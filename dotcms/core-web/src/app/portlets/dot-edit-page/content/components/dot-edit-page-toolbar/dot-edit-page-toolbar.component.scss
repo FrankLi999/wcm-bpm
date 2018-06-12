@@ -1,0 +1,117 @@
+@import 'variables';
+@import 'mixins';
+
+:host {
+    background-color: $white;
+    display: block;
+    position: relative;
+    z-index: 1;
+
+    ::ng-deep {
+        .ui-toolbar {
+            box-shadow: $md-shadow-1;
+            height: 48px;
+        }
+    }
+}
+
+::ng-deep [flat] .ui-selectbutton {
+    .edit-page-toolbar__state-selector-item--disabled,
+    .edit-page-toolbar__state-selector-item--disabled:hover {
+        background: none;
+        pointer-events: none;
+
+        .ui-button-text {
+            color: $gray-light;
+        }
+    }
+}
+
+.ui-toolbar-group-center {
+    display: flex;
+    justify-content: center;
+}
+
+.edit-page-toolbar__state-selector {
+    display: flex;
+    flex-direction: column;
+
+    ::ng-deep {
+        .ui-selectbutton {
+            align-items: center;
+            background-color: transparent;
+            display: flex;
+            flex-grow: 1;
+
+            .ui-button {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                height: 100%;
+                justify-content: center;
+                padding: 0 $basic-padding;
+
+                &.ui-state-active {
+                    background-color: rgba($brand-primary, 0.1);
+                    pointer-events: none;
+
+                    .ui-button-text {
+                        color: $brand-primary;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.edit-page-toolbar__locker {
+    ::ng-deep {
+        align-self: center;
+        margin-right: $basic-padding * 2;
+
+        .ui-inputswitch-handle {
+            position: relative;
+
+            &:after {
+                content: "\F023";
+                display: inline-block;
+                font-size: inherit;
+                font: normal normal normal 14px / 1 FontAwesome;
+                left: 5px;
+                position: absolute;
+                text-rendering: auto;
+                top: 3px;
+            }
+        }
+
+        &.ui-inputswitch-checked .ui-inputswitch-handle {
+            color: $white;
+        }
+
+        .ui-state-disabled {
+            .ui-inputswitch-handle {
+                &:after {
+                    color: rgba($black, 0.2);
+                }
+            }
+        }
+    }
+
+    &.warn ::ng-deep {
+        .ui-inputswitch-handle {
+            &:after {
+                color: $orange;
+            }
+        }
+
+        &.ui-inputswitch-checked .ui-inputswitch-handle {
+            &:after {
+                color: $white;
+            }
+        }
+    }
+}
+
+.edit-page-toolbar__save {
+    margin-right: $basic-padding;
+}

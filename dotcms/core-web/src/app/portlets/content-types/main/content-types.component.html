@@ -1,0 +1,16 @@
+<dot-listing-data-table
+    #listing
+    (rowWasClicked)="editContentType($event)"
+    [actionHeaderOptions]="actionHeaderOptions"
+    placeholder="i18nMessages['contenttypes.fieldname.structure.name']"
+    [columns]="contentTypeColumns"
+    [paginationPerPage]="40"
+    sortField="modDate"
+    sortOrder="DESC"
+    url="v1/contenttype"
+    [actions]="rowActions">
+</dot-listing-data-table>
+
+<dot-push-publish-dialog *ngIf="pushPublishIdentifier" [assetIdentifier]="pushPublishIdentifier" (cancel)="pushPublishIdentifier = null"></dot-push-publish-dialog>
+
+<dot-add-to-bundle *ngIf="addToBundleIdentifier" [assetIdentifier]="addToBundleIdentifier" (cancel)="addToBundleIdentifier = null"></dot-add-to-bundle>

@@ -1,0 +1,11 @@
+@import 'variables';
+
+:host {
+    position: relative;
+    display: block;
+}
+
+.listing-datatable__icon {
+    text-align: center;
+    width: 16px;
+}

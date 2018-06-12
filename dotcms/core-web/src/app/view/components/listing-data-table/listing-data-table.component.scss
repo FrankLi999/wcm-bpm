@@ -1,0 +1,35 @@
+@import 'variables';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    padding-top: $basic-padding * 2;
+    height: 100%;
+
+    ::ng-deep {
+        .ui-datatable {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ui-datatable-tablewrapper {
+            flex-grow: 1;
+
+            table tbody.ui-datatable-data td {
+                cursor: pointer;
+            }
+        }
+
+        .ui-datatable-data {
+            & > tr > .listing-datatable__action-column {
+                padding-bottom: 0;
+                padding-top: 0;
+            }
+        }
+    }
+}
+
+p-dataTable {
+    display: flex;
+    flex-grow: 1;
+}

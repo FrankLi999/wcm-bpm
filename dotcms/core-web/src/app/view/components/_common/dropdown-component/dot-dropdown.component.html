@@ -1,0 +1,22 @@
+<button *ngIf="icon"
+        pButton
+        [icon]="icon"
+        (click)="onToggle()"
+        [disabled]="disabled"
+        [class.inverted]="inverted">
+    <ng-content select=".badge"></ng-content>
+</button>
+
+<button pButton *ngIf="title"
+        icon="fa-chevron-down"
+        iconPos="right"
+        [label]="title"
+        (click)="onToggle()"
+        [disabled]="disabled">
+</button>
+
+<dot-gravatar class="dropdown-component__gravatar" *ngIf="gravatar" size="32" [email]="gravatar" (click)="onToggle()"></dot-gravatar>
+
+<div class="dropdown-content" *ngIf="show" [@enterAnimation]="show" [ngStyle]="!position || position === 'left' ? { left: 0 } : { right: 0 }">
+    <ng-content></ng-content>
+</div>
