@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+var args  = require('commander')
+var semver = require('semver')
+
+if(semver.satisfies(semver.clean(process.version), '>=7.10.0')) {
+    args.version('1.0.0')
+        .usage('<command> [options]')
+        .command('server', 'server specific commands')
+        .command('create', 'dev tasks')
+        .command('compile', 'compile tasks')
+        .command('htmltovue', 'convert html to vue using htmltovue.js in the fragments folder')
+        .command('hatch', 'convert html to vue using htmltovue.js in the fragments folder')
+        .command('hatchobject', 'convert dialog and model objects using htmltovue.js in the objects folder')
+        .parse(process.argv)
+}
+else {
+	console.log()
+	console.log('[ERROR] percli requires nodejs version 7.10.0 or greater')
+    console.log()
+}
+

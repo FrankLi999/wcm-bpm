@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+const args  = require('commander')
+const maven = require('maven')
+const path  = require('path')
+const fileUrl = require('file-url')
+
+args.version('1.0.0')
+	.usage('[options] <projectname>')
+	.parse(process.argv)
+
+if(args.args.length < 1) {
+    args.help()
+}
+
+const projectName = args.args[0]
+const mvn = maven.create()
+
+const percli = fileUrl(path.join(__dirname, '..'))
+
+mvn.execute(['archetype:generate', '--settings', path.join(__dirname, '..', 'maven', 'settings.xml')], {
+    archetypeGroupId: "com.peregrine-cms",
+    archetypeArtifactId: "peregrine-project-archetype",
+    groupId:"com."+projectName,
+    artifactId: projectName,
+    version:"1.0-SNAPSHOT",
+    appsFolderName: projectName,
+    artifactName: projectName,
+    contentFolderName: projectName,
+    packageGroup: projectName,
+    slingHostName:"localhost",
+    slingModelSubPackage:"models",
+    slingPort:"8080",
+    interactiveMode:"false",
+    percli: percli
+})

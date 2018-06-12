@@ -1,0 +1,76 @@
+#!/usr/bin/env node
+
+const args = require('commander')
+const { startPeregrine, setPort, getPathForServer, addServer, pathRegistered, promptAddServer }  = require('../lib/tasks')
+const { peregrineBanner } = require('../lib/banner.js')
+const fs = require('fs')
+const path = require('path')
+
+args.version('1.0.0')
+    .option('-a, --author', 'start as author')
+    .option('-s, --standalone', 'start as standalone')
+    .option('-p, --publish', 'start as publish')
+    .option('-n, --name [name]', 'start server by name')
+    .parse(process.argv)
+
+async function serverStart(type){
+	await peregrineBanner()
+	startPeregrine(type)
+}
+
+async function runPromptAndStart(type) {
+    await peregrineBanner()
+	const inputName = await promptAddServer(process.cwd())
+	startPeregrine(type)
+    if (!getPathForServer(inputName)) {
+        addServer(inputName, process.cwd())
+        console.log('Registering server '+inputName+' to path: '+process.cwd())
+    }
+}
+if(typeof args.name === 'string') {
+    const serverName = args.name
+    if (!getPathForServer(serverName)) {
+        addServer(serverName, process.cwd())
+        console.log('Registering server '+serverName+' to path: '+process.cwd())
+    }
+    const serverPath = getPathForServer(args.name)
+    if(serverPath) {
+        try {
+            let port = 8080
+            const file = fs.readFileSync(path.join(serverPath, 'sling', 'sling.properties')).toString()
+            lines = file.split(/[\n\r]/)
+            for(let i = 0; i < lines.length; i++) {
+                if(lines[i].startsWith('org.osgi.service.http.port=')) {
+                    const prop = lines[i].split('=')
+                    port = prop[1]
+                }
+            }
+            setPort(port)
+            process.chdir(serverPath)
+            serverStart('standalone')
+        } catch(err) {
+            console.error('server at path',serverPath,'does not exist')
+        }
+    } else {
+        console.error('no server found with name', args.name)
+    }
+} else if (pathRegistered(process.cwd())) {
+    if(args.author) {
+        serverStart('author')
+    } else if(args.publish) {
+        setPort(8180)
+        serverStart('publish')
+    } else {
+        serverStart('standalone')
+    }
+} else {
+
+    if(args.author) {
+        runPromptAndStart('author')
+    } else if(args.publish) {
+        setPort(8180)
+        runPromptAndStart('publish')
+    } else {
+        runPromptAndStart('standalone')
+    }
+}
