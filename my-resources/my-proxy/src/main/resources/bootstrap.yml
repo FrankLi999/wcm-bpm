@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: my-proxy
+  cloud:
+    config:
+      uri: http://localhost:8888
+      label: session
+      password: password

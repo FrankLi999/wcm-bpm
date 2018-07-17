@@ -1,0 +1,76 @@
+# tag::secured-config-server[]
+spring:
+  application:
+    name: gateway-service
+  #cloud:
+    #config:
+      #label: session
+      #password: password
+# end::secured-config-server[]
+
+info:
+  component: Edge Server
+  
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: my-service
+        uri: lb://my-service
+        predicates:
+        - Path=/resource/**
+        filters:
+        - RewritePath=/api/(?<path>.*), /$\{path}
+        - SaveSession
+      #- id: mainCss         
+         #uri: lb://my-service
+         #predicates:         
+         #- Path=/main.css 
+      #- id: customer-service
+      #  uri: lb://customer-service
+      #  predicates:
+      #  - Path=/customer/**
+      #  filters:
+      #  - RewritePath=/customer/(?<path>.*), /$\{path}
+  stream:
+    bindings:
+      input:
+        destination: learning-spring-boot-chat
+        group: comments-chat
+        content-type: application/json
+      newComments:
+        destination: learning-spring-boot-chat
+        group: comments-chat
+        content-type: application/json
+      clientToBroker:
+        destination: learning-spring-boot-chat-user-messages
+        group: app-chatMessages
+      brokerToClient:
+        destination: learning-spring-boot-chat-user-messages
+        group: topic-chatMessages
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://user:password@localhost:8761/eureka/
+    registerWithEureka: false
+      
+server:
+  port: 8765
+
+logging:
+  pattern: 
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+  level:
+    ROOT: INFO
+    org.springframework.web: DEBUG

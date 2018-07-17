@@ -1,0 +1,13 @@
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+A component required a bean named 'reactiveMongoTemplate' that could not be found.
+
+
+Action:
+
+Consider defining a bean named 'reactiveMongoTemplate' in your configuration.
