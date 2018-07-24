@@ -24,8 +24,8 @@ public class HelloController {
     MyServiceConfiguration myserviceConfig;
     
     @GetMapping
-    public Mono<String> sayHello() {
+    public Mono<String> sayHello(java.security.Principal user) {
         LOG.info("GET called on /hello resource");
-        return Mono.just(myserviceConfig.getMail().getDefaultRecipients().get(0) + myserviceConfig.getMail().getDefaultRecipients().get(1) + myserviceConfig.getMessage() + myserviceConfig.getHelloText() + HELLO_TEXT);
+        return Mono.just("Hello " + user.getName() + myserviceConfig.getMail().getDefaultRecipients().get(0) + myserviceConfig.getMail().getDefaultRecipients().get(1) + myserviceConfig.getMessage() + myserviceConfig.getHelloText() + HELLO_TEXT);
     }
 }

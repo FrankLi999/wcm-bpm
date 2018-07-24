@@ -26,12 +26,11 @@ public class FluxSecurityConfiguration { // extends WebSecurityConfigurerAdapter
 	
 	@Bean
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-		http.csrf().disable().authorizeExchange().pathMatchers("/**").permitAll();
-//			.authorizeExchange()
-//				.anyExchange().authenticated()
-//				.and()
-//			.httpBasic().and()
-//			.formLogin();
-		return http.build();
+		// return http.csrf().disable().authorizeExchange().pathMatchers("/**").permitAll().and().build();
+		return http.authorizeExchange()
+				  .pathMatchers("/admin").hasAuthority("ROLE_ADMIN")
+				  .anyExchange().authenticated()
+				  .and().formLogin()
+				  .and().build();
 	}
 }

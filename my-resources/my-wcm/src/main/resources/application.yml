@@ -114,8 +114,8 @@ spring:
             client-id: your-app-client-id
             client-secret: your-app-client-secret
           okta:
-            client-id: 0oaeszrc1wEt3A0iC0h7
-            client-secret: lJYdP4VtR7Das3k_hzUOiat-4_SJGGNy-Y-I9Ow7
+            client-id: 0oafqxb3wpiFE1cEs0h7
+            client-secret: mLFQPxoYGJ_9a38sDoNjebkXFoOi6vg2A6HlxPdb
             clientName: Okta
             authorization-grant-type: authorization_code
             redirectUriTemplate: '{baseUrl}/login/oauth2/code/{registrationId}'
@@ -133,13 +133,12 @@ spring:
               - openid
               - profile
               - email
-
         provider:
           okta:
-            authorization-uri: https://dev-727816.oktapreview.com/oauth2/v1/authorize
-            token-uri: https://dev-727816.oktapreview.com/oauth2/v1/token
-            user-info-uri: https://dev-727816.oktapreview.com/oauth2/v1/userinfo
-            jwk-set-uri: https://dev-727816.oktapreview.com/oauth2/v1/keys
+            authorization-uri: https://dev-907835.oktapreview.com/oauth2/default/v1/authorize
+            token-uri: https://dev-907835.oktapreview.com/oauth2/default/v1/token
+            user-info-uri: https://dev-907835.oktapreview.com/oauth2/default/v1/userinfo
+            jwk-set-uri: https://dev-907835.oktapreview.com/oauth2/v1/keys
             user-name-attribute: sub
           keycloak:
             authorization-uri: http://localhost:8180/auth/realms/SpringBootKeycloak/protocol/openid-connect/auth
