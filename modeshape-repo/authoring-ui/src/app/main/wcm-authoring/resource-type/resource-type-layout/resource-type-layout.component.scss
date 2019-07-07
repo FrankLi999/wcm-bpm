@@ -1,0 +1,252 @@
+//resource-type-layout { 
+  //  .field-pallet {
+  //       display: flex;
+  //       flex-direction: row;
+  //       align-self: flex-start;
+  //       margin: 10px;
+  //       padding: 0px;
+  //   }
+    // .field-pallet > * {
+    //     width: 100%;
+    // }
+    .resource-type .mat-divider {
+        border-top-color: rgba(255,255,255,.12);
+    }
+
+    #resouce-type-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #9AB3CE;
+        background-color: #E0E9F6;
+        text-align: center;
+        padding: 6px;
+    }
+    .resource-type {
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+        text-align: left;
+    }
+    .resource-type-action {
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+    }
+    .resource-type-column {
+        border: 1px solid #9AB3CE;
+        /*background-color: #E0E9F6;*/
+        //text-align: center;
+        padding: 5px 1px 5px 1px;
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+        text-align: left;
+
+        // align-items: center;
+        // justify-content: center;
+    }
+    .resource-field-column {
+        border: 1px solid #9AB3CE;
+        background-color: #EEF5F9;
+        padding: 5px 1px 5px 1px;
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+        text-align: left;
+    }
+
+    // .builder-container {
+    //     display: flex;
+
+    //     #builder-source, #builder-target {
+    //         flex: 1 1 auto;
+    //         box-sizing: border-box;
+    //     }
+
+    //     .builder-source-list {
+    //         position: absolute;
+    //         height: 100%;
+    //     }
+    // }
+
+    // #builder-source {
+    //     .ngx-dnd-container {
+    //         border: none;
+    //         background-color: #E0E9F6;
+    //         border-radius: 5px;
+    //         padding: 5px;        
+    //     }
+
+    //     .ngx-dnd-item {
+    //         background-color: transparent;
+    //         height: 50px;
+    //         line-height: 32px;
+    //         width: 100%;
+    //         margin: 0px;
+    //         margin-bottom: 10px;
+    //         padding: 0px;
+    //         padding-top: 10px;
+    //     }
+    //     .mat-icon {
+    //         margin-right: 16px;
+    //         font-size: 16px;
+    //     }
+    // }
+
+    // .ngx-dnd-item {
+    //   font-size: 16px;
+    // }
+  
+    // #builder-target {
+    //   .ngx-input {
+    //     margin: 0;
+    //     .ngx-input-wrap {
+    //       margin: 0;
+    //     }
+    //   }
+  
+    //   > * > .ngx-dnd-container {
+    //     min-height: 400px;
+    //     min-width: 400px;
+    //     border: none;
+    //   }
+  
+    //   .ngx-dnd-container {
+    //     justify-content: space-between;
+    //     flex-flow: row wrap;
+    //     display: flex;
+    //     -webkit-box-orient: horizontal;
+    //     -webkit-box-direction: normal;
+    //     box-sizing: border-box;
+  
+    //     border: 1px dashed lightgrey;
+    //     background-color: white;
+        
+    //     padding: 0;
+    //     min-height: 60px;
+  
+    //     .gu-unselectable &, &.gu-over, &.gu-over .ngx-dnd-container {
+    //       border: 1px dashed orange;
+    //     }
+  
+    //     .ngx-dnd-item {
+    //       background-color: transparent;
+    //       margin: 5px 1%;
+    //       border: 1px solid transparent;
+  
+    //       flex: 1 1 100%;
+    //       box-sizing: border-box;
+    //       -webkit-box-flex: 1;
+    //       max-width: 100%;
+          
+    //       &.half {
+    //         flex: 1 1 48%;
+    //         box-sizing: border-box;
+    //         -webkit-box-flex: 1;
+    //         max-width: 48%;
+    //         max-height: 60px;
+    //         padding: 0 5px 5px 5px;
+    //       }
+  
+    //       label {
+    //         font-size: 0.6em;
+    //         margin-left: 0.2em;
+    //       }
+  
+    //       input {
+    //         width: 100%;
+    //         padding: .5em .6em;
+    //         display: inline-block;
+    //         border: 1px solid #ccc;
+    //         box-shadow: inset 0 1px 3px #ddd;
+    //         border-radius: 4px;
+    //         vertical-align: middle;
+    //         box-sizing: border-box;
+    //       }
+    //     }
+  
+    //     .ngx-dnd-item.gu-transit,
+    //     .ngx-dnd-item:hover  {
+    //       border: 1px solid #1786e9
+    //     }
+    //   }
+    // }
+
+    .resource-field-viewport {
+        min-height: 600px;
+        border: 1px solid black;
+    }
+//}
+.builder-target, .builder-source {
+  width: 100%;
+  max-width: 100%;
+  /*margin: 0 25px 25px 0;*/
+  display: inline-block;
+  vertical-align: top;
+}
+
+.field-list {
+  border: solid 1px #ccc;
+  min-height: 60px;
+  background: #E0E9F6;
+  border-radius: 4px;
+  overflow: hidden;
+  display: block;
+}
+
+.field-box {
+  padding: 20px 10px;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background-color: transparent;
+  font-size: 14px;
+}
+
+.pallet-box {
+  padding: 20px 10px;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background-color: transparent;
+  font-size: 14px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+// .cdk-drag {
+//   border: none;
+// }
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.pallet-box:last-child {
+  border: none;
+}
+
+.field-list.cdk-drop-list-dragging .pallet-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+

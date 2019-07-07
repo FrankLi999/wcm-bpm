@@ -1,0 +1,158 @@
+<form class="mat-card" name="pageLayoutForm" [formGroup]="pageLayoutForm">
+    
+    <div id="layout" class="page-layout carded inner-scroll center">
+        <!-- PAGE -->
+        <div fxLayout="row" fxLayoutAlign="start"  fxFlex="1 0 auto">
+            <div fxLayout="column" fxFlex="30">
+                <mat-form-field appearance="outline">
+                    <mat-label>Page Layout name</mat-label>
+                    <input matInput formControlName="pageLayoutName" required>
+                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="30">
+                <mat-form-field appearance="outline">
+                    <mat-label>Theme</mat-label>
+                    <mat-select formControlName="themeName">
+                    <mat-option *ngFor="let theme of themes" [value]="theme.value">
+                        {{theme.viewValue}}
+                    </mat-option>
+                    </mat-select>               
+                </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="20">
+                <button mat-icon-button type="button" 
+                    title="Update side navigation configutation" aria-label="Update side navigation configutation"
+                    [matMenuTriggerFor]="sideNavMenu">
+                    <mat-icon>build</mat-icon>Side Navivation
+                </button>
+            </div>       
+            <div fxLayout="column" fxFlex="20">
+                <button mat-icon-button type="button" 
+                    [matMenuTriggerFor]="saveMenu">
+                    <mat-icon>build</mat-icon>Save
+                </button>
+            </div>         
+        </div>
+        <!-- HEADER -->
+        <div class="card" id="header-layout">
+            <!-- CONTENT -->
+            <div class="content">
+                <h4>HEADER</h4>
+            </div>
+            <div class="layout-form-card">
+                <div class="layout-form-button-container">
+                    <mat-checkbox formControlName="headerEnabled">Show Header</mat-checkbox>
+                </div>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+        <!-- / HEADER -->
+        <div class="card" id="page-layout">
+            <div class="card" id="sidenav-layout" fxFlex="{{layout.sideWidth}}" *ngIf="showLeftSideNav()">
+                <!-- Add container link-->
+                <a [routerLink]="" (click)="addSideViewer()"><mat-icon>add_circle_outline</mat-icon>Add Viewer</a>
+                <div class="card container" *ngFor="let viewer of layout.sideViewers; let viewerIndex = index;">
+                    <resource-viewer
+                        [viewer]="viewer"
+                        [viewerIndex]="viewerIndex"
+                        (resourceViewerRemoved)="removeSideViewer($event)">
+                    </resource-viewer>
+                </div>
+            </div>
+            <div class="card" id="content-layout" fxFlex="{{layout.contentWidth}}">
+                <!-- ROWS -->
+                <div *ngFor="let row of layout.rows; let rowIndex = index;">
+                    <div fxLayout="row" fxLayoutAlign="end">
+                        <div fxLayout="column" fxLayoutAlign="start" fxFlex="20">
+                            <button mat-icon-button type="button" 
+                                title="Update this row" aria-label="Update this row"
+                                [matMenuTriggerFor]="updateRowMenu"
+                                [matMenuTriggerData]="{item: rowIndex}">
+                                <mat-icon>edit</mat-icon>Update Row
+                            </button>
+                        </div>
+                        <div *ngIf="canRewmoveRow()" fxLayout="column" fxLayoutAlign="start" fxFlex="20">
+                                <button mat-icon-button title="Delete this row" aria-label="Delete this row" fxFlex="20"
+                                        (click)="removeRow(rowIndex)">
+                                        <mat-icon>delete</mat-icon>Remove Row
+                                </button>
+                        </div>
+                    </div>
+                    <!-- COLUMNS -->
+                    <div class="card, row-layout">
+                        <div class="column-layout" *ngFor="let column of row.columns; let columnIndex = index;" fxFlex="{{column.width}}">
+                            <a [routerLink]="" (click)="addResourceViewer(rowIndex, columnIndex)"><mat-icon>add_circle_outline</mat-icon>Add Viewer</a>
+                            <div class="card container" *ngFor="let viewer of column.viewers; let viewerIndex = index;">
+                                <resource-viewer 
+                                    [viewer]="viewer" 
+                                    [viewerIndex]="viewerIndex"
+                                    (resourceViewerRemoved)="removeResourceViewer(rowIndex, columnIndex, $event)">
+                                </resource-viewer>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / COLUMNS -->
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end">
+                    <div fxLayout="column" fxLayoutAlign="start" fxFlex="20">
+                        <button mat-icon-button type="button" (click)="addRow()"><mat-icon>add_box</mat-icon>Add Row</button>
+                    </div>
+                </div>
+                <!-- / ROWS -->
+            </div>
+            <div class="card" id="sidenav-layout" fxFlex="{{layout.sideWidth}}" *ngIf="showRightSideNav()">
+                <a [routerLink]="" (click)="addSideViewer()"><mat-icon>add_circle_outline</mat-icon>Add Viewer</a>
+                <div class="card container" *ngFor="let viewer of layout.sideViewers; let viewerIndex = index;">
+                    <resource-viewer
+                        [viewer]="viewer"
+                        [viewerIndex]="viewerIndex"
+                        (resourceViewerRemoved)="removeSideViewer($event)">
+                    </resource-viewer>
+                </div>
+            </div>
+        </div>
+        <!-- PAGE -->
+        <!-- FOOTER -->
+        <div class="card" id="footer-layout">
+            <!-- CONTENT -->
+            <div class="content">
+                <h4>FOOTER</h4>
+            </div>
+            <div class="layout-form-card">
+                <div class="layout-form-button-container">
+                    <mat-checkbox formControlName="footerEnabled">Show Footer</mat-checkbox>
+                </div>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+        <!-- / FOOTER -->
+    </div>
+</form>
+
+<mat-menu #updateRowMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="updateRow(item, 0)">One Column</button>
+    <button mat-menu-item (click)="updateRow(item, 1)">Two Columns (50/50)</button>
+    <button mat-menu-item (click)="updateRow(item, 2)">Two Columns (33/66)</button>
+    <button mat-menu-item (click)="updateRow(item, 3)">Tow Columns (66/33)</button>
+    <button mat-menu-item (click)="updateRow(item, 4)">Tow Columns (25/75)</button>
+    <button mat-menu-item (click)="updateRow(item, 5)">Tow Columns (75/25)</button>
+    <button mat-menu-item (click)="updateRow(item, 6)">Three Columns (33/33/33)</button>
+    <button mat-menu-item (click)="updateRow(item, 7)">Four Columns (25/25/25/25)</button>
+    </ng-template>
+</mat-menu>
+<mat-menu #sideNavMenu="matMenu">
+    <button mat-menu-item (click)="updateSidebar(0)">None</button>
+    <button mat-menu-item (click)="updateSidebar(1)">Left Side Navigation (20%)</button>
+    <button mat-menu-item (click)="updateSidebar(2)">Left Side Navigation (30%)</button>
+    <button mat-menu-item (click)="updateSidebar(3)">Left Side Navigation (40%)</button>
+    <button mat-menu-item (click)="updateSidebar(4)">Righ Side Navigation (20%)</button>
+    <button mat-menu-item (click)="updateSidebar(5)">Righ Side Navigation (30%)</button>
+    <button mat-menu-item (click)="updateSidebar(6)">Righ Side Navigation (40%)</button>
+</mat-menu>
+<mat-menu #saveMenu="matMenu">
+    <button mat-menu-item (click)="savePageLayout()">Save</button>
+    <button mat-menu-item (click)="publishPageLayout()">Publish</button>
+    <button mat-menu-item (click)="cancelEditing()">Cancel</button>
+</mat-menu>

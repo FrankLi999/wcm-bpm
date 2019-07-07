@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>spring-boot-commons-service</artifactId>
+    <packaging>jar</packaging>
+
+    <name>spring-boot-commons-service</name>
+    <description>Helper library for Spring Boot JPA Web Applications</description>
+
+    <parent>
+		<groupId>com.bpwizard.spring</groupId>
+		<artifactId>spring-boot-commons-non-reactive</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+
+    <dependencies>
+    
+		<dependency>
+			<groupId>com.bpwizard.spring</groupId>
+			<artifactId>spring-boot-commons-jpa</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+        <dependency>
+	        <groupId>javax.xml.bind</groupId>
+	        <artifactId>jaxb-api</artifactId>
+	    </dependency>
+
+    </dependencies>
+
+</project>

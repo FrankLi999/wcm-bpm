@@ -1,0 +1,94 @@
+<form name="searchCriteriaForm" [formGroup]="searchCriteriaForm">
+<div id="search-criteria" class="w-100-p tab-content p-24" fxLayout="column" fxFlex fusePerfectScrollbar>
+
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+        <mat-label>Query Name</mat-label>
+        <input matInput placeholder="Query Name"
+               name="queryName"
+               formControlName="queryName"
+               required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+        <mat-label>Variable Name</mat-label>
+        <input matInput placeholder="Variable Name"
+               name="variable"
+               formControlName="variable"
+               required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+        <mat-label>Description</mat-label>
+        <textarea matInput placeholder="Description"
+                  name="description"
+                  formControlName="description"
+                  rows="5">
+        </textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+        <mat-label>Number Of Entries</mat-label>
+        <input matInput placeholder="0"
+               name="numberOfEntries"
+               formControlName="numberOfEntries"
+               required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+        <mat-label>Nested Level</mat-label>
+        <input matInput placeholder="0"
+               name="nestedLevel"
+               formControlName="nestedLevel"
+               required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+        <mat-label>Resource Type</mat-label>
+        <input matInput placeholder="0"
+               name="resourceType"
+               formControlName="resourceType"
+               required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+        <mat-label>Site Area</mat-label>
+        <input matInput placeholder="0"
+               name="siteArea"
+               formControlName="siteArea"
+               required>
+    </mat-form-field>
+    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+        <mat-label>Category</mat-label>
+        <input matInput placeholder="0"
+               name="category"
+               formControlName="category"
+               required>
+    </mat-form-field>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field  appearance="outline" floatLabel="always" fxFlex="40">
+          <mat-label>Publish Date After</mat-label>
+          <input matInput formControlName="publishDateAfter" [matDatepicker]="publishDateAdterPicker" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="publishDateAdterPicker"></mat-datepicker-toggle>
+          <mat-datepicker #publishDateAdterPicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field  appearance="outline" floatLabel="always" fxFlex="40">
+          <mat-label>Publish Date Before</mat-label>
+          <input matInput formControlName="publishDateBefore" [matDatepicker]="publishDateBeforePicker" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="publishDateBeforePicker"></mat-datepicker-toggle>
+          <mat-datepicker #publishDateBeforePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="end">
+        <div fxLayout="column" fxFlex="10">
+          <button 
+              (click) = "saveSearchCriteria()"    
+              mat-raised-button type="button">Save</button>
+        </div>
+        <div fxLayout="column" fxFlex="10">
+          <button 
+              (click) = "resetSearchCriteria()"    
+              mat-raised-button type="button">Cancel</button>
+        </div>
+    </div>
+</div>
+</form>

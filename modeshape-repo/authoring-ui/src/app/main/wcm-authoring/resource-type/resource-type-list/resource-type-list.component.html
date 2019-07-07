@@ -1,0 +1,86 @@
+<div id="resource-type-list">
+    <div fxLayout="row">
+        <div fxFlex="80">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
+        </div>
+        <div fxFlex="20">
+            <button mat-icon-button 
+                  [matMenuTriggerFor]="newResourceTypeMenu">
+                <mat-icon class="mat-icon-rtl-mirror">add_circle</mat-icon>
+            </button>
+        </div>
+    </div>
+    <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
+      <!-- Base resource type Column -->
+      <ng-container matColumnDef="baseResourceType">
+        <th mat-header-cell *matHeaderCellDef>{{displayedColumns[0]}}</th>
+        <td mat-cell *matCellDef="let row"><mat-icon class="s-20">{{getIcon(row.baseResourceType)}}</mat-icon></td>
+      </ng-container>
+  
+      <!-- Resource Type name Column -->
+      <ng-container matColumnDef="resourceTypeName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{displayedColumns[1]}}</th>
+        <td mat-cell *matCellDef="let row"> {{row.resourceTypeName}} </td>
+      </ng-container>
+  
+      <!-- Variable Column -->
+      <ng-container matColumnDef="variable">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{displayedColumns[2]}}</th>
+        <td mat-cell *matCellDef="let row"> {{row.variable}} </td>
+      </ng-container>
+  
+      <!-- Description Column-->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[3]}} </th>
+        <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+      </ng-container>
+
+      <!-- Number of entries Column-->
+      <ng-container matColumnDef="numberOfEntries">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[4]}} </th>
+        <td mat-cell *matCellDef="let row"> {{row.numberOfEntries}} </td>
+      </ng-container>
+
+      <!-- Description Column-->
+      <ng-container matColumnDef="lastEditDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[5]}} </th>
+        <td mat-cell *matCellDef="let row"> {{row.lastEditDate}} </td>
+      </ng-container>
+
+      <!-- Description Column-->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> {{displayedColumns[6]}} </th>
+        <td mat-cell *matCellDef="let row; let rowIndex = dataIndex;">
+            <button mat-icon-button 
+                  [matMenuTriggerFor]="contextMenu"
+                  [matMenuTriggerData]="{item: rowIndex}">
+                <mat-icon class="mat-icon-rtl-mirror">more_vert</mat-icon>
+            </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnProperties"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnProperties;"></tr>
+    </table>
+  
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+  <mat-menu #newResourceTypeMenu="matMenu">
+      <button mat-menu-item (click)="newContentType()"><mat-icon class="mat-icon-rtl-mirror">archive</mat-icon>Content</button>
+      <button mat-menu-item (click)="newFileType()"><mat-icon class="mat-icon-rtl-mirror">file_copy</mat-icon>File</button>
+      <button mat-menu-item (click)="newWidgetType()"><mat-icon class="mat-icon-rtl-mirror">build</mat-icon>Widget</button>
+      <button mat-menu-item (click)="newKeyValueType()"><mat-icon class="mat-icon-rtl-mirror">domain</mat-icon>Key/Value</button>
+      <button mat-menu-item (click)="newVanityURLType()"><mat-icon class="mat-icon-rtl-mirror">http</mat-icon>Vanity URL</button>
+      <button mat-menu-item (click)="newPageType()"><mat-icon class="mat-icon-rtl-mirror">pageview</mat-icon>Page</button>
+      <button mat-menu-item (click)="newFormType()"><mat-icon class="mat-icon-rtl-mirror">apps</mat-icon>Form</button>
+      <button mat-menu-item (click)="newPersonaType()"><mat-icon class="mat-icon-rtl-mirror">person_outline</mat-icon>Persona</button>
+  </mat-menu>
+  <mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+      <button mat-menu-item (click)="editResourceType(item)">Edit</button>
+      <button mat-menu-item (click)="deleteResourceType(item)">Delete</button>
+    </ng-template>
+  </mat-menu>
+    

@@ -1,0 +1,69 @@
+<div id="template" class="page-layout carded left-sidebar inner-scroll">
+    <!-- SIDEBAR -->
+    <fuse-sidebar fxFlex="20" class="sidebar" name="page-template-side-bar" position="left" lockedOpen="gt-md">
+        <div fxLayout="column" fxLayoutAlign="start"  fxFlex="1 0 auto">
+            <mat-tree #site [dataSource]="dataSource" [treeControl]="treeControl">
+              <!-- Leaf node -->
+              <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+                <button mat-icon-button 
+                    [attr.aria-label]="'toggle ' + node.filename"
+                    (click)="loadChildren(node)"
+                    matTreeNodeToggle>
+                  <mat-icon class="mat-icon-rtl-mirror">chevron_right</mat-icon>
+                  <mat-icon class="mat-icon-rtl-mirror">
+                      {{node.active ? 'folder_open' : 'folder'}}
+                  </mat-icon>                
+                </button>
+                <span style="margin-left: 8px;" [matMenuTriggerFor]="contextMenu"
+		                  [matMenuTriggerData]="{item: node.item}">
+                    {{node.item}}
+                </span>
+              </mat-tree-node>
+
+              <!-- expandable node -->
+              <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                <button mat-icon-button
+                    [attr.aria-label]="'toggle ' + node.filename"
+                    (click)="loadChildren(node)"                    
+                    matTreeNodeToggle>
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                  </mat-icon>
+                  <mat-icon class="mat-icon-rtl-mirror">
+                      {{node.active ? 'folder_open' : 'folder'}}
+                  </mat-icon>
+                </button>
+                <span style="margin-left: 8px;" [matMenuTriggerFor]="contextMenu"
+                        [matMenuTriggerData]="{item: node.item}">
+                    {{node.item}}
+                </span>
+              </mat-tree-node>
+
+              <mat-tree-node *matTreeNodeDef="let node; when: isLoadMore">
+                <button mat-button (click)="loadMore(node.loadMoreParentItem)">
+                  Load more...
+                </button>
+              </mat-tree-node>
+            </mat-tree>
+        </div>
+    </fuse-sidebar>
+    <!-- / SIDEBAR -->
+    <!-- CENTER -->
+    <div class="center" fxFlex="80">
+        <!-- FOLDER OVERVIEW -->       
+        <h1>Active node: {{activeNode.item}}</h1>
+        <folder-overview></folder-overview>
+        <!-- / FOLDER OVERVIEW -->
+    </div>
+    <!-- / CENTER -->
+</div>
+<mat-menu #contextMenu="matMenu">
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="editCurrentNode(item)">Edit</button>
+    <button mat-menu-item (click)="deleteCurrentNode(item)">Delete</button>
+    <button mat-menu-item (click)="newFolderNode(item)">New Folder</button>
+    <button mat-menu-item (click)="newPageNode(item)">New Page</button>
+    <button mat-menu-item (click)="newContentItem(item)">New Content</button>
+    <button mat-menu-item (click)="newFile(item)">New File</button>
+  </ng-template>
+</mat-menu>

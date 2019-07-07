@@ -1,0 +1,52 @@
+{
+    "name" : "sample",
+    "jndiName" : "",
+    "monitoring" : {
+        "enabled" : true
+    },
+    "storage" : {
+        "transactionManagerLookup" : {
+            "name" : "com.bpwizard.wcm.repo.jcr.ModeshapeTransactionManagerLookup"
+        },
+        "persistence" : {
+            "type" : "db",
+            "connectionUrl": "jdbc:mysql://192.168.0.180:3306/modeshape?useSSL=false",
+            "driver": "com.mysql.jdbc.Driver",
+            "createOnStart" : true,
+            "dropOnExit" : true,
+            "username": "root",
+            "password": "P@ssw0rd"
+        },
+        "binaryStorage" : {
+            "type" : "file",
+            "directory": "${java.io.tmpdir}/modeshape_reactive/binaries",
+            "minimumBinarySizeInBytes" : 999
+        }
+    },
+    "sequencing" : {
+        "sequencers" : {
+            // a custom sequencer via which we'll validate that the WAR dependencies are correctly configured
+            "Images sequencer" : {
+                "classname" : "ImageSequencer",
+                "pathExpression" : "default://imagesContainer[@image] => default:/sequenced/images"
+            }
+        }
+    },
+    "workspaces" : {
+        "predefined" : ["otherWorkspace"],
+        "default" : "default",
+        "allowCreation" : true
+    },
+    "security" : {
+        "anonymous" : {
+            "roles" : ["readonly","readwrite","admin"],
+            "useOnFailedLogin" : false
+        },
+        "providers" : [
+            {
+                "name" : "Spring Security",
+                "classname" : "com.bpwizard.wcm.repo.jcr.security.SpringSecurityProvider"
+            }
+        ]
+    }
+}

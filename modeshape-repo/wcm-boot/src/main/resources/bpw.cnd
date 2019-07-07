@@ -1,0 +1,403 @@
+<jcr = 'http://www.jcp.org/jcr/1.0'>
+<nt = 'http://www.jcp.org/jcr/nt/1.0'>
+<mix = 'http://www.jcp.org/jcr/mix/1.0'>
+<bpw = 'http://www.bpwizard.com/bpw/1.0'>
+
+
+/*
+ * ------------------------------------------------------------------------------
+ * BPW  T Y P E S
+ * ------------------------------------------------------------------------------
+ */
+[bpw:keyValue] 
+- bpw:name (STRING) COPY
+- bpw:value (STRING) COPY
+
+[bpw:workflowAction] > mix:lastModified
+- name (String)
+
+[bpw:workflowStage] > mix:lastModified
++ * (bpw:workflowAction)
+
+[bpw:workflow] > mix:lastModified
++ * (bpw:workflowStage)
+
+[bpw:validationRule]
+- bpw:name (STRING) COPY
+- bpw:type (STRING) = regex COPY
+- bpw:rule (STRING) COPY
+
+[bpw:pageSearchData]
+- description (STRING)
+- keywords (STRING) multiple
+
+/*
+'Decimal', 'Text', 'True/False', 'Whole Number'
+*/
+[bpw:dataTypeOptions]
+- options (STRING) multiple
+
+/*
+'Many to many', 'Many to one', 'One to many', 'One to one'
+*/
+[bpw:relationshipCardinalityOptions]
+- options (STRING) multiple
+
+/*
+'Existing', 'New'
+*/
+[bpw:relationshipTypeOptions]
+- options (STRING) multiple
+
+[bpw:controlFieldMetaData]
+- bpw:title (STRING)
+- bpw:controlType (STRING)
+- bpw:hintText (STRING)
+- bpw:required (BOOLEAN)
+- bpw:readOnly (BOOLEAN) = 'false'
+- bpw:selectOptions (STRING) multiple
+
+[bpw:controlField]
+- bpw:title (STRING)
++ * (bpw:controlFieldMetaData)
+
+/*
+[bpw:controlField] > mix:lastModified
+- bpw:name (STRING) mandatory COPY
+- bpw:type (STRING) mandatory COPY
+- bpw:value (STRING) multiple COPY
+- bpw:options (STRING) multiple COPY
+- bpw:defaultValue (STRING) COPY
+- bpw:hint (STRING) COPY
+- bpw:dataType (STRING) = 'Text' COPY
+- bpw:relationshipType (STRING) COPY
+- bpw:relationshipCardinality (STRING) COPY
+- bpw:valditionRegEx (STRING) COPY
+- bpw:mandatory (BOOLEAN) = 'false' COPY
+- bpw:userSearchable (BOOLEAN) = 'false' COPY
+- bpw:systemIndexed (BOOLEAN) = 'false' COPY
+- bpw:showInList (BOOLEAN) = 'false' COPY
+- bpw:unique (BOOLEAN) = 'false' COPY
+*/
+[bpw:elementFormGroup] abstract
+- bpw:groupName (STRING)
+- bpw:groupTitle (STRING)
+
+[bpw:elementFormControl]
+- bpw:title (String)
+- bpw:controlName (String)
+- bpw:value (STRING) multiple COPY
+- bpw:options (STRING) multiple COPY
+- bpw:defaultValue (STRING) COPY
+- bpw:hint (STRING) COPY
+- bpw:dataType (STRING) = 'Text' COPY
+- bpw:relationshipType (STRING) COPY
+- bpw:relationshipCardinality (STRING) COPY
+- bpw:valditionRegEx (STRING) COPY
+- bpw:mandatory (BOOLEAN) = 'false' COPY
+- bpw:userSearchable (BOOLEAN) = 'false' COPY
+- bpw:systemIndexed (BOOLEAN) = 'false' COPY
+- bpw:showInList (BOOLEAN) = 'false' COPY
+- bpw:unique (BOOLEAN) = 'false' COPY
+
+[bpw:elementFormColumn]
++ * (bpw:elementFormControl)
+
+[bpw:elementFormRow] > bpw:elementFormGroup
++ * (bpw:elementFormColumn)
+
+[bpw:elementFormTab] > bpw:elementFormGroup
++ * (bpw:elementFormRow)
+
+[bpw:elementFormStep] > bpw:elementFormGroup
++ * (bpw:elementFormRow)
+
+[bpw:category] > nt:hierarchyNode, mix:lastModified
++ * (bpw:category)
+
+[bpw:resourceNode] > nt:hierarchyNode, mix:lastModified abstract
+- bpw:title (STRING) COPY
+- bpw:description (STRING) COPY
+- bpw:publishDate (STRING) COPY
+- bpw:expireDate (STRING) COPY
+- bpw:workflow (STRING) multiple COPY
+- bpw:workflowStage (STRING) COPY
+- bpw:categories (STRING) multiple
+
+[bpw:contentType] > bpw:resourceNode
+- bpw:contentName (STRING) mandatory COPY
+- bpw:body (STRING) COPY
+
+[bpw:componentType] > bpw:resourceNode
+- bpw:widgetName (STRING) mandatory COPY
+- bpw:componentTemplate (STRING) COPY
+
+[bpw:fileType] > nt:file, bpw:resourceNode
+- bpw:fileName (STRING) mandatory COPY
+- bpw:content (BINARY) COPY
++ bpw:metaData (bpw:keyValue)
+- bpw:showOnMenu (BOOLEAN) = 'false'
+- bpw:sortOrder (LONG) = 0
+
+
+[bpw:pageType] > bpw:resourceNode
+- bpw:name (STRING) mandatory COPY
+- bpw:template (STRING) mandatory COPY
+- bpw:title (STRING) mandatory COPY
+- bpw:friendlyURL (STRING)
+- bpw:cacheTTL (LONG)
+- bpw:showOnMenu (BOOLEAN) COPY
+- bpw:sortOrder (LONG) COPY
+- bpw:securePage (BOOLEAN) COPY
++ bpw:metaData (bpw:keyValue)
++ bpw:searchData (bpw:pageSearchData)
+
+[bpw:keyValueType] > bpw:resourceNode
+- bpw:key (STRING) COPY
+- bpw:value (STRING) COPY
+
+[bpw:vanityURLType] > bpw:resourceNode
+- bpw:vanityURLName (STRING) mandatory COPY
+- bpw:uri (STRING)
+- bpw:forwardTo (STRING)
+
+[bpw:formType] > bpw:resourceNode
+- bpw:formName (STRING) mandatory COPY
+
+[bpw:personaType] > bpw:resourceNode
+- bpw:name (STRING) mandatory COPY
+- bpw:phote (BINARY)
+
+[bpw:authoringTemplate] > mix:lastModified
+- bpw:resourceType (String)
++ * (bpw:elementFormGroup)
+
+[bpw:themeType] > bpw:resourceNode
+- themeName (STRING)
+- path (String)
+
+[bpw:siteArea] > bpw:resourceNode
+- bpw:name (STRING) mandatory COPY
+- bpw:sorderOrder (LONG) COPY
+- bpw:showOnMenu (BOOLEAN) COPY
+- bpw:allowedFileExtension (STRING) multiple COPY
+- bpw:allowedArtifactTypes (STRING) multiple COPY
+- bpw:description (STRING) COPY
+- bpw:defaultContent (STRING) COPY
++ * (bpw:resourceNode)
+
+[bpw:queryStatement] > bpw:resourceNode
+- bpw:queryName (STRING)
+- bpw:contentType (STRING)
+- bpw:queryStatement (STRING)
+- bpw:columns (STRING) multiple
+
+[bpw:resourcePath]
+- bpw:path (String)
+
+[bpw:queryColumn]
+- bpw:selectorName (STRING)
+- bpw:propertyName (STRING)
+- bpw:columnName (STRING)
+
+[bpw:queryJoinCondition]
+
+[bpw:equiJoinCondition] > bpw:queryJoinCondition
+- bpw:selector1Name (STRING) mandatory
+- bpw:property1Name (STRING) mandatory
+- bpw:selector2Name (STRING) mandatory
+- bpw:property2Name (STRING) mandatory
+
+[bpw:sameNodeJoinCondition] > bpw:queryJoinCondition
+- bpw:selector1Name (STRING) mandatory
+- bpw:selector2Name (STRING) mandatory
+- bpw:selector2Path (STRING)
+
+[bpw:childNodeJoinCondition] > bpw:queryJoinCondition
+- bpw:childSelectorName (STRING) mandatory
+- bpw:parentSelectorName (STRING) mandatory
+
+[bpw:descendantNodeJoinCondition] > bpw:queryJoinCondition
+- bpw:descendantSelectorName (STRING) mandatory
+- bpw:ancestorSelectorName (STRING) mandatory
+
+[bpw:queryConstraint] abstract
+
+[bpw:queryAnd] > bpw:queryConstraint
++ bpw:contraint1 (bpw:queryConstraint) mandatory
++ bpw:contraint2 (bpw:queryConstraint) mandatory
+
+[bpw:queryOr] > bpw:queryConstraint
++ bpw:contraint1 (bpw:queryConstraint) mandatory
++ bpw:contraint2 (bpw:queryConstraint) mandatory
+
+[bpw:queryNot] > bpw:queryConstraint
++ bpw:contraint (bpw:queryConstraint) mandatory
+
+[bpw:queryStaticOperand] abstract
+
+[bpw:queryDynamicOperand] abstract
+
+[bpw:queryLiteral] > bpw:queryStaticOperand
+- bpw:jcrValue (STRING)
+- bpw:propertyType (STRING)
+
+[bpw:queryBindVariableValue] > bpw:queryStaticOperand
+- bpw:bindVariableValue (STRING)
+- bpw:propertyType (STRING)
+
+[bpw:queryPropertyValue] > bpw:queryDynamicOperand
+- bpw:selectorName (STRING)
+- bpw:propertyName (STRING)
+
+[bpw:queryLength] > bpw:queryDynamicOperand
+- bpw:selectorName (STRING)
+- bpw:propertyName (STRING)
+
+[bpw:queryNodeName] > bpw:queryDynamicOperand
+- bpw:selectorName (STRING)
+
+[bpw:queryNodeLocalName] > bpw:queryDynamicOperand
+- bpw:selectorName (STRING)
+
+[bpw:queryFullTextSearchScore] > bpw:queryDynamicOperand
+- bpw:selectorName (STRING)
+
+[bpw:queryLowerCase] > bpw:queryDynamicOperand
++ bpw:operand (bpw:queryDynamicOperand)
+
+[bpw:queryUpperCase] > bpw:queryDynamicOperand
++ bpw:operand (bpw:queryDynamicOperand)
+
+[bpw:queryComparison] > bpw:queryConstraint
+- bpw:operator (STRING) 
++ bpw:dynamicOperand (bpw:queryDynamicOperand) mandatory
++ bpw:staticOperand (bpw:queryStaticOperand)
+
+[bpw:queryPropertyExistence] > bpw:queryConstraint
+- bpw:selectorName (STRING) 
+- bpw:propertyName (STRING)
+- bpw:isNull (BOOLEAN)
+
+[bpw:queryFullTextSearch] > bpw:queryConstraint
++ bpw:fullTextSearchExpression (bpw:queryStaticOperand)
+- bpw:selectorName (STRING) mandatory
+- bpw:propertyName (STRING)
+
+[bpw:querySameNode] > bpw:queryConstraint
+- bpw:selectorName (STRING) mandatory
+- bpw:path (STRING) mandatory
+
+[bpw:queryChildNode] > bpw:queryConstraint
+- bpw:selectorName (STRING) mandatory
+- bpw:path (STRING) mandatory
+
+[bpw:queryDescendantNode] > bpw:queryConstraint
+- bpw:selectorName (STRING) mandatory
+- bpw:path (STRING) mandatory
+
+
+[bpw:querySortOrder]
++ bpw:dynamicOperand (bpw:queryDynamicOperand) mandatory
+- bpw:order (STRING)
+
+[bpw:querySelector]
+- contentType (STRING)
+- selectName (STRING)
+
+[bpw:queryJoin]
+- joinType (String)
++ left (bpw:querySelector, bpw:queryJoin) = bpw:querySelector
++ right  (bpw:querySelector, bpw:queryJoin) = bpw:querySelector
++ joinCondition (bpw:queryJoinCondition)
+
+[bpw:query] > bpw:resourceNode
+- bpw:queryName (STRING)
+- bpw:nestedLevel (LONG)
+- bpw:category (STRING)
+- bpw:numberOfEntries (LONG)
+- bpw:publishDateBefore (DATE)
+- bpw:publishDateAfter (DATE)
++ * (bpw:queryColumn)
++ bpw:source (bpw:querySelector, bpw:queryJoin) = bpw:querySelector
++ bpw:constrait (bpw:queryConstraint)
++ * (bpw:querySortOrder)
+
+[bpw:renderTemplate] > mix:lastModified abstract
+- bpw:renderTemplateName (STRING)
+- bpw:description (STRING)
+- bpw:code (STRING)
+- bpw:preloop (STRING)
+- bpw:postloop (STRING)
+- bpw:maxEntries (LONG)
+- bpw:note (STRING)
+
+[bpw:resourceRendererTemplate] > bpw:renderTemplate
+- bpw:contentName (String)
+
+[bpw:queryRendererTemplate] > bpw:renderTemplate
+- bpw:queryName (String)
+
+[bpw:resourceViewer]
+- bpw:renderTemplayeName (STRING) multiple
+   
+[bpw:layoutColumn]
+- bpw:width (LONG)
++ * (bpw:resourceViewer)
+
+[bpw:layoutRow]
++ * (bpw:layoutColumn)
+
+[bpw:layoutSidenav]
+- bpw:isLeft (BOOLEAN) = true
+- bpw:width (LONG)
++ * (bpw:resourceViewer)
+
+[bpw:pageLayout] > mix:lastModified
+- bpw:layoutName (BOOLEAN) = false
+- bpw:hideHeader (BOOLEAN) = false
+- bpw:hideFooter (BOOLEAN) = false
+- bpw:site (STRING)
+- bpw:theme (STRING)
+- bpw:hideSide (BOOLEAN) = false
++ bpw:sidenav (bpw:layoutSidenav)
++ * (bpw:layoutRow)
+
+[bpw:workflowFolder] > nt:folder
+[bpw:categoryFolder] > nt:folder
+/*
+[bpw:siteArea] > nt:folder
+*/
+[bpw:resourceTypeFolder] > nt:folder
++ * (bpw:authoringTemplate)
+
+[bpw:controlFieldFolder] > nt:folder
++ * (bpw:controlField)
+
+[bpw:themeFolder] > nt:folder
+[bpw:pageLayoutFolder] > nt:folder
+[bpw:renderTemplateFolder] > nt:folder
+[bpw:queryFolder] > nt:folder
+
+[bpw:library] > nt:folder, mix:lastModified
+- bpw:language (STRING)
++ bpw:rootSiteArea (bpw:siteArea)
++ bpw:resourceType (bpw:resourceTypeFolder)
++ bpw:theme (bpw:themeFolder)
++ bpw:pageLayout (bpw:pageLayoutFolder)
++ bpw:renderTemplate (bpw:renderTemplateFolder)
++ bpw:query (bpw:queryFolder)
++ bpw:workflow (bpw:workflowFolder)
++ bpw:category (bpw:categoryFolder)
+
+[bpw:configurationFolder] > nt:folder
++ * [bpw:validationRule] 
+
+[bpw:libraryFolder] > nt:folder
++ * (bpw:library)
+
+[bpw:root] > nt:folder, mix:lastModified
++ bpw:controlField (bpw:controlFieldFolder)
++ bpw:baseResourceType (bpw:resourceTypeFolder)
++ bpw:configuration (bpw:configurationFolder)
++ bpw:library (bpw:libraryFolder)
