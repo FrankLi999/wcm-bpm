@@ -14,14 +14,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.service.AutoConfiguration;
-import com.bpwizard.spring.boot.commons.service.security.OAuth2AuthenticationFailureHandler;
-import com.bpwizard.spring.boot.commons.service.security.OAuth2AuthenticationSuccessHandler;
-import com.bpwizard.spring.boot.commons.service.security.SpringAuthenticationSuccessHandler;
 import com.bpwizard.spring.boot.commons.service.security.SpringJpaSecurityConfig;
-import com.bpwizard.spring.boot.commons.service.security.SpringOAuth2UserService;
-import com.bpwizard.spring.boot.commons.service.security.SpringOidcUserService;
 import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsService;
 import com.bpwizard.wcm.repo.entities.User;
 

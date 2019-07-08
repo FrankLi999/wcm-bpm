@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bpwizard.wcm</groupId>
-	<artifactId>modeshape-commons</artifactId>
+	<artifactId>modeshape-commons-boot</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>modeshape-commons</name>
-	<description>Spring Boot Modeshape</description>
+	<name>mmodeshape-commons-boot</name>
+	<description>Spring Boot Modeshape commons</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

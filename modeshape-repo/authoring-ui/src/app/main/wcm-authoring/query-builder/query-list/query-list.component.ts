@@ -15,7 +15,7 @@ export interface Query {
 }
 
 @Component({
-  selector: 'app-query-list',
+  selector: 'query-list',
   templateUrl: './query-list.component.html',
   styleUrls: ['./query-list.component.scss'],
   animations: [

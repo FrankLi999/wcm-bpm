@@ -58,7 +58,7 @@
 	<dependencies>
 	    <dependency>
 		    <groupId>com.bpwizard.wcm</groupId>
-			<artifactId>modelshape-commons</artifactId>
+			<artifactId>modeshape-commons-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

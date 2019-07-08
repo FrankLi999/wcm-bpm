@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-query-editor',
+  selector: 'query-editor',
   templateUrl: './query-editor.component.html',
   styleUrls: ['./query-editor.component.scss']
 })

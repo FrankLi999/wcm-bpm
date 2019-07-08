@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+// import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 // import { CollectionsModule } from '@angular/cdk/collections';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -26,6 +27,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatNativeDateModule } from '@angular/material';
+import { MatRadioModule } from '@angular/material/radio';
+
 import { TranslateModule } from '@ngx-translate/core';
 
 import { FuseSharedModule } from '@fuse/shared.module';
@@ -33,6 +37,20 @@ import { FuseSidebarModule } from '@fuse/components';
 import { QueryListComponent } from './query-list/query-list.component';
 import { QueryEditorComponent } from './query-editor/query-editor.component';
 import { SearchCriteriaComponent } from './search-criteria/search-criteria.component';
+
+import {  
+  QueryBuilderComponent,
+  QueryInputDirective,
+  QueryFieldDirective,
+  QueryEntityDirective,
+  QueryOperatorDirective,
+  QueryButtonGroupDirective,
+  QuerySwitchGroupDirective,
+  QueryRemoveButtonDirective,
+  QueryEmptyWarningDirective,
+  QueryArrowIconDirective
+} from './query-builder';
+
 const routes: Routes = [
   {
       path       : 'edit',
@@ -48,9 +66,26 @@ const routes: Routes = [
   }
 ];
 @NgModule({
-  declarations: [QueryListComponent, QueryEditorComponent, SearchCriteriaComponent],
+  declarations: [
+    QueryListComponent,
+    QueryEditorComponent,
+    SearchCriteriaComponent,
+
+    QueryBuilderComponent,
+    QueryInputDirective,
+    QueryOperatorDirective,
+    QueryFieldDirective,
+    QueryEntityDirective,
+    QueryButtonGroupDirective,
+    QuerySwitchGroupDirective,
+    QueryRemoveButtonDirective,
+    QueryEmptyWarningDirective,
+    QueryArrowIconDirective
+  ],
   imports: [
     RouterModule.forChild(routes),
+    // NoopAnimationsModule,
+
     ScrollingModule,
     CdkTableModule,
     CdkTreeModule,
@@ -76,7 +111,9 @@ const routes: Routes = [
     MatTableModule,
     MatToolbarModule,
     MatTreeModule,
-    
+    MatNativeDateModule,
+    MatRadioModule,
+
     TranslateModule,
 
     FuseSharedModule,
