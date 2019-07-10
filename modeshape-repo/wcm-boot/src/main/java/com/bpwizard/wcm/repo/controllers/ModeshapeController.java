@@ -3,7 +3,6 @@ package com.bpwizard.wcm.repo.controllers;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Random;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
@@ -14,7 +13,7 @@ import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeIterator;
 import javax.jcr.nodetype.PropertyDefinition;
-
+import org.modeshape.web.jcr.RepositoryManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +31,10 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = {"jcr"})
 public class ModeshapeController {
 	private static final Logger logger = LogManager.getLogger(ModeshapeController.class);
-	public static final String BASE_URI = "/api/modeshape";
+	public static final String BASE_URI = "/api/modeshape/server";
 	@Autowired
-	private Repository repository;
-	
+	// private Repository repository;
+	private RepositoryManager repositoryManager;
 //	@Autowired
 //	private Session session;
 
@@ -44,8 +43,7 @@ public class ModeshapeController {
 	public String modeShape() {
 		Session session = null;
 		try {
-			
-			session = repository.login();
+			session = this.repositoryManager.getSession("bpwizard");
 			// Get the root node ...
             Node root = session.getRootNode();
             
@@ -76,11 +74,12 @@ public class ModeshapeController {
             }
 		} catch (Exception e) {
 	        e.printStackTrace();
-        } finally {
-        	if (session != null) {
-                session.logout();
-        	}
-        }
+        } 
+//		finally {
+//        	if (session != null) {
+//                session.logout();
+//        	}
+//        }
 		return "{\"modeshape\": \"up\"}";
 	}
 	
@@ -89,8 +88,7 @@ public class ModeshapeController {
 	public String exportContent(@PathVariable("folder") String folder) {
 		Session session = null;
 		try {
-			
-			session = repository.login();
+			session = this.repositoryManager.getSession("bpwizard");
 			// Get the root node ...
             Node root = session.getRootNode();
             
@@ -112,11 +110,12 @@ public class ModeshapeController {
             os.close();
 		} catch (Exception e) {
 	        e.printStackTrace();
-        } finally {
-        	if (session != null) {
-                session.logout();
-        	}
-        }
+        } 
+//		finally {
+//        	if (session != null) {
+//                session.logout();
+//        	}
+//        }
 		return "{\"export\": \"done\"}";
 	}
 	
@@ -125,8 +124,7 @@ public class ModeshapeController {
 	public String importContent() {
 		Session session = null;
 		try {
-			
-			session = repository.login();
+			session = this.repositoryManager.getSession("bpwizard");
 			// Get the root node ...
             Node root = session.getRootNode();
             
@@ -147,11 +145,12 @@ public class ModeshapeController {
             logger.debug("+ Root childs");
 		} catch (Exception e) {
 	        e.printStackTrace();
-        } finally {
-        	if (session != null) {
-                session.logout();
-        	}
-        }
+        } 
+//		finally {
+//        	if (session != null) {
+//                session.logout();
+//        	}
+//        }
 		return "{\"import\": \"done\"}";
 	}
 	
@@ -160,9 +159,8 @@ public class ModeshapeController {
 	public String getNodeTypes() {
 		Session session = null;
 		try {
-			
-			session = repository.login();
-			Random rnd = new Random();
+			session = this.repositoryManager.getSession("bpwizard");
+			//Random rnd = new Random();
 			// Get the root node ...
             Node root = session.getRootNode();
             assert root != null;
@@ -198,11 +196,12 @@ public class ModeshapeController {
             
 		} catch (Exception e) {
 	        e.printStackTrace();
-        } finally {
-        	if (session != null) {
-                session.logout();
-        	}
-        }
+        } 
+//		finally {
+//        	if (session != null) {
+//                session.logout();
+//        	}
+//        }
 		return "{\"node-type\": \"up\"}";
 	}
 	
@@ -211,7 +210,7 @@ public class ModeshapeController {
 	public String loadCustomDataTypes() {
 		Session session = null;
 		try {
-			session = repository.login();
+			session = this.repositoryManager.getSession("bpwizard");
 			org.modeshape.jcr.api.nodetype.NodeTypeManager nodeTypeManager = (org.modeshape.jcr.api.nodetype.NodeTypeManager)
 				session.getWorkspace().getNodeTypeManager();
 			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 1");
@@ -221,15 +220,16 @@ public class ModeshapeController {
 			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 3 ");
 		} catch (Exception e) {
 	        e.printStackTrace();
-        } finally {
-        	if (session != null) {
-        		try {
-                session.logout();
-        		} catch (Exception e) {
-        			e.printStackTrace();
-        		}
-        	}
-        }
+        } 
+//		finally {
+//        	if (session != null) {
+//        		try {
+//                session.logout();
+//        		} catch (Exception e) {
+//        			e.printStackTrace();
+//        		}
+//        	}
+//        }
 		return "{\"modeshape\": \"Register node types\"}";
 	}
 }

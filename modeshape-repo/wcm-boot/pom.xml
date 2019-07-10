@@ -113,6 +113,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+		    <groupId>com.bpwizard.wcm</groupId>
+			<artifactId>modeshape-rest-boot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 			<exclusions>
@@ -206,7 +211,11 @@
 			<groupId>org.modeshape</groupId>
 			<artifactId>modeshape-persistence-relational</artifactId>
 		</dependency>
-		
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <scope>provided</scope>
+		</dependency>	
 	</dependencies>
 
 	<build>

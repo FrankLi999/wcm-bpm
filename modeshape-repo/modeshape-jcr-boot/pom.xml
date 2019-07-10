@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bpwizard.wcm</groupId>
-	<artifactId>modeshape-rest-boot</artifactId>
+	<artifactId>modeshape-jcr-boot</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>modeshape-rest-boot</name>
-	<description>Spring Boot Modeshape REST service</description>
+	<name>modeshape-jcr-boot</name>
+	<description>Spring Boot Modeshape JCR</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -70,10 +70,6 @@
 			<artifactId>spring-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 		</dependency>
@@ -99,47 +95,22 @@
 			<artifactId>modeshape-jcr</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>com.bpwizard.wcm</groupId>
-			<artifactId>modeshape-jcr-boot</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-        <dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-databind</artifactId>
+			<groupId>org.modeshape</groupId>
+			<artifactId>modeshape-sequencer-images</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>com.fasterxml.jackson.dataformat</groupId>
-		    <artifactId>jackson-dataformat-xml</artifactId>
+			<groupId>org.modeshape</groupId>
+			<artifactId>modeshape-common</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
+			<groupId>org.modeshape</groupId>
+			<artifactId>modeshape-persistence-relational</artifactId>
+		</dependency>   
+		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>javax.servlet-api</artifactId>
 		    <scope>provided</scope>
-		</dependency>
-		<!-- 
-		<dependency>
-		    <groupId>javax.ws.rs</groupId>
-		    <artifactId>javax.ws.rs-api</artifactId>
-		    <version>2.0</version>
-		    <scope>provided</scope>
-		</dependency>
-        <dependency>
-            <groupId>org.codehaus.jettison</groupId>
-            <artifactId>jettison</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-		<dependency>
-		    <groupId>org.jboss.resteasy</groupId>
-		    <artifactId>resteasy-multipart-provider</artifactId>
-		    <version>4.1.0.Final</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.jboss.resteasy</groupId>
-		    <artifactId>resteasy-jaxrs</artifactId>
-		    <version>3.8.0.Final</version>
-		</dependency>
-		 -->
-		        
+		</dependency> 
 	</dependencies>
+
 </project>

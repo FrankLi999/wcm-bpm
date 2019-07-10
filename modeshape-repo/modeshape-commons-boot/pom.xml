@@ -8,7 +8,7 @@
 	<artifactId>modeshape-commons-boot</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mmodeshape-commons-boot</name>
+	<name>modeshape-commons-boot</name>
 	<description>Spring Boot Modeshape commons</description>
 
 	<parent>
@@ -106,7 +106,11 @@
 			<groupId>org.modeshape</groupId>
 			<artifactId>modeshape-persistence-relational</artifactId>
 		</dependency>
-		
+		<dependency>
+		    <groupId>com.bpwizard.wcm</groupId>
+			<artifactId>modeshape-jcr-boot</artifactId>
+			<version>${project.version}</version>
+		</dependency>  
 	</dependencies>
 
 </project>
