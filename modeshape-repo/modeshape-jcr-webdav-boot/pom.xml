@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bpwizard.wcm</groupId>
-	<artifactId>modeshape-webdav-boot</artifactId>
+	<artifactId>modeshape-jcr-webdav-boot</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>modeshape-webdav-boot</name>
-	<description>Spring Boot Modeshape WebDav</description>
+	<name>modeshape-jcr-webdav-boot</name>
+	<description>Spring Boot Modeshape JCR WebDav</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -78,10 +78,6 @@
 			<artifactId>spring-beans</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-		</dependency>
-		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-api</artifactId>
 		  </dependency>
@@ -105,7 +101,7 @@
         </dependency>
         <dependency>
 		    <groupId>com.bpwizard.wcm</groupId>
-			<artifactId>modeshape-webdav</artifactId>
+			<artifactId>modeshape-webdav-boot</artifactId>
 			<version>${project.version}</version>
         </dependency>
         <dependency>

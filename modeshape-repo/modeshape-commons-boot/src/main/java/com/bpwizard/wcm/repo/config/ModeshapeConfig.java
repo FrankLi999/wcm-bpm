@@ -41,7 +41,7 @@ public class ModeshapeConfig {
 	@Autowired 
 	private TransactionManager transactionManager;
 	
-	@Bean
+	@Bean("webRepositoryManager")
 	@DependsOn({"transactionManager", "transactionManagerLookup"})
 	public RepositoryManager repositoryManager() throws IOException {
 		logger.debug("Entering ...");

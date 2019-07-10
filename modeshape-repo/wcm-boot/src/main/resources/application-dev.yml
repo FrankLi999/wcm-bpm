@@ -80,3 +80,14 @@ bpw:
     secret: 841D8A6C80CBA4FCAD32D5367C18C53B
     # expiration-millis: 864000000 # 10 days
     # short-lived-millis: 120000   # two minutes
+    
+org:
+  modeshape:
+    web:
+      jcr:
+        webdav:
+          CONTENT_PRIMARY_TYPE_NAMES: "nt:resource,mode:resource"
+          RESOURCE_PRIMARY_TYPES_NAMES: "nt:file"
+          NEW_FOLDER_PRIMARY_TYPE_NAME: "nt:folder"
+          NEW_RESOURCE_PRIMARY_TYPE_NAME: "nt:file"
+          NEW_CONTENT_PRIMARY_TYPE_NAME: "nt:resource"

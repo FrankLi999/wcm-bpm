@@ -114,7 +114,12 @@
 		</dependency>
 		<dependency>
 		    <groupId>com.bpwizard.wcm</groupId>
-			<artifactId>modeshape-rest-boot</artifactId>
+			<artifactId>modeshape-jcr-rest-boot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.bpwizard.wcm</groupId>
+			<artifactId>modeshape-jcr-webdav-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
