@@ -88,7 +88,7 @@ public abstract class AbstractHandler {
     protected Session getSession( HttpServletRequest request,
                                   String rawRepositoryName,
                                   String rawWorkspaceName ) throws RepositoryException {
-        assert request != null;
+    	assert request != null;
         if (ModeshapeRequestContext.get() == null) {
             this.repositoryManager.getSession(request, repositoryNameFor(rawRepositoryName), workspaceNameFor(
                     rawWorkspaceName));
@@ -113,17 +113,14 @@ public abstract class AbstractHandler {
 
     private String workspaceNameFor( String rawWorkspaceName ) {
         String workspaceName = RestHelper.URL_ENCODER.decode(rawWorkspaceName);
-
         if (EMPTY_WORKSPACE_NAME.equals(workspaceName)) {
             workspaceName = "";
         }
-
         return workspaceName;
     }
 
     private String repositoryNameFor( String rawRepositoryName ) {
         String repositoryName = RestHelper.URL_ENCODER.decode(rawRepositoryName);
-
         if (EMPTY_REPOSITORY_NAME.equals(repositoryName)) {
             repositoryName = "";
         }
@@ -240,9 +237,8 @@ public abstract class AbstractHandler {
                                        Session session,
                                        Item item ) throws RepositoryException {
         String baseUrl = RestHelper.repositoryUrl(request);
-        return item instanceof Node ? createRestNode(session, (Node)item, baseUrl, depth) : createRestProperty(session,
-                                                                                                               (Property)item,
-                                                                                                               baseUrl);
+        return item instanceof Node ? createRestNode(session, (Node)item, baseUrl, depth) : 
+        	createRestProperty(session, (Property)item, baseUrl);
     }
 
     protected String parentPath( String path ) {
@@ -293,19 +289,15 @@ public abstract class AbstractHandler {
                                      int depth ) throws RepositoryException {
         String nodeUrl = RestHelper.urlFrom(baseUrl, ITEMS_METHOD_NAME, encodedPath(node.getPath()));
         boolean isRoot = node.getPath().equals("/");
-        String parentUrl = isRoot ? RestHelper.urlFrom(baseUrl, ITEMS_METHOD_NAME, "..", "..") : RestHelper.urlFrom(baseUrl,
-                                                                                                                    ITEMS_METHOD_NAME,
-                                                                                                                    encodedPath(
-                                                                                                                            node.getParent()
-                                                                                                                                    .getPath()));
+        String parentUrl = isRoot ? RestHelper.urlFrom(baseUrl, ITEMS_METHOD_NAME, "..", "..") : 
+        	RestHelper.urlFrom(baseUrl, ITEMS_METHOD_NAME, encodedPath(node.getParent().getPath()));
+        
         RestNode restNode = new RestNode(nodeName(node), node.getIdentifier(), nodeUrl, parentUrl);
-
         // add the properties
         for (PropertyIterator propertyIterator = node.getProperties(); propertyIterator.hasNext();) {
             Property property = propertyIterator.nextProperty();
             restNode.addJcrProperty(createRestProperty(session, property, baseUrl));
         }
-
         // add the children
         for (NodeIterator nodeIterator = node.getNodes(); nodeIterator.hasNext();) {
             Node childNode = nodeIterator.nextNode();

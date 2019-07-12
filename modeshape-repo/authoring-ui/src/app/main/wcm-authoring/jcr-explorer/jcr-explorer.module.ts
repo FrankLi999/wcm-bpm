@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+
 import { RouterModule, Routes } from '@angular/router';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
@@ -22,19 +23,17 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseSidebarModule } from '@fuse/components';
-import { SiteExplorerComponent } from './site-explorer/site-explorer.component';
-import { FolderOverviewComponent } from './folder-overview/folder-overview.component';
+import { JcrExplorerComponent } from './jcr-explorer/jcr-explorer.component';
+
 const routes: Routes = [
-    {
-        path       : '**',
-        component  : SiteExplorerComponent
-    }
+  {
+      path       : '**',
+      component  : JcrExplorerComponent
+  }
 ];
+
 @NgModule({
-  declarations: [
-    SiteExplorerComponent,
-    FolderOverviewComponent
-  ],
+  declarations: [JcrExplorerComponent],
   imports: [
     RouterModule.forChild(routes),
     CdkTableModule,
@@ -62,4 +61,4 @@ const routes: Routes = [
     FuseSidebarModule
   ]
 })
-export class SiteExplorerModule { }
+export class JcrExplorerModule { }

@@ -18,6 +18,8 @@ import org.modeshape.common.util.StringUtil;
 import org.modeshape.jcr.api.BackupOptions;
 import org.modeshape.jcr.api.RestoreOptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,15 +56,27 @@ import com.bpwizard.wcm.repo.rest.model.RestWorkspaces;
 public class ModeShapeRestController {
 	private static final Logger logger = LogManager.getLogger(ModeShapeRestController.class);
 	public static final String BASE_URI = "/api/modeshape/rest";
-	
+	private static final String REQUEST_URI_PREFIX = "/api/modeshape/rest/%s/%s/%s";
 	@Autowired
     private RestServerHandler serverHandler;
-    private RestRepositoryHandler repositoryHandler = new RestRepositoryHandler();
-    private RestItemHandler itemHandler = new RestItemHandler();
-    private RestNodeHandler nodeHandler = new RestNodeHandler();
-    private RestQueryHandler queryHandler = new RestQueryHandler();
-    private RestBinaryHandler binaryHandler = new RestBinaryHandler();
-    private RestNodeTypeHandler nodeTypeHandler = new RestNodeTypeHandler();
+	
+	@Autowired
+	private RestRepositoryHandler repositoryHandler;
+	
+	@Autowired
+	private RestItemHandler itemHandler;
+    
+	@Autowired
+	private RestNodeHandler nodeHandler;
+    
+	@Autowired
+	private RestQueryHandler queryHandler;
+    
+	@Autowired
+	private RestBinaryHandler binaryHandler;
+    
+	@Autowired
+	private RestNodeTypeHandler nodeTypeHandler;
     
     /**
      * Returns the list of JCR repositories available on this server
@@ -87,8 +101,8 @@ public class ModeShapeRestController {
      * @return the list of workspaces available to this user within the named repository, as a {@link RestWorkspaces} instance.
      * @throws RepositoryException if there is any other error accessing the list of available workspaces for the repository
      */
-    @GetMapping(path="/{repositoryName}", 
-    		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @GetMapping(path="/{repositoryName}", produces= MediaType.APPLICATION_JSON_VALUE)
+    		//produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestWorkspaces getWorkspaces(
     		HttpServletRequest request,
     		@PathVariable("repositoryName")String rawRepositoryName) throws RepositoryException {
@@ -124,17 +138,16 @@ public class ModeShapeRestController {
      * 
      * @see org.modeshape.jcr.api.RepositoryManager#backupRepository(File, BackupOptions)
      */
-    @PostMapping(path="{repositoryName}/" + RestHelper.BACKUP_METHOD_NAME, 
-    		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<BackupResponse> backup(ServletContext servletContext,
-                            HttpServletRequest request,
+    @PostMapping(path="/{repositoryName}/" + RestHelper.BACKUP_METHOD_NAME, produces= MediaType.APPLICATION_JSON_VALUE) 
+    		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity<BackupResponse> backup(HttpServletRequest request,
                             @PathVariable("repositoryName") String repositoryName,
                             @RequestParam(name="includeBinaries", defaultValue="true") final boolean includeBinaries,
                             @RequestParam(name="documentsPerFile", defaultValue="100000") final long documentsPerFile,
                             @RequestParam(name="compress", defaultValue="true") final boolean compress,
                             @RequestParam(name="batchSize", defaultValue="10000") final int batchSize) throws RepositoryException {
     	logger.debug("Entering ...");
-    	ResponseEntity<BackupResponse> response = this.repositoryHandler.backupRepository(servletContext, request, repositoryName, new BackupOptions() {
+    	ResponseEntity<BackupResponse> response = this.repositoryHandler.backupRepository(request, repositoryName, new BackupOptions() {
             @Override
             public boolean includeBinaries() {
                 return includeBinaries;
@@ -184,17 +197,16 @@ public class ModeShapeRestController {
      * 
      * @see org.modeshape.jcr.api.RepositoryManager#restoreRepository(File, RestoreOptions)
      */
-    @PostMapping(path="{repositoryName}/" + RestHelper.RESTORE_METHOD_NAME, 
-    		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<?> restore(ServletContext servletContext,
-                            HttpServletRequest request,
+    @PostMapping(path="/{repositoryName}/" + RestHelper.RESTORE_METHOD_NAME, produces= MediaType.APPLICATION_JSON_VALUE)
+    		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity<?> restore(HttpServletRequest request,
                             @PathVariable("repositoryName") String repositoryName,
                             @RequestParam(name="name") final String backupName,
                             @RequestParam(name="includeBinaries", defaultValue="true") final boolean includeBinaries,
                             @RequestParam(name="reindexContent", defaultValue="true") final boolean reindexContent,
                             @RequestParam(name="batchSize", defaultValue="1000") final int batchSize) throws RepositoryException {
     	logger.debug("Entering ...");
-    	ResponseEntity<?> response = this.repositoryHandler.restoreRepository(servletContext, request, repositoryName, backupName, new RestoreOptions() {
+    	ResponseEntity<?> response = this.repositoryHandler.restoreRepository(request, repositoryName, backupName, new RestoreOptions() {
             @Override
             public boolean reindexContentOnFinish() {
                 return reindexContent;
@@ -231,29 +243,23 @@ public class ModeShapeRestController {
      *         valid.
      */
     //@GetMapping(path="{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "{path:.+}", produces= {"application/json", "text/html", "text/plain"})
-    @GetMapping(path="{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "{path}",
-    		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @GetMapping(
+    		// path="/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "/{*path:.+}",
+    		path="/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "/**", 
+    		//path="/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "/{*path}",
+    		produces= MediaType.APPLICATION_JSON_VALUE)
+    		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> getBinary( HttpServletRequest request,
     		                   @PathVariable( "repositoryName" ) String repositoryName,
     		                   @PathVariable( "workspaceName" ) String workspaceName,
-    		                   @PathVariable( "path" ) String path,
-    		                   @RequestParam( "mimeType" ) String mimeType,
-    		                   @RequestParam( "contentDisposition" ) String contentDisposition ) throws RepositoryException {
+    		                   // @PathVariable( "path" ) String path,
+    		                   @RequestParam( name="mimeType", required=false ) String mimeType,
+    		                   @RequestParam( name="contentDisposition", required=false ) String contentDisposition ) throws RepositoryException {
     	logger.debug("Entering ...");
-    	Property binaryProperty = this.binaryHandler.getBinaryProperty(request, repositoryName, workspaceName, path);
-        if (binaryProperty.getType() != PropertyType.BINARY) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                           .body(new RestException("The property " + binaryProperty.getPath() + " is not a binary"));
-        }
-        Binary binary = binaryProperty.getBinary();
-        if (StringUtil.isBlank(mimeType)) {
-            mimeType = binaryHandler.getDefaultMimeType(binaryProperty);
-        }
-        if (StringUtil.isBlank(contentDisposition)) {
-            contentDisposition = binaryHandler.getDefaultContentDisposition(binaryProperty);
-        }
-
-        ResponseEntity<Object> response = ResponseEntity.ok().contentType(MediaType.valueOf(mimeType)).body(binary.getStream());
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.BINARY_METHOD_NAME), "");
+    	ResponseEntity<?> response = this.getBindaryContent(request, repositoryName, workspaceName, path, mimeType, contentDisposition);
+        
+    	//ResponseEntity<String> response = ResponseEntity.ok().body(path);
         logger.debug("Exiting ...");
     	return response;
     }
@@ -269,8 +275,8 @@ public class ModeShapeRestController {
      * @throws RepositoryException if any JCR related operation fails.
      */
     //@GetMapping(path="{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME + "/{nodeTypeName:.+}", produces= {"application/json", "text/html", "text/plain"})
-    @GetMapping(path="{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME + "/{nodeTypeName}", 
-    		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @GetMapping(path="/{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME + "/{nodeTypeName}", produces= MediaType.APPLICATION_JSON_VALUE)
+    		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestNodeType getNodeType( 
     		HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String repositoryName,
@@ -283,7 +289,7 @@ public class ModeShapeRestController {
     }
     
     /**
-     * Imports a single CND file into the repository. The CND file should be submitted as the body of the request.
+     * Imports a single CND(Node type definition) file into the repository. The CND file should be submitted as the body of the request.
      *
      * @param request a non-null {@link HttpServletRequest} request
      * @param repositoryName a non-null {@link String} representing the name of a repository.
@@ -293,15 +299,15 @@ public class ModeShapeRestController {
      * @return a list with the registered node types if the operation was successful, or an appropriate error code otherwise.
      * @throws RepositoryException if any JCR related operation fails.
      */
-    @PostMapping(path="{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME, 
-    		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @PostMapping(path="/{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME, produces= MediaType.APPLICATION_JSON_VALUE)
+    		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> postCND(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String repositoryName,
     		@PathVariable( "workspaceName" ) String workspaceName,
     		@RequestParam( name="allowUpdate", defaultValue="true" ) boolean allowUpdate,
-            InputStream requestBodyInputStream ) throws RepositoryException {
+            @RequestBody Resource requestBody ) throws IOException, RepositoryException {
     	logger.debug("Entering ...");
-    	ResponseEntity<?> response = this.nodeTypeHandler.importCND(request, repositoryName, workspaceName, allowUpdate, requestBodyInputStream);
+    	ResponseEntity<?> response = this.nodeTypeHandler.importCND(request, repositoryName, workspaceName, allowUpdate, requestBody.getInputStream());
     	logger.debug("Exiting ...");
     	return response;
     }
@@ -319,9 +325,10 @@ public class ModeShapeRestController {
      * @throws RepositoryException if any JCR operations fail
      * @throws IllegalArgumentException if the submitted form does not contain an HTML element named "file".
      */
-    @PostMapping(path="{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME, 
-        consumes= MediaType.MULTIPART_FORM_DATA_VALUE,
-    	produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @PostMapping(path="/{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME, 
+    		produces= MediaType.APPLICATION_JSON_VALUE, 
+        consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+    	// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> postCNDViaForm(HttpServletRequest request,
     		@PathVariable("repositoryName" ) String repositoryName,
     		@PathVariable("workspaceName" ) String workspaceName,
@@ -350,14 +357,19 @@ public class ModeShapeRestController {
      * @see javax.jcr.Session#getItem(String)
      */
     //@GetMapping("{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "{path:.*}",
-    @GetMapping(path="{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "{path}",
-    		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @GetMapping(path= {
+    		//"/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME, 
+    		//"/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "/{path:.+}"}, 
+    		"/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "/**"},
+    		produces= MediaType.APPLICATION_JSON_VALUE)
+    		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestItem getItem(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
-    		@PathVariable( "path" ) String path,
+    		// @RequestParam( name="path", defaultValue="" ) String path,
     		@RequestParam( name="depth", defaultValue="0" ) int depth ) throws RepositoryException {
     	logger.debug("Entering ...");
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, rawRepositoryName, rawWorkspaceName, RestHelper.ITEMS_METHOD_NAME), "");
     	RestItem item = this.itemHandler.item(request, rawRepositoryName, rawWorkspaceName, path, depth);
     	logger.debug("Exiting ...");
     	return item;
@@ -379,15 +391,20 @@ public class ModeShapeRestController {
      * @throws JSONException if there is an error reading the request body as a valid JSON object.
      * @throws RepositoryException if any other error occurs
      */
-    @PostMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "{path}",
-	    consumes= MediaType.APPLICATION_JSON_VALUE,
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @PostMapping(path= {
+    		//"/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME, 
+    		//"/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "/{path:.+}"},
+    		"/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "/**"},
+	        consumes= MediaType.APPLICATION_JSON_VALUE, 
+	        produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<RestItem> postItem( HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
             @PathVariable( "workspaceName" ) String rawWorkspaceName,
-            @PathVariable( "path" ) String path,
+            // @PathVariable( name = "path", required = true ) String path,
             @RequestBody String requestContent ) throws RepositoryException, IOException {
     	logger.debug("Entering ...");
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, rawRepositoryName, rawWorkspaceName, RestHelper.ITEMS_METHOD_NAME), "");
     	ResponseEntity<RestItem> response = this.itemHandler.addItem(request, rawRepositoryName, rawWorkspaceName, path, requestContent);
     	logger.debug("Exiting ...");
     	return response;
@@ -413,9 +430,10 @@ public class ModeShapeRestController {
      * @throws RepositoryException if any other error occurs
      * @see ModeShapeRestService#postItem(javax.servlet.http.HttpServletRequest, String, String, String, String)
      */
-    @PostMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME,
-	    consumes= MediaType.APPLICATION_JSON_VALUE,
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @PostMapping(path= "/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME,
+	    consumes= MediaType.APPLICATION_JSON_VALUE, 
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> postItems( HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -436,13 +454,19 @@ public class ModeShapeRestController {
      * @return a {@code non-null} {@link ResponseEntity} instance.
      * @throws RepositoryException if any other error occurs
      */
-    @DeleteMapping("{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "{path}")
+    @DeleteMapping(path= {
+    		//"{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME,
+    		//"/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "/{path:.+}"}
+    		"/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "/**"}
+    )
     public ResponseEntity<?> deleteItem(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
-    		@PathVariable( "workspaceName" ) String rawWorkspaceName,
-    		@PathVariable( "path" ) String path ) throws RepositoryException {
+    		@PathVariable( "workspaceName" ) String rawWorkspaceName
+    		//@PathVariable( name = "path", required = false ) String path 
+    		) throws RepositoryException {
         
     	logger.debug("Entering ...");
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, rawRepositoryName, rawWorkspaceName, RestHelper.ITEMS_METHOD_NAME), "");
     	this.itemHandler.deleteItem(request, rawRepositoryName, rawWorkspaceName, path);
         logger.debug("Exiting ...");
         return ResponseEntity.noContent().build();
@@ -466,7 +490,8 @@ public class ModeShapeRestController {
      * @throws RepositoryException if any other error occurs
      * @see ModeShapeRestService#deleteItem(javax.servlet.http.HttpServletRequest, String, String, String)
      */
-    @DeleteMapping(path="{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME, consumes=MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(path="/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME, 
+    		consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteItems( HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -495,15 +520,21 @@ public class ModeShapeRestController {
      * @throws JSONException if there is an error reading the request body as a valid JSON object.
      * @throws RepositoryException if any other error occurs
      */
-    @PutMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "{path}",
+    @PutMapping(path= {
+    		// "{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME,
+    		//"/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "/{path:.+}",
+    		"/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME + "/**",
+        },
 	    consumes= MediaType.APPLICATION_JSON_VALUE,
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestItem putItem( HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
-    		@PathVariable( "path" ) String path,
+    		//@PathVariable( name = "path", required = false ) String path,
             @RequestBody String requestContent ) throws IOException, RepositoryException {
     	logger.debug("Entering ...");
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, rawRepositoryName, rawWorkspaceName, RestHelper.ITEMS_METHOD_NAME), "");
     	RestItem item = itemHandler.updateItem(request, rawRepositoryName, rawWorkspaceName, path, requestContent);
         logger.debug("Exiting ...");
         return item;
@@ -529,9 +560,10 @@ public class ModeShapeRestController {
      * @throws RepositoryException if any other error occurs
      * @see ModeShapeRestService#putItem(javax.servlet.http.HttpServletRequest, String, String, String, String)
      */
-    @PutMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME,
-    consumes= MediaType.APPLICATION_JSON_VALUE,
-	produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @PutMapping(path= "/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME,
+    		consumes= MediaType.APPLICATION_JSON_VALUE,
+    		produces= MediaType.APPLICATION_JSON_VALUE)
+	// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> putItems(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
             @PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -555,15 +587,20 @@ public class ModeShapeRestController {
      * @return a representation of the binary property that was created/updated.
      * @throws RepositoryException if any JCR related operation fails.
      */
-    @PostMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "{path}",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @PostMapping(path= {
+    		//"/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME,
+    		//"/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "/{path:.+}"},
+    		"/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "/**"},
+    		produces= MediaType.APPLICATION_JSON_VALUE)
+		//produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> postBinary(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String repositoryName,
     		@PathVariable( "workspaceName" ) String workspaceName,
-    		@PathVariable( "path" ) String path,
-            @RequestBody InputStream requestBodyInputStream ) throws RepositoryException {
+    		//@PathVariable( name = "path", required = false ) String path,
+            @RequestBody Resource requestBodyInputStream ) throws IOException, RepositoryException {
     	logger.debug("Entering ...");
-    	ResponseEntity<?> response = this.binaryHandler.updateBinary(request, repositoryName, workspaceName, path, requestBodyInputStream, true);
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.BINARY_METHOD_NAME), "");
+    	ResponseEntity<?> response = this.binaryHandler.updateBinary(request, repositoryName, workspaceName, path, requestBodyInputStream.getInputStream(), true);
     	logger.debug("Exiting ...");
         return response;
     }
@@ -581,15 +618,21 @@ public class ModeShapeRestController {
      * @return a representation of the binary property that was updated.
      * @throws RepositoryException if any JCR related operation fails.
      */
-    @PutMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "{path}",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @PutMapping(path= {
+    		"/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME,
+    		//"/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "/{path:.+}",
+    		"/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "/**",
+    		},
+    		produces= MediaType.APPLICATION_JSON_VALUE)
+    		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> putBinary(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String repositoryName,
     		@PathVariable( "workspaceName" ) String workspaceName,
-    		@PathVariable( "path" ) String path,
-            @RequestBody InputStream requestBodyInputStream ) throws RepositoryException {
+    		//@PathVariable( name = "path", required = false ) String path,
+            @RequestBody Resource requestBodyInputStream ) throws IOException, RepositoryException {
     	logger.debug("Entering ...");
-    	ResponseEntity<?> response = this.binaryHandler.updateBinary(request, repositoryName, workspaceName, path, requestBodyInputStream, false);
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.BINARY_METHOD_NAME), "");
+    	ResponseEntity<?> response = this.binaryHandler.updateBinary(request, repositoryName, workspaceName, path, requestBodyInputStream.getInputStream(), false);
     	logger.debug("Exiting ...");
         return response;
     }
@@ -607,19 +650,58 @@ public class ModeShapeRestController {
      * @throws RepositoryException if any JCR related operation fails.
      * @see ModeShapeRestService#postBinary(javax.servlet.http.HttpServletRequest, String, String, String, java.io.InputStream)
      */
-    @PostMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "{path}",
+    @PostMapping(path= {
+    		 "/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME,
+    		 //"/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "/{path:.+}"},
+    		 "/{repositoryName}/{workspaceName}/" + RestHelper.BINARY_METHOD_NAME + "/**"},
         consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+        produces= MediaType.APPLICATION_JSON_VALUE)
+		//produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> postBinaryViaForm(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String repositoryName,
     		@PathVariable( "workspaceName" ) String workspaceName,
-    		@PathVariable( "path" ) String path,
+    		//@PathVariable( name = "path", required = false ) String path,
     		@RequestParam("file") MultipartFile file ) throws IOException, RepositoryException {
         // form.validate();
     	logger.debug("Entering ...");
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.BINARY_METHOD_NAME), "");
     	ResponseEntity<?> response = this.binaryHandler.updateBinary(request, repositoryName, workspaceName, path, file.getInputStream(), true);
     	logger.debug("Exiting ...");
         return response;
+    }
+    
+    /**
+     * Retrieves the binary content of an existing [nt:file] node at the given path, allowing 2 extra (optional) parameters: the
+     * mime-type and the content-disposition of the binary value.
+     *
+     * @param request a non-null {@link HttpServletRequest} request
+     * @param repositoryName a non-null {@link String} representing the name of a repository.
+     * @param workspaceName a non-null {@link String} representing the name of a workspace.
+     * @param path a non-null {@link String} representing the absolute path to a content file.
+     * @param mimeType an optional {@link String} representing the "already-known" mime-type of the binary. Can be {@code null}
+     * @param contentDisposition an optional {@link String} representing the client-preferred content disposition of the respose.
+     *        Can be {@code null}
+     * @return the binary stream of the requested binary property or NOT_FOUND if either the property isn't found or it isn't a
+     *         binary
+     * @throws RepositoryException if any JCR related operation fails, including the case when the path to the property isn't
+     *         valid.
+     */
+    @GetMapping(
+    		// path="/{repositoryName}/{workspaceName}/" + RestHelper.DOWNLOAD_METHOD_NAME + "/{*path:.+}",
+    		path="/{repositoryName}/{workspaceName}/" + RestHelper.DOWNLOAD_METHOD_NAME + "/**", 
+    		produces= MediaType.APPLICATION_JSON_VALUE)
+    		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity<?> downloadBinaryFile( HttpServletRequest request,
+    		                   @PathVariable( "repositoryName" ) String repositoryName,
+    		                   @PathVariable( "workspaceName" ) String workspaceName,
+    		                   // @PathVariable( "path" ) String path,
+    		                   @RequestParam( name="mimeType", required=false ) String mimeType,
+    		                   @RequestParam( name="contentDisposition", required=false ) String contentDisposition ) throws RepositoryException {
+    	logger.debug("Entering ...");
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.DOWNLOAD_METHOD_NAME), "");
+    	ResponseEntity<?> response = this.getBindaryContent(request, repositoryName, workspaceName, path + "/jcr:content/jcr:data", mimeType, contentDisposition);        
+        logger.debug("Exiting ...");
+    	return response;
     }
     
     /**
@@ -647,17 +729,22 @@ public class ModeShapeRestController {
      * @return a {@code non-null} {@link ResponseEntity}
      * @throws RepositoryException if any JCR related operation fails.
      */
-    @PostMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.UPLOAD_METHOD_NAME + "{path}",
+    @PostMapping(path= {
+    		 //"/{repositoryName}/{workspaceName}/" + RestHelper.UPLOAD_METHOD_NAME,
+    		 //"/{repositoryName}/{workspaceName}/" + RestHelper.UPLOAD_METHOD_NAME + "/{path:.+}"},
+    		"/{repositoryName}/{workspaceName}/" + RestHelper.UPLOAD_METHOD_NAME + "/**"},
 	    consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> uploadBinaryViaForm(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String repositoryName,
     		@PathVariable( "workspaceName" ) String workspaceName,
-    		@PathVariable( "path" ) String filePath,
+    		//@PathVariable( name = "path", required = false ) String path,
     		@RequestParam("file") MultipartFile file) throws IOException, RepositoryException {
     	logger.debug("Entering ...");
     	// form.validate();
-    	ResponseEntity<?> response = this.binaryHandler.uploadBinary(request, repositoryName, workspaceName, filePath, file.getInputStream());
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.UPLOAD_METHOD_NAME), "");
+    	ResponseEntity<?> response = this.binaryHandler.uploadBinary(request, repositoryName, workspaceName, path, file.getInputStream());
     	logger.debug("Exiting ...");
         return response;
     }
@@ -688,15 +775,20 @@ public class ModeShapeRestController {
      * @return a {@code non-null} {@link ResponseEntity}
      * @throws RepositoryException if any JCR related operation fails.
      */
-    @PostMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.UPLOAD_METHOD_NAME + "{path}",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @PostMapping(path= {
+    		//"/{repositoryName}/{workspaceName}/" + RestHelper.UPLOAD_METHOD_NAME,
+    		// "/{repositoryName}/{workspaceName}/" + RestHelper.UPLOAD_METHOD_NAME + "/{path:.+}"},
+    		"/{repositoryName}/{workspaceName}/" + RestHelper.UPLOAD_METHOD_NAME + "/**"},
+    	    produces= MediaType.APPLICATION_JSON_VALUE)
+    		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> uploadBinary(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String repositoryName,
     		@PathVariable( "workspaceName" ) String workspaceName,
-    		@PathVariable( "path" ) String filePath,
-    		@RequestBody InputStream requestBodyInputStream ) throws RepositoryException {
+    		//@PathVariable( name = "path", required = false ) String path,
+    		@RequestBody Resource requestBodyInputStream ) throws IOException, RepositoryException {
     	logger.debug("Entering ...");
-    	ResponseEntity<?> response = this.binaryHandler.uploadBinary(request, repositoryName, workspaceName, filePath, requestBodyInputStream);
+    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.UPLOAD_METHOD_NAME), "");
+    	ResponseEntity<?> response = this.binaryHandler.uploadBinary(request, repositoryName, workspaceName, path, requestBodyInputStream.getInputStream());
     	logger.debug("Exiting ...");
         return response;
     }
@@ -721,7 +813,8 @@ public class ModeShapeRestController {
     @SuppressWarnings( "deprecation" )
     @PostMapping(path= "{repositoryName}/{workspaceName}/query",
 	    consumes = "application/jcr+xpath",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestQueryResult postXPathQuery(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -758,7 +851,8 @@ public class ModeShapeRestController {
     @SuppressWarnings( "deprecation" )
     @PostMapping(path= "{repositoryName}/{workspaceName}/query",
 	    consumes = "application/jcr+sql",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestQueryResult postJcrSqlQuery(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -793,7 +887,8 @@ public class ModeShapeRestController {
      */
     @PostMapping(path= "{repositoryName}/{workspaceName}/query",
 	    consumes = "application/jcr+sql2",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestQueryResult postJcrSql2Query(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -829,7 +924,8 @@ public class ModeShapeRestController {
      */
     @PostMapping(path= "{repositoryName}/{workspaceName}/query",
 	    consumes = "application/jcr+search",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestQueryResult postJcrSearchQuery(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -866,7 +962,8 @@ public class ModeShapeRestController {
     @SuppressWarnings( "deprecation" )
     @PostMapping(path= "{repositoryName}/{workspaceName}/queryPlan",
 	    consumes = "application/jcr+xpath",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestQueryPlanResult postXPathQueryPlan(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -902,7 +999,8 @@ public class ModeShapeRestController {
     @SuppressWarnings( "deprecation" )
     @PostMapping(path= "{repositoryName}/{workspaceName}/queryPlan",
 	    consumes = "application/jcr+sql",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+	    // produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestQueryPlanResult postJcrSqlQueryPlan( HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -937,7 +1035,8 @@ public class ModeShapeRestController {
      */
     @PostMapping(path= "{repositoryName}/{workspaceName}/queryPlan",
 	    consumes = "application/jcr+sql2",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestQueryPlanResult postJcrSql2QueryPlan(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -973,7 +1072,8 @@ public class ModeShapeRestController {
      */
     @PostMapping(path= "{repositoryName}/{workspaceName}/queryPlan",
 	    consumes = "application/jcr+search",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestQueryPlanResult postJcrSearchQueryPlan(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -1002,7 +1102,8 @@ public class ModeShapeRestController {
      * @see javax.jcr.Session#getNodeByIdentifier(String)
      */
     @GetMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.NODES_METHOD_NAME + "/{id}",
-		produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    		produces= MediaType.APPLICATION_JSON_VALUE)
+			// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestItem getNodeWithId( HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -1032,7 +1133,8 @@ public class ModeShapeRestController {
      */
     @PutMapping(path= "{repositoryName}/{workspaceName}/" + RestHelper.NODES_METHOD_NAME + "/{id}",
 		consumes = MediaType.APPLICATION_JSON_VALUE,
-    	produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})    
+		produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})    
     public RestItem putNodeWithId( HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String rawRepositoryName,
     		@PathVariable( "workspaceName" ) String rawWorkspaceName,
@@ -1064,5 +1166,32 @@ public class ModeShapeRestController {
         ResponseEntity<Void> response = ResponseEntity.noContent().build();
         logger.debug("Exiting ...");
     	return response;
+    }
+    
+    private ResponseEntity<?> getBindaryContent(HttpServletRequest request,
+            String repositoryName,
+            String workspaceName,
+            String path,
+            String mimeType,
+            String contentDisposition) throws RepositoryException {
+    	
+    	Property binaryProperty = this.binaryHandler.getBinaryProperty(request, repositoryName, workspaceName, path);
+    	if (binaryProperty.getType() != PropertyType.BINARY) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                           .body(new RestException("The property " + binaryProperty.getPath() + " is not a binary"));
+        }
+        Binary binary = binaryProperty.getBinary();
+        if (StringUtil.isBlank(mimeType)) {
+            mimeType = binaryHandler.getDefaultMimeType(binaryProperty);
+        }
+        
+        if (StringUtil.isBlank(mimeType)) {
+        	mimeType = MediaType.IMAGE_PNG_VALUE;
+        }
+        if (StringUtil.isBlank(contentDisposition)) {
+            contentDisposition = binaryHandler.getDefaultContentDisposition(binaryProperty);
+        }
+        
+        return ResponseEntity.ok().header("Content-Disposition", contentDisposition).contentType(MediaType.valueOf(mimeType)).body(new InputStreamResource(binary.getStream()));
     }
 }

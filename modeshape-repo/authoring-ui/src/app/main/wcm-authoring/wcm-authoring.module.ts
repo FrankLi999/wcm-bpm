@@ -6,6 +6,10 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 const routes = [
     {
+        path        : 'jcr-explorer',
+        loadChildren: './jcr-explorer/jcr-explorer.module#JcrExplorerModule'
+    },
+    {
         path        : 'resource-library',
         loadChildren: './resource-library/resource-library.module#ResourceLibraryModule'
     },

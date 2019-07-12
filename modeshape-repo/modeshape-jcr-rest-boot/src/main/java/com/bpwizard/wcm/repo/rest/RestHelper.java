@@ -48,6 +48,7 @@ public final class RestHelper {
     public static final String QUERY_PLAN_METHOD_NAME = "queryPlan";
     public static final String NODE_TYPES_METHOD_NAME = "nodetypes";
     public static final String UPLOAD_METHOD_NAME = "upload";
+    public static final String DOWNLOAD_METHOD_NAME = "download";
     public static final String BACKUP_METHOD_NAME = "backup";
     public static final String RESTORE_METHOD_NAME = "restore";
     
@@ -57,7 +58,8 @@ public final class RestHelper {
                                                                   QUERY_METHOD_NAME,
                                                                   QUERY_PLAN_METHOD_NAME,
                                                                   NODE_TYPES_METHOD_NAME,
-                                                                  UPLOAD_METHOD_NAME);
+                                                                  UPLOAD_METHOD_NAME,
+                                                                  DOWNLOAD_METHOD_NAME);
     // almost ISO8601, because in JDK 6 Z/z do not support timezones of the format hh:mm
     private static final List<SimpleDateFormat> ISO8601_DATE_PARSERS = Arrays.asList(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"),
                                                                                      new SimpleDateFormat("yyyy-MM-dd"));

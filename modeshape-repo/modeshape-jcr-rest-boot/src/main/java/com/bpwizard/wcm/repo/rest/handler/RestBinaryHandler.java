@@ -134,7 +134,6 @@ public final class RestBinaryHandler extends AbstractHandler {
         String parentPath = parentPath(binaryPropertyAbsPath);
         Session session = getSession(request, repositoryName, workspaceName);
         Node parent = (Node)itemAtPath(parentPath, session);
-
         int lastSlashInd = binaryPropertyAbsPath.lastIndexOf('/');
         String propertyName = lastSlashInd == -1 ? binaryPropertyAbsPath : binaryPropertyAbsPath.substring(lastSlashInd + 1);
         boolean createdNewValue = false;
@@ -162,6 +161,7 @@ public final class RestBinaryHandler extends AbstractHandler {
             try {
                 binaryStream.close();
             } catch (IOException e) {
+            	System.out.println(">>>>>>>>>>>>>>>>>>>>updateBinary >>>>>>>> 12"  + e );
                 logger.error("Cannot close binary stream", e);
             }
         }

@@ -8,6 +8,14 @@ export const navigation: FuseNavigation[] = [
         type     : 'group',
         children : [
             {
+                id       : 'jcr-explorer',
+                title    : 'JCR Explorer',
+                translate: 'NAV.JCR_EXPLORER.TITLE',
+                type     : 'item',
+                icon     : 'archive',
+                url      : '/wcm-authoring/jcr-explorer'
+            },
+            {
                 id       : 'resource-library',
                 title    : 'Resource Library',
                 translate: 'NAV.RESOURCE_LIBRARY.TITLE',

@@ -83,6 +83,7 @@ bpw:
     
 org:
   modeshape:
+    backupLocation: "c:/temp"
     web:
       jcr:
         webdav:

@@ -3,6 +3,9 @@ export const locale = {
     data: {
         'NAV': {
             'APPLICATIONS': 'Programlar',
+            'JCR_EXPLORER': {
+                'TITLE': 'JCR Gezgini'
+            },
             'RESOURCE_LIBRARY'  : {
                 'TITLE': 'Kaynak Kütüphanesi'
             },

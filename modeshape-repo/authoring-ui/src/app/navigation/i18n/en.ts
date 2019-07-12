@@ -3,6 +3,9 @@ export const locale = {
     data: {
         'NAV': {
             'APPLICATIONS': 'Applications',
+            'JCR_EXPLORER': {
+                'TITLE': 'JCR Explorer'
+            },
             'RESOURCE_LIBRARY'  : {
                 'TITLE': 'Resource Library'
             },

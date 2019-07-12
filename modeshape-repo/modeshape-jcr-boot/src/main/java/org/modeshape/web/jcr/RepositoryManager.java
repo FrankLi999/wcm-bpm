@@ -89,13 +89,13 @@ public class RepositoryManager {
                                       String workspaceName ) throws RepositoryException {
         // Go through all the RepositoryFactory instances and try to create one ...
         Repository repository = getRepository(repositoryName);
-
         // If there's no authenticated user, try an anonymous login
+        Session session = null;
         if (request == null || request.getUserPrincipal() == null) {
-            return repository.login(workspaceName);
+        	session = repository.login(workspaceName);
+        } else {
+        	session = repository.login(new ServletCredentials(request), workspaceName);
         }
-
-        Session session = repository.login(new ServletCredentials(request), workspaceName);
         ModeshapeRequestContext.set(session);
         return session;
     }

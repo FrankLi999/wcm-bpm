@@ -24,7 +24,7 @@
 
 [bpw:validationRule]
 - bpw:name (STRING) COPY
-- bpw:type (STRING) = regex COPY
+- bpw:type (STRING) = 'regex' COPY
 - bpw:rule (STRING) COPY
 
 [bpw:pageSearchData]

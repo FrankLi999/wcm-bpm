@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.modeshape.common.util.StringUtil;
@@ -35,6 +34,7 @@ import org.modeshape.jcr.api.Problems;
 import org.modeshape.jcr.api.Repository;
 import org.modeshape.jcr.api.RepositoryManager;
 import org.modeshape.jcr.api.RestoreOptions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -52,12 +52,15 @@ import com.bpwizard.wcm.repo.rest.model.RestWorkspaces;
 @Component
 public final class RestRepositoryHandler extends AbstractHandler {
 
-    private static final String BACKUP_LOCATION_INIT_PARAM = "backupLocation";
+	
+    private static final String SPRING_BACKUP_LOCATION_PROPERTY = "org.modeshape.backupLocation";
     private static final String JBOSS_DOMAIN_DATA_DIR = "jboss.domain.data.dir";
     private static final String JBOSS_SERVER_DATA_DIR = "jboss.server.data.dir";
     private static final String USER_HOME = "user.home";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("ddMMyyyy_HHmmss");
 
+    @Value("${org.modeshape.backupLocation}")
+    private String springBackupRoot;
     /**
      * Returns the list of workspaces available to this user within the named repository.
      *
@@ -84,11 +87,10 @@ public final class RestRepositoryHandler extends AbstractHandler {
     /**
      * Performs a repository backup.
      */
-    public ResponseEntity<BackupResponse> backupRepository( ServletContext context, 
-                                      HttpServletRequest request, 
+    public ResponseEntity<BackupResponse> backupRepository(HttpServletRequest request, 
                                       String repositoryName,
                                       BackupOptions options ) throws RepositoryException {
-        final File backupLocation = resolveBackupLocation(context);
+        final File backupLocation = resolveBackupLocation();
 
         Session session = getSession(request, repositoryName, null);
         String repositoryVersion = session.getRepository().getDescriptorValue(Repository.REP_VERSION_DESC).getString().replaceAll("\\.","");
@@ -116,15 +118,14 @@ public final class RestRepositoryHandler extends AbstractHandler {
     /**
      * Restores a repository using an existing backup.
      */
-    public ResponseEntity<?> restoreRepository( ServletContext context, 
-                                       HttpServletRequest request, 
+    public ResponseEntity<?> restoreRepository(HttpServletRequest request, 
                                        String repositoryName,
                                        String backupName, 
                                        RestoreOptions options ) throws RepositoryException {
         if (StringUtil.isBlank(backupName)) {
             throw new IllegalArgumentException("The name of the backup cannot be null");
         }
-        File backup = resolveBackup(context, backupName);
+        File backup = resolveBackup(backupName);
         logger.debug("Restoring repository '{0}' from backup '{1}' using '{2}'", repositoryName, backup, options);
         Session session = getSession(request, repositoryName, null);
         RepositoryManager repositoryManager = ((org.modeshape.jcr.api.Workspace)session.getWorkspace()).getRepositoryManager();
@@ -142,84 +143,114 @@ public final class RestRepositoryHandler extends AbstractHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
     
-    private File resolveBackup( ServletContext context, String backupName ) {
+    private File resolveBackup(String backupName) {
         // first look at the servlet init param
-        String backupRoot = context.getInitParameter(BACKUP_LOCATION_INIT_PARAM);
+        // String backupRoot = context.getInitParameter(BACKUP_LOCATION_INIT_PARAM);
+    	String backupRoot = this.springBackupRoot;
+        File backupFolder = null;
         if (!StringUtil.isBlank(backupRoot)) {
             if (isValidDir(backupRoot + "/" + backupName)) {
-                return new File(backupRoot + "/" + backupName);
+                //return new File(backupRoot + "/" + backupName);
+                backupFolder = new File(backupRoot + "/" + backupName);
+            } else {
+
+	            // try resolving it as a system property
+	            backupRoot = System.getProperty(backupRoot);
+	            if (isValidDir(backupRoot + "/" + backupName)) {
+	            	//return new File(backupRoot + "/" + backupName);
+	                backupFolder = new File(backupRoot + "/" + backupName);
+	            }
             }
-
-            // try resolving it as a system property
-            backupRoot = System.getProperty(backupRoot);
-            if (isValidDir(backupRoot + "/" + backupName)) {
-                return new File(backupRoot + "/" + backupName);
-            }
+        }
+        if (backupFolder == null) {
+	        // jboss.domain.data.dir
+	        backupRoot = System.getProperty(JBOSS_DOMAIN_DATA_DIR);
+	        if (isValidDir(backupRoot + "/" + backupName)) {
+	        	//return new File(backupRoot + "/" + backupName);
+                backupFolder = new File(backupRoot + "/" + backupName);
+	        }
         }
 
-        // jboss.domain.data.dir
-        backupRoot = System.getProperty(JBOSS_DOMAIN_DATA_DIR);
-        if (isValidDir(backupRoot + "/" + backupName)) {
-            return new File(backupRoot + "/" + backupName);
+        if (backupFolder == null) {
+	        // jboss.server.data.dir
+	        backupRoot = System.getProperty(JBOSS_SERVER_DATA_DIR);
+	        if (isValidDir(backupRoot + "/" + backupName)) {
+	        	//return new File(backupRoot + "/" + backupName);
+                backupFolder = new File(backupRoot + "/" + backupName);
+	        }
         }
-
-        // jboss.server.data.dir
-        backupRoot = System.getProperty(JBOSS_SERVER_DATA_DIR);
-        if (isValidDir(backupRoot + "/" + backupName)) {
-            return new File(backupRoot + "/" + backupName);
+        if (backupFolder == null) {
+	        // finally user.home
+	        backupRoot = System.getProperty(USER_HOME);
+	        if (isValidDir(backupRoot + "/" + backupName)) {
+	        	//return new File(backupRoot + "/" + backupName);
+                backupFolder = new File(backupRoot + "/" + backupName);
+	        }
         }
-
-        // finally user.home
-        backupRoot = System.getProperty(USER_HOME);
-        if (isValidDir(backupRoot + "/" + backupName)) {
-            return new File(backupRoot + "/" + backupName);
+        if (backupFolder != null) {
+        	return backupFolder;
         }
 
         // none of the above are available, so fail
         throw new IllegalArgumentException(
                 "Cannot locate backup '" + backupName + "' anywhere on the server in the following locations:" +
-                BACKUP_LOCATION_INIT_PARAM + " context param, " + JBOSS_DOMAIN_DATA_DIR + ", " + JBOSS_SERVER_DATA_DIR + ", "
+                SPRING_BACKUP_LOCATION_PROPERTY + " spring property, " + JBOSS_DOMAIN_DATA_DIR + ", " + JBOSS_SERVER_DATA_DIR + ", "
                 + USER_HOME);
 
     }
 
-    private File resolveBackupLocation( ServletContext context ) {
+    private File resolveBackupLocation() {
         // first look at the servlet init param 'backupLocation'
-        String backupLocation = context.getInitParameter(BACKUP_LOCATION_INIT_PARAM);
+        //String backupLocation = context.getInitParameter(BACKUP_LOCATION_INIT_PARAM);
+    	String backupLocation = this.springBackupRoot;
+        File backupRoot = null;
         if (!StringUtil.isBlank(backupLocation)) {
             if (isValidDir(backupLocation)) {
-                return new File(backupLocation);
-            }
+                // return new File(backupLocation);
+            	backupRoot = new File(backupLocation);
+            } else {
 
-            // try resolving it as a system property
-            backupLocation = System.getProperty(backupLocation);
-            if (isValidDir(backupLocation)) {
-                return new File(backupLocation);
+	            // try resolving it as a system property
+	            backupLocation = System.getProperty(backupLocation);
+	            if (isValidDir(backupLocation)) {
+	                // return new File(backupLocation);
+	            	backupRoot = new File(backupLocation);
+	            }
             }
         }
 
-        // jboss.domain.data.dir
-        backupLocation = System.getProperty(JBOSS_DOMAIN_DATA_DIR);
-        if (isValidDir(backupLocation)) {
-            return new File(backupLocation);
+        if (backupRoot == null) {
+	        // jboss.domain.data.dir
+	        backupLocation = System.getProperty(JBOSS_DOMAIN_DATA_DIR);
+	        if (isValidDir(backupLocation)) {
+	        	// return new File(backupLocation);
+            	backupRoot = new File(backupLocation);
+	        }
         }
 
         // jboss.server.data.dir
-        backupLocation = System.getProperty(JBOSS_SERVER_DATA_DIR);
-        if (isValidDir(backupLocation)) {
-            return new File(backupLocation);
+        if (backupRoot == null) {
+	        backupLocation = System.getProperty(JBOSS_SERVER_DATA_DIR);
+	        if (isValidDir(backupLocation)) {
+	        	// return new File(backupLocation);
+            	backupRoot = new File(backupLocation);
+	        }
         }
-
         // finally user.home
-        backupLocation = System.getProperty(USER_HOME);
-        if (isValidDir(backupLocation)) {
-            return new File(backupLocation);
+        if (backupRoot == null) {
+	        backupLocation = System.getProperty(USER_HOME);
+	        if (isValidDir(backupLocation)) {
+	        	// return new File(backupLocation);
+            	backupRoot = new File(backupLocation);
+	        }
         }
-
+        if (backupRoot != null) {
+        	return backupRoot;
+        }
         // none of the above are available, so fail
         throw new IllegalArgumentException(
                 "None of the following locations are writable folders on the server: " +
-                BACKUP_LOCATION_INIT_PARAM + " context param, " + JBOSS_DOMAIN_DATA_DIR + ", " + JBOSS_SERVER_DATA_DIR + ", "
+                SPRING_BACKUP_LOCATION_PROPERTY + " spring property, " + JBOSS_DOMAIN_DATA_DIR + ", " + JBOSS_SERVER_DATA_DIR + ", "
                 + USER_HOME);
     }
 
