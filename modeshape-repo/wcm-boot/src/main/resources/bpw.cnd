@@ -379,25 +379,31 @@
 [bpw:renderTemplateFolder] > nt:folder
 [bpw:queryFolder] > nt:folder
 
+[bpw:assetFolder] > nt:folder
+
 [bpw:library] > nt:folder, mix:lastModified
 - bpw:language (STRING)
-+ bpw:rootSiteArea (bpw:siteArea)
-+ bpw:resourceType (bpw:resourceTypeFolder)
-+ bpw:theme (bpw:themeFolder)
-+ bpw:pageLayout (bpw:pageLayoutFolder)
-+ bpw:renderTemplate (bpw:renderTemplateFolder)
-+ bpw:query (bpw:queryFolder)
-+ bpw:workflow (bpw:workflowFolder)
-+ bpw:category (bpw:categoryFolder)
++ rootSiteArea (bpw:siteArea)
++ resourceType (bpw:resourceTypeFolder)
++ theme (bpw:themeFolder)
++ pageLayout (bpw:pageLayoutFolder)
++ renderTemplate (bpw:renderTemplateFolder)
++ query (bpw:queryFolder)
++ workflow (bpw:workflowFolder)
++ category (bpw:categoryFolder)
++ asset (bpw:assetFolder)
+
+[bpw:validationRuleFolder] > nt:folder
++ * [bpw:validationRule] 
 
 [bpw:configurationFolder] > nt:folder
-+ * [bpw:validationRule] 
++ validationRule (bpw:validationRuleFolder)
 
 [bpw:libraryFolder] > nt:folder
 + * (bpw:library)
 
 [bpw:root] > nt:folder, mix:lastModified
-+ bpw:controlField (bpw:controlFieldFolder)
-+ bpw:baseResourceType (bpw:resourceTypeFolder)
-+ bpw:configuration (bpw:configurationFolder)
-+ bpw:library (bpw:libraryFolder)
++ controlField (bpw:controlFieldFolder)
++ baseResourceType (bpw:resourceTypeFolder)
++ configuration (bpw:configurationFolder)
++ library (bpw:libraryFolder)

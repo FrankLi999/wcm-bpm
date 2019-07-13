@@ -1,0 +1,1452 @@
+{
+    "bpwizard" : {
+        "jcr:primaryType": "bpw:root",
+        "jcr:mixinTypes": ["mix:lastModified"]
+    },
+    "bpwizard/library" : {
+        "jcr:primaryType":"bpw:libraryFolder",
+        "jcr:mixinTypes":["mix:lastModified"]
+    },
+    "bpwizard/configuration" : {
+        "jcr:primaryType":"bpw:configurationFolder",
+        "jcr:mixinTypes":["mix:lastModified"]
+    },
+    "bpwizard/configuration/validationRule" : {
+        "jcr:primaryType":"bpw:validationRuleFolder"
+    },
+    "bpwizard/configuration/validationRule/emailValidationRule" : {
+        "jcr:primaryType":"bpw:validationRule",
+        "bpw:name":"Email",
+        "bpw:rule":"^([a-zA-Z0-9]+[a-zA-Z0-9._%+-]*@(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,4})$"
+    },
+    "bpwizard/configuration/validationRule/numbersOnlyValidationRule" : {
+        "jcr:primaryType":"bpw:validationRule",
+        "bpw:name":"Numbers Only",
+        "bpw:rule":"[0-9]*"
+    },
+    "bpwizard/configuration/validationRule/lettersOnlyValidationRule" : {
+        "jcr:primaryType":"bpw:validationRule",
+        "bpw:name":"Letters Only",
+        "bpw:rule":"[a-zA-Zs]*"
+    },
+    "bpwizard/configuration/validationRule/alphanumericValidationRule" : {
+        "jcr:primaryType":"bpw:validationRule",
+        "bpw:name":"Alphanumeric",
+        "bpw:rule":"[0-9a-zA-Zs]*"
+    },
+    "bpwizard/configuration/validationRule/zipcodeValidationRule" : {
+        "jcr:primaryType":"bpw:validationRule",
+        "bpw:name":"US Zip Code",
+        "bpw:rule":"(^d{5}$)|(^d{5}-d{4}$)"
+    },
+    "bpwizard/configuration/validationRule/phoneValidationRule" : {
+        "jcr:primaryType":"bpw:validationRule",
+        "bpw:name":"US Phone",
+        "bpw:rule":"^(?[1-9]d{2}[)-]s?d{3}-d{4}$"
+    },
+    "bpwizard/configuration/validationRule/urlValidationRule" : {
+        "jcr:primaryType":"bpw:validationRule",
+        "bpw:name":"URL Pattern",
+        "bpw:rule":"^((http|ftp|https)://w{3}[d]*.|(http|ftp|https)://|w{3}[d]*.)([wd._-#()[],;:]+@[wd._-#()[],;:])?([a-z0-9]+.)*[a-z-0-9]+.([a-z]{2,3})?[a-z]{2,6}(:[0-9]+)?(/[/a-zA-Z0-9._-,%s]+)*(/|?[a-z0-9=&.-,#]+)?$"
+    },
+    "bpwizard/configuration/validationRule/noHtmlValidationRule" : {
+        "jcr:primaryType":"bpw:validationRule",
+        "bpw:name":"No HTML",
+        "bpw:rule":"[^(<[.]+>)]*"
+    },
+    "bpwizard/resourceType" : {
+        "jcr:primaryType":"bpw:resourceTypeFolder",
+        "jcr:mixinTypes":["mix:lastModified"]
+    },
+    "bpwizard/resourceType/contentType" : {
+        "jcr:primaryType":"bpw:authoringTemplate",
+        "bpw:resourceType": "bpw:contentType"
+    },
+    "bpwizard/resourceType/contentType/firstRow" : {
+        "jcr:primaryType":"bpw:elementFormRow"
+    },
+    "bpwizard/resourceType/contentType/firstRow/firstColumn" : {
+        "jcr:primaryType": "bpw:elementFormColumn"
+    },
+    "bpwizard/resourceType/contentType/firstRow/firstColumn/name" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/contentType/firstRow/firstColumn/title" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/contentType/firstRow/firstColumn/siteArea" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Site Area",
+        "bpw:controlName": "siteArea",
+        "bpw:mandatory": "true"
+    },
+    "bpwizard/resourceType/contentType/firstRow/firstColumn/category" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Category",
+        "bpw:controlName": "category",
+        "bpw:userSearchable": "true"
+    },
+    "bpwizard/resourceType/contentType/firstRow/firstColumn/body" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Body",
+        "bpw:controlName": "richText",
+        "bpw:mandatory": "true"
+    },
+    "bpwizard/resourceType/componentType" : {
+        "jcr:primaryType":"bpw:authoringTemplate",
+        "bpw:resourceType": "bpw:componentType"
+    },
+    "bpwizard/resourceType/componentType/firstRow" : {
+        "jcr:primaryType":"bpw:elementFormRow"
+    },
+    "bpwizard/resourceType/componentType/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:elementFormColumn"
+    },
+    "bpwizard/resourceType/componentType/firstRow/firstColumn/name" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/componentType/firstRow/firstColumn/title" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/componentType/firstRow/firstColumn/componentTemplate" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Component Template",
+        "bpw:controlName": "textArea",
+        "bpw:mandatory": "true"
+    },  
+    "bpwizard/resourceType/fileType" : {
+        "jcr:primaryType":"bpw:authoringTemplate",
+        "bpw:resourceType": "bpw:fileType"
+    },
+    "bpwizard/resourceType/fileType/contentTab" : {
+        "jcr:primaryType":"bpw:elementFormTab",
+        "bpw:groupTitle": "Content"
+    },
+    "bpwizard/resourceType/fileType/contentTab/firstRow" : {
+        "jcr:primaryType":"bpw:elementFormRow"
+    },
+    "bpwizard/resourceType/fileType/contentTab/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:elementFormColumn"
+    },
+    "bpwizard/resourceType/fileType/contentTab/firstRow/firstColumn/name" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/fileType/contentTab/firstRow/firstColumn/title" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/fileType/contentTab/firstRow/firstColumn/siteArea" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Site Area",
+        "bpw:controlName": "siteArea",
+        "bpw:mandatory": "true"
+    },
+    "bpwizard/resourceType/fileType/contentTab/firstRow/firstColumn/content" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Content",
+        "bpw:controlName": "binary",
+        "bpw:mandatory": "true"
+    },
+    "bpwizard/resourceType/fileType/metadataTab" : {
+        "jcr:primaryType": "bpw:elementFormTab",
+        "bpw:groupTitle": "Metadata"
+    },
+    "bpwizard/resourceType/fileType/metadataTab/firstRow" : {
+        "jcr:primaryType": "bpw:elementFormRow"
+    },
+    "bpwizard/resourceType/fileType/metadataTab/firstRow/firstColumn" : {
+        "jcr:primaryType": "bpw:elementFormColumn"
+    },
+    "bpwizard/resourceType/fileType/metadataTab/firstRow/firstColumn/metadata" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Metadata",
+        "bpw:controlName": "keyValue",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true"
+    },
+    "bpwizard/resourceType/fileType/metadataTab/firstRow/firstColumn/showOnMenu" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Show On Menu",
+        "bpw:controlName": "checkbox",
+        "bpw:value": "|true",
+        "bpw:defaultValue": "false",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/resourceType/fileType/metadataTab/firstRow/firstColumn/sorderOrder" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Sort Order",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Whole Number",
+        "bpw:defaultValue": "0",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/resourceType/fileType/metadataTab/firstRow/firstColumn/description" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "text",
+        "bpw:systemIndexed": "true"
+    },    
+    "bpwizard/resourceType/pageType" : {
+        "jcr:primaryType": "bpw:authoringTemplate",
+        "bpw:resourceType": "bpw:pageType"
+    },
+    "bpwizard/resourceType/pageType/contentTab" : {
+        "jcr:primaryType":"bpw:elementFormTab",
+        "bpw:groupTitle": "Content"
+    },
+    "bpwizard/resourceType/pageType/contentTab/firstRow" : {
+        "jcr:primaryType":"bpw:elementFormRow"
+    },
+    "bpwizard/resourceType/pageType/contentTab/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:elementFormColumn"
+    },
+    "bpwizard/resourceType/pageType/contentTab/firstRow/firstColumn/name" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/pageType/contentTab/firstRow/firstColumn/title" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/pageType/contentTab/firstRow/firstColumn/url" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "URL",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true"
+    },
+    "bpwizard/resourceType/pageType/contentTab/firstRow/firstColumn/siteArea" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Site Area",
+        "bpw:controlName": "siteArea",
+        "bpw:mandatory": "true"
+    },
+    "bpwizard/resourceType/pageType/contentTab/firstRow/firstColumn/pageLayout" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Page Layout",
+        "bpw:controlName": "select",
+        "bpw:options": "jcr://pageLayout",
+        "bpw:mandatory": "true"
+    },
+    "bpwizard/resourceType/pageType/propertiesTab" : {
+        "jcr:primaryType":"bpw:elementFormTab",
+        "bpw:groupTitle": "Properties"
+    },
+    "bpwizard/resourceType/pageType/propertiesTab/firstRow" : {
+        "jcr:primaryType":"bpw:elementFormRow"
+    },
+    "bpwizard/resourceType/pageType/propertiesTab/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:elementFormColumn"
+    },
+    "bpwizard/resourceType/pageType/propertiesTab/firstRow/firstColumn/friendlyURL" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Friendly URL",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true",
+        "bpw:systemIndexed": true
+    },
+    "bpwizard/resourceType/pageType/propertiesTab/firstRow/firstColumn/cacheTTL" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Cache TTL",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Whole Number",
+        "bpw:defaultValue": "15",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/resourceType/pageType/propertiesTab/firstRow/firstColumn/showOnMenu" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Show On Menu",
+        "bpw:controlName": "checkbox",
+        "bpw:value": "|true",
+        "bpw:defaultValue": "false",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/resourceType/pageType/propertiesTab/firstRow/firstColumn/securePage" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Secure Page",
+        "bpw:controlName": "checkbox",
+        "bpw:value": "|true",
+        "bpw:defaultValue": "false",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/resourceType/pageType/propertiesTab/firstRow/firstColumn/sorderOrder" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Sort Order",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Whole Number",
+        "bpw:defaultValue": "0",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/resourceType/pageType/propertiesTab/firstRow/firstColumn/metadata" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Metadata",
+        "bpw:controlName": "keyValue",
+		"bpw:mandatory": "true",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/resourceType/pageType/propertiesTab/firstRow/firstColumn/seoDescription" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "SEO Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+		"bpw:userSearchable": "true",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/resourceType/pageType/propertiesTab/firstRow/firstColumn/seoKeyword" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "SEO Keyword",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/resourceType/keyValueType" : {
+        "jcr:primaryType":"bpw:authoringTemplate",
+        "bpw:resourceType": "bpw:keyValueType"
+    },
+    "bpwizard/resourceType/keyValueType/firstRow" : {
+        "jcr:primaryType":"bpw:elementFormRow"
+    },
+    "bpwizard/resourceType/keyValueType/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:elementFormColumn"
+    },
+    "bpwizard/resourceType/keyValueType/firstRow/firstColumn/key" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Key",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true",
+        "bpw:unique": "true"
+    },
+    "bpwizard/resourceType/keyValueType/firstRow/firstColumn/value" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Value",
+        "bpw:controlName": "textArea",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/resourceType/vanityURLType" : {
+        "jcr:primaryType":"bpw:authoringTemplate",
+        "bpw:resourceType": "bpw:vanityURLType"
+    },
+    "bpwizard/resourceType/vanityURLType/firstRow" : {
+        "jcr:primaryType":"bpw:elementFormRow"
+    },
+    "bpwizard/resourceType/vanityURLType/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:elementFormColumn"
+    },
+    "bpwizard/resourceType/vanityURLType/firstRow/firstColumn/name" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/vanityURLType/firstRow/firstColumn/title" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/vanityURLType/firstRow/firstColumn/url" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "URL",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:showInList": "true"
+    },
+	"bpwizard/resourceType/vanityURLType/firstRow/firstColumn/forwardTo" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Forward To",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:showInList": "true"
+    },
+	"bpwizard/resourceType/personaType" : {
+        "jcr:primaryType":"bpw:authoringTemplate",
+        "bpw:resourceType": "bpw:personaType"
+    },
+    "bpwizard/resourceType/personaType/firstRow" : {
+        "jcr:primaryType":"bpw:elementFormRow"
+    },
+    "bpwizard/resourceType/personaType/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:elementFormColumn"
+    },
+    "bpwizard/resourceType/personaType/firstRow/firstColumn/name" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/personaType/firstRow/firstColumn/title" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/personaType/firstRow/firstColumn/photo" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Photo",
+        "bpw:controlName": "binary"
+    },	
+    "bpwizard/resourceType/formType" : {
+        "jcr:primaryType": "bpw:authoringTemplate",
+        "bpw:resourceType": "bpw:formType"
+    },
+    "bpwizard/resourceType/formType/firstRow" : {
+        "jcr:primaryType": "bpw:elementFormRow"
+    },
+    "bpwizard/resourceType/formType/firstRow/firstColumn" : {
+        "jcr:primaryType": "bpw:elementFormColumn"
+    },
+    "bpwizard/resourceType/formType/firstRow/firstColumn/name" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/resourceType/formType/firstRow/firstColumn/description" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true"
+    },
+    "bpwizard/resourceType/formType/firstRow/firstColumn/siteArea" : {
+        "jcr:primaryType": "bpw:elementFormControl",
+        "bpw:title": "Site Area",
+        "bpw:controlName": "iteArea",
+        "bpw:mandatory": "true"
+    },	
+    "bpwizard/controlField" : {
+        "jcr:primaryType": "bpw:controlFieldFolder",
+        "jcr:mixinTypes":["mix:lastModified"]
+    },	
+    "bpwizard/controlField/associations" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Associations"
+    },
+    "bpwizard/controlField/associations/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/associations/accociationType" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Accociation Type",
+        "bpw:controlType": "radio",
+        "bpw:selectOptions": "New|Existing",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/associations/accociationWith" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Select Content Type",
+        "bpw:controlType": "select",
+        "bpw:selectOptions": "jcr://bpw:resourceType",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/associations/accociationCardinality" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Relationship",
+        "bpw:controlType": "select",
+        "bpw:selectOptions": "OneToOne|One to one, OneToMany|One to many, ManyToOne|Many to one, ManyToMany|Many to many",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/associations/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/associations/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },	
+    "bpwizard/controlField/binary" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Binary"
+    },
+    "bpwizard/controlField/binary/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/binary/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/binary/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },	
+    "bpwizard/controlField/category" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Category"
+    },
+    "bpwizard/controlField/category/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/category/value" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "select",
+        "bpw:selectOptions": "jcr://bpw:category",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/category/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/category/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/category/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },	
+    "bpwizard/controlField/checkbox" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Checkbox"
+    },
+    "bpwizard/controlField/checkbox/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/checkbox/value" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Value",
+        "bpw:controlType": "texts",
+        "bpw:hintText": "list-text hint",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/checkbox/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/checkbox/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/checkbox/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/checkbox/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },	
+    "bpwizard/controlField/checkbox/systemIndexed" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "System Indexed",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },    
+    "bpwizard/controlField/customField" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Custom Field"
+    },
+    "bpwizard/controlField/customField/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/customField/value" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Value",
+        "bpw:controlType": "script",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/customField/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/customField/validationRegEx" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Validation RegEx",
+        "bpw:controlType": "select",
+        "bpw:selectOptions": "jcr://configuration/validationRule",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/customField/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/customField/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/customField/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/customField/systemIndexed" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "System Indexed",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/customField/showInList" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Show In List",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },    
+    "bpwizard/controlField/date" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Date"
+    },
+    "bpwizard/controlField/date/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/date/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/date/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/date/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/date/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/date/systemIndexed" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "System Indexed",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/date/showInList" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Show In List",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },    
+    "bpwizard/controlField/dateTime" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Date and Time"
+    },
+    "bpwizard/controlField/dateTime/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/dateTime/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/dateTime/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/dateTime/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/dateTime/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/dateTime/systemIndexed" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "System Indexed",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/dateTime/showInList" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Show In List",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },    
+    "bpwizard/controlField/file" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "File"
+    },
+    "bpwizard/controlField/file/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/file/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/file/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },    
+    "bpwizard/controlField/hiddenField" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Hidden Field"
+    },
+    "bpwizard/controlField/hiddenField/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/hiddenField/value" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Value",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },    
+    "bpwizard/controlField/image" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Image"
+    },
+    "bpwizard/controlField/image/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/image/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/image/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },    
+    "bpwizard/controlField/keyValue" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Key/Value"
+    },
+    "bpwizard/controlField/keyValue/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/keyValue/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/keyValue/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/keyValue/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },    
+    "bpwizard/controlField/lineDivider" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Line Divider"
+    },
+    "bpwizard/controlField/lineDivider/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },    
+    "bpwizard/controlField/multiSelect" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Multi Select"
+    },
+    "bpwizard/controlField/multiSelect/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/multiSelect/value" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "texts",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/multiSelect/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/multiSelect/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/multiSelect/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },    
+    "bpwizard/controlField/permissions" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Permissions"
+    },
+    "bpwizard/controlField/permissions/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },    
+    "bpwizard/controlField/radio" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Radio"
+    },
+    "bpwizard/controlField/radio/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/radio/dataType" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Data Type",
+        "bpw:controlType": "radio",
+        "bpw:selectOptions": "Text|True/False|Decimal|Whole Number",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/radio/value" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "texts",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/radio/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/radio/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/radio/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/radio/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/radio/systemIndexed" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "System Indexed",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/radio/showInList" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Show In List",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },    
+    "bpwizard/controlField/readonly" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Read-only Field"
+    },
+    "bpwizard/controlField/readonly/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/readonly/value" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "textArea",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/readonly/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/richText" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Rich Text"
+    },
+    "bpwizard/controlField/richText/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/richText/dataType" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Data Type",
+        "bpw:controlType": "radio",
+        "bpw:selectOptions": "Text|Decimal|Whole Number",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/richText/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/richText/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/richText/validationRegEx" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Validation RegEx",
+        "bpw:controlType": "select",
+        "bpw:selectOptions": "jcr://configuration/validationRule",
+        "bpw:required": false
+    },	
+    "bpwizard/controlField/richText/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/richText/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/richText/systemIndexed" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "System Indexed",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/text/showInList" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Show In List",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/text/unique" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "unique",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/select" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Select"
+    },
+    "bpwizard/controlField/select/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/select/dataType" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Data Type",
+        "bpw:controlType": "radio",
+        "bpw:selectOptions": "Text|True/False|Decimal|Whole Number",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/select/value" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "texts",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/select/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/select/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/select/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/select/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/select/systemIndexed" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "System Indexed",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/select/showInList" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Show In List",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/select/unique" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Unique",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/siteArea" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Site Area"
+    },
+    "bpwizard/controlField/siteArea/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/siteArea/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/siteArea/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/siteArea/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/tag" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Tag"
+    },
+    "bpwizard/controlField/tag/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/tag/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/tag/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "textArea",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/tag/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/tag/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/text" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Text"
+    },
+    "bpwizard/controlField/text/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/text/dataType" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Data Type",
+        "bpw:controlType": "radio",
+        "bpw:selectOptions": "Text|Decimal|Whole Number",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/text/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/text/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/text/validationRegEx" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Validation RegEx",
+        "bpw:controlType": "select",
+        "bpw:selectOptions": "jcr://configuration/validationRule",
+        "bpw:required": false
+    },	
+    "bpwizard/controlField/text/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/text/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/text/systemIndexed" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "System Indexed",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/text/showInList" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Show In List",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/text/unique" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "unique",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/textArea" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Text Area"
+    },
+    "bpwizard/controlField/textArea/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/textArea/dataType" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Data Type",
+        "bpw:controlType": "radio",
+        "bpw:selectOptions": "Text|Decimal|Whole Number",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/textArea/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/textArea/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/textArea/validationRegEx" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Validation RegEx",
+        "bpw:controlType": "select",
+        "bpw:selectOptions": "jcr://configuration/validationRule",
+        "bpw:required": false
+    },	
+    "bpwizard/controlField/textArea/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/textArea/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/textArea/systemIndexed" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "System Indexed",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/time" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Time"
+    },
+    "bpwizard/controlField/time/name" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title":"Name",
+        "bpw:controlType": "text",
+        "bpw:required": true
+    },
+    "bpwizard/controlField/time/defaultValue" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Default Value",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/time/hint" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Hint",
+        "bpw:controlType": "text",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/time/required" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "Required",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/time/userSearchable" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "User Searchable",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/controlField/time/systemIndexed" : {
+        "jcr:primaryType": "bpw:controlFieldMetaData",
+        "bpw:title": "System Indexed",
+        "bpw:controlType": "checkbox",
+        "bpw:required": false
+    },
+    "bpwizard/library/camunda" : {
+        "jcr:primaryType":"bpw:library",
+        "bpw:language": "en"
+    },
+    "bpwizard/library/camunda/asset" : {
+        "jcr:primaryType":"bpw:assetFolder"
+    },
+    "bpwizard/library/camunda/theme" : {
+        "jcr:primaryType":"bpw:themeFolder"
+    },
+    "bpwizard/library/camunda/pageLayout" : {
+        "jcr:primaryType":"bpw:pageLayoutFolder"
+    },
+    "bpwizard/library/camunda/renderTemplate" : {
+        "jcr:primaryType":"bpw:renderTemplateFolder"
+    },
+    "bpwizard/library/camunda/query" : {
+        "jcr:primaryType":"bpw:queryFolder"
+    },		
+    "bpwizard/library/camunda/workflow" : {
+        "jcr:primaryType":"bpw:workflowFolder"
+    },					
+	"bpwizard/library/camunda/category" : {
+        "jcr:primaryType":"bpw:categoryFolder"
+    },
+    "bpwizard/library/camunda/customResourceType" : {
+        "jcr:primaryType":"bpw:resourceTypeFolder"
+    },
+    "bpwizard/library/camunda/rootSiteArea" : {
+        "jcr:primaryType":"bpw:siteArea",
+        "bpw:name":"site",
+        "bpw:title":"Site"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home" : {
+        "jcr:primaryType":"bpw:siteArea",
+        "bpw:name":"home",
+        "bpw:title":"Home"
+    } ,
+    "bpwizard/library/camunda/rootSiteArea/tasklist" : {
+        "jcr:primaryType":"bpw:siteArea",
+        "bpw:name":"tasklist",
+        "bpw:title":"Task List"
+    } ,
+    "bpwizard/library/camunda/rootSiteArea/modeler" : {
+        "jcr:primaryType":"bpw:siteArea",
+        "bpw:name":"modeler",
+        "bpw:title":"Modeler"
+    } ,
+    "bpwizard/library/camunda/rootSiteArea/dashboard" : {
+        "jcr:primaryType":"bpw:siteArea",
+        "bpw:name":"dashboard",
+        "bpw:title":"Dashboard"
+    } ,
+    "bpwizard/library/camunda/rootSiteArea/monitor" : {
+        "jcr:primaryType":"bpw:siteArea",
+        "bpw:name":"monitor",
+        "bpw:title":"Monitor"
+    }     
+}

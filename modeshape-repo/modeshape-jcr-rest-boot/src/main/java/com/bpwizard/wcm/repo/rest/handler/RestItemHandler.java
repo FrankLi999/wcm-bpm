@@ -17,6 +17,7 @@
 package com.bpwizard.wcm.repo.rest.handler;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -161,6 +162,10 @@ public final class RestItemHandler extends ItemHandler {
         return createRestItem(request, 0, session, item);
     }
 
+    private JsonNode inputStreamToJsonNode( InputStream requestBody ) throws IOException {
+        return this.mapper.readTree(requestBody);
+    }
+    
     private JsonNode stringToJsonNode( String requestBody ) throws IOException {
         return StringUtil.isBlank(requestBody) ? this.mapper.createObjectNode() : this.mapper.readTree(requestBody);
     }
@@ -190,15 +195,31 @@ public final class RestItemHandler extends ItemHandler {
                               String repositoryName,
                               String workspaceName,
                               String requestContent ) throws IOException, RepositoryException {
-    	JsonNode requestBody = stringToJsonNode(requestContent);
-        if (requestBody.size() == 0) {
-            return ResponseEntity.ok().build();
-        }
-        Session session = getSession(request, repositoryName, workspaceName);
-        TreeMap<String, JsonNode> nodesByPath = createNodesByPathMap(requestBody);
-        return addMultipleNodes(request, nodesByPath, session);
+    	JsonNode requestBody = this.stringToJsonNode(requestContent);
+    	return this.doAddItems(request, repositoryName, workspaceName, requestBody);
     }
 
+    /**
+     * Performs a bulk creation of items, using a single {@link Session}. If any of the items cannot be created for whatever
+     * reason, the entire operation fails.
+     *
+     * @param request the servlet request; may not be null or unauthenticated
+     * @param repositoryName the URL-encoded repository name
+     * @param workspaceName the URL-encoded workspace name
+     * @param requestContent the JSON-encoded representation of the nodes and, possibly, properties to be added
+     * @return a {@code non-null} {@link ResponseEntity}
+     * @throws JSONException if the body of the request is not a valid JSON object
+     * @throws RepositoryException if any of the JCR operations fail
+     * @see RestItemHandler#addItem(javax.servlet.http.HttpServletRequest, String, String, String, String)
+     */
+    public ResponseEntity<?> addItems( HttpServletRequest request,
+                              String repositoryName,
+                              String workspaceName,
+                              InputStream requestContent ) throws IOException, RepositoryException {
+    	JsonNode requestBody = this.inputStreamToJsonNode(requestContent);
+        return this.doAddItems(request, repositoryName, workspaceName, requestBody);
+    }
+    
     /**
      * Performs a bulk updating of items, using a single {@link Session}. If any of the items cannot be updated for whatever
      * reason, the entire operation fails.
@@ -312,5 +333,17 @@ public final class RestItemHandler extends ItemHandler {
 
     private ResponseEntity<List<RestItem>> createOkResponse( final List<RestItem> result ) {
         return ResponseEntity.ok().body(result);
+    }
+    
+    private ResponseEntity<?> doAddItems(HttpServletRequest request,
+            String repositoryName,
+            String workspaceName,
+            JsonNode requestBody) throws IOException, RepositoryException {
+    	if (requestBody.size() == 0) {
+            return ResponseEntity.ok().build();
+        }
+        Session session = getSession(request, repositoryName, workspaceName);
+        TreeMap<String, JsonNode> nodesByPath = createNodesByPathMap(requestBody);
+        return addMultipleNodes(request, nodesByPath, session);
     }
 }

@@ -31,7 +31,7 @@
 					<sv:value>bpw:resourceTypeFolder</sv:value>
 				</sv:property>
 			</sv:node>
-			<sv:node sv:name="bpw:rootSiteArea">
+			<sv:node sv:name="rootSiteArea">
 				<sv:property sv:name="jcr:primaryType" sv:type="Name">
 					<sv:value>bpw:siteArea</sv:value>
 				</sv:property>
@@ -128,101 +128,108 @@
 					<sv:value>bpw:categoryFolder</sv:value>
 				</sv:property>
 			</sv:node>
+			
 		</sv:node>
 	</sv:node>
-	<sv:node sv:name="bpw:configuration">
+	
+	<sv:node sv:name="configuration">
 		<sv:property sv:name="jcr:primaryType" sv:type="Name">
 			<sv:value>bpw:configurationFolder</sv:value>
 		</sv:property>
-		<sv:node sv:name="emailValidationRule">
-			<sv:property sv:name="jcr:primaryType" sv:type="Name">
-				<sv:value>bpw:validationRule</sv:value>
+		<sv:node sv:name="validationRule">
+		    <sv:property sv:name="jcr:primaryType" sv:type="Name">
+				<sv:value>bpw:validationRuleFolder</sv:value>
 			</sv:property>
-			<sv:property sv:name="bpw:name" sv:type="String">
-				<sv:value>Email</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:rule" sv:type="String">
-				<sv:value>^([a-zA-Z0-9]+[a-zA-Z0-9._%+-]*@(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,4})$</sv:value>
-			</sv:property>
-		</sv:node>
-		<sv:node sv:name="numbersOnlyValidationRule">
-			<sv:property sv:name="jcr:primaryType" sv:type="Name">
-				<sv:value>bpw:validationRule</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:name" sv:type="String">
-				<sv:value>Numbers Only</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:rule" sv:type="String">
-				<sv:value>[0-9]*</sv:value>
-			</sv:property>
-		</sv:node>
-		<sv:node sv:name="lettersOnlyValidationRule">
-			<sv:property sv:name="jcr:primaryType" sv:type="Name">
-				<sv:value>bpw:validationRule</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:name" sv:type="String">
-				<sv:value>Letters Only</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:rule" sv:type="String">
-				<sv:value>[a-zA-Zs]*</sv:value>
-			</sv:property>
-		</sv:node>
-		<sv:node sv:name="alphanumericValidationRule">
-			<sv:property sv:name="jcr:primaryType" sv:type="Name">
-				<sv:value>bpw:validationRule</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:name" sv:type="String">
-				<sv:value>Alphanumeric</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:rule" sv:type="String">
-				<sv:value>[0-9a-zA-Zs]*</sv:value>
-			</sv:property>
-		</sv:node>
-		<sv:node sv:name="zipcodeValidationRule">
-			<sv:property sv:name="jcr:primaryType" sv:type="Name">
-				<sv:value>bpw:validationRule</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:name" sv:type="String">
-				<sv:value>US Zip Code</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:rule" sv:type="String">
-				<sv:value>(^d{5}$)|(^d{5}-d{4}$)</sv:value>
-			</sv:property>
-		</sv:node>
-		<sv:node sv:name="phoneValidationRule">
-			<sv:property sv:name="jcr:primaryType" sv:type="Name">
-				<sv:value>bpw:validationRule</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:name" sv:type="String">
-				<sv:value>US Phone</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:rule" sv:type="String">
-				<sv:value>^(?[1-9]d{2}[)-]s?d{3}-d{4}$</sv:value>
-			</sv:property>
-		</sv:node>
-		 
-		<sv:node sv:name="urlValidationRule">
-			<sv:property sv:name="jcr:primaryType" sv:type="Name">
-				<sv:value>bpw:validationRule</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:name" sv:type="String">
-				<sv:value>URL Pattern</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:rule" sv:type="String">
-				<sv:value>^((http|ftp|https)://w{3}[d]*.|(http|ftp|https)://|w{3}[d]*.)([wd._-#()[],;:]+@[wd._-#()[],;:])?([a-z0-9]+.)*[a-z-0-9]+.([a-z]{2,3})?[a-z]{2,6}(:[0-9]+)?(/[/a-zA-Z0-9._-,%s]+)*(/|?[a-z0-9=%&amp;.-,#]+)?$</sv:value>
-			</sv:property>
-		</sv:node>
-		<sv:node sv:name="noHtmlValidationRule">
-			<sv:property sv:name="jcr:primaryType" sv:type="Name">
-				<sv:value>bpw:validationRule</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:name" sv:type="String">
-				<sv:value>No HTML</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:rule" sv:type="String">
-				<sv:value>[^(&lt;[.]+&gt;)]*</sv:value>
-			</sv:property>
-		</sv:node>
+			<sv:node sv:name="emailValidationRule">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:validationRule</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:name" sv:type="String">
+					<sv:value>Email</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:rule" sv:type="String">
+					<sv:value>^([a-zA-Z0-9]+[a-zA-Z0-9._%+-]*@(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,4})$</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="numbersOnlyValidationRule">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:validationRule</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:name" sv:type="String">
+					<sv:value>Numbers Only</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:rule" sv:type="String">
+					<sv:value>[0-9]*</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="lettersOnlyValidationRule">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:validationRule</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:name" sv:type="String">
+					<sv:value>Letters Only</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:rule" sv:type="String">
+					<sv:value>[a-zA-Zs]*</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="alphanumericValidationRule">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:validationRule</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:name" sv:type="String">
+					<sv:value>Alphanumeric</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:rule" sv:type="String">
+					<sv:value>[0-9a-zA-Zs]*</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="zipcodeValidationRule">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:validationRule</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:name" sv:type="String">
+					<sv:value>US Zip Code</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:rule" sv:type="String">
+					<sv:value>(^d{5}$)|(^d{5}-d{4}$)</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="phoneValidationRule">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:validationRule</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:name" sv:type="String">
+					<sv:value>US Phone</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:rule" sv:type="String">
+					<sv:value>^(?[1-9]d{2}[)-]s?d{3}-d{4}$</sv:value>
+				</sv:property>
+			</sv:node>
+			 
+			<sv:node sv:name="urlValidationRule">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:validationRule</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:name" sv:type="String">
+					<sv:value>URL Pattern</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:rule" sv:type="String">
+					<sv:value>^((http|ftp|https)://w{3}[d]*.|(http|ftp|https)://|w{3}[d]*.)([wd._-#()[],;:]+@[wd._-#()[],;:])?([a-z0-9]+.)*[a-z-0-9]+.([a-z]{2,3})?[a-z]{2,6}(:[0-9]+)?(/[/a-zA-Z0-9._-,%s]+)*(/|?[a-z0-9=%&amp;.-,#]+)?$</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="noHtmlValidationRule">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:validationRule</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:name" sv:type="String">
+					<sv:value>No HTML</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:rule" sv:type="String">
+					<sv:value>[^(&lt;[.]+&gt;)]*</sv:value>
+				</sv:property>
+			</sv:node>
+		</sv:node>	
 	</sv:node>
 	<sv:node sv:name="bpw:controlField">
 		<sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -254,7 +261,7 @@
 					<sv:value>bpw:controlFieldMetaData</sv:value>
 				</sv:property>				
 				<sv:property sv:name="bpw:title" sv:type="String">
-					<sv:value></sv:value>
+					<sv:value>Accociation Type</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:controlType" sv:type="String">
 					<sv:value>radio</sv:value>
@@ -294,7 +301,7 @@
 					<sv:value>select</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:selectOptions" sv:type="String">
-					<sv:value>OneToOne|One to one, OneToMany|One to many, ManyToOne|Many to one, ManyToMany|Many to many </sv:value>
+					<sv:value>OneToOne|One to one, OneToMany|One to many, ManyToOne|Many to one, ManyToMany|Many to many</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:required" sv:type="Boolean">
 					<sv:value>false</sv:value>
@@ -595,7 +602,7 @@
 					<sv:value>bpw:controlFieldMetaData</sv:value>
 				</sv:property>				
 				<sv:property sv:name="bpw:title" sv:type="String">
-					<sv:value>Select Category</sv:value>
+					<sv:value>Value</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:controlType" sv:type="String">
 					<sv:value>script</sv:value>
@@ -629,7 +636,7 @@
 					<sv:value>select</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:selectOptions" sv:type="String">
-					<sv:value>jcr://bpw:configuration/bpw:validationRegEx</sv:value>
+					<sv:value>jcr://configuration/validationRule/</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:required" sv:type="Boolean">
 					<sv:value>false</sv:value>
@@ -1391,7 +1398,7 @@
 				</sv:property>
 			</sv:node>
 		</sv:node>
-		<sv:node sv:name="readonlyField">
+		<sv:node sv:name="readonly">
 			<sv:property sv:name="jcr:primaryType" sv:type="Name">
 				<sv:value>bpw:controlField</sv:value>
 			</sv:property>
@@ -1435,6 +1442,132 @@
 				</sv:property>
 				<sv:property sv:name="bpw:controlType" sv:type="String">
 					<sv:value>textArea</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:required" sv:type="Boolean">
+					<sv:value>false</sv:value>
+				</sv:property>
+			</sv:node>
+		</sv:node>
+		<sv:node sv:name="richText">
+			<sv:property sv:name="jcr:primaryType" sv:type="Name">
+				<sv:value>bpw:controlField</sv:value>
+			</sv:property>
+			<sv:property sv:name="bpw:title" sv:type="String">
+				<sv:value>Rich Text</sv:value>
+			</sv:property>
+			<sv:node sv:name="name">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:controlFieldMetaData</sv:value>
+				</sv:property>				
+				<sv:property sv:name="bpw:title" sv:type="String">
+					<sv:value>Name</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:controlType" sv:type="String">
+					<sv:value>text</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:required" sv:type="Boolean">
+					<sv:value>true</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="dataType">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:controlFieldMetaData</sv:value>
+				</sv:property>				
+				<sv:property sv:name="bpw:title" sv:type="String">
+					<sv:value>Data Type</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:controlType" sv:type="String">
+					<sv:value>radio</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:selectOptions" sv:type="String">
+					<sv:value>Text|Decimal|Whole Number</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:required" sv:type="Boolean">
+					<sv:value>false</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="defaultValue">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:controlFieldMetaData</sv:value>
+				</sv:property>				
+				<sv:property sv:name="bpw:title" sv:type="String">
+					<sv:value>Default Value</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:controlType" sv:type="String">
+					<sv:value>text</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:required" sv:type="Boolean">
+					<sv:value>false</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="hint">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:controlFieldMetaData</sv:value>
+				</sv:property>				
+				<sv:property sv:name="bpw:title" sv:type="String">
+					<sv:value>Hint</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:controlType" sv:type="String">
+					<sv:value>textArea</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:required" sv:type="Boolean">
+					<sv:value>false</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="validationRegEx">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:controlFieldMetaData</sv:value>
+				</sv:property>				
+				<sv:property sv:name="bpw:title" sv:type="String">
+					<sv:value>Validation RegEx</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:controlType" sv:type="String">
+					<sv:value>select</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:selectOptions" sv:type="String">
+					<sv:value>jcr://configuration/validationRule</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:required" sv:type="Boolean">
+					<sv:value>false</sv:value>
+				</sv:property>
+			</sv:node>			
+			<sv:node sv:name="required">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:controlFieldMetaData</sv:value>
+				</sv:property>				
+				<sv:property sv:name="bpw:title" sv:type="String">
+					<sv:value>Required</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:controlType" sv:type="String">
+					<sv:value>checkbox</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:required" sv:type="Boolean">
+					<sv:value>false</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="userSearchable">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:controlFieldMetaData</sv:value>
+				</sv:property>				
+				<sv:property sv:name="bpw:title" sv:type="String">
+					<sv:value>User Searchable</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:controlType" sv:type="String">
+					<sv:value>checkbox</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:required" sv:type="Boolean">
+					<sv:value>false</sv:value>
+				</sv:property>
+			</sv:node>
+			<sv:node sv:name="systemIndexed">
+				<sv:property sv:name="jcr:primaryType" sv:type="Name">
+					<sv:value>bpw:controlFieldMetaData</sv:value>
+				</sv:property>				
+				<sv:property sv:name="bpw:title" sv:type="String">
+					<sv:value>System Indexed</sv:value>
+				</sv:property>
+				<sv:property sv:name="bpw:controlType" sv:type="String">
+					<sv:value>checkbox</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:required" sv:type="Boolean">
 					<sv:value>false</sv:value>
@@ -1811,7 +1944,7 @@
 					<sv:value>select</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:selectOptions" sv:type="String">
-					<sv:value>jcr://bpw:configuration/bpw:validationRegEx</sv:value>
+					<sv:value>jcr://configuration/validationRule</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:required" sv:type="Boolean">
 					<sv:value>false</sv:value>
@@ -1968,7 +2101,7 @@
 					<sv:value>select</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:selectOptions" sv:type="String">
-					<sv:value>jcr://bpw:configuration/bpw:validationRegEx</sv:value>
+					<sv:value>jcr://configuration/validationRule</sv:value>
 				</sv:property>
 				<sv:property sv:name="bpw:required" sv:type="Boolean">
 					<sv:value>false</sv:value>
@@ -2109,133 +2242,8 @@
 				</sv:property>
 			</sv:node>
 		</sv:node>
-		<sv:node sv:name="richText">
-			<sv:property sv:name="jcr:primaryType" sv:type="Name">
-				<sv:value>bpw:controlField</sv:value>
-			</sv:property>
-			<sv:property sv:name="bpw:title" sv:type="String">
-				<sv:value>Rich Text</sv:value>
-			</sv:property>
-			<sv:node sv:name="name">
-				<sv:property sv:name="jcr:primaryType" sv:type="Name">
-					<sv:value>bpw:controlFieldMetaData</sv:value>
-				</sv:property>				
-				<sv:property sv:name="bpw:title" sv:type="String">
-					<sv:value>Name</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:controlType" sv:type="String">
-					<sv:value>text</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:required" sv:type="Boolean">
-					<sv:value>true</sv:value>
-				</sv:property>
-			</sv:node>
-			<sv:node sv:name="dataType">
-				<sv:property sv:name="jcr:primaryType" sv:type="Name">
-					<sv:value>bpw:controlFieldMetaData</sv:value>
-				</sv:property>				
-				<sv:property sv:name="bpw:title" sv:type="String">
-					<sv:value>Data Type</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:controlType" sv:type="String">
-					<sv:value>radio</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:selectOptions" sv:type="String">
-					<sv:value>Text|Decimal|Whole Number</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:required" sv:type="Boolean">
-					<sv:value>false</sv:value>
-				</sv:property>
-			</sv:node>
-			<sv:node sv:name="defaultValue">
-				<sv:property sv:name="jcr:primaryType" sv:type="Name">
-					<sv:value>bpw:controlFieldMetaData</sv:value>
-				</sv:property>				
-				<sv:property sv:name="bpw:title" sv:type="String">
-					<sv:value>Default Value</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:controlType" sv:type="String">
-					<sv:value>text</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:required" sv:type="Boolean">
-					<sv:value>false</sv:value>
-				</sv:property>
-			</sv:node>
-			<sv:node sv:name="hint">
-				<sv:property sv:name="jcr:primaryType" sv:type="Name">
-					<sv:value>bpw:controlFieldMetaData</sv:value>
-				</sv:property>				
-				<sv:property sv:name="bpw:title" sv:type="String">
-					<sv:value>Hint</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:controlType" sv:type="String">
-					<sv:value>textArea</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:required" sv:type="Boolean">
-					<sv:value>false</sv:value>
-				</sv:property>
-			</sv:node>
-			<sv:node sv:name="validationRegEx">
-				<sv:property sv:name="jcr:primaryType" sv:type="Name">
-					<sv:value>bpw:controlFieldMetaData</sv:value>
-				</sv:property>				
-				<sv:property sv:name="bpw:title" sv:type="String">
-					<sv:value>Validation RegEx</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:controlType" sv:type="String">
-					<sv:value>select</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:selectOptions" sv:type="String">
-					<sv:value>jcr://bpw:configuration/bpw:validationRegEx</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:required" sv:type="Boolean">
-					<sv:value>false</sv:value>
-				</sv:property>
-			</sv:node>			
-			<sv:node sv:name="required">
-				<sv:property sv:name="jcr:primaryType" sv:type="Name">
-					<sv:value>bpw:controlFieldMetaData</sv:value>
-				</sv:property>				
-				<sv:property sv:name="bpw:title" sv:type="String">
-					<sv:value>Required</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:controlType" sv:type="String">
-					<sv:value>checkbox</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:required" sv:type="Boolean">
-					<sv:value>false</sv:value>
-				</sv:property>
-			</sv:node>
-			<sv:node sv:name="userSearchable">
-				<sv:property sv:name="jcr:primaryType" sv:type="Name">
-					<sv:value>bpw:controlFieldMetaData</sv:value>
-				</sv:property>				
-				<sv:property sv:name="bpw:title" sv:type="String">
-					<sv:value>User Searchable</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:controlType" sv:type="String">
-					<sv:value>checkbox</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:required" sv:type="Boolean">
-					<sv:value>false</sv:value>
-				</sv:property>
-			</sv:node>
-			<sv:node sv:name="systemIndexed">
-				<sv:property sv:name="jcr:primaryType" sv:type="Name">
-					<sv:value>bpw:controlFieldMetaData</sv:value>
-				</sv:property>				
-				<sv:property sv:name="bpw:title" sv:type="String">
-					<sv:value>System Indexed</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:controlType" sv:type="String">
-					<sv:value>checkbox</sv:value>
-				</sv:property>
-				<sv:property sv:name="bpw:required" sv:type="Boolean">
-					<sv:value>false</sv:value>
-				</sv:property>
-			</sv:node>
-		</sv:node>
 	</sv:node>
+	
 	<sv:node sv:name="bpw:baseResourceType">
 		<sv:property sv:name="jcr:primaryType" sv:type="Name">
 			<sv:value>bpw:resourceTypeFolder</sv:value>
@@ -2650,12 +2658,13 @@
 				</sv:node>
 			</sv:node>
 		</sv:node>
+		
 		<sv:node sv:name="pageType">
 			<sv:property sv:name="jcr:primaryType" sv:type="Name">
 				<sv:value>bpw:authoringTemplate</sv:value>
 			</sv:property>				
 			<sv:property sv:name="bpw:resourceType" sv:type="String">
-				<sv:value>bpw:fileType</sv:value>
+				<sv:value>bpw:pageType</sv:value>
 			</sv:property>
 			<sv:node sv:name="contentTab">
 			    <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -2835,7 +2844,7 @@
 								<sv:value>text</sv:value>
 							</sv:property>
 							<sv:property sv:name="bpw:dataType" sv:type="String">
-								<sv:value>Whole Num er</sv:value>
+								<sv:value>Whole Number</sv:value>
 							</sv:property>
 							<sv:property sv:name="bpw:defaultValue" sv:type="Long">
 								<sv:value>15</sv:value>
@@ -2852,7 +2861,7 @@
 								<sv:value>bpw:elementFormControl</sv:value>
 							</sv:property>
 							<sv:property sv:name="bpw:title" sv:type="String">
-								<sv:value>Sort Order</sv:value>
+								<sv:value>Show On Menu</sv:value>
 							</sv:property>
 							<sv:property sv:name="bpw:controlName" sv:type="String">
 								<sv:value>checkbox</sv:value>
@@ -3153,7 +3162,7 @@
 					</sv:node>
 				</sv:node>	
 			</sv:node>
-		</sv:node>
+		</sv:node>		
 		<sv:node sv:name="personaType">
 			<sv:property sv:name="jcr:primaryType" sv:type="Name">
 				<sv:value>bpw:authoringTemplate</sv:value>

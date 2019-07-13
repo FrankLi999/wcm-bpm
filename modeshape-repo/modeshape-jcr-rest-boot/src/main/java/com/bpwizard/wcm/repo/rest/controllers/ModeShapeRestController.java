@@ -275,7 +275,8 @@ public class ModeShapeRestController {
      * @throws RepositoryException if any JCR related operation fails.
      */
     //@GetMapping(path="{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME + "/{nodeTypeName:.+}", produces= {"application/json", "text/html", "text/plain"})
-    @GetMapping(path="/{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME + "/{nodeTypeName}", produces= MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME + "/{nodeTypeName}", 
+    		produces= MediaType.APPLICATION_JSON_VALUE)
     		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestNodeType getNodeType( 
     		HttpServletRequest request,
@@ -299,7 +300,8 @@ public class ModeShapeRestController {
      * @return a list with the registered node types if the operation was successful, or an appropriate error code otherwise.
      * @throws RepositoryException if any JCR related operation fails.
      */
-    @PostMapping(path="/{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME, produces= MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path="/{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME, 
+    		produces= MediaType.APPLICATION_JSON_VALUE)
     		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> postCND(HttpServletRequest request,
     		@PathVariable( "repositoryName" ) String repositoryName,
@@ -326,7 +328,7 @@ public class ModeShapeRestController {
      * @throws IllegalArgumentException if the submitted form does not contain an HTML element named "file".
      */
     @PostMapping(path="/{repositoryName}/{workspaceName}/" + RestHelper.NODE_TYPES_METHOD_NAME, 
-    		produces= MediaType.APPLICATION_JSON_VALUE, 
+    	produces= MediaType.APPLICATION_JSON_VALUE, 
         consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
     	// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> postCNDViaForm(HttpServletRequest request,
@@ -440,6 +442,40 @@ public class ModeShapeRestController {
             @RequestBody String requestContent ) throws RepositoryException, IOException {
     	logger.debug("Entering ...");
     	ResponseEntity<?> response = this.itemHandler.addItems(request, rawRepositoryName, rawWorkspaceName, requestContent);
+    	logger.debug("Exiting ...");
+    	return response;
+    }
+    
+    /**
+     * Performs a bulk creation of items via a single session, using the body of the request, which is expected to be a valid JSON
+     * object. The format of the JSON request must be an object of the form:
+     * <ul>
+     * <li>{ "node1_path" : { node1_body }, "node2_path": { node2_body } ... }</li>
+     * <li>{ "property1_path" : { property1_body }, "property2_path": { property2_body } ... }</li>
+     * <li>{ "property1_path" : { property1_body }, "node1_path": { node1_body } ... }</li>
+     * </ul>
+     * where each body (either of a property or of a node) is expected to be a JSON object which has the same format as the one
+     * used when creating a single item.
+     *
+     * @param request the servlet request; may not be null or unauthenticated
+     * @param rawRepositoryName the URL-encoded repository name
+     * @param rawWorkspaceName the URL-encoded workspace name
+     * @param requestContent the JSON-encoded representation of the node or nodes to be added
+     * @return a {@code non-null} {@link ResponseEntity} instance which either contains the item or an error code.
+     * @throws JSONException if there is an error reading the request body as a valid JSON object.
+     * @throws RepositoryException if any other error occurs
+     * @see ModeShapeRestService#postItem(javax.servlet.http.HttpServletRequest, String, String, String, String)
+     */
+    @PostMapping(path= "/{repositoryName}/{workspaceName}/" + RestHelper.ITEMS_METHOD_NAME,
+	    consumes = MediaType.MULTIPART_FORM_DATA_VALUE, 
+	    produces= MediaType.APPLICATION_JSON_VALUE)
+		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ResponseEntity<?> postItemsViaForm( HttpServletRequest request,
+    		@PathVariable( "repositoryName" ) String rawRepositoryName,
+    		@PathVariable( "workspaceName" ) String rawWorkspaceName,
+    		@RequestParam("file") MultipartFile file ) throws RepositoryException, IOException {
+    	logger.debug("Entering ...");
+    	ResponseEntity<?> response = this.itemHandler.addItems(request, rawRepositoryName, rawWorkspaceName, file.getInputStream());
     	logger.debug("Exiting ...");
     	return response;
     }
