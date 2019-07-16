@@ -28,16 +28,12 @@ import { WorkflowsComponent } from './workflows/workflows.component';
 
 const routes: Routes = [
   {
-      path       : 'edit',
+      path       : 'workflow/edit',
       component  : WorkflowComponent
   },
   {
-      path       : 'list',
+      path       : 'workflow/list',
       component  : WorkflowsComponent
-  },
-  {
-      path       : '**',
-      redirectTo: 'list'
   }
 ];
 

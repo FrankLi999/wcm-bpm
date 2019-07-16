@@ -43,16 +43,12 @@ import {
 
 const routes: Routes = [
     {
-        path       : 'edit',
+        path       : 'resource-type/edit',
         component  : ResourceTypeEditorComponent
     },
     {
-        path       : 'list',
+        path       : 'resource-type/list',
         component  : ResourceTypeListComponent
-    },
-    {
-        path       : '**',
-        redirectTo: 'list'
     }
 ];
 @NgModule({

@@ -27,7 +27,7 @@ import { CategoryComponent } from './category/category.component';
 
 const routes: Routes = [
   {
-      path       : '**',
+      path       : 'category',
       component  :  CategoryComponent
   }
 ];

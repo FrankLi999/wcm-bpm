@@ -53,16 +53,12 @@ import {
 
 const routes: Routes = [
   {
-      path       : 'edit',
+      path       : 'query-builder/edit',
       component  : QueryEditorComponent
   },
   {
-      path       : 'list',
+      path       : 'query-builder/list',
       component  : QueryListComponent
-  },
-  {
-      path       : '**',
-      redirectTo: 'list'
   }
 ];
 @NgModule({

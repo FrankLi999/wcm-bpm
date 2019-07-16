@@ -31,16 +31,12 @@ import { SafePipe } from './pipes/safe.pipe';
 import { RenderTemplatesComponent } from './render-templates/render-templates.component';
 const routes: Routes = [
   {
-      path       : 'edit',
+      path       : 'render-template/edit',
       component  : RenderTemplateComponent
   },
   {
-      path       : 'list',
+      path       : 'render-template/list',
       component  : RenderTemplatesComponent
-  },
-  {
-      path       : '**',
-      redirectTo: 'list'
   }
 ];
 

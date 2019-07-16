@@ -31,16 +31,12 @@ import { ResourceViewerComponent } from './resource-viewer/resource-viewer.compo
 
 const routes: Routes = [
     {
-        path       : 'edit',
+        path       : 'page-layout/edit',
         component  : PageDesignerComponent
     },
     {
-        path       : 'list',
+        path       : 'page-layout/list',
         component  : PageLayoutsComponent
-    },
-    {
-        path       : '**',
-        redirectTo: 'list'
     }
 ];
 

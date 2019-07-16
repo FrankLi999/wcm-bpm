@@ -4,16 +4,12 @@ import { LibrariesComponent } from './libraries/libraries.component';
 import { LibraryComponent } from './library/library.component';
 const routes: Routes = [
   {
-      path       : 'edit',
+      path       : 'resource-library/edit',
       component  : LibraryComponent
   },
   {
-      path       : 'list',
+      path       : 'resource-library/list',
       component  : LibrariesComponent
-  },
-  {
-      path       : '**',
-      redirectTo: 'list'
   }
 ];
 @NgModule({

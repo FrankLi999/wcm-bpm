@@ -1,8 +1,7 @@
 ## Development environment
-
 spring:
-  show-sql: true
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
       #use-new-id-generator-mappings: false

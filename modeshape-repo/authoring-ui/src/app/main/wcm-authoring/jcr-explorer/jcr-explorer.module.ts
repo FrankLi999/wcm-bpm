@@ -27,8 +27,8 @@ import { JcrExplorerComponent } from './jcr-explorer/jcr-explorer.component';
 
 const routes: Routes = [
   {
-      path       : '**',
-      component  : JcrExplorerComponent
+      path     : 'jcr-explorer',
+      component: JcrExplorerComponent
   }
 ];
 

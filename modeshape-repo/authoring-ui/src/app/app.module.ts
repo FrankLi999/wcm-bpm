@@ -27,6 +27,14 @@ const appRoutes: Routes = [
         loadChildren: './main/wcm-authoring/wcm-authoring.module#WcmAuthoringModule'
     },
     {
+        path        : 'auth',
+        loadChildren: './main/authentication/authentication.module#AuthenticationModule'
+    },
+    {
+        path        : 'oauth2',
+        loadChildren: './main/oauth2/oauth2.module#Oauth2Module'
+    },
+    {
         path      : '**',
         redirectTo: 'wcm-authoring'
     }

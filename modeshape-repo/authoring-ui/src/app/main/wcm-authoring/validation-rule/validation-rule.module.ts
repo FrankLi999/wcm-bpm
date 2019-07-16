@@ -4,16 +4,12 @@ import { ValidationRuleComponent } from './validation-rule/validation-rule.compo
 import { ValidationRulesComponent } from './validation-rules/validation-rules.component';
 const routes: Routes = [
   {
-      path       : 'edit',
+      path       : 'validation-rule/edit',
       component  : ValidationRuleComponent
   },
   {
-      path       : 'list',
+      path       : 'validation-rule/list',
       component  : ValidationRulesComponent
-  },
-  {
-      path       : '**',
-      redirectTo: 'list'
   }
 ];
 @NgModule({

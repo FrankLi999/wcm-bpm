@@ -73,6 +73,12 @@ $typography: mat-typography-config(
 // Setup the typography
 @include angular-material-typography($typography);
 
+@import "src/app/main/authentication/login/login.theme";
+@import "src/app/main/authentication/signup/signup.theme";
+@import "src/app/main/authentication/reset-password/reset-password.theme";
+@import "src/app/main/authentication/forgot-password/forgot-password.theme";
+@import "src/app/main/authentication/lock-screen/lock-screen.theme";
+@import "src/app/main/authentication/mail-confirm/mail-confirm.theme";
 // -----------------------------------------------------------------------------------------------------
 // @ Component theming
 // -----------------------------------------------------------------------------------------------------

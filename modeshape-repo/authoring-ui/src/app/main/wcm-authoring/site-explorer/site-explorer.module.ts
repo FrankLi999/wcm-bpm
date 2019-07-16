@@ -26,7 +26,7 @@ import { SiteExplorerComponent } from './site-explorer/site-explorer.component';
 import { FolderOverviewComponent } from './folder-overview/folder-overview.component';
 const routes: Routes = [
     {
-        path       : '**',
+        path       : 'site-explorer',
         component  : SiteExplorerComponent
     }
 ];

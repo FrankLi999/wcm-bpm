@@ -32,6 +32,24 @@ export const locale = {
             },
             'VALIDATION_RULE': {
                 'TITLE': 'Validation Rule'
+            },
+            'LOGIN': {
+                'TITLE': 'Login'
+            },
+            'FORGOT_PASSWORD': {
+                'TITLE': 'Forgot Password'
+            },
+            'RESET_PASSWORD': {
+                'TITLE': 'Reset Password'
+            },
+            'SIGNUP': {
+                'TITLE': 'Signup'
+            },
+            'LOCK_SCREEN': {
+                'TITLE': 'Lock Screen'
+            },
+            'MAIL_CONFIRM': {
+                'TITLE': 'Mail Confirm'
             }
         }
     }
