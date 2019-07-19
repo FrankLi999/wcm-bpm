@@ -24,6 +24,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseSidebarModule } from '@fuse/components';
 import { JcrExplorerComponent } from './jcr-explorer/jcr-explorer.component';
+import { JcrNodeComponent } from './jcr-node/jcr-node.component';
+import { RepositoryComponent } from './repository/repository.component';
+import { WorkspaceComponent } from './workspace/workspace.component';
 
 const routes: Routes = [
   {
@@ -33,7 +36,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [JcrExplorerComponent],
+  declarations: [
+    JcrExplorerComponent, 
+    JcrNodeComponent, RepositoryComponent, WorkspaceComponent
+  ],
   imports: [
     RouterModule.forChild(routes),
     CdkTableModule,

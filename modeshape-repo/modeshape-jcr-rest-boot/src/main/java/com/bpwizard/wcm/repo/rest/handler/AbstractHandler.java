@@ -131,8 +131,8 @@ public abstract class AbstractHandler {
     protected List<String> restPropertyValues( Property property,
                                                String baseUrl,
                                                Session session ) throws RepositoryException {
-        List<String> result = new ArrayList<String>();
-
+        
+    	List<String> result = new ArrayList<String>();
         if (property.isMultiple()) {
             Value[] values = property.getValues();
             if (values == null || values.length == 0) {
@@ -287,7 +287,7 @@ public abstract class AbstractHandler {
                                      Node node,
                                      String baseUrl,
                                      int depth ) throws RepositoryException {
-        String nodeUrl = RestHelper.urlFrom(baseUrl, ITEMS_METHOD_NAME, encodedPath(node.getPath()));
+    	String nodeUrl = RestHelper.urlFrom(baseUrl, ITEMS_METHOD_NAME, encodedPath(node.getPath()));
         boolean isRoot = node.getPath().equals("/");
         String parentUrl = isRoot ? RestHelper.urlFrom(baseUrl, ITEMS_METHOD_NAME, "..", "..") : 
         	RestHelper.urlFrom(baseUrl, ITEMS_METHOD_NAME, encodedPath(node.getParent().getPath()));

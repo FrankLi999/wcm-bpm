@@ -12,7 +12,7 @@ import { QueryBuilderModule } from './query-builder/query-builder.module';
 import { CategoryModule } from './category/category.module';
 import { WorkflowModule } from './workflow/workflow.module';
 import { ValidationRuleModule } from './validation-rule/validation-rule.module';
-
+import { ModeshapeService } from './service/modeshape.service';
 @NgModule({
     declarations: [
     ],
@@ -29,9 +29,12 @@ import { ValidationRuleModule } from './validation-rule/validation-rule.module';
         WorkflowModule,
         ValidationRuleModule,
         TranslateModule,
-        FuseSharedModule
+        FuseSharedModule,
     ],
     exports     : [
+    ],
+    providers   : [
+        ModeshapeService
     ]
 })
 

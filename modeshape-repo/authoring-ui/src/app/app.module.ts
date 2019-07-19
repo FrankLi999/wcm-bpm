@@ -18,7 +18,7 @@ import { fuseConfig } from 'app/fuse-config';
 
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
-import { WcmAuthoringModule } from './main/wcm-authoring/wcm-authoring.module';
+import { RestClientModule } from './main/rest-client/rest-client.module';
 import { FakeDbService } from 'app/fake-db/fake-db.service';
 
 const appRoutes: Routes = [
@@ -35,8 +35,12 @@ const appRoutes: Routes = [
         loadChildren: './main/oauth2/oauth2.module#Oauth2Module'
     },
     {
+        path        : 'bpmn',
+        loadChildren: './main/bpmn/bpmn.module#BpmnModule'
+    },
+    {
         path      : '**',
-        redirectTo: 'wcm-authoring'
+        redirectTo: 'wcm-authoring/site-explorer'
     }
 ];
 
@@ -71,7 +75,8 @@ const appRoutes: Routes = [
 
         // App modules
         LayoutModule,
-        WcmAuthoringModule
+        // WcmAuthoringModule,
+		RestClientModule
     ],
     bootstrap   : [
         AppComponent

@@ -48,7 +48,7 @@ public final class RestProperty extends RestItem {
         this.multiValued = multiValued;
     }
 
-    List<String> getValues() {
+    public List<String> getValues() {
         return values;
     }
 

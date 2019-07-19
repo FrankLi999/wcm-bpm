@@ -27,6 +27,8 @@
                             "src/assets"
                         ],
                         "styles": [
+                            "node_modules/bpmn-js/dist/assets/diagram-js.css",
+                            "node_modules/bpmn-js/dist/assets/bpmn-font/css/bpmn.css",
                             "src/styles.scss"
                         ],
                         "scripts": [
@@ -140,6 +142,41 @@
                         "production": {
                             "devServerTarget": "fuse:serve:production"
                         }
+                    }
+                }
+            }
+        },
+        "rest-client": {
+            "projectType": "library",
+            "root": "projects/rest-client",
+            "sourceRoot": "projects/rest-client/src",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "options": {
+                        "tsConfig": "projects/rest-client/tsconfig.lib.json",
+                        "project": "projects/rest-client/ng-package.json"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/rest-client/src/test.ts",
+                        "tsConfig": "projects/rest-client/tsconfig.spec.json",
+                        "karmaConfig": "projects/rest-client/karma.conf.js"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "projects/rest-client/tsconfig.lib.json",
+                            "projects/rest-client/tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }

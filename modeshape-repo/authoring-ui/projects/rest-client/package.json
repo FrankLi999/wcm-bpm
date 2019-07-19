@@ -1,0 +1,12 @@
+{
+  "name": "rest-client",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^8.0.0",
+    "@angular/core": "^8.0.0",
+    "rxjs": "^6.5.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0"
+  }
+}

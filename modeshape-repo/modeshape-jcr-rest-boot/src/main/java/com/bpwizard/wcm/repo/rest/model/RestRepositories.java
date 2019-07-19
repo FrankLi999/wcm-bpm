@@ -75,7 +75,7 @@ public final class RestRepositories { //implements JSONAble {
 //    }
 
     
-    public final class Repository { //implements JSONAble {
+    public final class Repository implements HasName { //implements JSONAble {
         private final String name;
         private final String workspacesUrl;
         private final Map<String, List<String>> metadata;

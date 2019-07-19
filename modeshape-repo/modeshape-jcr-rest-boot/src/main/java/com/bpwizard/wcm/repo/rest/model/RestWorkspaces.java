@@ -68,7 +68,7 @@ public final class RestWorkspaces { //implements JSONAble {
 	}
 
 
-	public class Workspace { //implements JSONAble {
+	public class Workspace implements HasName { //implements JSONAble {
         private final String name;
         private final String repositoryUrl;
         private final String queryUrl;

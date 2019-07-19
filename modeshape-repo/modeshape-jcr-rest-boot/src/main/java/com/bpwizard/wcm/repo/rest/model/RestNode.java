@@ -19,10 +19,7 @@ package com.bpwizard.wcm.repo.rest.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-
-import org.modeshape.common.collection.Collections;
 
 /**
  * A REST representation of a {@link javax.jcr.Node}
@@ -36,10 +33,10 @@ public final class RestNode extends RestItem {
     public static final String ID_FIELD_NAME = "id";
     public static final String CHILDREN_FIELD_NAME = "children";
 
-    private static final Set<String> RESERVED_FIELD_NAMES = Collections.unmodifiableSet(SELF_FIELD_NAME,
-                                                                                        UP_FIELD_NAME,
-                                                                                        ID_FIELD_NAME,
-                                                                                        CHILDREN_FIELD_NAME);
+//    private static final Set<String> RESERVED_FIELD_NAMES = Collections.unmodifiableSet(SELF_FIELD_NAME,
+//                                                                                        UP_FIELD_NAME,
+//                                                                                        ID_FIELD_NAME,
+//                                                                                        CHILDREN_FIELD_NAME);
 
     private final List<RestProperty> jcrProperties;
     private final List<RestNode> children;

@@ -21,7 +21,7 @@ package com.bpwizard.wcm.repo.rest.model;
  *
  * @author Horia Chiorean (hchiorea@redhat.com)
  */
-public abstract class RestItem { //implements JSONAble {
+public abstract class RestItem implements HasName { //implements JSONAble {
 
     protected final String url;
     protected final String parentUrl;

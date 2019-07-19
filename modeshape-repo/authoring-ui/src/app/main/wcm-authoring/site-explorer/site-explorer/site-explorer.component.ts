@@ -1,8 +1,9 @@
 import { Component, Injectable, ViewChild } from '@angular/core';
-import {FlatTreeControl} from '@angular/cdk/tree';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { MatMenuTrigger } from '@angular/material';
+import { ModeshapeService } from '../../service/modeshape.service';
 
 const LOAD_MORE = 'LOAD_MORE';
 
@@ -85,7 +86,7 @@ export class SiteDatabase {
 }
 
 @Component({
-  selector: 'app-site-explorer',
+  selector: 'site-explorer',
   templateUrl: './site-explorer.component.html',
   styleUrls: ['./site-explorer.component.scss'],
   providers: [SiteDatabase]
@@ -100,7 +101,7 @@ export class SiteExplorerComponent {
   @ViewChild('site', {static: true}) tree;
   @ViewChild('contextMenu', {static: true}) contextMenu: MatMenuTrigger;
 
-  constructor(private _database: SiteDatabase) {
+  constructor(private _database: SiteDatabase, private modeshapeService: ModeshapeService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
       this.isExpandable, this.getChildren);
 
@@ -119,6 +120,7 @@ export class SiteExplorerComponent {
   }
 
   ngAfterViewInit() {
+    console.log(this.modeshapeService);
     this.tree.treeControl.expand(this.activeNode);
   }
 
