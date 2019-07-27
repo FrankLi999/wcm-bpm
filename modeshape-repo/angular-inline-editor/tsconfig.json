@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "sourceMap": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": ["es2016", "dom"],
+        "noImplicitAny": true,
+        "declaration": true,
+        "types": ["node"],
+        "suppressImplicitAnyIndexErrors": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "exclude": [
+        "demo/**/*",
+        "dist"
+    ]
+}

@@ -1,0 +1,8 @@
+typings.json
+index.d.ts
+/node_modules/
+/typing/
+/dist/
+/.vscode/
+*.d.ts
+package-lock.json

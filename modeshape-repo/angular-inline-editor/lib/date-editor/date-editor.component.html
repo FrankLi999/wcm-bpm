@@ -1,0 +1,27 @@
+<div *ngIf="editing">
+    <label class="col-form-label">{{label}}</label>
+    <div class="input-group">
+        <input #dateEditorControl #dp="bsDatepicker" bsDatepicker  [class.is-invalid]="dateReqflag" class="form-control" [id]="id" type="text" [placeholder]="placeholder" [ngModel]="value | date:'{{format}}'"
+        (ngModelChange)="value=$event">
+        <span class="input-group-btn">
+            <button class="btn btn-sm btn-success" type="button" (click)="onSaveDate()">
+                <i class="fa fa-check" aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" type="button" (click)="onCancelDate()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </span>
+    </div>
+    <div *ngIf="dateReqflag" class="text-danger">
+            {{requiredMessage}}
+        </div>
+</div>
+<div *ngIf="!editing">
+    <div class="form-group">
+        <label class="col-form-label">{{label}}</label>
+        <div *ngIf="IsDateEmpty()" (click)="edit(value)" (focus)="edit(value);" tabindex="0" class="inline-edit-empty">
+            {{placeholder}}&nbsp;
+        </div>
+        <div *ngIf="!IsDateEmpty()" (click)="edit(value)" (focus)="edit(value);" tabindex="0" [ngClass]="disabled == 'true' ? 'inline-no-edit' : 'inline-edit'">{{value | date:format}}&nbsp;</div>
+    </div>
+</div>

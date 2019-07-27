@@ -11,7 +11,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         #jdbc.lob.non_contextual_creation: true
   datasource:
-    url: jdbc:mysql://192.168.0.180:3306/modeshape?useSSL=false
+    url: jdbc:mysql://192.168.0.180:3306/camunda711?useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     username: root
     password: P@ssw0rd
     #url: jdbc:postgresql://localhost:5432/bpwdb
@@ -91,3 +91,13 @@ org:
           NEW_FOLDER_PRIMARY_TYPE_NAME: "nt:folder"
           NEW_RESOURCE_PRIMARY_TYPE_NAME: "nt:file"
           NEW_CONTENT_PRIMARY_TYPE_NAME: "nt:resource"
+camunda:
+  bpm:
+    database:
+      schema-update: false
+    admin-user:
+      id: demo
+      password: demo
+      firstName: Demo
+    filter:
+      create: All tasks

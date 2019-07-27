@@ -5,7 +5,8 @@ spring:
   resources.static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,classpath:/webui/
   # Active profile
   profiles.active: dev
-  
+  application:
+    name: wcm-boot
   # JSON serialization settings
   jackson:
     default-property-inclusion: NON_NULL
