@@ -37,8 +37,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.wcm.repo.rest.model.RestItem;
-import com.bpwizard.wcm.repo.rest.model.RestProperty;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestItem;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 
 /**
  * Class which handles incoming requests related to {@link Binary binary values}
@@ -161,7 +161,6 @@ public final class RestBinaryHandler extends AbstractHandler {
             try {
                 binaryStream.close();
             } catch (IOException e) {
-            	System.out.println(">>>>>>>>>>>>>>>>>>>>updateBinary >>>>>>>> 12"  + e );
                 logger.error("Cannot close binary stream", e);
             }
         }

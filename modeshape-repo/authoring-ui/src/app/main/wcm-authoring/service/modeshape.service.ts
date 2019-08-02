@@ -7,7 +7,10 @@ import {
   Client, 
   Path, 
   Get,
+  Post,
+  Delete,
   Timeout,
+  Body,
   Query, 
   Produces, 
   MediaType
@@ -23,7 +26,7 @@ import {
 @Injectable()
 @Client({
   serviceId: 'modeshape-service',
-  baseUrl: `${API_BASE_URL}/api/modeshape/rest`,
+  baseUrl: `${API_BASE_URL}/modeshape/api/rest`,
   headers: {
       'content-type': 'application/json'
   }
@@ -50,6 +53,21 @@ export class ModeshapeService extends RestClient {
   public getItems(
       @Path("repositoryName") repositoryName: string, 
       @Path("workspaceName") workspaceName: string,
-      @Path("path") path: string): Observable<RestItem> { return null; };
-      // @Query("depth") depth?:number): Observable<RestItem> { return null; };
+      @Path("path") path: string,
+      @Query("depth") depth?: number): Observable<RestItem> { return null; };
+  
+  @Post("/{repositoryName}/{workspaceName}/items/{path}")
+  @Timeout(20000) //In milliseconds
+  public postItems(
+      @Path("repositoryName") repositoryName: string, 
+      @Path("workspaceName") workspaceName: string,
+      @Path("path") path: string,
+      @Body itemContent: any): Observable<any> { return null; };
+
+  @Delete("/{repositoryName}/{workspaceName}/items/{path}")
+  @Timeout(20000) //In milliseconds
+  public deleteItem(
+      @Path("repositoryName") repositoryName: string, 
+      @Path("workspaceName") workspaceName: string,
+      @Path("path") path: string): Observable<any> { return null; };
 }

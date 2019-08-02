@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.wcm.repo.rest.model.RestRepositories;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories;
 
 /**
  * An class which returns POJO-based rest model instances.

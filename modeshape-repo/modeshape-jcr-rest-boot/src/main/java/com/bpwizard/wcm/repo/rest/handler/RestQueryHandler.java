@@ -43,8 +43,8 @@ import org.modeshape.common.util.StringUtil;
 import org.springframework.stereotype.Component;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
-import com.bpwizard.wcm.repo.rest.model.RestQueryPlanResult;
-import com.bpwizard.wcm.repo.rest.model.RestQueryResult;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestQueryPlanResult;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestQueryResult;
 
 /**
  * A REST handler used for executing queries against a repository and returning REST representations of the query results.

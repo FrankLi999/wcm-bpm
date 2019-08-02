@@ -1,0 +1,169 @@
+{
+	"bpwizard/library/design/authoringTemplate/sampleContent" : {
+        "jcr:primaryType": "bpw:authoringTemplate",
+        "bpw:baseResourceType": "contentType"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["body"]
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/body" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Body",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/tabs" : {
+        "jcr:primaryType":"bpw:formTabs"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/tabs/contentTab" : {
+        "jcr:primaryType":"bpw:formTab",
+        "bpw:tabName": "Content"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/tabs/contentTab/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/tabs/contentTab/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["name", "title", "url", "siteArea", "pageLayout"]
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/name" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/title" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/url" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "URL",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/siteArea" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Site Area",
+        "bpw:controlName": "siteArea",
+        "bpw:mandatory": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/pageLayout" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Page Layout",
+        "bpw:controlName": "select",
+        "bpw:options": "jcr://pageLayout",
+        "bpw:mandatory": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/tabs/propertiesTab" : {
+        "jcr:primaryType":"bpw:formTab",
+        "bpw:tabName": "Properties"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/tabs/propertiesTab/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/tabs/propertiesTab/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["friendlyURL", "cacheTTL", "showOnMenu"]
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/friendlyURL" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Friendly URL",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true",
+        "bpw:systemIndexed": true
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/cacheTTL" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Cache TTL",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Whole Number",
+        "bpw:defaultValue": "15",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/showOnMenu" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Show On Menu",
+        "bpw:controlName": "checkbox",
+        "bpw:value": "|true",
+        "bpw:defaultValue": "false",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/steps" : {
+        "jcr:primaryType":"bpw:formSteps"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/steps/contentStep" : {
+        "jcr:primaryType":"bpw:formStep",
+        "bpw:stepName": "Content_step"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/steps/contentStep/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/steps/contentStep/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["step1Description"]
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/step1Description" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Step1 Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/steps/propertiesStep" : {
+        "jcr:primaryType":"bpw:formStep",
+        "bpw:stepName": "Properties"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/steps/propertiesStep/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/steps/propertiesStep/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["step2Description"]
+    },
+    "bpwizard/library/design/authoringTemplate/sampleContent/elements/step2Description" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Step2 Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true",
+        "bpw:systemIndexed": true
+    }
+}

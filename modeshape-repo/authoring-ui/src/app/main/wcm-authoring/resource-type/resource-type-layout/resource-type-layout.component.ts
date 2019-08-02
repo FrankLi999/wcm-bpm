@@ -1,89 +1,27 @@
 import { Component, OnInit, Input, Inject, ViewEncapsulation } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {CdkDragDrop, moveItemInArray, copyArrayItem, transferArrayItem, CdkDrag} from '@angular/cdk/drag-drop';
-
-export interface SiteFolder {
-  path: string;
-}
-export interface Workflow {
-  workflow: string;
-}
-export interface ResourceType {
-  id: string;
-  typeName: string;
-  baseType: string
-  description: string;
-  siteFolder: SiteFolder,
-  workflow: Workflow,
-  publishDate : Date;
-  expireDate: Date;
-}
+import {
+  ControlField,
+  AuthoringTemplate,
+  BaseFormGroup,
+  FormSteps,
+  FormTabs,
+  FormTab,
+  FormStep,
+  FormRow,
+  FormRows,
+  FormColumn,
+  TemplateField
+} from '../../model';
+import { WcmService } from '../../service/wcm.service';
 const BASE_RESOURCE_TYPE: string[] = [
   'Content', 'Page', 'Widget', 'File', 'Key/Value', 'VanityURL', 'Form', 'Persona'
 ];
 
-export interface ResourceFieldColumnModel {
-  id: string;
-  fxFlex: number;
-  // coulmnName?: string;
-  fields: ResourceFieldModel[];
-}
-
-export interface ResourceFieldRowModel {
-  columns: ResourceFieldColumnModel[];
-  // rowName?: string;
-}
-
-export interface ResourceFieldRowsModel {
-  rows: ResourceFieldRowModel[];
-}
-
-export interface ResourceFieldTabModel {
-  tabRows: ResourceFieldRowModel[];
-  tabName: string;
-}
-
-export interface ResourceFieldTabsModel {
-  tabs: ResourceFieldTabModel[];
-}
-
-export interface ResourceFieldStepModel {
-  stepRows: ResourceFieldRowModel[];
-  stepName: string;
-}
-
-export interface ResourceFieldStepsModel {
-  steps: ResourceFieldStepModel[];
-}
-
-export type ResourceFieldGroupModel = ResourceFieldStepsModel | ResourceFieldTabsModel | ResourceFieldRowsModel;
-
-export interface ResourceTypeModel {
-  groups: ResourceFieldGroupModel[];     
-}
-
-export interface ResourceFieldModel {
-  name: string;
-  icon: string;
-  class: string;
-  inputType: ResourceFieldData;
-}
-
-export interface ResourceFieldData {
-  type: string;
-  name: string;
-  value?: string; // = "n/a";
-  defaultValue?: string; // ="n/a";
-  hint?: string; // = "n/a";
-  validationEx?: string; // = "n/a"
-  flagTitles?: string[]; // = [];
-  flags?: boolean[]; // = [];
-  dataType?: string; // = "n/a";
-  dataTypeTitles?:String[];
-  selectTitle?: String;
-  selections?: String[];
-  selected?: String;
-}
+// export interface AuthoringTemplateModel {
+//   groups: BaseFormGroup[];     
+// }
 
 @Component({
   selector: 'resource-type-layout',
@@ -96,434 +34,138 @@ export class ResourceTypeLayoutComponent implements OnInit {
   @Input() resourceTypeName: string;
   
   dropZones: string[] = ['builder-target1'];
-  resourceTypeModel: ResourceTypeModel = {
-    groups: [
-    //   {
-    //   rows: [{
-    //     columns: [{
-    //       id: "fieldgroup0",
-    //       fxFlex: 100,
-    //       fields: []
-    //     }]
-    //   },{
-    //     columns: [{
-    //       id: "fieldgroup1",
-    //       fxFlex: 50,
-    //       fields: []
-    //     },{
-    //       id: "fieldgroup2",
-    //       fxFlex: 50,
-    //       fields: []
-    //     }]
-    //   }]
-    // },{
-    //   tabs:[{
-    //     tabName: 'tab1',
-    //     tabRows: [{
-    //       columns: [{
-    //         id: "fieldgroup3",
-    //         fxFlex: 50,
-    //         fields: []
-    //       },{
-    //         id: "fieldgroup4",
-    //         fxFlex: 50,
-    //         fields: []
-    //       }]
-    //     },{
-    //       columns: [{
-    //         id: "fieldgroup4",
-    //         fxFlex: 50,
-    //         fields: []
-    //       },{
-    //         id: "fieldgroup5",
-    //         fxFlex: 50,
-    //         fields: []
-    //       }]
-    //     }]
-    //   },{
-    //     tabName: 'tab2',
-    //     tabRows: [{
-    //       columns: [{
-    //         id: "fieldgroup10",
-    //         fxFlex: 50,
-    //         fields: []
-    //       },{
-    //         id: "fieldgroup11",
-    //         fxFlex: 50,
-    //         fields: []
-    //       }]
-    //     },{
-    //       columns: [{
-    //         id: "fieldgroup12",
-    //         fxFlex: 50,
-    //         fields: []
-    //       },{
-    //         id: "fieldgroup13",
-    //         fxFlex: 50,
-    //         fields: []
-    //       }]
-    //     }]
-    //   }]
-    // },{
-    //   steps:[{
-    //     stepName: 'step1',
-    //     stepRows: [{
-    //       columns: [{
-    //         id: "fieldgroup6",
-    //         fxFlex: 50,
-    //         fields: []
-    //       },{
-    //         id: "fieldgroup7",
-    //         fxFlex: 50,
-    //         fields: []
-    //       }]
-    //     },{
-    //       columns: [{
-    //         id: "fieldgroup8",
-    //         fxFlex: 50,
-    //         fields: []
-    //       },{
-    //         id: "fieldgroup9",
-    //         fxFlex: 50,
-    //         fields: []
-    //       }]
-    //     }]
-    //   },{
-    //     stepName: 'step2',
-    //     stepRows: [{
-    //       columns: [{
-    //         id: "fieldgroup14",
-    //         fxFlex: 50,
-    //         fields: []
-    //       },{
-    //         id: "fieldgroup15",
-    //         fxFlex: 50,
-    //         fields: []
-    //       }]
-    //     },{
-    //       columns: [{
-    //         id: "fieldgroup16",
-    //         fxFlex: 50,
-    //         fields: []
-    //       },{
-    //         id: "fieldgroup17",
-    //         fxFlex: 50,
-    //         fields: []
-    //       }]
-    //     }]
-    //   }]
-    // }
-    ]
-  };
-
-  controlFields: ResourceFieldModel[] = [
-    { name: 'Associations',
-      inputType: {
-        type: 'Associations',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'recent_actors', class: 'wide' 
-    },
-    { name: 'Binary',
-      inputType: {
-        type: 'Binary',
-        name: '',
-        hint: 'Binary type',
-        flagTitles: ['Required'],
-        flags: [true]
-      }, 
-      icon: 'theaters', 
-      class: 'wide' 
-    },
-    { name: 'Category',
-      inputType: {
-        type: 'Category',
-        name: '',
-        hint: 'Category type',
-        flagTitles: ['Required', 'User Searchable'],
-        flags: [true, true],
-        selectTitle: 'Select Category',
-        selections: ['a', 'b', 'c'],
-        selected: 'a',
-      },
-      icon: 'category',
-      class: 'wide'
-    },
-    { name: 'Checkbox',
-      inputType: {
-        type: 'Checkbox',
-        name: ''
-      }, 
-      icon: 'check', class: 'wide' },
-    { name: 'Custom Field',
-      inputType: {
-        type: 'Custom Field',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'reorder', class: 'wide' },
-    { name: 'Date',
-      inputType: {
-        type: 'Date',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'calenda_today', class: 'wide' },
-    { name: 'Date and Time',
-      inputType: {
-        type: 'Date and Time',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'view_day', class: 'wide' },
-    { name: 'File',
-      inputType: {
-        type: 'File',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'file_copy', class: 'wide' },
-    { name: 'Hidden Field',
-      inputType: {
-        type: 'Hidden Field',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'keyboard_hide', class: 'wide' },
-    { name: 'Image',
-      inputType: {
-        type: 'Image',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'image', class: 'wide' },
-    { name: 'Key/Value',
-      inputType: {
-        type: 'Key/Value',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'event_note', class: 'wide' },
-    { name: 'Line Divider',
-      inputType: {
-        type: 'Line Divider',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'horizontal_split', class: 'wide' },
-    { name: 'Multi Select',
-      inputType: {
-        type: 'Multi Select',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'format_list_bulleted', class: 'wide' },
-    { name: 'Permissions',
-      inputType: {
-        type: 'Permissions',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'account_circle', class: 'wide' },
-    { name: 'Radio',
-      inputType: {
-        type: 'Radio',
-        name: '',
-        hint: '',
-        value: '',
-        flagTitles: ['Required', 'UserSearchable', 'System Indexed', 'Show In List'],
-        flags: [false, false, false, false],
-        dataTypeTitles: ['Text', 'True/False', 'Decimal', 'Whole Number'],
-        dataType: 'Text'
-      },
-      icon: 'radio_button_checked',
-      class: 'wide' 
-    },
-    { name: 'Read-only Field',
-      inputType: {
-        type: 'Read-only Field',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'offline_pin', class: 'wide' 
-    },
-    { name: 'Select',
-      inputType: {
-        type: 'Select',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'select_all', class: 'wide' },
-    { name: 'Site Area',
-      inputType: {
-        type: 'Site Area',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'archive', class: 'wide' },
-    { name: 'Tag',
-      inputType: {
-        type: 'Tag',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'flag', class: 'wide' },
-    { name: 'Text',
-      inputType: {
-        type: 'Text',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'text_fields', class: 'wide' },
-    { name: 'Textarea',
-      inputType: {
-        type: 'Textarea',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'textsms', class: 'wide' },
-    { name: 'Time',
-      inputType: {
-        type: 'Time',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'access_time', class: 'wide' },
-    { name: 'Rich Text',
-      inputType: {
-        type: 'Rich Text',
-        name: '',
-        hint: ''
-      }, 
-      icon: 'text_format', class: 'wide' }
-  ];
-  builderTargets: string[] = [
-    // 'fieldgroup0', 
-    // 'fieldgroup1', 
-    // 'fieldgroup2', 
-    // 'fieldgroup3', 
-    // 'fieldgroup4',
-    // 'fieldgroup5',
-    // 'fieldgroup6',
-    // 'fieldgroup7',
-    // 'fieldgroup8',
-    // 'fieldgroup9',
-    // 'fieldgroup10',
-    // 'fieldgroup11',
-    // 'fieldgroup12',
-    // 'fieldgroup13',
-    // 'fieldgroup14',
-    // 'fieldgroup15',
-    // 'fieldgroup16',
-    // 'fieldgroup17'              
+  controlFields: ControlField[] = [];
+  
+  builderTargets: string[] = [             
   ];
   baseResourceType: string = BASE_RESOURCE_TYPE[Math.round(Math.random() * (BASE_RESOURCE_TYPE.length - 1))];
-  
-  resourceType: ResourceType = {
-    id: Math.random().toString(),
-    typeName: 'A Resource Type',
-    baseType: this.baseResourceType,
+  resourceType: AuthoringTemplate = {
+    name: 'Resource Type name',
+    title: 'Title',
     description: 'Content type',
-    siteFolder: {
-      path: 'demo.dotcms.com'
-    },
-    workflow: {
-      workflow: 'System'
-    },
-    publishDate : new Date(2019, 0, 1),
-    expireDate: new Date(2019, 0, 1)
+    baseResourceType: 'Content',
+    workflow: ['System'],
+    categories: [],
+    publishDate: new Date(2019, 0, 1),
+    formGroups: [],
+    formControls: {}
   }
   private nextFieldGroupId: number = 0;
   constructor(
+      private wcmService: WcmService,
       private dialog: MatDialog) { 
   }
 
   ngOnInit() {
     this.nextFieldGroupId = this.getNextFieldGroupId();
+    this.wcmService.getControlField('bpwizard', 'default').subscribe(
+      (controlFiels: ControlField[]) => {
+        if (controlFiels) {
+          this.controlFields = controlFiels;
+        }
+      }
+    )
   }
 
-  groupType(group: ResourceFieldGroupModel): string {
-    if ((<ResourceFieldStepsModel>group) && (<ResourceFieldStepsModel>group).steps!== undefined) {
-      return "stepers";
+  groupType(group: BaseFormGroup): string {
+    if (!group) {
+      return 'n/a';
     }
-    if ((<ResourceFieldTabsModel>group) && (<ResourceFieldTabsModel>group).tabs !== undefined) {
+    if ((group as FormSteps).steps!== undefined) {
+      return "steps";
+    }
+    if ((group as FormTabs).tabs !== undefined) {
       return "tabs";
     }
-    if ((<ResourceFieldRowsModel>group) && (<ResourceFieldRowsModel>group).rows !== undefined) {
+    if ((group as FormRows).rows !== undefined) {
       return "rows";
+    }
+    if ((group as FormRow).columns !== undefined) {
+      return "columns";
     }
     return "n/a";
   }
 
-  stepRemovable(step: ResourceFieldStepModel): boolean {
-    return step.stepRows.length === 0;
+  stepRemovable(step: FormStep): boolean {
+    return step.formGroups.length === 0;
   }
 
-  deleteStep(index: number, steps: ResourceFieldRowModel[]) {
+  deleteStep(index: number, steps: FormStep[]) {
     steps.splice(index, 1);
   }
 
-  tabRemovable(tab: ResourceFieldTabModel): boolean {
-    return tab.tabRows.length === 0;
+  tabRemovable(tab: FormTab): boolean {
+    return tab.formGroups.length === 0;
   }
 
-  deleteTab(index: number, tabs: ResourceFieldTabModel[]) {
+  deleteTab(index: number, tabs: FormTab[]) {
     tabs.splice(index, 1);
   }
 
-  rowRemovable(row: ResourceFieldRowModel): boolean {
+  rowRemovable(row: FormRow): boolean {
     return row.columns.every(this.emptyColumn);
   }
 
-  emptyColumn(column: ResourceFieldColumnModel, index: number, columns: ResourceFieldColumnModel[]) {
-    return column.fields.length === 0;
+  emptyColumn(column: FormColumn, index: number, columns: FormColumn[]) {
+    return column.formControls.length === 0;
   }
 
-  deleteRow(index: number, rows: ResourceFieldRowModel[]) {
+  deleteRow(index: number, rows: FormRow[]) {
     rows.splice(index, 1);
   }
 
-  isStepers(group: ResourceFieldGroupModel): boolean {
-    return "stepers" === this.groupType(group);
+  isStepers(group: BaseFormGroup): boolean {
+    return "steps" === this.groupType(group);
   }
 
-  isTabs(group: ResourceFieldGroupModel): boolean {
+  isTabs(group: BaseFormGroup): boolean {
     return "tabs" === this.groupType(group);
   }
 
-  isRows(group: ResourceFieldGroupModel): boolean {
+  isRows(group: BaseFormGroup): boolean {
     return "rows" === this.groupType(group);
   }
 
-  drop(event: CdkDragDrop<ResourceFieldModel[]>) {
+  isRow(group: BaseFormGroup): boolean {
+    return "columns" === this.groupType(group);
+  }
+
+  drop(event: CdkDragDrop<ControlField[]|String[]>) {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      moveItemInArray((event.container.data as String[]), event.previousIndex, event.currentIndex);
     } else if ("palletFields" !== event.previousContainer.id) {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
+      transferArrayItem((event.previousContainer.data as String[]),
+        (event.container.data as String[]),
         event.previousIndex,
         event.currentIndex);
     } else {
+      const controlField = (event.previousContainer.data as ControlField[])[event.previousIndex];
       const dialogRef = this.dialog.open(ResourceFieldDialog, {
         width: '500px',
-        data: {...event.previousContainer.data[event.previousIndex].inputType}
+        data: {
+          currentFieldName: '',
+          controlField: controlField,
+          templateField: {
+            name: ''
+          }
+        }
       });
   
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          copyArrayItem([{...event.previousContainer.data[event.previousIndex]}],
-            event.container.data,
+          result.templateField.controlName = result.controlField.name;
+          copyArrayItem([result.templateField.name],
+            (event.container.data as String[]),
             0,
             event.currentIndex);
-            event.container.data[event.currentIndex].inputType = result;
+            this.resourceType.formControls[result.templateField.name] = result.templateField;
         }
       });
     }
   }
 
   /** Predicate function that only allows even numbers to be dropped into a list. */
-  evenPredicate(item: CdkDrag<ResourceFieldModel>) {
+  evenPredicate(item: CdkDrag<TemplateField>) {
     return true;
   }
 
@@ -532,43 +174,73 @@ export class ResourceTypeLayoutComponent implements OnInit {
     return false;
   }
 
-  droppableItemClass = (item: any) => `${item.class} ${item.inputType.type}`;
+  droppableItemClass = (item: any) => `wide ${item.inputType.controlName}`;
 
-  deleteTargetField(index:number, fields: ResourceFieldModel[]) {
-      fields.splice(index, 1);
+  deleteTargetField(index:number, fields: string[]) {
+      let fieldNames = fields.splice(index, 1);      	
+      delete this.resourceType.formControls[fieldNames[0]];
   }
 
-  editTargetField(index:number, fields: ResourceFieldModel[]) {
+  getControlFieldName(formControl:string): string {
+     return this.resourceType.formControls[formControl].controlName;
+  }
+  editTargetField(index:number, fields: string[]) {
+    let field:TemplateField  = this.resourceType.formControls[fields[index]];
     const dialogRef = this.dialog.open(ResourceFieldDialog, {
       width: '500px',
-      data: {...fields[index].inputType}
+      data: {
+        currentFieldName: fields[index],
+        controlField: this.getControlField(field.controlName),
+        templateField: field
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        fields[index].inputType = result;
+        fields[index] = result.templateField.name;
+        if (result.currentFieldName != result.templateField.name) {
+          delete this.resourceType.formControls[result.currentFieldName];
+        }
+        this.resourceType.formControls[result.templateField.name] = result.templateField;
       }
     });
   }
 
-  getResourceFieldHint(inputType: ResourceFieldData): string {
-      let hint = '';
-      if (inputType.hint) {
-        hint = hint.concat(' (').concat(inputType.hint).concat(')');
-      }
-      return hint;
+  getControlField(controlName: string): ControlField {
+    return this.controlFields.find(controlField => controlField.name == controlName);
   }
 
-  getResourceFieldFlags(inputType: ResourceFieldData): string {
-      let fieldFlag = '';
-      if (inputType.flags) {
-        for (let i = 0; i <= inputType.flags.length; i++) {
-          if (inputType.flags[i]) {
-            fieldFlag = fieldFlag.concat(' . ').concat(inputType.flagTitles[i]);
-          }
-        }
-      }
-      return fieldFlag;
+  getResourceFieldHint(templateFieldName: string): string {
+    let templateField = this.resourceType.formControls[templateFieldName];
+    let hint = '';
+    if (templateField.hint) {
+      hint = hint.concat(' (').concat(templateField.hint).concat(')');
+    }
+    return hint;
+  }
+
+  getResourceFieldFlags(templateFieldName: string): string {
+    let templateField = this.resourceType.formControls[templateFieldName];
+    let fieldFlag = '';
+    if (templateField.mandatory) {
+      fieldFlag = fieldFlag.concat(' . ').concat('Required');
+    }
+    if (templateField.userSearchable) {
+      fieldFlag = fieldFlag.concat(' . ').concat('User Searchable');
+    }
+    
+    if (templateField.systemIndexed) {
+      fieldFlag = fieldFlag.concat(' . ').concat('System Indexed');
+    }
+
+    if (templateField.showInList) {
+      fieldFlag = fieldFlag.concat(' . ').concat('Show In List');
+    }
+
+    if (templateField.unique) {
+      fieldFlag = fieldFlag.concat(' . ').concat('Unique');
+    }
+    return fieldFlag;
   }
 
   getIcon(baseResourceType: string) {
@@ -607,11 +279,11 @@ export class ResourceTypeLayoutComponent implements OnInit {
   editResourceType() {
     const dialogRef = this.dialog.open(ResourceTypeDialog, {
       width: '500px',
-      data: {...this.resourceType}
+      data: this.resourceType
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.resourceType = {...result};
+      this.resourceType = result;
     });
     return false;
   }
@@ -622,31 +294,31 @@ export class ResourceTypeLayoutComponent implements OnInit {
 
   addNewRow(numOfColumn: number) {
 
-    let rows = this.isRows(this.resourceTypeModel.groups[this.resourceTypeModel.groups.length - 1]) ? 
-        this.resourceTypeModel.groups[this.resourceTypeModel.groups.length - 1] :
-        { rows: []};
+    let rows = this.isRows(this.resourceType.formGroups[this.resourceType.formGroups.length - 1]) ? 
+    this.resourceType.formGroups[this.resourceType.formGroups.length - 1] as FormRows:
+        { rows: []} as FormRows;
     
-    (<ResourceFieldRowsModel>rows).rows.push({
+    rows.rows.push({
       columns: []
     });
-    let row = (<ResourceFieldRowsModel>rows).rows[(<ResourceFieldRowsModel>rows).rows.length - 1];
+    let row: FormRow = rows.rows[rows.rows.length - 1];
     for (let i = 0; i < numOfColumn; i++) {
       let fieldGroupId = "fieldgroup" + this.nextFieldGroupId++; 
       row.columns.push({
         id: fieldGroupId,
         fxFlex: 100/numOfColumn,
-        fields: []
+        formControls: []
       });
       this.builderTargets.push(fieldGroupId);
     }
 
-    if (!this.isRows(this.resourceTypeModel.groups[this.resourceTypeModel.groups.length - 1])) {
-      this.resourceTypeModel.groups.push(rows);
+    if (!this.isRows(this.resourceType.formGroups[this.resourceType.formGroups.length - 1])) {
+      this.resourceType.formGroups.push(rows);
     }
     return false;
   }
 
-  editTab(tab: ResourceFieldTabModel) {
+  editTab(tab: FormTab) {
       const dialogRef = this.dialog.open(TabEditorDialog, {
           width: '500px',
           data: tab.tabName
@@ -660,24 +332,22 @@ export class ResourceTypeLayoutComponent implements OnInit {
       return false;
   }
 
-  addTabRow(numOfColumn: number, tab: ResourceFieldTabModel) {
-      tab.tabRows.push({
-          columns: []
-      });  
-      let row: ResourceFieldRowModel = tab.tabRows[tab.tabRows.length - 1];
+  addTabRow(numOfColumn: number, tab: FormTab) {
+      tab.formGroups.push({columns: []} as FormRow);  
+      let row: FormRow = tab.formGroups[tab.formGroups.length - 1] as FormRow;
       for (let i = 0; i < numOfColumn; i++) {
           let fieldGroupId = "fieldgroup" + this.nextFieldGroupId++; 
           row.columns.push({
               id: fieldGroupId,
               fxFlex: 100/numOfColumn,
-              fields: []
+              formControls: []
           });
           this.builderTargets.push(fieldGroupId);
       }
       return false;
   }
 
-  editStep(step: ResourceFieldStepModel) {
+  editStep(step: FormStep) {
       const dialogRef = this.dialog.open(TabEditorDialog, {
           width: '500px',
           data: step.stepName
@@ -691,17 +361,15 @@ export class ResourceTypeLayoutComponent implements OnInit {
       return false;
   }
 
-  addStepRow(numOfColumn: number, step: ResourceFieldStepModel) {
-      step.stepRows.push({
-          columns: []
-      });  
-      let row: ResourceFieldRowModel = step.stepRows[step.stepRows.length - 1];
+  addStepRow(numOfColumn: number, step: FormStep) {
+      step.formGroups.push({columns: []} as FormRow);  
+      let row: FormRow = step.formGroups[step.formGroups.length - 1] as FormRow;
       for (let i = 0; i < numOfColumn; i++) {
           let fieldGroupId = "fieldgroup" + this.nextFieldGroupId++; 
           row.columns.push({
               id: fieldGroupId,
               fxFlex: 100/numOfColumn,
-              fields: []
+              formControls: []
           });
           this.builderTargets.push(fieldGroupId);
       }
@@ -716,29 +384,29 @@ export class ResourceTypeLayoutComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
         if (result) {
-            let tabs = this.isTabs(this.resourceTypeModel.groups[this.resourceTypeModel.groups.length - 1]) ? 
-                this.resourceTypeModel.groups[this.resourceTypeModel.groups.length - 1] :
-                { tabs: []};
+            let tabs = this.isTabs(this.resourceType.formGroups[this.resourceType.formGroups.length - 1]) ? 
+            this.resourceType.formGroups[this.resourceType.formGroups.length - 1] as FormTabs:
+                { tabs: []} as FormTabs;
             
-            (<ResourceFieldTabsModel>tabs).tabs.push({
-              tabRows: [{
+           tabs.tabs.push({
+              formGroups: [{
                 columns: []
-              }],
+              } as FormRow],
               tabName: result
             });
-            let tab = (<ResourceFieldTabsModel>tabs).tabs[(<ResourceFieldTabsModel>tabs).tabs.length - 1];
+            let tab = tabs.tabs[tabs.tabs.length - 1];
             for (let i = 0; i < numOfColumn; i++) {
               let fieldGroupId = "fieldgroup" + this.nextFieldGroupId++; 
-              tab.tabRows[0].columns.push({
+              (tab.formGroups[0] as FormRow).columns.push({
                 id: fieldGroupId,
                 fxFlex: 100/numOfColumn,
-                fields: []
+                formControls: []
               });
               this.builderTargets.push(fieldGroupId);
             }
 
-            if (!this.isTabs(this.resourceTypeModel.groups[this.resourceTypeModel.groups.length - 1])) {
-              this.resourceTypeModel.groups.push(tabs);
+            if (!this.isTabs(this.resourceType.formGroups[this.resourceType.formGroups.length - 1])) {
+              this.resourceType.formGroups.push(tabs);
             }
         }
     });
@@ -753,33 +421,50 @@ export class ResourceTypeLayoutComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          let steps = this.isStepers(this.resourceTypeModel.groups[this.resourceTypeModel.groups.length - 1]) ? 
-              this.resourceTypeModel.groups[this.resourceTypeModel.groups.length - 1] :
-              { steps: []};
+          let steps = this.isStepers(this.resourceType.formGroups[this.resourceType.formGroups.length - 1]) ? 
+          this.resourceType.formGroups[this.resourceType.formGroups.length - 1] as FormSteps:
+              { steps: []} as FormSteps;
         
-          (<ResourceFieldStepsModel>steps).steps.push({
-              stepRows: [{
+          (<FormSteps>steps).steps.push({
+            formGroups: [{
                 columns: []
-              }],
+              } as FormRow],
               stepName: result
           });
-          let step = (<ResourceFieldStepsModel>steps).steps[(<ResourceFieldStepsModel>steps).steps.length - 1];
+          let step = (<FormSteps>steps).steps[(<FormSteps>steps).steps.length - 1];
           for (let i = 0; i < numOfColumn; i++) {
               let fieldGroupId = "fieldgroup" + this.nextFieldGroupId++; 
-              step.stepRows[0].columns.push({
+              (step.formGroups[0] as FormRow).columns.push({
                   id: fieldGroupId,
                   fxFlex: 100/numOfColumn,
-                  fields: []
+                  formControls: []
               });
               this.builderTargets.push(fieldGroupId);
           }
 
-          if (!this.isStepers(this.resourceTypeModel.groups[this.resourceTypeModel.groups.length - 1])) {
-              this.resourceTypeModel.groups.push(steps);
+          if (!this.isStepers(this.resourceType.formGroups[this.resourceType.formGroups.length - 1])) {
+            this.resourceType.formGroups.push(steps);
           }
         }
     });
     return false;
+  }
+
+  saveResourceType() {
+    console.log(this.resourceType);
+    this.wcmService.createAuthoringTemplate('bpwizard', 'default', this.resourceType)
+      .subscribe(
+        (event: any) => {
+          console.log(event);
+        },
+        response => {
+          console.log("GET call in error", response);
+          console.log(response);
+        },
+        () => {
+          console.log("The GET observable is now completed.");
+        }
+      );
   }
 }
 
@@ -791,7 +476,7 @@ export class ResourceTypeDialog {
 
   constructor(
     public dialogRef: MatDialogRef<ResourceTypeDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: ResourceType) {}
+    @Inject(MAT_DIALOG_DATA) public data: AuthoringTemplate) {}
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -806,7 +491,9 @@ export class ResourceFieldDialog {
 
   constructor(
     public dialogRef: MatDialogRef<ResourceFieldDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: ResourceFieldData) {}
+    @Inject(MAT_DIALOG_DATA) public data: {
+      templateField:TemplateField,
+      readonly controlField: ControlField}) {}
 
   onNoClick(): void {
     this.dialogRef.close();

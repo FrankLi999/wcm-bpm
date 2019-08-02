@@ -3,7 +3,7 @@
     <div fxFlex="100">
         <!-- HEADER -->
         <div class="card" id="resouce-type-header">
-            <div class="resource-type" fxFlex="70">
+            <div class="resource-type" fxFlex="50">
                 <div fxLayout="row">
                     <mat-icon class="s-20">{{getIcon(resourceType.baseType)}}</mat-icon>
                     <h3 style="margin:0">{{resourceType.typeName}}</h3>
@@ -20,13 +20,18 @@
                     </div>
                 </div>
             </div>
-            <div class="resource-type-action" fxFlex="30">
+            <div class="resource-type-action" fxFlex="50">
                 <div fxLayout="row">
-                    <div fxFlex="50">
+                    <div fxFlex="25">
                         <button mat-raised-button (click)="editResourceType()">
                             <mat-icon class="mat-icon-rtl-mirror">edit</mat-icon>Edit
                         </button>
                     </div>
+                    <div fxFlex="25">
+                            <button mat-raised-button (click)="saveResourceType()">
+                                    <mat-icon class="mat-icon-rtl-mirror">save</mat-icon>Save
+                            </button>
+                        </div>
                     <div fxFlex="50">
                         <button mat-icon-button [matMenuTriggerFor]="resourceFieldMenu">
                             <mat-icon class="mat-icon-rtl-mirror">more_vert</mat-icon>
@@ -38,7 +43,7 @@
         <!-- / HEADER -->
         <!-- ROWS -->
         <cdk-virtual-scroll-viewport itemSize="30" class="resource-field-viewport">   
-            <div class="card resource-type-column" *ngFor="let group of resourceTypeModel.groups;">
+            <div class="card resource-type-column" *ngFor="let group of resourceType.formGroups;">
                 <div *ngIf="isStepers(group)">
                     <div *ngFor="let step of group.steps; let stepIndex = index">
                         <div fxLayout="row">
@@ -61,10 +66,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngFor="let stepRow of step.stepRows; let stepRowIndex = index">
+                        <div *ngFor="let stepRow of step.formGroups; let stepRowIndex = index">
                             <div *ngIf="rowRemovable(stepRow)" fxLayout="row" fxLayoutAlign="flex-end">
                                 <div fxLayout="column" fxFlex="20" fxLayoutAlign="flex-end">    
-                                    <button mat-icon-button (click)="deleteRow(stepRowIndex, step.stepRows)">
+                                    <button mat-icon-button (click)="deleteRow(stepRowIndex, step.formGroups)">
                                         <mat-icon>delete</mat-icon> Remove Row
                                     </button>
                                 </div>
@@ -74,29 +79,29 @@
                                         *ngFor="let column of stepRow.columns;" 
                                         fxFlex="{{column.fxFlex}}">
                                     <div cdkDropList id="{{column.id}}"
-                                            [cdkDropListData]="column.fields"                                
+                                            [cdkDropListData]="column.formControls"                                
                                             [cdkDropListConnectedTo]="builderTargets"
                                             class="field-list"
                                             (cdkDropListDropped)="drop($event)"
                                             [cdkDropListEnterPredicate]="evenPredicate">    
                                         <div class="field-box" cdkDrag 
-                                                *ngFor="let field of column.fields; let index = index" 
-                                                [cdkDragData]="field">
+                                                *ngFor="let formControl of column.formControls; let index = index;" 
+                                                [cdkDragData]="formControl">
 
                                             <div class="resource-field-column" fxFlex="100">
                                                 <div fxLayout="row" fxLayoutAlign="flex-end">
-                                                    <button mat-icon-button (click)="deleteTargetField(index, column.fields)">
+                                                    <button mat-icon-button (click)="deleteTargetField(index, column.formControls)">
                                                         <mat-icon>delete</mat-icon>
                                                     </button>
-                                                    <button mat-icon-button (click)="editTargetField(index, column.fields)">
+                                                    <button mat-icon-button (click)="editTargetField(index, column.formControls)">
                                                         <mat-icon>edit</mat-icon>
                                                     </button>
                                                 </div>
                                                 <div fxLayout="row">
-                                                    <div fxFlex="100">{{field.inputType.name}}{{getResourceFieldHint(field.inputType)}}</div>
+                                                    <div fxFlex="100">{{formControl}}{{getResourceFieldHint(formControl)}}</div>
                                                 </div>
                                                 <div fxLayout="row">
-                                                    <div fxFlex="100">{{field.inputType.type}}{{getResourceFieldFlags(field.inputType)}}</div>
+                                                    <div fxFlex="100">{{getControlFieldName(formControl)}}{{getResourceFieldFlags(formControl)}}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -128,10 +133,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngFor="let tabRow of tab.tabRows; let tabRowIndex = index">
+                        <div *ngFor="let tabRow of tab.formGroups; let tabRowIndex = index">
                             <div *ngIf="rowRemovable(tabRow)" fxLayout="row" fxLayoutAlign="flex-end">
                                 <div fxLayout="column" fxFlex="20" fxLayoutAlign="flex-end">    
-                                    <button mat-icon-button (click)="deleteRow(tabRowIndex, tab.tabRows)">
+                                    <button mat-icon-button (click)="deleteRow(tabRowIndex, tab.formGroups)">
                                         <mat-icon>delete</mat-icon> Remove Row
                                     </button>
                                 </div>
@@ -139,27 +144,28 @@
                             <div fxLayout="row">
                                 <div class="builder-target card container" *ngFor="let column of tabRow.columns;" fxFlex="{{column.fxFlex}}">
                                     <div cdkDropList id="{{column.id}}"
-                                        [cdkDropListData]="column.fields"
+                                        [cdkDropListData]="column.formControls"
                                         [cdkDropListConnectedTo]="builderTargets"
                                         class="field-list"
                                         (cdkDropListDropped)="drop($event)"
                                         [cdkDropListEnterPredicate]="evenPredicate">
             
-                                        <div class="field-box" cdkDrag *ngFor="let field of column.fields; let index = index" [cdkDragData]="field">
+                                        <div class="field-box" cdkDrag *ngFor="let formControl of column.formControls; let index = index"
+                                            [cdkDragData]="formControl">
                                             <div class="resource-field-column" fxFlex="100">
                                                 <div fxLayout="row" fxLayoutAlign="flex-end">
-                                                    <button mat-icon-button (click)="deleteTargetField(index, column.fields)">
+                                                    <button mat-icon-button (click)="deleteTargetField(index, column.formControls)">
                                                         <mat-icon>delete</mat-icon>
                                                     </button>
-                                                    <button mat-icon-button (click)="editTargetField(index, column.fields)">
+                                                    <button mat-icon-button (click)="editTargetField(index, column.formControls)">
                                                         <mat-icon>edit</mat-icon>
                                                     </button>
                                                 </div>
                                                 <div fxLayout="row">
-                                                    <div fxFlex="100">{{field.inputType.name}}{{getResourceFieldHint(field.inputType)}}</div>
+                                                    <div fxFlex="100">{{formControl}}{{getResourceFieldHint(formControl)}}</div>
                                                 </div>
                                                 <div fxLayout="row">
-                                                    <div fxFlex="100">{{field.inputType.type}}{{getResourceFieldFlags(field.inputType)}}</div>
+                                                    <div fxFlex="100">{{getControlFieldName(formControl)}}{{getResourceFieldFlags(formControl)}}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -181,27 +187,28 @@
                         <div fxLayout="row">
                             <div class="builder-target card container" *ngFor="let column of row.columns;" fxFlex="{{column.fxFlex}}">
                                 <div cdkDropList id="{{column.id}}"
-                                    [cdkDropListData]="column.fields"
+                                    [cdkDropListData]="column.formControls"
                                     [cdkDropListConnectedTo]="builderTargets"
                                     class="field-list"
                                     (cdkDropListDropped)="drop($event)"
                                     [cdkDropListEnterPredicate]="evenPredicate">
 
-                                    <div class="field-box" cdkDrag *ngFor="let field of column.fields; let index = index" [cdkDragData]="field">
+                                    <div class="field-box" cdkDrag *ngFor="let formControl of column.formControls; let index = index" 
+                                        [cdkDragData]="formControl">
                                         <div class="resource-field-column" fxFlex="100">
                                             <div fxLayout="row" fxLayoutAlign="flex-end">
-                                                <button mat-icon-button (click)="deleteTargetField(index, column.fields)">
+                                                <button mat-icon-button (click)="deleteTargetField(index, column.formControls)">
                                                     <mat-icon>delete</mat-icon>
                                                 </button>
-                                                <button mat-icon-button (click)="editTargetField(index, column.fields)">
+                                                <button mat-icon-button (click)="editTargetField(index, column.formControls)">
                                                     <mat-icon>edit</mat-icon>
                                                 </button>
                                             </div>
                                             <div fxLayout="row">
-                                                <div fxFlex="100">{{field.inputType.name}}{{getResourceFieldHint(field.inputType)}}</div>
+                                                <div fxFlex="100">{{formControl}}{{getResourceFieldHint(formControl)}}</div>
                                             </div>
                                             <div fxLayout="row">
-                                                <div fxFlex="100">{{field.inputType.type}}{{getResourceFieldFlags(field.inputType)}}</div>
+                                                <div fxFlex="100">{{getControlFieldName(formControl)}}{{getResourceFieldFlags(formControl)}}</div>
                                             </div>
                                         </div>
                                     </div>

@@ -40,9 +40,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
-import com.bpwizard.wcm.repo.rest.model.BackupResponse;
-import com.bpwizard.wcm.repo.rest.model.RestException;
-import com.bpwizard.wcm.repo.rest.model.RestWorkspaces;
+import com.bpwizard.wcm.repo.rest.modeshape.model.BackupResponse;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestException;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 
 /**
  * An handler which returns POJO-based rest model instances.

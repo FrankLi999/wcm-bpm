@@ -59,31 +59,14 @@
 
 [bpw:controlField]
 - bpw:title (STRING)
+- bpw:icon (STRING)
 + * (bpw:controlFieldMetaData)
 
-/*
-[bpw:controlField] > mix:lastModified
-- bpw:name (STRING) mandatory COPY
-- bpw:type (STRING) mandatory COPY
-- bpw:value (STRING) multiple COPY
-- bpw:options (STRING) multiple COPY
-- bpw:defaultValue (STRING) COPY
-- bpw:hint (STRING) COPY
-- bpw:dataType (STRING) = 'Text' COPY
-- bpw:relationshipType (STRING) COPY
-- bpw:relationshipCardinality (STRING) COPY
-- bpw:valditionRegEx (STRING) COPY
-- bpw:mandatory (BOOLEAN) = 'false' COPY
-- bpw:userSearchable (BOOLEAN) = 'false' COPY
-- bpw:systemIndexed (BOOLEAN) = 'false' COPY
-- bpw:showInList (BOOLEAN) = 'false' COPY
-- bpw:unique (BOOLEAN) = 'false' COPY
-*/
-[bpw:elementFormGroup] abstract
+[bpw:formGroup] abstract
 - bpw:groupName (STRING)
 - bpw:groupTitle (STRING)
 
-[bpw:elementFormControl]
+[bpw:formControl] > nt:hierarchyNode
 - bpw:title (String)
 - bpw:controlName (String)
 - bpw:value (STRING) multiple COPY
@@ -100,17 +83,30 @@
 - bpw:showInList (BOOLEAN) = 'false' COPY
 - bpw:unique (BOOLEAN) = 'false' COPY
 
-[bpw:elementFormColumn]
-+ * (bpw:elementFormControl)
+[bpw:formColumn]
+- bpw:id (STRING)
+- bpw:fxFlex (LONG) 
+- bpw:fieldNames (STRING) multiple
 
-[bpw:elementFormRow] > bpw:elementFormGroup
-+ * (bpw:elementFormColumn)
+[bpw:formRow] > bpw:formGroup
++ * (bpw:formColumn)
 
-[bpw:elementFormTab] > bpw:elementFormGroup
-+ * (bpw:elementFormRow)
+[bpw:formRows] > bpw:formGroup
++ * (bpw:formRow)
 
-[bpw:elementFormStep] > bpw:elementFormGroup
-+ * (bpw:elementFormRow)
+[bpw:formTabs] > bpw:formGroup
++ * (bpw:formTab)
+
+[bpw:formSteps] > bpw:formGroup
++ * (bpw:formStep)
+
+[bpw:formTab]
+- bpw:tabName (STRING)
++ * (bpw:formGroup)
+
+[bpw:formStep]
+- bpw:stepName (STRING)
++ * (bpw:formGroup)
 
 [bpw:category] > nt:hierarchyNode, mix:lastModified
 + * (bpw:category)
@@ -168,13 +164,16 @@
 - bpw:name (STRING) mandatory COPY
 - bpw:phote (BINARY)
 
-[bpw:authoringTemplate] > mix:lastModified
-- bpw:resourceType (String)
-+ * (bpw:elementFormGroup)
+[bpw:elementFolder] > nt:folder
++ * (bpw:formControl)
 
-[bpw:themeType] > bpw:resourceNode
-- themeName (STRING)
-- path (String)
+[bpw:authoringTemplate] > bpw:resourceNode
+- bpw:baseResourceType (String)
++ * (bpw:formGroup)
++ elements (bpw:elementFolder)
+
+[bpw:themeType] > nt:folder, bpw:resourceNode
+- bpw:themeName (STRING)
 
 [bpw:siteArea] > bpw:resourceNode
 - bpw:name (STRING) mandatory COPY
@@ -365,16 +364,15 @@
 
 [bpw:workflowFolder] > nt:folder
 [bpw:categoryFolder] > nt:folder
-/*
-[bpw:siteArea] > nt:folder
-*/
-[bpw:resourceTypeFolder] > nt:folder
+[bpw:authoringTemplateFolder] > nt:folder
 + * (bpw:authoringTemplate)
 
 [bpw:controlFieldFolder] > nt:folder
 + * (bpw:controlField)
 
-[bpw:themeFolder] > nt:folder
+[bpw:themesFolder] > nt:folder
++ * (bpw:themeType)
+
 [bpw:pageLayoutFolder] > nt:folder
 [bpw:renderTemplateFolder] > nt:folder
 [bpw:queryFolder] > nt:folder
@@ -384,8 +382,8 @@
 [bpw:library] > nt:folder, mix:lastModified
 - bpw:language (STRING)
 + rootSiteArea (bpw:siteArea)
-+ resourceType (bpw:resourceTypeFolder)
-+ theme (bpw:themeFolder)
++ authoringTemplate (bpw:authoringTemplateFolder)
++ theme (bpw:themesFolder)
 + pageLayout (bpw:pageLayoutFolder)
 + renderTemplate (bpw:renderTemplateFolder)
 + query (bpw:queryFolder)
@@ -393,17 +391,70 @@
 + category (bpw:categoryFolder)
 + asset (bpw:assetFolder)
 
+[bpw:supportedOpertion]
+  - bpw:resourceName (STRING)
+  - bpw:operation (STRING)
+  - bpw:defaultTitle (STRING)
+  - bpw:defaultIcon (STRING) = 'dialpad'
+  
+[bpw:supportedOpertions]
+  + * (bpw:supportedOpertion)
+  - bpw:jcrType (STRING)
+  
 [bpw:validationRuleFolder] > nt:folder
 + * [bpw:validationRule] 
 
+[bpw:opertionsFolder] > nt:folder
++ * [bpw:supportedOpertions]
+
 [bpw:configurationFolder] > nt:folder
 + validationRule (bpw:validationRuleFolder)
++ operations (bpw:opertionsFolder)
 
 [bpw:libraryFolder] > nt:folder
 + * (bpw:library)
 
 [bpw:root] > nt:folder, mix:lastModified
 + controlField (bpw:controlFieldFolder)
-+ baseResourceType (bpw:resourceTypeFolder)
++ authoringTemplate (bpw:authoringTemplateFolder)
 + configuration (bpw:configurationFolder)
 + library (bpw:libraryFolder)
+
+[bpw:contentElement] > nt:hierarchyNode abstract
+ - multiple (BOOLEAN)
+ 
+[bpw:stringElement] > bpw:contentElement 
+ - value (STRING) multiple
+ 
+[bpw:numberElement] > bpw:contentElement 
+ - value (LONG) multiple
+
+[bpw:binaryElement] > bpw:contentElement 
+ - value (BINARY)
+
+[bpw:doubleElement] > bpw:contentElement 
+ - value (DOUBLE) multiple
+ 
+[bpw:dateElement] > bpw:contentElement 
+ - value (DATE) multiple
+
+[bpw:nameElement] > bpw:contentElement 
+ - value (NAME) multiple
+
+[bpw:pathElement] > bpw:contentElement 
+ - value (PATH) multiple
+ 
+[bpw:referenceElement] > bpw:contentElement 
+- value (REFERENCE) multiple
+
+[bpw:weakReferenceElement] > bpw:contentElement 
+- value (WEAKREFERENCE) multiple
+
+[bpw:uriElement] > bpw:contentElement 
+- value (URI) multiple
+
+[bpw:decimalElement] > bpw:contentElement 
+- value (DECIMAL) multiple
+   
+ [bpw:content] > bpw:resourceNode
++ * (bpw:contentElement)

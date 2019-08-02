@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-export interface Theme {
-  value: string;
-  viewValue: string;
+import { WcmService } from '../../service/wcm.service';
+import { Theme } from '../../model';
+
+export interface ThemeModel {
+  value: String;
+  viewValue: String;
 }
 export interface SideBar {
   value: number;
@@ -59,13 +62,11 @@ export class PageLayoutComponent implements OnInit {
       }]
     }]
   };
-  themes: Theme[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'}
-  ];
+  themes: ThemeModel[] = [];
   
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private wcmService: WcmService) { }
 
   ngOnInit() {
       // Reactive Form
@@ -79,6 +80,26 @@ export class PageLayoutComponent implements OnInit {
             this.formBuilder.control(0, Validators.required)
           ])
       });
+
+      this.wcmService.getTheme().subscribe(
+        (jcrThemes: Theme[]) => {
+          if (jcrThemes)
+          jcrThemes.forEach(jcrTheme => {
+            this.themes.push({
+              value: `${jcrTheme.repositoryName}/${jcrTheme.workspace}/${jcrTheme.library}/${jcrTheme.name}`, 
+              viewValue: jcrTheme.title
+            })
+          });
+        },
+        response => {
+          console.log("GET call in error", response);
+          console.log(response);
+        },
+        () => {
+          console.log("The GET observable is now completed.");
+        }
+      );
+
   }
 
   get rows(): FormArray {
