@@ -1,3 +1,3 @@
 export interface HasName {
-    name: string;
+  name: string;
 }

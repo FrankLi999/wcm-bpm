@@ -44,10 +44,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
-import com.bpwizard.wcm.repo.rest.model.RestException;
-import com.bpwizard.wcm.repo.rest.model.RestItem;
-import com.bpwizard.wcm.repo.rest.model.RestNode;
-import com.bpwizard.wcm.repo.rest.model.RestProperty;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestException;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestItem;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 
 /**
  * Base class for the different rest handler implementations, to which the rest services delegate operations.

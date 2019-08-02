@@ -1,0 +1,7 @@
+{
+    "bpwizard/controlField/select" : {
+        "jcr:primaryType": "bpw:controlField",
+        "bpw:title": "Select",
+        "bpw:icon": "select_all"
+    }
+}

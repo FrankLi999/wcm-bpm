@@ -10,7 +10,7 @@
         },
         "persistence" : {
             "type" : "db",
-            "connectionUrl": "jdbc:mysql://192.168.0.180:3306/modeshape?useSSL=false",
+            "connectionUrl": "jdbc:mysql://192.168.0.180:3306/camunda711?useSSL=false",
             "driver": "com.mysql.jdbc.Driver",
             "createOnStart" : true,
             "dropOnExit" : true,
@@ -20,7 +20,7 @@
         "binaryStorage" : {
             "type"  : "database",
             "driverClass" : "com.mysql.jdbc.Driver",
-            "url" : "jdbc:mysql://192.168.0.180:3306/modeshape?useSSL=false",
+            "url" : "jdbc:mysql://192.168.0.180:3306/camunda711?useSSL=false",
             "username" : "root",
             "password" : "P@ssw0rd"
         }

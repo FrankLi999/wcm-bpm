@@ -34,7 +34,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
-import com.bpwizard.wcm.repo.rest.model.RestNodeType;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestNodeType;
 
 /**
  * Class which handles {@link NodeType} operations for incoming http requests on {@link org.modeshape.web.jcr.rest.ModeShapeRestService}

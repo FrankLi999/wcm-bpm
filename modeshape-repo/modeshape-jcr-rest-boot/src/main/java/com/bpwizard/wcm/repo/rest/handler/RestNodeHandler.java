@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.modeshape.common.util.StringUtil;
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.wcm.repo.rest.model.RestItem;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestItem;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
