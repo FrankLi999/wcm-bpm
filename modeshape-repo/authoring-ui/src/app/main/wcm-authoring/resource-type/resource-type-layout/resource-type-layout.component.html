@@ -87,7 +87,6 @@
                                         <div class="field-box" cdkDrag 
                                                 *ngFor="let formControl of column.formControls; let index = index;" 
                                                 [cdkDragData]="formControl">
-
                                             <div class="resource-field-column" fxFlex="100">
                                                 <div fxLayout="row" fxLayoutAlign="flex-end">
                                                     <button mat-icon-button (click)="deleteTargetField(index, column.formControls)">
@@ -149,7 +148,7 @@
                                         class="field-list"
                                         (cdkDropListDropped)="drop($event)"
                                         [cdkDropListEnterPredicate]="evenPredicate">
-            
+
                                         <div class="field-box" cdkDrag *ngFor="let formControl of column.formControls; let index = index"
                                             [cdkDragData]="formControl">
                                             <div class="resource-field-column" fxFlex="100">

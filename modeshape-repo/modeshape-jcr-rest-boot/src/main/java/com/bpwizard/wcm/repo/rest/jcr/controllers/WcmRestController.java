@@ -115,6 +115,7 @@ public class WcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+
 		Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
 		Node atFolder = session.getNode(String.format("/bpwizard/library/%s/authoringTemplate", "design"));
 		Node atNode = atFolder.addNode(at.getName(), "bpw:authoringTemplate");
@@ -145,8 +146,6 @@ public class WcmRestController {
 			} else if (g instanceof RowsFormGroup) {
 				this.addRows(groupNode, ((RowsFormGroup)g).getRows());
 			}
-			
-			
 		}
 		Node elementFolder = atNode.addNode("elements", "bpw:elementFolder");
 		for (String controlName: at.getFormControls().keySet()) {
@@ -210,9 +209,7 @@ public class WcmRestController {
 	
 	private void addControl(Node elementFolder, FormControl control) throws RepositoryException {
 		//Node controlNode = elementFolder.addNode(control.getName(), "bpw:formControl");
-		Node controlNode = elementFolder.addNode(control.getName(), "{http://www.bpwizard.com/bpw/1.0}formControl");
-		System.out.println(control.getName());
-		System.out.println(control.getTitle());
+		Node controlNode = elementFolder.addNode(control.getName(), "bpw:formControl");
 		if (StringUtils.hasText(control.getTitle())) {
 			controlNode.setProperty("bpw:title", control.getTitle());
 		}

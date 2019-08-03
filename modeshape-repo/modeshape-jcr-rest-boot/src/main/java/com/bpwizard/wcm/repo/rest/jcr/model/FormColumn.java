@@ -4,7 +4,6 @@ public class FormColumn {
 	private String id;
 	private int fxFlex;
     private String[] formControls;
-
     public String getId() {
 		return id;
 	}

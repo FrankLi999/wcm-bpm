@@ -1,7 +1,6 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.util.Map;
-
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 
 public class AuthoringTemplate implements HasName {
@@ -68,5 +67,4 @@ public class AuthoringTemplate implements HasName {
 	public void setFormControls(Map<String, FormControl> formControls) {
 		this.formControls = formControls;
 	}
-	
 }

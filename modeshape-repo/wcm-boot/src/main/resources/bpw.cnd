@@ -66,6 +66,7 @@
 - bpw:groupName (STRING)
 - bpw:groupTitle (STRING)
 
+
 [bpw:formControl] > nt:hierarchyNode
 - bpw:title (String)
 - bpw:controlName (String)

@@ -19,10 +19,6 @@ const BASE_RESOURCE_TYPE: string[] = [
   'Content', 'Page', 'Widget', 'File', 'Key/Value', 'VanityURL', 'Form', 'Persona'
 ];
 
-// export interface AuthoringTemplateModel {
-//   groups: BaseFormGroup[];     
-// }
-
 @Component({
   selector: 'resource-type-layout',
   templateUrl: './resource-type-layout.component.html',
@@ -71,6 +67,7 @@ export class ResourceTypeLayoutComponent implements OnInit {
     if (!group) {
       return 'n/a';
     }
+
     if ((group as FormSteps).steps!== undefined) {
       return "steps";
     }
@@ -297,7 +294,6 @@ export class ResourceTypeLayoutComponent implements OnInit {
     let rows = this.isRows(this.resourceType.formGroups[this.resourceType.formGroups.length - 1]) ? 
     this.resourceType.formGroups[this.resourceType.formGroups.length - 1] as FormRows:
         { rows: []} as FormRows;
-    
     rows.rows.push({
       columns: []
     });
@@ -387,7 +383,6 @@ export class ResourceTypeLayoutComponent implements OnInit {
             let tabs = this.isTabs(this.resourceType.formGroups[this.resourceType.formGroups.length - 1]) ? 
             this.resourceType.formGroups[this.resourceType.formGroups.length - 1] as FormTabs:
                 { tabs: []} as FormTabs;
-            
            tabs.tabs.push({
               formGroups: [{
                 columns: []
