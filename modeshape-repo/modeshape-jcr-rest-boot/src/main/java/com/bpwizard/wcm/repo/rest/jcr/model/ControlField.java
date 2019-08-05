@@ -1,5 +1,7 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
+import java.util.Arrays;
+
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 
 public class ControlField implements HasName {
@@ -38,5 +40,11 @@ public class ControlField implements HasName {
 
 	public void setControlFieldMetaData(ControlFieldMetadata[] controlFieldMetaData) {
 		this.controlFieldMetaData = controlFieldMetaData;
+	}
+
+	@Override
+	public String toString() {
+		return "ControlField [name=" + name + ", icon=" + icon + ", title=" + title + ", controlFieldMetaData="
+				+ Arrays.toString(controlFieldMetaData) + "]";
 	}
 }

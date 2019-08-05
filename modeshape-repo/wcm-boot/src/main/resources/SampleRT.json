@@ -1,0 +1,16 @@
+{
+	"bpwizard/library/design/renderTemplate/sampleRT": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "RT - Sample",
+		"bpw:title": "sampleRT",
+		"bpw:description": "Sample Render Template",
+		"bpw:code": "code",
+		"bpw:preloop": "preloop",
+		"bpw:postloop": "postloop",
+		
+		"bpw:maxEntries": "10",
+		"bpw:note": "note",
+		"bpw:resourceName": "sampleContent",
+		"bpw:isQuery": "false"
+	}
+}

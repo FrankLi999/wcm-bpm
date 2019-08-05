@@ -19,3 +19,5 @@ export { FormRows } from './FormRows';
 export { FormRow } from './FormRow';
 export { FormColumn } from './FormColumn';
 export { TemplateField } from './TemplateField';
+export { RenderTemplate } from './RenderTemplate';
+export { Query } from './Query';

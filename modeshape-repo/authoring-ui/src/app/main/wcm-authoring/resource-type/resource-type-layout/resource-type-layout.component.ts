@@ -36,6 +36,9 @@ export class ResourceTypeLayoutComponent implements OnInit {
   ];
   baseResourceType: string = BASE_RESOURCE_TYPE[Math.round(Math.random() * (BASE_RESOURCE_TYPE.length - 1))];
   resourceType: AuthoringTemplate = {
+    repository: 'bpwizard',
+    workspace: 'default',
+    library: 'design',
     name: 'Resource Type name',
     title: 'Title',
     description: 'Content type',
@@ -46,7 +49,9 @@ export class ResourceTypeLayoutComponent implements OnInit {
     formGroups: [],
     formControls: {}
   }
+
   private nextFieldGroupId: number = 0;
+  
   constructor(
       private wcmService: WcmService,
       private dialog: MatDialog) { 
@@ -447,7 +452,7 @@ export class ResourceTypeLayoutComponent implements OnInit {
 
   saveResourceType() {
     console.log(this.resourceType);
-    this.wcmService.createAuthoringTemplate('bpwizard', 'default', this.resourceType)
+    this.wcmService.createAuthoringTemplate(this.resourceType)
       .subscribe(
         (event: any) => {
           console.log(event);

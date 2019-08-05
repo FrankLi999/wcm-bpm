@@ -34,8 +34,8 @@
                             <div fxLayout="row" fxLayoutAlign="start center">
                                 <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Site</mat-label>
-                                        <input matInput formControlName="site" readonly>
+                                        <mat-label>Name</mat-label>
+                                        <input matInput formControlName="name">
                                     </mat-form-field>
                                </div>
                             </div>
@@ -61,8 +61,8 @@
                             <div fxLayout="row" fxLayoutAlign="start center">
                                 <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
                                     <mat-form-field appearance="outline" style="width:20%">
-                                        <mat-label>Max. Contents</mat-label>
-                                        <input matInput formControlName="maxContents">
+                                        <mat-label>Max. Entries</mat-label>
+                                        <input matInput formControlName="maxEntries">
                                     </mat-form-field>
                                </div>
                             </div>
@@ -74,7 +74,7 @@
                             </div>
                             <div *ngIf="hasContentItems()" fxLayout="row" fxLayoutAlign="start center">
                                 <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
-                                    <editor formControlName="preLoop"
+                                    <editor formControlName="preloop"
                                         [init]="{plugins: 'link, image, emoticons, code, paste, table'}"
                                         apiKey="qwgc8env9mecmyueffj9uzfsnbnp5qoxi5y39sjeakfet52f">
                                     </editor>
@@ -155,7 +155,7 @@
                             </div>
                             <div *ngIf="hasContentItems()" fxLayout="row" fxLayoutAlign="start center">
                                 <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
-                                    <editor formControlName="postLoop"
+                                    <editor formControlName="postloop"
                                         [init]="{plugins: 'link, image, emoticons, code, paste, table'}"
                                         apiKey="qwgc8env9mecmyueffj9uzfsnbnp5qoxi5y39sjeakfet52f">
                                     </editor>
@@ -164,11 +164,18 @@
                             <div fxLayout="row" fxLayoutAlign="start center">
                                 <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Notes</mat-label>
-                                        <textarea matInput rows="3" name="notes" 
-                                            formControlName="notes" required></textarea>
+                                        <mat-label>Note</mat-label>
+                                        <textarea matInput rows="3" name="note" 
+                                            formControlName="note" required></textarea>
                                     </mat-form-field>
                                </div>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
+                                    <button mat-raised-button (click)="saveRenderTemplate()">
+                                            <mat-icon class="mat-icon-rtl-mirror">save</mat-icon>Save
+                                    </button>
+                                </div>
                             </div>
                         </form>
                         </div>

@@ -1564,7 +1564,7 @@
 	"bpwizard/library/camunda/category" : {
         "jcr:primaryType":"bpw:categoryFolder"
     },
-    "bpwizard/library/camunda/customResourceType" : {
+    "bpwizard/library/camunda/authoringTemplate" : {
         "jcr:primaryType":"bpw:authoringTemplateFolder"
     },
     "bpwizard/library/camunda/rootSiteArea" : {
@@ -1622,7 +1622,7 @@
 	"bpwizard/library/apigateway/category" : {
         "jcr:primaryType":"bpw:categoryFolder"
     },
-    "bpwizard/library/apigateway/customResourceType" : {
+    "bpwizard/library/apigateway/authoringTemplate" : {
         "jcr:primaryType":"bpw:authoringTemplateFolder"
     },
     "bpwizard/library/apigateway/rootSiteArea" : {

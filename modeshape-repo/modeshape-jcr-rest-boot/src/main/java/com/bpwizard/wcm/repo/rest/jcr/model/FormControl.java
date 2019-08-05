@@ -1,4 +1,6 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
+import java.util.Arrays;
+
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 public class FormControl implements HasName {
 	private String name;
@@ -113,5 +115,14 @@ public class FormControl implements HasName {
 	}
 	public void setUnique(boolean unique) {
 		this.unique = unique;
+	}
+	@Override
+	public String toString() {
+		return "FormControl [name=" + name + ", title=" + title + ", controlName=" + controlName + ", values="
+				+ Arrays.toString(values) + ", options=" + Arrays.toString(options) + ", defaultValue=" + defaultValue
+				+ ", hint=" + hint + ", dataType=" + dataType + ", relationshipType=" + relationshipType
+				+ ", relationshipCardinality=" + relationshipCardinality + ", valditionRegEx=" + valditionRegEx
+				+ ", mandatory=" + mandatory + ", userSearchable=" + userSearchable + ", systemIndexed=" + systemIndexed
+				+ ", showInList=" + showInList + ", unique=" + unique + "]";
 	}
 }

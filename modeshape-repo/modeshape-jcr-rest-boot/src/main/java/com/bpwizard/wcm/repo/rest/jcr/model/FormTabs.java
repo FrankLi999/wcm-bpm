@@ -1,6 +1,8 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
-public class TabsFormGroup extends BaseFormGroup {
+import java.util.Arrays;
+
+public class FormTabs extends BaseFormGroup {
 	private FormTab[] tabs;
 
 	public FormTab[] getTabs() {
@@ -9,5 +11,10 @@ public class TabsFormGroup extends BaseFormGroup {
 
 	public void setTabs(FormTab[] tabs) {
 		this.tabs = tabs;
+	}
+
+	@Override
+	public String toString() {
+		return "FormTabs [tabs=" + Arrays.toString(tabs) + "]";
 	}
 }

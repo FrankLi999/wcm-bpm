@@ -1,5 +1,7 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
+import java.util.Arrays;
+
 public class FormColumn {
 	private String id;
 	private int fxFlex;
@@ -26,5 +28,10 @@ public class FormColumn {
 
 	public void setFormControls(String[] formControls) {
 		this.formControls = formControls;
+	}
+
+	@Override
+	public String toString() {
+		return "FormColumn [id=" + id + ", fxFlex=" + fxFlex + ", formControls=" + Arrays.toString(formControls) + "]";
 	}
 }

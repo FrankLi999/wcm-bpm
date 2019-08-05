@@ -19,7 +19,8 @@ import {API_BASE_URL} from '../../authentication/constants';
 import { 
   Theme,
   ControlField,
-  AuthoringTemplate
+  AuthoringTemplate,
+  RenderTemplate
 } from '../model';
 @Injectable()
 @Client({
@@ -47,11 +48,24 @@ export class WcmService extends RestClient {
       @Path('repository') repository: string, 
       @Path('workspace') workspace: string): Observable<ControlField[]> { return null; };
   
-  @Post('/{repository}/{workspace}/at')
+
+  @Post('/at')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public createAuthoringTemplate(
-      @Path('repository') repository: string, 
-      @Path('workspace') workspace: string,
-      @Body at: AuthoringTemplate): Observable<any> { return null; };
+  public createAuthoringTemplate(@Body at: AuthoringTemplate): Observable<any> { return null; };
+  
+  @Get('/at')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public getAuthoringTemplate(): Observable<AuthoringTemplate[]> { return null; };
+
+  @Post('/rt')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public createRenderTemplate(@Body rt: RenderTemplate): Observable<any> { return null; };
+
+  @Get('/rt')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public getRenderTemplate(): Observable<RenderTemplate[]> { return null; };
 }

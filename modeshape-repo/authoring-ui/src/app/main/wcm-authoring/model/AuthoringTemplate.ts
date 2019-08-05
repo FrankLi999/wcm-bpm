@@ -1,13 +1,12 @@
 import { HasName } from './HasName';
 import { BaseFormGroup } from './BaseFormGroup';
 import { TemplateField } from './TemplateField'
-export interface AuthoringTemplate extends HasName {
-	title?: string;
-	description?: string;
-	workflow?: string[];
-	categories?: string[];
+import { ResourceNode } from './ResourceNode'
+export interface AuthoringTemplate extends ResourceNode, HasName {
+	repository: string;
+	workspace: string;
+	library: string;
 	baseResourceType?: string;
-	publishDate?: Date;
 	formGroups?: BaseFormGroup[];
 	formControls?: {[key: string]: TemplateField};
 }

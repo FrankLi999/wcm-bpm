@@ -26,17 +26,17 @@ public class FormGroupDeserializer extends StdDeserializer<BaseFormGroup> {
     	BaseFormGroup group = null;
         JsonNode node = jp.getCodec().readTree(jp);
         if (node.has("steps")) {
-        	group = new StepsFormGroup();
+        	group = new FormSteps();
         	FormStep[] steps = mapper.readValue(node.get("steps").toString(), FormStep[].class);
-        	((StepsFormGroup)group).setSteps(steps);
+        	((FormSteps)group).setSteps(steps);
         } else if (node.has("rows")) {
-        	group = new RowsFormGroup();
+        	group = new FormRows();
         	FormRow[] rows = mapper.readValue(node.get("rows").toString(), FormRow[].class);
-        	((RowsFormGroup)group).setRows(rows);
+        	((FormRows)group).setRows(rows);
         } else if (node.has("tabs")) {
-        	group = new TabsFormGroup();
+        	group = new FormTabs();
         	FormTab[] tabs = mapper.readValue(node.get("tabs").toString(), FormTab[].class);
-        	((TabsFormGroup)group).setTabs(tabs);
+        	((FormTabs)group).setTabs(tabs);
         } else {
         	group = new FormRow();
         	FormColumn[] columns = mapper.readValue(node.get("columns").toString(), FormColumn[].class);

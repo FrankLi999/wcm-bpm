@@ -90,6 +90,7 @@
 - bpw:fieldNames (STRING) multiple
 
 [bpw:formRow] > bpw:formGroup
+- bpw:rowName (String)
 + * (bpw:formColumn)
 
 [bpw:formRows] > bpw:formGroup
@@ -323,20 +324,17 @@
 + bpw:constrait (bpw:queryConstraint)
 + * (bpw:querySortOrder)
 
-[bpw:renderTemplate] > mix:lastModified abstract
-- bpw:renderTemplateName (STRING)
+[bpw:renderTemplate] > mix:lastModified
+- bpw:name (STRING)
+- bpw:title (STRING)
 - bpw:description (STRING)
 - bpw:code (STRING)
 - bpw:preloop (STRING)
 - bpw:postloop (STRING)
 - bpw:maxEntries (LONG)
 - bpw:note (STRING)
-
-[bpw:resourceRendererTemplate] > bpw:renderTemplate
-- bpw:contentName (String)
-
-[bpw:queryRendererTemplate] > bpw:renderTemplate
-- bpw:queryName (String)
+- bpw:resourceName (STRING)
+- bpw:isQuery (BOOLEAN)
 
 [bpw:resourceViewer]
 - bpw:renderTemplayeName (STRING) multiple
@@ -375,9 +373,13 @@
 + * (bpw:themeType)
 
 [bpw:pageLayoutFolder] > nt:folder
-[bpw:renderTemplateFolder] > nt:folder
-[bpw:queryFolder] > nt:folder
++ * (bpw:pageLayout)
 
+[bpw:renderTemplateFolder] > nt:folder
++ * (bpw:renderTemplate)
+
+[bpw:queryFolder] > nt:folder
++ * (bpw:query)
 [bpw:assetFolder] > nt:folder
 
 [bpw:library] > nt:folder, mix:lastModified

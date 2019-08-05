@@ -1,21 +1,17 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import {
+  RenderTemplate,
+  AuthoringTemplate,
+  Query
+} from '../../model';
+import { WcmService } from '../../service/wcm.service';
+
 export interface Code {
   name: string;
   code: string;
   isQuery: boolean;
-}
-
-export interface RenderTemplateModel {
-  site: string;
-  title: string;
-  description: string;
-  maxContents: number;
-  preLoop?: string;
-  postLoop?: string;
-  notes: string;
-  code: Code;
 }
 
 @Component({
@@ -25,20 +21,18 @@ export interface RenderTemplateModel {
   encapsulation: ViewEncapsulation.None
 })
 export class RenderTemplateComponent implements OnInit {
-  renderTemplateModel: RenderTemplateModel = {
-    site: 'my_site',
-    title: '',
-    description: '',
-    maxContents: 0,
-    preLoop: '',
-    postLoop: '',
-    notes: '',
-    code: {
-      isQuery: false,
-      name: '',
-      code: ''
-    }
-  }
+  // renderTemplateModel: RenderTemplate = {
+  //   name: '',
+  //   title: '',
+  //   description: '',
+  //   maxEntries: 0,
+  //   preloop: '',
+  //   postloop: '',
+  //   note: '',
+  //   isQuery: false,
+  //   code: '',
+  //   resourceName: ''
+  // }
 
   renderTemplateForm: FormGroup;
   code: Code = {
@@ -47,58 +41,66 @@ export class RenderTemplateComponent implements OnInit {
     isQuery: false
   };
   
-  contentTypes: string[] = [
-    "content_type1",
-    "content_type2",
-    "content_type3"
-  ];
-
+  contentTypes: string[] = [];
+  contentElementsMap = new Map<String, string[]>();
+  queryElementsMap = new Map<String, string[]>();
+  contentTypeMap = new Map<String, AuthoringTemplate>();
+  queryMap = new Map<String, Query>();
   queries: string[] = [
-    "query1",
-    "query2",
-    "query3"
   ];
 
-  contentElements: string[] = [
-    "content_element_1",
-    "content_element_2",
-    "content_element_3",
-    "content_element_4",
-    "content_element_5",
-    "content_element_6",
-    "content_element_7"
-  ];
+  contentElements: string[] = [];
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private wcmService: WcmService,
+    private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.wcmService.getAuthoringTemplate().subscribe(
+      (authoringTemplates: AuthoringTemplate[]) => {
+        if (authoringTemplates) {
+          authoringTemplates.forEach(at => {
+            this.contentTypes.push(at.name);
+            let formControls: string[] = [];
+            for (let property in at.formControls) {
+              formControls.push(property)
+            }
+            this.contentElementsMap.set(at.name, formControls);
+            this.contentTypeMap.set(at.name, at);
+          });
+          console.log(this.contentTypes);
+        }
+      }
+
+    );
     this.renderTemplateForm = this.formBuilder.group({
-        site: ['My Site', Validators.required],
+        name: ['My Template', Validators.required],
         title: ['', Validators.required],
         description: ['', Validators.required],
-        maxContents: [1, Validators.required],
-        preLoop: ['<div>preLoop</div>', Validators.required],
-        postLoop: ['<div>postLoop</div>', Validators.required],
+        maxEntries: [1, Validators.required],
+        preloop: ['<div>preLoop</div>', Validators.required],
+        postloop: ['<div>postLoop</div>', Validators.required],
         selectedContentType: [''],
         selectedQuery: [''],
         selectedContentElement: [''],
-        notes: ['', Validators.required],
+        note: ['', Validators.required],
     });
   }
 
   hasContentItems():boolean {
-    return (this.renderTemplateForm.get('maxContents').value > 0)
+    return (this.renderTemplateForm.get('maxEntries').value > 0)
   }
 
   selectContentType() {
-      let selectedContentType = this.renderTemplateForm.get('selectedContentType').value;
-      this.code = {
-        name: selectedContentType,
-        code: '',
-        isQuery: false
-      };
-      this.renderTemplateForm.get('selectedQuery').setValue("");
-      return false;
+    let selectedContentType = this.renderTemplateForm.get('selectedContentType').value;
+    this.code = {
+      name: selectedContentType,
+      code: '',
+      isQuery: false
+    };
+    this.contentElements = this.contentElementsMap.get(selectedContentType);
+    this.renderTemplateForm.get('selectedQuery').setValue("");
+    return false;
   }
 
   selectQuery() {
@@ -108,7 +110,8 @@ export class RenderTemplateComponent implements OnInit {
       code: '',
       isQuery: true
     };
-    
+    this.contentElements = this.queryElementsMap.get(selectedQuery);
+    console.log(this.contentElements);
     this.renderTemplateForm.get('selectedContentType').setValue("");
     return false;
   }
@@ -117,5 +120,37 @@ export class RenderTemplateComponent implements OnInit {
     let selectedContentElement = this.renderTemplateForm.get('selectedContentElement').value;
     this.code.code += `<render-template element_name=\"${selectedContentElement}\"></render-template>`
     return false;
+  }
+  
+  saveRenderTemplate() {
+    const formValue = this.renderTemplateForm.value;
+    const renderTemplate: RenderTemplate = {
+      repository: 'bpwizard',
+      workspace: 'default',
+      library: 'design',
+      name: formValue.name,
+      title: formValue.title,
+      description: formValue.description,
+      code: this.code.code,
+      preloop: formValue.preloop,
+      postloop: formValue.postloop,
+      maxEntries: formValue.maxEntries,
+      note:  formValue.note,
+      isQuery: this.code.isQuery,
+      resourceName: this.code.name
+    }
+    this.wcmService.createRenderTemplate(renderTemplate).subscribe(
+      (event: any) => {
+        console.log(event);
+      },
+      response => {
+        console.log("GET call in error", response);
+        console.log(response);
+      },
+      () => {
+        console.log("The GET observable is now completed.");
+      }
+    );
+    console.log(renderTemplate)
   }
 }

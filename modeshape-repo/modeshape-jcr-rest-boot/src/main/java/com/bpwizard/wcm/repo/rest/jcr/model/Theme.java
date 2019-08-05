@@ -2,9 +2,8 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 
-public class Theme implements HasName {
+public class Theme extends ResourceNode implements HasName {
 	private String name;
-	private String title;
 	private String library;
 	private String repositoryName;
 	private String workspace;
@@ -13,12 +12,6 @@ public class Theme implements HasName {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
 	}
 	public String getRepositoryName() {
 		return repositoryName;
@@ -37,5 +30,10 @@ public class Theme implements HasName {
 	}
 	public void setLibrary(String library) {
 		this.library = library;
+	}
+	@Override
+	public String toString() {
+		return "Theme [name=" + name + ", library=" + library + ", repositoryName=" + repositoryName + ", workspace="
+				+ workspace + ", toString()=" + super.toString() + "]";
 	}
 }

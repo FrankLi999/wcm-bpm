@@ -28,4 +28,8 @@ public abstract class BaseFormGroup {
 	public void setGroupTitle(String groupTitle) {
 		this.groupTitle = groupTitle;
 	}
+	@Override
+	public String toString() {
+		return "BaseFormGroup [groupName=" + groupName + ", groupTitle=" + groupTitle + "]";
+	}
 }
