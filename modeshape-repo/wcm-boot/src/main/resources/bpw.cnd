@@ -357,8 +357,7 @@
 - bpw:footerEnabled (BOOLEAN) = false
 - bpw:theme (STRING)
 - bpw:contentWidth (LONG)
-- bpw:sidenavEnabled (BOOLEAN) = false
-+ bpw:sidenav (bpw:layoutSidenav)
++ sidenav (bpw:layoutSidenav)
 + * (bpw:layoutRow)
 
 [bpw:workflowFolder] > nt:folder

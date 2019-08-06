@@ -28,6 +28,7 @@ public class SideNav {
 	}
 	@Override
 	public String toString() {
-		return "SideNav [isLeft=" + isLeft + ", width=" + width + ", viewers=" + Arrays.toString(viewers) + "]";
+		return "SideNav [isLeft=" + isLeft + ", width=" + width + ", viewers=" + Arrays.toString(viewers)
+				+ ", toString()=" + super.toString() + "]";
 	}
 }

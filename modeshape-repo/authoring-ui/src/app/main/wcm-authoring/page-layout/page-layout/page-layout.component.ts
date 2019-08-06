@@ -309,10 +309,24 @@ export class PageLayoutComponent implements OnInit {
   public savePageLayout() {
     let formValue = this.pageLayoutForm.value;
     this.layout.name = formValue.name;
+    this.layout.repository = 'bpwizard';
+    this.layout.workspace = 'default';
+    this.layout.library = 'design';
     this.layout.headerEnabled = formValue.headerEnabled;
     this.layout.footerEnabled = formValue.footerEnabled;
     this.layout.theme = formValue.theme;
-    this.wcmService.createPagelayout(this.layout);
+    this.wcmService.createPagelayout(this.layout).subscribe(
+      (event: any) => {
+        console.log(event);
+      },
+      response => {
+        console.log("savePageLayout call in error", response);
+        console.log(response);
+      },
+      () => {
+        console.log("TsavePageLayout observable is now completed.");
+      }
+    );
   }
 
   public publishPageLayout() {

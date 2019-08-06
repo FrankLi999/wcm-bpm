@@ -19,6 +19,7 @@ public class LayoutColumn {
 	}
 	@Override
 	public String toString() {
-		return "LayoutColumn [width=" + width + ", viewers=" + Arrays.toString(viewers) + "]";
+		return "LayoutColumn [width=" + width + ", viewers=" + Arrays.toString(viewers) + ", toString()="
+				+ super.toString() + "]";
 	}
 }

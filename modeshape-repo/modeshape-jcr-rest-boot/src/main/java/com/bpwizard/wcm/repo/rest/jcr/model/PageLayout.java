@@ -7,6 +7,9 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 public class PageLayout implements HasName {
 	
 	String name;
+	String repository;
+	String workspace;
+	String library;
 	boolean headerEnabled = true;
 	boolean footerEnabled = true;
 	String theme;
@@ -38,12 +41,6 @@ public class PageLayout implements HasName {
 	public void setTheme(String theme) {
 		this.theme = theme;
 	}
-	public boolean isSidenavEnabled() {
-		return sidenavEnabled;
-	}
-	public void setSidenavEnabled(boolean sidenavEnabled) {
-		this.sidenavEnabled = sidenavEnabled;
-	}
 	public SideNav getSidenav() {
 		return sidenav;
 	}
@@ -62,11 +59,29 @@ public class PageLayout implements HasName {
 	public void setContentWidth(int contentWidth) {
 		this.contentWidth = contentWidth;
 	}
-	
+	public String getRepository() {
+		return repository;
+	}
+	public void setRepository(String repository) {
+		this.repository = repository;
+	}
+	public String getWorkspace() {
+		return workspace;
+	}
+	public void setWorkspace(String workspace) {
+		this.workspace = workspace;
+	}
+	public String getLibrary() {
+		return library;
+	}
+	public void setLibrary(String library) {
+		this.library = library;
+	}
 	@Override
 	public String toString() {
-		return "PageLayout [name=" + name + ", headerEnabled=" + headerEnabled + ", footerEnabled=" + footerEnabled
-				+ ", theme=" + theme + ", sidenavEnabled=" + sidenavEnabled + ", sidenav=" + sidenav + ", contentWidth="
-				+ contentWidth + ", rows=" + Arrays.toString(rows) + "]";
+		return "PageLayout [name=" + name + ", repository=" + repository + ", workspace=" + workspace + ", library="
+				+ library + ", headerEnabled=" + headerEnabled + ", footerEnabled=" + footerEnabled + ", theme=" + theme
+				+ ", sidenav=" + sidenav + ", contentWidth=" + contentWidth + ", rows=" + Arrays.toString(rows)
+				+ ", toString()=" + super.toString() + "]";
 	}
 }

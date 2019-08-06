@@ -15,6 +15,6 @@ public class LayoutRow {
 
 	@Override
 	public String toString() {
-		return "LayoutRow [columns=" + Arrays.toString(columns) + "]";
+		return "LayoutRow [columns=" + Arrays.toString(columns) + ", toString()=" + super.toString() + "]";
 	}
 }

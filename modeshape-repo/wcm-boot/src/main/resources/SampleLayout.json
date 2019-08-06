@@ -1,0 +1,30 @@
+{
+    "bpwizard/library/design/pageLayout/sampleLayout" : {
+        "jcr:primaryType":"bpw:pageLayout",
+        "bpw:name": "sampleLayout",
+        "bpw:headerEnabled": "true",
+        "bpw:footerEnabled": "true",
+        "bpw:theme": "camunda",
+        "bpw:contentWidth": "80"
+    },
+    "bpwizard/library/design/pageLayout/sampleLayout/sidenav" : {
+        "jcr:primaryType":"bpw:layoutSidenav",
+        "bpw:isLeft": "true",
+        "bpw:width": "20"
+    },
+    "bpwizard/library/design/pageLayout/sampleLayout/sidenav/sampleRT" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:renderTemplayeName": "sampleRT"
+    },
+    "bpwizard/library/design/pageLayout/sampleLayout/row1" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "bpwizard/library/design/pageLayout/sampleLayout/row1/column1" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "80"
+    },
+    "bpwizard/library/design/pageLayout/sampleLayout/row1/column1/sampleRT" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:renderTemplayeName": "sampleRT"
+    }  
+}

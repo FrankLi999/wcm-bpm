@@ -45,8 +45,13 @@ import com.bpwizard.wcm.repo.rest.jcr.model.FormStep;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormSteps;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormTab;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormTabs;
+import com.bpwizard.wcm.repo.rest.jcr.model.LayoutColumn;
+import com.bpwizard.wcm.repo.rest.jcr.model.LayoutRow;
+import com.bpwizard.wcm.repo.rest.jcr.model.PageLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceNode;
+import com.bpwizard.wcm.repo.rest.jcr.model.ResourceViewer;
+import com.bpwizard.wcm.repo.rest.jcr.model.SideNav;
 import com.bpwizard.wcm.repo.rest.jcr.model.Theme;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
@@ -249,6 +254,81 @@ public class WcmRestController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
+	@GetMapping(path="/pagelayout", produces= MediaType.APPLICATION_JSON_VALUE)
+	public PageLayout[] getPagelayout(HttpServletRequest request) throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		RestRepositories respositories = this.serverHandler.getRepositories(request);
+		PageLayout[] pageLayouts = respositories.getRepositories().stream()
+			.map(repo -> this.toPageLayout(repo))
+			.flatMap(layout -> this.getWorkspaces(layout, request))
+			.flatMap(layout -> this.getLibraries(layout, request))
+		    .flatMap(layout -> this.getPagelayouts(layout, request))
+		    .toArray(PageLayout[]::new);
+
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
+		return pageLayouts;
+	}
+	
+	@PostMapping(path="/pagelayout", consumes= MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createPageLayout(
+			@RequestBody PageLayout pageLayout,
+			HttpServletRequest request) throws RepositoryException, IOException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		String repositoryName = pageLayout.getRepository();
+		String workspaceName = pageLayout.getWorkspace();
+		
+		Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
+		Node pageLayoutFolder = session.getNode(String.format("/bpwizard/library/%s/pageLayout", pageLayout.getLibrary()));
+		Node pageLayoutNode = pageLayoutFolder.addNode(pageLayout.getName(), "bpw:pageLayout");
+		pageLayoutNode.setProperty("bpw:name", pageLayout.getName());
+		pageLayoutNode.setProperty("bpw:headerEnabled", pageLayout.isHeaderEnabled());
+		pageLayoutNode.setProperty("bpw:footerEnabled", pageLayout.isFooterEnabled());
+		pageLayoutNode.setProperty("bpw:theme", pageLayout.getTheme());
+		pageLayoutNode.setProperty("bpw:contentWidth", 80);
+
+		Node sidenavNode = pageLayoutNode.addNode("sidenav", "bpw:layoutSidenav");
+		this.addSidenavNode(sidenavNode, pageLayout.getSidenav());
+		this.addContentLayoutNodes(pageLayoutNode, pageLayout.getRows());
+		session.save();
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
+
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	private void addSidenavNode(Node sidenavNode, SideNav sidenav) throws RepositoryException {
+		sidenavNode.setProperty("bpw:isLeft", sidenav.isLeft());
+		sidenavNode.setProperty("bpw:width", sidenav.getWidth());
+		this.setResourceViewer(sidenavNode, sidenav.getViewers());
+	}
+	
+	private void addContentLayoutNodes(Node pageLayoutNode, LayoutRow[] rows) throws RepositoryException {
+		int rowCount = 0;
+		for (LayoutRow row: rows) {
+			Node rowNode = pageLayoutNode.addNode("row" + rowCount++, "bpw:layoutRow");
+			int columnCount = 0;
+			for (LayoutColumn column: row.getColumns()) {
+				Node columnNode = rowNode.addNode("column" + columnCount++, "bpw:layoutColumn");
+				columnNode.setProperty("bpw:width", column.getWidth());
+				this.setResourceViewer(columnNode, column.getViewers());
+			}
+		}
+	}
+	
+	private void setResourceViewer(Node restNode, ResourceViewer viewers[]) throws RepositoryException {
+		for (ResourceViewer viewer: viewers) {
+			Node viewerNode = restNode.addNode("viewer", "bpw:resourceViewer");
+			viewerNode.setProperty("bpw:renderTemplayeName", viewer.getRenderTemplate());
+		}
+	}
+	
 	private void addSteps(Node stepsNode, FormStep[] steps) throws RepositoryException {
 		for (FormStep step: steps) {
 			Node stepNode = stepsNode.addNode(step.getStepName(), "bpw:formStep");
@@ -363,11 +443,24 @@ public class WcmRestController {
 		return theme;
 	}
 	
+	private PageLayout toPageLayout(Repository repo) {
+		PageLayout pageLayout = new PageLayout();
+		pageLayout.setRepository(repo.getName());
+		return pageLayout;
+	}
+	
 	private Theme toTheme(Workspace workspace, String repo) {
 		Theme theme = new Theme();
 		theme.setRepositoryName(repo);
 		theme.setWorkspace(workspace.getName());
 		return theme;
+	}
+	
+	private PageLayout toPageLayout(Workspace workspace, String repo) {
+		PageLayout pageLayout = new PageLayout();
+		pageLayout.setRepository(repo);
+		pageLayout.setWorkspace(workspace.getName());
+		return pageLayout;
 	}
 	
 	private RenderTemplate toRenderTemplate(Workspace workspace, String repo) {
@@ -383,6 +476,14 @@ public class WcmRestController {
 		themeWithLibrary.setWorkspace(theme.getWorkspace());
 		themeWithLibrary.setLibrary(node.getName());
 		return themeWithLibrary;
+	}
+	
+	private PageLayout toPageLayoutWithLibrary(RestNode node, PageLayout pageLayout) {
+		PageLayout pagelayoutWithLibrary = new PageLayout();
+		pagelayoutWithLibrary.setRepository(pageLayout.getRepository());
+		pagelayoutWithLibrary.setWorkspace(pageLayout.getWorkspace());
+		pagelayoutWithLibrary.setLibrary(node.getName());
+		return pagelayoutWithLibrary;
 	}
 	
 	private RenderTemplate toRenderTemplateWithLibrary(RestNode node, RenderTemplate rt) {
@@ -407,7 +508,7 @@ public class WcmRestController {
 		RenderTemplate result = new RenderTemplate();
 		result.setRepository(rt.getRepository());
 		result.setWorkspace(rt.getWorkspace());
-		rt.setLibrary(rt.getLibrary());
+		result.setLibrary(rt.getLibrary());
 		result.setName(node.getName());
 		for (RestProperty property: node.getJcrProperties()) {
 			if ("bpw:title".equals(property.getName())) {
@@ -431,6 +532,83 @@ public class WcmRestController {
 			}      
 		}
 		return result;
+	}
+	
+	private PageLayout toPageLayout(RestNode node, PageLayout layout) {
+		PageLayout result = new PageLayout();
+		result.setRepository(layout.getRepository());
+		result.setWorkspace(layout.getWorkspace());
+		result.setLibrary(layout.getLibrary());
+		result.setName(node.getName());
+		for (RestProperty property: node.getJcrProperties()) {
+			if ("bpw:headerEnabled".equals(property.getName())) {
+				result.setHeaderEnabled(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:footerEnabled".equals(property.getName())) {
+				result.setFooterEnabled(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:theme".equals(property.getName())) {
+				result.setTheme(property.getValues().get(0));
+			} else if (" bpw:contentWidth".equals(property.getName())) {
+				result.setContentWidth(Integer.parseInt(property.getValues().get(0)));
+			} 
+		}
+
+		List<LayoutRow> rows = new ArrayList<>();
+		
+		node.getChildren().forEach(childNode -> {
+			if (this.checkNodeType(childNode, "bpw:layoutSidenav")) {
+				SideNav sidenav = new SideNav();
+				for (RestProperty property: childNode.getJcrProperties()) {
+					if ("bpw:isLeft".equals(property.getName())) {
+						sidenav.setLeft(Boolean.parseBoolean(property.getValues().get(0)));
+					} else if ("bpw:width".equals(property.getName())) {
+						sidenav.setWidth(Integer.parseInt(property.getValues().get(0)));
+					} 
+				}
+				sidenav.setViewers(this.resolveResourceViewer(childNode));
+				result.setSidenav(sidenav);
+			} else if (this.checkNodeType(childNode, "bpw:layoutRow")) {
+				LayoutRow row = this.resolveLayoutRow(childNode);
+				rows.add(row);
+			} 
+		});
+		result.setRows(rows.toArray(new LayoutRow[rows.size()]));
+		return result;
+	}
+	
+	private LayoutRow resolveLayoutRow(RestNode restNode) {
+		LayoutRow row = new LayoutRow();
+		LayoutColumn columns[] = restNode.getChildren().stream()
+				.filter(node -> this.checkNodeType(node, "bpw:layoutColumn"))
+				.map(this::toLayoutColumn)
+				.toArray(LayoutColumn[]::new);
+		row.setColumns(columns);
+		return row;
+	}
+	
+	private LayoutColumn toLayoutColumn(RestNode node) {
+		LayoutColumn column = new LayoutColumn();
+		for (RestProperty property: node.getJcrProperties()) {
+			if ("bpw:width".equals(property.getName())) {
+				column.setWidth(Integer.parseInt(property.getValues().get(0)));
+			} 
+		}
+		column.setViewers(this.resolveResourceViewer(node));
+		return column;
+	}
+	private ResourceViewer[] resolveResourceViewer(RestNode restNode) {
+		List<ResourceViewer> viewers = new ArrayList<>();
+		restNode.getChildren().forEach(viewerNode -> {
+			if (this.checkNodeType(viewerNode, "bpw:resourceViewer")) {
+				ResourceViewer viewer = new ResourceViewer();
+				for (RestProperty property: restNode.getJcrProperties()) {
+					if ("bpw:renderTemplayeName".equals(property.getName())) {
+						viewer.setRenderTemplate(property.getValues().get(0));
+					}
+				}
+				viewers.add(viewer);
+			}
+		});
+		return viewers.toArray(new ResourceViewer[viewers.size()]);
 	}
 	
 	private ControlFieldMetadata toControlFieldMetaData(RestNode node) {
@@ -472,7 +650,14 @@ public class WcmRestController {
 		return controlField;
 	}
 	
-	
+	private Stream<PageLayout> getWorkspaces(PageLayout pageLayout, HttpServletRequest request) throws WcmRepositoryException {
+		try {
+			RestWorkspaces workspaces = this.repositoryHandler.getWorkspaces(request, pageLayout.getRepository());
+			return workspaces.getWorkspaces().stream().map(workspace -> this.toPageLayout(workspace, pageLayout.getRepository()));
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e);
+		}
+	}
 	
 	private Stream<Theme> getWorkspaces(Theme theme, HttpServletRequest request) throws WcmRepositoryException {
 		try {
@@ -496,6 +681,15 @@ public class WcmRestController {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(request, theme.getRepositoryName(), theme.getWorkspace(), "/bpwizard/library", 1);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).map(node -> toThemeWithLibrary(node, theme));
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e);
+		}
+	}
+	
+	private Stream<PageLayout> getLibraries(PageLayout pageLayout, HttpServletRequest request) throws WcmRepositoryException {
+		try {
+			RestNode bpwizardNode = (RestNode) this.itemHandler.item(request, pageLayout.getRepository(), pageLayout.getWorkspace(), "/bpwizard/library", 1);
+			return bpwizardNode.getChildren().stream().filter(this::isLibrary).map(node -> toPageLayoutWithLibrary(node, pageLayout));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
@@ -528,6 +722,15 @@ public class WcmRestController {
 		}
 	}
 	
+	private Stream<PageLayout> getPagelayouts(PageLayout pageLayout, HttpServletRequest request) throws WcmRepositoryException {
+		try {
+			RestNode pageLayoutNode = (RestNode) this.itemHandler.item(request, pageLayout.getRepository(), pageLayout.getWorkspace(), "/bpwizard/library/" + pageLayout.getLibrary() + "/pageLayout", 4);
+			return pageLayoutNode.getChildren().stream().filter(this::isPageLayout).map(node -> this.toPageLayout(node, pageLayout));
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e);
+		}
+	}
+	
 	private boolean isControlField(RestNode node) {		
 		return this.checkNodeType(node, "bpw:controlField");
 	}
@@ -544,8 +747,13 @@ public class WcmRestController {
 		return this.checkNodeType(node, "bpw:themeType");
 	}
 
+	
 	private boolean isRenderTemplate(RestNode node) {
 		return this.checkNodeType(node, "bpw:renderTemplate");
+	}
+	
+	private boolean isPageLayout(RestNode node) {
+		return this.checkNodeType(node, "bpw:pageLayout");
 	}
 	
 	private boolean isAuthortingTemplate(RestNode node) {
