@@ -20,7 +20,8 @@ import {
   Theme,
   ControlField,
   AuthoringTemplate,
-  RenderTemplate
+  RenderTemplate,
+  PageLayout
 } from '../model';
 @Injectable()
 @Client({
@@ -68,4 +69,15 @@ export class WcmService extends RestClient {
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public getRenderTemplate(): Observable<RenderTemplate[]> { return null; };
+
+  
+  @Post('/pagelayout')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public createPagelayout(@Body rt: PageLayout): Observable<any> { return null; };
+
+  @Get('/pagelayout')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public getPagelayout(): Observable<PageLayout[]> { return null; };
 }

@@ -352,12 +352,12 @@
 + * (bpw:resourceViewer)
 
 [bpw:pageLayout] > mix:lastModified
-- bpw:layoutName (BOOLEAN) = false
-- bpw:hideHeader (BOOLEAN) = false
-- bpw:hideFooter (BOOLEAN) = false
-- bpw:site (STRING)
+- bpw:name (STRING) = false
+- bpw:headerEnabled (BOOLEAN) = false
+- bpw:footerEnabled (BOOLEAN) = false
 - bpw:theme (STRING)
-- bpw:hideSide (BOOLEAN) = false
+- bpw:contentWidth (LONG)
+- bpw:sidenavEnabled (BOOLEAN) = false
 + bpw:sidenav (bpw:layoutSidenav)
 + * (bpw:layoutRow)
 

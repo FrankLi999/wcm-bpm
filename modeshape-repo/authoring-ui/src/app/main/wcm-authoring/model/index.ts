@@ -21,3 +21,8 @@ export { FormColumn } from './FormColumn';
 export { TemplateField } from './TemplateField';
 export { RenderTemplate } from './RenderTemplate';
 export { Query } from './Query';
+export { LayoutRow } from './LayoutRow';
+export { SideNav } from './SideNav';
+export { PageLayout } from './PageLayout';
+export { ResourceViewer } from './ResourceViewer';
+export { LayoutColumn } from './LayoutColumn';

@@ -1,47 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { WcmService } from '../../service/wcm.service';
-import { Theme } from '../../model';
+import { 
+  Theme,
+  RenderTemplate,
+  PageLayout,
+  LayoutColumn,
+  LayoutRow,
+  SideNav
+} from '../../model';
 
 export interface ThemeModel {
   value: String;
   viewValue: String;
 }
-export interface SideBar {
-  value: number;
-  viewValue: string;
+
+export interface RenderTemplateModel {
+  value: String;
+  viewValue: String;
 }
 
-export interface LayoutRow {
-  value: number;
-  viewValue: string;
-}
+// export interface Viewer {
+//   renderTemplate: string;
+// }
 
-export interface LayoutColumn {
-  value: string;
-  viewValue: string;
-}
+// export interface Column {
+//   viewers: Viewer[];
+//   width: number;
+// }
 
-export interface Viewer {
-  renderTemplates: string[];
-}
+// export interface Row {
+//   columns: Column[];
+// }
 
-export interface Column {
-  viewers: Viewer[];
-  width: number;
-}
-
-export interface Row {
-  columns: Column[];
-}
-
-export interface Layout {
-  sideWidth: number;
-  contentWidth: number;
-  leftSide: boolean,
-  sideViewers: Viewer[],
-  rows : Row[];
-}
+// export interface Layout {
+//   sideWidth: number;
+//   contentWidth: number;
+//   leftSide: boolean,
+//   sidenav: Viewer[],
+//   rows : Row[];
+// }
 
 @Component({
   selector: 'page-layout',
@@ -50,11 +49,28 @@ export interface Layout {
 })
 export class PageLayoutComponent implements OnInit {
   pageLayoutForm: FormGroup;
-  layout : Layout = {
-    sideWidth: 0,
+
+  // headerEnabled : boolean;
+  // footerEnabled : boolean;
+  // theme: string;
+  // sidenavEnabled: boolean;
+  // sidenav: SideNav;
+  // rows: LayoutRow[];
+
+  layout: PageLayout = {
+    name: '',
+    headerEnabled: false,
+    footerEnabled: false,
+    theme: '',
+    // sideWidth: 0,
+    // contentWidth: 100,
     contentWidth: 100,
-    leftSide: true,
-    sideViewers: [],
+    //leftSide: true,
+    sidenav: {
+      isLeft: true,
+      width: 0,
+      viewers: []
+    },
     rows : [{
       columns : [ {
         width: 100,
@@ -64,16 +80,17 @@ export class PageLayoutComponent implements OnInit {
   };
   themes: ThemeModel[] = [];
   
+  renderTemplates: RenderTemplateModel[] = [];
   constructor(
+    private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private wcmService: WcmService) { }
 
   ngOnInit() {
       // Reactive Form
       this.pageLayoutForm = this.formBuilder.group({
-          pageLayoutName  : ['Page Layout Name', Validators.required],
-          themeName     : ['tacos-2', Validators.required],
-          sidebar       : [0, Validators.required],
+          name          : ['Page Layout Name', Validators.required],
+          theme         : ['tacos-2', Validators.required],
           headerEnabled : [true, Validators.required],
           footerEnabled : [true, Validators.required],
           rows: this.formBuilder.array([
@@ -92,11 +109,30 @@ export class PageLayoutComponent implements OnInit {
           });
         },
         response => {
-          console.log("GET call in error", response);
+          console.log("GET THEME call in error", response);
           console.log(response);
         },
         () => {
-          console.log("The GET observable is now completed.");
+          console.log("The GET THEME observable is now completed.");
+        }
+      );
+
+      this.wcmService.getRenderTemplate().subscribe(
+        (rts: RenderTemplate[]) => {
+          if (rts)
+          rts.forEach(rt => {
+            this.renderTemplates.push({
+              value: `${rt.repository}/${rt.workspace}/${rt.library}/${rt.name}`, 
+              viewValue:rt.title
+            })
+          });
+        },
+        response => {
+          console.log("GET RT call in error", response);
+          console.log(response);
+        },
+        () => {
+          console.log("The GET RT observable is now completed.");
         }
       );
 
@@ -117,7 +153,7 @@ export class PageLayoutComponent implements OnInit {
 
   updateRow(rowNumber: number, rowType: number) {
     let currentRow = this.layout.rows[rowNumber];
-    let columns : Column[];
+    let columns : LayoutColumn[];
     switch (rowType) {
     case 0:
         columns = this.updatedCurrentRowColumns(currentRow, [100]);
@@ -157,11 +193,6 @@ export class PageLayoutComponent implements OnInit {
     return this.rows.length > 1;
   }
 
-
-  addViewer(rowNumber: number, columnNumber: number, viewer: Viewer): void {
-      this.layout.rows[rowNumber].columns[columnNumber].viewers.push(viewer);
-  }
-
   removeViewer(rowNumber: number, columnNumber: number, viewerIndex: number): void {
       this.layout.rows[rowNumber].columns[columnNumber].viewers.splice(viewerIndex, 1);
   }
@@ -194,15 +225,13 @@ export class PageLayoutComponent implements OnInit {
   }
 
   updateSidenavWidth(sideWidth: number, contentWide: number, leftSide: boolean) {
-      this.layout.sideWidth = sideWidth;
+      this.layout.sidenav.width = sideWidth;
       this.layout.contentWidth = contentWide;
-      this.layout.leftSide = leftSide;
+      this.layout.sidenav.isLeft = leftSide;
   }
 
-
-
-  updatedCurrentRowColumns(currentRow: Row, columnWidths: number[]) :Column[] {
-      let columns : Column[] = [];
+  updatedCurrentRowColumns(currentRow: LayoutRow, columnWidths: number[]) : LayoutColumn[] {
+      let columns : LayoutColumn[] = [];
       let availableColumns = (currentRow.columns.length > columnWidths.length) ? columnWidths.length : currentRow.columns.length;
       columns = currentRow.columns.slice(0, availableColumns);
       if (availableColumns < columnWidths.length) {
@@ -220,28 +249,54 @@ export class PageLayoutComponent implements OnInit {
   }
   
   showLeftSideNav() : boolean {
-      return this.layout.sideWidth > 0 && this.layout.leftSide;
+      return this.layout.sidenav.width > 0 && this.layout.sidenav.isLeft;
   }
 
   showRightSideNav() : boolean {
-      return this.layout.sideWidth > 0 && (!this.layout.leftSide);
+      return this.layout.sidenav.width > 0 && (!this.layout.sidenav.isLeft);
   }
 
   public addSideViewer() {
-      this.layout.sideViewers.push({
-        renderTemplates: []
-      });
-      return false;
+   
+    const dialogRef = this.dialog.open(RenderTemplateDialog, {
+      width: '500px',
+      data: {
+        renderTemplates: this.renderTemplates,
+        selectedRenderTemplate: ''
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      if (data && data.selectedRenderTemplate) {
+        this.layout.sidenav.viewers.push({
+          renderTemplate: data.selectedRenderTemplate
+        });
+      }
+    });
+    
+    return false;
   }
 
   public removeSideViewer(viewerIndex: number) {
-      this.layout.sideViewers.splice(viewerIndex, 1);
+      this.layout.sidenav.viewers.splice(viewerIndex, 1);
       return false;
   }
 
   public addResourceViewer(rowNumber: number, colNumber: number) {
-    this.layout.rows[rowNumber].columns[colNumber].viewers.push({
-      renderTemplates: []
+    const dialogRef = this.dialog.open(RenderTemplateDialog, {
+      width: '500px',
+      data: {
+        renderTemplates: this.renderTemplates,
+        selectedRenderTemplate: ''
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      if (data && data.selectedRenderTemplate) {
+        this.layout.rows[rowNumber].columns[colNumber].viewers.push({
+          renderTemplate: data.selectedRenderTemplate
+        });
+      }
     });
     return false;
   }
@@ -251,18 +306,13 @@ export class PageLayoutComponent implements OnInit {
       return false;
   }
 
-  public addRenderTemplate(rowNumber: number, colNumber: number, viewIndex: number, renderTemplate:string) {
-    this.layout.rows[rowNumber].columns[colNumber].viewers[viewIndex].renderTemplates.push(renderTemplate);
-    return false;
-  }
-
-  public removeRenderTemplate(rowNumber: number, colNumber: number, viewIndex: number, renderTemplateIndex:number) {
-    this.layout.rows[rowNumber].columns[colNumber].viewers[viewIndex].renderTemplates.splice(renderTemplateIndex, 1);
-    return false;
-  }
-  
   public savePageLayout() {
-    console.log(this.layout);
+    let formValue = this.pageLayoutForm.value;
+    this.layout.name = formValue.name;
+    this.layout.headerEnabled = formValue.headerEnabled;
+    this.layout.footerEnabled = formValue.footerEnabled;
+    this.layout.theme = formValue.theme;
+    this.wcmService.createPagelayout(this.layout);
   }
 
   public publishPageLayout() {
@@ -271,5 +321,22 @@ export class PageLayoutComponent implements OnInit {
 
   public cancelEditing() {
     console.log(this.layout);
+  }
+}
+
+@Component({
+  selector: 'render-template-dialog',
+  templateUrl: 'render-template.dialog.html',
+})
+export class RenderTemplateDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<RenderTemplateDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: {
+      renderTemplates: RenderTemplate[],
+      selectedRenderTemplate: string}) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }

@@ -25,7 +25,10 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseSidebarModule } from '@fuse/components';
 
 import { PageDesignerComponent } from './page-designer/page-designer.component';
-import { PageLayoutComponent } from './page-layout/page-layout.component';
+import { 
+    PageLayoutComponent,
+    RenderTemplateDialog
+} from './page-layout/page-layout.component';
 import { PageLayoutsComponent } from './page-layouts/page-layouts.component';
 import { ResourceViewerComponent } from './resource-viewer/resource-viewer.component';
 
@@ -45,7 +48,8 @@ const routes: Routes = [
         PageDesignerComponent,
         PageLayoutComponent,
         PageLayoutsComponent,
-        ResourceViewerComponent
+        ResourceViewerComponent,
+        RenderTemplateDialog
     ],
     imports        : [
         RouterModule.forChild(routes),
@@ -71,6 +75,9 @@ const routes: Routes = [
         FuseSidebarModule
     ],
     providers      : [
+    ],
+    entryComponents: [
+        RenderTemplateDialog
     ]
 })
 export class PageLayoutModule { }

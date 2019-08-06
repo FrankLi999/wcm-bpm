@@ -1,17 +1,10 @@
 <div fxLayout="row" fxLayoutAlign="end">
-    <div fxLayout="column" fxLayoutAlign="start" fxFlex="50">
+    <div fxLayout="column" fxLayoutAlign="start" fxFlex="100">
       <a [routerLink]="" (click)="removeSideViewer(viewerIndex)"><mat-icon>remove_circle_outline</mat-icon>Remove Viewer</a>
-    </div>
-    <div fxLayout="column" fxLayoutAlign="start" fxFlex="50">
-        <a [routerLink]="" (click)="addRenderTemplate()"><mat-icon>add_circle_outline</mat-icon>Add Render Template</a>
     </div>
 </div>
 <div fxLayout="row" fxLayoutAlign="start">
   <div fxLayout="column" fxLayoutAlign="start">
   <h4>Render Templates:</h4>
-  <ul>
-  <li *ngFor="let renderTemplate of viewer.renderTemplates;">
-      {{renderTemplate}}
-  </li>
-  </ul>
+  {{renderTemplate}}
 </div>  

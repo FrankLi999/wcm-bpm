@@ -6,14 +6,14 @@
             <div fxLayout="column" fxFlex="30">
                 <mat-form-field appearance="outline">
                     <mat-label>Page Layout name</mat-label>
-                    <input matInput formControlName="pageLayoutName" required>
+                    <input matInput formControlName="name" required>
                     <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
                 </mat-form-field>
             </div>
             <div fxLayout="column" fxFlex="30">
                 <mat-form-field appearance="outline">
                     <mat-label>Theme</mat-label>
-                    <mat-select formControlName="themeName">
+                    <mat-select formControlName="theme">
                     <mat-option *ngFor="let theme of themes" [value]="theme.value">
                         {{theme.viewValue}}
                     </mat-option>
@@ -22,7 +22,8 @@
             </div>
             <div fxLayout="column" fxFlex="20">
                 <button mat-icon-button type="button" 
-                    title="Update side navigation configutation" aria-label="Update side navigation configutation"
+                    title="Update side navigation configutation" 
+                    aria-label="Update side navigation configutation"
                     [matMenuTriggerFor]="sideNavMenu">
                     <mat-icon>build</mat-icon>Side Navivation
                 </button>
@@ -52,10 +53,10 @@
             <div class="card" id="sidenav-layout" fxFlex="{{layout.sideWidth}}" *ngIf="showLeftSideNav()">
                 <!-- Add container link-->
                 <a [routerLink]="" (click)="addSideViewer()"><mat-icon>add_circle_outline</mat-icon>Add Viewer</a>
-                <div class="card container" *ngFor="let viewer of layout.sideViewers; let viewerIndex = index;">
+                <div class="card container" *ngFor="let viewer of layout.sidenav.viewers; let viewerIndex = index;">
                     <resource-viewer
-                        [viewer]="viewer"
                         [viewerIndex]="viewerIndex"
+                        [renderTemplate]="layout.sidenav.viewers[viewerIndex].renderTemplate"
                         (resourceViewerRemoved)="removeSideViewer($event)">
                     </resource-viewer>
                 </div>
@@ -85,8 +86,8 @@
                             <a [routerLink]="" (click)="addResourceViewer(rowIndex, columnIndex)"><mat-icon>add_circle_outline</mat-icon>Add Viewer</a>
                             <div class="card container" *ngFor="let viewer of column.viewers; let viewerIndex = index;">
                                 <resource-viewer 
-                                    [viewer]="viewer" 
                                     [viewerIndex]="viewerIndex"
+                                    [renderTemplate]="layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex].renderTemplate"
                                     (resourceViewerRemoved)="removeResourceViewer(rowIndex, columnIndex, $event)">
                                 </resource-viewer>
                             </div>
@@ -103,10 +104,10 @@
             </div>
             <div class="card" id="sidenav-layout" fxFlex="{{layout.sideWidth}}" *ngIf="showRightSideNav()">
                 <a [routerLink]="" (click)="addSideViewer()"><mat-icon>add_circle_outline</mat-icon>Add Viewer</a>
-                <div class="card container" *ngFor="let viewer of layout.sideViewers; let viewerIndex = index;">
+                <div class="card container" *ngFor="let viewer of layout.sidenav.viewers; let viewerIndex = index;">
                     <resource-viewer
-                        [viewer]="viewer"
                         [viewerIndex]="viewerIndex"
+                        [renderTemplate]="layout.sidenav.viewers[viewerIndex].renderTemplat"
                         (resourceViewerRemoved)="removeSideViewer($event)">
                     </resource-viewer>
                 </div>

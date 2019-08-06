@@ -7,16 +7,17 @@ import { Viewer } from '../page-layout/page-layout.component';
 })
 export class ResourceViewerComponent implements OnInit {
   @Output() resourceViewerRemoved = new EventEmitter<number>();
-  @Input() viewer: Viewer;
+  // @Input() viewer: Viewer;
   @Input() viewerIndex: number;
+  @Input() renderTemplate: string;
   constructor() { }
 
   ngOnInit() {
   }
 
-  public addRenderTemplate() {
-    this.viewer.renderTemplates.push("a_render_tmplate");
-  }
+  // public addRenderTemplate() {
+  //   this.viewer.renderTemplates.push("a_render_tmplate");
+  // }
   
   public removeSideViewer(viewerIndex: number) {
     this.resourceViewerRemoved.emit(viewerIndex);
