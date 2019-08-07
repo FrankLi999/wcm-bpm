@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Viewer } from '../page-layout/page-layout.component';
 @Component({
   selector: 'resource-viewer',
   templateUrl: './resource-viewer.component.html',

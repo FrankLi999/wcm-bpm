@@ -59,6 +59,9 @@ export class PageLayoutComponent implements OnInit {
 
   layout: PageLayout = {
     name: '',
+    repository: 'bpwizard',
+    workspace: 'default',
+    library: 'design',
     headerEnabled: false,
     footerEnabled: false,
     theme: '',
