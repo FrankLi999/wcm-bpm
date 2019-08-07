@@ -7,11 +7,12 @@ import { HttpClient } from '@angular/common/http';
 // import { map } from 'rxjs/operators';
 
 import { Examples } from './example-schemas.model';
-import { JsonPointer } from './dynamic-ui/shared';
+import { JsonPointer } from '../../../dynamic-ui/shared';
 
 @Component({
-  selector: 'demo',
-  templateUrl: 'demo.component.html',
+  selector: 'app-dynamic-ui',
+  templateUrl: './dynamic-ui.component.html',
+  styleUrls: ['./dynamic-ui.component.scss'],
   animations: [
     trigger('expandSection', [
       state('in', style({ height: '*' })),
@@ -23,21 +24,18 @@ import { JsonPointer } from './dynamic-ui/shared';
         animate(100, style({ height: 0 })),
       ]),
     ]),
-  ],
+  ]
 })
-export class DemoComponent implements OnInit {
+export class DynamicUiComponent implements OnInit {
   examples: any = Examples;
   languageList: any = ['en', 'fr'];
   languages: any = {
     'en': 'English',
     'fr': 'French',
   };
-  frameworkList: any = ['material-design', 'bootstrap-3', 'bootstrap-4', 'no-framework'];
+  frameworkList: any = ['material-design'];
   frameworks: any = {
-    'material-design': 'Material Design',
-    'bootstrap-3': 'Bootstrap 3',
-    'bootstrap-4': 'Bootstrap 4',
-    'no-framework': 'None (plain HTML)',
+    'material-design': 'Material Design'
   };
   selectedSet = 'ng-jsf';
   selectedSetName = '';
@@ -170,7 +168,7 @@ export class DemoComponent implements OnInit {
       this.selectedExample = selectedExample;
       this.selectedExampleName = selectedExampleName;
       this.router.navigateByUrl(
-        '/?set=' + selectedSet +
+        '/wcm-authoring/dynamic-ui?set=' + selectedSet +
         '&example=' + selectedExample +
         '&framework=' + this.selectedFramework +
         '&language=' + this.selectedLanguage
@@ -191,7 +189,7 @@ export class DemoComponent implements OnInit {
 
   loadSelectedLanguage() {
     window.location.href =
-      '/?set=' + this.selectedSet +
+      '/wcm-authoring/dynamic-ui?set=' + this.selectedSet +
       '&example=' + this.selectedExample +
       '&framework=' + this.selectedFramework +
       '&language=' + this.selectedLanguage;

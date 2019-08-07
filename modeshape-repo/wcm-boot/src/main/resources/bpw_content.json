@@ -50,6 +50,24 @@
         "bpw:defaultTitle": "Remove Folder",
         "bpw:defaultIcon": "remove"
     },
+    "bpwizard/configuration/operations/siteArea" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:siteArea"
+    },
+    "bpwizard/configuration/operations/siteArea/createSiteArea" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "SiteArea",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New SiteArea",
+        "bpw:defaultIcon": "create"
+    },
+    "bpwizard/configuration/operations/siteArea/removeSiteArea" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "SiteArea",
+        "bpw:operation": "Delete",
+        "bpw:defaultTitle": "Remove SiteArea",
+        "bpw:defaultIcon": "delete"
+    },
     "bpwizard/configuration/operations/themeFolder" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "bpw:themesFolder"

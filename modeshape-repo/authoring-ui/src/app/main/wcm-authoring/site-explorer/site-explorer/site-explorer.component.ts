@@ -174,7 +174,7 @@ export class SiteExplorerComponent {
     alert(`Click on Action 2 for ${item}`);
   }
 
-  newFolderNode(item: String) {
+  newSiteAreaNode(item: String) {
     alert(`Click on Action 2 for ${item}`);
   }
 

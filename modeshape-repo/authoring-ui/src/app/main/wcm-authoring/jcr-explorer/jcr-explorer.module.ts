@@ -1,9 +1,18 @@
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule,  Routes } from '@angular/router';
 
-import { RouterModule, Routes } from '@angular/router';
+import {
+  JsonSchemaFormModule, 
+  MaterialDesignFrameworkModule
+} from '../../dynamic-ui';
+
+
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -27,24 +36,34 @@ import { JcrExplorerComponent } from './jcr-explorer/jcr-explorer.component';
 import { JcrNodeComponent } from './jcr-node/jcr-node.component';
 import { RepositoryComponent } from './repository/repository.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
+import { DynamicUiComponent } from './dynamic-ui/dynamic-ui.component';
+import { AceEditorModule } from 'ng2-ace-editor';
 
 const routes: Routes = [
   {
-      path     : 'jcr-explorer',
-      component: JcrExplorerComponent
+    path     : 'jcr-explorer',
+    component: JcrExplorerComponent      
+  },
+  {
+    path     : 'dynamic-ui',
+    component: DynamicUiComponent
   }
 ];
 
 @NgModule({
   declarations: [
     JcrExplorerComponent, 
-    JcrNodeComponent, RepositoryComponent, WorkspaceComponent
+    JcrNodeComponent, 
+    RepositoryComponent, 
+    WorkspaceComponent, 
+    DynamicUiComponent
   ],
   imports: [
     RouterModule.forChild(routes),
     CdkTableModule,
     CdkTreeModule,
     MatButtonModule,
+    MatCardModule,
     MatCheckboxModule,
     MatDialogModule,
     MatExpansionModule,
@@ -60,7 +79,20 @@ const routes: Routes = [
     MatTableModule,
     MatToolbarModule,
     MatTreeModule,
-    
+   
+    MaterialDesignFrameworkModule,
+    JsonSchemaFormModule.forRoot(
+      // NoFrameworkModule,
+      MaterialDesignFrameworkModule,
+      // Bootstrap3FrameworkModule,
+      // Bootstrap4FrameworkModule,
+      MaterialDesignFrameworkModule
+    ),
+    FlexLayoutModule,
+    HttpClientModule,
+
+    AceEditorModule,
+
     TranslateModule,
 
     FuseSharedModule,

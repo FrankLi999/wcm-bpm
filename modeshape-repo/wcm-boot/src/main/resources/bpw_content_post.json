@@ -1,7 +1,30 @@
 {
-    "bpwizard/controlField/select" : {
-        "jcr:primaryType": "bpw:controlField",
-        "bpw:title": "Select",
-        "bpw:icon": "select_all"
+    "bpwizard/configuration/operations/siteArea/createPage" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "Page",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Page",
+        "bpw:defaultIcon": "create"
+    },
+    "bpwizard/configuration/operations/siteArea/removePage" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "Page",
+        "bpw:operation": "Delete",
+        "bpw:defaultTitle": "Remove Page",
+        "bpw:defaultIcon": "delete"
+    },
+    "bpwizard/configuration/operations/siteArea/createContent" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "Content",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Content Item",
+        "bpw:defaultIcon": "create"
+    },
+    "bpwizard/configuration/operations/siteArea/removeContent" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "Content",
+        "bpw:operation": "Delete",
+        "bpw:defaultTitle": "Remove Content Item",
+        "bpw:defaultIcon": "delete"
     }
 }
