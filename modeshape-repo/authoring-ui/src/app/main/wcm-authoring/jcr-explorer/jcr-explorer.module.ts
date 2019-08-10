@@ -3,11 +3,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule,  Routes } from '@angular/router';
 
-import {
-  JsonSchemaFormModule, 
-  MaterialDesignFrameworkModule
-} from '../../dynamic-ui';
-
 
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
@@ -37,8 +32,11 @@ import { JcrNodeComponent } from './jcr-node/jcr-node.component';
 import { RepositoryComponent } from './repository/repository.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { DynamicUiComponent } from './dynamic-ui/dynamic-ui.component';
-import { AceEditorModule } from 'ng2-ace-editor';
-
+import {
+  JsonSchemaFormModule, 
+  MaterialDesignFrameworkModule
+} from '../../dynamic-ui';
+import { AceEditorDirective } from './dynamic-ui/ace-editor.directive';
 const routes: Routes = [
   {
     path     : 'jcr-explorer',
@@ -52,6 +50,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
+    AceEditorDirective, 
     JcrExplorerComponent, 
     JcrNodeComponent, 
     RepositoryComponent, 
@@ -80,19 +79,18 @@ const routes: Routes = [
     MatToolbarModule,
     MatTreeModule,
    
-    MaterialDesignFrameworkModule,
-    JsonSchemaFormModule.forRoot(
-      // NoFrameworkModule,
-      MaterialDesignFrameworkModule,
-      // Bootstrap3FrameworkModule,
-      // Bootstrap4FrameworkModule,
-      MaterialDesignFrameworkModule
-    ),
     FlexLayoutModule,
     HttpClientModule,
-
-    AceEditorModule,
-
+    
+    MaterialDesignFrameworkModule,
+    JsonSchemaFormModule,
+    // JsonSchemaFormModule.forRoot(
+    //   // NoFrameworkModule,
+    //   // MaterialDesignFrameworkModule,
+    //   // Bootstrap3FrameworkModule,
+    //   // Bootstrap4FrameworkModule,
+    //   MaterialDesignFrameworkModule
+    // ),
     TranslateModule,
 
     FuseSharedModule,

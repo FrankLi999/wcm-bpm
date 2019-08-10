@@ -2,50 +2,38 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ModeshapeService } from '../../service/modeshape.service';
-
+import { BaseMewResourceDialog } from '../base-new-resource-dialog';
 @Component({
   selector: 'app-new-theme-dialog',
   templateUrl: './new-theme-dialog.component.html',
   styleUrls: ['./new-theme-dialog.component.scss']
 })
-export class NewThemeDialogComponent implements OnInit {
-  newThemeForm: FormGroup;
+export class NewThemeDialogComponent extends BaseMewResourceDialog implements OnInit {
   constructor(
     public matDialogRef: MatDialogRef<NewThemeDialogComponent>,
     private modeshapeService: ModeshapeService,
-    @Inject(MAT_DIALOG_DATA) private data: any
+    @Inject(MAT_DIALOG_DATA) data: any
   ) { 
-    this.newThemeForm = this.createNewThemeForm();
+    super(data);
   }
 
   ngOnInit() {
+    super.ngOnInit();
   }
 
   // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * Create compose form
-     *
-     * @returns {FormGroup}
-     */
-    createNewThemeForm(): FormGroup {
-        return new FormGroup({
-          themeName : new FormControl(''),
-          title : new FormControl('')
-        });
-    }
-
-    createTheme() {
+    createTheme(formData: any) {
       let newThemeBody = {
         "jcr:primaryType":"bpw:themeType",
-        "bpw:themeName": this.newThemeForm.get('themeName').value,
-        "bpw:title": this.newThemeForm.get('title').value
+        "bpw:themeName": formData.name,
+        "bpw:title": formData.title
       };
-      this.modeshapeService.postItems(this.data.repositoryName, this.data.workspaceName, `${this.data.nodePath}/${this.newThemeForm.get('themeName').value}`, newThemeBody)
+      this.modeshapeService.postItems(this.data.repositoryName, this.data.workspaceName, `${this.data.nodePath}/${formData.name}`, newThemeBody)
         .subscribe((event: any) => {
-          this.newThemeForm.reset();
+          // this.newThemeForm.reset();
         });    
     }
 }

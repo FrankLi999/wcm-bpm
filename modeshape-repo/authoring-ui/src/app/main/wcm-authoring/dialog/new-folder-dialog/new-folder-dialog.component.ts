@@ -1,48 +1,35 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ModeshapeService } from '../../service/modeshape.service';
-
+import { BaseMewResourceDialog } from '../base-new-resource-dialog';
 @Component({
   selector: 'app-new-folder-dialog',
   templateUrl: './new-folder-dialog.component.html',
   styleUrls: ['./new-folder-dialog.component.scss']
 })
-export class NewFolderDialogComponent implements OnInit {
-  newFolderForm: FormGroup;
+export class NewFolderDialogComponent extends BaseMewResourceDialog implements OnInit {
   constructor(
     public matDialogRef: MatDialogRef<NewFolderDialogComponent>,
     private modeshapeService: ModeshapeService,
-    @Inject(MAT_DIALOG_DATA) private data: any
+    @Inject(MAT_DIALOG_DATA) data: any
   ) { 
-    this.newFolderForm = this.createNewFolderForm();
+    super(data);
   }
 
   ngOnInit() {
+    super.ngOnInit();
   }
 
   // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
+  // @ Public methods
+  // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * Create compose form
-     *
-     * @returns {FormGroup}
-     */
-    createNewFolderForm(): FormGroup {
-        return new FormGroup({
-          folderName : new FormControl('')
-        });
+  createFolder(formData: any) {
+    let newFolderBody = {
+      "jcr:primaryType": "nt:folder"
     }
-
-    createFolder() {
-      let newFolderBody = {
-        "jcr:primaryType": "nt:folder"
-      }
-      this.modeshapeService.postItems(this.data.repositoryName, this.data.workspaceName, `${this.data.nodePath}/${this.newFolderForm.get('folderName').value}`, newFolderBody)
-        .subscribe((event: any) => {
-          this.newFolderForm.reset();
-        });    
-    }
+    this.modeshapeService.postItems(this.data.repositoryName, this.data.workspaceName, `${this.data.nodePath}/${formData.name}`, newFolderBody)
+      .subscribe((event: any) => {
+      });    
+  }
 }

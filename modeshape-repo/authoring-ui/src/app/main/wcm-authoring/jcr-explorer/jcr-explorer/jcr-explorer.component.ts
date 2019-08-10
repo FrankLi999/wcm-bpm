@@ -6,16 +6,21 @@ import { map, flatMap } from 'rxjs/operators';
 import { MatMenuTrigger } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { ModeshapeService } from '../../service/modeshape.service';
+import { WcmService }  from '../../service/wcm.service';
 import { 
   RestRepositories,
   RestWorkspaces,
   Workspace,
   Repository,
-  RestNode
+  RestNode,
+  JsonForm
 } from '../../model';
 import { UploadZipfileDialogComponent } from '../../dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
 import { NewFolderDialogComponent } from '../../dialog/new-folder-dialog/new-folder-dialog.component';
 import { NewThemeDialogComponent } from '../../dialog/new-theme-dialog/new-theme-dialog.component';
+import { NewSiteareaDialogComponent } from '../../dialog/new-sitearea-dialog/new-sitearea-dialog.component';
+import { NewPageDialogComponent } from '../../dialog/new-page-dialog/new-page-dialog.component';
+import { NewContentDialogComponent } from '../../dialog/new-content-dialog/new-content-dialog.component';
 /** Nested node */
 export class JcrNode {
   childrenChange = new BehaviorSubject<JcrNode[]>([]);
@@ -56,6 +61,7 @@ export class JcrExplorerComponent implements OnInit {
   functionMap = new Map<string, Function>();
   jcrNodeMap = new Map<string, JcrNode>();
   operationMap = new Map<string, Operation[]>();
+  jsonFormMap = new Map<string, JsonForm>();
   currentNodeOperations: Operation[];
   activeNode : JcrFlatNode = null; 
   nodeMap = new Map<string, JcrFlatNode>();
@@ -69,17 +75,25 @@ export class JcrExplorerComponent implements OnInit {
 
   constructor(
     private modeshapeService: ModeshapeService,
+    private wcmService: WcmService,
     private matDialog: MatDialog) {     
   }
 
   ngOnInit() {
-    this.functionMap.set('Upload.File', this.uploadZipFile);
-    this.functionMap.set('Create.Folder', this.createFolder);
-    this.functionMap.set('Create.Theme', this.createTheme);
-    this.functionMap.set('Remove.Folder', this.removeItem);
-    this.functionMap.set('Remove.File', this.removeItem);
-    this.functionMap.set('Delete.Theme', this.removeItem);
+    this.functionMap.set('Upload.file', this.uploadZipFile);
+    this.functionMap.set('Create.folder', this.createFolder);
+    this.functionMap.set('Create.theme', this.createTheme);
+    this.functionMap.set('Remove.folder', this.removeItem);
+    this.functionMap.set('Remove.file', this.removeItem);
+    this.functionMap.set('Delete.theme', this.removeItem);
     
+    this.functionMap.set('Create.siteArea', this.createSiteArea);
+    this.functionMap.set('Delete.siteArea', this.removeSiteArea);
+    this.functionMap.set('Create.content', this.createContent);
+    this.functionMap.set('Delete.content', this.removeContent);
+    this.functionMap.set('Create.page', this.createPage);
+    this.functionMap.set('Delete.page', this.removePage);
+
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
       this.isExpandable, this.getChildren);
 
@@ -124,6 +138,22 @@ export class JcrExplorerComponent implements OnInit {
         console.log("The Get Repository observable is now completed.");
       }
     );
+
+    this.wcmService.getAuthoringTemplateAsJsonSchema('bpwizard', 'default').subscribe(
+      (jsonForms: JsonForm[]) => {
+        if (jsonForms) {
+          jsonForms.forEach(jsonForm => this.jsonFormMap.set(jsonForm.resourceType, jsonForm));
+        }
+        
+      },
+      response => {
+        console.log("getAuthoringTemplateAsJsonSchema call ended in error", response);
+        console.log(response);
+      },
+      () => {
+        console.log("getAuthoringTemplateAsJsonSchema observable is now completed.");
+      }
+    );
   }
 
   private generateRepositoryNode(name: string, repository: Repository): JcrNode {
@@ -148,7 +178,7 @@ export class JcrExplorerComponent implements OnInit {
     this.jcrNodeMap.set(workspaceNode.id, workspaceNode);
     
     //load supported operations
-    this.modeshapeService.getItems(repositoryName, workspaceName, 'bpwizard/configuration/operations', 2).subscribe(
+    this.modeshapeService.getItems(repositoryName, workspaceName, 'bpwizard/library/system/configuration/operations', 2).subscribe(
       (restNode: RestNode) => {
         if (restNode) {
             restNode.children.forEach(child => {
@@ -357,12 +387,11 @@ export class JcrExplorerComponent implements OnInit {
   }
 
   createFolder() {
-    // node: JcrFlatNode, matDialog: MatDialog, modeshapeService: ModeshapeService, 
-    //   jcrNodeMap: Map<string, JcrNode>, nodeMap: Map<string, JcrFlatNode>, dataChange: BehaviorSubject<JcrNode[]>, callback: Function) {
     const node = this.activeNode;
     let dialogRef = this.matDialog.open(NewFolderDialogComponent, {
       panelClass: 'folder-new-dialog',
       data: { 
+        jsonFormObject: this.jsonFormMap.get('folderType').formSchema,
         nodePath: (node.value as RestNode).nodePath,
         repositoryName: (node.value as RestNode).repositoryName,
         workspaceName: (node.value as RestNode).workspaceName
@@ -383,6 +412,7 @@ export class JcrExplorerComponent implements OnInit {
     let dialogRef = this.matDialog.open(NewThemeDialogComponent, {
       panelClass: 'theme-new-dialog',
       data: { 
+        jsonFormObject: this.jsonFormMap.get('themeType').formSchema,
         nodePath: (node.value as RestNode).nodePath,
         repositoryName: (node.value as RestNode).repositoryName,
         workspaceName: (node.value as RestNode).workspaceName
@@ -423,5 +453,75 @@ export class JcrExplorerComponent implements OnInit {
       () => {
         console.log("removeFolder observable is now completed.");
       });
+  }
+
+
+  createSiteArea() {
+    const node = this.activeNode;
+    let dialogRef = this.matDialog.open(NewSiteareaDialogComponent, {
+      panelClass: 'sitearea-new-dialog',
+      data: { 
+        jsonFormObject: this.jsonFormMap.get('siteAreaType').formSchema,
+        nodePath: (node.value as RestNode).nodePath,
+        repositoryName: (node.value as RestNode).repositoryName,
+        workspaceName: (node.value as RestNode).workspaceName
+      }
+    });
+    dialogRef.afterClosed()
+      .subscribe(response => {
+        this.loadChildren(node, false);
+        this.tree.treeControl.expand(this.activeNode);
+          
+    });
+  }
+  
+  removeSiteArea() {
+    console.log('>>>>>>>>> removeSiteArea');
+  }
+  
+  createContent() {
+    const node = this.activeNode;
+    let dialogRef = this.matDialog.open(NewContentDialogComponent, {
+      panelClass: 'content-new-dialog',
+      data: { 
+        jsonFormObject: this.jsonFormMap.get('myContent').formSchema,
+        nodePath: (node.value as RestNode).nodePath,
+        repositoryName: (node.value as RestNode).repositoryName,
+        workspaceName: (node.value as RestNode).workspaceName
+      }
+    });
+    dialogRef.afterClosed()
+      .subscribe(response => {
+        this.loadChildren(node, false);
+        this.tree.treeControl.expand(this.activeNode);
+          
+    });
+  }
+  
+  removeContent() {
+    console.log('>>>>>>>>> removeContent');
+  }
+
+  createPage() {
+    const node = this.activeNode;
+    let dialogRef = this.matDialog.open(NewPageDialogComponent, {
+      panelClass: 'page-new-dialog',
+      data: { 
+        jsonFormObject: this.jsonFormMap.get('pageType').formSchema,
+        nodePath: (node.value as RestNode).nodePath,
+        repositoryName: (node.value as RestNode).repositoryName,
+        workspaceName: (node.value as RestNode).workspaceName
+      }
+    });
+    dialogRef.afterClosed()
+      .subscribe(response => {
+        this.loadChildren(node, false);
+        this.tree.treeControl.expand(this.activeNode);
+          
+    });
+  }
+
+  removePage() {
+    console.log('>>>>>>>>> removePage');
   }
 }

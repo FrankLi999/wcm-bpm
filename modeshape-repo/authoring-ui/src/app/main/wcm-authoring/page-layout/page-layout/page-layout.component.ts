@@ -101,7 +101,7 @@ export class PageLayoutComponent implements OnInit {
           ])
       });
 
-      this.wcmService.getTheme().subscribe(
+      this.wcmService.getTheme('bpwizard', 'default').subscribe(
         (jcrThemes: Theme[]) => {
           if (jcrThemes)
           jcrThemes.forEach(jcrTheme => {
@@ -120,7 +120,7 @@ export class PageLayoutComponent implements OnInit {
         }
       );
 
-      this.wcmService.getRenderTemplate().subscribe(
+      this.wcmService.getRenderTemplate('bpwizard', 'default').subscribe(
         (rts: RenderTemplate[]) => {
           if (rts)
           rts.forEach(rt => {

@@ -13,6 +13,9 @@
 - bpw:name (STRING) COPY
 - bpw:value (STRING) COPY
 
+[bpw:keyValues]
++ * (bpw:keyValue) 
+
 [bpw:workflowAction] > mix:lastModified
 - name (String)
 
@@ -30,6 +33,16 @@
 [bpw:pageSearchData]
 - description (STRING)
 - keywords (STRING) multiple
+
+[bpw:fieldLayout]
+- bpw:name (STRING)
+- bpw:title  (STRING)
+- bpw:multiple (BOOLEAN)
+- bpw:items (STRING)
+
+[bpw:customFieldLayout]
+- bpw:multiple (BOOLEAN)
++ * (bpw:fieldLayout)
 
 /*
 'Decimal', 'Text', 'True/False', 'Whole Number'
@@ -74,7 +87,8 @@
 - bpw:options (STRING) multiple COPY
 - bpw:defaultValue (STRING) COPY
 - bpw:hint (STRING) COPY
-- bpw:dataType (STRING) = 'Text' COPY
+- bpw:dataType (STRING) = 'text' COPY
+- bpw:multiple (BOOLEAN) = 'false' COPY
 - bpw:relationshipType (STRING) COPY
 - bpw:relationshipCardinality (STRING) COPY
 - bpw:valditionRegEx (STRING) COPY
@@ -88,6 +102,7 @@
 - bpw:id (STRING)
 - bpw:fxFlex (LONG) 
 - bpw:fieldNames (STRING) multiple
++ * (bpw:customFieldLayout)
 
 [bpw:formRow] > bpw:formGroup
 - bpw:rowName (String)
@@ -140,14 +155,15 @@
 
 [bpw:pageType] > bpw:resourceNode
 - bpw:name (STRING) mandatory COPY
-- bpw:template (STRING) mandatory COPY
+- bpw:pageLayout (STRING) mandatory COPY
 - bpw:title (STRING) mandatory COPY
+- bpw:url (STRING)
 - bpw:friendlyURL (STRING)
 - bpw:cacheTTL (LONG)
 - bpw:showOnMenu (BOOLEAN) COPY
 - bpw:sortOrder (LONG) COPY
 - bpw:securePage (BOOLEAN) COPY
-+ bpw:metaData (bpw:keyValue)
++ bpw:metaData (bpw:keyValues)
 + bpw:searchData (bpw:pageSearchData)
 
 [bpw:keyValueType] > bpw:resourceNode
@@ -179,6 +195,9 @@
 
 [bpw:siteArea] > bpw:resourceNode
 - bpw:name (STRING) mandatory COPY
+- bpw:title (STRING) mandatory COPY
+- bpw:url (STRING)
+- bpw:friendlyURL (STRING)
 - bpw:sorderOrder (LONG) COPY
 - bpw:showOnMenu (BOOLEAN) COPY
 - bpw:allowedFileExtension (STRING) multiple COPY
@@ -422,41 +441,43 @@
 + configuration (bpw:configurationFolder)
 + library (bpw:libraryFolder)
 
-[bpw:contentElement] > nt:hierarchyNode abstract
- - multiple (BOOLEAN)
- 
+[bpw:contentElement] > nt:hierarchyNode
+ - bpw:multiple (BOOLEAN)
+ - bpw:value (STRING) multiple
+ /*
 [bpw:stringElement] > bpw:contentElement 
- - value (STRING) multiple
+ - bpw:value (STRING) multiple
  
 [bpw:numberElement] > bpw:contentElement 
- - value (LONG) multiple
+ - bpw:value (LONG) multiple
 
 [bpw:binaryElement] > bpw:contentElement 
- - value (BINARY)
+ - bpw:value (BINARY)
 
 [bpw:doubleElement] > bpw:contentElement 
- - value (DOUBLE) multiple
+ - bpw:value (DOUBLE) multiple
  
 [bpw:dateElement] > bpw:contentElement 
- - value (DATE) multiple
+ - bpw:value (DATE) multiple
 
 [bpw:nameElement] > bpw:contentElement 
- - value (NAME) multiple
+ - bpw:value (NAME) multiple
 
 [bpw:pathElement] > bpw:contentElement 
- - value (PATH) multiple
+ - bpw:value (PATH) multiple
  
 [bpw:referenceElement] > bpw:contentElement 
-- value (REFERENCE) multiple
+- bpw:value (REFERENCE) multiple
 
 [bpw:weakReferenceElement] > bpw:contentElement 
-- value (WEAKREFERENCE) multiple
+- bpw:value (WEAKREFERENCE) multiple
 
 [bpw:uriElement] > bpw:contentElement 
-- value (URI) multiple
+- bpw:value (URI) multiple
 
 [bpw:decimalElement] > bpw:contentElement 
-- value (DECIMAL) multiple
-   
+- bpw:value (DECIMAL) multiple
+*/   
  [bpw:content] > bpw:resourceNode
+ - bpw:authoringTemplate (STRING)
 + * (bpw:contentElement)

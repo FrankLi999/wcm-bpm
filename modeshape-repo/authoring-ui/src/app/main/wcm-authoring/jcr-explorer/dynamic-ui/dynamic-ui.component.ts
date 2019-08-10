@@ -1,10 +1,8 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { ActivatedRoute, Router, RouterModule, Routes } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-
-// import { map } from 'rxjs/operators';
 
 import { Examples } from './example-schemas.model';
 import { JsonPointer } from '../../../dynamic-ui/shared';
@@ -28,14 +26,18 @@ import { JsonPointer } from '../../../dynamic-ui/shared';
 })
 export class DynamicUiComponent implements OnInit {
   examples: any = Examples;
-  languageList: any = ['en', 'fr'];
+  languageList: any = ['en', 'fr', 'zh'];
   languages: any = {
     'en': 'English',
     'fr': 'French',
+    'zh': 'Chinese',
   };
-  frameworkList: any = ['material-design'];
+  frameworkList: any = ['material-design', 'bootstrap-3', 'bootstrap-4', 'no-framework'];
   frameworks: any = {
-    'material-design': 'Material Design'
+    'material-design': 'Material Design',
+    'bootstrap-3': 'Bootstrap 3',
+    'bootstrap-4': 'Bootstrap 4',
+    'no-framework': 'None (plain HTML)',
   };
   selectedSet = 'ng-jsf';
   selectedSetName = '';
@@ -43,7 +45,7 @@ export class DynamicUiComponent implements OnInit {
   selectedExampleName = 'Flexbox layout';
   selectedFramework = 'material-design';
   selectedLanguage = 'en';
-  visible: { [item: string]: boolean } = {
+  visible = {
     options: true,
     schema: true,
     form: true,
@@ -73,7 +75,7 @@ export class DynamicUiComponent implements OnInit {
     printMargin: false,
     autoScrollEditorIntoView: true,
   };
-  @ViewChild(MatMenuTrigger, {static:true}) menuTrigger: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger, {static: true}) menuTrigger: MatMenuTrigger;
 
   constructor(
     private http: HttpClient,
@@ -136,10 +138,10 @@ export class DynamicUiComponent implements OnInit {
 
   get prettyValidationErrors() {
     if (!this.formValidationErrors) { return null; }
-    let errorArray = [];
-    for (let error of this.formValidationErrors) {
-      let message = error.message;
-      let dataPathArray = JsonPointer.parse(error.dataPath);
+    const errorArray = [];
+    for (const error of this.formValidationErrors) {
+      const message = error.message;
+      const dataPathArray = JsonPointer.parse(error.dataPath);
       if (dataPathArray.length) {
         let field = dataPathArray[0];
         for (let i = 1; i < dataPathArray.length; i++) {
@@ -188,11 +190,7 @@ export class DynamicUiComponent implements OnInit {
   }
 
   loadSelectedLanguage() {
-    window.location.href =
-      '/wcm-authoring/dynamic-ui?set=' + this.selectedSet +
-      '&example=' + this.selectedExample +
-      '&framework=' + this.selectedFramework +
-      '&language=' + this.selectedLanguage;
+    window.location.href = `${window.location.pathname}?set=${this.selectedSet}&example=${this.selectedExample}&framework=${this.selectedFramework}&language=${this.selectedLanguage}`;
   }
 
   // Display the form entered by the user
@@ -217,7 +215,7 @@ export class DynamicUiComponent implements OnInit {
 
         // If entered content is not valid JSON,
         // parse as JavaScript instead to include functions
-        let newFormObject: any = null;
+        const newFormObject: any = null;
         /* tslint:disable */
         eval('newFormObject = ' + newFormString);
         /* tslint:enable */

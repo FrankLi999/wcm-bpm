@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeIterator;
 import javax.jcr.nodetype.PropertyDefinition;
@@ -37,7 +38,7 @@ public final class RestNodeType { //implements JSONAble {
     private final Set<String> superTypesLinks;
     private final Set<String> subTypesLinks;
     private final List<RestPropertyType> propertyTypes;
-
+    private final List<RestChildType> childTypes;
     private final String name;
     private final boolean isMixin;
     private final boolean hasOrderableChildNodes;
@@ -71,10 +72,18 @@ public final class RestNodeType { //implements JSONAble {
             this.subTypesLinks.add(subTypeLink);
         }
 
+        
         this.propertyTypes = new ArrayList<RestPropertyType>();
         for (PropertyDefinition propertyDefinition : nodeType.getDeclaredPropertyDefinitions()) {
             this.propertyTypes.add(new RestPropertyType(propertyDefinition));
         }
+        
+        NodeDefinition[] childNodes = nodeType.getChildNodeDefinitions();
+        this.childTypes = new ArrayList<>(childNodes.length);
+        for (NodeDefinition childNode: childNodes) {
+        	this.childTypes.add(new RestChildType(childNode));
+        }
+        
     }
 
 	public Set<String> getSuperTypesLinks() {
@@ -89,6 +98,10 @@ public final class RestNodeType { //implements JSONAble {
 		return propertyTypes;
 	}
 
+	public List<RestChildType> getChildTypes() {
+		return childTypes;
+	}
+	
 	public String getName() {
 		return name;
 	}

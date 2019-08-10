@@ -1,30 +1,31 @@
 {
-    "bpwizard/configuration/operations/siteArea/createPage" : {
-        "jcr:primaryType":"bpw:supportedOpertion",
-        "bpw:resourceName": "Page",
-        "bpw:operation": "Create",
-        "bpw:defaultTitle": "New Page",
-        "bpw:defaultIcon": "create"
+    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/searchData" : {
+        "jcr:primaryType":"bpw:customFieldLayout"
     },
-    "bpwizard/configuration/operations/siteArea/removePage" : {
-        "jcr:primaryType":"bpw:supportedOpertion",
-        "bpw:resourceName": "Page",
-        "bpw:operation": "Delete",
-        "bpw:defaultTitle": "Remove Page",
-        "bpw:defaultIcon": "delete"
+    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/searchData/description" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:name": "searchData.description",
+        "bpw:title": "Description"
     },
-    "bpwizard/configuration/operations/siteArea/createContent" : {
-        "jcr:primaryType":"bpw:supportedOpertion",
-        "bpw:resourceName": "Content",
-        "bpw:operation": "Create",
-        "bpw:defaultTitle": "New Content Item",
-        "bpw:defaultIcon": "create"
+    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/searchData/keywords" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:name": "searchData.keywords",
+        "bpw:items": "searchData.keywords[]",
+        "bpw:title": "Keywords",
+        "bpw:multiple": "true"
     },
-    "bpwizard/configuration/operations/siteArea/removeContent" : {
-        "jcr:primaryType":"bpw:supportedOpertion",
-        "bpw:resourceName": "Content",
-        "bpw:operation": "Delete",
-        "bpw:defaultTitle": "Remove Content Item",
-        "bpw:defaultIcon": "delete"
+    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/metadata" : {
+        "jcr:primaryType":"bpw:customFieldLayout",
+        "bpw:multiple": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/metadata/name" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:name": "metadata.keyValues[].name",
+        "bpw:title": "Name"
+    },
+    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/metadata/value" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:name": "metadata.keyValues[].value",
+        "bpw:title": "Value"
     }
 }

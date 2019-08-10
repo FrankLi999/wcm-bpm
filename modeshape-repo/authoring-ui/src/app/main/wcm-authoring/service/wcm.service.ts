@@ -21,7 +21,11 @@ import {
   ControlField,
   AuthoringTemplate,
   RenderTemplate,
-  PageLayout
+  PageLayout,
+  JsonForm,
+  SiteArea,
+  Page,
+  ContentItem
 } from '../model';
 @Injectable()
 @Client({
@@ -37,10 +41,13 @@ export class WcmService extends RestClient {
     super(httpClient);
   }
 
-  @Get('/theme')
+  @Get('/{repository}/{workspace}/theme')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public getTheme(): Observable<Theme[]> { return null; };
+  public getTheme(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string
+  ): Observable<Theme[]> { return null; };
 
   @Get('/{repository}/{workspace}/control')
   @Timeout(2000) //In milliseconds
@@ -55,20 +62,34 @@ export class WcmService extends RestClient {
   @Produces(MediaType.JSON)
   public createAuthoringTemplate(@Body at: AuthoringTemplate): Observable<any> { return null; };
   
-  @Get('/at')
+  @Get('/{repository}/{workspace}/at')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public getAuthoringTemplate(): Observable<AuthoringTemplate[]> { return null; };
+  public getAuthoringTemplate(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string
+  ): Observable<AuthoringTemplate[]> { return null; };
+
+  @Get('/{repository}/{workspace}/jsonform')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public getAuthoringTemplateAsJsonSchema(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string
+  ): Observable<JsonForm[]> { return null; };
 
   @Post('/rt')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public createRenderTemplate(@Body rt: RenderTemplate): Observable<any> { return null; };
 
-  @Get('/rt')
+  @Get('/{repository}/{workspace}/rt')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public getRenderTemplate(): Observable<RenderTemplate[]> { return null; };
+  public getRenderTemplate(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string
+  ): Observable<RenderTemplate[]> { return null; };
 
   
   @Post('/pagelayout')
@@ -76,8 +97,26 @@ export class WcmService extends RestClient {
   @Produces(MediaType.JSON)
   public createPagelayout(@Body rt: PageLayout): Observable<any> { return null; };
 
-  @Get('/pagelayout')
+  @Get('/{repository}/{workspace}/pagelayout')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public getPagelayout(): Observable<PageLayout[]> { return null; };
+  public getPagelayout(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string
+  ): Observable<PageLayout[]> { return null; };
+
+  @Post('/sitearea')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public createSiteArea(@Body sa: SiteArea): Observable<any> { return null; };
+
+  @Post('/page')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public createPage(@Body page: Page): Observable<any> { return null; };
+
+  @Post('/ContentItem')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public createContentItem(@Body contentItem: ContentItem): Observable<any> { return null; };
 }

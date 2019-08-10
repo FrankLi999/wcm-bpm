@@ -56,7 +56,7 @@ export class RenderTemplateComponent implements OnInit {
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.wcmService.getAuthoringTemplate().subscribe(
+    this.wcmService.getAuthoringTemplate('bpwizard', 'default').subscribe(
       (authoringTemplates: AuthoringTemplate[]) => {
         if (authoringTemplates) {
           authoringTemplates.forEach(at => {

@@ -17,6 +17,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseSidebarModule } from '@fuse/components';
 import { TranslateModule } from '@ngx-translate/core';
+import { AceEditorModule } from 'ng2-ace-editor';
+import {
+  JsonSchemaFormModule, 
+  MaterialDesignFrameworkModule
+} from '../dynamic-ui';
+
 import { JcrExplorerModule } from './jcr-explorer/jcr-explorer.module';
 import { ResourceLibraryModule } from './resource-library/resource-library.module';
 import { SiteExplorerModule } from './site-explorer/site-explorer.module';
@@ -33,12 +39,18 @@ import { UploadZipfileDialogComponent } from './dialog/upload-zipfile-dialog/upl
 import { FileUploadComponent } from './dialog/file-upload/file-upload.component';
 import { NewFolderDialogComponent } from './dialog/new-folder-dialog/new-folder-dialog.component';
 import { NewThemeDialogComponent } from './dialog/new-theme-dialog/new-theme-dialog.component';
+import { NewSiteareaDialogComponent } from './dialog/new-sitearea-dialog/new-sitearea-dialog.component';
+import { NewPageDialogComponent } from './dialog/new-page-dialog/new-page-dialog.component';
+import { NewContentDialogComponent } from './dialog/new-content-dialog/new-content-dialog.component';
 @NgModule({
     declarations: [
     UploadZipfileDialogComponent,
     FileUploadComponent,
     NewFolderDialogComponent,
-    NewThemeDialogComponent],
+    NewThemeDialogComponent,
+    NewSiteareaDialogComponent,
+    NewPageDialogComponent,
+    NewContentDialogComponent],
     imports : [
         // RouterModule.forChild(routes),
         JcrExplorerModule,
@@ -63,6 +75,8 @@ import { NewThemeDialogComponent } from './dialog/new-theme-dialog/new-theme-dia
         MatSelectModule,
         MatToolbarModule,
 
+        MaterialDesignFrameworkModule,
+        JsonSchemaFormModule,
         TranslateModule,
 
         FuseSharedModule,
@@ -77,7 +91,10 @@ import { NewThemeDialogComponent } from './dialog/new-theme-dialog/new-theme-dia
     entryComponents: [
         UploadZipfileDialogComponent,
         NewFolderDialogComponent,
-        NewThemeDialogComponent
+        NewThemeDialogComponent,
+        NewSiteareaDialogComponent,
+        NewPageDialogComponent,
+        NewContentDialogComponent
     ]
 })
 

@@ -10,7 +10,8 @@ public class FormControl implements HasName {
 	private String[] options;
 	private String defaultValue;
 	private String hint;
-	private String dataType = "Text";
+	private String dataType = "text";
+	private boolean multiple;
 	private String relationshipType;
 	private String relationshipCardinality;
 	private String valditionRegEx;
@@ -19,7 +20,6 @@ public class FormControl implements HasName {
 	private boolean systemIndexed = false;
 	private boolean showInList = false;
 	private boolean unique = false;
-	
 	public String getName() {
 		return name;
 	}
@@ -67,6 +67,12 @@ public class FormControl implements HasName {
 	}
 	public void setDataType(String dataType) {
 		this.dataType = dataType;
+	}
+	public boolean isMultiple() {
+		return multiple;
+	}
+	public void setMultiple(boolean multiple) {
+		this.multiple = multiple;
 	}
 	public String getRelationshipType() {
 		return relationshipType;
@@ -120,9 +126,11 @@ public class FormControl implements HasName {
 	public String toString() {
 		return "FormControl [name=" + name + ", title=" + title + ", controlName=" + controlName + ", values="
 				+ Arrays.toString(values) + ", options=" + Arrays.toString(options) + ", defaultValue=" + defaultValue
-				+ ", hint=" + hint + ", dataType=" + dataType + ", relationshipType=" + relationshipType
-				+ ", relationshipCardinality=" + relationshipCardinality + ", valditionRegEx=" + valditionRegEx
-				+ ", mandatory=" + mandatory + ", userSearchable=" + userSearchable + ", systemIndexed=" + systemIndexed
-				+ ", showInList=" + showInList + ", unique=" + unique + "]";
+				+ ", hint=" + hint + ", dataType=" + dataType + ", multiple=" + multiple + ", relationshipType="
+				+ relationshipType + ", relationshipCardinality=" + relationshipCardinality + ", valditionRegEx="
+				+ valditionRegEx + ", mandatory=" + mandatory + ", userSearchable=" + userSearchable
+				+ ", systemIndexed=" + systemIndexed + ", showInList=" + showInList + ", unique=" + unique + "]";
 	}
+	
+	
 }
