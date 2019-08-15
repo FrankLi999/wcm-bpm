@@ -1,0 +1,31 @@
+GET /organizations/TestOrganization/apis/foo/versions/1.0/plans/Gold/policyChain admin/admin
+
+----
+200
+Content-Type: application/json
+
+{
+  "policies" : [
+      {
+        "createdBy" : "admin",
+        "description" : "Policy Def Two: Plan Policy 2",
+        "icon" : "one",
+        "name" : "Policy Def Two",
+        "policyDefinitionId" : "PolicyDefTwo"
+      },
+      {
+        "createdBy" : "admin",
+        "description" : "Policy Def One: Plan Policy 1",
+        "icon" : "one",
+        "name" : "Policy Def One",
+        "policyDefinitionId" : "PolicyDefOne"
+      },
+      {
+        "createdBy" : "admin",
+        "description" : "Policy Def Three: API Policy 1",
+        "icon" : "one",
+        "name" : "Policy Def Three",
+        "policyDefinitionId" : "PolicyDefThree"
+      }
+   ]
+}

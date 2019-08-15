@@ -1,0 +1,20 @@
+POST /gateways admin/admin
+Content-Type: application/json
+
+{
+  "name" : "Gateway Three",
+  "description" : "This is the third gateway.",
+  "type" : "REST",
+  "configuration" : "{\"endpoint\":\"http://localhost:8080/gateway-config/api\",\"username\":\"admin99\",\"password\":\"password\"}"
+}
+----
+200
+Content-Type: application/json
+
+{
+  "id" : "GatewayThree",
+  "name" : "Gateway Three",
+  "description" : "This is the third gateway.",
+  "type" : "REST",
+  "configuration" : "{\"endpoint\":\"http://localhost:8080/gateway-config/api\",\"username\":\"admin99\",\"password\":\"password\"}"
+}

@@ -1,0 +1,10 @@
+GET /SimpleEchoPublicTest/echo/1.0/path/to/app/resource admin/admin
+X-Custom-Header: MyValue
+
+----
+403
+
+{
+  "responseCode": 403,
+  "message": "API not public."
+}

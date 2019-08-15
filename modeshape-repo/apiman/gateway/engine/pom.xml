@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.apiman</groupId>
+    <artifactId>apiman-gateway</artifactId>
+    <version>1.5.2-SNAPSHOT</version>
+  </parent>
+  <artifactId>apiman-gateway-engine</artifactId>
+  <packaging>pom</packaging>
+  <name>apiman-gateway-engine</name>
+
+  <modules>
+    <module>beans</module>
+    <module>core</module>
+    <module>es</module>
+    <module>hawkular</module>
+    <module>hazelcast</module>
+    <module>influxdb</module>
+    <module>ispn</module>
+    <module>jdbc</module>
+    <module>osgi</module>
+    <module>policies</module>
+    <module>prometheus</module>
+    <module>redis</module>
+    <module>storage-common</module>
+    <module>vertx-eb-inmemory</module>
+    <module>vertx-polling</module>
+    <module>vertx-shareddata</module>
+    <module>3scale</module>
+  </modules>
+</project>

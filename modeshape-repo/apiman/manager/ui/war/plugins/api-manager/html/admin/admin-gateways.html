@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    
+  </head>
+
+  <body>
+    <div ng-include="headerInclude"></div>   
+    <div ng-controller="Apiman.AdminGatewaysController" class="page container admin-page" data-field="page" ng-cloak="" ng-show="pageState == 'loaded'">
+      <div class="row">
+        <div class="col-md-12">
+          <div ng-include="'plugins/api-manager/html/admin/admin_bc.include'"></div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Side Navigation -->
+        <div class="col-md-3">
+          <div ng-include="'plugins/api-manager/html/admin/admin_tabs.include'"></div>
+        </div>
+        <!-- Admin Content -->
+        <div class="col-md-9 admin-content">
+          <div class="container-fluid">
+            <div class="row">
+              <h2 class="title" data-field="heading" apiman-i18n-key="gateways">Gateways</h2>
+            </div>
+            <!-- Helpful hint -->
+            <div class="row">
+              <p class="col-md-10 apiman-label-faded" apiman-i18n-key="gateways-help-text" class="apiman-label-faded">Configure the gateways on which the APIs may be published.  If no gateways are configured, then users will not be able to publish their APIs!</p>
+            </div>
+            <!-- HR -->
+            <div class="row hr-row">
+              <hr/>
+            </div>
+            <!-- Filter and Actions -->
+            <div class="row">
+              <div class="apiman-filters apiman-gateways-filters">
+                <a apiman-i18n-key="new-gateway" data-field="toNewGateway" href="{{pluginName }}/new-gateway" class="btn btn-primary pull-right">New Gateway</a>
+              </div>
+            </div>
+            <!-- Table of Gateways -->
+            <div class="row">
+              <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" data-field="gateways">
+                  <thead>
+                    <tr>
+                      <th apiman-i18n-key="name">Name</th>
+                      <th apiman-i18n-key="config-type">Configuration Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-hide="gateways.length > 0">
+                      <td colspan="2">
+                        <div class="apiman-no-content">
+                          <p class="apiman-no-entities-description" apiman-i18n-key="no-gateways-found">No gateways have been added! Try adding a Gateway by clicking 'New Gateway' above - you'll need at least one, otherwise users will not be able to publish their APIs.</p>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr ng-repeat="gateway in gateways">
+                      <td><a href="{{ pluginName}}/admin/gateways/{{ gateway.id }}"><span>{{ gateway.name}}</span></a></td>
+                      <td>{{ gateway.type}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

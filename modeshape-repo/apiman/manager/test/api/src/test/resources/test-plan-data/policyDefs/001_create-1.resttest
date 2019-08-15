@@ -1,0 +1,32 @@
+POST /policyDefs admin/admin
+Content-Type: application/json
+
+{
+  "name" : "Policy Def One",
+  "description" : "This is the first policy def.",
+  "policyImpl" : "org.example.PolicyDefOne",
+  "icon" : "one",
+  "templates" : [
+    {
+      "language" : null,
+      "template" : "This is a simple MVEL template with no variables."
+    }
+  ]
+}
+----
+200
+Content-Type: application/json
+
+{
+  "id" : "PolicyDefOne",
+  "name" : "Policy Def One",
+  "description" : "This is the first policy def.",
+  "policyImpl" : "org.example.PolicyDefOne",
+  "icon" : "one",
+  "templates" : [
+    {
+      "language" : null,
+      "template" : "This is a simple MVEL template with no variables."
+    }
+  ]
+}

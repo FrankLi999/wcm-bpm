@@ -1,0 +1,25 @@
+PUT /clients admin/admin
+Content-Type: application/json
+
+{
+  "organizationId" : "GatewayApiTest",
+  "clientId" : "retired-test-client",
+  "version" : "1.0",
+  "apiKey" : "12345",
+  "contracts" : [
+    {
+      "apiOrgId" : "GatewayApiTest",
+      "apiId" : "echo",
+      "apiVersion" : "3.0"
+    }
+  ]
+}
+----
+404
+Content-Type: application/json
+X-API-Gateway-Error: true
+
+{
+  "errorType" : "ApiNotFoundException",
+  "message" : "API echo not found in Organization GatewayApiTest."
+}

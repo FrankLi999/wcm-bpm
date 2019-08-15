@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testPlan xmlns="urn:io.apiman.test:2014:02:testPlan">
+
+  <testGroup name="Test Pre-Publishing">
+    <test name="Not yet published">test-plan-data/simple/simple-echo/errors/000-not-published.resttest</test>
+  </testGroup>
+
+  <testGroup name="Configure the Gateway" endpoint="api">
+    <test name="Publish Api">test-plan-data/simple/simple-echo/setup/001-publish-api.resttest</test>
+    <test name="Register Client">test-plan-data/simple/simple-echo/setup/002-register-client.resttest</test>
+  </testGroup>
+
+  <testGroup name="Test the Echo Server through the Gateway">
+    <test name="Echo 1 (GET)">test-plan-data/simple/simple-echo/echo/001.resttest</test>
+    <test name="Echo 2 (PUT)">test-plan-data/simple/simple-echo/echo/002.resttest</test>
+    <test name="Echo 3 (POST)">test-plan-data/simple/simple-echo/echo/003.resttest</test>
+    <test name="Echo 4 (Query Params)">test-plan-data/simple/simple-echo/echo/004.resttest</test>
+    <test name="Echo 5 (No Trailing Slash)">test-plan-data/simple/simple-echo/echo/005-no-trailing-slash.resttest</test>
+    <test name="Echo 6 (Trailing Slash)">test-plan-data/simple/simple-echo/echo/006-trailing-slash.resttest</test>
+    <test name="Echo 7 (Strip 'apikey' Query Param)">test-plan-data/simple/simple-echo/echo/007-strip-query-param.resttest</test>
+  </testGroup>
+
+  <testGroup name="Test some error handling">
+    <test name="Echo 1 (404)">test-plan-data/simple/simple-echo/errors/001-404.resttest</test>
+    <test name="Echo 2 (403)">test-plan-data/simple/simple-echo/errors/002-403.resttest</test>
+    <test name="Echo 3 (409)">test-plan-data/simple/simple-echo/errors/003-409.resttest</test>
+  </testGroup>
+
+</testPlan>

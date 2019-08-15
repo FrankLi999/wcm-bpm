@@ -1,0 +1,9 @@
+PUT /gateways/GatewayOne admin/admin
+Content-Type: application/json
+
+{
+  "description" : "This is the first gateway. (updated)",
+  "configuration" : "{\"endpoint\":\"http://localhost:8080/gateway-config/api\",\"username\":\"admin99\",\"password\":\"zoomba19\"}"
+}
+----
+204

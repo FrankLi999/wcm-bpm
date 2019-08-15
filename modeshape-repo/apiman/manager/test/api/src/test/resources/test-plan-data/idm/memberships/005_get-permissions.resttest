@@ -1,0 +1,18 @@
+GET /permissions/user1 admin/admin
+----
+200
+Content-Type: application/json
+X-RestTest-ArrayOrdering: any
+
+{
+  "userId" : "user1",
+  "permissions" : [
+    {"name":"clientAdmin","organizationId":"TestOrganization1"},
+    {"name":"clientView","organizationId":"TestOrganization1"},
+    {"name":"planAdmin","organizationId":"TestOrganization1"},
+    {"name":"planView","organizationId":"TestOrganization1"},
+    {"name":"planEdit","organizationId":"TestOrganization1"} ]
+}
+
+
+

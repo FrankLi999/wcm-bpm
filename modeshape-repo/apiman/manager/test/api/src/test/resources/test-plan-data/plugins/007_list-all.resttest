@@ -1,0 +1,20 @@
+GET /plugins admin/admin
+----
+200
+Content-Type: application/json
+
+[ { "artifactId" : "apiman-test-plugin-1",
+    "createdBy" : "admin",
+    "description" : "This is version 2.0 of Plugin One.",
+    "groupId" : "io.apiman.test",
+    "name" : "Plugin One 2.0",
+    "version" : "2.0"
+  },
+  { "artifactId" : "apiman-test-plugin-2",
+    "createdBy" : "admin",
+    "description" : "This is the second plugin.",
+    "groupId" : "io.apiman.test",
+    "name" : "Plugin Two",
+    "version" : "1.0"
+  }
+]

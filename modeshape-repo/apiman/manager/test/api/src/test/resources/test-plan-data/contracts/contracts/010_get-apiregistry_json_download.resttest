@@ -1,0 +1,34 @@
+GET /downloads/${download-id}
+
+----
+200
+Content-Type: application/json
+Content-Disposition: attachment; filename=api-registry.json
+
+{
+  "apiKey" : "*",
+  "apis" : [
+    {
+        "httpEndpoint" : "http://example.org/endpoint",
+        "planId" : "Plan1",
+        "planName" : "Plan 1",
+        "planVersion" : "1.0",
+        "apiId" : "API1",
+        "apiName" : "API 1",
+        "apiOrgId" : "Organization1",
+        "apiOrgName" : "Organization 1",
+        "apiVersion" : "1.0"
+    },
+    {
+        "httpEndpoint" : "http://example.org/endpoint",
+        "planId" : "PlanA",
+        "planName" : "Plan A",
+        "planVersion" : "2.0",
+        "apiId" : "API2",
+        "apiName" : "API 2",
+        "apiOrgId" : "Organization2",
+        "apiOrgName" : "Organization 2",
+        "apiVersion" : "1.5"
+    }
+  ]
+}

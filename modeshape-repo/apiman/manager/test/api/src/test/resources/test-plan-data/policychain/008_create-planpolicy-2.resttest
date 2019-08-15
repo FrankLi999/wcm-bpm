@@ -1,0 +1,23 @@
+POST /organizations/TestOrganization/plans/Gold/versions/1.0/policies admin/admin
+Content-Type: application/json
+
+{
+  "definitionId" : "PolicyDefTwo",
+  "configuration" : "{\"message\" : \"Plan Policy 2\"}"
+}
+----
+200
+Content-Type: application/json
+X-RestTest-BindTo-planpolicy2-id: id
+
+{
+  "type" : "Plan",
+  "organizationId" : "TestOrganization",
+  "entityId" : "Gold",
+  "entityVersion" : "1.0",
+  "name" : "Policy Def Two",
+  "description" : "Policy Def Two: Plan Policy 2",
+  "definition" : {
+    "id" : "PolicyDefTwo"
+  }
+}

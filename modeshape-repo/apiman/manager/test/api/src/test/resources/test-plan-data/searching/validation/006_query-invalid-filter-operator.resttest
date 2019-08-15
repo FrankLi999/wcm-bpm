@@ -1,0 +1,16 @@
+POST /search/organizations admin/admin
+Content-Type: application/json
+
+{
+  "filters" : [
+    {
+      "name" : "id",
+      "value" : "TestOrganization1"
+    }
+  ]
+}
+----
+400
+Content-Type: application/json
+
+{"type":"InvalidSearchCriteriaException","errorCode":14001,"message":"Unsupported or missing search filter operator (filter #1)."}

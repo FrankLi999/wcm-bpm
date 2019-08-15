@@ -1,0 +1,16 @@
+<div class="row">
+  <a href="{{ pluginName }}/users/{{ entry.who }}">{{ entry.who }}</a>
+  <span apiman-i18n-key="audit.granted-memberships">granted membership(s) in </span>
+  <a class="emphasis" href="{{ pluginName }}/orgs/{{ entry.organizationId }}/plans">{{ entry.organizationId }}</a><span apiman-i18n-skip>.</span>
+</div>
+<div class="row boxed-row">
+  <ul>
+    <li ng-repeat="role in data.roles">
+      <span>
+        <a href="{{ pluginName }}/users/{{ data.userId }}/clients">{{ data.userId }}</a>
+        <span apiman-i18n-key="audit.was-given-role">was given role</span>
+        <span class="emphasis">{{ role }}</span>
+      </span>
+    </li>
+  </ul>
+</div>

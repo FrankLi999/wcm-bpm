@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+  </head>
+
+  <body>
+    
+    <div ng-include="headerInclude"></div>
+    <div ng-controller="Apiman.Error400Controller" class="container error-page" data-field="error-page">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="error-icon error-403 pull-right"></div>
+        </div>
+        <div class="col-md-8">
+          <div class="title" apiman-i18n-key="error-400-title">Bad Request!</div>
+          <div class="description" apiman-i18n-key="error-400-description">
+           Bad request!
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

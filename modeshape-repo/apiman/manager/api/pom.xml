@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.apiman</groupId>
+    <artifactId>apiman-manager</artifactId>
+    <version>1.5.2-SNAPSHOT</version>
+  </parent>
+  <artifactId>apiman-manager-api</artifactId>
+  <packaging>pom</packaging>
+  <name>apiman-manager-api</name>
+
+  <modules>
+    <module>beans</module>
+    <module>config</module>
+    <module>core</module>
+    <module>es</module>
+    <module>export-import</module>
+    <module>gateway</module>
+    <module>hawkular</module>
+    <module>ispn</module>
+    <module>jdbc</module>
+    <module>jpa</module>
+    <module>micro</module>
+    <module>migrator</module>
+    <module>rest</module>
+    <module>rest-impl</module>
+    <module>security</module>
+    <module>war</module>
+    <module>war/wildfly8</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>standard</id>
+      <activation>
+        <property>
+          <name>!skipTomcat</name>
+        </property>
+      </activation>
+      <modules>
+        <module>war/tomcat8</module>
+      </modules>
+    </profile>
+  </profiles>
+</project>

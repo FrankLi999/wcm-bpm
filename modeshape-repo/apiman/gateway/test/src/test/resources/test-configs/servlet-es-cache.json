@@ -1,0 +1,10 @@
+{
+    "factory" : "io.apiman.gateway.test.junit.servlet.ServletGatewayTestServerFactory",
+    "es" : true,
+    "config-files" : [
+      "servlet-es.properties"
+    ],
+    "config-properties" : {
+        "apiman-gateway.registry" : "io.apiman.gateway.engine.es.CachingESRegistry"
+    }
+}

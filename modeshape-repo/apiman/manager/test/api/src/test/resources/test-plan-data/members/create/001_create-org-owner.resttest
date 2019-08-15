@@ -1,0 +1,18 @@
+POST /roles admin/admin
+Content-Type: application/json
+
+{
+  "name" : "Organization Owner",
+  "autoGrant" : true,
+  "permissions" : [ "orgView", "orgEdit", "orgAdmin" ]
+}
+----
+200
+Content-Type: application/json
+X-RestTest-ArrayOrdering: any
+
+{
+  "id" : "OrganizationOwner",
+  "name" : "Organization Owner",
+  "permissions" : [ "orgView", "orgEdit", "orgAdmin" ]
+}

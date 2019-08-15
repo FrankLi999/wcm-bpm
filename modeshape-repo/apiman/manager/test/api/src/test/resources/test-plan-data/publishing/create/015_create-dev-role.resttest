@@ -1,0 +1,17 @@
+POST /roles admin/admin
+Content-Type: application/json
+
+{
+  "name" : "Dev Role",
+  "permissions" : [ "clientView", "clientEdit", "apiView", "apiEdit", "planView", "planEdit" ]
+}
+----
+200
+Content-Type: application/json
+X-RestTest-ArrayOrdering: any
+
+{
+  "id" : "DevRole",
+  "name" : "Dev Role",
+  "permissions" : [ "clientView", "clientEdit", "apiView", "apiEdit", "planView", "planEdit" ]
+}

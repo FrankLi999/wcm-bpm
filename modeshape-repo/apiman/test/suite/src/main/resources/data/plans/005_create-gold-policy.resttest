@@ -1,0 +1,21 @@
+POST /organizations/Test/plans/Gold/versions/1.0/policies ${apiman.suite.api-username}/${apiman.suite.api-password}
+Content-Type: application/json
+
+{
+  "definitionId" : "RateLimitingPolicy",
+  "configuration" : "{ \"limit\" : 100, \"granularity\" : \"Client\", \"period\" : \"Minute\" }"
+}
+----
+200
+Content-Type: application/json
+
+{
+  "type" : "Plan",
+  "organizationId" : "Test",
+  "entityId" : "Gold",
+  "entityVersion" : "1.0",
+  "name" : "Rate Limiting Policy",
+  "definition" : {
+    "id" : "RateLimitingPolicy"
+  }
+}

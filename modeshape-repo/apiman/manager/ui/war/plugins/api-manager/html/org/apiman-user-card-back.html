@@ -1,0 +1,26 @@
+<div class="apiman-card" data-field="card">
+  <div class="back active">
+    <div class="title">
+      <div class="explanation" data-field="editExplanation">Assign roles to {{member.userId}}</div>
+    </div>
+    <div class="body">
+      <div class="card-edit-details">
+        <div class="roles">
+          <select class="selectpicker" ng-model="updatedRoles" apiman-i18n-key="select-member-role" title="Select at least one role..."
+                  apiman-select-picker="" multiple ng-options="role.id as role.name for role in roles"
+                  ng-select="member.roles">
+          </select>
+        </div>
+        <div class="actions" style="margin-top: 5px">
+          <button class="btn btn-primary btn-xs btn-cliently" apiman-i18n-key="apply" placeholder="Applying..." data-icon="fa-cog" ng-click="updateRoles(updatedRoles) && flipCard(front)">Apply</button>
+
+          <button class="btn btn-default btn-xs btn-cancel" ng-click="flipCard(front)" apiman-i18n-key="cancel">Cancel</button>
+
+          <button class="btn btn-danger btn-xs btn-revoke-all" apiman-i18n-key="revoke-all" placeholder="Revoking..." ng-click="revokeAll()" data-icon="fa-cog">Revoke All</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-include="'plugins/api-manager/html/modals/confirmModal.html'"></div>
+</div>

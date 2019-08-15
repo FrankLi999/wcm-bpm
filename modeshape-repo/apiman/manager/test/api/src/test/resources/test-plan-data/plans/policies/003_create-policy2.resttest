@@ -1,0 +1,29 @@
+POST /organizations/Organization1/plans/Plan1/versions/1.0/policies admin/admin
+Content-Type: application/json
+
+{
+  "definitionId" : "PolicyDef",
+  "configuration" : "{\"jerk\" : \"store\"}"
+}
+----
+200
+Content-Type: application/json
+X-RestTest-BindTo-policy-id-2: id
+
+{
+  "type" : "Plan",
+  "organizationId" : "Organization1",
+  "entityId" : "Plan1",
+  "entityVersion" : "1.0",
+  "name" : "Policy Def",
+  "definition" : {
+    "id" : "PolicyDef",
+    "name" : "Policy Def",
+    "description" : "This is the test policy def.",
+    "policyImpl" : "org.example.policies.PolicyDef",
+    "icon" : "policy-def"
+  },
+  "configuration" : "{\"jerk\" : \"store\"}",
+  "createdBy" : "admin",
+  "modifiedBy" : "admin"
+}

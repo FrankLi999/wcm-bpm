@@ -1,0 +1,1966 @@
+
+body {
+  line-height: normal;
+  font-size: 13px;
+}
+
+textarea#api-definition.apiman-form-data {
+  height: 100px;
+}
+
+textarea#api-definition.apiman-form-data.myFocus {
+  height: 450px;
+}
+
+textarea#api-definition.apiman-form-data.myBlur {
+  height: 100px;
+}
+
+.actions .btn:focus, .actions .btn:active:focus {
+  outline: none;
+}
+
+.ui-select-bootstrap .ui-select-choices-row>a:hover, .ui-select-bootstrap .ui-select-choices-row>a:focus {
+  text-decoration: none;
+  color: #262626;
+  background-color: #d4edfa;
+  border-color: #b3d3e7;
+}
+
+.ui-select-bootstrap .ui-select-choices-row.active>a {
+  background-color: #0099d3;
+  border-color: #0076b7;
+  color: #fff;
+  outline: 2px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+  text-decoration: none;
+}
+
+a.ui-select-match-close {
+  background-image: url('../img/select2x2.png') !important;
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-size: 60px 40px !important;
+  width: 12px;
+  height: 13px;
+  font-size: 1px;
+  right: 3px;
+  top: 6px;
+  zoom: 1;
+  display: block;
+  position: absolute;
+  left: 3px;
+}
+
+a.ui-select-match-close:hover {
+  background-position: right -11px;
+}
+
+.api-type {
+  margin-top: -1px;
+}
+
+#apis-filter-b, #apis-filter-f, .api-namespaces button, .api-type button {
+  height: 28px;
+}
+
+.bootstrap-select.btn-group .dropdown-menu .selected a span.apiman-label-faded {
+  color: white;
+}
+
+.apiman-wrong-status, .apiman-not-permitted {
+  display: none !important;
+}
+
+.apiman-about-page table {
+  box-shadow: 2px 2px 3px rgb(221, 221, 221);
+}
+
+.apiman-about-page .about-logo {
+  background-image: url(../img/about-logo.gif);
+  background-repeat: no-repeat;
+  background-position: top left;
+  width: 215px;
+  height: 259px;
+  margin-top: 30px;
+}
+
+.apiman-about-page .about-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.apiman-form-control[readonly] {
+  cursor: auto;
+}
+
+.capitalized {
+  text-transform: capitalize;
+}
+
+.btn-search {
+  margin-left: 5px;
+  line-height: 22px;
+}
+
+.policy-grabber {
+  background-image: url(../img/grabber.png);
+  background-repeat: repeat-y;
+  cursor: move;
+  width: 10px;
+}
+
+textarea.dropping {
+  border: 1px dashed rgb(106, 131, 249);
+  background-color: rgb(217, 223, 253);
+}
+
+.apiman-search-box input {
+  width: 100%;
+  padding: 3px;
+  border: 1px solid rgb(183, 183, 183);
+}
+.apiman-search-box button.btn {
+  margin-left: 0px;
+  border-left: 0px;
+  box-shadow: none;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.vspacer-10, .vspacer-20 {
+  width: 100%;
+  float: left;
+}
+
+.vspacer-10 {
+  height: 10px;
+}
+
+.vspacer-20 {
+  height: 20px;
+}
+
+.movable {
+  cursor: move;
+}
+
+.container-fluid .row .col-no-padding {
+  padding: 0px;
+}
+
+.container-fluid .cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.apiman-form-control {
+  height: 28px;
+}
+
+textarea.apiman-form-data {
+  width: 780px;
+  height: 400px;
+  font-size: 11px;
+}
+
+.emphasis {
+  font-weight: bold;
+}
+
+.table-with-details form {
+  padding: 10px;
+}
+
+.table-with-details form label {
+  margin-bottom: 0px;
+}
+
+
+@keyframes progressPulse {
+  from {
+    border-bottom-color: rgb(25, 157, 222);
+  }
+  55% {
+    border-bottom-color: #89d7ff;
+  }
+  to {
+    border-bottom-color: rgb(25, 157, 222);
+  }
+}
+#apiman-progress-indicator {
+  border-bottom: 2px solid rgb(25, 157, 222);
+}
+#apiman-progress-indicator.loading {
+  animation-duration: 1.5s;
+  animation-name: progressPulse;
+  animation-iteration-count: infinite;
+}
+
+.amg.navbar-pf {
+  border-top: none;
+}
+
+#apiman-header {
+  background-color: rgb(36, 52, 70);
+  border-bottom: 1px solid black;
+}
+#apiman-header .main-header {
+  padding-top: 5px;
+}
+#apiman-header .logo {
+  background-image: url(../img/logo-header.png);
+  margin-top: 3px;
+  width: 120px;
+  height: 30px;
+  float: left;
+}
+#apiman-header .search {
+  font-size: 12px;
+  margin-top: 10px;
+  margin-left: 20px;
+  padding: 5px;
+  width: 200px;
+}
+#apiman-header .dropdown-toggle {
+  color: #eee;
+  font-size: 13px;
+}
+#apiman-header .user-menu {
+  font-size: 15px;
+  margin-top: 10px;
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+}
+#apiman-header .user-menu a {
+}
+#apiman-header h2 {
+  font-size: 14px;
+  color: white;
+  margin: 8px 0px 0px 0px;
+}
+#apiman-header.apiman-f8 {
+  background-color: black;
+}
+
+.alert.no-icon {
+  padding-left: 10px;
+}
+
+.alert-warning {
+  background-color: rgb(255,213,185)
+}
+.alert-warning .pficon {
+  color: rgb(236, 122, 8);
+}
+
+.alert-danger {
+  background-color: rgb(255,242,245);
+}
+.alert-danger .pficon {
+  color: #C00;
+}
+
+.apiman-label {
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 1px 8px;
+  color: white;
+  border-radius: 3px;
+  border: 1px solid white;
+}
+.apiman-label-default {
+  background-color: #999999;
+}
+.apiman-label-primary {
+  background-color: #1cace9;
+}
+.apiman-label-success {
+  background-color: #5cb75c;
+}
+.apiman-label-info {
+  background-color: #27799c;
+}
+.apiman-label-warning {
+  background-color: #eb7720;
+}
+.apiman-label-danger {
+  background-color: #c90813;
+}
+.apiman-label:hover {
+  cursor: default;
+}
+.apiman-label-default:hover {
+  background-color: #999999;
+  border-color: #666;
+}
+.apiman-label-primary:hover {
+  background-color: #1cace9;
+  border-color: #097BAB;
+}
+.apiman-label-success:hover {
+  background-color: #5cb75c;
+  border-color: #358C35;
+}
+.apiman-label-info:hover {
+  background-color: #27799c;
+  border-color: #0C5F82;
+}
+.apiman-label-warning:hover {
+  background-color: #eb7720;
+  border-color: #B56C19;
+}
+.apiman-label-danger:hover {
+  background-color: #c90813;
+  border-color: #870008;
+}
+
+.apiman-form-label {
+  margin-right: 10px;
+  font-weight: 700;
+  color: rgb(85, 85, 85);
+}
+
+#form-page .bootstrap-select {
+  width: 300px;
+}
+
+#form-page .inline-apiman-auto-width {
+  width: auto;
+}
+
+#form-page .inline-apiman-form-control {
+  display: inline; 
+  margin: 0px 5px;
+  width: auto;
+}
+
+#form-page .apiman-inline-form-dropdown, .apiman-inline-form-dropdown, .bootstrap-select .apiman-inline-form-dropdown {
+  height: 28px;
+  display: inline;
+  float: none;
+  margin: 0px 3px 5px 3px;
+  width: auto;
+}
+
+.input-search {
+  width: 300px;
+  float: left;
+}
+
+div.page {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.dash-group {
+  border: 1px solid rgb(200, 200, 200);
+  width: 49%;
+  float: left;
+  margin-top: 20px;
+  box-shadow: 2px 2px 3px rgb(221, 221, 221);
+}
+.dash-group:hover {
+  border: 1px solid rgb(175, 175, 190);
+  box-shadow: 2px 2px 3px rgb(201, 201, 201);
+}
+.dash-group .title {
+  background-color: #f6f6f6;
+  padding: 8px;
+  color: #666;
+  font-weight: bold;
+  font-size: 12px;
+  border-bottom: 1px solid rgb(200, 200, 200);
+}
+.dash-group .description {
+  padding: 10px;
+}
+.dash-group .actions {
+  padding: 10px;
+}
+.dash-group .actions ul {
+  margin: 0px;
+  margin-left: 40px;
+  padding: 0px;
+}
+.dash-group .actions ul li {
+  list-style: circle;
+  padding: 2px;
+}
+
+.dash-admin-group {
+  border: 1px solid rgb(254, 201, 201);
+}
+.dash-admin-group:hover {
+  border: 1px solid rgb(224, 181, 181);
+  box-shadow: 2px 2px 3px rgb(211, 201, 201);
+}
+.dash-admin-group .title {
+  background-color: rgb(254, 227, 227);
+  color: #666;
+  border-bottom: 1px solid rgb(254, 201, 201);
+}
+.dash-admin-group a {
+  color: rgb(217, 82, 79);
+}
+
+.browse-items {
+}
+.browse-items .count {
+  margin-bottom: 15px;
+}
+.browse-items .item {
+  position: relative;
+  padding: 10px;
+  width: 330px;
+  border: 1px solid rgb(218, 218, 218);
+  float: left;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+.browse-items .item.card {
+  height: 110px;
+  overflow: hidden;
+}
+.browse-items .item:hover {
+  border: 1px solid rgb(200, 200, 200);
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 3px #ddd;
+}
+.browse-items .item .title {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.browse-items .item .title .icon {
+  margin-right: 5px;
+  color: #666;
+}
+.browse-items .item .description {
+  color: #666;
+  min-height: 40px;
+}
+.browse-items .item .actions {
+  margin-top: 20px;
+  text-align: center;
+}
+.browse-items .item .actions div {
+  text-align: left;
+}
+.browse-items .item .ismember {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0;
+  width: 57px;
+  height: 57px;
+  background-image: url(../img/is-member.png);
+}
+
+.apiman-label-faded {
+  color: #789;
+}
+.apiman-label-small {
+  font-size: 10px;
+}
+
+.apiman-entitysummary {
+  padding: 5px;
+  border: 1px solid rgb(200, 200, 200);
+  box-shadow: 2px 2px 3px rgb(221, 221, 221);
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 10px;
+}
+.apiman-entitysummary .apiman-header {
+  font-size: 19px;
+  font-weight: bold;
+  color: #666;
+}
+.apiman-entitysummary .apiman-subheader {
+  font-size: 16px;
+  color: #666;
+}
+.apiman-entitysummary hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.apiman-entitysummary .metadata-with-icon .fa {
+  float: left;
+  line-height: 14px;
+  color: #456;
+}
+.apiman-entitysummary .metadata-with-icon div {
+  float: left;
+  margin-left: 3px;
+  min-height: 16px;
+  line-height: 14px;
+}
+.apiman-entitysummary .description {
+  margin-top: 8px;
+}
+
+.apiman-entitytabs .nav-tabs {
+  font-size: 15px;
+}
+
+.apiman-entitytabs .nav-tabs li a {
+  color: rgb(34, 34, 34);
+}
+
+.apiman-entitytabs .nav-tabs li.active a {
+  color: rgb(0, 153, 211);
+}
+
+.apiman-activity .apiman-summaryrow hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.apiman-activity .apiman-summaryrow .fa {
+  color: #456;
+}
+.apiman-activity .apiman-summaryrow .boxed-row {
+  margin-left: 0px;
+  margin-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: #EFEFFF;
+  border-left: 1px solid #DDDDFF;
+  padding: 5px;
+  font-size: 11px;
+}
+.apiman-activity .apiman-summaryrow .boxed-row div.activity-value {
+  background-color: rgb(255, 251, 230);
+  padding: 3px;
+  border: 1px solid #ddd;
+}
+.apiman-activity .apiman-summaryrow .boxed-row ul {
+  margin-bottom: 0px;
+  padding-left: 20px;
+}
+
+.apiman-divider-20 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.apiman-divider-40 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.apiman-divider-80 {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.apiman-filters {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(221, 221, 221);
+  float: left;
+  width: 100%;
+}
+.apiman-filters .input-search {
+  margin-right: 5px;
+}
+.apiman-filters .btn {
+  margin-left: 8px;
+}
+
+.tab-content {
+  margin-top: 10px;
+}
+
+.apiman-summaryrow-icon {
+  min-width: 45px;
+  padding-left: 5px;
+  padding-right: 5px;
+  float: right;
+  color: #444;
+  text-decoration: none;
+}
+.apiman-summaryrow-icon:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+.apiman-summaryrow .title {
+  font-weight: bold;
+}
+.apiman-summaryrow .title .secondary {
+  color: #333;
+  font-weight: normal;
+  font-style: italic;
+}
+.apiman-summaryrow .fa {
+  float: left;
+  line-height: 14px;
+}
+.apiman-summaryrow .fa-inline {
+  float: none;
+}
+.apiman-summaryrow button .fa {
+  float: none;
+}
+.apiman-summaryrow .title-summary-item {
+  font-size: 11px;
+  float: left;
+  margin-left: 2px;
+  line-height: 14px;
+}
+
+.apiman-organizations hr, .apiman-apis hr, .apiman-clients hr, .apiman-plans hr, .apiman-members hr, .apiman-contracts hr, .apiman-policies hr, .apiman-roles hr {
+  margin: 8px;
+}
+
+.apiman-plans .apiman-policy-chain {
+  max-height: 200px;
+  overflow: auto;
+}
+
+.apiman-timestamp {
+  color: #777;
+  margin-left: 3px;
+  float: left;
+  line-height: 14px;
+}
+
+ol.breadcrumb {
+  margin-bottom: 5px;
+}
+
+.apiman-entity-summary {
+  border: 1px solid rgb(200, 200, 200);
+  box-shadow: 2px 2px 3px rgb(221, 221, 221);
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.apiman-entity-summary .apiman-entity-breadcrumb {
+}
+.apiman-entity-summary .apiman-entity-breadcrumb .title {
+  font-size: 18px;
+  line-height: 48px;
+}
+.apiman-entity-summary .apiman-entity-breadcrumb .title .breadcrumb-icon {
+  color: rgb(83, 107, 133);
+  font-size: 1.5em;
+  line-height: 48px;
+  float: left;
+}
+.apiman-entity-summary .apiman-entity-breadcrumb .title div {
+  line-height: 48px;
+  float: left;
+  margin-left: 8px;
+}
+.apiman-entity-summary .apiman-entity-breadcrumb .title .divider {
+  color: #999;
+}
+.apiman-entity-summary .apiman-entity-breadcrumb .title .versions {
+  float: right;
+  line-height: normal;
+  padding-top: 5px;
+}
+.apiman-entity-summary .apiman-entity-breadcrumb .title .versions .bootstrap-select:not([class*="span"]):not([class*="col-"]):not([class*="apiman-form-control"]) {
+  float: left;
+  width: 140px;
+}
+.apiman-entity-summary .apiman-entity-breadcrumb .title .versions div {
+  float: none;
+}
+.apiman-entity-summary .apiman-entity-breadcrumb hr {
+  margin: 8px;
+}
+
+.apiman-entity-summary .apiman-entity-metadata {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.apiman-entity-summary .apiman-entity-metadata .title {
+  color: rgb(85, 85, 85);
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: -5px;
+}
+
+.apiman-entity-nav {
+  font-size: 15px;
+}
+
+.apiman-entity-nav .nav-pills li {
+  margin-top: 0px;
+}
+.apiman-entity-nav .nav-pills li a {
+  border-right: 1px solid rgb(221, 221, 221);
+  border-radius: 0px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  color: rgb(34, 34, 34);
+}
+.apiman-entity-nav .nav-pills li a:hover {
+}
+.apiman-entity-nav .nav-pills li.active a:hover, .apiman-entity-nav .nav-pills li.first a:hover, .apiman-entity-nav .nav-pills li.last a:hover {
+  text-decoration: none;
+}
+.apiman-entity-nav .nav-pills li.active a {
+  background-color: white;
+  color: rgb(0, 153, 211);
+  border-right: 0px;
+  border-top: 1px solid rgb(221, 221, 221);
+  border-bottom: 1px solid rgb(221, 221, 221);
+}
+.apiman-entity-nav .nav-pills li.first a:hover {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+.apiman-entity-nav .nav-pills li.last a:hover {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+.apiman-entity-nav .nav-pills li.first a:hover, .apiman-entity-nav .nav-pills li.last a:hover {
+  background-color: white;
+}
+
+.apiman-entity-overview h2 {
+  font-size: 18px;
+  text-decoration: underline;
+}
+
+.apiman-entity-content {
+  padding: 10px;
+}
+.apiman-entity-content .title {
+  color: #555;
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+.apiman-entity-content .apiman-summaryrow .title {
+  font-size: 13px;
+}
+.apiman-entity-content .description {
+  color: #243446;
+  margin-bottom: 12px;
+}
+.apiman-entity-content .description.apiman-label-faded {
+  color: #789;
+}
+.apiman-entity-content .apiman-summaryrow .description {
+  margin-bottom: 0px;
+}
+.apiman-entity-content .apiman-input-ro {
+  cursor: auto;
+}
+.apiman-entity-content .actions {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.entity-info-with-icon {
+  min-height: 16px;
+}
+.entity-info-with-icon .fa {
+  color: #456;
+}
+
+.apiman-entity-action {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.apiman-entity-new {
+  margin-top: 30px;
+}
+.apiman-entity-new .title {
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgb(238, 238, 238);
+  color: rgb(85, 85, 85);
+}
+.apiman-entity-new .divider {
+  float: left;
+  font-size: 22px;
+  color: #999;
+  line-height: normal;
+}
+.apiman-entity-new dl {
+  float: left;
+  margin-bottom: 10px;
+}
+.apiman-entity-new dl.org, .apiman-entity-new dl.slash {
+  margin-right: 10px;
+}
+.apiman-entity-new dl.name {
+}
+.apiman-entity-new dt {
+  padding-bottom: 0px;
+  margin-top: 8px;
+  color: #555;
+}
+.apiman-entity-new .entityname {
+  width: 300px;
+}
+.apiman-entity-new .description {
+  width: 700px;
+}
+.apiman-entity-new .hr-row {
+  margin-top: -10px;
+  padding-top: 0px;
+}
+.apiman-entity-new .btn-cancel {
+  margin-left: 5px;
+}
+.apiman-entity-new .input-search {
+  width: 300px;
+  float: left;
+}
+.apiman-entity-new .input-search-results {
+  max-width: 500px;
+}
+.apiman-entity-new .input-search-results .panel-body {
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 200px;
+}
+.apiman-entity-new .input-search-results .item {
+  width: 100%;
+  float: left;
+  line-height: 22px;
+  cursor: pointer;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: transparent;
+}
+.apiman-entity-new .input-search-results .item:hover {
+  border-color: rgb(179, 211, 231);
+  background-color: rgb(212, 237, 250);
+  text-decoration: none;
+}
+.apiman-entity-new .input-search-results .item:focus {
+  text-decoration: none;
+}
+.apiman-entity-new .input-search-results .item.selected {
+  color: white;
+  border-color: rgb(0, 118, 183);
+  background-color: rgb(0, 153, 211);
+}
+.apiman-entity-new .btn-search {
+  float: left;
+}
+.apiman-entity-new h3 hr {
+  margin: 5px 0px 20px 0px;
+  padding: 0px;
+}
+.apiman-entity-new .apiman-box {
+  border: 1px solid rgb(222, 222, 222);
+  border-radius: 5px;
+  padding-top: 10px;
+}
+
+.apiman-contracts .apiman-summaryrow .actions {
+  visibility: hidden;
+  float: right;
+}
+.apiman-contracts .apiman-summaryrow:hover .actions {
+  visibility: visible;
+}
+
+.apiman-policies .apiman-summaryrow {
+}
+.apiman-policies .apiman-summaryrow .container-fluid {
+  float: left;
+  width: 90%;
+}
+.apiman-policies .apiman-summaryrow .actions {
+  visibility: hidden;
+  float: right;
+}
+.apiman-policies .apiman-summaryrow:hover .actions {
+  visibility: visible;
+}
+.apiman-policies .apiman-summaryrow .actions span {
+  color: #789;
+}
+.apiman-policies .apiman-summaryrow .apiman-policy-icon {
+  color: rgb(83, 107, 133);
+  float: left;
+  font-size: 34px;
+  padding-right: 8px;
+  line-height: 36px;
+}
+.apiman-policies .apiman-summaryrow .description {
+  margin-bottom: 5px;
+}
+.apiman-policies .apiman-summaryrow hr {
+  clear: both;
+}
+.apiman-policies .row .col {
+  float: left;
+  margin-left: 10px;
+}
+.apiman-policies .row .col-70 {
+  width: 70%;
+}
+.apiman-policies .row .policy-grabber {
+  float: left;
+  margin-right: 10px;
+}
+.apiman-policies .as-sortable-placeholder {
+  padding: 5px 0px 10px 0px;
+}
+.apiman-policies .as-sortable-placeholder {
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 32px;
+  color: rgb(63, 146, 210);
+  border: 1px dashed #987;
+  opacity: 0.9;
+}
+.apiman-policies .as-sortable-item {
+  -ms-touch-action: none;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.apiman-no-entities-description {
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 1.3;
+  color: rgb(136, 136, 136);
+  background-color: #F2F2FA;
+  border: 2px solid rgb(204, 204, 204);
+}
+.apiman-no-entities-arrow {
+  float: right;
+  background-image: url(../img/new-entity-arrow.png);
+  background-position: top left;
+  width: 69px;
+  height: 69px;
+  margin-right: 25px;
+}
+
+.apiman-cards {
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-top: 10px;
+}
+.apiman-cards div {
+  float: left;
+}
+.apiman-cards .apiman-card {
+  width: 320px;
+  border: 1px solid rgb(204, 204, 204);
+  box-shadow: 2px 2px 3px #ddd;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  min-height: 110px;
+}
+.apiman-cards .apiman-card .front {
+  display: none;
+}
+.apiman-cards .apiman-card .back {
+  display: none;
+}
+.apiman-cards .apiman-card .front.active {
+  display: inherit;
+}
+.apiman-cards .apiman-card .back.active {
+  display: inherit;
+}
+.apiman-cards .apiman-card .title {
+  width: 318px;
+  border-bottom: 1px solid rgb(204, 204, 204);
+  background-color: #fafafa;
+}
+.apiman-cards .apiman-card .title .name {
+  line-height: 24px;
+  margin-left: 5px;
+}
+.apiman-cards .apiman-card .title .actions {
+  line-height: 24px;
+  margin-right: 5px;
+  float: right;
+}
+.apiman-cards .apiman-card .body {
+  width: 318px;
+}
+.apiman-cards .apiman-card .body .card-icon {
+}
+.apiman-cards .apiman-card .body .card-icon i.fa {
+  font-size: 4em;
+  line-height: 75px;
+  color: #bbb;
+  width: 75px;
+  text-align: center;
+}
+.apiman-cards .apiman-card .body .card-details {
+  width: 243px;
+  padding-top: 10px;
+  max-height: 83px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.apiman-cards .apiman-card .body .card-details .card-details-item {
+  width: 243px;
+}
+.apiman-cards .apiman-card .body .card-details .card-details-item i {
+  float: left;
+  line-height: 16px;
+}
+.apiman-cards .apiman-card .body .card-details .card-details-item .apiman-timestamp {
+  line-height: 16px;
+}
+.apiman-cards .apiman-card .body .card-details .card-details-item .card-label {
+}
+.apiman-cards .apiman-card .body .card-details .card-details-item .card-value {
+  margin-left: 5px;
+}
+.apiman-cards .apiman-card .body .card-edit-details {
+  padding: 5px;
+  width: 318px;
+}
+.apiman-cards .apiman-card .title .explanation {
+  line-height: 24px;
+  padding-left: 5px;
+}
+.apiman-cards .apiman-card .body .card-edit-details .roles {
+  padding-top: 5px;
+  width: 308px;
+}
+.apiman-cards .apiman-card .body .card-edit-details .roles .bootstrap-select {
+  width: 306px;
+}
+.apiman-cards .apiman-card .body .card-edit-details .actions {
+  width: 308px;
+}
+.apiman-cards .apiman-card .body .card-edit-details .actions button {
+  float: left;
+  margin-right: 5px;
+}
+.apiman-cards .apiman-card .body .card-edit-details .actions button.btn-revoke-all {
+  float: right;
+  margin-right: 2px;
+}
+
+.apiman-plan-selector {
+  padding: 10px;
+}
+.apiman-plan-selector .title {
+  font-size: 16px;
+  font-weight: normal;
+  margin-left: 6px;
+}
+.apiman-plan-selector hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#page-content .apiman-plan-selector div.bootstrap-select {
+  width: auto;
+  min-width: 100px;
+}
+
+.error-page {
+  margin-top: 30px;
+}
+.error-page .title {
+  font-size: 18px;
+  font-weight: bold;
+}
+.error-page .description {
+  font-size: 14px;
+  color: #444;
+}
+.error-page .header {
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.error-page .errorMessage {
+  width: 100%;
+  cursor: auto;
+  margin-top: 5px;
+}
+.error-icon {
+  width: 128px;
+  height: 128px;
+  background-repeat: no-repeat;
+  background-position: top left;
+}
+.error-403 {
+  background-image: url(../img/error-403.png);
+}
+.error-404 {
+  background-image: url(../img/error-404.png);
+}
+.error-409 {
+  background-image: url(../img/error-409.png);
+}
+.error-500 {
+  background-image: url(../img/error-500.png);
+}
+.error-0 {
+  background-image: url(../img/error-0.png);
+}
+
+.consumer-top-header {
+  margin-top: 0px;
+}
+
+.consumer-header {
+  margin-top: 0px;
+  border-bottom: 1px solid rgb(238, 238, 238);
+  padding-bottom: 5px;
+}
+
+.consumer-section {
+  float: left;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.consumer-section .icon {
+  line-height: 18px;
+  color: rgb(63, 146, 210);
+  margin-right: 3px;
+}
+
+.form.policy-config {
+  margin-bottom: 10px;
+}
+.form.policy-config.default {
+  width: 100%;
+}
+.form.policy-config.default span {
+  font-style: italic;
+}
+.form.policy-config.default textarea {
+  width: 100%;
+  height: 225px;
+  text-decoration: none;
+}
+
+.form.policy-config input[type=text].apiman-form-control {
+  width: 425px;
+}
+.form.policy-config input[type=text].apiman-form-control-small {
+  width: 200px;
+}
+
+
+
+div.admin-page {
+}
+
+div.admin-page .breadcrumb {
+  border-bottom: 1px solid rgb(221, 221, 221);
+  margin-bottom: 15px;
+}
+
+div.admin-page .side-nav {
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 2px;
+  padding: 2px;
+}
+
+div.admin-page .admin-content h2 {
+  margin-top: 10px;
+}
+
+div.admin-page .admin-content .hr-row hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+div.admin-page .admin-content .apiman-summaryrow .permissions {
+  padding-left: 8px;
+  padding-right: 150px;
+}
+
+div.admin-page .admin-content .apiman-summaryrow .emphasis {
+  color: #555;
+}
+
+.table > tbody > tr > td > a:hover {
+  text-decoration: underline;
+}
+
+.apiman-settings .settings-detail {
+  padding: 20px;
+  border: 1px solid rgb(200, 200, 200);
+  background-color: rgb(249, 249, 249);
+  box-shadow: 2px 2px 3px rgb(221, 221, 221);
+}
+
+.form-table {
+  margin-top: 5px;
+}
+
+.form-table td {
+  padding: 3px;
+}
+
+.form-table .td-label {
+  font-weight: bold;
+  color: #666;
+  padding-left: 10px;
+}
+
+.modal-dialog {
+  z-index: 1050;
+}
+
+.modal-header {
+  border-bottom: 1px solid rgb(238, 238, 238);
+}
+
+.modal-body {
+  padding: 25px;
+}
+
+.modal-footer {
+  border-top: 1px solid rgb(238, 238, 238);
+  margin-top: 0px;
+  padding: 15px;
+}
+
+#descriptionWrapper {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 20px;
+  overflow: auto;
+  height: auto;
+  border-radius: 0 3px 3px 0;
+}
+
+.editable-options {
+  -webkit-margin-before: -4px;
+}
+
+div.editable-click { 
+  color: black;
+  border-bottom: hidden;
+  border: 1px solid white;
+}
+
+div.editable-click:hover { 
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 3px 0px 0px 3px;
+  padding: 5px;
+  cursor: text;
+  color: black;
+}
+
+.editable-wrap {
+    width: 100% !important;
+    overflow: hidden;
+}
+
+.apiman-inline-edit-overlay {
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 3px 0px 0px 3px;
+  padding: 5px;
+  cursor: text;
+}
+
+.apiman-inline-edit-overlay-edit {
+  border: 1px solid rgb(200, 200, 200);
+  border-left: none;
+  border-radius: 0px 3px 3px 0px;
+  padding: 5px;
+  cursor: pointer;
+  background-color: #eee;
+  background-image: linear-gradient(rgb(250, 250, 250) 0px, rgb(237, 237, 237) 100%);
+  color: #666;
+}
+.apiman-inline-edit-overlay-edit:hover {
+  background-image: none;
+  background-color: rgb(238, 238, 238);
+  color: #333;
+}
+
+.apiman-inline-edit textarea.editable-input {
+  border: 1px solid rgb(200, 200, 200);
+  padding: 5px;
+  border-radius: 3px 3px 3px 0px;
+  width: 100%;
+}
+
+.apiman-inline-edit {
+  margin-right: 25px;
+}
+.apiman-inline-edit .btn {
+  border-top: 0px;
+}
+.apiman-inline-edit .inline-save-btn {
+  border-right: 0px;
+}
+
+textarea.apiman-endpoint {
+  border: 1px solid rgb(200, 200, 200);
+  padding: 5px;
+}
+
+
+#new-contract-form .bootstrap-select {
+  width: auto;
+}
+
+#new-contract-form .slash {
+  font-size: 18px;
+  margin-left: 5px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+#new-contract-form .title {
+  background-color: #999;
+  color: white;
+  font-weight: bold;
+  margin: 0px;
+  padding: 5px;
+}
+
+#new-contract-form .body {
+  padding: 10px;
+}
+
+#new-contract-form .client, #new-contract-form .plan, #new-contract-form .api {
+  border: 1px solid #999;
+  border-radius: 5px;
+}
+#new-contract-form .client.selected, #new-contract-form .plan.selected, #new-contract-form .api.selected {
+  border: 1px solid #3776ab;
+  border-radius: 5px;
+}
+#new-contract-form .client.selected .title, #new-contract-form .plan.selected .title, #new-contract-form .api.selected .title {
+  background-color: #3776ab;
+}
+#new-contract-form .client:hover, #new-contract-form .plan:hover, #new-contract-form .api:hover {
+  box-shadow: 3px 3px 5px #ccc;
+}
+#new-contract-form .plan {
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+#new-contract-form .to-plan-arrow {
+  height: 40px;
+  background-image: url(../img/new-contract-arrow-top.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#new-contract-form .to-api-arrow {
+  height: 60px;
+  background-image: url(../img/new-contract-arrow-bottom.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.center-content {
+  text-align: center;
+}
+.center-content * {
+  text-align: left;
+}
+
+.modal-select-api .panel {
+  margin-top: 10px;
+}
+.modal-select-api .input-search-results {
+  width: 100%;
+}
+.modal-select-api .input-search-results .panel-body {
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 175px;
+}
+.modal-select-api .input-search-results .item {
+  width: 100%;
+  float: left;
+  line-height: 22px;
+  cursor: pointer;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: transparent;
+}
+.modal-select-api .input-search-results .item:hover {
+  border-color: rgb(179, 211, 231);
+  background-color: rgb(212, 237, 250);
+  text-decoration: none;
+}
+.modal-select-api .input-search-results .item:focus {
+  text-decoration: none;
+}
+.modal-select-api .input-search-results .item.selected {
+  color: white;
+  border-color: rgb(0, 118, 183);
+  background-color: rgb(0, 153, 211);
+}
+.modal-select-api .btn-search {
+  float: left;
+}
+.apiman-entity-new h3 hr {
+  margin: 5px 0px 20px 0px;
+  padding: 0px;
+}
+.modal-select-api .apiman-box {
+  border: 1px solid rgb(222, 222, 222);
+  border-radius: 5px;
+  padding-top: 10px;
+}
+
+.modal .apiman-form-label {
+  font-size: 12px;
+  margin-right: 10px;
+  line-height: 24px;
+  display: block;
+}
+
+#selectApiModal .version {
+  display: block;
+  width: auto;
+}
+
+#apiman-swagger.swagger-section .swagger-ui-wrap {
+  max-width: none;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+#apiman-swagger.swagger-section .swagger-ui-wrap a {
+  cursor: pointer;
+}
+#apiman-swagger.swagger-section #resources_container {
+  padding: 0px;
+  margin: 0px;
+  width: auto;
+}
+#apiman-swagger.swagger-section #resources_container #resources {
+  padding: 0px;
+  margin: 0px;
+}
+#apiman-swagger.swagger-section #resources_container #resources .resource h2 {
+  margin: 0px;
+}
+#apiman-swagger.swagger-section #resources_container #resources ul.endpoints {
+  padding: 0px;
+  margin: 0px;
+}
+#apiman-swagger.swagger-section .swagger-ui-wrap table tbody tr td {
+  font-size: inherit;
+}
+#apiman-swagger.swagger-section .swagger-ui-wrap table thead tr th {
+  font-size: inherit;
+}
+#apiman-swagger.swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.content h4 {
+  padding: 0px;
+  margin: 0px;
+}
+#apiman-swagger.swagger-section .swagger-ui-wrap p {
+  padding: 0px;
+}
+
+.apiman-chart-title {
+  text-align: center;
+  text-decoration: underline;
+}
+
+#apiman-api-metrics-selector .bootstrap-select, #apiman-client-metrics-selector .bootstrap-select {
+  width: auto;
+}
+
+table tr.apiman_deleting {
+  text-decoration: line-through;
+  background-color: rgb(255, 204, 205);
+}
+
+
+.apiman-wizard-items {
+  padding: 0px;
+  border: 1px solid rgb(200, 200, 200);
+  padding-top: 15px;
+  padding-bottom: 0px;
+  margin-bottom: 10px;
+}
+.apiman-wizard-items .apiman-header {
+  font-size: 19px;
+  font-weight: bold;
+  color: #666;
+}
+.apiman-wizard-items .apiman-subheader {
+  font-size: 16px;
+  color: #666;
+}
+.apiman-wizard-items hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.apiman-wizard-items .metadata-with-icon .fa {
+  float: left;
+  line-height: 14px;
+  color: #456;
+}
+.apiman-wizard-items .metadata-with-icon div {
+  float: left;
+  margin-left: 3px;
+  min-height: 16px;
+  line-height: 14px;
+}
+.apiman-wizard-items .description {
+  margin-top: 8px;
+}
+
+
+.apiman-wizard .apiman-wizard-item {
+  padding: 12px;
+  margin-bottom: 1px;
+  background-color: #F2F2FA;
+}
+.apiman-wizard .apiman-wizard-item .step {
+  padding-left: 10px;
+  color: #999;
+}
+.apiman-wizard .apiman-wizard-item .step i {
+  font-size: 15px;
+}
+.apiman-wizard .apiman-wizard-item .step-title {
+  padding-left: 32px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #999;
+  line-height: 13px;
+}
+
+.apiman-wizard .apiman-wizard-item.active {
+  background-color: white;
+}
+.apiman-wizard .apiman-wizard-item.active .step i, .apiman-wizard .apiman-wizard-item.active .step-title {
+  color: rgb(207, 97, 0);
+}
+.apiman-wizard .apiman-wizard-item.done .step i, .apiman-wizard .apiman-wizard-item.done .step-title {
+  color: rgb(33, 169, 150);
+}
+
+.apiman-wizard-page {
+  
+}
+.apiman-wizard-page h1 {
+  margin-top: 0px;
+  padding-top: 0px;
+  padding-bottom: 5px;
+  border-bottom: 1px dotted #999;
+}
+.apiman-wizard-page h3 {
+  text-decoration: underline;
+}
+
+.apiman-wizard-buttons {
+  width: 100%;
+  text-align: right;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.apiman-wizard-buttons button, .apiman-wizard-buttons a {
+  min-width: 75px;
+  margin-left: 10px;
+}
+.apiman-wizard-buttons button#back {
+  margin-right: 0px;
+}
+.apiman-wizard-buttons button#next {
+  margin-left: 0px;
+}
+.apiman-wizard-buttons button#back span.fa {
+  margin-right: 5px;
+}
+.apiman-wizard-buttons button#next span.fa {
+  margin-left: 5px;
+}
+
+.apiman-wizard-search-box {
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #F2F2FA;
+  box-shadow: 2px 2px 4px #eee;
+  border-radius: 3px;
+  margin-bottom: 15px;
+}
+.apiman-wizard-search-box input {
+  width: 50%
+}
+
+.apiman-wizard-search-results .apiman-wizard-table-wrapper {
+  max-height: 200px;
+  overflow: auto;
+}
+
+#form-page .apiman-plan-selector div.bootstrap-select {
+  width: auto;
+  min-width: 100px;
+}
+
+.apiman-import-wizard-apis tr.pending {
+  color: #666;
+}
+.apiman-import-wizard-apis tr.active {
+  color: #00A8E1;
+  font-style: italic;
+}
+.apiman-import-wizard-apis tr.complete {
+  color: #3F9C35;
+}
+.apiman-import-wizard-apis tr.error {
+  color: #C00;
+}
+
+.progress-description {
+  margin-bottom: 0;
+}
+
+.progress-label-top-right .progress-bar span {
+  top: -20px;
+  font-size: 13px;
+}
+
+.holder {
+  color: #999 !important;
+  color: #777;
+  color: #0099d3;
+  color: #31A794 !important;
+  color: rgb(207, 97, 0) !important;
+}
+
+html, body {height: 100%;}
+
+
+.apiman-dropdown-checklist-popover a.btn:hover {
+  text-decoration: underline;
+}
+
+.apiman-dropdown-checklist-popover .popover-content {
+  padding: 0;
+}
+
+.apiman-dropdown-checklist-popover .popover-title {
+  border-bottom: 1px solid #EEE;
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 0;
+  min-height: inherit;
+}
+
+.checklist-panel {}
+
+.checklist-panel .panel {}
+
+.checklist-panel .panel-heading {
+  background: none;
+}
+
+.checklist-panel .panel-body {}
+
+.checklist-panel .panel-title {}
+
+.checklist-panel .panel-title > a:before {
+  display: none;
+}
+
+.checklist-panel .panel-title a:hover, .checklist-panel .panel-title a:focus, .checklist-panel .panel-title a:visited {
+  text-decoration: none;
+}
+
+.checklist-panel .complete {
+  color: #31A794 !important;
+}
+
+.checklist-panel .incomplete {
+  color: rgb(207, 97, 0);
+}
+
+.checklist-panel .title {
+  color: inherit !important;
+  font-size: 12px !important;
+  font-weight: bold;
+}
+
+.checklist-panel .optional, .optional {
+  color: #999;
+  font-style: italic;
+}
+
+.disabled-icon a, .disabled-icon a:hover, .disabled-icon i {
+  color: #999;
+}
+
+.invisible-icon a, .invisible-icon a:hover, .invisible-icon i {
+  cursor: default;
+  text-decoration: none;
+  visibility: hidden;
+}
+
+.clipboard {
+  padding: 2px 6px 4px;
+}
+
+.apiman-card-table {
+  margin-top: 10px;
+  background-color: #f5f5f5;
+  padding-top: 20px;
+}
+.apiman-card-table .alert {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  background-color: white;
+  width: 75%;
+}
+.apiman-card-table .card {
+  position: relative;
+  width: 23%;
+  padding: 15px 5px 15px 5px;
+  margin-left: 1%;
+  margin-right: 1%;
+  margin-bottom: 15px;
+  background-color: white;
+  border-top: 2px solid transparent;
+  border-left: 2px solid #eee;
+  border-right: 2px solid #eee;
+  border-bottom: 2px solid #eee;
+  text-align: center;
+}
+.apiman-card-table .card:hover {
+  border-color: #59b1d3;
+  border-top: 2px solid #59b1d3;
+}
+.apiman-card-table .card .info {
+  position: absolute;
+  top: 0px;
+  left: 5px;
+  font-size: 18px;
+  visibility: hidden;
+}
+.apiman-card-table .card .endpointType {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  font-size: 16px;
+  visibility: hidden;
+}
+.apiman-card-table .card:hover .info, .apiman-card-table .card:hover .endpointType {
+  visibility: visible;
+}
+.apiman-card-table .card .icon {
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+.apiman-card-table .card .icon img {
+  height: 32px;
+}
+.apiman-card-table .card .name {
+  font-size: 16px;
+  overflow-wrap: break-word;
+}
+
+.apiman-card-table .card .tags {
+  margin-top: 2px;
+  color: #357;
+  height: 40px;
+  overflow: auto;
+}
+.apiman-card-table .card .tags ul {
+  display: inline;
+  list-style: none;
+  padding-left: 0px;
+}
+.apiman-card-table .card .tags ul li {
+  display: inline;
+}
+.apiman-card-table .card .tags ul li:after {
+  content: ", ";
+}
+.apiman-card-table .card .tags ul li:last-child:after {
+  content: "";
+}
+.apiman-card-table .card .tags ul li a {
+  color: #357;
+  cursor: pointer;
+}
+
+.apiman-card-table .card .actions {
+  height: 24px;
+}
+
+#apiman-tags-filter div {
+	margin-top: -1px;
+}
+@-moz-document url-prefix() {
+  #apiman-tags-filter div {
+    margin-top: -2px;
+  }
+}
+
+
+.apiman-action-divider {
+  color: #ccc;
+  font-size: 16px;
+}
+
+.modal-body .apiman-entity-new {
+  margin: 0px;
+  padding: 0px;
+}
+
+.modal-body .apiman-entity-new .row {
+  margin: 0px;
+}
+
+.ui-select-placeholder, .ui-select-match-text {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 40px;
+}
+
+.select2 > .select2-choice.ui-select-match {
+  /* Because of the inclusion of Bootstrap */
+  height: 29px;
+}
+
+.select2-container {
+  font-size: 12px;
+}
+
+.select2-container .select2-choice {
+  -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  background-color: #eeeeee;
+  background-image: -webkit-linear-gradient(top, #fafafa 0%, #ededed 100%);
+  background-image: -o-linear-gradient(top, #fafafa 0%, #ededed 100%);
+  background-image: linear-gradient(to bottom, #fafafa 0%, #ededed 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffafafa', endColorstr='#ffededed', GradientType=0);
+  color: #4d5258;
+  border: 1px solid #b7b7b7;
+  border-radius: 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.select2-container .select2-choice .select2-arrow {
+  border-left: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.select2-container .select2-choice .select2-arrow b {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: none;
+}
+
+.select2-arrow b:before {
+  content: "\f107";
+  font-family: "FontAwesome";
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
+  .select2-search input, .select2-search-choice-close, .select2-container .select2-choice abbr, .select2-container .select2-choice .select2-arrow b {
+     background: none;
+     font-weight: normal;
+   }
+}
+
+.select2-default {
+  color: #4d5258 !important;
+}
+
+.ui-select-container.select2-container .select2-choice:hover {
+  background-color: #eeeeee;
+  background-image: none;
+  border-color: #b7b7b7;
+  color: #4d5258;
+}
+
+.ui-select-container.select2-container.select2-container-disabled .select2-choice:hover {
+  background-color: #f4f4f4;
+  background-image: none;
+  border: 1px solid #ddd;
+  cursor: not-allowed;
+}
+
+.select2-dropdown-open.open .select2-choice, .select2-dropdown-open.open .select2-choice:hover, .select2-dropdown-open.open .select2-choice:focus {
+  background-color: #e2e2e2;
+  background-image: none;
+  border-color: #a5a5a5;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  color: #4d5258;
+  outline-offset: -2px;
+}
+
+.ui-select-choices-row {
+  border-color: transparent;
+  border-style: solid;
+  border-width: 1px 0;
+}
+
+.select2-results {
+  padding: 0;
+  margin: 4px 0;
+}
+
+.select2-results .select2-highlighted, .ui-select-choices-row:hover {
+  background-color: #d4edfa;
+  border-color: #b3d3e7;
+  border-style: solid;
+  border-width: 1px 0;
+  color: #4d5258;
+  font-weight: normal;
+}
+
+.ui-select-dropdown.select2-drop {
+  border-radius: 0;
+}
+
+.ui-select-dropdown.select2-drop.select2-with-searchbox.select2-drop-active {
+  border-top: 1px solid;
+  border-color: #b7b7b7;
+}
+
+.select2-search {
+  padding-top: 4px;
+}
+
+.ng-dirty.ng-invalid > a.select2-choice {
+  border: 1px solid #b7b7b7;
+}
+
+#api-catalog-filters .api-type {
+  width: auto;
+}
+#api-catalog-filters .api-namespaces {
+  width: auto;
+  float: right;
+}
+#api-catalog-filters .input-search {
+  width: 250px;
+}

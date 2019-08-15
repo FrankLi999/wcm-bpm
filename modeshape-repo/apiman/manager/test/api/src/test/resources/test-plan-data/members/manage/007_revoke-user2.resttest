@@ -1,0 +1,3 @@
+DELETE /organizations/Organization1/roles/APIDeveloper/user2 admin/admin
+----
+204

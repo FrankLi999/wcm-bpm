@@ -1,0 +1,113 @@
+GET /users/admin/activity admin/admin
+----
+200
+Content-Type: application/json
+
+{ "beans" : [ { "data" : null,
+        "entityId" : "Client1",
+        "entityType" : "Client",
+        "entityVersion" : "1.0",
+        "organizationId" : "Organization1",
+        "what" : "Register",
+        "who" : "admin"
+      },
+      { "data" : "{\"clientOrgId\":\"Organization1\",\"clientId\":\"Client1\",\"clientVersion\":\"1.0\",\"apiOrgId\":\"Organization1\",\"apiId\":\"API1\",\"apiVersion\":\"1.0\",\"planId\":\"Plan1\",\"planVersion\":\"1.0\"}",
+        "entityId" : "API1",
+        "entityType" : "Api",
+        "entityVersion" : "1.0",
+        "organizationId" : "Organization1",
+        "what" : "CreateContract",
+        "who" : "admin"
+      },
+      { "data" : "{\"clientOrgId\":\"Organization1\",\"clientId\":\"Client1\",\"clientVersion\":\"1.0\",\"apiOrgId\":\"Organization1\",\"apiId\":\"API1\",\"apiVersion\":\"1.0\",\"planId\":\"Plan1\",\"planVersion\":\"1.0\"}",
+        "entityId" : "Client1",
+        "entityType" : "Client",
+        "entityVersion" : "1.0",
+        "organizationId" : "Organization1",
+        "what" : "CreateContract",
+        "who" : "admin"
+      },
+      { "data" : null,
+        "entityId" : "API1",
+        "entityType" : "Api",
+        "entityVersion" : "1.0",
+        "organizationId" : "Organization1",
+        "what" : "Publish",
+        "who" : "admin"
+      },
+      { 
+        "data" : "{\"changes\":[{\"name\":\"plans\",\"before\":\"\",\"after\":\"Plan1:1.0\"},{\"name\":\"endpoint\",\"before\":null,\"after\":\"http://localhost:8080/ping\"},{\"name\":\"endpointType\",\"before\":null,\"after\":\"rest\"}]}",
+        "entityId" : "API1",
+        "entityType" : "Api",
+        "entityVersion" : "1.0",
+        "organizationId" : "Organization1",
+        "what" : "Update",
+        "who" : "admin"
+      },
+      { "data" : null,
+        "entityId" : "API1",
+        "entityType" : "Api",
+        "entityVersion" : "1.0",
+        "organizationId" : "Organization1",
+        "what" : "Create",
+        "who" : "admin"
+      },
+      { "data" : null,
+        "entityId" : "API1",
+        "entityType" : "Api",
+        "entityVersion" : null,
+        "organizationId" : "Organization1",
+        "what" : "Create",
+        "who" : "admin"
+      },
+      { "data" : null,
+        "entityId" : "Client1",
+        "entityType" : "Client",
+        "entityVersion" : "1.0",
+        "organizationId" : "Organization1",
+        "what" : "Create",
+        "who" : "admin"
+      },
+      { "data" : null,
+        "entityId" : "Client1",
+        "entityType" : "Client",
+        "entityVersion" : null,
+        "organizationId" : "Organization1",
+        "what" : "Create",
+        "who" : "admin"
+      },
+      { "data" : null,
+        "entityId" : "Plan1",
+        "entityType" : "Plan",
+        "entityVersion" : "1.0",
+        "organizationId" : "Organization1",
+        "what" : "Lock",
+        "who" : "admin"
+      },
+      { "data" : null,
+        "entityId" : "Plan1",
+        "entityType" : "Plan",
+        "entityVersion" : "1.0",
+        "organizationId" : "Organization1",
+        "what" : "Create",
+        "who" : "admin"
+      },
+      { "data" : null,
+        "entityId" : "Plan1",
+        "entityType" : "Plan",
+        "entityVersion" : null,
+        "organizationId" : "Organization1",
+        "what" : "Create",
+        "who" : "admin"
+      },
+      { "data" : null,
+        "entityId" : null,
+        "entityType" : "Organization",
+        "entityVersion" : null,
+        "organizationId" : "Organization1",
+        "what" : "Create",
+        "who" : "admin"
+      }
+    ],
+  "totalSize" : 13
+}

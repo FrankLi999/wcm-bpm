@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    
+  </head>
+
+  <body>
+  <div>
+    
+    <div ng-include="headerInclude"></div>   
+    <div ng-controller="Apiman.ConsumerOrgController" class="page container" data-field="page" ng-cloak="" ng-show="pageState == 'loaded'">
+      <div class="row">
+        <div class="col-md-12">
+          <ol class="breadcrumb" data-field="breadcrumb">
+            <li><a id="bc-home" href="{{ pluginName }}/"><i class="fa fa-home fa-fw"></i><span apiman-i18n-key="home">Home</span></a></li>
+            <li><a id="bc-orgs" href="{{ pluginName }}/browse/orgs"><i class="fa fa-search fa-fw"></i><span apiman-i18n-key="organizations">Organizations</span></a></li>
+            <li class="active"><span><i class="fa fa-shield fa-fw"></i><span>{{ org.name }}</span></span></li>
+          </ol>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="consumer-top-header" apiman-i18n-key="organization-details">Organization Details</h1>
+        </div>
+        <div class="col-md-12">
+          <div class="vspacer-10" />
+        </div>
+      </div>
+      
+      <div class="row">
+
+        <!-- Left column -->
+        <div class="col-md-4 browse-items">
+          <div class="item" style="width: 100%; margin-bottom: 20px;" data-field="organizationCard">
+            <div class="title"><i class="fa fa-shield icon"></i><span data-field="title">{{ org.name }}</span></div>
+            <div class="description" data-field="description">{{ org.description }}</div>
+            <div class="actions" style="display:none">
+              <button class="btn btn-default" style="display:none" data-field="requestMembership" apiman-i18n-key="request-membership">Request Membership</button>
+            </div>
+            <a ng-show="org.isMember" class="ismember" title="You are already a member of this Organization." href="{{ pluginName }}/orgs/{{ org.id }}" data-field="isMemberLink" apiman-i18n-key="is-member"></a>
+          </div>
+          
+          <div class="consumer-section">
+            <h3 apiman-i18n-key="current-members" class="consumer-header">Current Members</h3>
+            <div class="apiman-members" data-field="members">
+              <div class="container-fluid apiman-summaryrow" ng-repeat="member in members">
+                <div class="row">
+                  <span class="title">
+                    <i class="fa fa-fw fa-user icon"></i>
+                    <a href="{{ pluginName }}/users/{{ member.userId }}/orgs">{{ member.userName }}</a>
+                    <span class="secondary">({{ member.userId }})</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Right column -->
+        <div class="col-md-8">
+          <div class="consumer-section">
+            <h3 apiman-i18n-key="apis-offered" class="consumer-header">APIs Offered</h3>
+            <div class="apiman-filters apiman-apis-filters">
+              <apiman-search-box id="api-filter" apiman-i18n-key="filter-consumer-apis" function="filterApis" placeholder="Filter by API name..." />
+            </div>
+            <div class="apiman-apis consumer-section">
+
+              <div class="apiman-no-content" ng-hide="apis.length > 0">
+                <p class="apiman-no-entities-description" apiman-i18n-key="consumer-no-apis-found-for-org">No APIs are currently offered by this organization.</p>
+              </div>
+
+              <div class="apiman-no-content" ng-show="apis.length > 0 && filteredApis.length == 0">
+                <p class="apiman-no-entities-description" apiman-i18n-key="consumer-no-apis-found-for-filter">No APIs matched the current filter criteria.</p>
+              </div>
+
+              <div class="container-fluid apiman-summaryrow" ng-repeat="api in filteredApis">
+                <div class="row">
+                  <i class="fa fa-fw fa-puzzle-piece icon"></i>
+                  <span class="title"><a href="{{ pluginName }}/browse/orgs/{{ org.id }}/{{ api.id }}">{{ api.name }}</a></span>
+                </div>
+                <div class="row">
+                  <span class="description">
+                    {{ api.description }}
+                  </span>
+                </div>
+                <hr/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div> <!-- /container -->
+  </div>
+  </body>
+</html>

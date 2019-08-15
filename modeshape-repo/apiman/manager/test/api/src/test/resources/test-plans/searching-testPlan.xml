@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testPlan xmlns="urn:io.apiman.test:2014:02:testPlan">
+
+  <!-- First, create a bunch of Organizations -->
+  <testGroup name="Populate With Data">
+    <test name="Create Organization 1">test-plan-data/searching/populate/001_create.resttest</test>
+    <test name="Create Organization 2">test-plan-data/searching/populate/002_create.resttest</test>
+    <test name="Create Organization 3">test-plan-data/searching/populate/003_create.resttest</test>
+    <test name="Create Organization 4">test-plan-data/searching/populate/004_create.resttest</test>
+    <test name="Create Organization 5">test-plan-data/searching/populate/005_create.resttest</test>
+    <test name="Create Organization 6">test-plan-data/searching/populate/006_create.resttest</test>
+    <test name="Create Organization 7">test-plan-data/searching/populate/007_create.resttest</test>
+    <test name="Create Organization 8">test-plan-data/searching/populate/008_create.resttest</test>
+    <test name="Create Organization 9">test-plan-data/searching/populate/009_create.resttest</test>
+    <test name="Create Organization 10">test-plan-data/searching/populate/010_create.resttest</test>
+  </testGroup>
+
+  <!-- Now, execute a number of queries -->
+  <testGroup name="Test Various Queries">
+    <test name="Query All">test-plan-data/searching/queries/001_query-all.resttest</test>
+    <test name="Query First Page">test-plan-data/searching/queries/002_query-page-1.resttest</test>
+    <test name="Query Second Page">test-plan-data/searching/queries/003_query-page-2.resttest</test>
+    <test name="Query By ID">test-plan-data/searching/queries/004_query-by-id.resttest</test>
+    <test name="Descending Order">test-plan-data/searching/queries/005_query-order-by-desc.resttest</test>
+    <test name="Query By Name">test-plan-data/searching/queries/006_query-by-name.resttest</test>
+    <test name="Query API Catalogs">test-plan-data/searching/queries/007_query-api-catalog.resttest</test>
+    <test name="List API Catalog Namespaces">test-plan-data/searching/queries/008_list-api-namespaces.resttest</test>
+    <test name="Query By Name (Caps)">test-plan-data/searching/queries/009_query-by-name-caps.resttest</test>
+  </testGroup>
+
+  <!-- Now, test that request validation is working -->
+  <testGroup name="Test Various Invalid Requests">
+    <test name="Missing Order-By Name">test-plan-data/searching/validation/001_query-invalid-orderby-name.resttest</test>
+    <test name="Invalid Page Size">test-plan-data/searching/validation/002_query-invalid-pageSize.resttest</test>
+    <test name="Invalid Page">test-plan-data/searching/validation/003_query-invalid-page.resttest</test>
+    <test name="Invalid Filter Name">test-plan-data/searching/validation/004_query-invalid-filter-name.resttest</test>
+    <test name="Invalid Filter Value">test-plan-data/searching/validation/005_query-invalid-filter-value.resttest</test>
+    <test name="Invalid Filter Operator">test-plan-data/searching/validation/006_query-invalid-filter-operator.resttest</test>
+  </testGroup>
+
+
+</testPlan>

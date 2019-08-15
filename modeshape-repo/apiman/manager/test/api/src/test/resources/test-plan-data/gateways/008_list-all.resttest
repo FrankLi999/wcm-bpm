@@ -1,0 +1,18 @@
+GET /gateways admin/admin
+----
+200
+Content-Type: application/json
+
+[
+    {
+      "id" : "GatewayOne",
+      "name" : "Gateway One",
+      "description" : "This is the first gateway. (updated)"
+    },
+    {
+      "id" : "GatewayTwo",
+      "name" : "Gateway Two",
+      "description" : "This is the second gateway.",
+      "type" : "REST"
+    }
+]

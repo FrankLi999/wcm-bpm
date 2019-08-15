@@ -1,0 +1,15 @@
+GET /Test/echo/1.0
+X-Custom-Header: custom-value
+X-API-Key: ${client10-api-key}
+
+----
+200
+Content-Type: application/json
+X-RestTest-Assert-IgnoreCase: true
+
+{
+  "method" : "GET",
+  "headers" : {
+    "X-Custom-Header" : "custom-value"
+  }
+}

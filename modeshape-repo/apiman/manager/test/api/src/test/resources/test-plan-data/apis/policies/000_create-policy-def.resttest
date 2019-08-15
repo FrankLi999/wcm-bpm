@@ -1,0 +1,32 @@
+POST /policyDefs admin/admin
+Content-Type: application/json
+
+{
+  "name" : "Policy Def",
+  "description" : "This is the test policy def.",
+  "policyImpl" : "org.example.policies.PolicyDef",
+  "icon" : "policy-def",
+  "templates" : [
+    {
+      "language" : null,
+      "template" : "This is a test policy for @{testName}."
+    }
+  ]
+}
+----
+200
+Content-Type: application/json
+
+{
+  "id" : "PolicyDef",
+  "name" : "Policy Def",
+  "description" : "This is the test policy def.",
+  "policyImpl" : "org.example.policies.PolicyDef",
+  "icon" : "policy-def",
+  "templates" : [
+    {
+      "language" : null,
+      "template" : "This is a test policy for @{testName}."
+    }
+  ]
+}

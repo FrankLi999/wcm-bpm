@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+  </head>
+
+  <body>
+  <div>
+    
+    <div ng-include="headerInclude"></div>   
+    <div ng-controller="Apiman.AdminRolesController" class="page container admin-page" data-field="page" ng-cloak="" ng-show="pageState == 'loaded'">
+      <div class="row">
+        <div class="col-md-12">
+          <div ng-include="'plugins/api-manager/html/admin/admin_bc.include'"></div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Side Navigation -->
+        <div class="col-md-3">
+          <div ng-include="'plugins/api-manager/html/admin/admin_tabs.include'"></div>
+        </div>
+        <!-- Admin Content -->
+        <div class="col-md-9 admin-content">
+          <div class="container-fluid">
+            <div class="row">
+              <h2 class="title" apiman-i18n-key="role-management" apiman-i18n-key="role-management">Role Management</h2>
+            </div>
+            <!-- Helpful hint -->
+            <div class="row">
+              <p class="col-md-10 apiman-label-faded" apiman-i18n-key="role-management-help-text" class="apiman-label-faded">Create and modify roles that users can be granted membership in for any organization.  Each role grants the user a set of permissions, allowing her to do specific things within the organization.</p>
+            </div>
+            <!-- HR -->
+            <div class="row hr-row">
+              <hr/>
+            </div>
+            <!-- Filter and Actions -->
+            <div class="row">
+              <div class="apiman-filters apiman-roles-filters">
+                <div>
+                  <apiman-search-box id="role-name-filter" apiman-i18n-key="filter-roles" function="filterRoles" placeholder="Filter by role name..." />
+                </div>
+                <a apiman-i18n-key="new-role" href="{{ pluginName }}/new-role" class="btn btn-primary pull-right">New Role</a>
+              </div>
+            </div>
+            <!-- The Roles -->
+            <div class="row">
+              <div class="apiman-roles">
+
+                  <div class="apiman-no-content container-fluid" ng-hide="roles.length > 0">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <p class="apiman-no-entities-description" apiman-i18n-key="no-roles-found">No roles have been created.  Until at least one "auto-grant" role is created, users will not be able to use apiman.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="apiman-no-content container-fluid" ng-show="roles.length > 0 && filteredRoles.length == 0">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <p class="apiman-no-entities-description" apiman-i18n-key="no-roles-found-for-filter">No roles found matching your filter criteria - please try searching for something different.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="container-fluid apiman-summaryrow" ng-repeat="role in filteredRoles">
+                    <div class="row">
+                      <span class="title"><a href="{{ pluginName }}/admin/roles/{{ role.id }}">{{ role.name }}</a></span>
+                      
+                      <a ng-show="role.autoGrant" class="apiman-summaryrow-icon">
+                        <i class="fa fa-check fa-fw"></i>
+                        <span class="title-summary-item" apiman-i18n-key="auto-grant-to-creator">Auto-granted to org creator</span>
+                      </a>
+                    </div>
+                    <div class="row" style="margin-bottom: 8px;">
+                      <span class="description apiman-label-faded">
+                        {{ role.description }}
+                      </span>
+                    </div>
+                    <div class="row">
+                      <div class="permissions">
+                        <span class="emphasis" apiman-i18n-key="grants-permissions">Grants Permissions:</span>
+                        <span class="description" ng-repeat="permission in role.permissions">
+                        	{{ permission }}{{$last ? '' : ', '}}
+                        </span>
+                      </div>
+                    </div>
+                    <hr/>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>

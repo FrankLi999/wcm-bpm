@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+  </head>
+
+  <body>
+  <div>
+    
+    <div ng-include="headerInclude"></div>
+    <div ng-controller="Apiman.OrgApisController" class="page container" data-field="page" ng-cloak="" ng-show="pageState == 'loaded'">
+      <div ng-include="'plugins/api-manager/html/org/org_bc.include'"></div>
+      <div class="row">
+        <div ng-include="'plugins/api-manager/html/org/org_entity.include'"></div>
+        <!-- Center Content -->
+        <div class="col-md-8">
+          <div class="apiman-entitytabs">
+            <div ng-include="'plugins/api-manager/html/org/org_tabs.include'"></div>
+            <div id="entitytabsContent" class="tab-content">
+
+              <!-- Apis Tab Content -->
+              <div class="tab-pane active" id="tab-apis">
+                <div class="apiman-filters apiman-apis-filters">
+                  <div>
+                    <apiman-search-box id="apis-filter" apiman-i18n-key="filter-org-apis" function="filterApis" placeholder="Filter by API name..." />
+                  </div>
+                  <div apiman-permission="apiEdit" class="btn-group pull-right">
+                    <a href="{{ pluginName }}/new-api" class="btn btn-primary" apiman-i18n-key="new-api">New API</a>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                      <span class="sr-only" apiman-i18n-key="toggle-dropdown">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="{{ pluginName }}/orgs/{{ org.id }}/import/apis" apiman-i18n-key="import-apis_">Import API(s)</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <!-- The list of apis the user has access to -->
+                <div class="apiman-apis" data-field="apis">
+
+                  <div class="apiman-no-content container-fluid" ng-hide="apis.length > 0">
+                    <div class="row">
+                      <div class="col-md-9">
+                        <p class="apiman-no-entities-description" apiman-i18n-key="no-apis-found-for-org">We couldn't find any APIs in this organization. Probably because none exist. We hope. Try creating one using the New API button.</p>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="apiman-no-entities-arrow"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="apiman-no-content container-fluid" ng-show="apis.length > 0 && filteredApis.length == 0">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <p class="apiman-no-entities-description" apiman-i18n-key="no-apis-found-for-filter">No APIs found matching your filter criteria - please try searching for something different.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="container-fluid apiman-summaryrow" ng-repeat="api in filteredApis">
+                    <div class="row">
+                      <span class="title"><a href="{{ pluginName }}/orgs/{{ api.organizationId }}/apis/{{ api.id }}">{{ api.name }}</a></span>
+                      <a class="apiman-summaryrow-icon">
+                        <i class="fa fa-clock-o fa-fw"></i>
+                        <span class="title-summary-item" apiman-i18n-key="created-on">Created on</span>
+                        <span class="title-summary-item">{{ api.createdOn | date:'yyyy-MM-dd' }}</span>
+                      </a>
+                    </div>
+                    <div class="row">
+                      <span class="description">{{ api.description }}
+                      </span>
+                    </div>
+                    <hr/>
+                  </div>
+                </div>
+              </div>
+              <!-- End Apis Tab Content -->
+              
+            </div>
+          </div>
+        </div>
+        <!-- /Center Content -->
+      </div>
+    </div> <!-- /container -->
+  </div>
+  </body>
+</html>

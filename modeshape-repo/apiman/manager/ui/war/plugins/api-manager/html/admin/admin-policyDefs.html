@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+  </head>
+
+  <body>
+  <div>
+    
+    <div ng-include="headerInclude"></div>   
+    <div ng-controller="Apiman.AdminPolicyDefsController" class="page container admin-page" data-field="page" ng-cloak="" ng-show="pageState == 'loaded'">
+      <div class="row">
+        <div class="col-md-12">
+          <div ng-include="'plugins/api-manager/html/admin/admin_bc.include'"></div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Side Navigation -->
+        <div class="col-md-3">
+          <div ng-include="'plugins/api-manager/html/admin/admin_tabs.include'"></div>
+        </div>
+        <!-- Admin Content -->
+        <div class="col-md-9 admin-content">
+          <div class="container-fluid">
+            <div class="row">
+              <h2 class="title" data-field="heading" apiman-i18n-key="policy-definitions">Policy Definitions</h2>
+            </div>
+            <!-- Helpful hint -->
+            <div class="row">
+              <p class="col-md-10 apiman-label-faded" apiman-i18n-key="policy-definitions-help-text" class="apiman-label-faded">Configure the available policy definitions.  These will be the policies made available to users when configuring clients, APIs, and plans.</p>
+            </div>
+            <!-- HR -->
+            <div class="row hr-row">
+              <hr/>
+            </div>
+            <!-- Filter and Actions -->
+            <div class="row">
+              <div class="apiman-filters apiman-policyDefs-filters">
+                <div>
+                  <apiman-search-box id="policy-name-filter" apiman-i18n-key="filter-policies" function="filterPolicies" placeholder="Filter by policy name..." />
+                </div>
+                <a apiman-i18n-key="import-policy" href="{{ pluginName }}/import-policyDefs" class="btn btn-primary pull-right">Import Policy</a>
+              </div>
+            </div>
+            <!-- Table of Policy Definitions -->
+            <div class="row">
+
+              <div ng-hide="policyDefs.length > 0">
+                <div class="apiman-no-content container-fluid">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <p class="apiman-no-entities-description" apiman-i18n-key="no-policy-defs-found">No policy definitions have been added!  Without at least one policy definition users will not be able to add policies to their APIs, Plans, and Clients.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div ng-show="policyDefs.length > 0 && filteredPolicyDefs.length == 0">
+                <div class="apiman-no-content container-fluid">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <p class="apiman-no-entities-description" apiman-i18n-key="no-policy-defs-for-filter">No policy definitions matched your filter criteria.  Try something different!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="apiman-summaryrow" ng-repeat="policyDef in filteredPolicyDefs">
+                <a href="{{ pluginName }}/admin/policyDefs/{{policyDef.id}}"><i style="font-size: 18px; margin-top: 2px" class="fa fa-{{ policyDef.icon}} fa-fw"></i><span>{{ policyDef.name }}</span></a>
+                <div style="padding-left: 24px">
+	                <div class="description apiman-label-faded">{{ policyDef.description}}</div>
+	                <div>
+	                  <div class="emphasis" apiman-i18n-key="implementation">Implementation:</div>
+	                  <div>{{ policyDef.policyImpl}}</div>
+	                </div>
+                </div>
+                <hr/>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>

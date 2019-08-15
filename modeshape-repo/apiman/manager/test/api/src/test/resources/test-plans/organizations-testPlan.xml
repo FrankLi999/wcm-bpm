@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testPlan xmlns="urn:io.apiman.test:2014:02:testPlan">
+
+  <!-- Make sure Organizations are working properly -->
+  <testGroup name="Organization Management">
+    <test name="Create Organization">test-plan-data/organizations/orgs/001_create.resttest</test>
+    <test name="Get Organization">test-plan-data/organizations/orgs/002_get.resttest</test>
+    <test name="Create Org (Duplicate)">test-plan-data/organizations/orgs/003_create_already-exists.resttest</test>
+    <test name="Search for all Orgs">test-plan-data/organizations/orgs/004_search_all.resttest</test>
+    <test name="Create Organization 2">test-plan-data/organizations/orgs/005_create_another.resttest</test>
+    <test name="Search for all Orgs (2)">test-plan-data/organizations/orgs/006_search_all-2.resttest</test>
+    <test name="Update Organization">test-plan-data/organizations/orgs/007_update.resttest</test>
+    <test name="Get Organization (updated)">test-plan-data/organizations/orgs/008_get.resttest</test>
+    <test name="Create Organization (invalid)">test-plan-data/organizations/orgs/009_create_invalid_name.resttest</test>
+  </testGroup>
+
+  <!-- Make sure auditing is working properly -->
+  <testGroup name="Organization Auditing">
+    <test name="Organization Activity">test-plan-data/organizations/auditing/001_activity.resttest</test>
+  </testGroup>
+
+  <!-- Non-latin org name -->
+  <testGroup name="Non Latin Orgs">
+    <test name="Create Spanish Org">test-plan-data/organizations/i18n/001_create-spanish.resttest</test>
+    <test name="Create Russian Org">test-plan-data/organizations/i18n/002_create-russian.resttest</test>
+  </testGroup>
+</testPlan>

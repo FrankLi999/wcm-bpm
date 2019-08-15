@@ -1,0 +1,177 @@
+= Apiman Vert.x 3 Gateway
+Marc Savy <marc@rhymewithgravy.com>
+:toc: macro
+
+This is an apiman gateway implemented using http://www.vertx.io[Vert.x 3].
+
+NOTE: **You should also refer to the documentation specific to the configuration you're using. This README provides a high-level, generic overview.**
+
+toc::[]
+
+== Building & Running
+
+This module can be built with `mvn clean install`.
+
+To run the Vert.x apiman gateway, you'll need to have a valid JSON config (see following sections), and build apiman with Java 8 (`mvn clean install`):
+
+```shell
+java -jar target/apiman-gateway-platforms-vertx3-1.2.10-SNAPSHOT-fat.jar -conf <path-to-your-config.json>
+```
+
+Replace `1.2.10-SNAPSHOT` with the version you built.
+
+If you're using the distro version, you can make use of the `apiman-gateway.sh` script which provides a number of helpful defaults and sets up logging for you.
+
+== Configuration
+
+This gateway's counterpart to `apiman.properties` is a simple JSON-based configuration file, examples of which are provided in the https://github.com/apiman/apiman/blob/master/distro/vertx/src/main/resources/overlay/configs/[repository].
+
+We'll use ElasticSearch components examples throughout this README.
+
+=== Format
+
+If you've used apiman before, then there's a simple and direct conversion between `apiman.properties` and `config.json`.
+
+For example:
+
+```json
+{
+  "client": {
+    "type": "jest",
+    "cluster-name": "elasticsearch",
+    "host": "127.0.0.1",
+    "port": "9200",
+    "initialize": true,
+    "apiman": ["great", "fantastic", "excellent"]
+  }
+}
+```
+
+Is equivalent to:
+
+```properties
+client.type=jest
+client.cluster-name=elasticsearch
+client.host=127.0.0.1
+client.port=9200
+client.initialize=true
+client.apiman=great,fantastic,excellent
+```
+
+==== Comments
+
+Unlike standard JSON, you can insert comments into the configuration by using C-style `// comment` syntax.
+
+```json
+{
+  "foo": "bar" // This is a comment.
+}
+```
+
+==== Variables
+
+The configuration supports variable substitution (transclusion) in the form `"${SOME_VARIABLE}"`; where `SOME_VARIABLE` is the variable to be transcluded.
+The following list defines the lookup sources and order of precedence for variable resolution.
+
+1. JSON config's `variables` section:
+
+  "variables": {
+    "SOME_VARIABLE": "foo"
+  }
+
+2. System properties: `-DSOME_VARIABLE="foo"`
+3. Environment: `export SOME_VARIABLE="foo"`
+
+A default value can be provided, which will be used if other lookup sources fail.
+
+For example `${MAGIC_NUMBER:-8090}` will result in `8090` being set if `MAGIC_NUMBER` is unresolved after the prior steps.
+
+=== Registries, factories and components
+
+```json
+{
+  "registry": {
+    "class": "io.apiman.gateway.engine.es.PollCachingESRegistry", // <1>
+    "config": {
+      "client": {
+        "client": "jest",
+        "protocol": "${apiman.es.protocol}", // <2>
+        "host": "${apiman.es.host}",
+        "port": "${apiman.es.port}",
+        "initialize": true,
+        "username": "${apiman.es.username}",
+        "password": "${apiman.es.password}",
+        "timeout": "${apiman.es.timeout}"
+      }
+    }
+  }
+}
+```
+<1> Fully qualified path to registry class.
+<2> Note the variables here, which will be resolved as defined in <<Variables>>.
+
+To configure a registry, component or factory, set the `class` to the corresponding fully qualified name of a valid implementation on the classpath.
+
+You can pass arguments to the component using the `config` section.
+
+=== Verticles and scaling
+
+```json
+{
+  "verticles": {
+    "http": { "port": 8082, "count": "auto" },
+    "https": { "port": 8443, "count": 1 },
+    "api": { "port": 8081, "count": 1 }
+  }
+}
+```
+
+To scale your gateway, you can alter the number of verticles that will be spun up per-JVM when the project is deployed by changing `count`.
+If you prefer, a count value of `"auto"` will provide a sensible default based upon the number of cores.
+
+If you don't want any instances of a particular verticle type, set its `count` to `0`.
+
+Which port the verticle listens on can be changed with `port`.
+
+NOTE: Verticle count only defines the number of verticles deployed in a given JVM instance (i.e. per `java -jar apiman<...>.jar -conf <...>`). How many deployments, and hence total number of verticles exist within your overall cluster is entirely up to you.
+
+==== HTTP
+
+Plaintext HTTP entry-point, with no transport security. Turn off by reducing count to zero.
+
+==== HTTPS
+
+Encrypted HTTPS entry-point, with TLS. Turn off by reducing count to zero.
+
+==== API
+
+Hosts the apiman gateway API, which is typically used by the apiman manager to drive the gateway.
+For instance, publishing and retiring APIs, Contracts.
+You probably only need 1 of these.
+
+=== Gateway API Authentication
+
+NOTE: This only relates to apiman's Gateway API; it is *unrelated* to auth of traffic transiting the gateway.
+
+=== Hostname
+
+```json
+{ "hostname": "localhost" }
+```
+The hostname to bind to.
+
+=== Endpoint
+
+```json
+{ "endpoint": "mynode.local" }
+```
+
+Force the gateway to report the given gateway endpoint when it is queried by the manager. By default the gateway will inspect the request used to hit the Gateway API, and use whichever address was used to reach it as the endpoint.
+
+=== Prefer Secure
+
+```json
+{ "preferSecure": true }
+```
+
+When reporting the gateway endpoint (as above), prefer to report the secure (HTTPS) URI rather than an insecure one (HTTP).

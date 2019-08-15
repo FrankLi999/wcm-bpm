@@ -1,0 +1,14 @@
+GET /roles/TestRole1 admin/admin
+----
+200
+Content-Type: application/json
+X-RestTest-ArrayOrdering: any
+
+{
+  "id" : "TestRole1",
+  "name" : "Test Role 1",
+  "autoGrant" : true,
+  "createdBy" : "admin",
+  "description" : "This is the description of Test Role 1.",
+  "permissions" : [ "orgAdmin", "orgView", "orgEdit" ]
+}

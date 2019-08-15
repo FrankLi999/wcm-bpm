@@ -1,0 +1,12 @@
+GET /ClientReregisterTest/echo-1/1.0/path/to/app/resource admin/admin
+X-API-Key: 12345
+Accept: application/json
+
+----
+404
+Content-Type: application/json
+
+{
+  "responseCode" : 404,
+  "message" : "No contract found between Client test and API echo-1."
+}

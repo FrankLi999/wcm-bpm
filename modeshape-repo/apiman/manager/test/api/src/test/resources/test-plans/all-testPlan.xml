@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testPlan xmlns="urn:io.apiman.test:2014:02:testPlan">
+
+  <!-- First, do some simple System level requests -->
+  <testGroup name="System">
+    <test name="Status">test-plan-data/all/system/001_status.resttest</test>
+  </testGroup>
+
+  <testGroup name="Create Entities">
+    <test name="Create Gateway">test-plan-data/all/creates/000_create-gateway.resttest</test>
+    <test name="Create Organization">test-plan-data/all/creates/001_create_org.resttest</test>
+    <test name="Create Plan">test-plan-data/all/creates/002_create-plan1.resttest</test>
+    <test name="Create Plan Version">test-plan-data/all/creates/003_create-plan1-version-1.0.resttest</test>
+    <test name="Lock Plan">test-plan-data/all/publish/003_lock-plan-1.resttest</test>
+    <test name="Create Client">test-plan-data/all/creates/004_create-client1.resttest</test>
+    <test name="Create Client Version">test-plan-data/all/creates/005_create-client1-version-1.0.resttest</test>
+    <test name="Create API">test-plan-data/all/creates/006_create-api1.resttest</test>
+    <test name="Create API Version">test-plan-data/all/creates/007_create-api1-version-1.0.resttest</test>
+    <test name="Update API Version">test-plan-data/all/creates/007.5_update-api1-version-1.0.resttest</test>
+    <test name="Publish API">test-plan-data/all/publish/001_publish-api-1.resttest</test>
+    <test name="Create Contract">test-plan-data/all/creates/008_create-contract1.resttest</test>
+    <test name="Register Client">test-plan-data/all/publish/002_register-client-1.resttest</test>
+  </testGroup>
+
+  <testGroup name="Auditing">
+    <test name="User Activity">test-plan-data/all/auditing/001_user-activity.resttest</test>
+  </testGroup>
+
+</testPlan>

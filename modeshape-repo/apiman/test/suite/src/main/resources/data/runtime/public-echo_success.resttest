@@ -1,0 +1,14 @@
+GET /Test/public-echo/1.0
+X-Custom-Header: custom-value
+
+----
+200
+Content-Type: application/json
+X-RestTest-Assert-IgnoreCase: true
+
+{
+  "method" : "GET",
+  "headers" : {
+    "X-Custom-Header" : "custom-value"
+  }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+  </head>
+
+  <body>
+    
+    <div ng-include="headerInclude"></div>
+    <div ng-controller="Apiman.UserProfileController" class="page container" data-field="page" ng-cloak="" ng-show="pageState == 'loaded'">
+      <div class="row">
+        <div class="col-md-12">
+          <h1><i class="fa fa-user fa-fw"></i> <span apiman-i18n-key="user-profile">User Profile</span></h1>
+          <hr />
+        </div>
+      </div>
+      <div class="row apiman-settings">
+        <div class="col-md-6">
+          <div class="settings-detail">
+            <form role="form">
+              <div class="form-group">
+                <label apiman-i18n-key="profile.username" for="usernameInput">Username</label>
+                <input ng-model="user.username" type="text" class="apiman-form-control form-control" id="apiman-username" disabled="disabled">
+              </div>
+              <div class="form-group">
+                <label apiman-i18n-key="profile.full-name" for="nameInput">Full Name</label>
+                <input ng-model="updatedUser.fullName" type="text" class="apiman-form-control form-control" id="apiman-name" apiman-i18n-key="profile.enter-full-name" placeholder="Enter your full name...">
+              </div>
+              <div class="form-group">
+                <label apiman-i18n-key="profile.email" for="emailInput">Email</label>
+                <input ng-model="updatedUser.email" type="email" class="apiman-form-control form-control" id="apiman-email" apiman-i18n-key="profile.enter-email" placeholder="Email address...">
+              </div>
+              <button id="update-profile" ng-disabled="!isDirty || !isValid" apiman-action-btn="" class="btn btn-primary" data-field="updateButton" apiman-i18n-key="update-profile" placeholder="Updating..." data-icon="fa-cog" ng-click="save()">Update Profile</button>
+              <a id="cancel"
+                 class="btn btn-default btn-cancel cancel"
+                 ng-click="cancel();"
+                 apiman-i18n-key="cancel">Cancel</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div> <!-- /container -->
+  </body>
+</html>

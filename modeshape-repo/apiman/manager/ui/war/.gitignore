@@ -1,0 +1,12 @@
+.externalToolBuilders/
+.idea/
+deps.css
+npm-debug.log
+defs.d.ts
+dist
+d.ts/api-manager/
+d.ts/includes.d.ts
+libs/
+node/
+node_modules/
+/compiled.js

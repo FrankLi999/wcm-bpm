@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testPlan xmlns="urn:io.apiman.test:2014:02:testPlan">
+
+  <testGroup name="Initial Creates">
+    <test name="Create Organization 1">test-plan-data/policychain/001_create-org.resttest</test>
+    <test name="Create Policy Def 1">test-plan-data/policychain/002_create-policyDef-1.resttest</test>
+    <test name="Create Policy Def 2">test-plan-data/policychain/003_create-policyDef-2.resttest</test>
+    <test name="Create Policy Def 3">test-plan-data/policychain/004_create-policyDef-3.resttest</test>
+    <test name="Create Gold Plan">test-plan-data/policychain/005_create-plan-gold.resttest</test>
+    <test name="Create Gold Plan 1.0">test-plan-data/policychain/006_create-plan-1-1.0.resttest</test>
+    <test name="Create plan policy 1">test-plan-data/policychain/007_create-planpolicy-1.resttest</test>
+    <test name="Create plan policy 2">test-plan-data/policychain/008_create-planpolicy-2.resttest</test>
+    <test name="Lock Gold Plan 1.0">test-plan-data/policychain/009_lock-plan-1.resttest</test>
+
+    <test name="Create foo API">test-plan-data/policychain/010_create-api-foo.resttest</test>
+    <test name="Create foo API 1.0">test-plan-data/policychain/011_create-api-foo-1.0.resttest</test>
+    <test name="Update foo API 1.0">test-plan-data/policychain/011.5_update-api-foo-1.0.resttest</test>
+    <test name="Create API policy 1">test-plan-data/policychain/012_create-apipolicy-1.resttest</test>
+  </testGroup>
+
+  <!-- Policy Chain -->
+  <testGroup name="Policy Chain">
+    <test name="Gold Policy Chain">test-plan-data/policychain/020_get-policychain-gold.resttest</test>
+    <test name="Reorder Plan Policies">test-plan-data/policychain/021_reorder-plan-policies.resttest</test>
+    <test name="Gold Policy Chain (reordered)">test-plan-data/policychain/022_get-policychain-gold.resttest</test>
+  </testGroup>
+
+</testPlan>

@@ -1,0 +1,28 @@
+POST /organizations/Organization1/plans/Plan1/versions/1.0/policies admin/admin
+Content-Type: application/json
+
+{
+  "configuration" : "{ 'kung' : 'foo' }",
+  "definitionId" : "PolicyDefOne"
+}
+----
+200
+Content-Type: application/json
+
+{  
+  "type" : "Plan",
+  "organizationId" : "Organization1",
+  "entityId" : "Plan1",
+  "entityVersion" : "1.0",
+  "name" : "Policy Def One",
+  "configuration" : "{ 'kung' : 'foo' }",
+  "createdBy" : "admin",
+  "modifiedBy" : "admin",
+  "definition" : {  
+    "id" : "PolicyDefOne",
+    "policyImpl" : "org.example.PolicyDefOne",
+    "name" : "Policy Def One",
+    "description" : "This is the first policy def.",
+    "icon" : "one"
+  }
+}

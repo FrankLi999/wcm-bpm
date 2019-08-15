@@ -1,0 +1,20 @@
+POST /gateways admin/admin
+Content-Type: application/json
+
+{
+  "name" : "Gateway Two",
+  "description" : "This is the second gateway.",
+  "type" : "REST",
+  "configuration" : "{\"endpoint\":\"http://localhost:8080/gateway-config/api\",\"username\":\"admin99\",\"password\":\"password\"}"
+}
+----
+200
+Content-Type: application/json
+
+{
+  "id" : "GatewayTwo",
+  "name" : "Gateway Two",
+  "description" : "This is the second gateway.",
+  "type" : "REST",
+  "configuration" : "{\"endpoint\":\"http://localhost:8080/gateway-config/api\",\"username\":\"admin99\",\"password\":\"password\"}"
+}
