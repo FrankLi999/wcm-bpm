@@ -479,6 +479,11 @@ export function buildLayout(jsf, widgetLibrary) {
       widget: widgetLibrary.getWidget('submit'),
     });
   }
+  console.log("form layout: ")
+  console.log(formLayout)
+  
+  console.log("jsf: ")
+  console.log(jsf)
   return formLayout;
 }
 

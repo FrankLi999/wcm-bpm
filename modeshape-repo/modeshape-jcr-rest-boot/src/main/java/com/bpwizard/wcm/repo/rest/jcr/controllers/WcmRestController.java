@@ -52,11 +52,11 @@ import com.bpwizard.wcm.repo.rest.jcr.model.KeyValue;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutRow;
 import com.bpwizard.wcm.repo.rest.jcr.model.Page;
-import com.bpwizard.wcm.repo.rest.jcr.model.PageLayout;
+import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceNode;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceViewer;
-import com.bpwizard.wcm.repo.rest.jcr.model.SideNav;
+import com.bpwizard.wcm.repo.rest.jcr.model.SidePane;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
 import com.bpwizard.wcm.repo.rest.jcr.model.Theme;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestChildType;
@@ -85,6 +85,29 @@ public class WcmRestController {
 	private RestNodeTypeHandler nodeTypeHandler;
 
 	private ObjectMapper objectMapper = new ObjectMapper();
+
+	@GetMapping(path = "/{repository}/{workspace}/site/{site}/{language}", 
+		produces = MediaType.APPLICATION_JSON_VALUE)
+	public ControlField[] getSiteConfig(
+			@PathVariable("repository") String repository,
+			@PathVariable("workspace") String workspace, 
+			@PathVariable("site") String site,
+			@PathVariable("page") String page,
+			@PathVariable("language") String language,
+			HttpServletRequest request) throws RepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		RestNode controlFieldFolder = (RestNode) this.itemHandler.item(request, repository, workspace,
+				"/bpwizard/library/system/controlField", 2);
+		ControlField[] ControlFileds = controlFieldFolder.getChildren().stream().filter(this::isControlField)
+				.map(this::toControlField).toArray(ControlField[]::new);
+
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
+		return ControlFileds;
+	}
 
 	@GetMapping(path = "/{repository}/{workspace}/theme", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Theme[] getTheme(@PathVariable("repository") String repository, @PathVariable("workspace") String workspace,
@@ -263,24 +286,24 @@ public class WcmRestController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@GetMapping(path = "/{repository}/{workspace}/pagelayout", produces = MediaType.APPLICATION_JSON_VALUE)
-	public PageLayout[] getPagelayout(@PathVariable("repository") String repository,
+	@GetMapping(path = "/{repository}/{workspace}/contentAreaLayout", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ContentAreaLayout[] getContentAreaLayout(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
 
-		PageLayout[] pageLayouts = this.getPageLayoutLibraries(repository, workspace, request)
-				.flatMap(layout -> this.getPagelayouts(layout, request)).toArray(PageLayout[]::new);
+		ContentAreaLayout[] contentAreaLayouts = this.getContentAreaLayoutLibraries(repository, workspace, request)
+				.flatMap(layout -> this.getContentArealayouts(layout, request)).toArray(ContentAreaLayout[]::new);
 
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
 		}
-		return pageLayouts;
+		return contentAreaLayouts;
 	}
 
-	@PostMapping(path = "/pagelayout", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createPageLayout(@RequestBody PageLayout pageLayout, HttpServletRequest request)
+	@PostMapping(path = "/contentAreaLayout", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createPageLayout(@RequestBody ContentAreaLayout pageLayout, HttpServletRequest request)
 			throws RepositoryException, IOException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
@@ -289,18 +312,18 @@ public class WcmRestController {
 		String workspaceName = pageLayout.getWorkspace();
 
 		Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
-		Node pageLayoutFolder = session
-				.getNode(String.format("/bpwizard/library/%s/pageLayout", pageLayout.getLibrary()));
-		Node pageLayoutNode = pageLayoutFolder.addNode(pageLayout.getName(), "bpw:pageLayout");
-		pageLayoutNode.setProperty("bpw:name", pageLayout.getName());
-		pageLayoutNode.setProperty("bpw:headerEnabled", pageLayout.isHeaderEnabled());
-		pageLayoutNode.setProperty("bpw:footerEnabled", pageLayout.isFooterEnabled());
-		pageLayoutNode.setProperty("bpw:theme", pageLayout.getTheme());
-		pageLayoutNode.setProperty("bpw:contentWidth", 80);
+		Node contentAreaLayoutFolder = session
+				.getNode(String.format("/bpwizard/library/%s/contentAreaLayout", pageLayout.getLibrary()));
+		Node contentAreaLayoutNode = contentAreaLayoutFolder.addNode(pageLayout.getName(), "bpw:contentAreaLayout");
+		contentAreaLayoutNode.setProperty("bpw:name", pageLayout.getName());
+		contentAreaLayoutNode.setProperty("bpw:headerEnabled", pageLayout.isHeaderEnabled());
+		contentAreaLayoutNode.setProperty("bpw:footerEnabled", pageLayout.isFooterEnabled());
+		contentAreaLayoutNode.setProperty("bpw:theme", pageLayout.getTheme());
+		contentAreaLayoutNode.setProperty("bpw:contentWidth", 80);
 
-		Node sidenavNode = pageLayoutNode.addNode("sidenav", "bpw:layoutSidenav");
-		this.addSidenavNode(sidenavNode, pageLayout.getSidenav());
-		this.addContentLayoutNodes(pageLayoutNode, pageLayout.getRows());
+		Node sidePaneNode = contentAreaLayoutNode.addNode("sidePane", "bpw:layoutSidePane");
+		this.addSidePageNode(sidePaneNode, pageLayout.getSidePane());
+		this.addPageLayoutNodes(contentAreaLayoutNode, pageLayout.getRows());
 		session.save();
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
@@ -755,13 +778,13 @@ public class WcmRestController {
 		return jsonForm;
 	}
 
-	private void addSidenavNode(Node sidenavNode, SideNav sidenav) throws RepositoryException {
+	private void addSidePageNode(Node sidenavNode, SidePane sidenav) throws RepositoryException {
 		sidenavNode.setProperty("bpw:isLeft", sidenav.isLeft());
 		sidenavNode.setProperty("bpw:width", sidenav.getWidth());
 		this.setResourceViewer(sidenavNode, sidenav.getViewers());
 	}
 
-	private void addContentLayoutNodes(Node pageLayoutNode, LayoutRow[] rows) throws RepositoryException {
+	private void addPageLayoutNodes(Node pageLayoutNode, LayoutRow[] rows) throws RepositoryException {
 		int rowCount = 0;
 		for (LayoutRow row : rows) {
 			Node rowNode = pageLayoutNode.addNode("row" + rowCount++, "bpw:layoutRow");
@@ -897,12 +920,12 @@ public class WcmRestController {
 		return themeWithLibrary;
 	}
 
-	private PageLayout toPageLayoutWithLibrary(RestNode node, String repository, String workspace) {
-		PageLayout pagelayoutWithLibrary = new PageLayout();
-		pagelayoutWithLibrary.setRepository(repository);
-		pagelayoutWithLibrary.setWorkspace(workspace);
-		pagelayoutWithLibrary.setLibrary(node.getName());
-		return pagelayoutWithLibrary;
+	private ContentAreaLayout toContentAreaLayoutWithLibrary(RestNode node, String repository, String workspace) {
+		ContentAreaLayout contentAreaLayoutWithLibrary = new ContentAreaLayout();
+		contentAreaLayoutWithLibrary.setRepository(repository);
+		contentAreaLayoutWithLibrary.setWorkspace(workspace);
+		contentAreaLayoutWithLibrary.setLibrary(node.getName());
+		return contentAreaLayoutWithLibrary;
 	}
 
 	private RenderTemplate toRenderTemplateWithLibrary(RestNode node, String repository, String workspace) {
@@ -953,8 +976,8 @@ public class WcmRestController {
 		return result;
 	}
 
-	private PageLayout toPageLayout(RestNode node, PageLayout layout) {
-		PageLayout result = new PageLayout();
+	private ContentAreaLayout toContentAreaLayout(RestNode node, ContentAreaLayout layout) {
+		ContentAreaLayout result = new ContentAreaLayout();
 		result.setRepository(layout.getRepository());
 		result.setWorkspace(layout.getWorkspace());
 		result.setLibrary(layout.getLibrary());
@@ -974,17 +997,17 @@ public class WcmRestController {
 		List<LayoutRow> rows = new ArrayList<>();
 
 		node.getChildren().forEach(childNode -> {
-			if (this.checkNodeType(childNode, "bpw:layoutSidenav")) {
-				SideNav sidenav = new SideNav();
+			if (this.checkNodeType(childNode, "bpw:layoutSidePane")) {
+				SidePane sidepane = new SidePane();
 				for (RestProperty property : childNode.getJcrProperties()) {
 					if ("bpw:isLeft".equals(property.getName())) {
-						sidenav.setLeft(Boolean.parseBoolean(property.getValues().get(0)));
+						sidepane.setLeft(Boolean.parseBoolean(property.getValues().get(0)));
 					} else if ("bpw:width".equals(property.getName())) {
-						sidenav.setWidth(Integer.parseInt(property.getValues().get(0)));
+						sidepane.setWidth(Integer.parseInt(property.getValues().get(0)));
 					}
 				}
-				sidenav.setViewers(this.resolveResourceViewer(childNode));
-				result.setSidenav(sidenav);
+				sidepane.setViewers(this.resolveResourceViewer(childNode));
+				result.setSidePane(sidepane);
 			} else if (this.checkNodeType(childNode, "bpw:layoutRow")) {
 				LayoutRow row = this.resolveLayoutRow(childNode);
 				rows.add(row);
@@ -1080,13 +1103,13 @@ public class WcmRestController {
 		}
 	}
 
-	private Stream<PageLayout> getPageLayoutLibraries(String repository, String workspace, HttpServletRequest request)
+	private Stream<ContentAreaLayout> getContentAreaLayoutLibraries(String repository, String workspace, HttpServletRequest request)
 			throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(request, repository, workspace,
 					"/bpwizard/library", 1);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
-					.map(node -> toPageLayoutWithLibrary(node, repository, workspace));
+					.map(node -> toContentAreaLayoutWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
@@ -1126,13 +1149,13 @@ public class WcmRestController {
 		}
 	}
 
-	private Stream<PageLayout> getPagelayouts(PageLayout pageLayout, HttpServletRequest request)
+	private Stream<ContentAreaLayout> getContentArealayouts(ContentAreaLayout contentAreaLayout, HttpServletRequest request)
 			throws WcmRepositoryException {
 		try {
-			RestNode pageLayoutNode = (RestNode) this.itemHandler.item(request, pageLayout.getRepository(),
-					pageLayout.getWorkspace(), "/bpwizard/library/" + pageLayout.getLibrary() + "/pageLayout", 4);
-			return pageLayoutNode.getChildren().stream().filter(this::isPageLayout)
-					.map(node -> this.toPageLayout(node, pageLayout));
+			RestNode contentAreaLayoutNode = (RestNode) this.itemHandler.item(request, contentAreaLayout.getRepository(),
+					contentAreaLayout.getWorkspace(), "/bpwizard/library/" + contentAreaLayout.getLibrary() + "/pageLayout", 4);
+			return contentAreaLayoutNode.getChildren().stream().filter(this::isContentAreaLayout)
+					.map(node -> this.toContentAreaLayout(node, contentAreaLayout));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
@@ -1158,8 +1181,8 @@ public class WcmRestController {
 		return this.checkNodeType(node, "bpw:renderTemplate");
 	}
 
-	private boolean isPageLayout(RestNode node) {
-		return this.checkNodeType(node, "bpw:pageLayout");
+	private boolean isContentAreaLayout(RestNode node) {
+		return this.checkNodeType(node, "bpw:contentAreaLayout");
 	}
 
 	private boolean isAuthortingTemplate(RestNode node) {

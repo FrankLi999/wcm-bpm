@@ -1,87 +1,51 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
-import java.util.Arrays;
-
-import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
-
-public class PageLayout implements HasName {
-	
-	String name;
-	String repository;
-	String workspace;
-	String library;
-	boolean headerEnabled = true;
-	boolean footerEnabled = true;
-	String theme;
-	SideNav sidenav;
-	int contentWidth;
-	LayoutRow rows[];
-	
-	public String getName() {
-		return name;
+public class PageLayout {
+    private String colorTheme;
+    private boolean customScrollbars;
+	private NavBar navbar;
+	private Toolbar toolbar;
+	private Footer Footer;
+	private SidePanel sidePanel;
+	public String getColorTheme() {
+		return colorTheme;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setColorTheme(String colorTheme) {
+		this.colorTheme = colorTheme;
 	}
-	public boolean isHeaderEnabled() {
-		return headerEnabled;
+	public boolean isCustomScrollbars() {
+		return customScrollbars;
 	}
-	public void setHeaderEnabled(boolean headerEnabled) {
-		this.headerEnabled = headerEnabled;
+	public void setCustomScrollbars(boolean customScrollbars) {
+		this.customScrollbars = customScrollbars;
 	}
-	public boolean isFooterEnabled() {
-		return footerEnabled;
+	public NavBar getNavbar() {
+		return navbar;
 	}
-	public void setFooterEnabled(boolean footerEnabled) {
-		this.footerEnabled = footerEnabled;
+	public void setNavbar(NavBar navbar) {
+		this.navbar = navbar;
 	}
-	public String getTheme() {
-		return theme;
+	public Toolbar getToolbar() {
+		return toolbar;
 	}
-	public void setTheme(String theme) {
-		this.theme = theme;
+	public void setToolbar(Toolbar toolbar) {
+		this.toolbar = toolbar;
 	}
-	public SideNav getSidenav() {
-		return sidenav;
+	public Footer getFooter() {
+		return Footer;
 	}
-	public void setSidenav(SideNav sidenav) {
-		this.sidenav = sidenav;
+	public void setFooter(Footer footer) {
+		Footer = footer;
 	}
-	public LayoutRow[] getRows() {
-		return rows;
+	public SidePanel getSidePanel() {
+		return sidePanel;
 	}
-	public void setRows(LayoutRow[] rows) {
-		this.rows = rows;
-	}
-	public int getContentWidth() {
-		return contentWidth;
-	}
-	public void setContentWidth(int contentWidth) {
-		this.contentWidth = contentWidth;
-	}
-	public String getRepository() {
-		return repository;
-	}
-	public void setRepository(String repository) {
-		this.repository = repository;
-	}
-	public String getWorkspace() {
-		return workspace;
-	}
-	public void setWorkspace(String workspace) {
-		this.workspace = workspace;
-	}
-	public String getLibrary() {
-		return library;
-	}
-	public void setLibrary(String library) {
-		this.library = library;
+	public void setSidePanel(SidePanel sidePanel) {
+		this.sidePanel = sidePanel;
 	}
 	@Override
 	public String toString() {
-		return "PageLayout [name=" + name + ", repository=" + repository + ", workspace=" + workspace + ", library="
-				+ library + ", headerEnabled=" + headerEnabled + ", footerEnabled=" + footerEnabled + ", theme=" + theme
-				+ ", sidenav=" + sidenav + ", contentWidth=" + contentWidth + ", rows=" + Arrays.toString(rows)
-				+ ", toString()=" + super.toString() + "]";
+		return "PageLayout [colorTheme=" + colorTheme + ", customScrollbars=" + customScrollbars + ", navbar=" + navbar
+				+ ", toolbar=" + toolbar + ", Footer=" + Footer + ", sidePanel=" + sidePanel + "]";
 	}
 }

@@ -365,7 +365,7 @@
 [bpw:layoutRow]
 + * (bpw:layoutColumn)
 
-[bpw:layoutSidenav]
+[bpw:layoutSidePane]
 - bpw:isLeft (BOOLEAN) = true
 - bpw:width (LONG)
 + * (bpw:resourceViewer)
@@ -376,7 +376,16 @@
 - bpw:footerEnabled (BOOLEAN) = false
 - bpw:theme (STRING)
 - bpw:contentWidth (LONG)
-+ sidenav (bpw:layoutSidenav)
++ sidePane (bpw:layoutSidePane)
++ * (bpw:layoutRow)
+
+[bpw:contentAreaLayout] > mix:lastModified
+- bpw:name (STRING) = false
+- bpw:headerEnabled (BOOLEAN) = false
+- bpw:footerEnabled (BOOLEAN) = false
+- bpw:theme (STRING)
+- bpw:contentWidth (LONG)
++ sidePane (bpw:layoutSidePane)
 + * (bpw:layoutRow)
 
 [bpw:workflowFolder] > nt:folder
@@ -393,6 +402,9 @@
 [bpw:pageLayoutFolder] > nt:folder
 + * (bpw:pageLayout)
 
+[bpw:contentAreaLayoutFolder] > nt:folder
++ * (bpw:contentAreaLayout)
+
 [bpw:renderTemplateFolder] > nt:folder
 + * (bpw:renderTemplate)
 
@@ -406,6 +418,7 @@
 + authoringTemplate (bpw:authoringTemplateFolder)
 + theme (bpw:themesFolder)
 + pageLayout (bpw:pageLayoutFolder)
++ contentAreaLayout (bpw:contentAreaLayoutFolder)
 + renderTemplate (bpw:renderTemplateFolder)
 + query (bpw:queryFolder)
 + workflow (bpw:workflowFolder)

@@ -3,7 +3,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Framework } from '../framework';
 import { FrameworkLibraryService } from '../framework-library.service';
-import { JsonSchemaFormModule } from '../../json-schema-form.module';
+// import { JsonSchemaFormModule } from '../../json-schema-form.module';
 import { JsonSchemaFormService } from '../../json-schema-form.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';

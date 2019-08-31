@@ -2,7 +2,7 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.util.Arrays;
 
-public class SideNav {
+public class SidePane {
 
     private boolean isLeft = true;
     private int width;
