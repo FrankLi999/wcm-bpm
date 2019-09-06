@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageLayoutComponent } from './page-layout.component';
+import { ContentAreaLayoutsComponent } from './content-area-layouts.component';
 
-describe('PageTemplateComponent', () => {
-  let component: PageLayoutComponent;
-  let fixture: ComponentFixture<PageLayoutComponent>;
+describe('ContentAreaLayoutsComponent', () => {
+  let component: ContentAreaLayoutsComponent;
+  let fixture: ComponentFixture<ContentAreaLayoutsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PageLayoutComponent ]
+      declarations: [ ContentAreaLayoutsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PageLayoutComponent);
+    fixture = TestBed.createComponent(ContentAreaLayoutsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

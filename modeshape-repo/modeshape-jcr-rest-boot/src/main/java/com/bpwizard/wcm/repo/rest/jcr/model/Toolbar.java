@@ -21,7 +21,7 @@ public class Toolbar {
 	private boolean customBackgroundColor;
     private String background;
     private boolean hidden;
-    private String position;
+    private Position position;
 	public boolean isCustomBackgroundColor() {
 		return customBackgroundColor;
 	}
@@ -40,10 +40,10 @@ public class Toolbar {
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
 	}
-	public String getPosition() {
+	public Position getPosition() {
 		return position;
 	}
-	public void setPosition(String position) {
+	public void setPosition(Position position) {
 		this.position = position;
 	}
 	@Override

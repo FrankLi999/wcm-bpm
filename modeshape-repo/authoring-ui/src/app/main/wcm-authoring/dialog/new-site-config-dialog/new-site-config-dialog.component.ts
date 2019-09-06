@@ -2,15 +2,15 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { WcmService } from '../../service/wcm.service';
 import { BaseMewResourceDialog } from '../base-new-resource-dialog';
-
+import { SiteConfig } from '../../model/SiteConfig';
 @Component({
-  selector: 'app-new-page-dialog',
-  templateUrl: './new-page-dialog.component.html',
-  styleUrls: ['./new-page-dialog.component.scss']
+  selector: 'app-new-site-config-dialog',
+  templateUrl: './new-site-config-dialog.component.html',
+  styleUrls: ['./new-site-config-dialog.component.scss']
 })
-export class NewPageDialogComponent extends BaseMewResourceDialog implements OnInit {
+export class NewSiteConfigDialogComponent extends BaseMewResourceDialog implements OnInit {
   constructor(
-    public matDialogRef: MatDialogRef<NewPageDialogComponent>,
+    public matDialogRef: MatDialogRef<NewSiteConfigDialogComponent>,
     private wcmService: WcmService,
     @Inject(MAT_DIALOG_DATA) protected data: any
   ) { 
@@ -25,15 +25,16 @@ export class NewPageDialogComponent extends BaseMewResourceDialog implements OnI
   // @ Public methods
   // -----------------------------------------------------------------------------------------------------
 
-  createPage(formData: any) {
-    const page = {
+  createSiteConfig(formData: any) {
+    const siteConfig: SiteConfig = {
       ...formData,
       repository: this.data.repositoryName,
-      nodePath: this.data.nodePath,
-      workspace: this.data.workspaceName
+      workspace: this.data.workspaceName,
+      library: this.data.library
     }
-    this.wcmService.createPage(page).subscribe((event: any) => {
+    this.wcmService.createSiteConfig(siteConfig)
+      .subscribe((event: any) => {
         console.log(event)
-    });  
+      });    
   }
 }

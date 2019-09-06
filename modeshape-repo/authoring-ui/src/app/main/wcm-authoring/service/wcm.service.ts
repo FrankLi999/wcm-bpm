@@ -17,15 +17,15 @@ import {
 import {API_BASE_URL} from '../../authentication/constants';
 
 import { 
+  ApplicationConfig,
   Theme,
   ControlField,
   AuthoringTemplate,
   RenderTemplate,
-  PageLayout,
-  JsonForm,
+  ContentAreaLayout,
   SiteArea,
-  Page,
-  ContentItem
+  ContentItem,
+  SiteConfig
 } from '../model';
 @Injectable()
 @Client({
@@ -70,18 +70,25 @@ export class WcmService extends RestClient {
     @Path('workspace') workspace: string
   ): Observable<AuthoringTemplate[]> { return null; };
 
-  @Get('/{repository}/{workspace}/jsonform')
+  @Get('/{repository}/{workspace}/applicationConfig/{library}/{siteConfig}')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public getAuthoringTemplateAsJsonSchema(
+  public getApplicationConfig(
     @Path('repository') repository: string, 
-    @Path('workspace') workspace: string
-  ): Observable<JsonForm[]> { return null; };
+    @Path('workspace') workspace: string,
+    @Path('repository') library: string, 
+    @Path('workspace') siteConfig: string
+  ): Observable<ApplicationConfig> { return null; };
 
   @Post('/rt')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public createRenderTemplate(@Body rt: RenderTemplate): Observable<any> { return null; };
+
+  @Post('/siteConfig')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public createSiteConfig(@Body siteConfig: SiteConfig): Observable<any> { return null; };
 
   @Get('/{repository}/{workspace}/rt')
   @Timeout(2000) //In milliseconds
@@ -92,28 +99,28 @@ export class WcmService extends RestClient {
   ): Observable<RenderTemplate[]> { return null; };
 
   
-  @Post('/pagelayout')
+  @Post('/contentAreaLayout')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public createPagelayout(@Body rt: PageLayout): Observable<any> { return null; };
+  public createContentAreaLayout(@Body contentAreaLayout: ContentAreaLayout): Observable<any> { return null; };
 
-  @Get('/{repository}/{workspace}/pagelayout')
+  @Get('/{repository}/{workspace}/contentAreaLayout')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public getPagelayout(
+  public geContentAreaLayout(
     @Path('repository') repository: string, 
     @Path('workspace') workspace: string
-  ): Observable<PageLayout[]> { return null; };
+  ): Observable<ContentAreaLayout[]> { return null; };
 
   @Post('/sitearea')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public createSiteArea(@Body sa: SiteArea): Observable<any> { return null; };
 
-  @Post('/page')
-  @Timeout(2000) //In milliseconds
-  @Produces(MediaType.JSON)
-  public createPage(@Body page: Page): Observable<any> { return null; };
+  // @Post('/page')
+  // @Timeout(2000) //In milliseconds
+  // @Produces(MediaType.JSON)
+  // public createPage(@Body page: Page): Observable<any> { return null; };
 
   @Post('/ContentItem')
   @Timeout(2000) //In milliseconds

@@ -35,14 +35,18 @@
 - keywords (STRING) multiple
 
 [bpw:fieldLayout]
-- bpw:name (STRING)
-- bpw:title  (STRING)
 - bpw:multiple (BOOLEAN)
+- bpw:name (STRING)
+- bpw:key (STRING)
+- bpw:title  (STRING)
 - bpw:items (STRING)
++ * (bpw:fieldLayout)
 
+/*
 [bpw:customFieldLayout]
 - bpw:multiple (BOOLEAN)
 + * (bpw:fieldLayout)
+*/
 
 /*
 'Decimal', 'Text', 'True/False', 'Whole Number'
@@ -82,6 +86,7 @@
 
 [bpw:formControl] > nt:hierarchyNode
 - bpw:title (String)
+- bpw:fieldPath (String)
 - bpw:controlName (String)
 - bpw:value (STRING) multiple COPY
 - bpw:options (STRING) multiple COPY
@@ -102,7 +107,7 @@
 - bpw:id (STRING)
 - bpw:fxFlex (LONG) 
 - bpw:fieldNames (STRING) multiple
-+ * (bpw:customFieldLayout)
++ * (bpw:fieldLayout)
 
 [bpw:formRow] > bpw:formGroup
 - bpw:rowName (String)
@@ -152,20 +157,6 @@
 - bpw:showOnMenu (BOOLEAN) = 'false'
 - bpw:sortOrder (LONG) = 0
 
-
-[bpw:pageType] > bpw:resourceNode
-- bpw:name (STRING) mandatory COPY
-- bpw:pageLayout (STRING) mandatory COPY
-- bpw:title (STRING) mandatory COPY
-- bpw:url (STRING)
-- bpw:friendlyURL (STRING)
-- bpw:cacheTTL (LONG)
-- bpw:showOnMenu (BOOLEAN) COPY
-- bpw:sortOrder (LONG) COPY
-- bpw:securePage (BOOLEAN) COPY
-+ bpw:metaData (bpw:keyValues)
-+ bpw:searchData (bpw:pageSearchData)
-
 [bpw:keyValueType] > bpw:resourceNode
 - bpw:key (STRING) COPY
 - bpw:value (STRING) COPY
@@ -193,6 +184,12 @@
 [bpw:themeType] > nt:folder, bpw:resourceNode
 - bpw:themeName (STRING)
 
+[bpw:navigationBadge]
+- bpw:title (STRING)
+- bpw:translate (STRING)
+- bpw:bg (STRING)
+- bpw:fg (STRING)
+
 [bpw:siteArea] > bpw:resourceNode
 - bpw:name (STRING) mandatory COPY
 - bpw:title (STRING) mandatory COPY
@@ -204,6 +201,21 @@
 - bpw:allowedArtifactTypes (STRING) multiple COPY
 - bpw:description (STRING) COPY
 - bpw:defaultContent (STRING) COPY
+- bpw:contentAreaLayout (STRING)
+- bpw:cacheTTL (LONG)
+- bpw:securePage (BOOLEAN) COPY
+- bpw:navigationId (STRING) mandatory 
+- bpw:navigationType (STRING) mandatory 
+- bpw:function (STRING)
+- bpw:translate (STRING)
+- bpw:icon (STRING)
+- bpw:classes (STRING)
+- bpw:exactMatch (BOOLEAN)
+- bpw:externalUrl (BOOLEAN)
+- bpw:openInNewTab (BOOLEAN)
++ bpw:badge (bpw:navigationBadge)
++ bpw:metaData (bpw:keyValues)
++ bpw:searchData (bpw:pageSearchData)
 + * (bpw:resourceNode)
 
 [bpw:queryStatement] > bpw:resourceNode
@@ -365,27 +377,54 @@
 [bpw:layoutRow]
 + * (bpw:layoutColumn)
 
-[bpw:layoutSidePane]
+[bpw:contentAreaSidePanel]
 - bpw:isLeft (BOOLEAN) = true
 - bpw:width (LONG)
 + * (bpw:resourceViewer)
 
+[bpw:navbar]
+- primaryBackground (STRING)
+- secondaryBackground (STRING)
+- hidden (BOOLEAN)
+- folded (BOOLEAN)
+- position (STRING)
+- variant (STRING)
+
+[bpw:toolbar]
+- customBackgroundColor (BOOLEAN)
+- background (STRING)
+- hidden (BOOLEAN)
+- position (STRING)
+
+[bpw:footer]
+- customBackgroundColor (BOOLEAN)
+- background (STRING)
+- hidden (BOOLEAN)
+- position (STRING)
+
+[bpw:sidePanel]
+- hidden (BOOLEAN)
+- position (STRING)
+
 [bpw:pageLayout] > mix:lastModified
-- bpw:name (STRING) = false
-- bpw:headerEnabled (BOOLEAN) = false
-- bpw:footerEnabled (BOOLEAN) = false
-- bpw:theme (STRING)
-- bpw:contentWidth (LONG)
-+ sidePane (bpw:layoutSidePane)
-+ * (bpw:layoutRow)
+- bpw:style (STRING)
+- bpw:width (STRING)
++ navbar (bpw:navbar)
++ toolbar (bpw:toolbar)
++ footer (bpw:footer)
++ sidePanel (bpw:sidePanel)
+
+[bpw:siteConfig] > mix:lastModified
+- bpw:name (STRING)
+- bpw:colorTheme (STRING)
+- bpw:customScrollbars (BOOLEAN)
+- bpw:rootSiteArea (STRING)
++ layout (bpw:pageLayout)
 
 [bpw:contentAreaLayout] > mix:lastModified
-- bpw:name (STRING) = false
-- bpw:headerEnabled (BOOLEAN) = false
-- bpw:footerEnabled (BOOLEAN) = false
-- bpw:theme (STRING)
+- bpw:name (STRING)
 - bpw:contentWidth (LONG)
-+ sidePane (bpw:layoutSidePane)
++ sidePane (bpw:contentAreaSidePanel)
 + * (bpw:layoutRow)
 
 [bpw:workflowFolder] > nt:folder
@@ -399,8 +438,8 @@
 [bpw:themesFolder] > nt:folder
 + * (bpw:themeType)
 
-[bpw:pageLayoutFolder] > nt:folder
-+ * (bpw:pageLayout)
+[bpw:siteConfigFolder] > nt:folder
++ * (bpw:siteConfig)
 
 [bpw:contentAreaLayoutFolder] > nt:folder
 + * (bpw:contentAreaLayout)
@@ -417,7 +456,7 @@
 + rootSiteArea (bpw:siteArea)
 + authoringTemplate (bpw:authoringTemplateFolder)
 + theme (bpw:themesFolder)
-+ pageLayout (bpw:pageLayoutFolder)
++ siteConfig (bpw:siteConfigFolder)
 + contentAreaLayout (bpw:contentAreaLayoutFolder)
 + renderTemplate (bpw:renderTemplateFolder)
 + query (bpw:queryFolder)
@@ -457,40 +496,7 @@
 [bpw:contentElement] > nt:hierarchyNode
  - bpw:multiple (BOOLEAN)
  - bpw:value (STRING) multiple
- /*
-[bpw:stringElement] > bpw:contentElement 
- - bpw:value (STRING) multiple
  
-[bpw:numberElement] > bpw:contentElement 
- - bpw:value (LONG) multiple
-
-[bpw:binaryElement] > bpw:contentElement 
- - bpw:value (BINARY)
-
-[bpw:doubleElement] > bpw:contentElement 
- - bpw:value (DOUBLE) multiple
- 
-[bpw:dateElement] > bpw:contentElement 
- - bpw:value (DATE) multiple
-
-[bpw:nameElement] > bpw:contentElement 
- - bpw:value (NAME) multiple
-
-[bpw:pathElement] > bpw:contentElement 
- - bpw:value (PATH) multiple
- 
-[bpw:referenceElement] > bpw:contentElement 
-- bpw:value (REFERENCE) multiple
-
-[bpw:weakReferenceElement] > bpw:contentElement 
-- bpw:value (WEAKREFERENCE) multiple
-
-[bpw:uriElement] > bpw:contentElement 
-- bpw:value (URI) multiple
-
-[bpw:decimalElement] > bpw:contentElement 
-- bpw:value (DECIMAL) multiple
-*/   
  [bpw:content] > bpw:resourceNode
  - bpw:authoringTemplate (STRING)
 + * (bpw:contentElement)

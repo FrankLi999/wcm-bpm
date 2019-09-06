@@ -5,10 +5,9 @@ import { WcmService } from '../../service/wcm.service';
 import { 
   Theme,
   RenderTemplate,
-  PageLayout,
+  ContentAreaLayout,
   LayoutColumn,
-  LayoutRow,
-  SideNav
+  LayoutRow
 } from '../../model';
 
 export interface ThemeModel {
@@ -43,11 +42,11 @@ export interface RenderTemplateModel {
 // }
 
 @Component({
-  selector: 'page-layout',
-  templateUrl: './page-layout.component.html',
-  styleUrls: ['./page-layout.component.scss']
+  selector: 'content-area-layout',
+  templateUrl: './content-area-layout.component.html',
+  styleUrls: ['./content-area-layout.component.scss']
 })
-export class PageLayoutComponent implements OnInit {
+export class ContentAreaLayoutComponent implements OnInit {
   pageLayoutForm: FormGroup;
 
   // headerEnabled : boolean;
@@ -57,19 +56,19 @@ export class PageLayoutComponent implements OnInit {
   // sidenav: SideNav;
   // rows: LayoutRow[];
 
-  layout: PageLayout = {
+  layout: ContentAreaLayout = {
     name: '',
     repository: 'bpwizard',
     workspace: 'default',
     library: 'design',
-    headerEnabled: false,
-    footerEnabled: false,
-    theme: '',
+    // headerEnabled: false,
+    // footerEnabled: false,
+    // theme: '',
     // sideWidth: 0,
     // contentWidth: 100,
     contentWidth: 100,
     //leftSide: true,
-    sidenav: {
+    sidePane: {
       isLeft: true,
       width: 0,
       viewers: []
@@ -200,37 +199,37 @@ export class PageLayoutComponent implements OnInit {
       this.layout.rows[rowNumber].columns[columnNumber].viewers.splice(viewerIndex, 1);
   }
 
-  updateSidebar(sidebarType: number) {
-      switch (sidebarType) {
+  updateSidePane(sidePaneType: number) {
+      switch (sidePaneType) {
           case 0:
-              this.updateSidenavWidth(0, 100, true);
+              this.updateSidePaneWidth(0, 100, true);
               break;
           case 1:
-              this.updateSidenavWidth(20, 80, true);
+              this.updateSidePaneWidth(20, 80, true);
               break;
           case 2:
-              this.updateSidenavWidth(30, 70, true);
+              this.updateSidePaneWidth(30, 70, true);
               break;
           case 3:
-              this.updateSidenavWidth(40, 60, true);
+              this.updateSidePaneWidth(40, 60, true);
               break;
           case 4:
-              this.updateSidenavWidth(20, 80, false);
+              this.updateSidePaneWidth(20, 80, false);
               break;
           case 5:
-              this.updateSidenavWidth(30, 70, false);
+              this.updateSidePaneWidth(30, 70, false);
               break;  
           case 6:
           default:
-              this.updateSidenavWidth(40, 60, false);
+              this.updateSidePaneWidth(40, 60, false);
               break; 
       }
   }
 
-  updateSidenavWidth(sideWidth: number, contentWide: number, leftSide: boolean) {
-      this.layout.sidenav.width = sideWidth;
+  updateSidePaneWidth(sideWidth: number, contentWide: number, leftSide: boolean) {
+      this.layout.sidePane.width = sideWidth;
       this.layout.contentWidth = contentWide;
-      this.layout.sidenav.isLeft = leftSide;
+      this.layout.sidePane.isLeft = leftSide;
   }
 
   updatedCurrentRowColumns(currentRow: LayoutRow, columnWidths: number[]) : LayoutColumn[] {
@@ -252,11 +251,11 @@ export class PageLayoutComponent implements OnInit {
   }
   
   showLeftSideNav() : boolean {
-      return this.layout.sidenav.width > 0 && this.layout.sidenav.isLeft;
+      return this.layout.sidePane.width > 0 && this.layout.sidePane.isLeft;
   }
 
   showRightSideNav() : boolean {
-      return this.layout.sidenav.width > 0 && (!this.layout.sidenav.isLeft);
+      return this.layout.sidePane.width > 0 && (!this.layout.sidePane.isLeft);
   }
 
   public addSideViewer() {
@@ -271,7 +270,7 @@ export class PageLayoutComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data => {
       if (data && data.selectedRenderTemplate) {
-        this.layout.sidenav.viewers.push({
+        this.layout.sidePane.viewers.push({
           renderTemplate: data.selectedRenderTemplate
         });
       }
@@ -281,7 +280,7 @@ export class PageLayoutComponent implements OnInit {
   }
 
   public removeSideViewer(viewerIndex: number) {
-      this.layout.sidenav.viewers.splice(viewerIndex, 1);
+      this.layout.sidePane.viewers.splice(viewerIndex, 1);
       return false;
   }
 
@@ -315,10 +314,10 @@ export class PageLayoutComponent implements OnInit {
     this.layout.repository = 'bpwizard';
     this.layout.workspace = 'default';
     this.layout.library = 'design';
-    this.layout.headerEnabled = formValue.headerEnabled;
-    this.layout.footerEnabled = formValue.footerEnabled;
-    this.layout.theme = formValue.theme;
-    this.wcmService.createPagelayout(this.layout).subscribe(
+    // this.layout.headerEnabled = formValue.headerEnabled;
+    // this.layout.footerEnabled = formValue.footerEnabled;
+    // this.layout.theme = formValue.theme;
+    this.wcmService.createContentAreaLayout(this.layout).subscribe(
       (event: any) => {
         console.log(event);
       },

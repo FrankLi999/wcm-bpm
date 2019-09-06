@@ -32,13 +32,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
+import com.bpwizard.wcm.repo.rest.jcr.model.ApplicationConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.BaseFormGroup;
+import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.ControlField;
 import com.bpwizard.wcm.repo.rest.jcr.model.ControlFieldMetadata;
-import com.bpwizard.wcm.repo.rest.jcr.model.CustomFieldLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.FieldLayout;
+import com.bpwizard.wcm.repo.rest.jcr.model.Footer;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormControl;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormRow;
@@ -51,14 +53,20 @@ import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
 import com.bpwizard.wcm.repo.rest.jcr.model.KeyValue;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutRow;
-import com.bpwizard.wcm.repo.rest.jcr.model.Page;
-import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
+import com.bpwizard.wcm.repo.rest.jcr.model.NavBar;
+import com.bpwizard.wcm.repo.rest.jcr.model.Navigation;
+import com.bpwizard.wcm.repo.rest.jcr.model.NavigationItem;
+import com.bpwizard.wcm.repo.rest.jcr.model.NavigationType;
+import com.bpwizard.wcm.repo.rest.jcr.model.PageLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceNode;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceViewer;
 import com.bpwizard.wcm.repo.rest.jcr.model.SidePane;
+import com.bpwizard.wcm.repo.rest.jcr.model.SidePanel;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
+import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.Theme;
+import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestChildType;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNodeType;
@@ -85,28 +93,38 @@ public class WcmRestController {
 	private RestNodeTypeHandler nodeTypeHandler;
 
 	private ObjectMapper objectMapper = new ObjectMapper();
-
-	@GetMapping(path = "/{repository}/{workspace}/site/{site}/{language}", 
+    //http://localhost:8080/wcm/api/rest/bpwizard/default/applicationConfig/camunda/bpm
+	@GetMapping(path = "/{repository}/{workspace}/applicationConfig/{library}/{siteConfig}", 
 		produces = MediaType.APPLICATION_JSON_VALUE)
-	public ControlField[] getSiteConfig(
+	public ApplicationConfig getApplicationConfig(
 			@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, 
-			@PathVariable("site") String site,
-			@PathVariable("page") String page,
-			@PathVariable("language") String language,
+			@PathVariable("library") String library, 
+			@PathVariable("siteConfig") String siteConfigName,
 			HttpServletRequest request) throws RepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-		RestNode controlFieldFolder = (RestNode) this.itemHandler.item(request, repository, workspace,
-				"/bpwizard/library/system/controlField", 2);
-		ControlField[] ControlFileds = controlFieldFolder.getChildren().stream().filter(this::isControlField)
-				.map(this::toControlField).toArray(ControlField[]::new);
+
+		Session session = repositoryManager.getSession(request, repository, workspace);
+		Node siteConfigNode = session.getNode(String.format("/bpwizard/library/%s/siteConfig/%s", library, siteConfigName));
+		SiteConfig siteConfig = this.getSiteConfig(siteConfigNode);
+		siteConfig.setRepository(repository);
+		siteConfig.setWorkspace(workspace);
+		siteConfig.setLibrary(library);
+		String rootSiteArea = siteConfig.getRootSiteArea();
+		
+		Navigation[] navigation = this.getNavigations(request, repository, workspace, library, rootSiteArea);
+		JsonForm[] jsonForms = this.getAuthoringTemplateAsJsonForm(repository, workspace, request);
+		ApplicationConfig applicationConfig = new ApplicationConfig();
+		applicationConfig.setJsonForms(jsonForms);
+		applicationConfig.setNavigation(navigation);
+		applicationConfig.setSiteConfig(siteConfig);
 
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
 		}
-		return ControlFileds;
+		return applicationConfig;
 	}
 
 	@GetMapping(path = "/{repository}/{workspace}/theme", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -143,7 +161,8 @@ public class WcmRestController {
 
 	@GetMapping(path = "/{repository}/{workspace}/jsonform", produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonForm[] getAuthoringTemplateAsJsonForm(@PathVariable("repository") String repository,
-			@PathVariable("workspace") String workspace, HttpServletRequest request) throws WcmRepositoryException {
+			@PathVariable("workspace") String workspace, HttpServletRequest request) 
+			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -174,10 +193,65 @@ public class WcmRestController {
 		return ControlFileds;
 	}
 
+	@PostMapping(path = "/siteConfig", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createSiteConfig(
+			@RequestBody SiteConfig siteConfig, HttpServletRequest request) 
+			throws RepositoryException, IOException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		String repositoryName = siteConfig.getRepository();
+		String workspaceName = siteConfig.getWorkspace();
+
+		Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
+		Node siteConfigFolder = session.getNode(String.format("/bpwizard/library/%s/siteConfig", siteConfig.getLibrary()));
+		Node siteConfigNode = siteConfigFolder.addNode(siteConfig.getName(), "bpw:siteConfig");
+		
+		siteConfigNode.setProperty("bpw:name", siteConfig.getName());
+		siteConfigNode.setProperty("bpw:colorTheme", siteConfig.getColorTheme());
+		siteConfigNode.setProperty("bpw:rootSiteArea", siteConfig.getRootSiteArea());
+		siteConfigNode.setProperty("bpw:customScrollbars", siteConfig.isCustomScrollbars());
+		
+		PageLayout layout = siteConfig.getLayout();
+		Node layoutNode = siteConfigNode.addNode("layout", "bpw:pageLayout");
+		layoutNode.setProperty("bpw:style", layout.getStyle());
+		layoutNode.setProperty("bpw:width", layout.getWidth());
+		
+		Node navbarNode = layoutNode.addNode("navbar", "bpw:navbar");
+		navbarNode.setProperty("primaryBackground", layout.getNavbar().getPrimaryBackground());
+		navbarNode.setProperty("secondaryBackground", layout.getNavbar().getSecondaryBackground());
+		navbarNode.setProperty("hidden", layout.getNavbar().isHidden());
+		navbarNode.setProperty("folded", layout.getNavbar().isFolded());
+		navbarNode.setProperty("position", layout.getNavbar().getPosition().name());
+		navbarNode.setProperty("variant", layout.getNavbar().getVariant());
+
+		
+		Node toolbarNode = layoutNode.addNode("toolbar", "bpw:toolbar");
+		toolbarNode.setProperty("customBackgroundColor", layout.getToolbar().isCustomBackgroundColor());
+		toolbarNode.setProperty("background", layout.getToolbar().getBackground());
+		toolbarNode.setProperty("hidden", layout.getToolbar().isHidden());
+		toolbarNode.setProperty("position", layout.getToolbar().getPosition().name());
+		
+		Node footerNode = layoutNode.addNode("footer", "bpw:footer");
+		footerNode.setProperty("customBackgroundColor", layout.getFooter().isCustomBackgroundColor());
+		footerNode.setProperty("background", layout.getFooter().getBackground());
+		footerNode.setProperty("hidden", layout.getFooter().isHidden());
+		footerNode.setProperty("position", layout.getFooter().getPosition().name());
+
+		Node sidePanelNode = layoutNode.addNode("sidePanel", "bpw:sidePanel");
+		sidePanelNode.setProperty("hidden", layout.getSidePanel().isHidden());
+		sidePanelNode.setProperty("position", layout.getSidePanel().getPosition().name());
+		session.save();
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
+
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
 	@PostMapping(path = "/at", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createAuthoringTemplate(
-
-			@RequestBody AuthoringTemplate at, HttpServletRequest request) throws RepositoryException, IOException {
+			@RequestBody AuthoringTemplate at, HttpServletRequest request) 
+			throws RepositoryException, IOException {
 
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
@@ -316,12 +390,9 @@ public class WcmRestController {
 				.getNode(String.format("/bpwizard/library/%s/contentAreaLayout", pageLayout.getLibrary()));
 		Node contentAreaLayoutNode = contentAreaLayoutFolder.addNode(pageLayout.getName(), "bpw:contentAreaLayout");
 		contentAreaLayoutNode.setProperty("bpw:name", pageLayout.getName());
-		contentAreaLayoutNode.setProperty("bpw:headerEnabled", pageLayout.isHeaderEnabled());
-		contentAreaLayoutNode.setProperty("bpw:footerEnabled", pageLayout.isFooterEnabled());
-		contentAreaLayoutNode.setProperty("bpw:theme", pageLayout.getTheme());
 		contentAreaLayoutNode.setProperty("bpw:contentWidth", 80);
 
-		Node sidePaneNode = contentAreaLayoutNode.addNode("sidePane", "bpw:layoutSidePane");
+		Node sidePaneNode = contentAreaLayoutNode.addNode("sidePane", "bpw:contentAreaSidePanel");
 		this.addSidePageNode(sidePaneNode, pageLayout.getSidePane());
 		this.addPageLayoutNodes(contentAreaLayoutNode, pageLayout.getRows());
 		session.save();
@@ -369,64 +440,75 @@ public class WcmRestController {
 			saNode.setProperty("bpw:allowedFileExtension", sa.getAllowedFileExtension().split(","));
 		}
 
-		session.save();
-		if (logger.isDebugEnabled()) {
-			logger.traceExit();
-		}
+		saNode.setProperty("bpw:contentAreaLayout", sa.getContentAreaLayout());
+		saNode.setProperty("bpw:securePage", sa.isSecurePage());
+		saNode.setProperty("bpw:cacheTTL", sa.getCacheTTL());
 
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
-
-	@PostMapping(path = "/page", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createPage(@RequestBody Page page, HttpServletRequest request)
-			throws RepositoryException, IOException {
-
-		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+		if (StringUtils.hasText(sa.getNavigationId())) {
+			saNode.setProperty("bpw:navigationId", sa.getNavigationId());
 		}
 		
-		String repositoryName = page.getRepository();
-		String workspaceName = page.getWorkspace();
-
-		Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
-		Node parentFolder = session.getNode("/" + page.getNodePath());
-		Node pageNode = parentFolder.addNode(page.getName(), "bpw:pageType");
-
-		pageNode.setProperty("bpw:name", page.getName());
-		pageNode.setProperty("bpw:pageLayout", page.getPageLayout());
-		pageNode.setProperty("bpw:title", StringUtils.hasText(page.getTitle()) ? page.getTitle() : page.getName());
-		if (StringUtils.hasText(page.getDescription())) {
-			pageNode.setProperty("bpw:description", page.getDescription());
+		if (StringUtils.hasText(sa.getNavigationType())) {
+			saNode.setProperty("bpw:navigationType", sa.getNavigationType());
 		}
-		pageNode.setProperty("bpw:url", StringUtils.hasText(page.getUrl()) ? page.getUrl() : page.getName());
-		if (StringUtils.hasText(page.getFriendlyURL())) {
-			pageNode.setProperty("bpw:friendlyURL", page.getFriendlyURL());
-		}
-		pageNode.setProperty("bpw:sortOrder", page.getSortOrder());
-		pageNode.setProperty("bpw:showOnMenu", page.isShowOnMenu());
-		pageNode.setProperty("bpw:securePage", page.isSecurePage());
 		
-		pageNode.setProperty("bpw:cacheTTL", page.getCacheTTL());
-	
-		if (page.getMetadata() != null && page.getMetadata().getKeyValues() != null) {
-			Node metaDataNode = pageNode.addNode("bpw:metaData", "bpw:keyValues");
+		if (StringUtils.hasText(sa.getTranslate())) {
+			saNode.setProperty("bpw:translate", sa.getTranslate());
+		}
+		
+		if (StringUtils.hasText( sa.getIcon())) {
+			saNode.setProperty("bpw:function", sa.getFunction());
+		}
+		
+		if (StringUtils.hasText(sa.getIcon())) {
+			saNode.setProperty("bpw:icon", sa.getIcon());
+		}
+		
+		if (StringUtils.hasText(sa.getClasses())) {
+			saNode.setProperty("bpw:classes", sa.getClasses());
+		}
+
+		saNode.setProperty("bpw:exactMatch", sa.isExactMatch());
+		saNode.setProperty("bpw:externalUrl", sa.isExternalUrl());
+		saNode.setProperty("bpw:openInNewTab", sa.isOpenInNewTab());
+		
+		if (sa.getBadge() != null) {
+			Node badgeNode = saNode.addNode("bpw:badge", "bpw:navigationBadge");
+			if (StringUtils.hasText(sa.getBadge().getTitle())) {
+				badgeNode.setProperty("bpw:title", sa.getBadge().getTitle());
+			}
+			if (StringUtils.hasText(sa.getBadge().getTranslate())) {
+				badgeNode.setProperty("bpw:translate", sa.getBadge().getTranslate());
+			}
+			if (StringUtils.hasText(sa.getBadge().getBg())) {
+				badgeNode.setProperty("bpw:bg", sa.getBadge().getBg());
+			}
+			if (StringUtils.hasText(sa.getBadge().getFg())) {
+				badgeNode.setProperty("bpw:fg", sa.getBadge().getFg());
+			}
+		}
+		
+		if (sa.getMetadata() != null && sa.getMetadata().getKeyValues() != null) {
+			Node metaDataNode = saNode.addNode("bpw:metaData", "bpw:keyValues");
 			int count = 0;
-			for (KeyValue keyValue: page.getMetadata().getKeyValues()) {
+			for (KeyValue keyValue: sa.getMetadata().getKeyValues()) {
 				Node kvNode = metaDataNode.addNode("kv" + count++, "bpw:keyValue");
 				kvNode.setProperty("bpw:name", keyValue.getName());
 				kvNode.setProperty("bpw:value", keyValue.getValue());
 			}
 		}
 		
-		if (page.getSearchData() != null) {
-			Node searchDataDataNode = pageNode.addNode("bpw:searchData", "bpw:pageSearchData");
-			if (StringUtils.hasText(page.getSearchData().getDescription())) {
-				searchDataDataNode.setProperty("description", page.getSearchData().getDescription());
+		if (sa.getSearchData() != null) {
+			Node searchDataDataNode = saNode.addNode("bpw:searchData", "bpw:pageSearchData");
+			if (StringUtils.hasText(sa.getSearchData().getDescription())) {
+				searchDataDataNode.setProperty("description", sa.getSearchData().getDescription());
 			}
-			if (page.getSearchData().getKeywords() != null) {
-				searchDataDataNode.setProperty("keywords", page.getSearchData().getKeywords());
+			if (sa.getSearchData().getKeywords() != null) {
+				searchDataDataNode.setProperty("keywords", sa.getSearchData().getKeywords());
 			}
 		}
+
+		
 		session.save();
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
@@ -434,8 +516,7 @@ public class WcmRestController {
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
-	
-	
+
 	@PostMapping(path = "/ContentItem", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createContentItem(@RequestBody ContentItem contentItem, HttpServletRequest request)
 			throws RepositoryException, IOException {
@@ -478,6 +559,7 @@ public class WcmRestController {
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
+	
 	private ObjectNode toPropertyNode(FormControl formControl, ObjectNode definitions) {
 		ObjectNode propertyNode = JsonNodeFactory.instance.objectNode();
 		// propertyNode.put("name", formControl.getName());
@@ -508,9 +590,9 @@ public class WcmRestController {
 		return propertyNode;
 	}
 
-	private Optional<CustomFieldLayout> getCustomeFileLayout(FormColumn formColumn, String controlName) {
-		CustomFieldLayout customFieldLayout = null;
-		for (CustomFieldLayout layout : formColumn.getCustomeFieldLayouts()) {
+	private Optional<FieldLayout> getCustomeFileLayout(FormColumn formColumn, String controlName) {
+		FieldLayout customFieldLayout = null;
+		for (FieldLayout layout : formColumn.getFieldLayouts()) {
 			if (controlName.equals(layout.getName())) {
 				customFieldLayout = layout;
 				break;
@@ -520,6 +602,7 @@ public class WcmRestController {
 	}
 
 	private ObjectNode getColumnNode(AuthoringTemplate at, FormColumn formColumn) {
+		
 		ObjectNode columnNode = this.objectMapper.createObjectNode();
 		columnNode.put("type", "div");
 		columnNode.put("displayFlex", true);
@@ -527,11 +610,11 @@ public class WcmRestController {
 		columnNode.put("fxFlex", formColumn.getFxFlex());
 
 		ArrayNode fieldNodes = this.objectMapper.createArrayNode();
-		for (String name : formColumn.getFormControls()) {
+		for (String name : formColumn.getFormControls()) {			
 			FormControl formControl = at.getFormControls().get(name);
-			
-			Optional<CustomFieldLayout> customeFileLayout = this.getCustomeFileLayout(formColumn,
-					formControl.getName());
+			Optional<FieldLayout> customeFileLayout = this.getCustomeFileLayout(
+					formColumn,
+					name);
 			if (customeFileLayout.isPresent()) {
 				ArrayNode layoutNodes = null;
 				if (customeFileLayout.get().isMultiple()) {
@@ -544,23 +627,40 @@ public class WcmRestController {
 				} else {
 					layoutNodes = fieldNodes;
 				}
-				for (FieldLayout fieldLayout: customeFileLayout.get().getFieldLayouts()) {
+				if (customeFileLayout.get().getFieldLayouts() == null || customeFileLayout.get().getFieldLayouts().length == 0) {
+					FieldLayout fieldLayout = customeFileLayout.get();
 					ObjectNode fieldNode = this.objectMapper.createObjectNode();
 					if (StringUtils.hasText(fieldLayout.getTitle())) {
 						fieldNode.put("title", fieldLayout.getTitle());
 					} else {
 						fieldNode.put("notitle", "true");
 					}
-					fieldNode.put("key", fieldLayout.getName());
+					fieldNode.put("key", fieldLayout.getKey());
 					if (fieldLayout.isMultiple()) {
 						fieldNode.put("type", "array");
 						ArrayNode itemsNode = this.objectMapper.createArrayNode();
 						fieldNode.set("items", itemsNode);
 						itemsNode.add(fieldLayout.getItems());
 					} 
-					layoutNodes.add(fieldNode);
+					fieldNodes.add(fieldNode);
+				} else {
+					for (FieldLayout fieldLayout: customeFileLayout.get().getFieldLayouts()) {
+						ObjectNode fieldNode = this.objectMapper.createObjectNode();
+						if (StringUtils.hasText(fieldLayout.getTitle())) {
+							fieldNode.put("title", fieldLayout.getTitle());
+						} else {
+							fieldNode.put("notitle", "true");
+						}
+						fieldNode.put("key", fieldLayout.getName());
+						if (fieldLayout.isMultiple()) {
+							fieldNode.put("type", "array");
+							ArrayNode itemsNode = this.objectMapper.createArrayNode();
+							fieldNode.set("items", itemsNode);
+							itemsNode.add(fieldLayout.getItems());
+						} 
+						layoutNodes.add(fieldNode);
+					}
 				}
-				
 			} else {
 				ObjectNode fieldNode = this.objectMapper.createObjectNode();
 				fieldNodes.add(fieldNode);
@@ -715,7 +815,8 @@ public class WcmRestController {
 		}
 	}
 
-	private JsonForm toJsonForm(HttpServletRequest request, String repository, String workspace, AuthoringTemplate at) {
+	private JsonForm toJsonForm(HttpServletRequest request, String repository, 
+			String workspace, AuthoringTemplate at) {
 		JsonForm jsonForm = new JsonForm();
 		jsonForm.setResourceType(at.getName());
 		ObjectNode jsonNode = JsonNodeFactory.instance.objectNode();
@@ -869,6 +970,10 @@ public class WcmRestController {
 			controlNode.setProperty("bpw:title", control.getTitle());
 		}
 
+		if (StringUtils.hasText(control.getFieldPath())) {
+			controlNode.setProperty("bpw:fieldPath", control.getFieldPath());
+		}
+		
 		if (StringUtils.hasText(control.getControlName())) {
 			controlNode.setProperty("bpw:controlName", control.getControlName());
 		}
@@ -983,13 +1088,14 @@ public class WcmRestController {
 		result.setLibrary(layout.getLibrary());
 		result.setName(node.getName());
 		for (RestProperty property : node.getJcrProperties()) {
-			if ("bpw:headerEnabled".equals(property.getName())) {
-				result.setHeaderEnabled(Boolean.parseBoolean(property.getValues().get(0)));
-			} else if ("bpw:footerEnabled".equals(property.getName())) {
-				result.setFooterEnabled(Boolean.parseBoolean(property.getValues().get(0)));
-			} else if ("bpw:theme".equals(property.getName())) {
-				result.setTheme(property.getValues().get(0));
-			} else if (" bpw:contentWidth".equals(property.getName())) {
+//			if ("bpw:headerEnabled".equals(property.getName())) {
+//				result.setHeaderEnabled(Boolean.parseBoolean(property.getValues().get(0)));
+//			} else if ("bpw:footerEnabled".equals(property.getName())) {
+//				result.setFooterEnabled(Boolean.parseBoolean(property.getValues().get(0)));
+//			} else if ("bpw:theme".equals(property.getName())) {
+//				result.setTheme(property.getValues().get(0));
+//			} else 
+			if (" bpw:contentWidth".equals(property.getName())) {
 				result.setContentWidth(Integer.parseInt(property.getValues().get(0)));
 			}
 		}
@@ -997,7 +1103,7 @@ public class WcmRestController {
 		List<LayoutRow> rows = new ArrayList<>();
 
 		node.getChildren().forEach(childNode -> {
-			if (this.checkNodeType(childNode, "bpw:layoutSidePane")) {
+			if (this.checkNodeType(childNode, "bpw:contentAreaSidePanel")) {
 				SidePane sidepane = new SidePane();
 				for (RestProperty property : childNode.getJcrProperties()) {
 					if ("bpw:isLeft".equals(property.getName())) {
@@ -1165,6 +1271,10 @@ public class WcmRestController {
 		return this.checkNodeType(node, "bpw:controlField");
 	}
 
+	private boolean isSiteArea(RestNode node) {
+		return this.checkNodeType(node, "bpw:siteArea");
+	}
+	
 	private boolean isControlFieldMetaData(RestNode node) {
 		return this.checkNodeType(node, "bpw:controlFieldMetaData");
 	}
@@ -1272,6 +1382,8 @@ public class WcmRestController {
 		for (RestProperty property : node.getJcrProperties()) {
 			if ("bpw:title".equals(property.getName())) {
 				formControl.setTitle(property.getValues().get(0));
+			} else if ("bpw:fieldPath".equals(property.getName())) {
+				formControl.setFieldPath(property.getValues().get(0));
 			} else if ("bpw:controlName".equals(property.getName())) {
 				formControl.setControlName(property.getValues().get(0));
 			} else if ("bpw:value".equals(property.getName())) {
@@ -1410,7 +1522,7 @@ public class WcmRestController {
 	}
 
 	private boolean isCustomeFieldLayout(RestNode node) {
-		return this.checkNodeType(node, "bpw:customFieldLayout");
+		return this.checkNodeType(node, "bpw:fieldLayout");
 	}
 
 	private boolean isFieldLayout(RestNode node) {
@@ -1422,6 +1534,8 @@ public class WcmRestController {
 		for (RestProperty property : node.getJcrProperties()) {
 			if ("bpw:multiple".equals(property.getName())) {
 				fieldLayout.setMultiple(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:key".equals(property.getName())) {
+				fieldLayout.setKey(property.getValues().get(0));
 			} else if ("bpw:name".equals(property.getName())) {
 				fieldLayout.setName(property.getValues().get(0));
 			} else if ("bpw:title".equals(property.getName())) {
@@ -1430,17 +1544,30 @@ public class WcmRestController {
 				fieldLayout.setItems(property.getValues().get(0));
 			}
 		}
+		if (StringUtils.isEmpty(fieldLayout.getKey())) {
+			fieldLayout.setKey(fieldLayout.getName());
+		}
 		return fieldLayout;
 	}
-
-	private CustomFieldLayout toCustomeFieldLayout(RestNode node) {
-		CustomFieldLayout customFieldLayout = new CustomFieldLayout();
+	
+	private FieldLayout toCustomeFieldLayout(RestNode node) {
+		FieldLayout customFieldLayout = new FieldLayout();
 		customFieldLayout.setName(node.getName());
 		for (RestProperty property : node.getJcrProperties()) {
 			if ("bpw:multiple".equals(property.getName())) {
 				customFieldLayout.setMultiple(Boolean.parseBoolean(property.getValues().get(0)));
-				break;
-			}
+			} else if ("bpw:key".equals(property.getName())) {
+				customFieldLayout.setKey(property.getValues().get(0));
+			} else if ("bpw:name".equals(property.getName())) {
+				customFieldLayout.setName(property.getValues().get(0));
+			} else if ("bpw:title".equals(property.getName())) {
+				customFieldLayout.setTitle(property.getValues().get(0));
+			} else if ("bpw:items".equals(property.getName())) {
+				customFieldLayout.setItems(property.getValues().get(0));
+			} 
+		}
+		if (StringUtils.isEmpty(customFieldLayout.getKey())) {
+			customFieldLayout.setKey(customFieldLayout.getName());
 		}
 
 		FieldLayout[] fieldLayouts = node.getChildren().stream().filter(this::isFieldLayout).map(this::toFieldLayout)
@@ -1464,10 +1591,10 @@ public class WcmRestController {
 		}
 
 		if (node.getChildren() != null) {
-			CustomFieldLayout[] customeFieldLayouts = node.getChildren().stream().filter(this::isCustomeFieldLayout)
-					.map(this::toCustomeFieldLayout).toArray(CustomFieldLayout[]::new);
+			FieldLayout[] customeFieldLayouts = node.getChildren().stream().filter(this::isCustomeFieldLayout)
+					.map(this::toCustomeFieldLayout).toArray(FieldLayout[]::new);
 
-			column.setCustomeFieldLayouts(customeFieldLayouts);
+			column.setFieldLayouts(customeFieldLayouts);
 		}
 
 		return column;
@@ -1501,5 +1628,120 @@ public class WcmRestController {
 			group = this.populateFormRow(node);
 		}
 		return group == null ? Optional.empty() : Optional.of(group);
+	}
+	
+	private SiteConfig getSiteConfig(Node siteConfigNode) throws RepositoryException {
+		SiteConfig siteConfig = new SiteConfig();
+		siteConfig.setName(siteConfigNode.getProperty("bpw:name").getString());
+		siteConfig.setColorTheme(siteConfigNode.getProperty("bpw:colorTheme").getString());
+		siteConfig.setCustomScrollbars(siteConfigNode.getProperty("bpw:customScrollbars").getBoolean());
+		siteConfig.setRootSiteArea(siteConfigNode.getProperty("bpw:rootSiteArea").getString());
+		
+		Node layoutNode = siteConfigNode.getNode("layout");
+		
+		PageLayout layout = new PageLayout();
+		siteConfig.setLayout(layout);
+		layout.setStyle(layoutNode.getProperty("bpw:style").getString());
+		layout.setWidth(layoutNode.getProperty("bpw:width").getString());
+
+		Node navbarNode = layoutNode.getNode("navbar");
+		NavBar navbar = new NavBar();
+		layout.setNavbar(navbar);
+		
+		navbar.setFolded(navbarNode.getProperty("folded").getBoolean());
+		navbar.setPrimaryBackground(navbarNode.getProperty("primaryBackground").getString());
+		navbar.setSecondaryBackground(navbarNode.getProperty("secondaryBackground").getString());
+		navbar.setVariant(navbarNode.getProperty("variant").getString());
+		navbar.setPosition(NavBar.Position.valueOf(navbarNode.getProperty("position").getString()));
+		navbar.setHidden(navbarNode.getProperty("hidden").getBoolean());
+		
+		
+		Node toolbarNode = layoutNode.getNode("toolbar");
+		Toolbar toolbar = new Toolbar();
+		layout.setToolbar(toolbar);
+		toolbar.setCustomBackgroundColor(toolbarNode.getProperty("customBackgroundColor").getBoolean());
+		toolbar.setBackground(toolbarNode.getProperty("background").getString());
+		toolbar.setHidden(toolbarNode.getProperty("hidden").getBoolean());
+		toolbar.setPosition(Toolbar.Position.valueOf(toolbarNode.getProperty("position").getString()));
+		
+		Node footerNode = layoutNode.getNode("footer");
+		Footer footer = new Footer();
+		layout.setFooter(footer);
+		footer.setCustomBackgroundColor(footerNode.getProperty("customBackgroundColor").getBoolean());
+		footer.setBackground(footerNode.getProperty("background").getString());
+		footer.setHidden(footerNode.getProperty("hidden").getBoolean());
+		footer.setPosition(Footer.Position.valueOf(footerNode.getProperty("position").getString()));
+		
+		Node sidePanelNode = layoutNode.getNode("sidePanel");
+		SidePanel sidePanel = new SidePanel();
+		layout.setSidePanel(sidePanel);
+		sidePanel.setHidden(sidePanelNode.getProperty("hidden").getBoolean());
+		sidePanel.setPosition(SidePanel.Position.valueOf(sidePanelNode.getProperty("position").getString()));
+		return siteConfig;
+	}
+	
+	private Navigation[] getNavigations(
+			HttpServletRequest request,
+			String repository,			
+			String workspace, 
+			String library,
+			String rootSiteArea
+			) throws RepositoryException {
+		RestNode siteArea = (RestNode) this.itemHandler.item(request, repository, workspace,
+				String.format("/bpwizard/library/%s/%s", library, rootSiteArea), 3);
+		
+		Navigation[] navigation = siteArea.getChildren().stream().filter(this::isSiteArea)
+				.map(node -> this.toNavigation(node)).toArray(Navigation[]::new);
+		return navigation;
+	}
+	
+	private NavigationItem toNavigation(RestNode siteArea) {
+		Navigation navigation = new Navigation();
+		for (RestProperty property : siteArea.getJcrProperties()) {
+			if ("bpw:navigationId".equals(property.getName())) {
+				navigation.setId(property.getValues().get(0));
+			} else if ("bpw:navigationType".equals(property.getName())) {
+				navigation.setType(NavigationType.valueOf(property.getValues().get(0)));
+			} else if ("bpw:title".equals(property.getName())) {
+				navigation.setTitle(property.getValues().get(0));
+			} else if ("bpw:translate".equals(property.getName())) {
+				navigation.setTranslate(property.getValues().get(0));
+			} else if ("bpw:icon".equals(property.getName())) {
+				navigation.setIcon(property.getValues().get(0));
+			} else if ("bpw:url".equals(property.getName())) {
+				navigation.setUrl(property.getValues().get(0));
+			}
+		}
+		
+		NavigationItem[] navigationItems = siteArea.getChildren().stream().filter(this::isSiteArea)
+				.map(node -> this.toNavigationItem(node, 1)).toArray(NavigationItem[]::new);
+		navigation.setChildren(navigationItems);
+		
+		return navigation;
+	}
+	
+	private NavigationItem toNavigationItem(RestNode siteArea, int level) {
+		NavigationItem navigation = new NavigationItem();
+		for (RestProperty property : siteArea.getJcrProperties()) {
+			if ("bpw:navigationId".equals(property.getName())) {
+				navigation.setId(property.getValues().get(0));
+			} else if ("bpw:navigationType".equals(property.getName())) {
+				navigation.setType(NavigationType.valueOf(property.getValues().get(0)));
+			} else if ("bpw:title".equals(property.getName())) {
+				navigation.setTitle(property.getValues().get(0));
+			} else if ("bpw:translate".equals(property.getName())) {
+				navigation.setTranslate(property.getValues().get(0));
+			} else if ("bpw:icon".equals(property.getName())) {
+				navigation.setIcon(property.getValues().get(0));
+			} else if ("bpw:url".equals(property.getName())) {
+				navigation.setUrl(property.getValues().get(0));
+			}
+		}
+		if (level <= 2) {
+			NavigationItem[] navigationItems = siteArea.getChildren().stream().filter(this::isSiteArea)
+					.map(node -> this.toNavigationItem(node, level + 1)).toArray(NavigationItem[]::new);
+			navigation.setChildren(navigationItems);
+		}
+		return navigation;
 	}
 }

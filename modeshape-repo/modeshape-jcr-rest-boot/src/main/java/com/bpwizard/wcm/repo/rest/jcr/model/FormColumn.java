@@ -6,7 +6,7 @@ public class FormColumn {
 	private String id;
 	private int fxFlex;
     private String[] formControls;
-    private CustomFieldLayout customeFieldLayouts[];
+    private FieldLayout fieldLayouts[];
 	public String getId() {
 		return id;
 	}
@@ -25,15 +25,16 @@ public class FormColumn {
 	public void setFormControls(String[] formControls) {
 		this.formControls = formControls;
 	}
-	public CustomFieldLayout[] getCustomeFieldLayouts() {
-		return customeFieldLayouts;
+
+	public FieldLayout[] getFieldLayouts() {
+		return fieldLayouts;
 	}
-	public void setCustomeFieldLayouts(CustomFieldLayout[] customeFieldLayouts) {
-		this.customeFieldLayouts = customeFieldLayouts;
+	public void setFieldLayouts(FieldLayout[] fieldLayouts) {
+		this.fieldLayouts = fieldLayouts;
 	}
 	@Override
 	public String toString() {
 		return "FormColumn [id=" + id + ", fxFlex=" + fxFlex + ", formControls=" + Arrays.toString(formControls)
-				+ ", customeFieldLayouts=" + Arrays.toString(customeFieldLayouts) + "]";
+				+ ", fieldLayouts=" + Arrays.toString(fieldLayouts) + "]";
 	}
 }

@@ -1,6 +1,7 @@
 export interface TemplateField {
 	name: string;
-    title: string;
+	title: string;
+	fieldPath: string;
 	controlName: string;
 	values: string[];
 	options: string[];

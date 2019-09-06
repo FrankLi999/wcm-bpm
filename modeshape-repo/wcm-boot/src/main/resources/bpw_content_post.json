@@ -1,31 +1,212 @@
 {
-    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/searchData" : {
-        "jcr:primaryType":"bpw:customFieldLayout"
-    },
-    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/searchData/description" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:name": "searchData.description",
-        "bpw:title": "Description"
-    },
-    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/searchData/keywords" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:name": "searchData.keywords",
-        "bpw:items": "searchData.keywords[]",
-        "bpw:title": "Keywords",
-        "bpw:multiple": "true"
-    },
-    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/metadata" : {
-        "jcr:primaryType":"bpw:customFieldLayout",
-        "bpw:multiple": "true"
-    },
-    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/metadata/name" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:name": "metadata.keyValues[].name",
-        "bpw:title": "Name"
-    },
-    "bpwizard/library/system/authoringTemplate/pageType/tabs/propertiesTab/firstRow/firstColumn/metadata/value" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:name": "metadata.keyValues[].value",
-        "bpw:title": "Value"
-    }
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_style" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:fieldPath": "layout.style",
+	    "bpw:title": "Style",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_width" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Width",
+	    "bpw:fieldPath": "layout.width",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_navbar" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Page Layout",
+	    "bpw:fieldPath": "layout.navbar",
+	    "bpw:controlName": "customField",
+	    "bpw:dataType": "bpw:navbar",
+		"bpw:userSearchable": "true",
+	    "bpw:systemIndexed": "true"
+	},
+	
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_navbar_primaryBackground" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Primary Background",
+	    "bpw:fieldPath": "layout.navbar.primaryBackground",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_navbar_secondaryBackground" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Secondary Background",
+	    "bpw:fieldPath": "layout.navbar.secondaryBackground",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_navbar_hidden" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Hide Navbar",
+	    "bpw:fieldPath": "layout.navbar.hidden",
+	    "bpw:controlName": "checkbox",
+	    "bpw:value": "|true",
+	    "bpw:defaultValue": "false",
+	    "bpw:systemIndexed": "true"
+	},    
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_navbar_folded" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Navbar Folded",
+	    "bpw:fieldPath": "layout.navbar.folded",
+	    "bpw:controlName": "checkbox",
+	    "bpw:value": "|true",
+	    "bpw:defaultValue": "false",
+	    "bpw:systemIndexed": "true"
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_navbar_position" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Navbar Position",
+	    "bpw:fieldPath": "layout.navbar.position",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_navbar_variant" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Navbar Variant",
+	    "bpw:fieldPath": "layout.navbar.variant",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_toolbar" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Page Layout",
+	    "bpw:fieldPath": "layout.toolbar",
+	    "bpw:controlName": "customField",
+	    "bpw:dataType": "bpw:toolbar",
+		"bpw:userSearchable": "true",
+	    "bpw:systemIndexed": "true"
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_toolbar_customBackgroundColor" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Custom Toolbar Background Color",
+	    "bpw:fieldPath": "layout.toolbar.customBackgroundColor",
+	    "bpw:controlName": "checkbox",
+	    "bpw:value": "|true",
+	    "bpw:defaultValue": "false",
+	    "bpw:systemIndexed": "true"
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_toolbar_background" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Toolbar Background Color",
+	    "bpw:fieldPath": "layout.toolbar.customBackgroundColor",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_toolbar_hidden" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Hide Toolbar",
+	    "bpw:fieldPath": "layout.toolbar.hidden",
+	    "bpw:controlName": "checkbox",
+	    "bpw:value": "|true",
+	    "bpw:defaultValue": "false",
+	    "bpw:systemIndexed": "true"
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_toolbar_position" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Toolbar Position",
+	    "bpw:fieldPath": "layout.toolbar.position",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_footer" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Page Layout",
+	    "bpw:fieldPath": "layout.footer",
+	    "bpw:controlName": "customField",
+	    "bpw:dataType": "bpw:footer",
+		"bpw:userSearchable": "true",
+	    "bpw:systemIndexed": "true"
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_footer_customBackgroundColor" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Custom Footer Background Color",
+	    "bpw:fieldPath": "layout.footer.customBackgroundColor",
+	    "bpw:controlName": "checkbox",
+	    "bpw:value": "|true",
+	    "bpw:defaultValue": "false",
+	    "bpw:systemIndexed": "true"
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_footer_background" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Footer Background Color",
+	    "bpw:fieldPath": "layout.footer.background",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_footer_hidden" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Hide Footer",
+	    "bpw:fieldPath": "layout.footer.hidden",
+	    "bpw:controlName": "checkbox",
+	    "bpw:value": "|true",
+	    "bpw:defaultValue": "false",
+	    "bpw:systemIndexed": "true"
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_footer_position" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Footer Position",
+	    "bpw:fieldPath": "layout.footer.position",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_sidePanel" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Page Layout",
+	    "bpw:fieldPath": "layout.sidePanel",
+	    "bpw:controlName": "customField",
+	    "bpw:dataType": "bpw:sidePanel",
+		"bpw:userSearchable": "true",
+	    "bpw:systemIndexed": "true"
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_sidePanel_hidden" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Hide Side Panel",
+	    "bpw:fieldPath": "layout.sidePanel.hidden",
+	    "bpw:controlName": "checkbox",
+	    "bpw:value": "|true",
+	    "bpw:defaultValue": "false",
+	    "bpw:systemIndexed": "true"
+	},
+	"bpwizard/library/system/authoringTemplate/siteConfigType/elements/layout_sidePanel_position" : {
+	    "jcr:primaryType": "bpw:formControl",
+	    "bpw:title": "Side Panel Position",
+	    "bpw:fieldPath": "layout.sidePanel.position",
+	    "bpw:controlName": "text",
+	    "bpw:dataType": "Text",
+	    "bpw:mandatory": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:systemIndexed": true
+	}
 }

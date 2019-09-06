@@ -17,6 +17,25 @@ public class SiteArea implements HasName {
 	private String defaultContent;
 	private String allowedFileExtension;
 	private String allowedArtifactTypes;
+	
+	private boolean securePage;
+	private String contentAreaLayout;
+	private int cacheTTL;
+
+	private keyValues metadata;
+	private SearchData searchData;
+	
+	private String navigationId;
+	private String navigationType;
+	private String function;
+	private String translate;
+	private String icon;
+	private String classes;
+	private boolean exactMatch;
+	private boolean externalUrl;
+	private boolean openInNewTab;
+	private NavigationBadge badge;
+	
 	public String getRepository() {
 		return repository;
 	}
@@ -95,12 +114,106 @@ public class SiteArea implements HasName {
 	public void setAllowedArtifactTypes(String allowedArtifactTypes) {
 		this.allowedArtifactTypes = allowedArtifactTypes;
 	}
+	public boolean isSecurePage() {
+		return securePage;
+	}
+	public void setSecurePage(boolean securePage) {
+		this.securePage = securePage;
+	}
+	public String getContentAreaLayout() {
+		return contentAreaLayout;
+	}
+	public void setContentAreaLayout(String contentAreaLayout) {
+		this.contentAreaLayout = contentAreaLayout;
+	}
+	public int getCacheTTL() {
+		return cacheTTL;
+	}
+	public void setCacheTTL(int cacheTTL) {
+		this.cacheTTL = cacheTTL;
+	}
+	public keyValues getMetadata() {
+		return metadata;
+	}
+	public void setMetadata(keyValues metadata) {
+		this.metadata = metadata;
+	}
+	public SearchData getSearchData() {
+		return searchData;
+	}
+	public void setSearchData(SearchData searchData) {
+		this.searchData = searchData;
+	}
+	public String getNavigationId() {
+		return navigationId;
+	}
+	public void setNavigationId(String navigationId) {
+		this.navigationId = navigationId;
+	}
+	public String getNavigationType() {
+		return navigationType;
+	}
+	public void setNavigationType(String navigationType) {
+		this.navigationType = navigationType;
+	}
+	public String getFunction() {
+		return function;
+	}
+	public void setFunction(String function) {
+		this.function = function;
+	}
+	public String getTranslate() {
+		return translate;
+	}
+	public void setTranslate(String translate) {
+		this.translate = translate;
+	}
+	public String getIcon() {
+		return icon;
+	}
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+	public String getClasses() {
+		return classes;
+	}
+	public void setClasses(String classes) {
+		this.classes = classes;
+	}
+	public boolean isExactMatch() {
+		return exactMatch;
+	}
+	public void setExactMatch(boolean exactMatch) {
+		this.exactMatch = exactMatch;
+	}
+	public boolean isExternalUrl() {
+		return externalUrl;
+	}
+	public void setExternalUrl(boolean externalUrl) {
+		this.externalUrl = externalUrl;
+	}
+	public boolean isOpenInNewTab() {
+		return openInNewTab;
+	}
+	public void setOpenInNewTab(boolean openInNewTab) {
+		this.openInNewTab = openInNewTab;
+	}
+	public NavigationBadge getBadge() {
+		return badge;
+	}
+	public void setBadge(NavigationBadge badge) {
+		this.badge = badge;
+	}
 	@Override
 	public String toString() {
 		return "SiteArea [repository=" + repository + ", workspace=" + workspace + ", nodePath=" + nodePath + ", name="
 				+ name + ", title=" + title + ", description=" + description + ", url=" + url + ", sorderOrder="
 				+ sorderOrder + ", friendlyURL=" + friendlyURL + ", showOnMenu=" + showOnMenu + ", defaultContent="
 				+ defaultContent + ", allowedFileExtension=" + allowedFileExtension + ", allowedArtifactTypes="
-				+ allowedArtifactTypes + "]";
+				+ allowedArtifactTypes + ", securePage=" + securePage + ", contentAreaLayout=" + contentAreaLayout
+				+ ", cacheTTL=" + cacheTTL + ", metadata=" + metadata + ", searchData=" + searchData + ", navigationId="
+				+ navigationId + ", navigationType=" + navigationType + ", function=" + function + ", translate="
+				+ translate + ", icon=" + icon + ", classes=" + classes + ", exactMatch=" + exactMatch
+				+ ", externalUrl=" + externalUrl + ", openInNewTab=" + openInNewTab + ", badge=" + badge + "]";
 	}
 }

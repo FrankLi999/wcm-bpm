@@ -26,7 +26,7 @@ import {
 import { JcrExplorerModule } from './jcr-explorer/jcr-explorer.module';
 import { ResourceLibraryModule } from './resource-library/resource-library.module';
 import { SiteExplorerModule } from './site-explorer/site-explorer.module';
-import { PageLayoutModule } from './page-layout/page-layout.module';
+import { ContentAreaLayoutModule } from './content-area-layout/content-area-layout.module';
 import { ResourceTypeModule } from './resource-type/resource-type.module';
 import { RenderTemplateModule } from './render-template/render-template.module';
 import { QueryBuilderModule } from './query-builder/query-builder.module';
@@ -40,8 +40,8 @@ import { FileUploadComponent } from './dialog/file-upload/file-upload.component'
 import { NewFolderDialogComponent } from './dialog/new-folder-dialog/new-folder-dialog.component';
 import { NewThemeDialogComponent } from './dialog/new-theme-dialog/new-theme-dialog.component';
 import { NewSiteareaDialogComponent } from './dialog/new-sitearea-dialog/new-sitearea-dialog.component';
-import { NewPageDialogComponent } from './dialog/new-page-dialog/new-page-dialog.component';
 import { NewContentDialogComponent } from './dialog/new-content-dialog/new-content-dialog.component';
+import { NewSiteConfigDialogComponent } from './dialog/new-site-config-dialog/new-site-config-dialog.component';
 @NgModule({
     declarations: [
     UploadZipfileDialogComponent,
@@ -49,14 +49,14 @@ import { NewContentDialogComponent } from './dialog/new-content-dialog/new-conte
     NewFolderDialogComponent,
     NewThemeDialogComponent,
     NewSiteareaDialogComponent,
-    NewPageDialogComponent,
-    NewContentDialogComponent],
+    NewContentDialogComponent,
+    NewSiteConfigDialogComponent],
     imports : [
         // RouterModule.forChild(routes),
         JcrExplorerModule,
         ResourceLibraryModule,
         SiteExplorerModule,
-        PageLayoutModule,
+        ContentAreaLayoutModule,
         ResourceTypeModule,
         RenderTemplateModule,
         QueryBuilderModule,
@@ -93,8 +93,8 @@ import { NewContentDialogComponent } from './dialog/new-content-dialog/new-conte
         NewFolderDialogComponent,
         NewThemeDialogComponent,
         NewSiteareaDialogComponent,
-        NewPageDialogComponent,
-        NewContentDialogComponent
+        NewContentDialogComponent,
+        NewSiteConfigDialogComponent
     ]
 })
 

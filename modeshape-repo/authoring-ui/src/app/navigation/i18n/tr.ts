@@ -12,7 +12,7 @@ export const locale = {
             'SITE_EXPLORER'     : {
                 'TITLE': 'Site Explorer'
             },
-            'PAGE_LAYOUT'        : {
+            'CONTENT_AREA_LAYOUT' : {
                 'TITLE': 'Sayfa Düzeni',
             },
             'RESOURCE_TYPE':  {

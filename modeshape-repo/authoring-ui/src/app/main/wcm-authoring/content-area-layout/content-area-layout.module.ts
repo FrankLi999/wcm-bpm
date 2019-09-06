@@ -24,30 +24,30 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseSidebarModule } from '@fuse/components';
 
-import { PageDesignerComponent } from './page-designer/page-designer.component';
+import { ContentAreaDesignerComponent } from './content-area-designer/content-area-designer.component';
 import { 
-    PageLayoutComponent,
+    ContentAreaLayoutComponent,
     RenderTemplateDialog
-} from './page-layout/page-layout.component';
-import { PageLayoutsComponent } from './page-layouts/page-layouts.component';
+} from './content-area-layout/content-area-layout.component';
+import { ContentAreaLayoutsComponent } from './content-area-layouts/content-area-layouts.component';
 import { ResourceViewerComponent } from './resource-viewer/resource-viewer.component';
 
 const routes: Routes = [
     {
-        path       : 'page-layout/edit',
-        component  : PageDesignerComponent
+        path       : 'content-area-layout/edit',
+        component  : ContentAreaDesignerComponent
     },
     {
-        path       : 'page-layout/list',
-        component  : PageLayoutsComponent
+        path       : 'content-area-layout/list',
+        component  : ContentAreaLayoutsComponent
     }
 ];
 
 @NgModule({
     declarations   : [
-        PageDesignerComponent,
-        PageLayoutComponent,
-        PageLayoutsComponent,
+        ContentAreaDesignerComponent,
+        ContentAreaLayoutComponent,
+        ContentAreaLayoutsComponent,
         ResourceViewerComponent,
         RenderTemplateDialog
     ],
@@ -80,4 +80,4 @@ const routes: Routes = [
         RenderTemplateDialog
     ]
 })
-export class PageLayoutModule { }
+export class ContentAreaLayoutModule { }

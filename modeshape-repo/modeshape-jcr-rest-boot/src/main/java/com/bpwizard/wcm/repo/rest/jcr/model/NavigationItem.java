@@ -17,6 +17,7 @@ public class NavigationItem {
 	private String function;
 	private NavigationBadge badge;
 	private NavigationItem children[];
+	
 	public String getId() {
 		return id;
 	}

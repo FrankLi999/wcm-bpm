@@ -1,23 +1,24 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 public class PageLayout {
-    private String colorTheme;
-    private boolean customScrollbars;
+    private String style = "vertical-layout-1";
+    private String width = "fullwidth";
+    
 	private NavBar navbar;
 	private Toolbar toolbar;
-	private Footer Footer;
+	private Footer footer;
 	private SidePanel sidePanel;
-	public String getColorTheme() {
-		return colorTheme;
+	public String getStyle() {
+		return style;
 	}
-	public void setColorTheme(String colorTheme) {
-		this.colorTheme = colorTheme;
+	public void setStyle(String style) {
+		this.style = style;
 	}
-	public boolean isCustomScrollbars() {
-		return customScrollbars;
+	public String getWidth() {
+		return width;
 	}
-	public void setCustomScrollbars(boolean customScrollbars) {
-		this.customScrollbars = customScrollbars;
+	public void setWidth(String width) {
+		this.width = width;
 	}
 	public NavBar getNavbar() {
 		return navbar;
@@ -32,10 +33,10 @@ public class PageLayout {
 		this.toolbar = toolbar;
 	}
 	public Footer getFooter() {
-		return Footer;
+		return footer;
 	}
 	public void setFooter(Footer footer) {
-		Footer = footer;
+		this.footer = footer;
 	}
 	public SidePanel getSidePanel() {
 		return sidePanel;
@@ -45,7 +46,7 @@ public class PageLayout {
 	}
 	@Override
 	public String toString() {
-		return "PageLayout [colorTheme=" + colorTheme + ", customScrollbars=" + customScrollbars + ", navbar=" + navbar
-				+ ", toolbar=" + toolbar + ", Footer=" + Footer + ", sidePanel=" + sidePanel + "]";
+		return "PageLayout [style=" + style + ", width=" + width + ", navbar=" + navbar + ", toolbar=" + toolbar
+				+ ", Footer=" + footer + ", sidePanel=" + sidePanel + "]";
 	}
 }

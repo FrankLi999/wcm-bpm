@@ -1,4 +1,6 @@
 import { HasName } from './HasName';
+import { KeyValues } from './KeyValues';
+import { SearchData } from './SearchData'
 export interface SiteArea extends HasName {
 	repository: string;
 	workspace: string;
@@ -13,4 +15,10 @@ export interface SiteArea extends HasName {
 	defaultContent?: string;
 	allowedFileExtension?: string;
 	allowedArtifactTypes?: string;
+
+	pageLayout: string;
+	cacheTTL?: number;
+	securePage?: boolean;
+	metadata?: KeyValues;
+	searchData?: SearchData;
 }

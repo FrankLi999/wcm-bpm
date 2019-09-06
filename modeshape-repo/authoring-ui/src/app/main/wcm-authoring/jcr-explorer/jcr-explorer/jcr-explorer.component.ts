@@ -13,13 +13,14 @@ import {
   Workspace,
   Repository,
   RestNode,
+  ApplicationConfig,
   JsonForm
 } from '../../model';
 import { UploadZipfileDialogComponent } from '../../dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
 import { NewFolderDialogComponent } from '../../dialog/new-folder-dialog/new-folder-dialog.component';
 import { NewThemeDialogComponent } from '../../dialog/new-theme-dialog/new-theme-dialog.component';
 import { NewSiteareaDialogComponent } from '../../dialog/new-sitearea-dialog/new-sitearea-dialog.component';
-import { NewPageDialogComponent } from '../../dialog/new-page-dialog/new-page-dialog.component';
+import { NewSiteConfigDialogComponent } from '../../dialog/new-site-config-dialog/new-site-config-dialog.component';
 import { NewContentDialogComponent } from '../../dialog/new-content-dialog/new-content-dialog.component';
 /** Nested node */
 export class JcrNode {
@@ -91,8 +92,8 @@ export class JcrExplorerComponent implements OnInit {
     this.functionMap.set('Delete.siteArea', this.removeSiteArea);
     this.functionMap.set('Create.content', this.createContent);
     this.functionMap.set('Delete.content', this.removeContent);
-    this.functionMap.set('Create.page', this.createPage);
-    this.functionMap.set('Delete.page', this.removePage);
+    this.functionMap.set('Create.siteConfig', this.createSiteConfig);
+    this.functionMap.set('Delete.siteConfig', this.removeSiteConfig);
 
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
       this.isExpandable, this.getChildren);
@@ -139,10 +140,10 @@ export class JcrExplorerComponent implements OnInit {
       }
     );
 
-    this.wcmService.getAuthoringTemplateAsJsonSchema('bpwizard', 'default').subscribe(
-      (jsonForms: JsonForm[]) => {
-        if (jsonForms) {
-          jsonForms.forEach(jsonForm => this.jsonFormMap.set(jsonForm.resourceType, jsonForm));
+    this.wcmService.getApplicationConfig('bpwizard', 'default', 'camunda', 'bpm').subscribe(
+      (applicationConfig: ApplicationConfig) => {
+        if (applicationConfig) {
+          applicationConfig.jsonForms.forEach(jsonForm => this.jsonFormMap.set(jsonForm.resourceType, jsonForm));
         }
         
       },
@@ -499,16 +500,18 @@ export class JcrExplorerComponent implements OnInit {
   }
   
   removeContent() {
-    console.log('>>>>>>>>> removeContent');
+    console.log('remove content');
   }
 
-  createPage() {
+  createSiteConfig() {
     const node = this.activeNode;
-    let dialogRef = this.matDialog.open(NewPageDialogComponent, {
-      panelClass: 'page-new-dialog',
+    console.log(node);
+    let dialogRef = this.matDialog.open(NewSiteConfigDialogComponent, {
+      panelClass: 'siteconfig-new-dialog',
       data: { 
-        jsonFormObject: this.jsonFormMap.get('pageType').formSchema,
-        nodePath: (node.value as RestNode).nodePath,
+        jsonFormObject: this.jsonFormMap.get('siteConfigType').formSchema,
+        // nodePath: (node.value as RestNode).nodePath,
+        library: 'camunda',
         repositoryName: (node.value as RestNode).repositoryName,
         workspaceName: (node.value as RestNode).workspaceName
       }
@@ -521,7 +524,7 @@ export class JcrExplorerComponent implements OnInit {
     });
   }
 
-  removePage() {
-    console.log('>>>>>>>>> removePage');
+  removeSiteConfig() {
+    console.log('remove site config');
   }
 }

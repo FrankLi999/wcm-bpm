@@ -12,8 +12,8 @@ export const locale = {
             'SITE_EXPLORER'     : {
                 'TITLE': 'Site Explorer'
             },
-            'PAGE_LAYOUT'        : {
-                'TITLE': 'Page Layout'
+            'CONTENT_AREA_LAYOUT' : {
+                'TITLE': 'Content Layout'
             },            
             'RESOURCE_TYPE':  {
                 'TITLE': 'Resource Type'

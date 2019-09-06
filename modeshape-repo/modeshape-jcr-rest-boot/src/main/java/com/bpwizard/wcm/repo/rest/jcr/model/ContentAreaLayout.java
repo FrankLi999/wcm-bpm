@@ -10,9 +10,6 @@ public class ContentAreaLayout implements HasName {
 	String repository;
 	String workspace;
 	String library;
-	boolean headerEnabled = true;
-	boolean footerEnabled = true;
-	String theme;
 	SidePane sidePane;
 	int contentWidth;
 	LayoutRow rows[];
@@ -22,24 +19,6 @@ public class ContentAreaLayout implements HasName {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public boolean isHeaderEnabled() {
-		return headerEnabled;
-	}
-	public void setHeaderEnabled(boolean headerEnabled) {
-		this.headerEnabled = headerEnabled;
-	}
-	public boolean isFooterEnabled() {
-		return footerEnabled;
-	}
-	public void setFooterEnabled(boolean footerEnabled) {
-		this.footerEnabled = footerEnabled;
-	}
-	public String getTheme() {
-		return theme;
-	}
-	public void setTheme(String theme) {
-		this.theme = theme;
 	}
 	public SidePane getSidePane() {
 		return sidePane;
@@ -79,9 +58,8 @@ public class ContentAreaLayout implements HasName {
 	}
 	@Override
 	public String toString() {
-		return "PageLayout [name=" + name + ", repository=" + repository + ", workspace=" + workspace + ", library="
-				+ library + ", headerEnabled=" + headerEnabled + ", footerEnabled=" + footerEnabled + ", theme=" + theme
-				+ ", sidePane=" + sidePane + ", contentWidth=" + contentWidth + ", rows=" + Arrays.toString(rows)
-				+ ", toString()=" + super.toString() + "]";
+		return "ContentAreaLayout [name=" + name + ", repository=" + repository + ", workspace=" + workspace
+				+ ", library=" + library + ", sidePane=" + sidePane + ", contentWidth=" + contentWidth + ", rows="
+				+ Arrays.toString(rows) + "]";
 	}
 }

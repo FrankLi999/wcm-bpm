@@ -5,6 +5,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 public class FormControl implements HasName {
 	private String name;
 	private String title;
+	private String fieldPath;
 	private String controlName;
 	private String[] values;
 	private String[] options;
@@ -122,15 +123,22 @@ public class FormControl implements HasName {
 	public void setUnique(boolean unique) {
 		this.unique = unique;
 	}
+	
+	public String getFieldPath() {
+		return fieldPath;
+	}
+	public void setFieldPath(String fieldPath) {
+		this.fieldPath = fieldPath;
+	}
 	@Override
 	public String toString() {
-		return "FormControl [name=" + name + ", title=" + title + ", controlName=" + controlName + ", values="
-				+ Arrays.toString(values) + ", options=" + Arrays.toString(options) + ", defaultValue=" + defaultValue
-				+ ", hint=" + hint + ", dataType=" + dataType + ", multiple=" + multiple + ", relationshipType="
-				+ relationshipType + ", relationshipCardinality=" + relationshipCardinality + ", valditionRegEx="
-				+ valditionRegEx + ", mandatory=" + mandatory + ", userSearchable=" + userSearchable
-				+ ", systemIndexed=" + systemIndexed + ", showInList=" + showInList + ", unique=" + unique + "]";
+		return "FormControl [name=" + name + ", title=" + title + ", fieldPath=" + fieldPath + ", controlName="
+				+ controlName + ", values=" + Arrays.toString(values) + ", options=" + Arrays.toString(options)
+				+ ", defaultValue=" + defaultValue + ", hint=" + hint + ", dataType=" + dataType + ", multiple="
+				+ multiple + ", relationshipType=" + relationshipType + ", relationshipCardinality="
+				+ relationshipCardinality + ", valditionRegEx=" + valditionRegEx + ", mandatory=" + mandatory
+				+ ", userSearchable=" + userSearchable + ", systemIndexed=" + systemIndexed + ", showInList="
+				+ showInList + ", unique=" + unique + "]";
 	}
-	
 	
 }
