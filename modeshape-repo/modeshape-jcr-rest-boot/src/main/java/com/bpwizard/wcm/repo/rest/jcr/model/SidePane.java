@@ -4,15 +4,15 @@ import java.util.Arrays;
 
 public class SidePane {
 
-    private boolean isLeft = true;
+    private boolean left = true;
     private int width;
 	private ResourceViewer viewers[];
 	
 	public boolean isLeft() {
-		return isLeft;
+		return left;
 	}
-	public void setLeft(boolean isLeft) {
-		this.isLeft = isLeft;
+	public void setLeft(boolean left) {
+		this.left = left;
 	}
 	public int getWidth() {
 		return width;
@@ -28,7 +28,7 @@ public class SidePane {
 	}
 	@Override
 	public String toString() {
-		return "SideNav [isLeft=" + isLeft + ", width=" + width + ", viewers=" + Arrays.toString(viewers)
+		return "SideNav [isLeft=" + left + ", width=" + width + ", viewers=" + Arrays.toString(viewers)
 				+ ", toString()=" + super.toString() + "]";
 	}
 }

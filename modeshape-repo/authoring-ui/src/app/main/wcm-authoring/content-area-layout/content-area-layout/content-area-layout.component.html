@@ -26,7 +26,7 @@
                 <button mat-icon-button type="button" 
                     title="Update side navigation configutation" 
                     aria-label="Update side navigation configutation"
-                    [matMenuTriggerFor]="sideNavMenu">
+                    [matMenuTriggerFor]="sidePanelMenu">
                     <mat-icon>build</mat-icon>Side Navivation
                 </button>
             </div>       
@@ -52,13 +52,13 @@
         -->
         <!-- / HEADER -->
         <div class="card" id="page-layout">
-            <div class="card" id="sidenav-layout" fxFlex="{{layout.sideWidth}}" *ngIf="showLeftSideNav()">
+            <div class="card" id="sidePanel-layout" fxFlex="{{layout.sidePane.width}}" *ngIf="showLeftSidePanel()">
                 <!-- Add container link-->
                 <a [routerLink]="" (click)="addSideViewer()"><mat-icon>add_circle_outline</mat-icon>Add Viewer</a>
-                <div class="card container" *ngFor="let viewer of layout.sidenav.viewers; let viewerIndex = index;">
+                <div class="card container" *ngFor="let viewer of layout.sidePane.viewers; let viewerIndex = index;">
                     <resource-viewer
                         [viewerIndex]="viewerIndex"
-                        [renderTemplate]="layout.sidenav.viewers[viewerIndex].renderTemplate"
+                        [renderTemplate]="layout.sidePane.viewers[viewerIndex].renderTemplate"
                         (resourceViewerRemoved)="removeSideViewer($event)">
                     </resource-viewer>
                 </div>
@@ -104,12 +104,12 @@
                 </div>
                 <!-- / ROWS -->
             </div>
-            <div class="card" id="sidenav-layout" fxFlex="{{layout.sideWidth}}" *ngIf="showRightSideNav()">
+            <div class="card" id="sidePanel-layout" fxFlex="{{layout.sidePane.width}}" *ngIf="showRightSidePanel()">
                 <a [routerLink]="" (click)="addSideViewer()"><mat-icon>add_circle_outline</mat-icon>Add Viewer</a>
-                <div class="card container" *ngFor="let viewer of layout.sidenav.viewers; let viewerIndex = index;">
+                <div class="card container" *ngFor="let viewer of layout.sidePane.viewers; let viewerIndex = index;">
                     <resource-viewer
                         [viewerIndex]="viewerIndex"
-                        [renderTemplate]="layout.sidenav.viewers[viewerIndex].renderTemplat"
+                        [renderTemplate]="layout.sidePane.viewers[viewerIndex].renderTemplat"
                         (resourceViewerRemoved)="removeSideViewer($event)">
                     </resource-viewer>
                 </div>
@@ -145,7 +145,7 @@
     <button mat-menu-item (click)="updateRow(item, 7)">Four Columns (25/25/25/25)</button>
     </ng-template>
 </mat-menu>
-<mat-menu #sideNavMenu="matMenu">
+<mat-menu #sidePanelMenu="matMenu">
     <button mat-menu-item (click)="updateSidePane(0)">None</button>
     <button mat-menu-item (click)="updateSidePane(1)">Left Side Navigation (20%)</button>
     <button mat-menu-item (click)="updateSidePane(2)">Left Side Navigation (30%)</button>

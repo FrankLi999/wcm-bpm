@@ -35,6 +35,7 @@ public class SiteArea implements HasName {
 	private boolean externalUrl;
 	private boolean openInNewTab;
 	private NavigationBadge badge;
+	private SiteAreaLayout siteAreaLayout;
 	
 	public String getRepository() {
 		return repository;
@@ -204,6 +205,12 @@ public class SiteArea implements HasName {
 	public void setBadge(NavigationBadge badge) {
 		this.badge = badge;
 	}
+	public SiteAreaLayout getSiteAreaLayout() {
+		return siteAreaLayout;
+	}
+	public void setSiteAreaLayout(SiteAreaLayout siteAreaLayout) {
+		this.siteAreaLayout = siteAreaLayout;
+	}
 	@Override
 	public String toString() {
 		return "SiteArea [repository=" + repository + ", workspace=" + workspace + ", nodePath=" + nodePath + ", name="
@@ -214,6 +221,7 @@ public class SiteArea implements HasName {
 				+ ", cacheTTL=" + cacheTTL + ", metadata=" + metadata + ", searchData=" + searchData + ", navigationId="
 				+ navigationId + ", navigationType=" + navigationType + ", function=" + function + ", translate="
 				+ translate + ", icon=" + icon + ", classes=" + classes + ", exactMatch=" + exactMatch
-				+ ", externalUrl=" + externalUrl + ", openInNewTab=" + openInNewTab + ", badge=" + badge + "]";
+				+ ", externalUrl=" + externalUrl + ", openInNewTab=" + openInNewTab + ", badge=" + badge
+				+ ", siteAreaLayout=" + siteAreaLayout + "]";
 	}
 }

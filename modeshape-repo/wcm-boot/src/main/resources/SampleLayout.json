@@ -1,30 +1,27 @@
 {
-    "bpwizard/library/design/pageLayout/sampleLayout" : {
-        "jcr:primaryType":"bpw:pageLayout",
+    "bpwizard/library/design/contentAreaLayout/sampleLayout" : {
+        "jcr:primaryType":"bpw:contentAreaLayout",
         "bpw:name": "sampleLayout",
-        "bpw:headerEnabled": "true",
-        "bpw:footerEnabled": "true",
-        "bpw:theme": "camunda",
         "bpw:contentWidth": "80"
     },
-    "bpwizard/library/design/pageLayout/sampleLayout/sidenav" : {
-        "jcr:primaryType":"bpw:layoutSidenav",
+    "bpwizard/library/design/contentAreaLayout/sampleLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
         "bpw:isLeft": "true",
         "bpw:width": "20"
     },
-    "bpwizard/library/design/pageLayout/sampleLayout/sidenav/sampleRT" : {
+    "bpwizard/library/design/contentAreaLayout/sampleLayout/sidePane/viewer0" : {
         "jcr:primaryType":"bpw:resourceViewer",
-        "bpw:renderTemplayeName": "sampleRT"
+        "bpw:renderTemplayeName": "bpwizard/default/design/MyRT"
     },
-    "bpwizard/library/design/pageLayout/sampleLayout/row1" : {
+    "bpwizard/library/design/contentAreaLayout/sampleLayout/row0" : {
         "jcr:primaryType":"bpw:layoutRow"
     },
-    "bpwizard/library/design/pageLayout/sampleLayout/row1/column1" : {
+    "bpwizard/library/design/contentAreaLayout/sampleLayout/row0/column0" : {
         "jcr:primaryType":"bpw:layoutColumn",
-        "bpw:width": "80"
+        "bpw:width": "100"
     },
-    "bpwizard/library/design/pageLayout/sampleLayout/row1/column1/sampleRT" : {
+    "bpwizard/library/design/contentAreaLayout/sampleLayout/row0/column0/viewer0" : {
         "jcr:primaryType":"bpw:resourceViewer",
-        "bpw:renderTemplayeName": "sampleRT"
+        "bpw:renderTemplayeName": "bpwizard/default/design/MyTemplate1"
     }  
 }

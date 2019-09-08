@@ -337,6 +337,13 @@
         "bpw:userSearchable": "true",
         "bpw:showInList": "true"
     },
+    "bpwizard/library/system/authoringTemplate/fileType/elements/description" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "text",
+        "bpw:systemIndexed": "true"
+    }, 
     "bpwizard/library/system/authoringTemplate/fileType/elements/siteArea" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Site Area",
@@ -383,13 +390,6 @@
         "bpw:defaultValue": "0",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/fileType/elements/description" : {
-        "jcr:primaryType": "bpw:formControl",
-        "bpw:title": "Description",
-        "bpw:controlName": "text",
-        "bpw:dataType": "text",
-        "bpw:systemIndexed": "true"
-    },    
     
     "bpwizard/library/system/authoringTemplate/siteConfigType" : {
         "jcr:primaryType": "bpw:authoringTemplate"
@@ -2082,7 +2082,8 @@
         "bpw:navigationId": "bpm",
         "bpw:navigationType": "group",
         "bpw:url": "/bpm",
-        "bpw:translate": "NAV.BPM.APPLICATIONS"
+        "bpw:translate": "NAV.BPM.APPLICATIONS",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     },
     "bpwizard/library/camunda/rootSiteArea/home" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2092,18 +2093,78 @@
         "bpw:navigationType": "item",
         "bpw:icon": "archive",
         "bpw:url": "/bpm/home",
-        "bpw:translate": "NAV.BPM.HOME.TITLE"
+        "bpw:translate": "NAV.BPM.HOME.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "20"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/sidePane/viewer_s0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:renderTemplayeName": "bpwizard/default/design/MySidePaneRenderTemplate",
+        "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row0/column0/viewer_c0_0_0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+       "bpw:renderTemplayeName": "bpwizard/default/design/MyRenderTemplate",
+       "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MyContent"
     },
     "bpwizard/library/camunda/rootSiteArea/tasklist" : {
         "jcr:primaryType":"bpw:siteArea",
         "bpw:name":"tasklist",
         "bpw:title":"Task List",
         "bpw:navigationId": "bpm-tasklist",
-        "bpw:navigationType": "item",
+        "bpw:navigationType": "group",
         "bpw:icon": "archive",
         "bpw:url": "/bpm/tasklist",
-        "bpw:translate": "NAV.BPM.TASKLIST.TITLE"
-    } ,
+        "bpw:translate": "NAV.BPM.TASKLIST.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+    },
+    "bpwizard/library/camunda/rootSiteArea/tasklist/taskinstance" : {
+        "jcr:primaryType":"bpw:siteArea",
+        "bpw:name":"taskinstance",
+        "bpw:title":"Task Instance",
+        "bpw:navigationId": "task-instance",
+        "bpw:navigationType": "item",
+        "bpw:icon": "archive",
+        "bpw:url": "/bpm/tasklist/taskinstance",
+        "bpw:translate": "NAV.BPM.TASKLIST.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+    },
+    "bpwizard/library/camunda/rootSiteArea/tasklist/processinstance" : {
+        "jcr:primaryType":"bpw:siteArea",
+        "bpw:name":"processinstance",
+        "bpw:title":"Process Instance",
+        "bpw:navigationId": "process-instance",
+        "bpw:navigationType": "group",
+        "bpw:icon": "archive",
+        "bpw:url": "/bpm/tasklist/processinstance",
+        "bpw:translate": "NAV.BPM.TASKLIST.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+    },
+    "bpwizard/library/camunda/rootSiteArea/tasklist/processinstance/processoperation" : {
+        "jcr:primaryType":"bpw:siteArea",
+        "bpw:name":"processinstance",
+        "bpw:title":"Process Operation",
+        "bpw:navigationId": "process-operation",
+        "bpw:navigationType": "item",
+        "bpw:icon": "archive",
+        "bpw:url": "/bpm/tasklist/processinstance/operation",
+        "bpw:translate": "NAV.BPM.TASKLIST.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+    },
     "bpwizard/library/camunda/rootSiteArea/modeler" : {
         "jcr:primaryType":"bpw:siteArea",
         "bpw:name":"modeler",
@@ -2112,7 +2173,8 @@
         "bpw:navigationType": "item",
         "bpw:icon": "archive",
         "bpw:url": "/bpm/modeler",
-        "bpw:translate": "NAV.BPM.MODELER.TITLE"
+        "bpw:translate": "NAV.BPM.MODELER.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     } ,
     "bpwizard/library/camunda/rootSiteArea/dashboard" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2122,7 +2184,8 @@
         "bpw:navigationType": "item",
         "bpw:icon": "archive",
         "bpw:url": "/bpm/dashboard",
-        "bpw:translate": "NAV.BPM.DASHBOARD.TITLE"
+        "bpw:translate": "NAV.BPM.DASHBOARD.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     } ,
     "bpwizard/library/camunda/rootSiteArea/monitor" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2132,7 +2195,8 @@
         "bpw:navigationType": "item",
         "bpw:icon": "archive",
         "bpw:url": "/bpm/monitor",
-        "bpw:translate": "NAV.BPM.MONITOR.TITLE"
+        "bpw:translate": "NAV.BPM.MONITOR.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     },
     "bpwizard/library/apigateway" : {
         "jcr:primaryType":"bpw:library",
@@ -2172,7 +2236,8 @@
         "bpw:navigationId": "apigateway",
         "bpw:navigationType": "group",
         "bpw:url": "/api_gateway",
-        "bpw:translate": "NAV.API.APPLICATIONS"
+        "bpw:translate": "NAV.API.APPLICATIONS",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     },
     "bpwizard/library/apigateway/rootSiteArea/home" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2182,7 +2247,8 @@
         "bpw:navigationType": "item",
         "bpw:icon": "archive",
         "bpw:url": "/bpm/home",
-        "bpw:translate": "NAV.API.HOME.TITLE"
+        "bpw:translate": "NAV.API.HOME.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     },
     "bpwizard/library/apigateway/rootSiteArea/tasklist" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2192,7 +2258,8 @@
         "bpw:navigationType": "item",
         "bpw:icon": "archive",
         "bpw:url": "/bpm/tasklist",
-        "bpw:translate": "NAV.API.TASKLIST.TITLE"
+        "bpw:translate": "NAV.API.TASKLIST.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     } ,
     "bpwizard/library/apigateway/rootSiteArea/modeler" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2202,7 +2269,8 @@
         "bpw:navigationType": "item",
         "bpw:icon": "archive",
         "bpw:url": "/bpm/modeler",
-        "bpw:translate": "NAV.API.MODELER.TITLE"
+        "bpw:translate": "NAV.API.MODELER.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     } ,
     "bpwizard/library/apigateway/rootSiteArea/dashboard" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2212,7 +2280,8 @@
         "bpw:navigationType": "item",
         "bpw:icon": "archive",
         "bpw:url": "/bpm/dashboard",
-        "bpw:translate": "NAV.API.DASHBOARD.TITLE"
+        "bpw:translate": "NAV.API.DASHBOARD.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     } ,
     "bpwizard/library/apigateway/rootSiteArea/monitor" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2222,7 +2291,8 @@
         "bpw:navigationType": "item",
         "bpw:icon": "archive",
         "bpw:url": "/bpm/monitor",
-        "bpw:translate": "NAV.API.MONITOR.TITLE"
+        "bpw:translate": "NAV.API.MONITOR.TITLE",
+        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     },
     "bpwizard/library/design" : {
         "jcr:primaryType":"bpw:library",
@@ -2264,5 +2334,247 @@
     },
     "bpwizard/library/design/authoringTemplate" : {
         "jcr:primaryType":"bpw:authoringTemplateFolder"
+    },
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent" : {
+        "jcr:primaryType": "bpw:authoringTemplate",
+        "bpw:baseResourceType": "contentType"
+    },
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["name", "title", "description", "sidebody"]
+    },
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/elements/name" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/elements/title" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/elements/description" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "text",
+        "bpw:systemIndexed": "true"
+    }, 
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/elements/sidebody" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Body",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/MyContent" : {
+        "jcr:primaryType": "bpw:authoringTemplate",
+        "bpw:baseResourceType": "contentType"
+    },
+    "bpwizard/library/design/authoringTemplate/MyContent/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "bpwizard/library/design/authoringTemplate/MyContent/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/design/authoringTemplate/MyContent/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["name", "title", "description", "body"]
+    },
+    "bpwizard/library/design/authoringTemplate/MyContent/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "bpwizard/library/design/authoringTemplate/MyContent/elements/name" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/MyContent/elements/title" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/MyContent/elements/description" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "text",
+        "bpw:systemIndexed": "true"
+    },
+    "bpwizard/library/design/authoringTemplate/MyContent/elements/body" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Body",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/design/renderTemplate/MySidePaneRenderTemplate": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "MySidePaneRenderTemplate",
+		"bpw:title": "MySidePaneRenderTemplate",
+		"bpw:description": "My Side Panel Render Template",
+		"bpw:code": "<render-element [elementName]='\"sidebody\"'></render-element>",
+		"bpw:preloop": "<div>preloop</div>",
+		"bpw:postloop": "<div>postloop</div>",
+		
+		"bpw:maxEntries": "10",
+		"bpw:note": "MySidePaneRenderTemplate note",
+		"bpw:resourceName": "bpwizard/default/design/MySidePaneContent",
+		"bpw:isQuery": "false"
+	},
+	"bpwizard/library/design/renderTemplate/MyRenderTemplate": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "MyRenderTemplate",
+		"bpw:title": "MyRenderTemplate",
+		"bpw:description": "My Render Template",
+		"bpw:code": "<render-element [elementName]='\"body\"'></render-element>",
+		"bpw:preloop": "<div>preloop</div>",
+		"bpw:postloop": "<div>postloop</div>",
+		
+		"bpw:maxEntries": "10",
+		"bpw:note": "MyRenderTemplate note",
+		"bpw:resourceName": "bpwizard/default/design/MyContent",
+		"bpw:isQuery": "false"
+	},
+    "bpwizard/library/design/contentAreaLayout/MyLayout" : {
+        "jcr:primaryType":"bpw:contentAreaLayout",
+        "bpw:name": "sampleLayout",
+        "bpw:contentWidth": "80"
+    },
+    "bpwizard/library/design/contentAreaLayout/MyLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "20"
+    },
+    "bpwizard/library/design/contentAreaLayout/MyLayout/sidePane/viewer_s0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:renderTemplayeName": "bpwizard/default/design/MySidePaneRenderTemplate",
+        "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent"
+    },
+    "bpwizard/library/design/contentAreaLayout/MyLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "bpwizard/library/design/contentAreaLayout/MyLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "bpwizard/library/design/contentAreaLayout/MyLayout/row0/column0/viewer_c0_0_0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+       "bpw:renderTemplayeName": "bpwizard/default/design/MyRenderTemplate",
+       "bpw:contentPath": "bpwizard/library/camunda/rootSiteArea/home/MyContent"
+    },
+    "bpwizard/library/camunda/siteConfig/bpm" : {
+        "jcr:primaryType":"bpw:siteConfig",
+        "bpw:name":"bpm",
+        "bpw:colorTheme":"bpm",
+        "bpw:rootSiteArea":"rootSiteArea",
+        "bpw:customScrollbars":"false"
+    },
+    "bpwizard/library/camunda/siteConfig/bpm/layout" : {
+        "jcr:primaryType":"bpw:pageLayout",
+        "bpw:style":"horizontal-layout-1",
+        "bpw:width":"fullwidth"
+    },
+    "bpwizard/library/camunda/siteConfig/bpm/layout/navbar" : {
+        "jcr:primaryType":"bpw:navbar",
+        "primaryBackground":"navbar-primary",
+        "secondaryBackground":"navbar-second",
+        "hidden":"false",
+        "folded":"false",
+        "position":"left",
+        "variant":"vertical-style-1"
+    },
+    "bpwizard/library/camunda/siteConfig/bpm/layout/toolbar" : {
+        "jcr:primaryType":"bpw:toolbar",
+        "customBackgroundColor":"false",
+        "background":"toolbar",
+        "hidden":"false",
+        "position":"above"
+    },
+    "bpwizard/library/camunda/siteConfig/bpm/layout/footer" : {
+        "jcr:primaryType":"bpw:footer",
+        "customBackgroundColor":"false",
+        "background":"footer",
+        "hidden":"false",
+        "position":"above"
+    },
+    "bpwizard/library/camunda/siteConfig/bpm/layout/sidePanel" : {
+        "jcr:primaryType":"bpw:sidePanel",
+        "hidden":"false",
+        "position":"right"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/MyContent" : {
+        "jcr:primaryType":"bpw:content",
+        "bpw:description":"MyContent",
+        "bpw:authoringTemplate":"bpwizard/default/design/MyContent",
+        "bpw:title":"MyContent"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/MyContent/body" : {
+        "jcr:primaryType":"bpw:contentElement",
+        "bpw:multiple":"false",
+        "bpw:value":"Content Body"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent" : {
+        "jcr:primaryType":"bpw:content",
+        "bpw:description":"MySidePaneContent",
+        "bpw:authoringTemplate":"bpwizard/default/design/MySidePaneContent",
+        "bpw:title":"MySidePaneContent"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent/sidebody" : {
+        "jcr:primaryType":"bpw:contentElement",
+        "bpw:multiple":"false",
+        "bpw:value":"MySidePaneContent Body"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1" : {
+        "jcr:primaryType":"bpw:content",
+        "bpw:description":"MySidePaneContent1",
+        "bpw:authoringTemplate":"bpwizard/default/design/MySidePaneContent",
+        "bpw:title":"MySidePaneContent1"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1/sidebody" : {
+        "jcr:primaryType":"bpw:contentElement",
+        "bpw:multiple":"false",
+        "bpw:value":"MySidePaneContent1 Body"
     }
 }

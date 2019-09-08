@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { RouterModule,  Routes } from '@angular/router';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -24,38 +24,25 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
-
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseSidebarModule } from '@fuse/components';
-import { JcrExplorerComponent } from './jcr-explorer/jcr-explorer.component';
-import { JcrNodeComponent } from './jcr-node/jcr-node.component';
-import { RepositoryComponent } from './repository/repository.component';
-import { WorkspaceComponent } from './workspace/workspace.component';
-import { DynamicUiComponent } from './dynamic-ui/dynamic-ui.component';
-import {
-  JsonSchemaFormModule, 
-  MaterialDesignFrameworkModule
-} from '../../dynamic-ui';
-import { AceEditorDirective } from './dynamic-ui/ace-editor.directive';
+
+import { ContentAreaPreviewComponent } from './content-area-preview/content-area-preview.component';
+import { ResourceRendererComponent } from './resource-renderer/resource-renderer.component';
+import { RenderElementComponent } from './render-element/render-element.component';
+import { ContentIdDirective } from './content-id.directive';
+import { RendererService } from './renderer.service';
 const routes: Routes = [
   {
-    path     : 'jcr-explorer',
-    component: JcrExplorerComponent      
-  },
-  {
-    path     : 'dynamic-ui',
-    component: DynamicUiComponent
+    path     : 'preview',
+    component: ContentAreaPreviewComponent      
   }
 ];
-
 @NgModule({
   declarations: [
-    AceEditorDirective, 
-    JcrExplorerComponent, 
-    JcrNodeComponent, 
-    RepositoryComponent, 
-    WorkspaceComponent, 
-    DynamicUiComponent
+    ContentAreaPreviewComponent, 
+    ResourceRendererComponent, 
+    RenderElementComponent, ContentIdDirective
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -81,20 +68,16 @@ const routes: Routes = [
    
     FlexLayoutModule,
     HttpClientModule,
-    
-    MaterialDesignFrameworkModule,
-    JsonSchemaFormModule,
-    // JsonSchemaFormModule.forRoot(
-    //   // NoFrameworkModule,
-    //   // MaterialDesignFrameworkModule,
-    //   // Bootstrap3FrameworkModule,
-    //   // Bootstrap4FrameworkModule,
-    //   MaterialDesignFrameworkModule
-    // ),
     TranslateModule,
-
     FuseSharedModule,
     FuseSidebarModule
-  ]
+  ],
+  exports: [
+    RenderElementComponent,
+    ContentIdDirective
+  ],
+  providers   : [
+    RendererService
+],
 })
-export class JcrExplorerModule { }
+export class PreviewModule { }

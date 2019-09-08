@@ -2,6 +2,7 @@ package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
@@ -55,18 +57,22 @@ import com.bpwizard.wcm.repo.rest.jcr.model.LayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutRow;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavBar;
 import com.bpwizard.wcm.repo.rest.jcr.model.Navigation;
+import com.bpwizard.wcm.repo.rest.jcr.model.NavigationBadge;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationType;
 import com.bpwizard.wcm.repo.rest.jcr.model.PageLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceNode;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceViewer;
+import com.bpwizard.wcm.repo.rest.jcr.model.SearchData;
 import com.bpwizard.wcm.repo.rest.jcr.model.SidePane;
 import com.bpwizard.wcm.repo.rest.jcr.model.SidePanel;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
+import com.bpwizard.wcm.repo.rest.jcr.model.SiteAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.Theme;
 import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
+import com.bpwizard.wcm.repo.rest.jcr.model.keyValues;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestChildType;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNodeType;
@@ -114,13 +120,22 @@ public class WcmRestController {
 		siteConfig.setLibrary(library);
 		String rootSiteArea = siteConfig.getRootSiteArea();
 		
-		Navigation[] navigation = this.getNavigations(request, repository, workspace, library, rootSiteArea);
-		JsonForm[] jsonForms = this.getAuthoringTemplateAsJsonForm(repository, workspace, request);
+		Navigation[] navigations = this.getNavigations(request, repository, workspace, library, rootSiteArea);
+		Map<String, JsonForm> jsonForms = this.getAuthoringTemplateAsJsonForm(repository, workspace, request);
+		
 		ApplicationConfig applicationConfig = new ApplicationConfig();
 		applicationConfig.setJsonForms(jsonForms);
-		applicationConfig.setNavigation(navigation);
+		applicationConfig.setNavigations(navigations);
 		applicationConfig.setSiteConfig(siteConfig);
 
+		Map<String, RenderTemplate> renderTemplates = this.getRenderTemplates(repository, workspace, request);
+		applicationConfig.setRenderTemplates(renderTemplates);
+		Map<String, SiteArea> siteAreas = this.getSiteAreas(repository, workspace, library, rootSiteArea, request);
+		applicationConfig.setSiteAreas(siteAreas);
+		
+		Map<String, ContentAreaLayout> contentAreaLayouts = this.getContentAreaLayouts(repository, workspace, request);
+		applicationConfig.setContentAreaLayouts(contentAreaLayouts);
+		
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
 		}
@@ -160,20 +175,22 @@ public class WcmRestController {
 	}
 
 	@GetMapping(path = "/{repository}/{workspace}/jsonform", produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonForm[] getAuthoringTemplateAsJsonForm(@PathVariable("repository") String repository,
+	public Map<String, JsonForm> getAuthoringTemplateAsJsonForm(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
 
-		List<JsonForm> jsonForms = this.getAuthoringTemplateLibraries(repository, workspace, request)
+		Map<String, JsonForm> jsonForms = this.getAuthoringTemplateLibraries(repository, workspace, request)
 				.flatMap(at -> this.getAuthoringTemplates(at, request))
-				.map(at -> this.toJsonForm(request, repository, workspace, at)).collect(Collectors.toList());
+				.map(at -> this.toJsonForm(request, repository, workspace, at)).collect(Collectors.toMap(
+						jsonForm -> String.format("%s/%s/%s/%s", repository, workspace, jsonForm.getLibrary(), jsonForm.getResourceType()), 
+						Function.identity()));
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
 		}
-		return jsonForms.toArray(new JsonForm[jsonForms.size()]);
+		return jsonForms;
 	}
 
 	@GetMapping(path = "/{repository}/{workspace}/control", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -302,14 +319,16 @@ public class WcmRestController {
 	}
 
 	@GetMapping(path = "/{repository}/{workspace}/rt", produces = MediaType.APPLICATION_JSON_VALUE)
-	public RenderTemplate[] getRenderTemplate(@PathVariable("repository") String repository,
+	public Map<String, RenderTemplate> getRenderTemplates(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
 
-		RenderTemplate[] renderTemplates = this.getRenderTemplateLibraries(repository, workspace, request)
-				.flatMap(rt -> this.getRenderTemplates(rt, request)).toArray(RenderTemplate[]::new);
+		Map<String, RenderTemplate> renderTemplates = this.getRenderTemplateLibraries(repository, workspace, request)
+				.flatMap(rt -> this.getRenderTemplates(rt, request)).collect(Collectors.toMap(
+						rt -> String.format("%s/%s/%s/%s", repository, workspace, rt.getLibrary(), rt.getName()), 
+						Function.identity()));
 
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
@@ -361,14 +380,17 @@ public class WcmRestController {
 	}
 
 	@GetMapping(path = "/{repository}/{workspace}/contentAreaLayout", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ContentAreaLayout[] getContentAreaLayout(@PathVariable("repository") String repository,
+	public Map<String, ContentAreaLayout> getContentAreaLayouts(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
 
-		ContentAreaLayout[] contentAreaLayouts = this.getContentAreaLayoutLibraries(repository, workspace, request)
-				.flatMap(layout -> this.getContentArealayouts(layout, request)).toArray(ContentAreaLayout[]::new);
+		Map<String, ContentAreaLayout> contentAreaLayouts = this.getContentAreaLayoutLibraries(repository, workspace, request)
+				.flatMap(layout -> this.getContentArealayouts(layout, request))
+				.collect(Collectors.toMap(
+						layout -> String.format("%s/%s/%s/%s", repository, workspace, layout.getLibrary(), layout.getName()), 
+						Function.identity()));
 
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
@@ -508,7 +530,12 @@ public class WcmRestController {
 			}
 		}
 
-		
+		Node siteAreaLayoutNode = saNode.addNode("siteAreaLayout", "bpw:siteAreaLayout");
+		if (sa.getSiteAreaLayout() != null) {
+			Node sidePaneNode = siteAreaLayoutNode.addNode("sidePane", "bpw:contentAreaSidePanel");
+			this.addSidePageNode(sidePaneNode, sa.getSiteAreaLayout().getSidePane());
+			this.addPageLayoutNodes(siteAreaLayoutNode, sa.getSiteAreaLayout().getRows());
+		}
 		session.save();
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
@@ -540,7 +567,7 @@ public class WcmRestController {
 		
 		Node contentNode = parentFolder.addNode(name, "bpw:content");
 
-		contentNode.setProperty("bpw:title", name);
+		//contentNode.setProperty("bpw:name", name);
 		contentNode.setProperty("bpw:authoringTemplate", contentItem.getAuthoringTemplate());
 		contentNode.setProperty("bpw:title", StringUtils.hasText(title) ? title : name);
 		if (StringUtils.hasText(description)) {
@@ -560,6 +587,51 @@ public class WcmRestController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
+	@GetMapping(path = "/{repository}/{workspace}/contentItem", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ContentItem getContentItem(
+		    @PathVariable("repository") String repository,
+		    @PathVariable("workspace") String workspace,
+		    @RequestParam("path") String contentItemPath,
+		    HttpServletRequest request) throws RepositoryException, IOException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		
+		RestNode contentItemNode = (RestNode) this.itemHandler.item(request, repository, workspace,
+				"/" + contentItemPath, 2);
+		
+		ContentItem contentItem = new ContentItem(); 
+		contentItem.setRepository(repository);
+		contentItem.setWorkspace(workspace);
+		contentItem.setNodePath(contentItemPath);
+		Map<String, String> contentElements = new HashMap<>();
+		contentElements.put("name", contentItemNode.getName());
+		contentItem.setContentElements(contentElements);
+		for (RestProperty property: contentItemNode.getJcrProperties()) {
+			if ("bpw:authoringTemplate".equals(property.getName())) {
+				contentItem.setAuthoringTemplate(property.getValues().get(0));
+			} else if ("bpw:title".equals(property.getName())) {
+				contentElements.put("title", property.getValues().get(0));
+			} else if ("bpw:description".equals(property.getName())) {
+				contentElements.put("description", property.getValues().get(0));
+			}
+		}
+		for (RestNode node: contentItemNode.getChildren()) {
+			if (this.checkNodeType(node, "bpw:contentElement")) {
+				for (RestProperty property: node.getJcrProperties()) {
+					if ("bpw:value".equals(property.getName())) {
+						contentElements.put(node.getName(), property.getValues().get(0));
+						break;
+					} 
+				}
+			}
+		}
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
+		return contentItem;
+	}
+	  
 	private ObjectNode toPropertyNode(FormControl formControl, ObjectNode definitions) {
 		ObjectNode propertyNode = JsonNodeFactory.instance.objectNode();
 		// propertyNode.put("name", formControl.getName());
@@ -818,6 +890,9 @@ public class WcmRestController {
 	private JsonForm toJsonForm(HttpServletRequest request, String repository, 
 			String workspace, AuthoringTemplate at) {
 		JsonForm jsonForm = new JsonForm();
+		jsonForm.setRepository(repository);
+		jsonForm.setWorkspace(workspace);
+		jsonForm.setLibrary(at.getLibrary());
 		jsonForm.setResourceType(at.getName());
 		ObjectNode jsonNode = JsonNodeFactory.instance.objectNode();
 		ObjectNode schemaNode = JsonNodeFactory.instance.objectNode();
@@ -882,7 +957,7 @@ public class WcmRestController {
 	private void addSidePageNode(Node sidenavNode, SidePane sidenav) throws RepositoryException {
 		sidenavNode.setProperty("bpw:isLeft", sidenav.isLeft());
 		sidenavNode.setProperty("bpw:width", sidenav.getWidth());
-		this.setResourceViewer(sidenavNode, sidenav.getViewers());
+		this.addResourceViewers(sidenavNode, sidenav.getViewers());
 	}
 
 	private void addPageLayoutNodes(Node pageLayoutNode, LayoutRow[] rows) throws RepositoryException {
@@ -893,15 +968,19 @@ public class WcmRestController {
 			for (LayoutColumn column : row.getColumns()) {
 				Node columnNode = rowNode.addNode("column" + columnCount++, "bpw:layoutColumn");
 				columnNode.setProperty("bpw:width", column.getWidth());
-				this.setResourceViewer(columnNode, column.getViewers());
+				this.addResourceViewers(columnNode, column.getViewers());
 			}
 		}
 	}
 
-	private void setResourceViewer(Node restNode, ResourceViewer viewers[]) throws RepositoryException {
+	private void addResourceViewers(Node restNode, ResourceViewer viewers[]) throws RepositoryException {
+		int viewerCount = 0;
 		for (ResourceViewer viewer : viewers) {
-			Node viewerNode = restNode.addNode("viewer", "bpw:resourceViewer");
+			Node viewerNode = restNode.addNode("viewer" + viewerCount++, "bpw:resourceViewer");
 			viewerNode.setProperty("bpw:renderTemplayeName", viewer.getRenderTemplate());
+			if (StringUtils.hasText(viewer.getContentPath())) {
+				viewerNode.setProperty("bpw:contentPath", viewer.getContentPath());
+			}
 		}
 	}
 
@@ -1145,12 +1224,15 @@ public class WcmRestController {
 
 	private ResourceViewer[] resolveResourceViewer(RestNode restNode) {
 		List<ResourceViewer> viewers = new ArrayList<>();
+		
 		restNode.getChildren().forEach(viewerNode -> {
 			if (this.checkNodeType(viewerNode, "bpw:resourceViewer")) {
 				ResourceViewer viewer = new ResourceViewer();
-				for (RestProperty property : restNode.getJcrProperties()) {
+				for (RestProperty property : viewerNode.getJcrProperties()) {
 					if ("bpw:renderTemplayeName".equals(property.getName())) {
 						viewer.setRenderTemplate(property.getValues().get(0));
+					} else if ("bpw:contentPath".equals(property.getName())) {
+						viewer.setContentPath(property.getValues().get(0));
 					}
 				}
 				viewers.add(viewer);
@@ -1202,7 +1284,7 @@ public class WcmRestController {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(request, repository, workspace,
 					"/bpwizard/library", 1);
-			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
+			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toThemeWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
@@ -1214,7 +1296,7 @@ public class WcmRestController {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(request, repository, workspace,
 					"/bpwizard/library", 1);
-			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
+			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toContentAreaLayoutWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
@@ -1226,7 +1308,7 @@ public class WcmRestController {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(request, repository, workspace,
 					"/bpwizard/library", 1);
-			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
+			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toRenderTemplateWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
@@ -1259,7 +1341,7 @@ public class WcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode contentAreaLayoutNode = (RestNode) this.itemHandler.item(request, contentAreaLayout.getRepository(),
-					contentAreaLayout.getWorkspace(), "/bpwizard/library/" + contentAreaLayout.getLibrary() + "/pageLayout", 4);
+					contentAreaLayout.getWorkspace(), "/bpwizard/library/" + contentAreaLayout.getLibrary() + "/contentAreaLayout", 4);
 			return contentAreaLayoutNode.getChildren().stream().filter(this::isContentAreaLayout)
 					.map(node -> this.toContentAreaLayout(node, contentAreaLayout));
 		} catch (RepositoryException e) {
@@ -1283,6 +1365,10 @@ public class WcmRestController {
 		return this.checkNodeType(node, "bpw:library");
 	}
 
+	private boolean notSystemLibrary(RestNode node) {
+		return !"system".equalsIgnoreCase(node.getName());
+	}
+	
 	private boolean isTheme(RestNode node) {
 		return this.checkNodeType(node, "bpw:themeType");
 	}
@@ -1680,6 +1766,24 @@ public class WcmRestController {
 		return siteConfig;
 	}
 	
+	private Map<String, SiteArea> getSiteAreas(
+			String repository,			
+			String workspace, 
+			String library,
+			String rootSiteArea,
+			HttpServletRequest request
+			) throws RepositoryException {
+		RestNode saNode = (RestNode) this.itemHandler.item(request, repository, workspace,
+				String.format("/bpwizard/library/%s/%s", library, rootSiteArea), 5);
+		Map<String, SiteArea> siteAreas = new HashMap<>();
+		for (RestNode node :saNode.getChildren()) {
+			if (this.isSiteArea(node)) {
+				this.toSiteArea(node, siteAreas);
+			}
+		}
+		return siteAreas;
+	}
+	
 	private Navigation[] getNavigations(
 			HttpServletRequest request,
 			String repository,			
@@ -1695,6 +1799,135 @@ public class WcmRestController {
 		return navigation;
 	}
 	
+	private SiteArea toSiteArea(RestNode saNode, Map<String, SiteArea> siteAreas) {
+		SiteArea sa = new SiteArea();
+		for (RestProperty property : saNode.getJcrProperties()) {
+			if ("bpw:navigationId".equals(property.getName())) {
+				sa.setNavigationId(property.getValues().get(0));
+			} else if ("bpw:navigationType".equals(property.getName())) {
+				sa.setNavigationType(property.getValues().get(0));
+			} else if ("bpw:title".equals(property.getName())) {
+				sa.setTitle(property.getValues().get(0));
+			} else if ("bpw:translate".equals(property.getName())) {
+				sa.setTranslate(property.getValues().get(0));
+			} else if ("bpw:icon".equals(property.getName())) {
+				sa.setIcon(property.getValues().get(0));
+			} else if ("bpw:url".equals(property.getName())) {
+				sa.setUrl(property.getValues().get(0));
+			} else if ("bpw:name".equals(property.getName())) {
+				sa.setName(property.getValues().get(0));
+			} else if ("bpw:friendlyURL".equals(property.getName())) {
+				sa.setFriendlyURL(property.getValues().get(0));
+			} else if ("bpw:sorderOrder".equals(property.getName())) {
+				sa.setSorderOrder(Integer.parseInt(property.getValues().get(0)));
+			} else if ("bpw:sorderOrder".equals(property.getName())) {
+				sa.setShowOnMenu(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:allowedFileExtension".equals(property.getName())) {
+				sa.setAllowedFileExtension(property.getValues().get(0));
+			} else if ("bpw:allowedArtifactTypes".equals(property.getName())) {
+				sa.setAllowedArtifactTypes(property.getValues().get(0));
+			} else if ("bpw:description".equals(property.getName())) {
+				sa.setDescription(property.getValues().get(0));
+			} else if ("bpw:defaultContent".equals(property.getName())) {
+				sa.setDefaultContent(property.getValues().get(0));
+			} else if ("bpw:contentAreaLayout".equals(property.getName())) {
+				sa.setContentAreaLayout(property.getValues().get(0));
+			} else if ("bpw:cacheTTL".equals(property.getName())) {
+				sa.setCacheTTL(Integer.parseInt(property.getValues().get(0)));
+			} else if ("bpw:securePage".equals(property.getName())) {
+				sa.setSecurePage(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:function".equals(property.getName())) {
+				sa.setFunction(property.getValues().get(0));
+			} else if ("bpw:translate".equals(property.getName())) {
+				sa.setTranslate(property.getValues().get(0));
+			} else if ("bpw:icon".equals(property.getName())) {
+				sa.setIcon(property.getValues().get(0));
+			} else if ("bpw:classes".equals(property.getName())) {
+				sa.setClasses(property.getValues().get(0));
+			} else if ("bpw:exactMatch".equals(property.getName())) {
+				sa.setExactMatch(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:externalUrl".equals(property.getName())) {
+				sa.setExternalUrl(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:openInNewTab".equals(property.getName())) {
+				sa.setOpenInNewTab(Boolean.parseBoolean(property.getValues().get(0)));
+			}     
+			/*
+			+ bpw:metaData (bpw:keyValues)
+			+ bpw:searchData (bpw:pageSearchData)	
+			*/		
+		}
+		
+		siteAreas.put(sa.getNavigationId(), sa);
+		for (RestNode node :saNode.getChildren()) {
+			if (this.checkNodeType(node, "bpw:navigationBadge")) {
+				NavigationBadge badge = new NavigationBadge();
+				for (RestProperty property : node.getJcrProperties()) {
+					if ("bpw:title".equals(property.getName())) {
+						badge.setTitle(property.getValues().get(0));
+					} else if ("bpw:translate".equals(property.getName())) {
+						badge.setTranslate(property.getValues().get(0));
+					} else if ("bpw:bg".equals(property.getName())) {
+						badge.setBg(property.getValues().get(0));
+					} else if ("bpw:fg".equals(property.getName())) {
+						badge.setFg(property.getValues().get(0));
+					} 
+				}
+				sa.setBadge(badge);	
+			} else if (this.checkNodeType(node, "bpw:keyValues")) {
+				keyValues metadata = new keyValues();
+				KeyValue[] keyValues = node.getChildren().stream().filter(n -> this.checkNodeType(n, "bpw:keyValue"))
+						.map(n -> this.toKeyValue(n)).toArray(KeyValue[]::new);
+				metadata.setKeyValue(keyValues);
+				sa.setMetadata(metadata);
+			} else if (this.checkNodeType(node, "bpw:pageSearchData")) {
+				SearchData searchData = new SearchData();
+				for (RestProperty property : node.getJcrProperties()) {
+					if ("description".equals(property.getName())) {
+						searchData.setDescription(property.getValues().get(0));
+					} else if ("keywords".equals(property.getName())) {
+						searchData.setKeywords(property.getValues().toArray(new String[property.getValues().size()]));
+					}
+				}
+				sa.setSearchData(searchData);
+			} else if (this.checkNodeType(node, "bpw:siteAreaLayout")) {
+				SiteAreaLayout siteAreaLayout = new SiteAreaLayout();
+				List<LayoutRow> rows = new ArrayList<>();
+				node.getChildren().forEach(childNode -> {
+					if (this.checkNodeType(childNode, "bpw:contentAreaSidePanel")) {
+						SidePane sidepane = new SidePane();
+						for (RestProperty property : childNode.getJcrProperties()) {
+							if ("bpw:isLeft".equals(property.getName())) {
+								sidepane.setLeft(Boolean.parseBoolean(property.getValues().get(0)));
+							} else if ("bpw:width".equals(property.getName())) {
+								sidepane.setWidth(Integer.parseInt(property.getValues().get(0)));
+							}
+						}
+						sidepane.setViewers(this.resolveResourceViewer(childNode));
+						siteAreaLayout.setSidePane(sidepane);
+					} else if (this.checkNodeType(childNode, "bpw:layoutRow")) {
+						LayoutRow row = this.resolveLayoutRow(childNode);
+						rows.add(row);
+					}
+				});
+				siteAreaLayout.setRows(rows.toArray(new LayoutRow[rows.size()]));
+				sa.setSiteAreaLayout(siteAreaLayout);
+			} else if (this.isSiteArea(node)) {
+				this.toSiteArea(node, siteAreas);
+			}
+		}
+		return sa;
+	}
+	private KeyValue toKeyValue(RestNode node) {
+		KeyValue keyValue = new KeyValue();
+		for (RestProperty property : node.getJcrProperties()) {
+			if ("bpw:name".equals(property.getName())) {
+				keyValue.setName(property.getValues().get(0));
+			} else if ("bpw:value".equals(property.getName())) {
+				keyValue.setValue(property.getValues().get(0));
+			}
+		}
+		return keyValue;
+	}
 	private NavigationItem toNavigation(RestNode siteArea) {
 		Navigation navigation = new Navigation();
 		for (RestProperty property : siteArea.getJcrProperties()) {
@@ -1712,7 +1945,23 @@ public class WcmRestController {
 				navigation.setUrl(property.getValues().get(0));
 			}
 		}
-		
+		for (RestNode node: siteArea.getChildren()) {
+			if (this.checkNodeType(node, "bpw:navigationBadge")) {
+				NavigationBadge badge = new NavigationBadge();
+				for (RestProperty property : node.getJcrProperties()) {
+					if ("bpw:title".equals(property.getName())) {
+						badge.setTitle(property.getValues().get(0));
+					} else if ("bpw:translate".equals(property.getName())) {
+						badge.setTranslate(property.getValues().get(0));
+					} else if ("bpw:bg".equals(property.getName())) {
+						badge.setBg(property.getValues().get(0));
+					} else if ("bpw:fg".equals(property.getName())) {
+						badge.setFg(property.getValues().get(0));
+					} 
+				}
+				navigation.setBadge(badge);
+			}
+		}
 		NavigationItem[] navigationItems = siteArea.getChildren().stream().filter(this::isSiteArea)
 				.map(node -> this.toNavigationItem(node, 1)).toArray(NavigationItem[]::new);
 		navigation.setChildren(navigationItems);

@@ -31,8 +31,9 @@ export class NewContentDialogComponent extends BaseMewResourceDialog implements 
       repository: this.data.repositoryName,
       nodePath: this.data.nodePath,
       workspace: this.data.workspaceName,
-      authoringTemplate: 'myContent'
+      authoringTemplate: 'bpwizard/default/design/MyContent'
     }
+    console.log(contentItem);
     this.wcmService.createContentItem(contentItem).subscribe((event: any) => {
         console.log(event)
     });   

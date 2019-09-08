@@ -33,6 +33,7 @@ import { QueryBuilderModule } from './query-builder/query-builder.module';
 import { CategoryModule } from './category/category.module';
 import { WorkflowModule } from './workflow/workflow.module';
 import { ValidationRuleModule } from './validation-rule/validation-rule.module';
+import { PreviewModule } from './preview/preview.module';
 import { ModeshapeService } from './service/modeshape.service';
 import { WcmService } from './service/wcm.service';
 import { UploadZipfileDialogComponent } from './dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
@@ -63,6 +64,7 @@ import { NewSiteConfigDialogComponent } from './dialog/new-site-config-dialog/ne
         CategoryModule,
         WorkflowModule,
         ValidationRuleModule,
+        PreviewModule,
         MatButtonModule,
         MatCheckboxModule,
         MatDialogModule,

@@ -93,7 +93,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.CONTENT_AREA_LAYOUT.TITLE',
                 type     : 'item',
                 icon     : 'pageview',
-                url      : '/wcm-authoring/content-area-layout/list'
+                url      : '/wcm-authoring/content-area-layout/edit'
             },
             {
                 id       : 'resource-type',
@@ -109,7 +109,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.RENDER_TEMPLATE.TITLE',
                 type     : 'item',
                 icon     : 'view_array',
-                url      : '/wcm-authoring/render-template/list'
+                url      : '/wcm-authoring/render-template/edit'
             },
             {
                 id       : 'query-builder',

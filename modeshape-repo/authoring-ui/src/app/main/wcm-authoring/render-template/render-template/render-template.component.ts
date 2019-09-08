@@ -118,7 +118,7 @@ export class RenderTemplateComponent implements OnInit {
 
   addContentElement() {
     let selectedContentElement = this.renderTemplateForm.get('selectedContentElement').value;
-    this.code.code += `<render-template element_name=\"${selectedContentElement}\"></render-template>`
+    this.code.code += `<render-template [elementName]='\"${selectedContentElement}\"'></render-template>`
     return false;
   }
   

@@ -10,8 +10,8 @@ public class ContentAreaLayout implements HasName {
 	String repository;
 	String workspace;
 	String library;
-	SidePane sidePane;
 	int contentWidth;
+	SidePane sidePane;
 	LayoutRow rows[];
 	
 	public String getName() {

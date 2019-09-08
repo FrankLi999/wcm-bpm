@@ -1,3 +1,5 @@
+import { NavigationBadge } from './NavigationBadge';
+
 export interface NavigationItem {
     id: string;
     title: string;
@@ -11,12 +13,7 @@ export interface NavigationItem {
     externalUrl?: boolean;
     openInNewTab?: boolean;
     function?: any;
-    badge?: {
-        title?: string;
-        translate?: string;
-        bg?: string;
-        fg?: string;
-    };
+    badge?: NavigationBadge;
     children?: NavigationItem[];
 }
 

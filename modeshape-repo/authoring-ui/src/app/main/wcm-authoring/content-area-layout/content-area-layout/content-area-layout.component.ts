@@ -69,7 +69,7 @@ export class ContentAreaLayoutComponent implements OnInit {
     contentWidth: 100,
     //leftSide: true,
     sidePane: {
-      isLeft: true,
+      left: true,
       width: 0,
       viewers: []
     },
@@ -119,15 +119,16 @@ export class ContentAreaLayoutComponent implements OnInit {
         }
       );
 
-      this.wcmService.getRenderTemplate('bpwizard', 'default').subscribe(
-        (rts: RenderTemplate[]) => {
-          if (rts)
-          rts.forEach(rt => {
-            this.renderTemplates.push({
-              value: `${rt.repository}/${rt.workspace}/${rt.library}/${rt.name}`, 
-              viewValue:rt.title
-            })
-          });
+      this.wcmService.getRenderTemplates('bpwizard', 'default').subscribe(
+        (rts: {[key:string]:RenderTemplate}) => {
+          if (rts) {
+            for (let prop in rts) {
+              this.renderTemplates.push({
+                value: prop, 
+                viewValue:rts[prop].title
+              })
+            }
+          }
         },
         response => {
           console.log("GET RT call in error", response);
@@ -229,7 +230,7 @@ export class ContentAreaLayoutComponent implements OnInit {
   updateSidePaneWidth(sideWidth: number, contentWide: number, leftSide: boolean) {
       this.layout.sidePane.width = sideWidth;
       this.layout.contentWidth = contentWide;
-      this.layout.sidePane.isLeft = leftSide;
+      this.layout.sidePane.left = leftSide;
   }
 
   updatedCurrentRowColumns(currentRow: LayoutRow, columnWidths: number[]) : LayoutColumn[] {
@@ -250,12 +251,12 @@ export class ContentAreaLayoutComponent implements OnInit {
       return columns;
   }
   
-  showLeftSideNav() : boolean {
-      return this.layout.sidePane.width > 0 && this.layout.sidePane.isLeft;
+  showLeftSidePanel() : boolean {
+      return this.layout.sidePane.width > 0 && this.layout.sidePane.left;
   }
 
-  showRightSideNav() : boolean {
-      return this.layout.sidePane.width > 0 && (!this.layout.sidePane.isLeft);
+  showRightSidePanel() : boolean {
+      return this.layout.sidePane.width > 0 && (!this.layout.sidePane.left);
   }
 
   public addSideViewer() {
@@ -326,7 +327,7 @@ export class ContentAreaLayoutComponent implements OnInit {
         console.log(response);
       },
       () => {
-        console.log("TsavePageLayout observable is now completed.");
+        console.log("savePageLayout observable is now completed.");
       }
     );
   }

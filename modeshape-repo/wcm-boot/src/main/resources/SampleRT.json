@@ -1,12 +1,12 @@
 {
-	"bpwizard/library/design/renderTemplate/sampleRT": {
+	"bpwizard/library/design/renderTemplate/MyRT": {
 		"jcr:primaryType": "bpw:renderTemplate",
-		"bpw:name": "RT - Sample",
-		"bpw:title": "sampleRT",
+		"bpw:name": "MyRT",
+		"bpw:title": "My RT",
 		"bpw:description": "Sample Render Template",
-		"bpw:code": "code",
-		"bpw:preloop": "preloop",
-		"bpw:postloop": "postloop",
+		"bpw:code": "<render-template element_name=\"step2Description\"></render-template>",
+		"bpw:preloop": "<div>preloop</div>",
+		"bpw:postloop": "<div>postloop</div>",
 		
 		"bpw:maxEntries": "10",
 		"bpw:note": "note",

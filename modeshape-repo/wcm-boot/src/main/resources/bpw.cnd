@@ -190,6 +190,11 @@
 - bpw:bg (STRING)
 - bpw:fg (STRING)
 
+
+[bpw:siteAreaLayout]
++ sidePane (bpw:contentAreaSidePanel)
++ * (bpw:layoutRow)
+
 [bpw:siteArea] > bpw:resourceNode
 - bpw:name (STRING) mandatory COPY
 - bpw:title (STRING) mandatory COPY
@@ -216,6 +221,7 @@
 + bpw:badge (bpw:navigationBadge)
 + bpw:metaData (bpw:keyValues)
 + bpw:searchData (bpw:pageSearchData)
++ siteAreaLayout (bpw:siteAreaLayout)
 + * (bpw:resourceNode)
 
 [bpw:queryStatement] > bpw:resourceNode
@@ -368,7 +374,8 @@
 - bpw:isQuery (BOOLEAN)
 
 [bpw:resourceViewer]
-- bpw:renderTemplayeName (STRING) multiple
+- bpw:renderTemplayeName (STRING)
+- bpw:contentPath (STRING)
    
 [bpw:layoutColumn]
 - bpw:width (LONG)
@@ -421,7 +428,7 @@
 - bpw:rootSiteArea (STRING)
 + layout (bpw:pageLayout)
 
-[bpw:contentAreaLayout] > mix:lastModified
+[bpw:contentAreaLayout] > nt:hierarchyNode, mix:lastModified
 - bpw:name (STRING)
 - bpw:contentWidth (LONG)
 + sidePane (bpw:contentAreaSidePanel)

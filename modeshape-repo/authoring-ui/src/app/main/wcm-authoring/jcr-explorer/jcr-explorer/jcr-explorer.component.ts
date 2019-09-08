@@ -13,7 +13,7 @@ import {
   Workspace,
   Repository,
   RestNode,
-  ApplicationConfig,
+  //ApplicationConfig,
   JsonForm
 } from '../../model';
 import { UploadZipfileDialogComponent } from '../../dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
@@ -62,7 +62,7 @@ export class JcrExplorerComponent implements OnInit {
   functionMap = new Map<string, Function>();
   jcrNodeMap = new Map<string, JcrNode>();
   operationMap = new Map<string, Operation[]>();
-  jsonFormMap = new Map<string, JsonForm>();
+  jsonFormMap: {[key:string]:JsonForm} = {};
   currentNodeOperations: Operation[];
   activeNode : JcrFlatNode = null; 
   nodeMap = new Map<string, JcrFlatNode>();
@@ -140,12 +140,11 @@ export class JcrExplorerComponent implements OnInit {
       }
     );
 
-    this.wcmService.getApplicationConfig('bpwizard', 'default', 'camunda', 'bpm').subscribe(
-      (applicationConfig: ApplicationConfig) => {
-        if (applicationConfig) {
-          applicationConfig.jsonForms.forEach(jsonForm => this.jsonFormMap.set(jsonForm.resourceType, jsonForm));
+    this.wcmService.getJsonForms('bpwizard', 'default').subscribe(
+      (jsonForms: {[key:string]:JsonForm}) => {
+        if (jsonForms) {
+          this.jsonFormMap = jsonForms;
         }
-        
       },
       response => {
         console.log("getAuthoringTemplateAsJsonSchema call ended in error", response);
@@ -392,7 +391,7 @@ export class JcrExplorerComponent implements OnInit {
     let dialogRef = this.matDialog.open(NewFolderDialogComponent, {
       panelClass: 'folder-new-dialog',
       data: { 
-        jsonFormObject: this.jsonFormMap.get('folderType').formSchema,
+        jsonFormObject: this.jsonFormMap['bpwizard/default/system/folderType'].formSchema,
         nodePath: (node.value as RestNode).nodePath,
         repositoryName: (node.value as RestNode).repositoryName,
         workspaceName: (node.value as RestNode).workspaceName
@@ -413,7 +412,7 @@ export class JcrExplorerComponent implements OnInit {
     let dialogRef = this.matDialog.open(NewThemeDialogComponent, {
       panelClass: 'theme-new-dialog',
       data: { 
-        jsonFormObject: this.jsonFormMap.get('themeType').formSchema,
+        jsonFormObject: this.jsonFormMap['bpwizard/default/system/themeType'].formSchema,
         nodePath: (node.value as RestNode).nodePath,
         repositoryName: (node.value as RestNode).repositoryName,
         workspaceName: (node.value as RestNode).workspaceName
@@ -462,7 +461,7 @@ export class JcrExplorerComponent implements OnInit {
     let dialogRef = this.matDialog.open(NewSiteareaDialogComponent, {
       panelClass: 'sitearea-new-dialog',
       data: { 
-        jsonFormObject: this.jsonFormMap.get('siteAreaType').formSchema,
+        jsonFormObject: this.jsonFormMap['bpwizard/default/system/siteAreaType'].formSchema,
         nodePath: (node.value as RestNode).nodePath,
         repositoryName: (node.value as RestNode).repositoryName,
         workspaceName: (node.value as RestNode).workspaceName
@@ -485,7 +484,7 @@ export class JcrExplorerComponent implements OnInit {
     let dialogRef = this.matDialog.open(NewContentDialogComponent, {
       panelClass: 'content-new-dialog',
       data: { 
-        jsonFormObject: this.jsonFormMap.get('myContent').formSchema,
+        jsonFormObject: this.jsonFormMap['bpwizard/default/system/MyContent'].formSchema,
         nodePath: (node.value as RestNode).nodePath,
         repositoryName: (node.value as RestNode).repositoryName,
         workspaceName: (node.value as RestNode).workspaceName
@@ -509,7 +508,7 @@ export class JcrExplorerComponent implements OnInit {
     let dialogRef = this.matDialog.open(NewSiteConfigDialogComponent, {
       panelClass: 'siteconfig-new-dialog',
       data: { 
-        jsonFormObject: this.jsonFormMap.get('siteConfigType').formSchema,
+        jsonFormObject: this.jsonFormMap['bpwizard/default/system/siteConfigType'].formSchema,
         // nodePath: (node.value as RestNode).nodePath,
         library: 'camunda',
         repositoryName: (node.value as RestNode).repositoryName,
