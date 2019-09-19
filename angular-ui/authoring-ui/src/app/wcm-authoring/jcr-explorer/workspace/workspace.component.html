@@ -1,0 +1,38 @@
+<div id="workspace-overview">
+    <h1>Workspace - {{workspace.name}}</h1> 
+    <div class="workspace-content" fxLayout="column" fxFlex="100">
+        <div class="profile-box info-box general" fxLayout="column" fxFlex="100">
+            <header class="accent">
+                <div class="title">Workspace URLs</div>
+            </header>
+
+            <div class="content">
+                <div class="info-line">
+                    <div class="title">Repository Url</div>
+                    <div class="info">{{workspace.repositoryUrl}}</div>
+                </div>
+                <div class="info-line">
+                    <div class="title">Query Url</div>
+                    <div class="info">{{workspace.queryUrl}}</div>
+                </div>
+
+                <div class="info-line">
+                    <div class="title">Item Url</div>
+                    <div class="info">{{workspace.itemsUrl}}</div>
+                </div>
+
+                <div class="info-line">
+                    <div class="title">Binary Url</div>
+                    <div class="info">{{workspace.binaryUrl}}</div>
+                </div>
+
+                <div class="info-line">
+                    <div class="title">Node Type Url</div>
+                    <div class="info">{{workspace.nodeTypesUrl}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+

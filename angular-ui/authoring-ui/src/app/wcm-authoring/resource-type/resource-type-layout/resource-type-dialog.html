@@ -1,0 +1,50 @@
+
+<h1 mat-dialog-title>{{data.baseResourceType}}</h1>
+<div mat-dialog-content fxLayout="row">
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field>
+            <mat-label>Name:</mat-label>
+            <input matInput [(ngModel)]="data.name">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Title:</mat-label>
+            <input matInput [(ngModel)]="data.title">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Description:</mat-label>  
+            <input matInput [(ngModel)]="data.description">
+        </mat-form-field>
+        <!--
+        <mat-form-field>
+            <mat-label>Workflow:</mat-label>  
+            <input matInput [(ngModel)]="data.workflow.workflow">
+        </mat-form-field>
+        -->
+    </div>
+</div>
+
+<div mat-dialog-content fxLayout="row">
+    <mat-form-field>
+        <mat-label>Publish Date:</mat-label>  
+        <input matInput [matDatepicker]="publishDatePicker" [(ngModel)]="data.publishDate">
+        <mat-datepicker-toggle matSuffix [for]="publishDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #publishDatePicker></mat-datepicker>
+    </mat-form-field>
+    <!--
+    <mat-form-field>
+        <mat-label>Expire Date:</mat-label>  
+        <input matInput [matDatepicker]="expireDatePicker" [(ngModel)]="data.expireDate">
+        <mat-datepicker-toggle matSuffix [for]="expireDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #expireDatePicker></mat-datepicker>
+    </mat-form-field>
+    -->
+</div>
+
+<div mat-dialog-content fxLayout="row">    
+    <div fxLayout="column" fxFlex="100">
+        <div mat-dialog-actions>
+            <button mat-button (click)="onNoClick()">No Thanks</button>
+            <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+        </div>
+    </div>
+</div>

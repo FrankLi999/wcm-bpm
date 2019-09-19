@@ -1,0 +1,59 @@
+<div id="query-editor" class="page-layout carded left-sidebar">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+        <!-- CONTENT HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <div fxLayout="column" fxLayoutAlign="start start">
+                   <div class="h2">
+                       Query Editor
+                   </div>
+               </div>
+            </div>
+        </div>
+        <!-- / CONTENT HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <mat-tab-group fxLayout="column" fxFlex>
+
+                    <mat-tab label="Search Criteria">
+
+                        <div class="tab-content p-24">
+                            <search-criteria [queryName]='queryName'></search-criteria>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Permissions">
+                        <div class="products tab-content p-24">
+                            properties
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="History">
+                        <div class="products tab-content p-24">
+                            History
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>

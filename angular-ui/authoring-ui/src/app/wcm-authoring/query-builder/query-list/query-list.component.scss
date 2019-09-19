@@ -1,0 +1,65 @@
+#query-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 20px;
+    flex: 1 1 auto;
+
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border: 1px solid #9AB3CE;
+    background-color: white;
+    text-align: left;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+}
+
+
+tr.folder-detail-row {
+    height: 0;
+}
+
+tr.folder-element-row:not(.folder-expanded-row):hover {
+    background: #f5f5f5;
+}
+
+tr.folder-element-row:not(.folder-expanded-row):active {
+    background: #efefef;
+}
+
+.folder-element-row td {
+    border-bottom-width: 0;
+}
+
+.folder-element-detail {
+    overflow: hidden;
+    display: flex;
+}
+
+.folder-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+}
+
+.folder-element-progress {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+}
+
+.folder-element-description {
+    padding: 16px;
+}
+
+.folder-element-description-attribution {
+    opacity: 0.5;
+}
+  
+  

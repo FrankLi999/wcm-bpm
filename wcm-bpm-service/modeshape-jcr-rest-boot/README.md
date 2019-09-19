@@ -13,11 +13,11 @@ http://localhost:19090/swagger-ui.html
 
 ## How to run
 
-    $ mvn spring-boot:run -Dspring-boot.run.jvmArguments="-DLOG_ROOT_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/modeshape-repo"
+    $ mvn spring-boot:run -Dspring-boot.run.jvmArguments="-DLOG_ROOT_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm"
 
 mvn spring-boot:run -Dspring-boot.run.arguments=--mongo
 
-mvn spring-boot:run -Dspring-boot.run.arguments=--mongo -Dspring-boot.run.jvmArguments="-DLOG_ROOT_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/bpw-repo-reactive"
+mvn spring-boot:run -Dspring-boot.run.arguments=--mongo -Dspring-boot.run.jvmArguments="-DLOG_ROOT_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm"
 
 
 

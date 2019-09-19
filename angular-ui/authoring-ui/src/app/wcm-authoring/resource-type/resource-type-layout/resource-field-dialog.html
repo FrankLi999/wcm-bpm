@@ -1,0 +1,18 @@
+
+<h1 mat-dialog-title>{{data.controlField.name}}</h1>
+<div mat-dialog-content fxLayout="row">
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field>
+            <mat-label>Field Name:</mat-label>
+            <input matInput [(ngModel)]="data.templateField.name">
+        </mat-form-field>
+    </div>
+</div>
+<div mat-dialog-content fxLayout="row">    
+    <div fxLayout="column" fxFlex="100">
+        <div mat-dialog-actions>
+            <button mat-button (click)="onNoClick()">No Thanks</button>
+            <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+        </div>
+    </div>
+</div>

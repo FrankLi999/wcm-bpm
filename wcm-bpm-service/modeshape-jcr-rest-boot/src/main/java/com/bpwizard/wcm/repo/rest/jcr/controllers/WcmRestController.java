@@ -116,7 +116,7 @@ public class WcmRestController {
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
-    //http://localhost:8080/wcm/api/rest/bpwizard/default/wcmSystem/camunda/bpm
+    //http://localhost:8080/wcm/api/rest/wcmSystem/bpwizard/default/camunda/bpm
 	@GetMapping(path = "/wcmSystem/{repository}/{workspace}/{library}/{siteConfig}", 
 		produces = MediaType.APPLICATION_JSON_VALUE)
 	public WcmSystem getWcmSystem(
@@ -126,22 +126,16 @@ public class WcmRestController {
 			@PathVariable("siteConfig") String siteConfigName,
 			HttpServletRequest request) 
 			throws WcmRepositoryException, WcmSystemException {
+		
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-
 		try {
 			Session session = repositoryManager.getSession(request, repository, workspace);
 			WcmSystem wcmSystem = new WcmSystem();
-			
-			WcmRepository wcmRepositories[] = null;
-			wcmSystem.setWcmRepositories(wcmRepositories);
-			
 			Map<String, WcmOperation[]> operations = this.getWcmOperations(repository, workspace, request);
 			wcmSystem.setOperations(operations);
-			
 			wcmSystem.setJcrThemes(this.getTheme(repository, workspace, request));
-			
 			Map<String, JsonForm> jsonForms = this.getAuthoringTemplateAsJsonForm(repository, workspace, request);
 			wcmSystem.setJsonForms(jsonForms);
 			Map<String, RenderTemplate> renderTemplates = this.getRenderTemplates(repository, workspace, request);
@@ -149,7 +143,6 @@ public class WcmRestController {
 			Map<String, ContentAreaLayout> contentAreaLayouts = this.getContentAreaLayouts(repository, workspace, request);
 			wcmSystem.setContentAreaLayouts(contentAreaLayouts);
 			wcmSystem.setAuthoringTemplates(this.getAuthoringTemplate(repository, workspace, request));
-			
 			Node siteConfigNode = session.getNode(String.format("/bpwizard/library/%s/siteConfig/%s", library, siteConfigName));
 			SiteConfig siteConfig = this.getSiteConfig(siteConfigNode);
 			siteConfig.setRepository(repository);
@@ -162,8 +155,9 @@ public class WcmRestController {
 			Map<String, SiteArea> siteAreas = this.getSiteAreas(repository, workspace, library, rootSiteArea, request);
 			wcmSystem.setSiteAreas(siteAreas);
 			
-			
 			wcmSystem.setControlFiels(this.getControlField(repository, workspace, request));
+			
+			wcmSystem.setWcmRepositories(this.getWcmRepositories(request));
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -214,8 +208,7 @@ public class WcmRestController {
 		}
 		try {
 			RestNode operationsNode = (RestNode) this.itemHandler.item(request, repository, workspace,
-					"bpwizard/library/system/configuration/operations", 2);
-			
+					"/bpwizard/library/system/configuration/operations", 2);
 			Map<String, WcmOperation[]> wcmOperationMap = operationsNode.getChildren().stream().filter(node -> this.checkNodeType(node, "bpw:supportedOpertions"))
 			    .map(this::supportedOpertionsToWcmOperation)
 			    .collect(Collectors.toMap(
@@ -226,10 +219,13 @@ public class WcmRestController {
 			}
 			return wcmOperationMap;
 		} catch (WcmRepositoryException|WcmSystemException e ) {
+			e.printStackTrace();
 			throw e;
 	    } catch (RepositoryException e) {
+	    	e.printStackTrace();
 			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
+			t.printStackTrace();
 			throw new WcmSystemException(t);
 		}	
 	}
@@ -264,7 +260,7 @@ public class WcmRestController {
 			Map<String, AuthoringTemplate> authoringTemplates = this.getAuthoringTemplateLibraries(repository, workspace, request)
 					.flatMap(at -> this.getAuthoringTemplates(at, request))
 					.collect(Collectors.toMap(
-							at -> String.format("%s/%s/%s/%s", repository, workspace, at.getLibrary(), at.getBaseResourceType()), 
+							at -> String.format("%s/%s/%s/%s", repository, workspace, at.getLibrary(), at.getName()), 
 							Function.identity()));
 	
 			if (logger.isDebugEnabled()) {
