@@ -1,13 +1,13 @@
-import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { BehaviorSubject, Observable, forkJoin, of } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { MatMenuTrigger } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import { ModeshapeService } from '../../service/modeshape.service';
-import { WcmService }  from '../../service/wcm.service';
+
 import { 
   WcmRepository,
   WcmWorkspace,
@@ -55,7 +55,7 @@ export class JcrFlatNode {
   templateUrl: './jcr-explorer.component.html',
   styleUrls: ['./jcr-explorer.component.scss']
 })
-export class JcrExplorerComponent implements OnInit {
+export class JcrExplorerComponent implements OnInit, OnDestroy {
   functionMap: {[key:string]:Function}= {};
   // jcrNodeMap = new Map<string, JcrNode>();
   jcrNodeMap: {[key: string]: JcrNode} = {};
@@ -71,12 +71,16 @@ export class JcrExplorerComponent implements OnInit {
   dataChange = new BehaviorSubject<JcrNode[]>([]);
   @ViewChild('jcrExplorer', {static: true}) tree;
   @ViewChild('contextMenu', {static: true}) contextMenu: MatMenuTrigger;
-
+  // Private
+  private unsubscribeAll: Subject<any>;
+  private loadError: string;
   constructor(
     private modeshapeService: ModeshapeService,
     // private wcmService: WcmService,
     private store: Store<fromStore.WcmAppState>,
     private matDialog: MatDialog) {
+
+      this.unsubscribeAll = new Subject();
   }
 
   ngOnInit() {
@@ -105,14 +109,26 @@ export class JcrExplorerComponent implements OnInit {
       this.dataSource.data = data;
       this.resetCurrentOperations();
     });
-    this.store.pipe(select(fromStore.getWcmRepositories)).subscribe(
+    this.store.pipe(
+      select(fromStore.getGetWcmSystemError),
+      takeUntil(this.unsubscribeAll)).subscribe(
+        (loadError: string) => {
+        if (loadError) {
+          this.loadError = loadError;
+        }
+    });
+    this.store.pipe(
+        select(fromStore.getWcmRepositories),
+        takeUntil(this.unsubscribeAll)).subscribe(
       (repositories: WcmRepository[]) => {
         if (repositories) {
           const repoNodes = repositories.map(repository => this.generateRepositoryNode(repository.name, repository));
           this.dataChange.next(repoNodes);
           if (this.activeNode != null) {
             this.activeNode.active = true;
-            this.tree.treeControl.expand(this.activeNode);
+            if (this.tree.treeControl) {
+              this.tree.treeControl.expand(this.activeNode);
+            }
           }
         }
       },
@@ -125,7 +141,9 @@ export class JcrExplorerComponent implements OnInit {
       }
     )
     
-    this.store.pipe(select(fromStore.getJsonForms)).subscribe(
+    this.store.pipe(
+        select(fromStore.getJsonForms),
+        takeUntil(this.unsubscribeAll)).subscribe(
       (jsonForms: {[key:string]:JsonForm}) => {
         if (jsonForms) {
           this.jsonFormMap = jsonForms;
@@ -139,6 +157,15 @@ export class JcrExplorerComponent implements OnInit {
         console.log("getAuthoringTemplateAsJsonSchema observable is now completed.");
       }
     );
+  }
+
+  /**
+    * On destroy
+    */
+  ngOnDestroy(): void {
+    this.unsubscribeAll.next();
+    this.unsubscribeAll.complete();
+    this.loadError && this.store.dispatch(new fromStore.WcmSystemClearError());
   }
 
   private generateRepositoryNode(name: string, repository: WcmRepository): JcrNode {
@@ -167,7 +194,9 @@ export class JcrExplorerComponent implements OnInit {
     
     //load supported operations
     //this.modeshapeService.getItems(repositoryName, workspaceName, 'bpwizard/library/system/configuration/operations', 2).subscribe(
-      this.store.pipe(select(fromStore.getOperations)).subscribe(
+      this.store.pipe(
+        select(fromStore.getOperations),
+        takeUntil(this.unsubscribeAll)).subscribe(
       (operations: {[key: string]: WcmOperation[]}) => {
         if (operations) {
           this.operationMap = operations;

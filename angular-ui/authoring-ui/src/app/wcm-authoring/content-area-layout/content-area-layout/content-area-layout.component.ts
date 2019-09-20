@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { 
   Theme,
@@ -26,18 +28,22 @@ export interface RenderTemplateModel {
   templateUrl: './content-area-layout.component.html',
   styleUrls: ['./content-area-layout.component.scss']
 })
-export class ContentAreaLayoutComponent implements OnInit {
+export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
   pageLayoutForm: FormGroup;
 
   layout: ContentAreaLayout = null;
   themes: ThemeModel[] = [];
   
   renderTemplates: RenderTemplateModel[] = [];
+  private unsubscribeAll: Subject<any>;
+  private error: string;
   constructor(
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private store: Store<fromStore.WcmAppState>
-    ) { }
+    ) { 
+      this.unsubscribeAll = new Subject()
+    }
 
   ngOnInit() {
       // Reactive Form
@@ -51,8 +57,20 @@ export class ContentAreaLayoutComponent implements OnInit {
           ])
       });
 
+      this.store.pipe(
+        select(fromStore.getContentAreaLayoutError),
+        takeUntil(this.unsubscribeAll)).subscribe(
+          (error: string) => {
+          if (error) {
+            this.error = error;
+          }
+      });
+
       //jcrThemes: Theme[];
-      this.store.pipe(select(fromStore.getThemes)).subscribe(
+      this.store.pipe(
+          select(fromStore.getThemes),
+          takeUntil(this.unsubscribeAll)
+        ).subscribe(
         (jcrThemes: Theme[]) => {
           if (jcrThemes)
           jcrThemes.forEach(jcrTheme => {
@@ -71,7 +89,9 @@ export class ContentAreaLayoutComponent implements OnInit {
         }
       );
 
-      this.store.pipe(select(fromStore.getRenderTemplates)).subscribe(
+      this.store.pipe(
+          select(fromStore.getRenderTemplates),
+          takeUntil(this.unsubscribeAll)).subscribe(
         (rts: {[key:string]:RenderTemplate}) => {
           if (rts) {
             for (let prop in rts) {
@@ -91,12 +111,23 @@ export class ContentAreaLayoutComponent implements OnInit {
         }
       );
 
-      this.store.pipe(select(fromStore.getContentAreaLayout)).subscribe(
+      this.store.pipe(
+          select(fromStore.getContentAreaLayout),
+          takeUntil(this.unsubscribeAll)).subscribe(
         (layout: ContentAreaLayout) => {
           this.layout = layout;
         }
       );
       
+  }
+
+  /**
+    * On destroy
+    */
+  ngOnDestroy(): void {
+    this.unsubscribeAll.next();
+    this.unsubscribeAll.complete();
+    this.error && this.store.dispatch(new fromStore.ContentAreaLayoutClearError());
   }
 
   get rows(): FormArray {

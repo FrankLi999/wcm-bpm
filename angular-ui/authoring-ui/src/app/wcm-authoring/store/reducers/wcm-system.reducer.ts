@@ -5,6 +5,9 @@ export interface WcmSystemState {
     wcmSystem?: WcmSystem;
     loading: boolean;
     loaded: boolean;
+    loadError?:string;
+    atError?:string;
+    rtError?:string;
 }
 
 export const WcmSystemInitialState: WcmSystemState = {
@@ -25,7 +28,10 @@ export const WcmSystemInitialState: WcmSystemState = {
       controlFiels: []
     },
     loading : false,
-    loaded  : false
+    loaded  : false,
+    loadError: null,
+    atError: null,
+    rtError: null
 };
 
 export function WcmSystemReducer(state = WcmSystemInitialState, action: WcmSystemActions): WcmSystemState {
@@ -34,20 +40,27 @@ export function WcmSystemReducer(state = WcmSystemInitialState, action: WcmSyste
             return {
                 ...state,
                 loading: true,
-                loaded : false
+                loaded : false,
+                loadError: null
             };
         case WcmSystemActionTypes.GET_WCMSYSTEM_SUCCESS:
             return {
                 wcmSystem: { ... action.payload},
                 loading: false,
-                loaded : true
+                loaded : true,
+                loadError: null
             };
-
+        case WcmSystemActionTypes.WCMSYSTEM_CLEAR_ERROR:
+            return {
+                ...state,
+                loadError: null
+            };
         case WcmSystemActionTypes.GET_WCMSYSTEM_FAILED:
             return {
                 ...state,
                 loading: false,
-                loaded : false
+                loaded : false,
+                loadError: action.payload
             };
         case WcmSystemActionTypes.CREATE_RENDER_TEMPLATE_SUCCESS: {            
             let wcmSystem: WcmSystem = { ... state.wcmSystem };
@@ -55,18 +68,26 @@ export function WcmSystemReducer(state = WcmSystemInitialState, action: WcmSyste
             return {
                 wcmSystem: wcmSystem,
                 loading: false,
-                loaded : true
+                loaded : true,
+                rtError: null
             };
-          }    
-        case WcmSystemActionTypes.CREATE_AUTHORING_TEMPLATE_SUCCESS: {
-            let wcmSystem: WcmSystem = { ... state.wcmSystem };
-            wcmSystem.authoringTemplates[`${action.payload.repository}/${action.payload.workspace}/${action.payload.library}/${action.payload.name}`] = action.payload;
-            return {
-                wcmSystem: wcmSystem,
-                loading: false,
-                loaded : true
-            }; 
           }
+        case WcmSystemActionTypes.RENDER_TEMPLATE_CLEAR_ERROR:
+            return {
+                ...state,
+                rtError: null
+            };    
+        case WcmSystemActionTypes.CREATE_AUTHORING_TEMPLATE_FAILED: {
+            return {
+                ...state,
+                atError: action.payload
+            }; 
+        }
+        case WcmSystemActionTypes.AUTHORING_TEMPLATE_CLEAR_ERROR:
+            return {
+                ...state,
+                atError: null
+            }; 
         default:
             return state;
     }

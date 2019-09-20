@@ -1,10 +1,12 @@
 import { ContentAreaLayoutActions, ContentAreaLayoutActionTypes } from '../actions/content-area-layout.actions';
 import { ContentAreaLayout } from '../../model';
 export interface ContentAreaLayoutState {
-    contentAreaLayout?: ContentAreaLayout
+    contentAreaLayout?: ContentAreaLayout,
+    error?: string;
 }
 
 export const ContentAreaLayoutInitialState: ContentAreaLayoutState = {
+    error: null,
     contentAreaLayout: {
         name: '',
         repository: 'bpwizard',
@@ -30,12 +32,18 @@ export function ContentAreaLayoutReducer(state = ContentAreaLayoutInitialState, 
         case ContentAreaLayoutActionTypes.CREATE_CONTENT_AREA_LAYOUT_SUCCESS:
 
             return {
-                contentAreaLayout: {...action.payload}
+                contentAreaLayout: {...action.payload},
+                error: null
             };
-
         case ContentAreaLayoutActionTypes.CREATE_CONTENT_AREA_LAYOUT_FAILED:
             return {
-                contentAreaLayout: {...state.contentAreaLayout}
+               ...state,
+               error: action.payload
+            };
+        case ContentAreaLayoutActionTypes.CONTENT_AREA_LAYOUT_CLEAR_ERROR:
+            return {
+                ...state,
+                error: null
             };
         default:
             return state;

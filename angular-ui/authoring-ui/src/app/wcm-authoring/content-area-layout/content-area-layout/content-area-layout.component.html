@@ -1,5 +1,7 @@
 <form class="mat-card" name="pageLayoutForm" [formGroup]="pageLayoutForm">
-    
+    <div *ngIf=error fxLayout="row" fxLayoutAlign="start"  fxFlex="1 0 auto">
+        <div fxLayout="column" fxFlex="100">{{error}}</div>
+    </div>
     <div id="layout" class="page-layout carded inner-scroll center">
         <!-- CONTENT AREA -->
         <div fxLayout="row" fxLayoutAlign="start"  fxFlex="1 0 auto">

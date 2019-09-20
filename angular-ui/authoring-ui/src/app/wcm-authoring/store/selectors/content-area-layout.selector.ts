@@ -10,3 +10,8 @@ export const getContentAreaLayout = createSelector(
     getContentAreaLayoutState,
     (state: ContentAreaLayoutState) => state.contentAreaLayout
 );
+
+export const getContentAreaLayoutError = createSelector(
+    getContentAreaLayoutState,
+    (state: ContentAreaLayoutState) => state.error
+);

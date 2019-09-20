@@ -1,4 +1,7 @@
 <div class="builder-container page-layout carded left-sidebar">
+    <div *ngIf=error fxLayout="row" fxLayoutAlign="start"  fxFlex="1 0 auto">
+        <div fxLayout="column" fxFlex="100">{{error}}</div>
+    </div>
     <!-- RESOURCE TYPE -->
     <div fxFlex="100">
         <!-- HEADER -->

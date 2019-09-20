@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import {
@@ -6,7 +6,8 @@ import {
   AuthoringTemplate,
   Query
 } from '../../model';
-// import { WcmService } from '../../service/wcm.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 export interface Code {
   name: string;
@@ -21,20 +22,8 @@ import * as fromStore from '../../store';
   styleUrls: ['./render-template.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class RenderTemplateComponent implements OnInit {
-  // renderTemplateModel: RenderTemplate = {
-  //   name: '',
-  //   title: '',
-  //   description: '',
-  //   maxEntries: 0,
-  //   preloop: '',
-  //   postloop: '',
-  //   note: '',
-  //   isQuery: false,
-  //   code: '',
-  //   resourceName: ''
-  // }
-
+export class RenderTemplateComponent implements OnInit, OnDestroy {
+  
   renderTemplateForm: FormGroup;
   code: Code = {
     name: '',
@@ -51,15 +40,27 @@ export class RenderTemplateComponent implements OnInit {
   ];
 
   contentElements: string[] = [];
-
+  private unsubscribeAll: Subject<any>;
+  private error: string;
   constructor(
     // private wcmService: WcmService,
     private store: Store<fromStore.WcmAppState>,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder) { 
+      this.unsubscribeAll = new Subject();
+    }
 
   ngOnInit() {
+    this.store.pipe(
+        select(fromStore.getCreateRenderTemplateError),
+        takeUntil(this.unsubscribeAll)).subscribe(
+      (error: string) => {
+         this.error = error;
+      }
+    )
     // this.wcmService.getAuthoringTemplate('bpwizard', 'default').subscribe(
-      this.store.pipe(select(fromStore.getAuthoringTemplates)).subscribe(
+      this.store.pipe(
+        select(fromStore.getAuthoringTemplates),
+        takeUntil(this.unsubscribeAll)).subscribe(
       (authoringTemplates: {[key: string]: AuthoringTemplate}) => {
         if (authoringTemplates) {
           Object.entries(authoringTemplates).forEach(([key, at]) => {
@@ -88,6 +89,15 @@ export class RenderTemplateComponent implements OnInit {
         selectedContentElement: [''],
         note: ['', Validators.required],
     });
+  }
+
+  /**
+  * On destroy
+  */
+  ngOnDestroy(): void {
+    this.unsubscribeAll.next();
+    this.unsubscribeAll.complete();
+    this.error && this.store.dispatch(new fromStore.RenderTemplateClearError);
   }
 
   hasContentItems():boolean {

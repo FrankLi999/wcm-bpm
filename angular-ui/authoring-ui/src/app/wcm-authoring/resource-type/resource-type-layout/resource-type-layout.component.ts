@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Inject, ViewEncapsulation } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {CdkDragDrop, moveItemInArray, copyArrayItem, transferArrayItem, CdkDrag} from '@angular/cdk/drag-drop';
 import { select, Store } from '@ngrx/store';
@@ -15,7 +15,8 @@ import {
   FormColumn,
   TemplateField
 } from '../../model';
-// import { WcmService } from '../../service/wcm.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import * as fromStore from '../../store';
 
 const BASE_RESOURCE_TYPE: string[] = [
@@ -28,7 +29,7 @@ const BASE_RESOURCE_TYPE: string[] = [
   styleUrls: ['./resource-type-layout.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ResourceTypeLayoutComponent implements OnInit {
+export class ResourceTypeLayoutComponent implements OnInit, OnDestroy {
   
   @Input() resourceTypeName: string;
   
@@ -54,24 +55,44 @@ export class ResourceTypeLayoutComponent implements OnInit {
   }
 
   private nextFieldGroupId: number = 0;
-  
+  private unsubscribeAll: Subject<any>;
+  private error: string;
   constructor(
       // private wcmService: WcmService,
       private store: Store<fromStore.WcmAppState>,
       private dialog: MatDialog) { 
+    this.unsubscribeAll = new Subject();
   }
 
   ngOnInit() {
     this.nextFieldGroupId = this.getNextFieldGroupId();
-
+    this.store.pipe(
+        select(fromStore.getCreateRenderTemplateError),
+        takeUntil(this.unsubscribeAll)).subscribe(
+      (error: string) => {
+        this.error = error;
+      }
+    )
     //this.wcmService.getControlField('bpwizard', 'default').subscribe(
-    this.store.pipe(select(fromStore.getControlFiels)).subscribe(
+    this.store.pipe(
+        select(fromStore.getControlFiels),
+        takeUntil(this.unsubscribeAll)).subscribe(
       (controlFiels: ControlField[]) => {
         if (controlFiels) {
           this.controlFields = controlFiels;
         }
       }
     )
+  }
+
+  /**
+  * On destroy
+  */
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this.unsubscribeAll.next();
+    this.unsubscribeAll.complete();
+    this.error && this.store.dispatch(new fromStore.AuthoringTemplateClearError());
   }
 
   groupType(group: BaseFormGroup): string {

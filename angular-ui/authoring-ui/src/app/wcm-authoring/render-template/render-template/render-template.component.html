@@ -1,5 +1,7 @@
 <div id="page-designer" class="page-layout carded left-sidebar inner-scroll">
-
+    <div *ngIf=error fxLayout="row" fxLayoutAlign="start"  fxFlex="1 0 auto">
+        <div fxLayout="column" fxFlex="100">{{error}}</div>
+    </div>
     <!-- TOP BACKGROUND -->
     <div class="top-bg accent"></div>
     <!-- / TOP BACKGROUND -->

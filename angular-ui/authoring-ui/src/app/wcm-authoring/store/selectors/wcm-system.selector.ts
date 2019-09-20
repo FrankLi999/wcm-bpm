@@ -50,3 +50,18 @@ export const getControlFiels = createSelector(
     getWcmSystem,
     (wcmSystem: WcmSystem) => wcmSystem.controlFiels
 );
+
+export const getCreateAuthoringTemplateError = createSelector(
+    getWcmSystemState,
+    (state: WcmSystemState) => state.atError
+);
+
+export const getCreateRenderTemplateError = createSelector(
+    getWcmSystemState,
+    (state: WcmSystemState) => state.rtError
+);
+
+export const getGetWcmSystemError = createSelector(
+    getWcmSystemState,
+    (state: WcmSystemState) => state.loadError
+);

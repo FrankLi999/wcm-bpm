@@ -8,9 +8,9 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('App root should not be null', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('authoring-ui app is running!');
+    expect(page.getAppRoot()).not.toBeNull();
   });
 
   afterEach(async () => {

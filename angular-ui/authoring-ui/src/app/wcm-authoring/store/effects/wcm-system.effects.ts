@@ -14,7 +14,7 @@ import {
   CreateRenderTemplateSuccess,
   CreateAuthoringTemplate,  
   CreateAuthoringTemplateFailed, 
-  CreateAuthoringTemplateSuccess
+  // CreateAuthoringTemplateSuccess
 } from '../actions';
 
 @Injectable()
@@ -59,7 +59,12 @@ export class WcmSystemEffects {
       return this.wcmService.createAuthoringTemplate(action.payload)
         .pipe(
             map((at: AuthoringTemplate) => {
-                return new CreateAuthoringTemplateSuccess(at);
+                return new GetWcmSystem({
+                  repository: 'bpwizard',
+                  workspace: 'default',
+                  library: 'camunda',
+                  siteConfig: 'bpm'
+              });
             }),
             catchError(err => of(new CreateAuthoringTemplateFailed(err)))
         );
