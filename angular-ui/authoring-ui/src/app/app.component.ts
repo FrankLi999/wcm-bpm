@@ -4,12 +4,18 @@ import { Platform } from '@angular/cdk/platform';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { FuseConfigService } from '@fuse/services/config.service';
-import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
-import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
-import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
-import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
+import { Store } from '@ngrx/store';
+import { 
+  AppConfigurationState,
+  SetNavigation
+} from 'bpw-layout';
+import {
+  FuseConfigService,
+  FuseNavigationService,
+  FuseSidebarService,
+  FuseSplashScreenService,
+  FuseTranslationLoaderService
+} from 'bpw-components';
 
 import { navigation } from 'app/navigation/navigation';
 import { locale as navigationEnglish } from 'app/navigation/i18n/en';
@@ -48,12 +54,13 @@ export class AppComponent implements OnInit, OnDestroy
         private _fuseSplashScreenService: FuseSplashScreenService,
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _translateService: TranslateService,
-        private _platform: Platform
+        private _platform: Platform,
+        private _store: Store<AppConfigurationState>
     )
     {
         // Get default navigation
         this.navigation = navigation;
-
+        this._store.dispatch(new SetNavigation(this.navigation));
         // Register the navigation to the service
         this._fuseNavigationService.register('main', this.navigation);
 

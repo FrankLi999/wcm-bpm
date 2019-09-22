@@ -110,16 +110,18 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
       this.resetCurrentOperations();
     });
     this.store.pipe(
-      select(fromStore.getGetWcmSystemError),
-      takeUntil(this.unsubscribeAll)).subscribe(
+        takeUntil(this.unsubscribeAll),
+        select(fromStore.getGetWcmSystemError)
+      ).subscribe(
         (loadError: string) => {
         if (loadError) {
           this.loadError = loadError;
         }
     });
     this.store.pipe(
-        select(fromStore.getWcmRepositories),
-        takeUntil(this.unsubscribeAll)).subscribe(
+        takeUntil(this.unsubscribeAll),
+        select(fromStore.getWcmRepositories)
+    ).subscribe(
       (repositories: WcmRepository[]) => {
         if (repositories) {
           const repoNodes = repositories.map(repository => this.generateRepositoryNode(repository.name, repository));
@@ -142,8 +144,9 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
     )
     
     this.store.pipe(
-        select(fromStore.getJsonForms),
-        takeUntil(this.unsubscribeAll)).subscribe(
+        takeUntil(this.unsubscribeAll),
+        select(fromStore.getJsonForms)
+    ).subscribe(
       (jsonForms: {[key:string]:JsonForm}) => {
         if (jsonForms) {
           this.jsonFormMap = jsonForms;
@@ -195,8 +198,8 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
     //load supported operations
     //this.modeshapeService.getItems(repositoryName, workspaceName, 'bpwizard/library/system/configuration/operations', 2).subscribe(
       this.store.pipe(
-        select(fromStore.getOperations),
-        takeUntil(this.unsubscribeAll)).subscribe(
+        takeUntil(this.unsubscribeAll),
+        select(fromStore.getOperations)).subscribe(
       (operations: {[key: string]: WcmOperation[]}) => {
         if (operations) {
           this.operationMap = operations;

@@ -21,8 +21,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseSidebarModule } from '@fuse/components';
+import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { WorkflowsComponent } from './workflows/workflows.component';
 

@@ -9,7 +9,7 @@ import {
 } from '@angular/common/http';
 import { Subscription, of} from 'rxjs';
 import { map, tap, last, catchError } from 'rxjs/operators';
-import {API_BASE_URL} from '../../../authentication/constants';
+import {API_BASE_URL} from 'bpw-auth';
 export class FileUploadModel {
   data: File;
   relativePath: String;

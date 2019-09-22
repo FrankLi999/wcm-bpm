@@ -1,0 +1,17 @@
+{
+  "extends": "../../tslint.json",
+  "rules": {
+    "directive-selector": [
+      true,
+      "attribute",
+      "bpwRestClient",
+      "camelCase"
+    ],
+    "component-selector": [
+      true,
+      "element",
+      "bpw-rest-client",
+      "kebab-case"
+    ]
+  }
+}

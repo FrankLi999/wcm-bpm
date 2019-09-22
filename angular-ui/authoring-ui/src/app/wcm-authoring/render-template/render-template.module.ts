@@ -21,12 +21,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseSidebarModule } from '@fuse/components';
+import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 
 import { RenderTemplateComponent } from './render-template/render-template.component';
 import { AceEditorModule } from 'ng2-ace-editor';
-import { EditorModule } from '@tinymce/tinymce-angular';
 import { SafePipe } from './pipes/safe.pipe';
 import { RenderTemplatesComponent } from './render-templates/render-templates.component';
 const routes: Routes = [
@@ -49,7 +47,6 @@ const routes: Routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
-    EditorModule,
     AceEditorModule,
     MatButtonModule,
     MatCheckboxModule,

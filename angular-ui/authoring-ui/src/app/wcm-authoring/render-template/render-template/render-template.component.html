@@ -76,10 +76,17 @@
                             </div>
                             <div *ngIf="hasContentItems()" fxLayout="row" fxLayoutAlign="start center">
                                 <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
+                                    <!--
                                     <editor formControlName="preloop"
                                         [init]="{plugins: 'link, image, emoticons, code, paste, table'}"
                                         apiKey="qwgc8env9mecmyueffj9uzfsnbnp5qoxi5y39sjeakfet52f">
                                     </editor>
+                                    -->
+                                    <ace-editor [(text)]="code.preloop"
+                                        [autoUpdateContent]="true" theme="github"
+                                        style="min-height: 200px; width:100%; overflow: auto;"
+                                        mode="html">
+                                    </ace-editor>
                                </div>
                             </div>
                             <div fxLayout="row" fxLayoutAlign="start center" style="margin-top:24px;">
@@ -157,10 +164,17 @@
                             </div>
                             <div *ngIf="hasContentItems()" fxLayout="row" fxLayoutAlign="start center">
                                 <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
+                                    <!--
                                     <editor formControlName="postloop"
                                         [init]="{plugins: 'link, image, emoticons, code, paste, table'}"
                                         apiKey="qwgc8env9mecmyueffj9uzfsnbnp5qoxi5y39sjeakfet52f">
                                     </editor>
+                                    -->
+                                    <ace-editor [(text)]="code.postloop"
+                                        [autoUpdateContent]="true" theme="github"
+                                        style="min-height: 200px; width:100%; overflow: auto;"
+                                        mode="html">
+                                    </ace-editor>
                                </div>
                             </div>
                             <div fxLayout="row" fxLayoutAlign="start center">

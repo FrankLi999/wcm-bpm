@@ -4,7 +4,7 @@ import { RouterStateSnapshot } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 
 import { Observable, forkJoin, of } from 'rxjs';
-import { map, switchMap, catchError, tap, take, filter } from 'rxjs/operators';
+import { switchMap, catchError, tap, take, filter } from 'rxjs/operators';
 
 import { WcmAppState } from '../reducers';
 import * as fromStore from '../';
@@ -17,7 +17,7 @@ export class ResolveGuard implements CanActivate {
     /**
      * Constructor
      *
-     * @param {Store<any>} _store
+     * @param {Store<WcmAppState>} _store
      */
     constructor(
         private _store: Store<WcmAppState>
@@ -25,8 +25,9 @@ export class ResolveGuard implements CanActivate {
         this._store
             .pipe(select(getRouteState))
             .subscribe(routerState => {
-                if ( routerState )
-                {
+                if ( routerState ) {
+                    console.log(">>>>>>>>>>>>>>>>>  routerState");
+                    console.log(routerState);
                     this.routerState = routerState.state;
                 }
             });

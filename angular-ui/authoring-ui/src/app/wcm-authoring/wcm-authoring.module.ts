@@ -14,14 +14,13 @@ import {
 
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseSidebarModule } from '@fuse/components';
+import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { TranslateModule } from '@ngx-translate/core';
 import { AceEditorModule } from 'ng2-ace-editor';
 import {
-  JsonSchemaFormModule, 
+  //JsonSchemaFormModule, 
   MaterialDesignFrameworkModule
-} from '../dynamic-ui';
+} from 'bpw-form';
 
 import { JcrExplorerModule } from './jcr-explorer/jcr-explorer.module';
 import { ResourceLibraryModule } from './resource-library/resource-library.module';
@@ -44,6 +43,8 @@ import { NewSiteareaDialogComponent } from './dialog/new-sitearea-dialog/new-sit
 import { NewContentDialogComponent } from './dialog/new-content-dialog/new-content-dialog.component';
 import { NewSiteConfigDialogComponent } from './dialog/new-site-config-dialog/new-site-config-dialog.component';
 import { WcmAppStoreModule } from './store/store.module';
+import { AuthenticationModule } from 'bpw-auth';
+import { Oauth2Module } from 'bpw-auth';
 import * as fromGuards from './store/guards';
 const routes: Routes = [
   {
@@ -87,12 +88,15 @@ const routes: Routes = [
         MatToolbarModule,
 
         MaterialDesignFrameworkModule,
-        JsonSchemaFormModule,
+        //JsonSchemaFormModule,
         TranslateModule,
 
         FuseSharedModule,
         FuseSidebarModule,
-        WcmAppStoreModule
+        WcmAppStoreModule,
+        AceEditorModule,
+        AuthenticationModule,
+        Oauth2Module
     ],
     exports     : [
     ],

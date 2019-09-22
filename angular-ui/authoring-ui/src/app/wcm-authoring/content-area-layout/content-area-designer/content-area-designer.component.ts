@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { fuseAnimations } from '@fuse/animations';
+import { fuseAnimations } from 'bpw-components';
 @Component({
   selector: 'content-area-designer',
   templateUrl: './content-area-designer.component.html',

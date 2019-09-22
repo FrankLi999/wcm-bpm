@@ -10,16 +10,20 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
 
-import { FuseModule } from '@fuse/fuse.module';
-import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
+import {
+  FuseModule,
+  FuseSharedModule,
+  FuseProgressBarModule,
+  FuseSidebarModule,
+  FuseThemeOptionsModule
+} from 'bpw-components';
 
 import { fuseConfig } from 'app/fuse-config';
 
 import { AppComponent } from 'app/app.component';
 import { AppStoreModule } from 'app/store/store.module';
-import { LayoutModule } from 'app/layout/layout.module';
-import { RestClientModule } from './rest-client/rest-client.module';
+import { LayoutModule } from 'bpw-layout';
+import { RestClientModule } from 'bpw-rest-client';
 import { FakeDbService } from 'app/fake-db/fake-db.service';
 import { environment } from 'environments/environment';
 
@@ -28,13 +32,21 @@ const appRoutes: Routes = [
         path        : 'wcm-authoring',
         loadChildren: './wcm-authoring/wcm-authoring.module#WcmAuthoringModule'
     },
+    // {
+    //     path        : 'auth',
+    //     loadChildren: 'authentication#AuthenticationModule'
+    // },
+    // {
+    //     path        : 'oauth2',
+    //     loadChildren: 'authentication#Oauth2Module'
+    // },
     {
         path        : 'auth',
-        loadChildren: './authentication/authentication.module#AuthenticationModule'
+        loadChildren: () => import('bpw-auth').then(m => m.AuthenticationModule)
     },
     {
         path        : 'oauth2',
-        loadChildren: './oauth2/oauth2.module#Oauth2Module'
+        loadChildren: () => import('bpw-auth').then(m => m.Oauth2Module)
     },
     {
         path        : 'bpmn',

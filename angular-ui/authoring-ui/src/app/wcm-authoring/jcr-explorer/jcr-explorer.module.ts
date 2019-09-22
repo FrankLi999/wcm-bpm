@@ -25,17 +25,16 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseSidebarModule } from '@fuse/components';
+import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { JcrExplorerComponent } from './jcr-explorer/jcr-explorer.component';
 import { JcrNodeComponent } from './jcr-node/jcr-node.component';
 import { RepositoryComponent } from './repository/repository.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { DynamicUiComponent } from './dynamic-ui/dynamic-ui.component';
 import {
-  JsonSchemaFormModule, 
+  // JsonSchemaFormModule, 
   MaterialDesignFrameworkModule
-} from '../../dynamic-ui';
+} from 'bpw-form';
 import * as fromGuards from '../store/guards';
 import { AceEditorDirective } from './dynamic-ui/ace-editor.directive';
 const routes: Routes = [
@@ -90,7 +89,7 @@ const routes: Routes = [
     HttpClientModule,
     
     MaterialDesignFrameworkModule,
-    JsonSchemaFormModule,
+    // JsonSchemaFormModule,
     // JsonSchemaFormModule.forRoot(
     //   // NoFrameworkModule,
     //   // MaterialDesignFrameworkModule,

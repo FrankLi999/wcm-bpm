@@ -58,8 +58,9 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
       });
 
       this.store.pipe(
-        select(fromStore.getContentAreaLayoutError),
-        takeUntil(this.unsubscribeAll)).subscribe(
+        takeUntil(this.unsubscribeAll),
+        select(fromStore.getContentAreaLayoutError)
+        ).subscribe(
           (error: string) => {
           if (error) {
             this.error = error;
@@ -68,8 +69,8 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
 
       //jcrThemes: Theme[];
       this.store.pipe(
-          select(fromStore.getThemes),
-          takeUntil(this.unsubscribeAll)
+          takeUntil(this.unsubscribeAll),
+          select(fromStore.getThemes)          
         ).subscribe(
         (jcrThemes: Theme[]) => {
           if (jcrThemes)
@@ -90,8 +91,8 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
       );
 
       this.store.pipe(
-          select(fromStore.getRenderTemplates),
-          takeUntil(this.unsubscribeAll)).subscribe(
+        takeUntil(this.unsubscribeAll),
+          select(fromStore.getRenderTemplates)).subscribe(
         (rts: {[key:string]:RenderTemplate}) => {
           if (rts) {
             for (let prop in rts) {
@@ -112,8 +113,8 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
       );
 
       this.store.pipe(
-          select(fromStore.getContentAreaLayout),
-          takeUntil(this.unsubscribeAll)).subscribe(
+          takeUntil(this.unsubscribeAll),
+          select(fromStore.getContentAreaLayout)).subscribe(
         (layout: ContentAreaLayout) => {
           this.layout = layout;
         }

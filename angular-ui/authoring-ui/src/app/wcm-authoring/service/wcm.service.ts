@@ -13,9 +13,9 @@ import {
   Produces, 
   Query,
   MediaType
-} from '../../rest-client';
+} from 'bpw-rest-client';
 
-import {API_BASE_URL} from '../../authentication/constants';
+import {API_BASE_URL} from 'bpw-auth';
 
 import { 
   JsonForm,

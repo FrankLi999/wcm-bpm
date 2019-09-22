@@ -12,6 +12,8 @@ import { takeUntil } from 'rxjs/operators';
 export interface Code {
   name: string;
   code: string;
+  preloop: string;
+  postloop: string;
   isQuery: boolean;
 }
 import * as fromStore from '../../store';
@@ -28,6 +30,8 @@ export class RenderTemplateComponent implements OnInit, OnDestroy {
   code: Code = {
     name: '',
     code: '',
+    preloop: '',
+    postloop: '',
     isQuery: false
   };
   
@@ -51,16 +55,16 @@ export class RenderTemplateComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.pipe(
-        select(fromStore.getCreateRenderTemplateError),
-        takeUntil(this.unsubscribeAll)).subscribe(
+        takeUntil(this.unsubscribeAll),
+        select(fromStore.getCreateRenderTemplateError)).subscribe(
       (error: string) => {
          this.error = error;
       }
     )
     // this.wcmService.getAuthoringTemplate('bpwizard', 'default').subscribe(
       this.store.pipe(
-        select(fromStore.getAuthoringTemplates),
-        takeUntil(this.unsubscribeAll)).subscribe(
+        takeUntil(this.unsubscribeAll),
+        select(fromStore.getAuthoringTemplates)).subscribe(
       (authoringTemplates: {[key: string]: AuthoringTemplate}) => {
         if (authoringTemplates) {
           Object.entries(authoringTemplates).forEach(([key, at]) => {
@@ -82,8 +86,8 @@ export class RenderTemplateComponent implements OnInit, OnDestroy {
         title: ['', Validators.required],
         description: ['', Validators.required],
         maxEntries: [1, Validators.required],
-        preloop: ['<div>preLoop</div>', Validators.required],
-        postloop: ['<div>postLoop</div>', Validators.required],
+        // preloop: ['<div>preLoop</div>', Validators.required],
+        // postloop: ['<div>postLoop</div>', Validators.required],
         selectedContentType: [''],
         selectedQuery: [''],
         selectedContentElement: [''],
@@ -109,6 +113,8 @@ export class RenderTemplateComponent implements OnInit, OnDestroy {
     this.code = {
       name: selectedContentType,
       code: '',
+      preloop: '',
+      postloop: '',
       isQuery: false
     };
     this.contentElements = this.contentElementsMap.get(selectedContentType);
@@ -121,6 +127,8 @@ export class RenderTemplateComponent implements OnInit, OnDestroy {
     this.code = {
       name: selectedQuery,
       code: '',
+      preloop: '',
+      postloop: '',
       isQuery: true
     };
     this.contentElements = this.queryElementsMap.get(selectedQuery);
@@ -145,8 +153,8 @@ export class RenderTemplateComponent implements OnInit, OnDestroy {
       title: formValue.title,
       description: formValue.description,
       code: this.code.code,
-      preloop: formValue.preloop,
-      postloop: formValue.postloop,
+      preloop: this.code.preloop,
+      postloop: this.code.postloop,
       maxEntries: formValue.maxEntries,
       note:  formValue.note,
       isQuery: this.code.isQuery,

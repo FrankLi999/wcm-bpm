@@ -29,8 +29,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
-import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseSidebarModule } from '@fuse/components';
+import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 
 import { ResourceTypeListComponent } from './resource-type-list/resource-type-list.component';
 import { ResourceTypeEditorComponent } from './resource-type-editor/resource-type-editor.component';

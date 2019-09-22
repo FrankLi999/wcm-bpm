@@ -6,18 +6,45 @@ https://blog.angularindepth.com/npm-peer-dependencies-f843f3ac4e7f
 
 1. Create library projects
 
-   ng new angular-commons --create-application=false
+   // ng new angular-commons --create-application=false
    
+   ng new bpw-rest-client --create-application=false
+   cd bpw-rest-client
+   ng generate library bpw-rest-client --prefix=rest-client
+   
+   ng new bpw-components --create-application=false
+   cd bpw-components
+   ng generate library bpw-components --prefix=bpw-components
+
+   ng new bpw-auth --create-application=false
+   cd bpw-auth
+   ng generate library bpw-auth --prefix=bpw-auth
+   
+   ng new bpw-layout --create-application=false
+   cd bpw-layout
+   ng generate library bpw-layout --prefix=bpw-layout
+   
+
+   
+   ng new bpw-form --create-application=false
+   ng generate library bpw-form --prefix=bpw-form
+   
+   ng new bpw-dynamic-ui --create-application=false
+   ng generate library bpw-dynamic-ui --prefix=bpw-dynamic-ui
+   
+   
+   npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz	
+   npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz	
+
    cd angular-commons
    
    generate libraries:
    
-   ng generate library rest-client --prefix=restcli
-   ng generate library bpw-components --prefix=components
-   ng generate library bpw-layout --prefix=layout
-   ng generate library bpw-auth --prefix=auth
-   ng generate library bpw-dynamic-ui --prefix=dynamicui
-   ng generate library bpw-form --prefix=form
+   
+   
+   
+   
+   
    
    generate test app:
    
@@ -86,7 +113,7 @@ https://blog.angularindepth.com/npm-peer-dependencies-f843f3ac4e7f
 		
 		this created "example-ng6-lib-0.0.1.tgz"
 	> Using the Library in a Separate Application
-      npm install ../example-ng6-lib/dist/example-ng6-lib/example-ng6-lib-0.0.1.tgz	
+      npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz	
 	
 	> npm deal with conflict versions
 

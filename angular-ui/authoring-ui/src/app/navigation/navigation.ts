@@ -1,4 +1,4 @@
-import { FuseNavigation } from '@fuse/types';
+import { FuseNavigation } from 'bpw-components';
 
 export const navigation: FuseNavigation[] = [
     {

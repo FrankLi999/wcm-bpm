@@ -1,0 +1,17 @@
+{
+  "name": "bpw-components",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^8.2.5",
+    "@angular/core": "^8.2.5",
+    "@angular/forms": "~8.2.5",
+    "@angular/material": "^8.2.0",
+    "@angular/material-moment-adapter": "^8.2.0",
+    "@types/prismjs": "^1.16.0",
+    "@angular/flex-layout": "^8.0.0-beta.27",
+    "@ngx-translate/core": "^11.0.1",
+    "lodash-es": "^4.17.15",
+    "moment": "^2.24.0",
+    "rxjs": "~6.4.0"
+  }
+}

@@ -1,4 +1,4 @@
-import { FuseConfig } from '@fuse/types';
+import { FuseConfig } from 'bpw-components';
 
 /**
  * Default Fuse Configuration

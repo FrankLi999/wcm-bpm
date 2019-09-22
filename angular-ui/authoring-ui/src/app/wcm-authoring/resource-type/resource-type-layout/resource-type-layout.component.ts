@@ -67,16 +67,16 @@ export class ResourceTypeLayoutComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.nextFieldGroupId = this.getNextFieldGroupId();
     this.store.pipe(
-        select(fromStore.getCreateRenderTemplateError),
-        takeUntil(this.unsubscribeAll)).subscribe(
+        takeUntil(this.unsubscribeAll),
+        select(fromStore.getCreateRenderTemplateError)).subscribe(
       (error: string) => {
         this.error = error;
       }
     )
     //this.wcmService.getControlField('bpwizard', 'default').subscribe(
     this.store.pipe(
-        select(fromStore.getControlFiels),
-        takeUntil(this.unsubscribeAll)).subscribe(
+        takeUntil(this.unsubscribeAll),
+        select(fromStore.getControlFiels)).subscribe(
       (controlFiels: ControlField[]) => {
         if (controlFiels) {
           this.controlFields = controlFiels;
