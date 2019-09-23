@@ -18,7 +18,7 @@
             </div>
 
             <div class="px-8 px-md-16">
-                <fuse-shortcuts [navigation]="navigation"></fuse-shortcuts>
+                <fuse-shortcuts *ngIf="navigation" [navigation]="navigation"></fuse-shortcuts>
             </div>
 
         </div>

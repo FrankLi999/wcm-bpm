@@ -1,4 +1,4 @@
-// @import "bpw-components/lib/scss/fuse";
+@import "~bpw-components/lib/scss/fuse";
 
 fuse-sidebar {
 
@@ -78,7 +78,7 @@ navbar {
             min-height: 64px;
             padding: 0 16px 0 24px;
             transition: padding 200ms ease;
-            // @include mat-elevation(1);
+            @include mat-elevation(1);
 
             .logo {
                 display: flex;

@@ -1,4 +1,4 @@
-// @import "bpw-components/lib/scss/fuse";
+@import "~bpw-components/lib/scss/fuse";
 
 fuse-sidebar {
 
@@ -119,11 +119,11 @@ navbar {
             height: 64px;
             padding: 12px 12px 12px 20px;
 
-            // @include media-breakpoint('xs') {
-            //     min-height: 56px;
-            //     max-height: 56px;
-            //     height: 56px;
-            // }
+            @include media-breakpoint('xs') {
+                min-height: 56px;
+                max-height: 56px;
+                height: 56px;
+            }
 
             .logo {
                 display: flex;

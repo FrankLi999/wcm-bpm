@@ -73,19 +73,19 @@ $typography: mat-typography-config(
 // Setup the typography
 @include angular-material-typography($typography);
 
-@import "bpw-auth/lib/authentication/login/login.theme";
-@import "bpw-auth/lib/authentication/signup/signup.theme";
-@import "bpw-auth/lib/authentication/reset-password/reset-password.theme";
-@import "bpw-auth/lib/authentication/forgot-password/forgot-password.theme";
-@import "bpw-auth/lib/authentication/lock-screen/lock-screen.theme";
-@import "bpw-auth/lib/authentication/mail-confirm/mail-confirm.theme";
+@import "~bpw-auth/lib/authentication/login/login.theme";
+@import "~bpw-auth/lib/authentication/signup/signup.theme";
+@import "~bpw-auth/lib/authentication/reset-password/reset-password.theme";
+@import "~bpw-auth/lib/authentication/forgot-password/forgot-password.theme";
+@import "~bpw-auth/lib/authentication/lock-screen/lock-screen.theme";
+@import "~bpw-auth/lib/authentication/mail-confirm/mail-confirm.theme";
 // -----------------------------------------------------------------------------------------------------
 // @ Component theming
 // -----------------------------------------------------------------------------------------------------
 
 // Import app and page component themes here to enable theming for them
 // @import "src/app/layout/components/chat-panel/chat-panel.theme";
-@import "bpw-layout/lib/components/toolbar/toolbar.theme";
+@import "~bpw-layout/lib/components/toolbar/toolbar.theme";
 
 // Define a mixin for easier access
 @mixin components-theme($theme) {
@@ -93,6 +93,14 @@ $typography: mat-typography-config(
     // Layout components
     // @include chat-panel-theme($theme);
     @include toolbar-theme($theme);
+	
+	// Pages
+    @include forgot-password-theme($theme);
+    @include lock-screen-theme($theme);
+    @include login-theme($theme);    
+    @include mail-confirm-theme($theme);
+    @include reset-password-theme($theme);
+    @include signup-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------

@@ -10,6 +10,20 @@
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
+
+    "emitDecoratorMetadata": true,
+    "noEmitHelpers": false,
+    "pretty": true,
+    "allowUnreachableCode": true,
+    "allowUnusedLabels": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "noImplicitUseStrict": false,
+    "noFallthroughCasesInSwitch": false,
+    "allowSyntheticDefaultImports": true,
+    "suppressExcessPropertyErrors": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "resolveJsonModule": true,
     "target": "es2015",
     "typeRoots": [
       "node_modules/@types"

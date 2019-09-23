@@ -6,6 +6,7 @@ import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
@@ -95,7 +96,8 @@ const appRoutes: Routes = [
         // App modules
         LayoutModule,
         AppStoreModule,
-		RestClientModule
+        RestClientModule,
+        FlexLayoutModule
     ],
     bootstrap   : [
         AppComponent

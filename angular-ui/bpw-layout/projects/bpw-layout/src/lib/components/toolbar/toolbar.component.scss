@@ -1,4 +1,4 @@
-// @import "bpw-components/lib/scss/fuse";
+@import "~bpw-components/lib/scss/fuse";
 
 toolbar {
     position: relative;
@@ -33,9 +33,9 @@ toolbar {
         min-width: 64px;
         height: 64px;
 
-        // @include media-breakpoint('xs') {
-        //     height: 56px;
-        // }
+        @include media-breakpoint('xs') {
+            height: 56px;
+        }
     }
 
     .navbar-toggle-button {
@@ -47,8 +47,8 @@ toolbar {
         height: 64px;
         width: 1px;
 
-        // @include media-breakpoint('xs') {
-        //     height: 56px;
-        // }
+        @include media-breakpoint('xs') {
+            height: 56px;
+        }
     }
 }
