@@ -1,4 +1,7 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule, Routes } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -52,6 +55,10 @@ const routes: Routes = [
     ],
     imports        : [
         RouterModule.forChild(routes),
+        CommonModule,
+        FormsModule, 
+        ReactiveFormsModule,
+        FlexLayoutModule,
         MatButtonModule,
         MatCheckboxModule,
         MatDialogModule,

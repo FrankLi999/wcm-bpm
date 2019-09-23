@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { RouterModule,  Routes } from '@angular/router';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -32,7 +32,7 @@ import { RepositoryComponent } from './repository/repository.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { DynamicUiComponent } from './dynamic-ui/dynamic-ui.component';
 import {
-  // JsonSchemaFormModule, 
+  JsonSchemaFormModule, 
   MaterialDesignFrameworkModule
 } from 'bpw-form';
 import * as fromGuards from '../store/guards';
@@ -64,6 +64,9 @@ const routes: Routes = [
     DynamicUiComponent
   ],
   imports: [
+    CommonModule,
+    FormsModule, 
+    ReactiveFormsModule,
     RouterModule.forChild(routes),
     CdkTableModule,
     CdkTreeModule,
@@ -89,7 +92,7 @@ const routes: Routes = [
     HttpClientModule,
     
     MaterialDesignFrameworkModule,
-    // JsonSchemaFormModule,
+    JsonSchemaFormModule,
     // JsonSchemaFormModule.forRoot(
     //   // NoFrameworkModule,
     //   // MaterialDesignFrameworkModule,

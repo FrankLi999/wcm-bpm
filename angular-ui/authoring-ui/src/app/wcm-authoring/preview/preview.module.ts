@@ -45,6 +45,7 @@ const routes: Routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
+    CommonModule,
     CdkTableModule,
     CdkTreeModule,
     MatButtonModule,

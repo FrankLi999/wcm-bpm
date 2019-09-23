@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-// import { CollectionsModule } from '@angular/cdk/collections';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
@@ -79,8 +80,10 @@ const routes: Routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
-    // NoopAnimationsModule,
-
+    CommonModule,
+    FormsModule, 
+    ReactiveFormsModule,
+    FlexLayoutModule,
     ScrollingModule,
     CdkTableModule,
     CdkTreeModule,

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
@@ -35,6 +36,7 @@ const routes: Routes = [
     FolderOverviewComponent
   ],
   imports: [
+    CommonModule,
     RouterModule.forChild(routes),
     CdkTableModule,
     CdkTreeModule,

@@ -1,4 +1,7 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule, Routes } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -62,6 +65,10 @@ const routes: Routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule, 
+    ReactiveFormsModule,
+    FlexLayoutModule,
     ScrollingModule,
     CdkTableModule,
     CdkTreeModule,

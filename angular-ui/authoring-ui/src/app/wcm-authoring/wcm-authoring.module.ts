@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRippleModule } from '@angular/material/core';
@@ -18,7 +21,7 @@ import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { TranslateModule } from '@ngx-translate/core';
 import { AceEditorModule } from 'ng2-ace-editor';
 import {
-  //JsonSchemaFormModule, 
+  JsonSchemaFormModule, 
   MaterialDesignFrameworkModule
 } from 'bpw-form';
 
@@ -45,6 +48,7 @@ import { NewSiteConfigDialogComponent } from './dialog/new-site-config-dialog/ne
 import { WcmAppStoreModule } from './store/store.module';
 import { AuthenticationModule } from 'bpw-auth';
 import { Oauth2Module } from 'bpw-auth';
+
 import * as fromGuards from './store/guards';
 const routes: Routes = [
   {
@@ -55,15 +59,20 @@ const routes: Routes = [
 ];
 @NgModule({
     declarations: [
-    UploadZipfileDialogComponent,
-    FileUploadComponent,
-    NewFolderDialogComponent,
-    NewThemeDialogComponent,
-    NewSiteareaDialogComponent,
-    NewContentDialogComponent,
-    NewSiteConfigDialogComponent],
+      UploadZipfileDialogComponent,
+      FileUploadComponent,
+      NewFolderDialogComponent,
+      NewThemeDialogComponent,
+      NewSiteareaDialogComponent,
+      NewContentDialogComponent,
+      NewSiteConfigDialogComponent
+    ],
     imports : [
         RouterModule.forChild(routes),
+        CommonModule,
+        FormsModule, 
+        ReactiveFormsModule,
+        FlexLayoutModule,
         JcrExplorerModule,
         ResourceLibraryModule,
         SiteExplorerModule,
@@ -88,7 +97,7 @@ const routes: Routes = [
         MatToolbarModule,
 
         MaterialDesignFrameworkModule,
-        //JsonSchemaFormModule,
+        JsonSchemaFormModule,
         TranslateModule,
 
         FuseSharedModule,
