@@ -63,9 +63,11 @@ public class SpringSecurityProvider implements AuthenticationProvider, Authoriza
 			String workspaceName, 
 			Path absPath, 
 			String... actions) {
-		
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>abs path:" + absPath.getString());
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>actions:" + actions);
+		System.out.println(">>>>>>>>>>>>hasPermission>>>>>>>>>repositoryName:" + repositoryName);
+		System.out.println(">>>>>>>>>>>hasPermission>>>>>>>>>>repositorySourceName:" + repositorySourceName);
+		System.out.println(">>>>>>>>>>>hasPermission>>>>>>>>>>workspaceName:" + workspaceName);
+		System.out.println(">>>>>>>>>>>>hasPermission>>>>>>>>>abs path:" + absPath.getString());
+		System.out.println(">>>>>>>>>>>hasPermission>>>>>>>>>>actions:" + actions);
 		return true;
 	}
 }

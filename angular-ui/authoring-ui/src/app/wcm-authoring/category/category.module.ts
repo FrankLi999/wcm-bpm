@@ -23,11 +23,14 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { CategoryComponent } from './category/category.component';
+import { AuthGuard } from 'bpw-auth';
+import * as fromGuards from '../store/guards';
 
 const routes: Routes = [
   {
-      path       : 'category',
-      component  :  CategoryComponent
+    path       : 'category',
+    component  :  CategoryComponent,
+    canActivate: [AuthGuard, fromGuards.ResolveGuard] 
   }
 ];
 @NgModule({

@@ -24,10 +24,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { SiteExplorerComponent } from './site-explorer/site-explorer.component';
 import { FolderOverviewComponent } from './folder-overview/folder-overview.component';
+import * as fromGuards from '../store/guards';
+import { AuthGuard } from 'bpw-auth';
 const routes: Routes = [
     {
         path       : 'site-explorer',
-        component  : SiteExplorerComponent
+        component  : SiteExplorerComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
     }
 ];
 @NgModule({

@@ -69,7 +69,7 @@ public final class RestBinaryHandler extends AbstractHandler {
                                        String repositoryName,
                                        String workspaceName,
                                        String binaryAbsPath ) throws RepositoryException {
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         return session.getProperty(binaryAbsPath);
     }
 
@@ -132,7 +132,7 @@ public final class RestBinaryHandler extends AbstractHandler {
         CheckArg.isNotNull(binaryStream, "request body");
 
         String parentPath = parentPath(binaryPropertyAbsPath);
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         Node parent = (Node)itemAtPath(parentPath, session);
         int lastSlashInd = binaryPropertyAbsPath.lastIndexOf('/');
         String propertyName = lastSlashInd == -1 ? binaryPropertyAbsPath : binaryPropertyAbsPath.substring(lastSlashInd + 1);
@@ -195,7 +195,7 @@ public final class RestBinaryHandler extends AbstractHandler {
             return exceptionResponse("The path '" + filePath + "' should contain at least one segment");
         }
 
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         Node fileNode;
         try {
             fileNode = session.getNode(filePath);

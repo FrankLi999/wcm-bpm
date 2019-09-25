@@ -69,7 +69,7 @@ public final class RestItemHandler extends ItemHandler {
                           String workspaceName,
                           String path,
                           int depth ) throws RepositoryException {
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         Item item = itemAtPath(path, session);
         return createRestItem(request, depth, session, item);
     }
@@ -101,7 +101,7 @@ public final class RestItemHandler extends ItemHandler {
         String parentAbsPath = parentPath(path);
         String newNodeName = newNodeName(path);
 
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         Node parentNode = (Node)session.getItem(parentAbsPath);
         Node newNode = addNode(parentNode, newNodeName, requestBodyJSON);
 
@@ -154,7 +154,7 @@ public final class RestItemHandler extends ItemHandler {
                                 String rawWorkspaceName,
                                 String path,
                                 String requestContent ) throws IOException, RepositoryException {
-        Session session = getSession(request, rawRepositoryName, rawWorkspaceName);
+        Session session = getSession(rawRepositoryName, rawWorkspaceName);
         Item item = itemAtPath(path, session);
         item = updateItem(item, stringToJsonNode(requestContent));
         session.save();
@@ -241,7 +241,7 @@ public final class RestItemHandler extends ItemHandler {
         if (requestBody.size() == 0) {
             return ResponseEntity.ok().build();
         }
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         TreeMap<String, JsonNode> nodesByPath = createNodesByPathMap(requestBody);
         List<RestItem> result = updateMultipleNodes(request, session, nodesByPath);
         return createOkResponse(result);
@@ -269,7 +269,7 @@ public final class RestItemHandler extends ItemHandler {
             return ResponseEntity.ok().build();
         }
 
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         TreeSet<String> pathsInOrder = new TreeSet<>();
         for (int i = 0; i < requestArray.size(); i++) {
             pathsInOrder.add(absPath(requestArray.get(i).asText()));
@@ -342,7 +342,7 @@ public final class RestItemHandler extends ItemHandler {
     	if (requestBody.size() == 0) {
             return ResponseEntity.ok().build();
         }
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         TreeMap<String, JsonNode> nodesByPath = createNodesByPathMap(requestBody);
         return addMultipleNodes(request, nodesByPath, session);
     }

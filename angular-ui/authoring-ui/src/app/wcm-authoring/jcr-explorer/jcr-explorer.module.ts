@@ -35,16 +35,14 @@ import {
   JsonSchemaFormModule, 
   MaterialDesignFrameworkModule
 } from 'bpw-form';
-import {
-  AuthGuard
-} from 'bpw-auth';
+import { AuthGuard } from 'bpw-auth';
 import * as fromGuards from '../store/guards';
 import { AceEditorDirective } from './dynamic-ui/ace-editor.directive';
 const routes: Routes = [
   {
     path     : 'jcr-explorer',
     component: JcrExplorerComponent,
-    canActivate: [fromGuards.ResolveGuard, AuthGuard]       
+    canActivate: [AuthGuard, fromGuards.ResolveGuard]       
   },
   // {
   //   path     : 'jcr-explorer/:repo/:workspace',

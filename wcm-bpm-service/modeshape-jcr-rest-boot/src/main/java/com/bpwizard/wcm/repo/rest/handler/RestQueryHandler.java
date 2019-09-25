@@ -87,7 +87,7 @@ public final class RestQueryHandler extends AbstractHandler {
         assert language != null;
         assert statement != null;
 
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         Query query = createQuery(language, statement, session);
         bindExtraVariables(request, session.getValueFactory(), query);
 
@@ -133,7 +133,7 @@ public final class RestQueryHandler extends AbstractHandler {
         assert language != null;
         assert statement != null;
 
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         org.modeshape.jcr.api.query.Query query = createQuery(language, statement, session);
         bindExtraVariables(request, session.getValueFactory(), query);
 

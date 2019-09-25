@@ -40,11 +40,13 @@
 				<version>${hazelcast.version}</version>
 			</dependency>
 			-->
+			<!--
 			<dependency>
 				<groupId>com.github.ulisesbocchio</groupId>
 				<artifactId>jasypt-spring-boot-starter</artifactId>
 				<version>2.1.1</version>
 			</dependency>
+			-->
 			<dependency>
 				<groupId>org.modeshape.bom</groupId>
 				<artifactId>modeshape-bom-embedded</artifactId>
@@ -100,6 +102,11 @@
 		<dependency>
 			<groupId>org.modeshape</groupId>
 			<artifactId>modeshape-jcr</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.bpwizard.wcm</groupId>
+			<artifactId>modeshape-commons-boot</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>com.bpwizard.wcm</groupId>

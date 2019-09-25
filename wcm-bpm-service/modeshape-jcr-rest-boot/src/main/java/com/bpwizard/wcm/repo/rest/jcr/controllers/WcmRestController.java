@@ -130,7 +130,7 @@ public class WcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			Session session = repositoryManager.getSession(request, repository, workspace);
+			Session session = repositoryManager.getSession(repository, workspace);
 			WcmSystem wcmSystem = new WcmSystem();
 			Map<String, WcmOperation[]> operations = this.getWcmOperations(repository, workspace, request);
 			wcmSystem.setOperations(operations);
@@ -325,7 +325,7 @@ public class WcmRestController {
 			String repositoryName = siteConfig.getRepository();
 			String workspaceName = siteConfig.getWorkspace();
 	
-			Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
+			Session session = repositoryManager.getSession(repositoryName, workspaceName);
 			Node siteConfigFolder = session.getNode(String.format("/bpwizard/library/%s/siteConfig", siteConfig.getLibrary()));
 			Node siteConfigNode = siteConfigFolder.addNode(siteConfig.getName(), "bpw:siteConfig");
 			
@@ -388,7 +388,7 @@ public class WcmRestController {
 			String repositoryName = at.getRepository();
 			String workspaceName = at.getWorkspace();
 	
-			Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
+			Session session = repositoryManager.getSession(repositoryName, workspaceName);
 			Node atFolder = session.getNode(String.format("/bpwizard/library/%s/authoringTemplate", at.getLibrary()));
 			Node atNode = atFolder.addNode(at.getName(), "bpw:authoringTemplate");
 			if (StringUtils.hasText(at.getBaseResourceType())) {
@@ -472,7 +472,7 @@ public class WcmRestController {
 			String repositoryName = rt.getRepository();
 			String workspaceName = rt.getWorkspace();
 	
-			Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
+			Session session = repositoryManager.getSession(repositoryName, workspaceName);
 			Node rtFolder = session.getNode(String.format("/bpwizard/library/%s/renderTemplate", rt.getLibrary()));
 			Node rtNode = rtFolder.addNode(rt.getName(), "bpw:renderTemplate");
 			rtNode.setProperty("bpw:name", rt.getName());
@@ -549,7 +549,7 @@ public class WcmRestController {
 			String repositoryName = pageLayout.getRepository();
 			String workspaceName = pageLayout.getWorkspace();
 	
-			Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
+			Session session = repositoryManager.getSession(repositoryName, workspaceName);
 			Node contentAreaLayoutFolder = session
 					.getNode(String.format("/bpwizard/library/%s/contentAreaLayout", pageLayout.getLibrary()));
 			Node contentAreaLayoutNode = contentAreaLayoutFolder.addNode(pageLayout.getName(), "bpw:contentAreaLayout");
@@ -585,7 +585,7 @@ public class WcmRestController {
 			String repositoryName = sa.getRepository();
 			String workspaceName = sa.getWorkspace();
 	
-			Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
+			Session session = repositoryManager.getSession(repositoryName, workspaceName);
 			Node parentFolder = session.getNode("/" + sa.getNodePath());
 			Node saNode = parentFolder.addNode(sa.getName(), "bpw:siteArea");
 	
@@ -712,7 +712,7 @@ public class WcmRestController {
 			String repositoryName = contentItem.getRepository();
 			String workspaceName = contentItem.getWorkspace();
 	
-			Session session = repositoryManager.getSession(request, repositoryName, workspaceName);
+			Session session = repositoryManager.getSession(repositoryName, workspaceName);
 			Node parentFolder = session.getNode("/" + contentItem.getNodePath());
 			Map<String, String> contentElements = contentItem.getContentElements();
 			String name = contentElements.get("name"); 

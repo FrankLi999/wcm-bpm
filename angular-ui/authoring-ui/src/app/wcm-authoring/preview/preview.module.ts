@@ -31,10 +31,14 @@ import { ResourceRendererComponent } from './resource-renderer/resource-renderer
 import { RenderElementComponent } from './render-element/render-element.component';
 import { ContentIdDirective } from './content-id.directive';
 import { RendererService } from './renderer.service';
+import * as fromGuards from '../store/guards';
+import { AuthGuard } from 'bpw-auth';
+
 const routes: Routes = [
   {
     path     : 'preview',
-    component: ContentAreaPreviewComponent      
+    component: ContentAreaPreviewComponent,
+    canActivate: [AuthGuard, fromGuards.ResolveGuard]       
   }
 ];
 @NgModule({

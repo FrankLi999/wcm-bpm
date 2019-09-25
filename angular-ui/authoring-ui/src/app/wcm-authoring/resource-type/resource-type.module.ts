@@ -42,15 +42,18 @@ import {
   ResourceFieldDialog,
   StepEditorDialog,
   TabEditorDialog } from './resource-type-layout/resource-type-layout.component';
-
+import * as fromGuards from '../store/guards';
+import { AuthGuard } from 'bpw-auth';
 const routes: Routes = [
     {
         path       : 'resource-type/edit',
-        component  : ResourceTypeEditorComponent
+        component  : ResourceTypeEditorComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
     },
     {
         path       : 'resource-type/list',
-        component  : ResourceTypeListComponent
+        component  : ResourceTypeListComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
     }
 ];
 @NgModule({

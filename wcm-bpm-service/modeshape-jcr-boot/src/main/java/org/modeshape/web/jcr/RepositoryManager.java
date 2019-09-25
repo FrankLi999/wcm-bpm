@@ -28,7 +28,6 @@ import javax.jcr.LoginException;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-// import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
@@ -36,6 +35,11 @@ import org.apache.logging.log4j.Logger;
 import org.modeshape.common.annotation.ThreadSafe;
 import org.modeshape.jcr.api.RepositoriesContainer;
 import org.modeshape.jcr.api.ServletCredentials;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.bpwizard.wcm.repo.jcr.security.SpringSecurityCredentials;
 
 /**
  * Manager for accessing JCR Repository instances. This manager uses the idiomatic way to find JCR Repository (and ModeShape
@@ -72,6 +76,33 @@ public class RepositoryManager {
     @PreDestroy
     public void shutdown() {
         this.repositoriesContainer.shutdown();
+    }
+    
+    /**
+     * Get a JCR Session for the named workspace in the named repository, using the supplied HTTP servlet request for
+     * authentication information.
+     * 
+     * @param request the servlet request; may not be null or unauthenticated
+     * @param repositoryName the name of the repository in which the session is created
+     * @param workspaceName the name of the workspace to which the session should be connected
+     * @return an active session with the given workspace in the named repository
+     * @throws RepositoryException if the named repository does not exist or there was a problem obtaining the named repository
+     */
+    public Session getSession( String repositoryName, String workspaceName ) throws RepositoryException {
+        // Go through all the RepositoryFactory instances and try to create one ...
+        Repository repository = getRepository(repositoryName);
+        // If there's no authenticated user, try an anonymous login
+        Session session = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(">>>>>>>>>>>>>>>>>>>> getSession: " + authentication);
+        if (authentication instanceof AnonymousAuthenticationToken) {
+        	session = repository.login(workspaceName);
+        } else {
+        	session = repository.login(new SpringSecurityCredentials(authentication), workspaceName);
+        }
+        
+        ModeshapeRequestContext.set(session);
+        return session;
     }
     
     /**

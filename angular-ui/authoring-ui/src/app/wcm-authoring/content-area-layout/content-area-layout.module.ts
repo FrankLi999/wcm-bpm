@@ -33,15 +33,19 @@ import {
 } from './content-area-layout/content-area-layout.component';
 import { ContentAreaLayoutsComponent } from './content-area-layouts/content-area-layouts.component';
 import { ResourceViewerComponent } from './resource-viewer/resource-viewer.component';
+import { AuthGuard } from 'bpw-auth';
+import * as fromGuards from '../store/guards';
 
 const routes: Routes = [
     {
         path       : 'content-area-layout/edit',
-        component  : ContentAreaDesignerComponent
+        component  : ContentAreaDesignerComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard] 
     },
     {
         path       : 'content-area-layout/list',
-        component  : ContentAreaLayoutsComponent
+        component  : ContentAreaLayoutsComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard] 
     }
 ];
 

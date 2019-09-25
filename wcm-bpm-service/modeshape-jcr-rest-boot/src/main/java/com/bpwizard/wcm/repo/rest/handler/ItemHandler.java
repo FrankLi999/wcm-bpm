@@ -289,11 +289,37 @@ public abstract class ItemHandler extends AbstractHandler {
         assert rawWorkspaceName != null;
         assert path != null;
 
-        Session session = getSession(request, rawRepositoryName, rawWorkspaceName);
+        Session session = getSession(rawRepositoryName, rawWorkspaceName);
 
         doDelete(path, session);
         session.save();
     }
+    
+//    /**
+//     * Deletes the item at {@code path}.
+//     * 
+//     * @param request the servlet request; may not be null or unauthenticated
+//     * @param rawRepositoryName the URL-encoded repository name
+//     * @param rawWorkspaceName the URL-encoded workspace name
+//     * @param path the path to the item
+//     * @throws NotFoundException if no item exists at {@code path}
+//     * @throws NotAuthorizedException if the user does not have the access required to delete the item at this path
+//     * @throws RepositoryException if any other error occurs
+//     */
+//    public void deleteItem( HttpServletRequest request,
+//                            String rawRepositoryName,
+//                            String rawWorkspaceName,
+//                            String path ) throws RepositoryException {
+//
+//        assert rawRepositoryName != null;
+//        assert rawWorkspaceName != null;
+//        assert path != null;
+//
+//        Session session = getSession(request, rawRepositoryName, rawWorkspaceName);
+//
+//        doDelete(path, session);
+//        session.save();
+//    }
 
     protected void doDelete( String path,
                              Session session ) throws RepositoryException {

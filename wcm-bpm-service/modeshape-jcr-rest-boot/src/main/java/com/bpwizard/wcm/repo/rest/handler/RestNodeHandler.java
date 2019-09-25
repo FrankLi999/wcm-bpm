@@ -57,7 +57,7 @@ public final class RestNodeHandler extends ItemHandler {
                                 String workspaceName,
                                 String id,
                                 int depth ) throws RepositoryException {
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         Node node = nodeWithId(id, session);
         return createRestItem(request, depth, session, node);
     }
@@ -85,7 +85,7 @@ public final class RestNodeHandler extends ItemHandler {
                                       String rawWorkspaceName,
                                       String id,
                                       String requestContent ) throws IOException, RepositoryException {
-        Session session = getSession(request, rawRepositoryName, rawWorkspaceName);
+        Session session = getSession(rawRepositoryName, rawWorkspaceName);
         Node node = nodeWithId(id, session);
         node = updateNode(node, stringToJSONObject(requestContent));
         session.save();
@@ -117,7 +117,7 @@ public final class RestNodeHandler extends ItemHandler {
         assert rawWorkspaceName != null;
         assert id != null;
 
-        Session session = getSession(request, rawRepositoryName, rawWorkspaceName);
+        Session session = getSession(rawRepositoryName, rawWorkspaceName);
         Node node = nodeWithId(id, session);
         node.remove();
         session.save();

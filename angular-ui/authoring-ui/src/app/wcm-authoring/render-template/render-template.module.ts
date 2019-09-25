@@ -30,14 +30,19 @@ import { RenderTemplateComponent } from './render-template/render-template.compo
 import { AceEditorModule } from 'ng2-ace-editor';
 import { SafePipe } from './pipes/safe.pipe';
 import { RenderTemplatesComponent } from './render-templates/render-templates.component';
+import * as fromGuards from '../store/guards';
+import { AuthGuard } from 'bpw-auth';
+
 const routes: Routes = [
   {
       path       : 'render-template/edit',
-      component  : RenderTemplateComponent
+      component  : RenderTemplateComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
   },
   {
       path       : 'render-template/list',
-      component  : RenderTemplatesComponent
+      component  : RenderTemplatesComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
   }
 ];
 

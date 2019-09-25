@@ -58,7 +58,7 @@ public final class RestNodeTypeHandler extends AbstractHandler {
                                      String repositoryName,
                                      String workspaceName,
                                      String nodeTypeName ) throws RepositoryException {
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
         NodeType nodeType = nodeTypeManager.getNodeType(nodeTypeName);
         return new RestNodeType(nodeType, RestHelper.repositoryUrl(request));
@@ -82,7 +82,7 @@ public final class RestNodeTypeHandler extends AbstractHandler {
                                boolean allowUpdate,
                                InputStream cndInputStream ) throws RepositoryException {
         CheckArg.isNotNull(cndInputStream, "request body");
-        Session session = getSession(request, repositoryName, workspaceName);
+        Session session = getSession(repositoryName, workspaceName);
         NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
         if (!(nodeTypeManager instanceof org.modeshape.jcr.api.nodetype.NodeTypeManager)) {
             //501 = not implemented

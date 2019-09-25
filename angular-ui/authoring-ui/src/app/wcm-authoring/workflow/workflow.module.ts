@@ -24,15 +24,19 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { WorkflowsComponent } from './workflows/workflows.component';
+import * as fromGuards from '../store/guards';
+import { AuthGuard } from 'bpw-auth';
 
 const routes: Routes = [
   {
       path       : 'workflow/edit',
-      component  : WorkflowComponent
+      component  : WorkflowComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
   },
   {
       path       : 'workflow/list',
-      component  : WorkflowsComponent
+      component  : WorkflowsComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
   }
 ];
 

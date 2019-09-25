@@ -76,7 +76,7 @@ public final class RestRepositoryHandler extends AbstractHandler {
         assert repositoryName != null;
 
         RestWorkspaces workspaces = new RestWorkspaces();
-        Session session = getSession(request, repositoryName, null);
+        Session session = getSession(repositoryName, null);
         for (String workspaceName : session.getWorkspace().getAccessibleWorkspaceNames()) {
             String repositoryUrl = RestHelper.urlFrom(request);
             workspaces.addWorkspace(workspaceName, repositoryUrl);
@@ -92,7 +92,7 @@ public final class RestRepositoryHandler extends AbstractHandler {
                                       BackupOptions options ) throws RepositoryException {
         final File backupLocation = resolveBackupLocation();
 
-        Session session = getSession(request, repositoryName, null);
+        Session session = getSession(repositoryName, null);
         String repositoryVersion = session.getRepository().getDescriptorValue(Repository.REP_VERSION_DESC).getString().replaceAll("\\.","");
         final String backupName = "modeshape_" + repositoryVersion + "_" + repositoryName + "_backup_" + DATE_FORMAT.format(new Date());
         final File backup = new File(backupLocation, backupName);
@@ -127,7 +127,7 @@ public final class RestRepositoryHandler extends AbstractHandler {
         }
         File backup = resolveBackup(backupName);
         logger.debug("Restoring repository '{0}' from backup '{1}' using '{2}'", repositoryName, backup, options);
-        Session session = getSession(request, repositoryName, null);
+        Session session = getSession(repositoryName, null);
         RepositoryManager repositoryManager = ((org.modeshape.jcr.api.Workspace)session.getWorkspace()).getRepositoryManager();
         final Problems problems = repositoryManager.restoreRepository(backup, options);
         if (!problems.hasProblems()) {

@@ -723,6 +723,7 @@ public class ModeShapeWebdavStore implements IWebdavStore {
             if (result == null) {
                 try {
                     result = this.repositoryManager.getSession(request.getRequest(), repositoryName, workspaceName);
+                	// result = this.repositoryManager.getSession(repositoryName, workspaceName);
                 } catch (RepositoryException e) {
                     logger().warn(WebdavI18n.cannotGetRepositorySession, repositoryName, e.getMessage());
                     throw translate(e);
@@ -810,6 +811,7 @@ public class ModeShapeWebdavStore implements IWebdavStore {
                     Session session = null;
                     try {
                         session = this.repositoryManager.getSession(request.getRequest(), repositoryName, null);
+                    	// session = this.repositoryManager.getSession(repositoryName, null);
                         return session.getWorkspace().getAccessibleWorkspaceNames();
                     } catch (RepositoryException e) {
                         logger().warn(WebdavI18n.cannotGetRepositorySession, repositoryName, e.getMessage());

@@ -72,10 +72,10 @@ public abstract class AbstractHandler {
      */
     protected static final String EMPTY_WORKSPACE_NAME = "<default>";
 
-    private static final Logger LOGGER = WebLogger.getLogger(AbstractHandler.class);
+    //private static final Logger LOGGER = WebLogger.getLogger(AbstractHandler.class);
 
     protected final Logger logger = WebLogger.getLogger(getClass());
-
+    
     /**
      * Returns an active session for the given workspace name in the named repository.
      * 
@@ -85,16 +85,35 @@ public abstract class AbstractHandler {
      * @return an active session with the given workspace in the named repository
      * @throws RepositoryException if any other error occurs
      */
-    protected Session getSession( HttpServletRequest request,
-                                  String rawRepositoryName,
+    protected Session getSession( String rawRepositoryName,
                                   String rawWorkspaceName ) throws RepositoryException {
-    	assert request != null;
         if (ModeshapeRequestContext.get() == null) {
-            this.repositoryManager.getSession(request, repositoryNameFor(rawRepositoryName), workspaceNameFor(
+            this.repositoryManager.getSession(repositoryNameFor(rawRepositoryName), workspaceNameFor(
                     rawWorkspaceName));
         }
         return ModeshapeRequestContext.get();
     }
+    
+
+//    /**
+//     * Returns an active session for the given workspace name in the named repository.
+//     * 
+//     * @param request the servlet request; may not be null or unauthenticated
+//     * @param rawRepositoryName the URL-encoded name of the repository in which the session is created
+//     * @param rawWorkspaceName the URL-encoded name of the workspace to which the session should be connected
+//     * @return an active session with the given workspace in the named repository
+//     * @throws RepositoryException if any other error occurs
+//     */
+//    protected Session getSession( HttpServletRequest request,
+//                                  String rawRepositoryName,
+//                                  String rawWorkspaceName ) throws RepositoryException {
+//    	assert request != null;
+//        if (ModeshapeRequestContext.get() == null) {
+//            this.repositoryManager.getSession(request, repositoryNameFor(rawRepositoryName), workspaceNameFor(
+//                    rawWorkspaceName));
+//        }
+//        return ModeshapeRequestContext.get();
+//    }
 
 //    /**
 //     * Cleans up any resources related to {@link AbstractHandler#ACTIVE_SESSION}

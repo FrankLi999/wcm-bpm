@@ -50,15 +50,19 @@ import {
   QueryEmptyWarningDirective,
   QueryArrowIconDirective
 } from './query-builder';
+import * as fromGuards from '../store/guards';
+import { AuthGuard } from 'bpw-auth';
 
 const routes: Routes = [
   {
       path       : 'query-builder/edit',
-      component  : QueryEditorComponent
+      component  : QueryEditorComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
   },
   {
       path       : 'query-builder/list',
-      component  : QueryListComponent
+      component  : QueryListComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
   }
 ];
 @NgModule({

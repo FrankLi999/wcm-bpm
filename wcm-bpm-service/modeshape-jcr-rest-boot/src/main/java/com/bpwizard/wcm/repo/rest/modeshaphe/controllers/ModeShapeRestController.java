@@ -1,7 +1,6 @@
 package com.bpwizard.wcm.repo.rest.modeshaphe.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
 import javax.jcr.Binary;
