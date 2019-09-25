@@ -11,7 +11,7 @@ export interface AuthContextState {
 export const initialAuthContextState: AuthContextState = {
   loggedIn: false,
   userProfile: {
-    id: '',
+    id: 'anunymous',
     email: '',
     accessToken: '',
     roles: [],
@@ -34,17 +34,14 @@ export function authReducer(state = initialAuthContextState,
       }
     case AuthActionTypes.LoginAction_Failed:
       return {
-        userProfile: undefined,
-        loggedIn: false,
+        ... initialAuthContextState,
         loginError: action.payload
         
       };  
 
     case AuthActionTypes.LogoutAction:
         return {
-          loggedIn: false,
-          userProfile: undefined,
-          loginError: undefined
+          ... initialAuthContextState
         };
     case AuthActionTypes.LoginAction_Clear_Error:
       return {

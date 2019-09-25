@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import {
   RestClient, 
   Client, 
-  Post,
+  Get,
   Body,
   Timeout,
   Produces,
@@ -23,28 +23,22 @@ import {
   providedIn: 'root'
 })
 @Client({
-  serviceId: 'auth-service',
-  baseUrl: `${API_BASE_URL}/auth/api/rest`,
+  serviceId: 'user-service',
+  baseUrl: `${API_BASE_URL}/user/api/rest`,
   headers: {
       'content-type': 'application/json'
   }
 })
-export class AuthService extends RestClient {
+export class userService extends RestClient {
 
   constructor(httpClient: HttpClient){
     super(httpClient);
   }
 
-  @Post('/login')
+  @Get('/me')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public login(
-    @Body login: Login
+  public me(
   ): Observable<UserProfile> { return null; };
-
-  // @Post('/logout')
-  // @Timeout(2000) //In milliseconds
-  // @Produces(MediaType.JSON)
-  // public logout(
-  // ): Observable<void> { return null; };
 }
+

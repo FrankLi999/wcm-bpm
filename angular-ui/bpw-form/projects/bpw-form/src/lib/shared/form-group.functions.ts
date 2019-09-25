@@ -276,8 +276,6 @@ export function buildFormGroupTemplate(
  * // {AbstractControl}
 */
 export function buildFormGroup(template: any): AbstractControl {
-  // console.log(">>>>>>>>>>>>>>>>>>>> Build form group");
-  // console.log(template);
   const validatorFns: ValidatorFn[] = [];
   let validatorFn: ValidatorFn = null;
   if (hasOwn(template, 'validators')) {

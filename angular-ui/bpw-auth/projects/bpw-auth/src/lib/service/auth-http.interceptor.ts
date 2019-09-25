@@ -23,11 +23,11 @@ import {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       return this.store.pipe(
         select(fromStore.getUserProfile),
-        filter(userProfile => !!userProfile),
         take(1),
         flatMap((userProfile: UserProfile) => {
-              console.log('............... AuthHttpInterceptor');
-              const authRequest = req.clone({ setHeaders: { authorization: `${userProfile.tokenType} ${userProfile.accessToken}` } })
+              const authRequest = userProfile.accessToken ? 
+                  req.clone({ setHeaders: { authorization: `${userProfile.tokenType} ${userProfile.accessToken}` } }) :
+                  req;
               return next.handle(authRequest);
         }),
         catchError((err, caught) => {
