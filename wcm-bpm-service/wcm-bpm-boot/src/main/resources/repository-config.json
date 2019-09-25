@@ -38,10 +38,6 @@
         "allowCreation" : true    
     },
     "security" : {
-        "anonymous" : {
-            "roles" : ["readonly","readwrite","admin"],
-            "useOnFailedLogin" : false
-        },
         "providers" : [
             {
                 "name" : "Spring Security",

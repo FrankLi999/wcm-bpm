@@ -12,6 +12,10 @@ https://blog.angularindepth.com/npm-peer-dependencies-f843f3ac4e7f
    cd bpw-rest-client
    ng generate library bpw-rest-client --prefix=rest-client
    
+      
+   ng new bpw-form --create-application=false
+   ng generate library bpw-form --prefix=bpw-form
+   
    ng new bpw-components --create-application=false
    cd bpw-components
    ng generate library bpw-components --prefix=bpw-components
@@ -25,9 +29,7 @@ https://blog.angularindepth.com/npm-peer-dependencies-f843f3ac4e7f
    ng generate library bpw-layout --prefix=bpw-layout
    
 
-   
-   ng new bpw-form --create-application=false
-   ng generate library bpw-form --prefix=bpw-form
+
    
    ng new bpw-dynamic-ui --create-application=false
    ng generate library bpw-dynamic-ui --prefix=bpw-dynamic-ui

@@ -58,8 +58,8 @@ public class ErrorResponseComposer<T extends Throwable> {
 		}
         
         if (handler != null) // a handler is found    	
-        	return Optional.of(handler.getErrorResponse(ex));
-        
+			return Optional.of(handler.getErrorResponse(ex));
+		log.warn("Unable to find the handler for the exception", ex);
         return Optional.empty();
 	}
 }

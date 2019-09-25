@@ -37,14 +37,13 @@ public class DefaultExceptionHandlerControllerAdvice<T extends Throwable> {
     @RequestMapping(produces = "application/json")
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<?> handleException(T ex) throws T {
-
     	ErrorResponse errorResponse = errorResponseComposer.compose(ex).orElseThrow(() -> ex);
     	
     	// Propogate up if message or status is null 
-    	if (errorResponse.incomplete())
+		if (errorResponse.incomplete()) {
     		throw ex;
-    	
-    	log.warn("Handling exception", ex);
+	    }
+		log.warn("Handling exception", ex);
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
     }
 }

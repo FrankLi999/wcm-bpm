@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -47,7 +48,7 @@ import { NewContentDialogComponent } from './dialog/new-content-dialog/new-conte
 import { NewSiteConfigDialogComponent } from './dialog/new-site-config-dialog/new-site-config-dialog.component';
 import { WcmAppStoreModule } from './store/store.module';
 import { AuthenticationModule } from 'bpw-auth';
-import { Oauth2Module } from 'bpw-auth';
+import { OAuth2Module, AuthHttpInterceptor } from 'bpw-auth';
 
 import * as fromGuards from './store/guards';
 const routes: Routes = [
@@ -72,6 +73,7 @@ const routes: Routes = [
         CommonModule,
         FormsModule, 
         ReactiveFormsModule,
+        HttpClientModule,
         FlexLayoutModule,
         JcrExplorerModule,
         ResourceLibraryModule,
@@ -105,14 +107,19 @@ const routes: Routes = [
         WcmAppStoreModule,
         AceEditorModule,
         AuthenticationModule,
-        Oauth2Module
+        OAuth2Module
     ],
     exports     : [
     ],
     providers   : [
         ModeshapeService,
         WcmService,
-        fromGuards.ResolveGuard
+        fromGuards.ResolveGuard,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: AuthHttpInterceptor,
+          multi: true
+      }
     ],
     entryComponents: [
         UploadZipfileDialogComponent,

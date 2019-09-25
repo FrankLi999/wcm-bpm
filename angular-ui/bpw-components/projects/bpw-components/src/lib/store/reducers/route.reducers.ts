@@ -14,11 +14,12 @@ export interface RouteSnapshotReducerState {
     routeState: RouterReducerState<RouteSnapshot>;
 }
 
-export const reducers: ActionReducerMap<RouteSnapshotReducerState> = {
+export const routeReducers: ActionReducerMap<RouteSnapshotReducerState> = {
     routeState: routerReducer
 };
 
-export const getRouteState = createFeatureSelector<RouterReducerState<RouteSnapshot>>('routeState');
+// export const getRouteState = createFeatureSelector<RouterReducerState<RouteSnapshot>>('routeState');
+export const getRouteState = state => state.routeState;
 export const getRouteSnapshot = createSelector(getRouteState, routeState => routeState.state);
 
 export class RouteSnapshotSerializer implements RouterStateSerializer<RouteSnapshot> {

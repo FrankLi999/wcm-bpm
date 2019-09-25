@@ -24,22 +24,26 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modeshape.jcr.ExecutionContext;
 import org.modeshape.jcr.security.AuthenticationProvider;
+import org.modeshape.jcr.security.AuthorizationProvider;
+import org.modeshape.jcr.value.Path;
 import org.springframework.security.core.Authentication;
 
 /**
  * @author M.Sarhan
  */
-public class SpringSecurityProvider implements AuthenticationProvider {
+public class SpringSecurityProvider implements AuthenticationProvider, AuthorizationProvider {
 
     final static Logger logger = LogManager.getLogger(SpringSecurityProvider.class);
 
     @Override
-    public ExecutionContext authenticate(Credentials credentials
-            , String repositoryName
-            , String workspaceName
-            , ExecutionContext repositoryContext
-            , Map<String, Object> sessionAttributes) {
+    public ExecutionContext authenticate(Credentials credentials,
+            String repositoryName,
+            String workspaceName,
+            ExecutionContext repositoryContext,
+            Map<String, Object> sessionAttributes) {
 
+    	System.out.println(">>>>>>>>>>>>SpringSecurityProvider.authenticate1: " + (credentials instanceof SpringSecurityCredentials));
+    	System.out.println(">>>>>>>>>>>>SpringSecurityProvider.authenticate2: " + credentials);
         if (credentials instanceof SpringSecurityCredentials) {
             SpringSecurityCredentials creds = (SpringSecurityCredentials) credentials;
             Authentication auth = creds.getAuth();
@@ -50,4 +54,18 @@ public class SpringSecurityProvider implements AuthenticationProvider {
         }
         return null;
     }
+
+	@Override
+	public boolean hasPermission(
+			ExecutionContext context, 
+			String repositoryName, 
+			String repositorySourceName,
+			String workspaceName, 
+			Path absPath, 
+			String... actions) {
+		
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>abs path:" + absPath.getString());
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>actions:" + actions);
+		return true;
+	}
 }

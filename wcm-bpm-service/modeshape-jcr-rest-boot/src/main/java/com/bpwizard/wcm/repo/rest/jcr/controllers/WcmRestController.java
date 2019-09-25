@@ -35,7 +35,6 @@ import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
-import com.bpwizard.wcm.repo.rest.jcr.exception.WcmSystemException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.BaseFormGroup;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
@@ -125,7 +124,7 @@ public class WcmRestController {
 			@PathVariable("library") String library, 
 			@PathVariable("siteConfig") String siteConfigName,
 			HttpServletRequest request) 
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
@@ -162,19 +161,17 @@ public class WcmRestController {
 				logger.traceExit();
 			}
 			return wcmSystem;
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-	    } catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}		
 	}
 
 	@GetMapping(path = "/wcmRepository/{repository}/{workspace}", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public WcmRepository[] getWcmRepositories(HttpServletRequest request) 
-			throws WcmSystemException {
+			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -187,12 +184,10 @@ public class WcmRestController {
 				logger.traceExit();
 			}
 			return wcmRepositories;
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-//	    } catch (RepositoryException e) {
-//			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}	
 	}
 	
@@ -202,7 +197,7 @@ public class WcmRestController {
 			@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, 
 			HttpServletRequest request) 
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -218,15 +213,12 @@ public class WcmRestController {
 				logger.traceExit();
 			}
 			return wcmOperationMap;
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			e.printStackTrace();
 			throw e;
-	    } catch (RepositoryException e) {
-	    	e.printStackTrace();
-			throw new WcmRepositoryException(e);
-		} catch (Throwable t) {
+	    } catch (Throwable t) {
 			t.printStackTrace();
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}	
 	}
 	
@@ -235,7 +227,7 @@ public class WcmRestController {
 			@PathVariable("repository") String repository, 
 			@PathVariable("workspace") String workspace,
 			HttpServletRequest request) 
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -252,7 +244,7 @@ public class WcmRestController {
 	@GetMapping(path = "/at/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, AuthoringTemplate> getAuthoringTemplate(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -267,12 +259,10 @@ public class WcmRestController {
 				logger.traceExit();
 			}
 			return authoringTemplates;
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-//	    } catch (RepositoryException e) {
-//			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}	
 	}
 
@@ -293,19 +283,17 @@ public class WcmRestController {
 				logger.traceExit();
 			}
 			return jsonForms;
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-//	    } catch (RepositoryException e) {
-//			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}	
 	}
 
 	@GetMapping(path = "/control/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ControlField[] getControlField(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -319,19 +307,17 @@ public class WcmRestController {
 				logger.traceExit();
 			}
 			return ControlFileds;
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-	    } catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}	
 	}
 
 	@PostMapping(path = "/siteConfig", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createSiteConfig(
 			@RequestBody SiteConfig siteConfig, HttpServletRequest request) 
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -383,19 +369,17 @@ public class WcmRestController {
 			}
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-	    } catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}	
 	}
 	
 	@PostMapping(path = "/at", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createAuthoringTemplate(
 			@RequestBody AuthoringTemplate at, HttpServletRequest request) 
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
@@ -444,19 +428,17 @@ public class WcmRestController {
 			}
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-	    } catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}	
 	}
 
 	@GetMapping(path = "/rt/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, RenderTemplate> getRenderTemplates(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -470,12 +452,10 @@ public class WcmRestController {
 				logger.traceExit();
 			}
 			return renderTemplates;
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-//	    } catch (RepositoryException e) {
-//			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}	
 	}
 
@@ -483,7 +463,7 @@ public class WcmRestController {
 	public ResponseEntity<?> createRenderTemplate(
 			@RequestBody RenderTemplate rt, 
 			HttpServletRequest request)
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
@@ -523,12 +503,10 @@ public class WcmRestController {
 			}
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-	    } catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}
 	}
 
@@ -537,7 +515,7 @@ public class WcmRestController {
 			@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, 
 			HttpServletRequest request) 
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -552,12 +530,10 @@ public class WcmRestController {
 				logger.traceExit();
 			}
 			return contentAreaLayouts;
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-//	    } catch (RepositoryException e) {
-//			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}
 	}
 
@@ -565,7 +541,7 @@ public class WcmRestController {
 	public ResponseEntity<?> createPageLayout(
 			@RequestBody ContentAreaLayout pageLayout, 
 			HttpServletRequest request)
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -589,12 +565,10 @@ public class WcmRestController {
 			}
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-	    } catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}
 	}
 
@@ -602,7 +576,7 @@ public class WcmRestController {
 	public ResponseEntity<?> createSiteArea(
 			@RequestBody SiteArea sa, 
 			HttpServletRequest request)
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
@@ -718,12 +692,10 @@ public class WcmRestController {
 			}
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-	    } catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}
 	}
 
@@ -731,7 +703,7 @@ public class WcmRestController {
 	public ResponseEntity<?> createContentItem(
 			@RequestBody ContentItem contentItem, 
 			HttpServletRequest request)
-			throws WcmRepositoryException, WcmSystemException {
+			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
@@ -770,12 +742,10 @@ public class WcmRestController {
 			}
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-	    } catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}
 	}
 	
@@ -785,7 +755,7 @@ public class WcmRestController {
 		    @PathVariable("workspace") String workspace,
 		    @RequestParam("path") String contentItemPath,
 		    HttpServletRequest request) 
-		    throws WcmRepositoryException, WcmSystemException {
+		    throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -823,12 +793,10 @@ public class WcmRestController {
 				logger.traceExit();
 			}
 			return contentItem;
-		} catch (WcmRepositoryException|WcmSystemException e ) {
+		} catch (WcmRepositoryException e ) {
 			throw e;
-	    } catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
 		} catch (Throwable t) {
-			throw new WcmSystemException(t);
+			throw new WcmRepositoryException(t);
 		}
 	}
 	  
@@ -1037,7 +1005,7 @@ public class WcmRestController {
 	}
 
 	private ObjectNode toTypeDefinition(HttpServletRequest request, String repository, String workspace,
-			RestChildType restChildType) {
+			RestChildType restChildType) throws RepositoryException {
 		return this.toTypeDefinition(request, repository, workspace, restChildType.getRequiredPrimaryTypeNames()[0],
 				"*".equals(restChildType.getName()));
 	}
@@ -1047,111 +1015,113 @@ public class WcmRestController {
 	}
 
 	private ObjectNode toTypeDefinition(HttpServletRequest request, String repository, String workspace,
-			String dataType, boolean multiple) {
-		try {
-			RestNodeType restNodeType = nodeTypeHandler.getNodeType(request, repository, workspace, dataType);
+			String dataType, boolean multiple) throws RepositoryException {
+		
+		RestNodeType restNodeType = nodeTypeHandler.getNodeType(request, repository, workspace, dataType);
 
-			ObjectNode definition = this.objectMapper.createObjectNode();
-			ObjectNode itemsNode;
+		ObjectNode definition = this.objectMapper.createObjectNode();
+		ObjectNode itemsNode;
 
-			if (multiple) {
-				definition.put("type", "array");
-				itemsNode = this.objectMapper.createObjectNode();
-				itemsNode.put("type", "object");
-				definition.set("items", itemsNode);
-			} else {
-				definition.put("type", "object");
-				itemsNode = definition;
-			}
-
-			ObjectNode properties = this.objectMapper.createObjectNode();
-			itemsNode.set("properties", properties);
-			for (RestPropertyType restProperty : restNodeType.getPropertyTypes()) {
-				ObjectNode fieldNode = this.toJsonFormField(restProperty);
-				String fieldName = this.fieldNameFromNodeTypeName(restProperty.getName());
-				properties.set(fieldName, fieldNode);
-			}
-			List<RestChildType> childTypes = restNodeType.getChildTypes();
-			if (childTypes != null && childTypes.size() > 0) {
-				for (RestChildType restChildType : childTypes) {
-					String fieldName = "*".equals(restChildType.getName())
-							? this.fieldNameFromNodeTypeName(restChildType.getDeclaringNodeTypeName())
-							: restChildType.getName();
-					ObjectNode childType = this.toTypeDefinition(request, repository, workspace, restChildType);
-					properties.set(fieldName, childType);
-				}
-			}
-			return definition;
-		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
-		}
-	}
-
-	private JsonForm toJsonForm(HttpServletRequest request, String repository, 
-			String workspace, AuthoringTemplate at) {
-		JsonForm jsonForm = new JsonForm();
-		jsonForm.setRepository(repository);
-		jsonForm.setWorkspace(workspace);
-		jsonForm.setLibrary(at.getLibrary());
-		jsonForm.setResourceType(at.getName());
-		ObjectNode jsonNode = JsonNodeFactory.instance.objectNode();
-		ObjectNode schemaNode = JsonNodeFactory.instance.objectNode();
-		jsonNode.set("schema", schemaNode);
-		schemaNode.put("type", "object");
-		if (StringUtils.hasText(at.getTitle())) {
-			schemaNode.put("title", at.getTitle());
-		}
-
-		if (StringUtils.hasText(at.getDescription())) {
-			schemaNode.put("description", at.getDescription());
+		if (multiple) {
+			definition.put("type", "array");
+			itemsNode = this.objectMapper.createObjectNode();
+			itemsNode.put("type", "object");
+			definition.set("items", itemsNode);
+		} else {
+			definition.put("type", "object");
+			itemsNode = definition;
 		}
 
 		ObjectNode properties = this.objectMapper.createObjectNode();
-		ObjectNode definitions = this.objectMapper.createObjectNode();
-
-		for (String key : at.getFormControls().keySet()) {
-			FormControl formControl = at.getFormControls().get(key);
-			if ("keyValue".equals(formControl.getControlName())) {
-				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, "bpw:keyValues", false);
-				definitions.set("keyValues", definition);
-			} else if ("customField".equals(formControl.getControlName())) {
-				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, formControl.getDataType(),
-						false);
-				String fieldName = this.fieldNameFromNodeTypeName(formControl.getDataType());
-				definitions.set(fieldName, definition);
-			}
-			ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
-			properties.set(key, objectNode);
+		itemsNode.set("properties", properties);
+		for (RestPropertyType restProperty : restNodeType.getPropertyTypes()) {
+			ObjectNode fieldNode = this.toJsonFormField(restProperty);
+			String fieldName = this.fieldNameFromNodeTypeName(restProperty.getName());
+			properties.set(fieldName, fieldNode);
 		}
-
-		// properties.addAll(propertyNodes);
-		schemaNode.set("properties", properties);
-		schemaNode.set("definitions", definitions);
-		String required[] = at.getFormControls().entrySet().stream().map(entry -> entry.getValue())
-				.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
-				.toArray(String[]::new);
-
-		if (required != null && required.length > 0) {
-			ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
-			for (String name : required) {
-				reqiuriedNode.add(name);
+		List<RestChildType> childTypes = restNodeType.getChildTypes();
+		if (childTypes != null && childTypes.size() > 0) {
+			for (RestChildType restChildType : childTypes) {
+				String fieldName = "*".equals(restChildType.getName())
+						? this.fieldNameFromNodeTypeName(restChildType.getDeclaringNodeTypeName())
+						: restChildType.getName();
+				ObjectNode childType = this.toTypeDefinition(request, repository, workspace, restChildType);
+				properties.set(fieldName, childType);
 			}
-			schemaNode.set("required", reqiuriedNode);
 		}
+		return definition;
+		
+	}
 
-		jsonNode.set("layout", this.toFormLayoutNode(at));
-		// "params" node
-		// "validate": false
-
-		// data: object to populate the form with default or previously submitted values
-		// options: object to set any global options for the form
-		// widgets: object to add custom widgets
-		// language: string to set the error message language (currently supports 'en'
-		// and 'fr')
-		// framework: string or object to set which framework to use
-		jsonForm.setFormSchema(jsonNode);
-
-		return jsonForm;
+	private JsonForm toJsonForm(HttpServletRequest request, String repository, 
+			String workspace, AuthoringTemplate at) throws WcmRepositoryException {
+		try {
+			JsonForm jsonForm = new JsonForm();
+			jsonForm.setRepository(repository);
+			jsonForm.setWorkspace(workspace);
+			jsonForm.setLibrary(at.getLibrary());
+			jsonForm.setResourceType(at.getName());
+			ObjectNode jsonNode = JsonNodeFactory.instance.objectNode();
+			ObjectNode schemaNode = JsonNodeFactory.instance.objectNode();
+			jsonNode.set("schema", schemaNode);
+			schemaNode.put("type", "object");
+			if (StringUtils.hasText(at.getTitle())) {
+				schemaNode.put("title", at.getTitle());
+			}
+	
+			if (StringUtils.hasText(at.getDescription())) {
+				schemaNode.put("description", at.getDescription());
+			}
+	
+			ObjectNode properties = this.objectMapper.createObjectNode();
+			ObjectNode definitions = this.objectMapper.createObjectNode();
+	
+			for (String key : at.getFormControls().keySet()) {
+				FormControl formControl = at.getFormControls().get(key);
+				if ("keyValue".equals(formControl.getControlName())) {
+					ObjectNode definition = this.toTypeDefinition(request, repository, workspace, "bpw:keyValues", false);
+					definitions.set("keyValues", definition);
+				} else if ("customField".equals(formControl.getControlName())) {
+					ObjectNode definition = this.toTypeDefinition(request, repository, workspace, formControl.getDataType(),
+							false);
+					String fieldName = this.fieldNameFromNodeTypeName(formControl.getDataType());
+					definitions.set(fieldName, definition);
+				}
+				ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
+				properties.set(key, objectNode);
+			}
+	
+			// properties.addAll(propertyNodes);
+			schemaNode.set("properties", properties);
+			schemaNode.set("definitions", definitions);
+			String required[] = at.getFormControls().entrySet().stream().map(entry -> entry.getValue())
+					.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
+					.toArray(String[]::new);
+	
+			if (required != null && required.length > 0) {
+				ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
+				for (String name : required) {
+					reqiuriedNode.add(name);
+				}
+				schemaNode.set("required", reqiuriedNode);
+			}
+	
+			jsonNode.set("layout", this.toFormLayoutNode(at));
+			// "params" node
+			// "validate": false
+	
+			// data: object to populate the form with default or previously submitted values
+			// options: object to set any global options for the form
+			// widgets: object to add custom widgets
+			// language: string to set the error message language (currently supports 'en'
+			// and 'fr')
+			// framework: string or object to set which framework to use
+			jsonForm.setFormSchema(jsonNode);
+	
+			return jsonForm;
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e);
+		}
 	}
 
 	private void addSidePageNode(Node sidenavNode, SidePane sidenav) throws RepositoryException {

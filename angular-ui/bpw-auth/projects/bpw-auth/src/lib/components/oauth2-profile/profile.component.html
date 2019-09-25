@@ -1,0 +1,11 @@
+<h3>User profile</h3>
+<div *ngIf="userProfile">
+  {{userProfile.accessToken}}<br />
+  {{userProfile.name}}<br />
+  {{userProfile.email}}<br />
+  {{userProfile.imageUrl}}<br />
+  
+  <button (click)="handleLogout()">
+    logout
+  </button>
+</div>

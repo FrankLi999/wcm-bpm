@@ -6,30 +6,21 @@ import { storeFreeze } from 'ngrx-store-freeze';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 import { environment } from 'environments/environment';
-import { reducers, effects, RouteSnapshotSerializer } from 'app/store';
-
+import { RouterEffects, RouteSnapshotSerializer } from 'bpw-components';
+import { appReducers} from './app.reducer';
 export const metaReducers: MetaReducer<any>[] = !environment.production
     ? [storeFreeze]
     : [];
 
 @NgModule({
     imports  : [
-        StoreModule.forRoot(reducers, {metaReducers}),
-        EffectsModule.forRoot(effects),
+        StoreModule.forRoot(appReducers, {metaReducers}),
+        EffectsModule.forRoot([RouterEffects]),
         !environment.production ? StoreDevtoolsModule.instrument() : [],
         StoreRouterConnectingModule.forRoot({
             serializer: RouteSnapshotSerializer
-            //     navigationActionTiming: NavigationActionTiming.PostActivation,
-            //     routerState: RouterState.Full
-            
         })
-    ] // ,
-    // providers: [
-    //     {
-    //         provide : RouterStateSerializer,
-    //         useClass: RouteSnapshotSerializer
-    //     }
-    // ]
+    ]
 })
 
 export class AppStoreModule

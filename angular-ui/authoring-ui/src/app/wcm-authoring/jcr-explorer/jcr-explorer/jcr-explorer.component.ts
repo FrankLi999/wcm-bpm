@@ -110,8 +110,8 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
       this.resetCurrentOperations();
     });
     this.store.pipe(
-        takeUntil(this.unsubscribeAll),
-        select(fromStore.getGetWcmSystemError)
+        select(fromStore.getGetWcmSystemError),
+        takeUntil(this.unsubscribeAll)       
       ).subscribe(
         (loadError: string) => {
         if (loadError) {
@@ -119,8 +119,8 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
         }
     });
     this.store.pipe(
-        takeUntil(this.unsubscribeAll),
-        select(fromStore.getWcmRepositories)
+      select(fromStore.getWcmRepositories),
+      takeUntil(this.unsubscribeAll)
     ).subscribe(
       (repositories: WcmRepository[]) => {
         if (repositories) {

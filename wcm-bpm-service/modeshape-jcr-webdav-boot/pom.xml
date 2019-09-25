@@ -24,19 +24,22 @@
 		<java.version>1.8</java.version>
 		<modeshape.version>5.4.1.Final</modeshape.version>
 		<atomikos.version>4.0.6</atomikos.version>
+		<hazelcast.version>3.12.2</hazelcast.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
+		    <!-- 
 			<dependency>
 				<groupId>com.hazelcast</groupId>
 				<artifactId>hazelcast</artifactId>
-				<version>3.12</version>
+				<version>${hazelcast.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.hazelcast</groupId>
 				<artifactId>hazelcast-spring</artifactId>
-				<version>3.12</version>
+				<version>${hazelcast.version}</version>
 			</dependency>
+			-->
 			<dependency>
 				<groupId>com.github.ulisesbocchio</groupId>
 				<artifactId>jasypt-spring-boot-starter</artifactId>

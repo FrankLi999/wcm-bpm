@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { TranslateModule } from '@ngx-translate/core';
+import { AuthHttpInterceptor } from 'bpw-auth';
 import 'hammerjs';
 
 import {
@@ -33,21 +34,13 @@ const appRoutes: Routes = [
         path        : 'wcm-authoring',
         loadChildren: './wcm-authoring/wcm-authoring.module#WcmAuthoringModule'
     },
-    // {
-    //     path        : 'auth',
-    //     loadChildren: 'authentication#AuthenticationModule'
-    // },
-    // {
-    //     path        : 'oauth2',
-    //     loadChildren: 'authentication#Oauth2Module'
-    // },
     {
         path        : 'auth',
         loadChildren: () => import('bpw-auth').then(m => m.AuthenticationModule)
     },
     {
         path        : 'oauth2',
-        loadChildren: () => import('bpw-auth').then(m => m.Oauth2Module)
+        loadChildren: () => import('bpw-auth').then(m => m.OAuth2Module)
     },
     {
         path        : 'bpmn',
@@ -96,13 +89,17 @@ const appRoutes: Routes = [
         // App modules
         LayoutModule,
         AppStoreModule,
-        RestClientModule,
         FlexLayoutModule
+    ],
+    providers: [{
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthHttpInterceptor,
+        multi: true
+      }
     ],
     bootstrap   : [
         AppComponent
     ]
 })
-export class AppModule
-{
+export class AppModule {
 }

@@ -3,13 +3,13 @@ import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 
-import { Observable, forkJoin, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { switchMap, catchError, tap, take, filter } from 'rxjs/operators';
 
 import { WcmAppState } from '../reducers';
 import * as fromStore from '../';
 import { getWcmSystemLoaded } from '../selectors';
-import { getRouteState, RouteSnapshot } from 'app/store/reducers';
+import { getRouteState, RouteSnapshot } from 'bpw-components';
 @Injectable()
 export class ResolveGuard implements CanActivate {
     routerState: RouteSnapshot;
@@ -26,8 +26,6 @@ export class ResolveGuard implements CanActivate {
             .pipe(select(getRouteState))
             .subscribe(routerState => {
                 if ( routerState ) {
-                    console.log(">>>>>>>>>>>>>>>>>  routerState");
-                    console.log(routerState);
                     this.routerState = routerState.state;
                 }
             });

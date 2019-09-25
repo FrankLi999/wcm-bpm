@@ -23,7 +23,9 @@ import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 import com.bpwizard.wcm.repo.entities.User;
+import com.bpwizard.wcm.repo.entities.UserProfile;
 import com.bpwizard.wcm.repo.exception.BadRequestException;
+import com.bpwizard.wcm.repo.exception.ResourceNotFoundException;
 import com.bpwizard.wcm.repo.payload.ApiResponse;
 import com.bpwizard.wcm.repo.payload.AuthResponse;
 import com.bpwizard.wcm.repo.payload.LoginRequest;
@@ -32,7 +34,7 @@ import com.bpwizard.wcm.repo.repositories.UserRepository;
 import com.bpwizard.wcm.repo.secureity.oauth2.AuthProvider;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth/api/rest")
 public class AuthController {
 
     @Autowired
@@ -65,8 +67,9 @@ public class AuthController {
 				BlueTokenService.AUTH_AUDIENCE,
 				currentUser.getUsername(),
 				(long) properties.getJwt().getShortLivedMillis());
-        
-        return ResponseEntity.ok(new AuthResponse(shortLivedAuthToken));
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", loginRequest.getEmail()));
+        return ResponseEntity.ok(AuthResponse.fromUserAndToken(user, shortLivedAuthToken));
     }
 
     @PostMapping("/signup")
@@ -87,7 +90,7 @@ public class AuthController {
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
+                .fromCurrentContextPath().path("/user/api/rest/me")
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location)

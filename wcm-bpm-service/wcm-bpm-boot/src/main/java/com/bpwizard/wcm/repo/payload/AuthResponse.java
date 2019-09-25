@@ -1,26 +1,115 @@
 package com.bpwizard.wcm.repo.payload;
 
+import com.bpwizard.wcm.repo.entities.User;
+
 public class AuthResponse {
+    private String id;
+	private String email;
+	private String password;
+	private String name;
+	private String firstName;
+	private String lasstName;
+	private String imageUrl;
+	private String roles[];
     private String accessToken;
     private String tokenType = "Bearer";
 
-    public AuthResponse(String accessToken) {
-        this.accessToken = accessToken;
+    public static AuthResponse fromUserAndToken(User user, String accessToken) {
+    	AuthResponse authResponse = new AuthResponse();
+    	authResponse.setAccessToken(accessToken);
+    	authResponse.setId(user.getId().toString());
+    	authResponse.setEmail(user.getEmail());
+    	authResponse.setImageUrl(user.getImageUrl());
+    	authResponse.setName(user.getName());
+    	authResponse.setRoles(user.getRoles().toArray(new String[user.getRoles().size()]));
+    	return authResponse;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getTokenType() {
-        return tokenType;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLasstName() {
+		return lasstName;
+	}
+
+	public void setLasstName(String lasstName) {
+		this.lasstName = lasstName;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public String[] getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String[] roles) {
+		this.roles = roles;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public String getTokenType() {
+		return tokenType;
+	}
+
+	public void setTokenType(String tokenType) {
+		this.tokenType = tokenType;
+	}
+
+	@Override
+	public String toString() {
+		return "AuthResponse [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name
+				+ ", firstName=" + firstName + ", lasstName=" + lasstName + ", imageUrl=" + imageUrl + ", roles="
+				+ roles + ", accessToken=" + accessToken + ", tokenType=" + tokenType + "]";
+	}
+
 }

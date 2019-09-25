@@ -10,6 +10,7 @@ export * from './lib/services/copier.service';
 export * from './lib/services/match-media.service';
 export * from './lib/services/splash-screen.service';
 export * from './lib/services/translation-loader.service';
+export * from './lib/services/ui.service';
 export * from './lib/types/fuse-config';
 export * from './lib/types/fuse-navigation';
 
@@ -74,6 +75,10 @@ export * from './lib/components/theme-options/theme-options.component';
 export * from './lib/components/widget/widget.module';
 export * from './lib/components/widget/widget.component';
 export * from './lib/components/widget/widget-toggle.directive';
+
+export * from './lib/store/reducers/route.reducers';
+export * from './lib/store/actions/router.action';
+export * from './lib/store/effects/router.effect';
 
 // export * from './lib/store/store.module';
 
