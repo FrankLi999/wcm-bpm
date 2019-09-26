@@ -3,6 +3,7 @@ package com.bpwizard.wcm.repo.rest.jcr.controllers;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.Principal;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
@@ -12,6 +13,10 @@ import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeIterator;
 import javax.jcr.nodetype.PropertyDefinition;
+import javax.jcr.security.AccessControlList;
+import javax.jcr.security.AccessControlManager;
+import javax.jcr.security.AccessControlPolicyIterator;
+import javax.jcr.security.Privilege;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -131,7 +136,6 @@ public class ModeshapeController {
 
             // 
             InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("bpw_content.xml");
-            System.out.println(">>>>>>> import from:" + in);
             session.importXML("/", in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
             session.save();
             logger.debug("Added one node under root");
@@ -197,30 +201,40 @@ public class ModeshapeController {
 		return "{\"node-type\": \"up\"}";
 	}
 	
-	@GetMapping("/registerNodeTypes")
-	public String loadCustomDataTypes() {
-		Session session = null;
-		try {
-			session = this.repositoryManager.getSession("bpwizard");
-			org.modeshape.jcr.api.nodetype.NodeTypeManager nodeTypeManager = (org.modeshape.jcr.api.nodetype.NodeTypeManager)
-				session.getWorkspace().getNodeTypeManager();
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 1");
-			InputStream myCndStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("bpw.cnd");
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 2: " + myCndStream);
-			nodeTypeManager.registerNodeTypes(myCndStream,true);
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 3 ");
-		} catch (Exception e) {
-	        e.printStackTrace();
-        } 
-//		finally {
-//        	if (session != null) {
-//        		try {
-//                session.logout();
-//        		} catch (Exception e) {
-//        			e.printStackTrace();
-//        		}
-//        	}
-//        }
-		return "{\"modeshape\": \"Register node types\"}";
+	@GetMapping("/testACL")
+	public String testACL() throws Exception {
+		String path = "/bpwizard/library";
+		String[] privileges = new String[]{
+				Privilege.JCR_READ, 
+				Privilege.JCR_WRITE, 
+				Privilege.JCR_MODIFY_ACCESS_CONTROL};
+		Principal principal = new TestPrincipal();
+		Principal adminPrincipal = new TestPrincipal("admin");  
+		Principal group = new TestGroup();
+		Session session = this.repositoryManager.getSession("bpwizard");
+		AccessControlManager acm = session.getAccessControlManager();
+		 
+		// Convert the privilege strings to Privilege instances ...
+		Privilege[] permissions = new Privilege[privileges.length];
+		for (int i = 0; i < privileges.length; i++) {
+		    permissions[i] = acm.privilegeFromName(privileges[i]);
+		}
+		 
+		AccessControlList acl = null;
+		AccessControlPolicyIterator it = acm.getApplicablePolicies(path);
+		
+		if (it.hasNext()) {
+		    acl = (AccessControlList)it.nextAccessControlPolicy();
+		} else {
+		    acl = (AccessControlList)acm.getPolicies(path)[0];
+		}
+		
+		acl.addAccessControlEntry(principal, permissions);
+		acl.addAccessControlEntry(adminPrincipal, permissions);
+		acl.addAccessControlEntry(group, permissions);
+//		 
+		acm.setPolicy(path, acl);
+		session.save();
+		return "done";
 	}
 }

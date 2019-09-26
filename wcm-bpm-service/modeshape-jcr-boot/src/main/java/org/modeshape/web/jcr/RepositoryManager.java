@@ -94,7 +94,6 @@ public class RepositoryManager {
         // If there's no authenticated user, try an anonymous login
         Session session = null;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(">>>>>>>>>>>>>>>>>>>> getSession: " + authentication);
         if (authentication instanceof AnonymousAuthenticationToken) {
         	session = repository.login(workspaceName);
         } else {

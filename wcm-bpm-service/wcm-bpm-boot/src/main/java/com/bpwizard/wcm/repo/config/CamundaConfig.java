@@ -29,9 +29,7 @@ public class CamundaConfig {
 
 	@EventListener
 	private void startCaseInstance(PostDeployEvent event) {
-		System.out.println(">>>>>>>>>>startCaseInstance processEngine :" + processEngine);
 		CaseService caseService = processEngine.getCaseService();
-		System.out.println(">>>>>>>>>>case service :" + caseService);
 		caseService.createCaseInstanceByKey("loan_application",
 				Variables.createVariables().putValue("applicationSufficient", Variables.booleanValue(null))
 						.putValue("rating", Variables.integerValue(null)));
@@ -40,21 +38,15 @@ public class CamundaConfig {
 
 	@EventListener
 	private void evaluateDecisionTable(PostDeployEvent event) {
-		System.out.println(">>>>>>>>>>evaluateDecisionTable processEngine :" + processEngine);
 		DecisionService decisionService = processEngine.getDecisionService();
-		System.out.println(">>>>>>>>>>decisionService :" + decisionService);
 		VariableMap variables = Variables.createVariables().putValue("season", "Spring").putValue("guestCount", 10)
 				.putValue("guestsWithChildren", false);
 
 		DmnDecisionTableResult dishDecisionResult = decisionService.evaluateDecisionTableByKey("dish", variables);
 		String desiredDish = dishDecisionResult.getSingleEntry();
 
-		System.out.println(">>>>>>>>>>> Desired dish: " + desiredDish);
-
 		DmnDecisionTableResult beveragesDecisionResult = decisionService.evaluateDecisionTableByKey("beverages",
 				variables);
 		List<Object> beverages = beveragesDecisionResult.collectEntries("beverages");
-
-		System.out.println(">>>>>>>>>>> Desired beverages: " + beverages);
 	}
 }

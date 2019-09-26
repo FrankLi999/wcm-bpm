@@ -91,6 +91,7 @@ public final class RestNodeTypeHandler extends AbstractHandler {
         org.modeshape.jcr.api.nodetype.NodeTypeManager modeshapeTypeManager = (org.modeshape.jcr.api.nodetype.NodeTypeManager)nodeTypeManager;
         try {
             List<RestNodeType> registeredTypes = registerCND(request, allowUpdate, cndInputStream, modeshapeTypeManager);
+            session.save();//TODO, added by Frank Li
             return createOkResponse(registeredTypes);
         } catch (IOException e) {
             throw new RepositoryException(e);

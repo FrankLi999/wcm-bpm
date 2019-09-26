@@ -1,8 +1,8 @@
 <jcr = 'http://www.jcp.org/jcr/1.0'>
 <nt = 'http://www.jcp.org/jcr/nt/1.0'>
 <mix = 'http://www.jcp.org/jcr/mix/1.0'>
+<mode = "http://www.modeshape.org/1.0">
 <bpw = 'http://www.bpwizard.com/bpw/1.0'>
-
 
 /*
  * ------------------------------------------------------------------------------
@@ -458,7 +458,7 @@
 + * (bpw:query)
 [bpw:assetFolder] > nt:folder
 
-[bpw:library] > nt:folder, mix:lastModified
+[bpw:library] > nt:folder, mix:lastModified, mode:accessControllable
 - bpw:language (STRING)
 + rootSiteArea (bpw:siteArea)
 + authoringTemplate (bpw:authoringTemplateFolder)

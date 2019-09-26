@@ -42,8 +42,6 @@ public class SpringSecurityProvider implements AuthenticationProvider, Authoriza
             ExecutionContext repositoryContext,
             Map<String, Object> sessionAttributes) {
 
-    	System.out.println(">>>>>>>>>>>>SpringSecurityProvider.authenticate1: " + (credentials instanceof SpringSecurityCredentials));
-    	System.out.println(">>>>>>>>>>>>SpringSecurityProvider.authenticate2: " + credentials);
         if (credentials instanceof SpringSecurityCredentials) {
             SpringSecurityCredentials creds = (SpringSecurityCredentials) credentials;
             Authentication auth = creds.getAuth();

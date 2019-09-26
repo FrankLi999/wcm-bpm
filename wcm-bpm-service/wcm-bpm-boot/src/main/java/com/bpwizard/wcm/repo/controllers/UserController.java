@@ -24,7 +24,6 @@ public class UserController {
     @GetMapping("/me")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> getCurrentUser(@CurrentUser SpringPrincipal userPrincipal) {
-        System.out.println(">>>>>>>>>>>>>> get current user:" + userPrincipal);
     	User user = userRepository.findByEmail(userPrincipal.currentUser().getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.currentUser().getId()));
         return ResponseEntity.ok(AuthResponse.fromUserAndToken(user, ""));
