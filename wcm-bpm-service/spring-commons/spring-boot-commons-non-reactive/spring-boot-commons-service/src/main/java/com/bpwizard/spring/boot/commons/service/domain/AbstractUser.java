@@ -70,15 +70,17 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 	
 	@JsonView(UserUtils.SignupInput.class)
 	// @NotBlank(message = "{blank.name}", groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
-    @Size(min=NAME_MIN, max=NAME_MAX, groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
-    @Column(nullable = false, length = NAME_MAX)
+    // @Size(min=NAME_MIN, max=NAME_MAX, groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
+    // @Column(nullable = false, length = NAME_MAX)
+	@Column(length = NAME_MAX)
     protected String firstName;
 	
 	
 	@JsonView(UserUtils.SignupInput.class)
 	// @NotBlank(message = "{blank.name}", groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
-    @Size(min=NAME_MIN, max=NAME_MAX, groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
-    @Column(nullable = false, length = NAME_MAX)
+    // @Size(min=NAME_MIN, max=NAME_MAX, groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
+    // @Column(nullable = false, length = NAME_MAX)
+	@Column(length = NAME_MAX)
     protected String lastName;
 	
 	

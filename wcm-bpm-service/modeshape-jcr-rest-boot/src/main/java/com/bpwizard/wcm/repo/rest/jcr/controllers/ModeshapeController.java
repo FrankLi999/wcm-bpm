@@ -209,8 +209,9 @@ public class ModeshapeController {
 				Privilege.JCR_WRITE, 
 				Privilege.JCR_MODIFY_ACCESS_CONTROL};
 		Principal principal = new TestPrincipal();
-		Principal adminPrincipal = new TestPrincipal("admin");  
+		Principal adminPrincipal = new TestPrincipal("admin@example.com");  
 		Principal group = new TestGroup();
+		Principal readonlyGroup = new TestGroup("readonly");
 		Session session = this.repositoryManager.getSession("bpwizard");
 		AccessControlManager acm = session.getAccessControlManager();
 		 
@@ -232,6 +233,7 @@ public class ModeshapeController {
 		acl.addAccessControlEntry(principal, permissions);
 		acl.addAccessControlEntry(adminPrincipal, permissions);
 		acl.addAccessControlEntry(group, permissions);
+		acl.addAccessControlEntry(readonlyGroup, permissions);
 //		 
 		acm.setPolicy(path, acl);
 		session.save();

@@ -151,7 +151,14 @@ public class RepositoryManager {
     }
 
     public Session getSession( String repositoryName ) throws LoginException, RepositoryException, NoSuchRepositoryException {
-    	Session session = this.getRepository(repositoryName).login();
+    	
+    	Session session = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken) {
+        	session = this.getRepository(repositoryName).login();
+        } else {
+        	session = this.getRepository(repositoryName).login(new SpringSecurityCredentials(authentication));
+        }
     	ModeshapeRequestContext.set(session);
     	return session;
     }
