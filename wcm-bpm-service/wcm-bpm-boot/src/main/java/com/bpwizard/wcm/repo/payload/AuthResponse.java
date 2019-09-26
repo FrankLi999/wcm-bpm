@@ -8,7 +8,7 @@ public class AuthResponse {
 	private String password;
 	private String name;
 	private String firstName;
-	private String lasstName;
+	private String lastName;
 	private String imageUrl;
 	private String roles[];
     private String accessToken;
@@ -21,6 +21,8 @@ public class AuthResponse {
     	authResponse.setEmail(user.getEmail());
     	authResponse.setImageUrl(user.getImageUrl());
     	authResponse.setName(user.getName());
+    	authResponse.setFirstName(user.getFirstName());
+    	authResponse.setLastName(user.getLastName());
     	authResponse.setRoles(user.getRoles().toArray(new String[user.getRoles().size()]));
     	return authResponse;
     }
@@ -65,12 +67,12 @@ public class AuthResponse {
 		this.firstName = firstName;
 	}
 
-	public String getLasstName() {
-		return lasstName;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLasstName(String lasstName) {
-		this.lasstName = lasstName;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getImageUrl() {
@@ -108,7 +110,7 @@ public class AuthResponse {
 	@Override
 	public String toString() {
 		return "AuthResponse [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name
-				+ ", firstName=" + firstName + ", lasstName=" + lasstName + ", imageUrl=" + imageUrl + ", roles="
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", imageUrl=" + imageUrl + ", roles="
 				+ roles + ", accessToken=" + accessToken + ", tokenType=" + tokenType + "]";
 	}
 

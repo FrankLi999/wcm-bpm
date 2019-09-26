@@ -23,7 +23,6 @@ import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 import com.bpwizard.wcm.repo.entities.User;
-import com.bpwizard.wcm.repo.entities.UserProfile;
 import com.bpwizard.wcm.repo.exception.BadRequestException;
 import com.bpwizard.wcm.repo.exception.ResourceNotFoundException;
 import com.bpwizard.wcm.repo.payload.ApiResponse;
