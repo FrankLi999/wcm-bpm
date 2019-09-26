@@ -35,4 +35,14 @@ public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
         }
         return null;
     }
+
+	@Override
+	public String getFirstName() {
+		return "";
+	}
+
+	@Override
+	public String getLastName() {
+		return "";
+	}
 }

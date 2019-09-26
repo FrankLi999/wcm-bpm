@@ -11,7 +11,7 @@ import com.bpwizard.spring.boot.commons.service.SpringService;
 import com.bpwizard.wcm.repo.entities.User;
 
 @Service
-public class MyService extends SpringService<User, Long> {
+public class BpwSpringService extends SpringService<User, Long> {
 
 	public static final String ADMIN_NAME = "Administrator";
 

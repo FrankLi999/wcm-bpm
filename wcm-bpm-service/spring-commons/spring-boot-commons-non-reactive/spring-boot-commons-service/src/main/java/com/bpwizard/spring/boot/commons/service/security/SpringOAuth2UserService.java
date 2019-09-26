@@ -137,6 +137,8 @@ public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Seri
 		
 		U user = springService.newUser();
 		user.setName(oauth2UserInfo.getName());
+		user.setFirstName(oauth2UserInfo.getFirstName());
+		user.setLastName(oauth2UserInfo.getLastName());
 		user.setEmail(email);
 		user.setPassword(passwordEncoder.encode(SecurityUtils.uid()));
 		user.setEmailVerified(emailVerified);
@@ -144,6 +146,7 @@ public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Seri
 		user.setProvider(AuthProvider.valueOf(registrationId));
 		user.setProviderId(oauth2UserInfo.getId());
 		user.getRoles().add(UserUtils.Role.USER);
+		user.getRoles().add(UserUtils.Role.READONLY);
 		springService.fillAdditionalFields(registrationId, user, attributes);
 		springService.save(user);
 		return user;

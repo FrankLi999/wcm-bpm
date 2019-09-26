@@ -24,6 +24,8 @@ public class UserUtils {
 		static final String BLOCKED = "BLOCKED";
 		static final String ADMIN = "ADMIN";
 		static final String USER = "USER";
+		static final String READWRITE = "READWRITE";
+		static final String READONLY = "READONLY";
 	}
 
 	public interface Permission {

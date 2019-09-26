@@ -25,7 +25,7 @@ public class SignupMvcTests extends AbstractMvcTests {
 	@Test
 	public void testSignupWithInvalidData() throws Exception {
 		
-		User invalidUser = new User("abc", "user1", null);
+		User invalidUser = new User("abc", "user1", null, "fn", "ln");
 
 		mvc.perform(post("/api/core/users")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -41,7 +41,7 @@ public class SignupMvcTests extends AbstractMvcTests {
 	@Test
 	public void testSignup() throws Exception {
 		
-		User user = new User("user.foo@example.com", "user123", "User Foo");
+		User user = new User("user.foo@example.com", "user123", "User Foo", "fn", "ln");
 
 		mvc.perform(post("/api/core/users")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ public class SignupMvcTests extends AbstractMvcTests {
 	@Test
 	public void testSignupDuplicateEmail() throws Exception {
 		
-		User user = new User("user@example.com", "user123", "User");
+		User user = new User("user@example.com", "user123", "User", "fn", "ln");
 
 		mvc.perform(post("/api/core/users")
 				.contentType(MediaType.APPLICATION_JSON)

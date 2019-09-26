@@ -68,6 +68,20 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
     @Column(name="role")
 	protected Set<String> roles = new HashSet<>();
 	
+	@JsonView(UserUtils.SignupInput.class)
+	// @NotBlank(message = "{blank.name}", groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
+    @Size(min=NAME_MIN, max=NAME_MAX, groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
+    @Column(nullable = false, length = NAME_MAX)
+    protected String firstName;
+	
+	
+	@JsonView(UserUtils.SignupInput.class)
+	// @NotBlank(message = "{blank.name}", groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
+    @Size(min=NAME_MIN, max=NAME_MAX, groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
+    @Column(nullable = false, length = NAME_MAX)
+    protected String lastName;
+	
+	
 	// in the email-change process, temporarily stores the new email
 	@UniqueEmail(groups = {UserUtils.ChangeEmailValidation.class})
 	@Column(length = UserUtils.EMAIL_MAX)
@@ -134,6 +148,8 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 		
 		userDto.setId(getId().toString());
 		userDto.setUsername(email);
+		userDto.setFirstName(firstName);
+		userDto.setLastName(lastName);
 		userDto.setPassword(password);
 		userDto.setEmail(email);
 		userDto.setEmailVerified(this.emailVerified);

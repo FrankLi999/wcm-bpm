@@ -20,6 +20,8 @@ public class UserDto implements Serializable {
 	
 	private String id;
 	private String username;
+	private String firstName;
+	private String lastName;
 	private String password;
 	private Set<String> roles = new HashSet<String>();
 	private Serializable tag;
