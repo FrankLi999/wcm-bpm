@@ -19,13 +19,12 @@ import {
   FuseSidebarModule,
   FuseThemeOptionsModule
 } from 'bpw-components';
-
+import { AuthStoreModule } from 'bpw-auth';
 import { fuseConfig } from 'app/fuse-config';
 
 import { AppComponent } from 'app/app.component';
 import { AppStoreModule } from 'app/store/store.module';
 import { LayoutModule } from 'bpw-layout';
-import { RestClientModule } from 'bpw-rest-client';
 import { FakeDbService } from 'app/fake-db/fake-db.service';
 import { environment } from 'environments/environment';
 
@@ -89,7 +88,8 @@ const appRoutes: Routes = [
         // App modules
         LayoutModule,
         AppStoreModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        AuthStoreModule
     ],
     providers: [{
         provide: HTTP_INTERCEPTORS,

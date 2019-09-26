@@ -8,7 +8,7 @@ import { ResetPasswordModule } from './reset-password/reset-password.module';
 import { SignupModule } from './signup/signup.module';
 import { LockScreenModule } from './lock-screen/lock-screen.module';
 import { MailConfirmModule } from './mail-confirm/mail-confirm.module';
-import { AuthStoreModule } from '../store/auth-store.module';
+
 @NgModule({
   declarations: [
   ],
@@ -21,8 +21,7 @@ import { AuthStoreModule } from '../store/auth-store.module';
       LockScreenModule,
       MailConfirmModule,
       TranslateModule,
-      FuseSharedModule,
-      AuthStoreModule
+      FuseSharedModule
   ],
   exports: [
     LoginModule,
