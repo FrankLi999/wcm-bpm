@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.bpwizard.spring.boot.commons.service.AutoConfiguration;
 import com.bpwizard.spring.boot.commons.service.security.SpringJpaSecurityConfig;
 import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsService;
-import com.bpwizard.wcm.repo.entities.User;
+import com.bpwizard.wcm.repo.domain.User;
 
 @Configuration
 @EnableWebSecurity
@@ -35,7 +35,7 @@ public class ModeshapeSecurityConfig extends SpringJpaSecurityConfig {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private SpringUserDetailsService<User, Long> userDetailsService;
+	private SpringUserDetailsService userDetailsService;
 	
 	@Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {

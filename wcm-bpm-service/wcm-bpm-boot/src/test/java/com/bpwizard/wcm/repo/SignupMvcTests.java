@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
-import com.bpwizard.wcm.repo.entities.User;
+import com.bpwizard.wcm.repo.domain.User;
 
 @Sql({"/test-data/initialize.sql", "/test-data/finalize.sql"})
 public class SignupMvcTests extends AbstractMvcTests {

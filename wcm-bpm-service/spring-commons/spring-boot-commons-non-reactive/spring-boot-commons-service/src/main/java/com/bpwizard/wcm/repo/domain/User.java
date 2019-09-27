@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.entities;
+package com.bpwizard.wcm.repo.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

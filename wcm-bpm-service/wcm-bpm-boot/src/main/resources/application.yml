@@ -38,13 +38,35 @@ server:
 # Spring Commons related properties
 bpw:
 
-  # First ADMIN user
-  admin:
-    username: admin@example.com
-    password: admin!
-    
-   # Spring Commons flags
-   # enabled:
+  # prepopulate Users and Roles
+  rolename: 
+    - admin
+    - wcm-viewer
+    - user
+    - readonly
+    - readwrite
+    - camunda-admin
+    - UNVERIFIED
+    - BLOCKED
+  
+
+  user:
+    -
+      username: admin@example.com
+      email: admin@example.com
+      password: admin!
+      rolename: 
+        - admin
+    -
+      username: demo
+      email: demo@example.com
+      password: demo
+      rolename: 
+        - readonly
+        - wcm-viewer
+        - camunda-admin
+    # Spring Commons flags
+    # enabled:
       # json-prefix: false
       
   # Properties to be passed to client

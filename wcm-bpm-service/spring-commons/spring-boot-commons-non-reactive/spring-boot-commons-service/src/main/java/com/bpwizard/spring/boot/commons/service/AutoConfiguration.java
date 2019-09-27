@@ -1,6 +1,8 @@
 package com.bpwizard.spring.boot.commons.service;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +35,8 @@ import com.bpwizard.spring.boot.commons.service.util.ServiceUtils;
 import com.bpwizard.spring.boot.commons.service.validation.UniqueEmailValidator;
 import com.bpwizard.spring.boot.commons.validation.RetypePasswordValidator;
 import com.bpwizard.spring.boot.commons.web.security.SpringWebSecurityConfig;
+import com.bpwizard.wcm.repo.domain.Role;
+import com.bpwizard.wcm.repo.domain.RoleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -186,4 +190,11 @@ public class AutoConfiguration {
 		return new UniqueEmailValidator(userRepository);		
 	}
 	
+	@Bean
+	public Map<String, Role> preloadedRoles(RoleRepository roleRepository, SpringProperties properties) {
+		
+        log.info("preloadedRoles");   //TODO, load in batch
+        Map<String, Role> roles = new HashMap<>();
+        return roles;	
+	}
 }

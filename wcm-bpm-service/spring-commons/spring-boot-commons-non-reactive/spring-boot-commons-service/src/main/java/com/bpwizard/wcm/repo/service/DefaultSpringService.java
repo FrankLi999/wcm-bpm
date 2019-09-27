@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.services;
+package com.bpwizard.wcm.repo.service;
 
 import java.util.Map;
 
@@ -8,12 +8,10 @@ import org.springframework.stereotype.Service;
 import com.bpwizard.spring.boot.commons.jpa.JpaUtils;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.service.SpringService;
-import com.bpwizard.wcm.repo.entities.User;
+import com.bpwizard.wcm.repo.domain.User;
 
 @Service
-public class BpwSpringService extends SpringService<User, Long> {
-
-	public static final String ADMIN_NAME = "Administrator";
+public class DefaultSpringService extends SpringService<User, Long> {
 
 	@Override
     public User newUser() {
@@ -33,13 +31,13 @@ public class BpwSpringService extends SpringService<User, Long> {
         });
     }
     
-    @Override
-    protected User createAdminUser() {
-    	
-    	User user = super.createAdminUser(); 
-    	user.setName(ADMIN_NAME);
-    	return user;
-    }    
+//    @Override
+//    protected User createAdminUser() {
+//    	
+//    	User user = super.createAdminUser(); 
+//    	user.setName(ADMIN_NAME);
+//    	return user;
+//    }    
     
     @Override
     public void fillAdditionalFields(String registrationId, User user, Map<String, Object> attributes) {

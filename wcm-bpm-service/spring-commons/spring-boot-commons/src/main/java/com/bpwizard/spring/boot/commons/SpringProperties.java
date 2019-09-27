@@ -74,8 +74,9 @@ public class SpringProperties {
     /**
 	 * Properties related to the initial Admin user to be created
 	 */
-	private Admin admin = new Admin();
-	
+	// private Admin admin = new Admin();
+	private String rolename[];
+	private User user[];
 	
 	/**
      * Any shared properties you want to pass to the 
@@ -186,18 +187,35 @@ public class SpringProperties {
 	 * 
 	 * @author Sanjay Patel
 	 */
+//	@Getter @Setter
+//	public static class Admin {
+//		
+//		/**
+//		 * Login ID of the initial Admin user to be created 
+//		 */
+//		private String username;
+//		
+//		/**
+//		 * Password of the initial Admin user to be created 
+//		 */		
+//		private String password;
+//	}
+//	
 	@Getter @Setter
-	public static class Admin {
+	public static class User {
 		
 		/**
 		 * Login ID of the initial Admin user to be created 
 		 */
 		private String username;
+		private String email;
 		
 		/**
 		 * Password of the initial Admin user to be created 
 		 */		
 		private String password;
+		
+		private String[] rolename;
 	}
 	
 	/**

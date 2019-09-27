@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.bpwizard.spring.boot.commons.mail.MailSender;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
-import com.bpwizard.wcm.repo.repositories.UserRepository;
+import com.bpwizard.wcm.repo.domain.UserRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest({

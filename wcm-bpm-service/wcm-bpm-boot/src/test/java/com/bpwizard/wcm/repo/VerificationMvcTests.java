@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 
 import com.bpwizard.spring.boot.commons.security.GreenTokenService;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
-import com.bpwizard.wcm.repo.entities.User;
+import com.bpwizard.wcm.repo.domain.User;
 
 public class VerificationMvcTests extends AbstractMvcTests {
 	

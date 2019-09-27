@@ -31,7 +31,7 @@ import com.bpwizard.spring.boot.commons.service.SpringService;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
-import com.bpwizard.wcm.repo.exception.OAuth2AuthenticationProcessingException;
+import com.bpwizard.wcm.repo.domain.Role;
 import com.bpwizard.wcm.repo.secureity.oauth2.AuthProvider;
 import com.bpwizard.wcm.repo.secureity.oauth2.user.OAuth2UserInfo;
 import com.bpwizard.wcm.repo.secureity.oauth2.user.OAuth2UserInfoFactory;
@@ -134,7 +134,7 @@ public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Seri
 		
 		boolean emailVerified = springService.getOAuth2AccountVerified(registrationId, attributes);
 		// SpringExceptionUtils.validate(emailVerified, "com.bpwizard.spring.oauth2EmailNotVerified", registrationId).go();
-		
+		Map<String, Role> roles = this.springService.getPreloadedRoles();
 		U user = springService.newUser();
 		user.setName(oauth2UserInfo.getName());
 		user.setFirstName(oauth2UserInfo.getFirstName());
@@ -145,8 +145,9 @@ public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Seri
 		user.setImageUrl(oauth2UserInfo.getImageUrl());
 		user.setProvider(AuthProvider.valueOf(registrationId));
 		user.setProviderId(oauth2UserInfo.getId());
-		user.getRoles().add(UserUtils.Role.USER);
-		user.getRoles().add(UserUtils.Role.READONLY);
+		user.getRoles().add(roles.get(UserUtils.Role.USER));
+		user.getRoles().add(roles.get(UserUtils.Role.READONLY));
+		user.getRoles().add(roles.get("wcm-viewer"));
 		springService.fillAdditionalFields(registrationId, user, attributes);
 		springService.save(user);
 		return user;

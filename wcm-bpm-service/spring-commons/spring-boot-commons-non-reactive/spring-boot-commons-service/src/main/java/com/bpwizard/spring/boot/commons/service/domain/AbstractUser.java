@@ -3,14 +3,14 @@ package com.bpwizard.spring.boot.commons.service.domain;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
@@ -18,11 +18,11 @@ import javax.validation.constraints.Size;
 
 import com.bpwizard.spring.boot.commons.jpa.SpringEntity;
 import com.bpwizard.spring.boot.commons.security.UserDto;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUser.Tag;
 import com.bpwizard.spring.boot.commons.service.validation.UniqueEmail;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.validation.Password;
 import com.bpwizard.spring.boot.commons.vlidation.Captcha;
+import com.bpwizard.wcm.repo.domain.Role;
 import com.bpwizard.wcm.repo.secureity.oauth2.AuthProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -62,11 +62,17 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 	@Column(nullable = false) // no length because it will be encrypted
 	protected String password;
 	
-	// roles collection
-	@ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name="usr_role", joinColumns=@JoinColumn(name="user_id"))
-    @Column(name="role")
-	protected Set<String> roles = new HashSet<>();
+//	// roles collection
+//	@ElementCollection(fetch = FetchType.EAGER)
+//    @CollectionTable(name="usr_role", joinColumns=@JoinColumn(name="user_id"))
+//    @Column(name="role")
+//	protected Set<String> roles = new HashSet<>();
+	
+	@ManyToMany
+	@JoinTable(name = "user_role", 
+	joinColumns = @JoinColumn(name = "user_id"), 
+	inverseJoinColumns = @JoinColumn(name = "role_id"))
+	protected Set<Role> roles = new HashSet<>();
 	
 	@JsonView(UserUtils.SignupInput.class)
 	// @NotBlank(message = "{blank.name}", groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
@@ -163,7 +169,13 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 		// roles would be org.hibernate.collection.internal.PersistentSet,
 		// which is not in another microservices not having Hibernate.
 		// So, let's convert it to HashSet
-		userDto.setRoles(new HashSet<String>(roles));
+		Set<String> userRoles = this.roles.stream()
+				// .map(role -> new SpringGrantedAuthority("ROLE_" + role))
+				.map(role -> role.getName())
+				.collect(Collectors.toCollection(() ->
+					new HashSet<String>(this.roles.size()))); 
+		
+		userDto.setRoles(userRoles);
 		
 		userDto.setTag(toTag());
 		

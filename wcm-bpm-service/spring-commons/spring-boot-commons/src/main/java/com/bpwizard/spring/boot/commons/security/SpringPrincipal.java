@@ -47,18 +47,19 @@ public class SpringPrincipal implements OidcUser, UserDetails, CredentialsContai
 		Set<String> roles = userDto.getRoles();
 		
 		Collection<SpringGrantedAuthority> authorities = roles.stream()
-				.map(role -> new SpringGrantedAuthority("ROLE_" + role))
+				// .map(role -> new SpringGrantedAuthority("ROLE_" + role))
+				.map(role -> new SpringGrantedAuthority(role))
 				.collect(Collectors.toCollection(() ->
 					new ArrayList<SpringGrantedAuthority>(roles.size() + 2))); 
 		
 		if (userDto.isGoodUser()) {
 			
-			authorities.add(new SpringGrantedAuthority("ROLE_"
-					+ SecurityUtils.GOOD_USER));
+			// authorities.add(new SpringGrantedAuthority("ROLE_" + SecurityUtils.GOOD_USER));
+			authorities.add(new SpringGrantedAuthority(SecurityUtils.GOOD_USER));
 			
 			if (userDto.isGoodAdmin())
-				authorities.add(new SpringGrantedAuthority("ROLE_"
-					+ SecurityUtils.GOOD_ADMIN));
+				// authorities.add(new SpringGrantedAuthority("ROLE_" + SecurityUtils.GOOD_ADMIN));
+				authorities.add(new SpringGrantedAuthority(SecurityUtils.GOOD_ADMIN));
 		}
 		
 		return authorities;	

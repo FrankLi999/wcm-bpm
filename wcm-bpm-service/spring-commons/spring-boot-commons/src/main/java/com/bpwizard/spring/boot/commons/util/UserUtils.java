@@ -22,10 +22,10 @@ public class UserUtils {
 
 		static final String UNVERIFIED = "UNVERIFIED";
 		static final String BLOCKED = "BLOCKED";
-		static final String ADMIN = "ADMIN";
-		static final String USER = "USER";
-		static final String READWRITE = "READWRITE";
-		static final String READONLY = "READONLY";
+		static final String ADMIN = "admin";
+		static final String USER = "user";
+		static final String READWRITE = "readwrite";
+		static final String READONLY = "readonly";
 	}
 
 	public interface Permission {

@@ -211,7 +211,7 @@ public class ModeshapeController {
 		Principal principal = new TestPrincipal();
 		Principal adminPrincipal = new TestPrincipal("admin@example.com");  
 		Principal group = new TestGroup();
-		Principal readonlyGroup = new TestGroup("readonly");
+		Principal wcmViewer = new TestGroup("wcm-viewer");
 		Session session = this.repositoryManager.getSession("bpwizard");
 		AccessControlManager acm = session.getAccessControlManager();
 		 
@@ -233,7 +233,7 @@ public class ModeshapeController {
 		acl.addAccessControlEntry(principal, permissions);
 		acl.addAccessControlEntry(adminPrincipal, permissions);
 		acl.addAccessControlEntry(group, permissions);
-		acl.addAccessControlEntry(readonlyGroup, permissions);
+		acl.addAccessControlEntry(wcmViewer, permissions);
 //		 
 		acm.setPolicy(path, acl);
 		session.save();

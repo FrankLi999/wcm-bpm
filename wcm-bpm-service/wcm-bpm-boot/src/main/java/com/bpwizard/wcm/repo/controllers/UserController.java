@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
+import com.bpwizard.wcm.repo.domain.User;
+import com.bpwizard.wcm.repo.domain.UserRepository;
 import com.bpwizard.wcm.repo.annotations.CurrentUser;
-import com.bpwizard.wcm.repo.entities.User;
 import com.bpwizard.wcm.repo.exception.ResourceNotFoundException;
 import com.bpwizard.wcm.repo.payload.AuthResponse;
-import com.bpwizard.wcm.repo.repositories.UserRepository;
+
 
 @RestController
 @RequestMapping("/user/api/rest")

@@ -1,6 +1,6 @@
 package com.bpwizard.wcm.repo.payload;
 
-import com.bpwizard.wcm.repo.entities.User;
+import com.bpwizard.wcm.repo.domain.User;
 
 public class AuthResponse {
     private String id;

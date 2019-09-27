@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import com.bpwizard.wcm.repo.rest.filter.CleanupFilter;
 import com.bpwizard.wcm.repo.rest.filter.LoggingFilter;
 @Configuration
+//@ComponentScan(basePackages= {"com.bpwizard.spring.boot.commons.service.domain"})
 public class AppConfig {
 	@Bean
 	public ServletRegistrationBean<ModeShapeWebdavServlet> webDavDispatcherServletRegistration1() {

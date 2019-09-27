@@ -96,7 +96,11 @@
 			<artifactId>camunda-rest-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-        
+		<dependency>
+			<groupId>com.bpwizard.wcm</groupId>
+			<artifactId>camunda-db-identity-plugin</artifactId>
+			<version>${project.version}</version>
+		</dependency>            
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

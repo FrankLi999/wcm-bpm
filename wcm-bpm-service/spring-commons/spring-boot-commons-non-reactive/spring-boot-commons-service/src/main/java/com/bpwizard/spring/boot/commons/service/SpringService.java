@@ -27,8 +27,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import com.bpwizard.spring.boot.commons.SpringProperties;
-import com.bpwizard.spring.boot.commons.SpringProperties.Admin;
+import com.bpwizard.spring.boot.commons.SpringProperties;;
 import com.bpwizard.spring.boot.commons.domain.ChangePasswordForm;
 import com.bpwizard.spring.boot.commons.domain.ResetPasswordForm;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
@@ -46,7 +45,9 @@ import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
-
+import com.bpwizard.wcm.repo.domain.User;
+import com.bpwizard.wcm.repo.domain.Role;
+import com.bpwizard.wcm.repo.domain.RoleRepository;
 /**
  * The Spring Commons Service class
  * 
@@ -66,7 +67,9 @@ public abstract class SpringService
 	private UserDetailsService userDetailsService;
 	private BlueTokenService blueTokenService;
 	private GreenTokenService greenTokenService;
-
+	private RoleRepository roleRepository;
+	private Map<String, Role> preloadedRoles;
+	
 	@Autowired
 	public void createSpringService(SpringProperties properties,
 			PasswordEncoder passwordEncoder,
@@ -74,7 +77,9 @@ public abstract class SpringService
 			AbstractUserRepository<U, ID> userRepository,
 			UserDetailsService userDetailsService,
 			BlueTokenService blueTokenService,
-			GreenTokenService greenTokenService) {
+			GreenTokenService greenTokenService,
+			RoleRepository roleRepository,
+			Map<String, Role> preloadedRoles) {
 		
 		this.properties = properties;
 		this.passwordEncoder = passwordEncoder;
@@ -83,6 +88,8 @@ public abstract class SpringService
 		this.userDetailsService = userDetailsService;
 		this.blueTokenService = blueTokenService;
 		this.greenTokenService = greenTokenService;
+		this.roleRepository = roleRepository;
+		this.preloadedRoles = preloadedRoles;
 		
 		log.info("Created");
 	}
@@ -114,37 +121,75 @@ public abstract class SpringService
 			
 			// Check if the user already exists
 			userDetailsService
-				.loadUserByUsername(properties.getAdmin().getUsername());
+				.loadUserByUsername(properties.getUser()[0].getUsername());
 			
 		} catch (UsernameNotFoundException e) {
 			
 			// Doesn't exist. So, create it.
-	    	U user = createAdminUser();
-	    	userRepository.save(user);			
+//	    	U user = createAdminUser();
+//	    	userRepository.save(user);		
+			// Doesn't exist. So, create it.
+			String[] roleNames = properties.getRolename();
+			for (String roleName: roleNames) {
+				this.preloadedRoles.put(roleName, createRole(roleName));
+			}
+			
+			SpringProperties.User[] users = properties.getUser();
+			for (SpringProperties.User user: users) {
+				createUser(user, this.preloadedRoles);
+			}
 		}
 	}
 
+	protected Role createRole(String roleName) {
+		Role role = new Role();
+		role.setName(roleName);
+		roleRepository.save(role);	
+		return role;
+	}
 
 	/**
 	 * Creates the initial Admin user.
 	 * Override this if needed.
 	 */
-    protected U createAdminUser() {
-		
-    	// fetch data about the user to be created
-    	Admin initialAdmin = properties.getAdmin();
-    	
-    	log.info("Creating the first admin user: " + initialAdmin.getUsername());
+	protected U createUser(SpringProperties.User user, Map<String, Role> roles) {
+    	log.info("Creating the initial user: " + user.getUsername());
 
     	// create the user
-    	U user = newUser();
-    	user.setEmail(initialAdmin.getUsername());
-		user.setPassword(passwordEncoder.encode(
-			properties.getAdmin().getPassword()));
-		user.getRoles().add(UserUtils.Role.ADMIN);
-		
-		return user;
+    	U newUser = newUser();
+    	newUser.setName(user.getUsername());
+    	newUser.setEmail(user.getEmail());
+    	newUser.setPassword(passwordEncoder.encode(
+				user.getPassword()));
+		for (String rolename: user.getRolename()) {
+			if (null != roles.get(rolename)) {
+				newUser.getRoles().add(roles.get(rolename));
+			}
+		}
+		userRepository.save(newUser);	
+		return newUser;
 	}
+    
+//	/**
+//	 * Creates the initial Admin user.
+//	 * Override this if needed.
+//	 */
+//    protected U createAdminUser() {
+//		
+//    	// fetch data about the user to be created
+//    	Admin initialAdmin = properties.getAdmin();
+//    	
+//    	log.info("Creating the first admin user: " + initialAdmin.getUsername());
+//
+//    	// create the user
+//    	U user = newUser();
+//    	user.setEmail(initialAdmin.getUsername());
+//		user.setPassword(passwordEncoder.encode(
+//			properties.getAdmin().getPassword()));
+//		user.getRoles().add(UserUtils.Role.ADMIN);
+//		
+//		return user;
+//	}
 
     
 	/**
@@ -159,6 +204,9 @@ public abstract class SpringService
 	 */
     public abstract U newUser();
 
+    public Map<String, Role> getPreloadedRoles() {
+    	return this.preloadedRoles;
+    }
 
 	/**
 	 * Returns the context data to be sent to the client,
@@ -233,7 +281,7 @@ public abstract class SpringService
 	 */
 	protected void makeUnverified(U user) {
 		
-		user.getRoles().add(UserUtils.Role.UNVERIFIED);
+		user.getRoles().add(this.preloadedRoles.get(UserUtils.Role.UNVERIFIED));
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 		JpaUtils.afterCommit(() -> sendVerificationMail(user)); // send a verification mail to the user
 	}
