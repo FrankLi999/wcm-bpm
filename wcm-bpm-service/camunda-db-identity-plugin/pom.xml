@@ -126,6 +126,11 @@
 			<artifactId>spring-boot-commons-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
         <dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>javax.servlet-api</artifactId>

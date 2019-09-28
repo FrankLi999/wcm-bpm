@@ -1,15 +1,10 @@
 package com.bpwizard.wcm.repo.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-// import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
-import com.bpwizard.spring.boot.commons.util.UserUtils;
-import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

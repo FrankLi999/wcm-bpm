@@ -102,3 +102,13 @@ alter table ACT_ID_TENANT_MEMBER
     add constraint ACT_FK_TENANT_MEMB_GROUP
     foreign key (GROUP_ID_)
     references ACT_ID_GROUP (ID_);
+   
+    
+CREATE TABLE tenent_membership (
+  id bigint(20) AUTO_INCREMENT,
+  tenent_id bigint(20) NOT NULL,
+  role_id bigint(20) DEFAULT NULL,
+  user_id bigint(20) DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_bin;
+

@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import com.bpwizard.spring.boot.commons.SpringProperties;;
+import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.domain.ChangePasswordForm;
 import com.bpwizard.spring.boot.commons.domain.ResetPasswordForm;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
@@ -44,10 +44,12 @@ import com.bpwizard.spring.boot.commons.service.util.ServiceUtils;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.bpwizard.wcm.repo.domain.User;
 import com.bpwizard.wcm.repo.domain.Role;
+import com.bpwizard.wcm.repo.domain.User;
 import com.bpwizard.wcm.repo.domain.RoleRepository;
+import com.bpwizard.wcm.repo.domain.Tenant;
+import com.bpwizard.wcm.repo.domain.TenantRepository;
+import com.nimbusds.jwt.JWTClaimsSet;
 /**
  * The Spring Commons Service class
  * 
@@ -68,6 +70,7 @@ public abstract class SpringService
 	private BlueTokenService blueTokenService;
 	private GreenTokenService greenTokenService;
 	private RoleRepository roleRepository;
+	private TenantRepository tenantRepository;
 	private Map<String, Role> preloadedRoles;
 	
 	@Autowired
@@ -79,6 +82,7 @@ public abstract class SpringService
 			BlueTokenService blueTokenService,
 			GreenTokenService greenTokenService,
 			RoleRepository roleRepository,
+			TenantRepository tenantRepository,
 			Map<String, Role> preloadedRoles) {
 		
 		this.properties = properties;
@@ -89,6 +93,7 @@ public abstract class SpringService
 		this.blueTokenService = blueTokenService;
 		this.greenTokenService = greenTokenService;
 		this.roleRepository = roleRepository;
+		this.tenantRepository = tenantRepository;
 		this.preloadedRoles = preloadedRoles;
 		
 		log.info("Created");
@@ -124,27 +129,34 @@ public abstract class SpringService
 				.loadUserByUsername(properties.getUser()[0].getUsername());
 			
 		} catch (UsernameNotFoundException e) {
-			
+			//TODO: batch mode		
 			// Doesn't exist. So, create it.
-//	    	U user = createAdminUser();
-//	    	userRepository.save(user);		
-			// Doesn't exist. So, create it.
+//			Tenant tenant = new Tenant();
+//			tenant.setName("default");
+//			tenantRepository.save(tenant);
+			Tenant tenant = null;
+
 			String[] roleNames = properties.getRolename();
 			for (String roleName: roleNames) {
-				this.preloadedRoles.put(roleName, createRole(roleName));
+				Role role = createRole(roleName, tenant);
+				this.preloadedRoles.put(roleName, role);
+				
 			}
 			
 			SpringProperties.User[] users = properties.getUser();
 			for (SpringProperties.User user: users) {
-				createUser(user, this.preloadedRoles);
+				createUser(user, this.preloadedRoles, tenant);
 			}
 		}
 	}
 
-	protected Role createRole(String roleName) {
+	protected Role createRole(String roleName, Tenant tenant) {
 		Role role = new Role();
 		role.setName(roleName);
-		roleRepository.save(role);	
+		if (tenant != null) {
+			role.setTenant(tenant);
+		}
+    	roleRepository.save(role);
 		return role;
 	}
 
@@ -152,7 +164,7 @@ public abstract class SpringService
 	 * Creates the initial Admin user.
 	 * Override this if needed.
 	 */
-	protected U createUser(SpringProperties.User user, Map<String, Role> roles) {
+	protected U createUser(SpringProperties.User user, Map<String, Role> roles, Tenant tenant) {
     	log.info("Creating the initial user: " + user.getUsername());
 
     	// create the user
@@ -161,6 +173,9 @@ public abstract class SpringService
     	newUser.setEmail(user.getEmail());
     	newUser.setPassword(passwordEncoder.encode(
 				user.getPassword()));
+    	if (tenant != null) {
+    		newUser.setTenant(tenant);
+		}
 		for (String rolename: user.getRolename()) {
 			if (null != roles.get(rolename)) {
 				newUser.getRoles().add(roles.get(rolename));

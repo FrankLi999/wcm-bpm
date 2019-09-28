@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.bpwizard.camunda.spring.boot.configuration.CamundaDBIdentityAutoConfiguration
+com.bpwizard.camunda.identity.spring.boot.configuration.SpringIdentityAutoConfiguration

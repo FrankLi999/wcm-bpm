@@ -35,7 +35,7 @@ public class ModeshapeSecurityConfig extends SpringJpaSecurityConfig {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private SpringUserDetailsService userDetailsService;
+	private SpringUserDetailsService<User, Long> userDetailsService;
 	
 	@Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -82,5 +82,6 @@ public class ModeshapeSecurityConfig extends SpringJpaSecurityConfig {
             	//.permitAll();
                 .authenticated();
 		//super.authorizeRequests(http);
+		// .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	}
 }

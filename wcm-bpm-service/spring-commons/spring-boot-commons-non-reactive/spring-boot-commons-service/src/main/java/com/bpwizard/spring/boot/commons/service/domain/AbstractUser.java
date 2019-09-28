@@ -1,6 +1,7 @@
 package com.bpwizard.spring.boot.commons.service.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -8,10 +9,14 @@ import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -23,6 +28,7 @@ import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.validation.Password;
 import com.bpwizard.spring.boot.commons.vlidation.Captcha;
 import com.bpwizard.wcm.repo.domain.Role;
+import com.bpwizard.wcm.repo.domain.Tenant;
 import com.bpwizard.wcm.repo.secureity.oauth2.AuthProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -62,17 +68,33 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 	@Column(nullable = false) // no length because it will be encrypted
 	protected String password;
 	
+    protected String salt;
+	
+    protected String newPassword;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+	protected Date lockExpirationTime;
+	
+    protected int attempts;
+	
 //	// roles collection
 //	@ElementCollection(fetch = FetchType.EAGER)
 //    @CollectionTable(name="usr_role", joinColumns=@JoinColumn(name="user_id"))
 //    @Column(name="role")
 //	protected Set<String> roles = new HashSet<>();
 	
-	@ManyToMany
+	@ManyToMany()
 	@JoinTable(name = "user_role", 
-	joinColumns = @JoinColumn(name = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "role_id"))
+	    joinColumns = @JoinColumn(name = "user_id"), 
+	    inverseJoinColumns = @JoinColumn(name = "role_id"))
 	protected Set<Role> roles = new HashSet<>();
+	
+	//@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = true)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinTable(name = "tenant_membership",  
+    joinColumns = { @JoinColumn(name = "user_id", referencedColumnName="id", nullable=true) },
+    inverseJoinColumns = { @JoinColumn(name = "tenant_id", referencedColumnName="id", nullable=true) })
+	protected Tenant tenant;
 	
 	@JsonView(UserUtils.SignupInput.class)
 	// @NotBlank(message = "{blank.name}", groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
@@ -104,7 +126,7 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 	@Transient
 	@JsonView(UserUtils.SignupInput.class)
 	@Captcha(groups = {UserUtils.SignUpValidation.class})
-	private String captchaResponse;
+	protected String captchaResponse;
 	
 	@JsonView(UserUtils.SignupInput.class)
 	@NotBlank(message = "{blank.name}", groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})
@@ -114,7 +136,7 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 	
 	private String imageUrl;
     // @Column(nullable = false)
-    private Boolean emailVerified = false;
+	protected Boolean emailVerified = false;
 
     // @NotNull
     @Enumerated(EnumType.STRING)

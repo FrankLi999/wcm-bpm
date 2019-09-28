@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bpwizard.camunda.plugin.impl.identity.db;
+package com.bpwizard.camunda.identity.boot.plugin;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.interceptor.SessionFactory;
-import org.camunda.bpm.engine.impl.persistence.GenericManagerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.bpwizard.camunda.identity.impl.db.DbIdentityServiceProvider;
+import com.bpwizard.wcm.repo.camunda.identity.service.SpringGroupService;
+import com.bpwizard.wcm.repo.camunda.identity.service.SpringUserService;
 
 /**
  * <p>
@@ -39,14 +39,22 @@ import com.bpwizard.camunda.identity.impl.db.DbIdentityServiceProvider;
  * @author Daniel Meyer
  *
  */
-public class DBIdentityProviderPlugin implements ProcessEnginePlugin {
+public class SpringIdentityProviderPlugin implements ProcessEnginePlugin {
+    private SpringUserService userService;
+    private SpringGroupService groupService;
+    private PasswordEncoder passwordEncoder;
+	public SpringIdentityProviderPlugin(
+			SpringUserService userService,
+			SpringGroupService groupService,
+			PasswordEncoder passwordEncoder) {
+	    this.userService = userService;
+	    this.groupService = groupService;
+	    this.passwordEncoder = passwordEncoder;
+	}
 
 	public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
-		System.out.println(">>>>>>>>>>>>> init db DBIdentityProviderPlugin:" + processEngineConfiguration);
-		SessionFactory identityProviderSessionFactory = new GenericManagerFactory(DbIdentityServiceProvider.class);
-		System.out.println(">>>>>>>>>>>>> init db DBIdentityProviderPlugin 1:" + identityProviderSessionFactory);
+		SpringIdentityProviderSessionFactory identityProviderSessionFactory = new SpringIdentityProviderSessionFactory(userService, groupService, passwordEncoder);
 		processEngineConfiguration.setIdentityProviderSessionFactory(identityProviderSessionFactory);
-		System.out.println(">>>>>>>>>>>>> init db DBIdentityProviderPlugin 2:");
 	}
 
 	@Override
