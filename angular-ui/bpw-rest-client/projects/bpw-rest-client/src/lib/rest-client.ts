@@ -19,6 +19,10 @@ export class RestClient {
   }
 
   public getBaseUrl(): string {
+    return null;
+  };
+
+  public getApiBaseUrl(): string {
     return this.apiConfigService.apiConfig.apiBaseUrl;
   };
 

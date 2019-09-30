@@ -96,11 +96,13 @@
 			<artifactId>camunda-rest-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>com.bpwizard.wcm</groupId>
 			<artifactId>camunda-db-identity-plugin</artifactId>
 			<version>${project.version}</version>
-		</dependency>            
+		</dependency>
+		-->            
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -281,10 +283,12 @@
 		    <artifactId>javax.servlet-api</artifactId>
 		    <scope>provided</scope>
 		</dependency>
+		<!--
 		<dependency>
 		   <groupId>org.flywaydb</groupId>
 		   <artifactId>flyway-core</artifactId>
 		</dependency>
+		-->
 	</dependencies>
 
 	<build>
@@ -294,6 +298,7 @@
 		    mvn clean flyway:migrate -Dflyway.configFile=flywayConfig.properties 
 		    mvn flyway:info -Dflyway.configFile=flywayConfig.properties 
 		    -->
+		    <!--
 		    <plugin>
 			    <groupId>org.flywaydb</groupId>
 			    <artifactId>flyway-maven-plugin</artifactId>
@@ -310,6 +315,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>

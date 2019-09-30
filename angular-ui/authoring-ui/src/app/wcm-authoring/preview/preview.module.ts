@@ -44,7 +44,8 @@ const routes: Routes = [
   declarations: [
     ContentAreaPreviewComponent, 
     ResourceRendererComponent, 
-    RenderElementComponent, ContentIdDirective
+    RenderElementComponent, 
+    ContentIdDirective
   ],
   imports: [
     RouterModule.forChild(routes),

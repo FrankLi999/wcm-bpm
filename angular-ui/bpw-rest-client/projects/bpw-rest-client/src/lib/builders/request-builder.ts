@@ -67,7 +67,15 @@ export function methodBuilder( method: string ) {
           }
           resUrl = baseUrl + resUrl;
         }
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>> request url: " + resUrl);
+
+        if ( this.getApiBaseUrl() !== null ) {
+          let apiBaseUrl = this.getApiBaseUrl();
+          if ( apiBaseUrl.indexOf( '/' ) === apiBaseUrl.length - 1 && resUrl.indexOf( '/' ) === 0 ) {
+            apiBaseUrl = apiBaseUrl.substring( 0, 1 );
+          }
+          resUrl = apiBaseUrl + resUrl;
+        }
+
         // Query
         let search: HttpParams = new HttpParams();
         if ( pQuery ) {

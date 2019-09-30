@@ -1,7 +1,7 @@
 package com.bpwizard.wcm.repo.payload;
 
 import com.bpwizard.wcm.repo.domain.User;
-
+import com.bpwizard.wcm.repo.domain.Role;
 public class AuthResponse {
     private String id;
 	private String email;
@@ -23,7 +23,8 @@ public class AuthResponse {
     	authResponse.setName(user.getName());
     	authResponse.setFirstName(user.getFirstName());
     	authResponse.setLastName(user.getLastName());
-    	authResponse.setRoles(user.getRoles().toArray(new String[user.getRoles().size()]));
+    	
+    	authResponse.setRoles(user.getRoles().stream().map(Role::getName).toArray(String[]::new));
     	return authResponse;
     }
 

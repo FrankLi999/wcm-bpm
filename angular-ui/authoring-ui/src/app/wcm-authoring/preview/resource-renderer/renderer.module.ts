@@ -26,11 +26,13 @@ import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 
-import { PreviewModule } from '../preview.module';
-
+// import { PreviewModule } from '../preview.module';
+import { RenderElementComponent } from '../render-element/render-element.component';
 
 @NgModule({
-
+  declarations: [
+    RenderElementComponent
+  ],
   imports: [
     CdkTableModule,
     CdkTreeModule,
@@ -56,8 +58,10 @@ import { PreviewModule } from '../preview.module';
     HttpClientModule,
     TranslateModule,
     FuseSharedModule,
-    FuseSidebarModule,
-    PreviewModule
+    FuseSidebarModule
+  ],
+  exports: [
+    RenderElementComponent
   ]
 })
 export class RendererModule { }
