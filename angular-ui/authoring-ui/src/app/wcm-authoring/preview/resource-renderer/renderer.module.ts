@@ -26,23 +26,12 @@ import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 
-import { ContentAreaPreviewComponent } from '../content-area-preview/content-area-preview.component';
-import { RenderElementComponent } from '../render-element/render-element.component';
-import { ContentIdDirective } from '../content-id.directive';
-import { RendererService } from '../renderer.service';
-const routes: Routes = [
-  {
-    path     : 'preview',
-    component: ContentAreaPreviewComponent      
-  }
-];
+import { PreviewModule } from '../preview.module';
+
+
 @NgModule({
-  declarations: [
-    ContentAreaPreviewComponent,  
-    RenderElementComponent, ContentIdDirective
-  ],
+
   imports: [
-    RouterModule.forChild(routes),
     CdkTableModule,
     CdkTreeModule,
     MatButtonModule,
@@ -67,14 +56,8 @@ const routes: Routes = [
     HttpClientModule,
     TranslateModule,
     FuseSharedModule,
-    FuseSidebarModule
-  ],
-  exports: [
-    RenderElementComponent,
-    ContentIdDirective
-  ],
-  providers   : [
-    RendererService
-],
+    FuseSidebarModule,
+    PreviewModule
+  ]
 })
 export class RendererModule { }

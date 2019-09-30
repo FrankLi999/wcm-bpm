@@ -22,7 +22,8 @@ import { RendererService } from '../renderer.service';
 @Component({
   selector: 'resource-renderer',
   templateUrl: './resource-renderer.component.html',
-  styleUrls: ['./resource-renderer.component.scss']
+  styleUrls: ['./resource-renderer.component.scss'],
+  providers:[ RendererService ]
 })
 export class ResourceRendererComponent implements OnInit {
 

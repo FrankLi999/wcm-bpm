@@ -23,7 +23,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { CategoryComponent } from './category/category.component';
-import { AuthGuard } from 'bpw-auth';
+import { AuthGuard } from 'bpw-store';
 import * as fromGuards from '../store/guards';
 
 const routes: Routes = [

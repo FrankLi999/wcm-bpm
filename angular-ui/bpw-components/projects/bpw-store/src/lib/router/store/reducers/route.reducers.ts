@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Data, ParamMap } from '@angular/router';
-import { createFeatureSelector, createSelector, ActionReducerMap } from '@ngrx/store';
+import { createSelector, ActionReducerMap } from '@ngrx/store';
 import { BaseRouterStoreState, RouterReducerState, routerReducer, RouterStateSerializer} from '@ngrx/router-store';
 
 ///jcr-explorer/bpw/default?a=b#top

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LibrariesComponent } from './libraries/libraries.component';
 import { LibraryComponent } from './library/library.component';
 import * as fromGuards from '../store/guards';
-import { AuthGuard } from 'bpw-auth';
+import { AuthGuard } from 'bpw-store';
 const routes: Routes = [
   {
       path       : 'resource-library/edit',

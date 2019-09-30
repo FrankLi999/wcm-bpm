@@ -24,6 +24,5 @@ import { FuseProgressBarComponent } from './progress-bar.component';
         FuseProgressBarComponent
     ]
 })
-export class FuseProgressBarModule
-{
+export class FuseProgressBarModule {
 }

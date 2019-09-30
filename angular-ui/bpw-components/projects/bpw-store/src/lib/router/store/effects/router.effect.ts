@@ -11,9 +11,9 @@ export class RouterEffects {
     /**
      * Constructor
      *
-     * @param {Actions} actions$
-     * @param {Router} router
-     * @param {Location} location
+     * @param Actions actions$
+     * @param Router router
+     * @param Location location
      */
     constructor(
         private actions$: Actions,
@@ -36,7 +36,6 @@ export class RouterEffects {
 
     /**
      * Navigate back
-     * @type {Observable<any>}
      */
     @Effect({dispatch: false})
     navigateBack$ = this.actions$.pipe(
@@ -46,7 +45,6 @@ export class RouterEffects {
 
     /**
      * Navigate forward
-     * @type {Observable<any>}
      */
     @Effect({dispatch: false})
     navigateForward$ = this.actions$.pipe(

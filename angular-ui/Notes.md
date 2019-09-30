@@ -4,6 +4,20 @@ https://blog.angularindepth.com/creating-a-library-in-angular-6-part-2-6e2bc1e14
 https://blog.angularindepth.com/the-angular-library-series-publishing-ce24bb673275
 https://blog.angularindepth.com/npm-peer-dependencies-f843f3ac4e7f
 
+
+=====================================================================================
+
+
+Feature Module	Declarations	Providers	   Exports	        Imported by
+--------------  ------------    ---------      --------         ---------
+Domain	            Yes	           Rare	        Top component	Feature, AppModule
+Routed	            Yes	           Rare	        No	            None
+Routing	            No	           Yes (Guards)	RouterModule	Feature (for routing)
+Service	            No	           Yes	        No	            AppModule
+Widget	            Yes	           Rare	        Yes	            Feature
+
+
+=====================================================================================
 1. Create library projects
 
    // ng new angular-commons --create-application=false
@@ -12,13 +26,13 @@ https://blog.angularindepth.com/npm-peer-dependencies-f843f3ac4e7f
    cd bpw-rest-client
    ng generate library bpw-rest-client --prefix=rest-client
    
-      
    ng new bpw-form --create-application=false
    ng generate library bpw-form --prefix=bpw-form
    
    ng new bpw-components --create-application=false
    cd bpw-components
    ng generate library bpw-components --prefix=bpw-components
+   ng generate library bpw-store --prefix=rest-store
 
    ng new bpw-auth --create-application=false
    cd bpw-auth
@@ -36,8 +50,11 @@ https://blog.angularindepth.com/npm-peer-dependencies-f843f3ac4e7f
    
    
    npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz	
+    npm install ../bpw--form/dist/bpw-form/bpw-form-0.0.1.tgz
    npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz	
-
+   npm install ../bpw-components/dist/bpw-store/bpw-store-0.0.1.tgz	
+   npm install ../bpw-auth/dist/bpw-auth/bpw-auth-0.0.1.tgz	
+   npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz	
    cd angular-commons
    
    generate libraries:
@@ -51,7 +68,12 @@ https://blog.angularindepth.com/npm-peer-dependencies-f843f3ac4e7f
    generate test app:
    
    ng generate application bpw-tester
-   
+## Linked libraries
+    https://docs.npmjs.com/cli/link
+		While working on a published library, you can use npm link to avoid reinstalling the library on every build.
+
+		The library must be rebuilt on every change. When linking a library, make sure that the build step runs in watch mode, and that the library's package.json configuration points at the correct entry points. For example, main should point at a JavaScript file, not a TypeScript file.
+
    #Build
    ## libraries are built in prod mode by default
    ng build rest-client [--watch]

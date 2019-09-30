@@ -76,10 +76,6 @@ export * from './lib/components/widget/widget.module';
 export * from './lib/components/widget/widget.component';
 export * from './lib/components/widget/widget-toggle.directive';
 
-export * from './lib/store/reducers/route.reducers';
-export * from './lib/store/actions/router.action';
-export * from './lib/store/effects/router.effect';
-
 // export * from './lib/store/store.module';
 
 // export * from './lib/store/actions/navigation.action';

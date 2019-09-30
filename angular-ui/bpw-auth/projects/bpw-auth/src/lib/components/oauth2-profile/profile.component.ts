@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import * as fromStore from '../../store';
-import { UserProfile } from '../../model/user-profile.model';
+import * as fromStore from 'bpw-store';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +12,7 @@ import { UserProfile } from '../../model/user-profile.model';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   private unsubscribeAll: Subject<any>;
-  userProfile: UserProfile;
+  userProfile: fromStore.UserProfile;
 
   constructor(
     private store: Store<fromStore.AuthState>,
@@ -26,7 +25,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   */
   ngOnInit(): void {
     this.store.pipe(select(fromStore.getUserProfile), takeUntil(this.unsubscribeAll)).subscribe(
-      (userProfile: UserProfile) => {
+      (userProfile: fromStore.UserProfile) => {
         this.userProfile = userProfile;
       }
     );

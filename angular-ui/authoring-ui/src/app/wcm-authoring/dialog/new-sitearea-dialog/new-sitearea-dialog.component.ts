@@ -12,7 +12,7 @@ export class NewSiteareaDialogComponent extends BaseMewResourceDialog implements
   constructor(
     public matDialogRef: MatDialogRef<NewSiteareaDialogComponent>,
     private wcmService: WcmService,
-    @Inject(MAT_DIALOG_DATA) protected data: any
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
     super(data);
   }

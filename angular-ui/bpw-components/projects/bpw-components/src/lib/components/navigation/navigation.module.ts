@@ -34,6 +34,5 @@ import { FuseNavHorizontalCollapsableComponent } from './horizontal/collapsable/
         FuseNavHorizontalCollapsableComponent
     ]
 })
-export class FuseNavigationModule
-{
+export class FuseNavigationModule {
 }

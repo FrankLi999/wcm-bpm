@@ -15,7 +15,7 @@ import {
   MediaType
 } from 'bpw-rest-client';
 
-import {API_BASE_URL} from 'bpw-auth';
+import {API_BASE_URL} from 'bpw-rest-client';
 
 import { 
   JsonForm,

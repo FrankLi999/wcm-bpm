@@ -19,10 +19,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class UploadZipfileDialogComponent implements OnInit {
   constructor(
     public matDialogRef: MatDialogRef<UploadZipfileDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) { 
+    }
 
   ngOnInit() {
   }
+
   onFileComplete(data: any) {
     console.log(data); // We just print out data bubbled up from event emitter.
     this.matDialogRef.close();

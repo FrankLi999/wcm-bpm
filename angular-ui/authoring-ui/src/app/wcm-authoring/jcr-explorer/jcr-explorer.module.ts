@@ -35,7 +35,7 @@ import {
   JsonSchemaFormModule, 
   MaterialDesignFrameworkModule
 } from 'bpw-form';
-import { AuthGuard } from 'bpw-auth';
+import { AuthGuard } from 'bpw-store';
 import * as fromGuards from '../store/guards';
 import { AceEditorDirective } from './dynamic-ui/ace-editor.directive';
 const routes: Routes = [

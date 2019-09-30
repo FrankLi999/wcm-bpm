@@ -23,9 +23,6 @@ import { SimpleDialogComponent, UiService } from './services/ui.service';
     declarations: [
         SimpleDialogComponent
     ],
-    providers: [
-        UiService
-    ],
     exports  : [
         FuseDirectivesModule,
         FusePipesModule,

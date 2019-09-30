@@ -7,9 +7,8 @@ import { FuseConfigService } from 'bpw-components';
 import { fuseAnimations } from 'bpw-components';
 import { take, takeUntil, flatMap, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, API_BASE_URL, ACCESS_TOKEN } from '../../constants';
-import * as fromStore from '../../../store';
-import { getRouteSnapshot, RouteSnapshot } from 'bpw-components';
+import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, API_BASE_URL, ACCESS_TOKEN } from 'bpw-rest-client';
+import * as fromStore from 'bpw-store';
 
 @Component({
     selector     : 'login',

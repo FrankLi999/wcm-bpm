@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'query-editor',
@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QueryEditorComponent implements OnInit {
 
+  @Input() queryName: string;
   constructor() { }
 
   ngOnInit() {

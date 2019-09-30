@@ -8,8 +8,11 @@ import {
   MatDialogConfig,
 } from '@angular/material'
 import { Observable } from 'rxjs';
+import { FuseSharedModule } from '../shared.module';
 
-@Injectable()
+@Injectable({
+  providedIn: FuseSharedModule
+})
 export class UiService {
   constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {}
 

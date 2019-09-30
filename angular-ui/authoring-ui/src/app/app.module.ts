@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { TranslateModule } from '@ngx-translate/core';
-import { AuthHttpInterceptor } from 'bpw-auth';
+import { AuthHttpInterceptor } from 'bpw-store';
 import 'hammerjs';
 
 import {
@@ -19,7 +19,7 @@ import {
   FuseSidebarModule,
   FuseThemeOptionsModule
 } from 'bpw-components';
-import { AuthStoreModule } from 'bpw-auth';
+import { AuthModule } from 'bpw-store';
 import { fuseConfig } from 'app/fuse-config';
 
 import { AppComponent } from 'app/app.component';
@@ -35,11 +35,13 @@ const appRoutes: Routes = [
     },
     {
         path        : 'auth',
-        loadChildren: () => import('bpw-auth').then(m => m.AuthenticationModule)
+        // loadChildren: () => import('bpw-auth').then(m => m.AuthenticationModule)
+        loadChildren: './lazy-module/lazy.module#LazyModule'
     },
     {
         path        : 'oauth2',
-        loadChildren: () => import('bpw-auth').then(m => m.OAuth2Module)
+        // loadChildren: () => import('bpw-auth').then(m => m.OAuth2Module)
+        loadChildren: './lazy-module/lazy.module#LazyModule'
     },
     {
         path        : 'bpmn',
@@ -89,7 +91,7 @@ const appRoutes: Routes = [
         LayoutModule,
         AppStoreModule,
         FlexLayoutModule,
-        AuthStoreModule
+        AuthModule
     ],
     providers: [{
         provide: HTTP_INTERCEPTORS,

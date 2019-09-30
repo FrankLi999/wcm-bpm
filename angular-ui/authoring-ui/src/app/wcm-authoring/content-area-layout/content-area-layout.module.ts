@@ -33,7 +33,7 @@ import {
 } from './content-area-layout/content-area-layout.component';
 import { ContentAreaLayoutsComponent } from './content-area-layouts/content-area-layouts.component';
 import { ResourceViewerComponent } from './resource-viewer/resource-viewer.component';
-import { AuthGuard } from 'bpw-auth';
+import { AuthGuard } from 'bpw-store';
 import * as fromGuards from '../store/guards';
 
 const routes: Routes = [

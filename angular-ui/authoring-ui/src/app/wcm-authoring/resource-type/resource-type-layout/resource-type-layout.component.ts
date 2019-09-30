@@ -56,7 +56,7 @@ export class ResourceTypeLayoutComponent implements OnInit, OnDestroy {
 
   private nextFieldGroupId: number = 0;
   private unsubscribeAll: Subject<any>;
-  private error: string;
+  error: string;
   constructor(
       // private wcmService: WcmService,
       private store: Store<fromStore.WcmAppState>,

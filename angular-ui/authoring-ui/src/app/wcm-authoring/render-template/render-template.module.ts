@@ -31,7 +31,7 @@ import { AceEditorModule } from 'ng2-ace-editor';
 import { SafePipe } from './pipes/safe.pipe';
 import { RenderTemplatesComponent } from './render-templates/render-templates.component';
 import * as fromGuards from '../store/guards';
-import { AuthGuard } from 'bpw-auth';
+import { AuthGuard } from 'bpw-store';
 
 const routes: Routes = [
   {

@@ -6,9 +6,9 @@
  * Both released under MIT license - © Zeno Rocha
  */
 import { Injectable } from '@angular/core';
-
+import { FuseSharedModule } from '../shared.module';
 @Injectable({
-    providedIn: 'root'
+  providedIn: FuseSharedModule
 })
 export class FuseCopierService
 {

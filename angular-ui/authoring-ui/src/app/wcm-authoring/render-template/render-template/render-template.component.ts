@@ -45,7 +45,7 @@ export class RenderTemplateComponent implements OnInit, OnDestroy {
 
   contentElements: string[] = [];
   private unsubscribeAll: Subject<any>;
-  private error: string;
+  error: string;
   constructor(
     // private wcmService: WcmService,
     private store: Store<fromStore.WcmAppState>,

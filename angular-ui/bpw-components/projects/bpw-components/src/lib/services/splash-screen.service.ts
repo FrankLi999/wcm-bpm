@@ -2,11 +2,11 @@ import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { animate, AnimationBuilder, AnimationPlayer, style } from '@angular/animations';
 import { NavigationEnd, Router } from '@angular/router';
-
+import { FuseSharedModule } from '../shared.module';
 import { filter, take } from 'rxjs/operators';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: FuseSharedModule
 })
 export class FuseSplashScreenService
 {

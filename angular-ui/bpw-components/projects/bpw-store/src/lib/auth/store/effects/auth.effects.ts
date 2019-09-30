@@ -8,7 +8,6 @@ import {
   AuthActionTypes,
   LoginAction,
   LoginSucceedAction,
-  LogoutAction,
   LoginFailedAction
 } from '../actions/auth.actions';
 import { AuthService } from '../../service/auth.service';

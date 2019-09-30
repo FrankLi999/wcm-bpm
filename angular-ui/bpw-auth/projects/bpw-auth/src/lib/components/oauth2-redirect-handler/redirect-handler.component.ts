@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Store } from '@ngrx/store';
-import { ACCESS_TOKEN } from '../constants';
-import * as fromStore from '../../store';
-import { API_BASE_URL} from '../../components/constants';
-import { UserProfile } from '../../model/user-profile.model';
+import * as fromStore from 'bpw-store';
+import { API_BASE_URL, ACCESS_TOKEN} from 'bpw-rest-client';
 
 @Component({
   selector: 'redirect-handler',
@@ -35,7 +33,7 @@ export class RedirectHandlerComponent implements OnInit {
       ));
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       this.http.get(`${API_BASE_URL}/user/api/rest/me`, {headers}).subscribe(
-        (userProfile: UserProfile) => {
+        (userProfile: fromStore.UserProfile) => {
           userProfile.accessToken = token;
           this.store.dispatch(new fromStore.LoginSucceedAction(userProfile));
         },

@@ -9,7 +9,7 @@ import { switchMap, catchError, tap, take, filter } from 'rxjs/operators';
 import { WcmAppState } from '../reducers';
 import * as fromStore from '../';
 import { getWcmSystemLoaded } from '../selectors';
-import { getRouteState, RouteSnapshot } from 'bpw-components';
+import { getRouteState, RouteSnapshot } from 'bpw-store';
 @Injectable()
 export class ResolveGuard implements CanActivate {
     routerState: RouteSnapshot;

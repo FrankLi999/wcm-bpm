@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ValidationRuleComponent } from './validation-rule/validation-rule.component';
 import { ValidationRulesComponent } from './validation-rules/validation-rules.component';
 import * as fromGuards from '../store/guards';
-import { AuthGuard } from 'bpw-auth';
+import { AuthGuard } from 'bpw-store';
 
 const routes: Routes = [
   {

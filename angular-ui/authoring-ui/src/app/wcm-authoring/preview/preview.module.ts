@@ -30,9 +30,8 @@ import { ContentAreaPreviewComponent } from './content-area-preview/content-area
 import { ResourceRendererComponent } from './resource-renderer/resource-renderer.component';
 import { RenderElementComponent } from './render-element/render-element.component';
 import { ContentIdDirective } from './content-id.directive';
-import { RendererService } from './renderer.service';
 import * as fromGuards from '../store/guards';
-import { AuthGuard } from 'bpw-auth';
+import { AuthGuard } from 'bpw-store';
 
 const routes: Routes = [
   {
@@ -79,9 +78,6 @@ const routes: Routes = [
   exports: [
     RenderElementComponent,
     ContentIdDirective
-  ],
-  providers   : [
-    RendererService
-],
+  ]
 })
 export class PreviewModule { }

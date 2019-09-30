@@ -4,12 +4,12 @@ import { Platform } from '@angular/cdk/platform';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import * as _ from 'lodash-es';
-
+import { FuseSharedModule } from '../shared.module';
 // Create the injection token for the custom settings
 export const FUSE_CONFIG = new InjectionToken('fuseCustomConfig');
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: FuseSharedModule
 })
 export class FuseConfigService {
     // Private

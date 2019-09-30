@@ -43,7 +43,7 @@ import {
   StepEditorDialog,
   TabEditorDialog } from './resource-type-layout/resource-type-layout.component';
 import * as fromGuards from '../store/guards';
-import { AuthGuard } from 'bpw-auth';
+import { AuthGuard } from 'bpw-store';
 const routes: Routes = [
     {
         path       : 'resource-type/edit',

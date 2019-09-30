@@ -8,19 +8,21 @@
         <div class="card" id="resouce-type-header">
             <div class="resource-type" fxFlex="50">
                 <div fxLayout="row">
-                    <mat-icon class="s-20">{{getIcon(resourceType.baseType)}}</mat-icon>
-                    <h3 style="margin:0">{{resourceType.typeName}}</h3>
+                    <mat-icon class="s-20">{{getIcon(resourceType.baseResourceType)}}</mat-icon>
+                    <h3 style="margin:0">{{resourceType.name}}</h3>
                 </div>
                 <div fxLayout="row" style="padding: 6px">
                     <mat-divider></mat-divider>
                 </div>
                 <div fxLayout="row">
                     <div fxFlex="30">
-                        {{resourceType.baseType}}
+                        {{resourceType.baseResourceType}}
                     </div>
+                    <!--
                     <div fxFlex="70">
                         ID: {{resourceType.id}}
                     </div>
+                    -->
                 </div>
             </div>
             <div class="resource-type-action" fxFlex="50">

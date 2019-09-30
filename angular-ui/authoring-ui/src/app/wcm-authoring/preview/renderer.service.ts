@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ContentItem } from '../model';
-@Injectable({
-  providedIn: 'root'
-})
+import { PreviewModule } from './preview.module';
+
+@Injectable(
+//  { providedIn: PreviewModule}
+)
 export class RendererService {
   contentItems:{[key: string]: ContentItem} = {}
   constructor() { }

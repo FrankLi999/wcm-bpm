@@ -3,9 +3,10 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import * as _ from 'lodash-es';
 
 import { FuseNavigationItem } from '../../types';
+import { FuseNavigationModule } from './navigation.module';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: FuseNavigationModule
 })
 export class FuseNavigationService
 {

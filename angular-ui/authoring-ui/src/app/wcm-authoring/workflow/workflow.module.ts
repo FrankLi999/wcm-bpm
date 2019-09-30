@@ -25,7 +25,7 @@ import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { WorkflowsComponent } from './workflows/workflows.component';
 import * as fromGuards from '../store/guards';
-import { AuthGuard } from 'bpw-auth';
+import { AuthGuard } from 'bpw-store';
 
 const routes: Routes = [
   {

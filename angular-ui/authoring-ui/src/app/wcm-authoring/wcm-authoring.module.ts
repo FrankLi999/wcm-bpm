@@ -48,8 +48,8 @@ import { NewContentDialogComponent } from './dialog/new-content-dialog/new-conte
 import { NewSiteConfigDialogComponent } from './dialog/new-site-config-dialog/new-site-config-dialog.component';
 import { WcmAppStoreModule } from './store/store.module';
 import { AuthenticationModule } from 'bpw-auth';
-import { OAuth2Module, AuthHttpInterceptor } from 'bpw-auth';
-
+import { OAuth2Module } from 'bpw-auth';
+import { AuthHttpInterceptor } from 'bpw-store';
 import * as fromGuards from './store/guards';
 const routes: Routes = [
   {
@@ -131,6 +131,5 @@ const routes: Routes = [
     ]
 })
 
-export class WcmAuthoringModule
-{
+export class WcmAuthoringModule {
 }

@@ -73,7 +73,7 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
   @ViewChild('contextMenu', {static: true}) contextMenu: MatMenuTrigger;
   // Private
   private unsubscribeAll: Subject<any>;
-  private loadError: string;
+  loadError: string;
   constructor(
     private modeshapeService: ModeshapeService,
     // private wcmService: WcmService,

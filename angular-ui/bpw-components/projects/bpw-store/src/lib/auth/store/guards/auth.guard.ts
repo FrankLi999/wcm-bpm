@@ -16,8 +16,10 @@ import { map, mergeMap } from 'rxjs/operators';
 import { iif, of } from 'rxjs';
 import { UserProfile } from '../../model/user-profile.model';
 import { UiService } from 'bpw-components';
+import { AuthModule } from '../../auth.module';
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: AuthModule
 })
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 

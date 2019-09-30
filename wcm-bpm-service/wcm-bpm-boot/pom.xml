@@ -187,7 +187,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
+		<!-- 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -275,11 +280,24 @@
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>javax.servlet-api</artifactId>
 		    <scope>provided</scope>
-		</dependency>	
+		</dependency>
+		<dependency>
+		   <groupId>org.flywaydb</groupId>
+		   <artifactId>flyway-core</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+		    <!-- default migration table: flyway_schema_history
+		    6 Commands: info, migrate, baseline, validate, repair, clean
+		    mvn clean flyway:migrate -Dflyway.configFile=flywayConfig.properties 
+		    mvn flyway:info -Dflyway.configFile=flywayConfig.properties 
+		    -->
+		    <plugin>
+			    <groupId>org.flywaydb</groupId>
+			    <artifactId>flyway-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>

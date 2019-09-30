@@ -1,6 +1,6 @@
 export class BaseMewResourceDialog {
-  protected jsonFormObject: any;
-  protected jsonFormOptions: any = {
+  jsonFormObject: any;
+  jsonFormOptions: any = {
     addSubmit: true, // Add a submit button if layout does not have one
     debug: false, // Don't show inline debugging information
     loadExternalAssets: true, // Load external css and JavaScript for frameworks
@@ -8,8 +8,8 @@ export class BaseMewResourceDialog {
     setSchemaDefaults: true, // Always use schema defaults for empty fields
     defautWidgetOptions: { feedback: true }, // Show inline feedback icons
   };
-  protected selectedFramework = 'material-design';
-  protected  selectedLanguage = 'en';
+  selectedFramework = 'material-design';
+  selectedLanguage = 'en';
   constructor(protected data: any) { 
   }
 

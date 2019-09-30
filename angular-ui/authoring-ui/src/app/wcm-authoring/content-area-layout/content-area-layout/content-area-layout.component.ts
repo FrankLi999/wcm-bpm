@@ -36,7 +36,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
   
   renderTemplates: RenderTemplateModel[] = [];
   private unsubscribeAll: Subject<any>;
-  private error: string;
+  error: string;
   constructor(
     private dialog: MatDialog,
     private formBuilder: FormBuilder,

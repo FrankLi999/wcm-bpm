@@ -2,14 +2,13 @@ import { Component, OnInit, Inject, Input, Output, EventEmitter, ViewEncapsulati
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { 
   HttpClient,
-  HttpResponse,
   HttpRequest, 
   HttpEventType,
   HttpErrorResponse 
 } from '@angular/common/http';
 import { Subscription, of} from 'rxjs';
 import { map, tap, last, catchError } from 'rxjs/operators';
-import {API_BASE_URL} from 'bpw-auth';
+import {API_BASE_URL} from 'bpw-rest-client';
 export class FileUploadModel {
   data: File;
   relativePath: String;
@@ -41,7 +40,7 @@ export class FileUploadComponent implements OnInit {
   @Input() repositoryName = '';
   @Input() workspaceName = '';
   @Input() nodePath = '';
-  private files: Array<FileUploadModel> = [];
+  files: Array<FileUploadModel> = [];
 
   constructor(
     private http: HttpClient) { }

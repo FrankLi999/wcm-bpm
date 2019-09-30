@@ -12,8 +12,11 @@ import {
   import { AuthService } from './auth.service'
   import { UserProfile } from '../model/user-profile.model';
   import * as fromStore from '../store';
-
-  @Injectable()
+  // import { AuthModule } from '../auth.module';
+  
+  @Injectable(
+  // { providedIn: AuthModule }
+  )
   export class AuthHttpInterceptor implements HttpInterceptor {
     constructor(
       private authService: AuthService, 

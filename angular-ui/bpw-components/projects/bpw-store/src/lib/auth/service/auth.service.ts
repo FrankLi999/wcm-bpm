@@ -5,40 +5,46 @@ import { Observable } from 'rxjs';
 import {
   RestClient, 
   Client, 
-  Get,
+  Post,
   Body,
   Timeout,
   Produces,
   MediaType
 } from 'bpw-rest-client';
 
-import {API_BASE_URL} from '../components/constants';
-
+import { API_BASE_URL } from 'bpw-rest-client';
+import { AuthModule } from '../auth.module';
 import {
   UserProfile,
   Login
 } from '../model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: AuthModule
 })
 @Client({
-  serviceId: 'user-service',
-  baseUrl: `${API_BASE_URL}/user/api/rest`,
+  serviceId: 'auth-service',
+  baseUrl: `${API_BASE_URL}/auth/api/rest`,
   headers: {
       'content-type': 'application/json'
   }
 })
-export class userService extends RestClient {
+export class AuthService extends RestClient {
 
   constructor(httpClient: HttpClient){
     super(httpClient);
   }
 
-  @Get('/me')
+  @Post('/login')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public me(
+  public login(
+    @Body login: Login
   ): Observable<UserProfile> { return null; };
-}
 
+  // @Post('/logout')
+  // @Timeout(2000) //In milliseconds
+  // @Produces(MediaType.JSON)
+  // public logout(
+  // ): Observable<void> { return null; };
+}

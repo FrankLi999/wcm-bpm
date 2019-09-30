@@ -13,3 +13,4 @@ export { MediaType, Produces } from './lib/decorators/produces';
 export { Get, Post, Patch, Put, Delete, Head } from './lib/decorators/request-methods';
 
 export * from './lib/rest-client.module';
+export * from './lib/constants';
