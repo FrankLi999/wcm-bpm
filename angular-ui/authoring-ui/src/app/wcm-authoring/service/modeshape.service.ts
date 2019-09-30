@@ -13,10 +13,9 @@ import {
   Body,
   Query, 
   Produces, 
-  MediaType
+  MediaType,
+  ApiConfigService
 } from 'bpw-rest-client';
-
-import {API_BASE_URL} from 'bpw-rest-client';
 
 import { 
   RestRepositories,
@@ -26,15 +25,17 @@ import {
 @Injectable()
 @Client({
   serviceId: 'modeshape-service',
-  baseUrl: `${API_BASE_URL}/modeshape/api/rest`,
+  baseUrl: '/modeshape/api/rest',
   headers: {
       'content-type': 'application/json'
   }
 })
 export class ModeshapeService extends RestClient {
 
-  constructor(httpClient: HttpClient){
-    super(httpClient);
+  constructor(
+    apiConfigService: ApiConfigService,
+    httpClient: HttpClient){
+    super(httpClient, apiConfigService);
   }
 
   @Get("/repo")

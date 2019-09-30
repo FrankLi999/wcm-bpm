@@ -18,6 +18,18 @@ Widget	            Yes	           Rare	        Yes	            Feature
 
 
 =====================================================================================
+
+Generally, you'll only need providedIn for providing services and forRoot()/forChild() for routing
+
+If a module defines both providers and declarations (components, directives, pipes), then loading the module in multiple feature modules would duplicate the registration of the service. This could result in multiple service instances and the service would no longer behave as a singleton.
+
+There are multiple ways to prevent this:
+
+	> Use the providedIn syntax instead of registering the service in the module.
+	> Separate your services into their own module.
+	> Define forRoot() and forChild() methods in the module.
+
+======================================================================================
 1. Create library projects
 
    // ng new angular-commons --create-application=false

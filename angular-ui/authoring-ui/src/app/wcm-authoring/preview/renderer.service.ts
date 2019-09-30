@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { ContentItem } from '../model';
 import { PreviewModule } from './preview.module';
 
-@Injectable(
-//  { providedIn: PreviewModule}
-)
+@Injectable()
 export class RendererService {
   contentItems:{[key: string]: ContentItem} = {}
   constructor() { }

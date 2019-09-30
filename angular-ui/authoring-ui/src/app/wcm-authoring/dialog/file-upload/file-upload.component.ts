@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Subscription, of} from 'rxjs';
 import { map, tap, last, catchError } from 'rxjs/operators';
-import {API_BASE_URL} from 'bpw-rest-client';
+import { ApiConfigService } from 'bpw-rest-client';
 export class FileUploadModel {
   data: File;
   relativePath: String;
@@ -43,6 +43,7 @@ export class FileUploadComponent implements OnInit {
   files: Array<FileUploadModel> = [];
 
   constructor(
+    private apiConfigService: ApiConfigService,
     private http: HttpClient) { }
 
   ngOnInit() {
@@ -78,7 +79,7 @@ export class FileUploadComponent implements OnInit {
   private uploadFile(file: FileUploadModel) {
       const fd = new FormData();
       fd.append(this.param, file.data);
-      const req = new HttpRequest('POST', `${API_BASE_URL}/modeshape/api/rest/${this.repositoryName}/${this.workspaceName}/upload/${this.nodePath}/${file.relativePath.slice(file.relativePath.indexOf("/") + 1)}`, fd, {
+      const req = new HttpRequest('POST', `${this.apiConfigService.apiConfig.apiBaseUrl}/modeshape/api/rest/${this.repositoryName}/${this.workspaceName}/upload/${this.nodePath}/${file.relativePath.slice(file.relativePath.indexOf("/") + 1)}`, fd, {
             reportProgress: true
       });
 

@@ -1,6 +1,6 @@
 import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { ApiConfigService } from './services/api-config.service';
 /**
  * Angular 8 RestClient class.
  *
@@ -9,7 +9,9 @@ import { Observable } from 'rxjs';
  */
 export class RestClient {
 
-  public constructor(private httpClient: HttpClient) {
+  public constructor(
+    private httpClient: HttpClient,
+    private apiConfigService: ApiConfigService) {
   }
 
   public getServiceId(): string {
@@ -17,7 +19,7 @@ export class RestClient {
   }
 
   public getBaseUrl(): string {
-    return null;
+    return this.apiConfigService.apiConfig.apiBaseUrl;
   };
 
   public getDefaultHeaders(): Object {

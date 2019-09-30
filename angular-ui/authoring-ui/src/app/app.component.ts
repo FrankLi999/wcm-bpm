@@ -37,14 +37,14 @@ export class AppComponent implements OnInit, OnDestroy
     /**
      * Constructor
      *
-     * @param {DOCUMENT} document
-     * @param {FuseConfigService} _fuseConfigService
-     * @param {FuseNavigationService} _fuseNavigationService
-     * @param {FuseSidebarService} _fuseSidebarService
-     * @param {FuseSplashScreenService} _fuseSplashScreenService
-     * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-     * @param {Platform} _platform
-     * @param {TranslateService} _translateService
+     * @param DOCUMENT document
+     * @param FuseConfigService _fuseConfigService
+     * @param FuseNavigationService _fuseNavigationService
+     * @param FuseSidebarService _fuseSidebarService
+     * @param FuseSplashScreenService _fuseSplashScreenService
+     * @param FuseTranslationLoaderService _fuseTranslationLoaderService
+     * @param Platform _platform
+     * @param TranslateService _translateService
      */
     constructor(
         @Inject(DOCUMENT) private document: any,

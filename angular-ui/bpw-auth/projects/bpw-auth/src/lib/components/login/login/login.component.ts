@@ -5,9 +5,9 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { FuseConfigService } from 'bpw-components';
 import { fuseAnimations } from 'bpw-components';
-import { take, takeUntil, flatMap, filter } from 'rxjs/operators';
+import { takeUntil, flatMap, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, API_BASE_URL, ACCESS_TOKEN } from 'bpw-rest-client';
+import { ApiConfigService } from 'bpw-rest-client';
 import * as fromStore from 'bpw-store';
 
 @Component({
@@ -21,23 +21,27 @@ export class LoginComponent implements OnInit, OnDestroy
 {
     loginForm: FormGroup;
     googleLogo = 'assets/images/social-login/google-logo.png';
-    googleLogin = GOOGLE_AUTH_URL;
+    googleLogin = '';
     fbLogo = 'assets/images/social-login/fb-logo.png';
-    facebookLogin = FACEBOOK_AUTH_URL;
+    facebookLogin = '';
     githubLogo = 'assets/images/social-login/github-logo.png';
-    githubLogin = GITHUB_AUTH_URL;
+    githubLogin: string = '';
     loginError: string = '';
     private unsubscribeAll: Subject<any>;
+    
     /**
-     * Constructor
-     *
-     * @ param {FuseConfigService} _fuseConfigService
-     * @ param {FormBuilder} _formBuilder
+     * @param _fuseConfigService 
+     * @param _formBuilder 
+     * @param apiConfigService 
+     * @param ApiConfigService 
+     * @param router 
+     * @param store 
      */
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _formBuilder: FormBuilder,
-        private http: HttpClient,
+        private apiConfigService: ApiConfigService,
+        //private http: HttpClient,
         private router: Router,
         private store: Store<fromStore.AuthState>
     )
@@ -70,6 +74,10 @@ export class LoginComponent implements OnInit, OnDestroy
       * On init
       */
     ngOnInit(): void {
+        this.googleLogin = this.apiConfigService.apiConfig.googleAuthUrl;
+        this.facebookLogin = this.apiConfigService.apiConfig.facebookAuthUrl;
+        this.githubLogin = this.apiConfigService.apiConfig.githubAuthUrl;
+
         this.loginForm = this._formBuilder.group({
             email   : ['', [Validators.required, Validators.email]],
             password: ['', Validators.required]

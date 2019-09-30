@@ -2,9 +2,8 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { FuseSharedModule } from '../shared.module';
 @Injectable({
-  providedIn: FuseSharedModule
+  providedIn: 'root'
 })
 export class FuseMatchMediaService
 {

@@ -14,9 +14,9 @@ import {
   import * as fromStore from '../store';
   // import { AuthModule } from '../auth.module';
   
-  @Injectable(
-  // { providedIn: AuthModule }
-  )
+  @Injectable({ 
+    providedIn: 'root' 
+  })
   export class AuthHttpInterceptor implements HttpInterceptor {
     constructor(
       private authService: AuthService, 

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { FuseDirectivesModule } from '../directives';
 @Injectable({
-    providedIn: FuseDirectivesModule
+    providedIn: 'root'
 })
 export class FuseMatSidenavHelperService
 {

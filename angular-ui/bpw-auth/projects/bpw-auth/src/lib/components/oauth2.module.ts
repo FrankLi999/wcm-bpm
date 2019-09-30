@@ -1,33 +1,26 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { ProfileComponent } from './oauth2-profile/profile.component';
-import { AuthGuard } from 'bpw-store';
-import { RedirectHandlerComponent } from './oauth2-redirect-handler/redirect-handler.component';
+import { Oauth2ProfileModule } from './oauth2-profile/oauth2-profile.module';
+import { Oauth2RedirectHandlerModule } from './oauth2-redirect-handler/oauth2-redirect-handler.module';
 
-const routes = [
-  {
-    path     : 'profile',
-    component: ProfileComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path     : 'redirect',
-    component: RedirectHandlerComponent
-  }
-];
+// const routes = [
+//   {
+//     path     : 'profile',
+//     component: ProfileComponent,
+//     canActivate: [AuthGuard]
+//   },
+//   {
+//     path     : 'redirect',
+//     component: RedirectHandlerComponent
+//   }
+// ];
 @NgModule({
-  declarations: [
-    ProfileComponent,
-    RedirectHandlerComponent
-  ],
   imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
+    Oauth2ProfileModule,
+    Oauth2RedirectHandlerModule
   ],
   exports: [
-    ProfileComponent,
-    RedirectHandlerComponent
+    Oauth2ProfileModule,
+    Oauth2RedirectHandlerModule
   ]
 })
 export class OAuth2Module { }

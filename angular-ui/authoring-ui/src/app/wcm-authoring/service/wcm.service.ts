@@ -12,10 +12,9 @@ import {
   Timeout,
   Produces, 
   Query,
-  MediaType
+  MediaType,
+  ApiConfigService
 } from 'bpw-rest-client';
-
-import {API_BASE_URL} from 'bpw-rest-client';
 
 import { 
   JsonForm,
@@ -32,15 +31,17 @@ import {
 @Injectable()
 @Client({
   serviceId: 'modeshape-service',
-  baseUrl: `${API_BASE_URL}/wcm/api/rest`,
+  baseUrl: '/wcm/api/rest',
   headers: {
       'content-type': 'application/json'
   }
 })
 export class WcmService extends RestClient {
 
-  constructor(httpClient: HttpClient){
-    super(httpClient);
+  constructor(
+    apiConfigService: ApiConfigService,
+    httpClient: HttpClient){
+    super(httpClient, apiConfigService);
   }
 
   @Get('/theme/{repository}/{workspace}')

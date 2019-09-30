@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 import { FuseSharedModule } from 'bpw-components';
-
+import { RestClientModule } from 'bpw-rest-client';
 import { LoginComponent } from './login/login.component';
 
 const routes = [
@@ -25,6 +25,7 @@ const routes = [
     LoginComponent
   ],
   imports: [
+    RestClientModule,
     RouterModule.forChild(routes),
     CommonModule,
     FormsModule, 

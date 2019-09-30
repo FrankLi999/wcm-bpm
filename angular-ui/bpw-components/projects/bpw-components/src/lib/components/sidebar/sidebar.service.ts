@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { FuseSidebarComponent } from './sidebar.component';
-import { FuseSidebarModule } from './sidebar.module';
 
 @Injectable({
-    providedIn: FuseSidebarModule
+    providedIn: 'root'
 })
 export class FuseSidebarService
 {

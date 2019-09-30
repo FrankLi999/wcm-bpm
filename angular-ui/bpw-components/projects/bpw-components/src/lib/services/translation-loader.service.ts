@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { FuseSharedModule } from '../shared.module';
 export interface Locale
 {
     lang: string;
@@ -8,7 +7,7 @@ export interface Locale
 }
 
 @Injectable({
-  providedIn: FuseSharedModule
+  providedIn: 'root'
 })
 export class FuseTranslationLoaderService
 {

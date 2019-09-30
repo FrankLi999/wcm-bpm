@@ -67,7 +67,7 @@ export function methodBuilder( method: string ) {
           }
           resUrl = baseUrl + resUrl;
         }
-
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>> request url: " + resUrl);
         // Query
         let search: HttpParams = new HttpParams();
         if ( pQuery ) {

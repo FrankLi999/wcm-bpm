@@ -11,7 +11,7 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthHttpInterceptor } from 'bpw-store';
 import 'hammerjs';
-
+import { RestClientConfigModule } from 'bpw-rest-client';
 import {
   FuseModule,
   FuseSharedModule,
@@ -19,8 +19,10 @@ import {
   FuseSidebarModule,
   FuseThemeOptionsModule
 } from 'bpw-components';
+
 import { AuthModule } from 'bpw-store';
-import { fuseConfig } from 'app/fuse-config';
+
+import { fuseConfig, apiConfig } from 'app/fuse-config';
 
 import { AppComponent } from 'app/app.component';
 import { AppStoreModule } from 'app/store/store.module';
@@ -79,6 +81,8 @@ const appRoutes: Routes = [
         // Material
         MatButtonModule,
         MatIconModule,
+
+        RestClientConfigModule.forRoot(apiConfig),
 
         // Fuse modules
         FuseModule.forRoot(fuseConfig),

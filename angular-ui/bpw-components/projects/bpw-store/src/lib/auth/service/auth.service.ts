@@ -9,30 +9,31 @@ import {
   Body,
   Timeout,
   Produces,
-  MediaType
+  MediaType,
+  ApiConfigService
 } from 'bpw-rest-client';
 
-import { API_BASE_URL } from 'bpw-rest-client';
-import { AuthModule } from '../auth.module';
 import {
   UserProfile,
   Login
 } from '../model';
 
-@Injectable({
-  providedIn: AuthModule
+@Injectable({ 
+    providedIn: 'root' 
 })
 @Client({
   serviceId: 'auth-service',
-  baseUrl: `${API_BASE_URL}/auth/api/rest`,
+  baseUrl: '/auth/api/rest',
   headers: {
       'content-type': 'application/json'
   }
 })
 export class AuthService extends RestClient {
 
-  constructor(httpClient: HttpClient){
-    super(httpClient);
+  constructor(
+    apiconfigService: ApiConfigService,
+    httpClient: HttpClient){
+    super(httpClient, apiconfigService);
   }
 
   @Post('/login')
