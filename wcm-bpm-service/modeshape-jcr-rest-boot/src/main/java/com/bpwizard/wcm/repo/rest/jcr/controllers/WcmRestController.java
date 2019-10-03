@@ -1,6 +1,7 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,9 +71,11 @@ import com.bpwizard.wcm.repo.rest.jcr.model.SidePanel;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
+import com.bpwizard.wcm.repo.rest.jcr.model.SiteNavigatorFilter;
 import com.bpwizard.wcm.repo.rest.jcr.model.Theme;
 import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmLibrary;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmNode;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmOperation;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmRepository;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmSystem;
@@ -760,8 +763,9 @@ public class WcmRestController {
 			logger.traceEntry();
 		}
 		try {
+			contentItemPath = contentItemPath.startsWith("/") ? contentItemPath : "/" + contentItemPath;
 			RestNode contentItemNode = (RestNode) this.itemHandler.item(request, repository, workspace,
-					"/" + contentItemPath, 2);
+					contentItemPath, 2);
 			
 			ContentItem contentItem = new ContentItem(); 
 			contentItem.setRepository(repository);
@@ -799,7 +803,68 @@ public class WcmRestController {
 			throw new WcmRepositoryException(t);
 		}
 	}
-	  
+	
+	@PostMapping(path = "/wcmNodes/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public WcmNode[] getWcmNodes(
+			@PathVariable("repository") final String repository, 
+			@PathVariable("workspace") final String workspace,
+			@RequestBody final SiteNavigatorFilter filter,
+			HttpServletRequest request) {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			final String siteAreaPath = filter.getNodePath().startsWith("/") ? filter.getNodePath() : "/" + filter.getNodePath();
+			RestNode saNode = (RestNode) this.itemHandler.item(request, repository, workspace,
+					siteAreaPath, 2);
+			System.out.println("..............getWcmNodes:" + filter);
+			WcmNode[] wcmNodes = saNode.getChildren().stream()
+			    .filter(node -> this.applyFilter(node, filter))
+			    .map(node -> this.toWcmNode(node, siteAreaPath))
+			    .toArray(WcmNode[]::new);
+
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return wcmNodes; 
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}
+	};
+	
+	private boolean applyFilter(final RestNode node, SiteNavigatorFilter filter) {
+		return (filter == null || filter.getNodePath() == null) ?
+				node.getJcrProperties().stream()
+				.filter(property -> "jcr:primaryType".equals(property.getName()))
+				.map(property -> property.getValues().get(0))
+				.anyMatch(nodeType -> nodeType.startsWith("bpw:"))
+		    : node.getJcrProperties().stream()
+				.filter(property -> "jcr:primaryType".equals(property.getName()))
+				.map(property -> property.getValues().get(0))
+				.anyMatch(nodeType -> Arrays.stream(
+						filter.getNodeTypes()).anyMatch(nodeType::equals) &&
+						this.propertyMatch(node, filter.getFilters().get(nodeType)));
+	}
+	
+	private boolean propertyMatch(RestNode node, Map<String, String> siteAreaPath) {
+		return true;
+	}
+	
+	private WcmNode toWcmNode(RestNode node, String siteAreaPath) {
+		WcmNode wcmNode = new WcmNode();
+		wcmNode.setName(node.getName());
+		for (RestProperty property: node.getJcrProperties()) {
+			if ("jcr:primaryType".equals(property.getName())) {
+				wcmNode.setNodeType(property.getValues().get(0));
+				break;
+			} 
+		}
+		wcmNode.setNodeType(String.format("%s/%s", siteAreaPath, node.getName()));
+		return wcmNode;
+	}
+	
 	private ObjectNode toPropertyNode(FormControl formControl, ObjectNode definitions) {
 		ObjectNode propertyNode = JsonNodeFactory.instance.objectNode();
 		// propertyNode.put("name", formControl.getName());
@@ -1148,7 +1213,8 @@ public class WcmRestController {
 		for (ResourceViewer viewer : viewers) {
 			Node viewerNode = restNode.addNode("viewer" + viewerCount++, "bpw:resourceViewer");
 			viewerNode.setProperty("bpw:renderTemplayeName", viewer.getRenderTemplate());
-			if (StringUtils.hasText(viewer.getContentPath())) {
+			viewerNode.setProperty("bpw:title", viewer.getTitle());
+			if (viewer.getContentPath() != null && viewer.getContentPath().length > 0) {
 				viewerNode.setProperty("bpw:contentPath", viewer.getContentPath());
 			}
 		}
@@ -1399,10 +1465,12 @@ public class WcmRestController {
 			if (this.checkNodeType(viewerNode, "bpw:resourceViewer")) {
 				ResourceViewer viewer = new ResourceViewer();
 				for (RestProperty property : viewerNode.getJcrProperties()) {
-					if ("bpw:renderTemplayeName".equals(property.getName())) {
+					if ("bpw:title".equals(property.getName())) {
+						viewer.setTitle(property.getValues().get(0));
+					} else if ("bpw:renderTemplayeName".equals(property.getName())) {
 						viewer.setRenderTemplate(property.getValues().get(0));
 					} else if ("bpw:contentPath".equals(property.getName())) {
-						viewer.setContentPath(property.getValues().get(0));
+						viewer.setContentPath(property.getValues().toArray(new String[property.getValues().size()]));
 					}
 				}
 				viewers.add(viewer);

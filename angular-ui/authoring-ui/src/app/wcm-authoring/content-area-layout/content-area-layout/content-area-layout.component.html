@@ -12,18 +12,6 @@
                     <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
                 </mat-form-field>
             </div>
-            <!--
-            <div fxLayout="column" fxFlex="30">
-                <mat-form-field appearance="outline">
-                    <mat-label>Theme</mat-label>
-                    <mat-select formControlName="theme">
-                    <mat-option *ngFor="let theme of themes" [value]="theme.value">
-                        {{theme.viewValue}}
-                    </mat-option>
-                    </mat-select>               
-                </mat-form-field>
-            </div>
-            -->
             <div fxLayout="column" fxFlex="20">
                 <button mat-icon-button type="button" 
                     title="Update side navigation configutation" 
@@ -39,19 +27,6 @@
                 </button>
             </div>         
         </div>
-        <!-- HEADER -->
-        <!--
-        <div class="card" id="header-layout">
-            <div class="content">
-                <h4>HEADER</h4>
-            </div>
-            <div class="layout-form-card">
-                <div class="layout-form-button-container">
-                    <mat-checkbox formControlName="headerEnabled">Show Header</mat-checkbox>
-                </div>
-            </div>
-        </div>
-        -->
         <!-- / HEADER -->
         <div class="card" id="page-layout">
             <div class="card" id="sidePanel-layout" fxFlex="{{layout.sidePane.width}}" *ngIf="showLeftSidePanel()">
@@ -60,7 +35,8 @@
                 <div class="card container" *ngFor="let viewer of layout.sidePane.viewers; let viewerIndex = index;">
                     <resource-viewer
                         [viewerIndex]="viewerIndex"
-                        [renderTemplate]="layout.sidePane.viewers[viewerIndex].renderTemplate"
+                        [resourceViewer]="layout.sidePane.viewers[viewerIndex]"
+                        [renderTemplate] = "renderTemplate(layout.sidePane.viewers[viewerIndex].renderTemplate)"
                         (resourceViewerRemoved)="removeSideViewer($event)">
                     </resource-viewer>
                 </div>
@@ -91,7 +67,8 @@
                             <div class="card container" *ngFor="let viewer of column.viewers; let viewerIndex = index;">
                                 <resource-viewer 
                                     [viewerIndex]="viewerIndex"
-                                    [renderTemplate]="layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex].renderTemplate"
+                                    [resourceViewer]="layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex]"
+                                    [renderTemplate] = "renderTemplate(layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex].renderTemplate)"
                                     (resourceViewerRemoved)="removeResourceViewer(rowIndex, columnIndex, $event)">
                                 </resource-viewer>
                             </div>
@@ -111,7 +88,8 @@
                 <div class="card container" *ngFor="let viewer of layout.sidePane.viewers; let viewerIndex = index;">
                     <resource-viewer
                         [viewerIndex]="viewerIndex"
-                        [renderTemplate]="layout.sidePane.viewers[viewerIndex].renderTemplat"
+                        [resourceViewer]="layout.sidePane.viewers[viewerIndex]"
+                        [renderTemplate] = "renderTemplate(layout.sidePane.viewers[viewerIndex].renderTemplate)"
                         (resourceViewerRemoved)="removeSideViewer($event)">
                     </resource-viewer>
                 </div>

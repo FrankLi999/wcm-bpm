@@ -1,191 +1,194 @@
-import { Component, Injectable, ViewChild } from '@angular/core';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { MatMenuTrigger } from '@angular/material';
-// import { ModeshapeService } from '../../service/modeshape.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import { MatDialog } from '@angular/material/dialog';
+import { WcmOperation, JsonForm } from '../../model';
+import * as fromStore from '../../store';
+import { ModeshapeService } from '../../service/modeshape.service';
+import { WcmService } from '../../service/wcm.service';
+import { SiteNavigatorComponent } from '../../components/site-navigator/site-navigator.component';
 
-const LOAD_MORE = 'LOAD_MORE';
-
-/** Nested node */
-export class SiteNode {
-  childrenChange = new BehaviorSubject<SiteNode[]>([]);
-
-  get children(): SiteNode[] {
-    return this.childrenChange.value;
-  }
-
-  constructor(public item: string,
-              public hasChildren = false,
-              public loadMoreParentItem: string | null = null) {}
-}
-
-/** Flat node with expandable and level information */
-export class SiteFlatNode {
-  constructor(public item: string,
-              public level = 1,
-              public expandable = false,
-              public active = false,
-              public loadMoreParentItem: string | null = null) {}
-}
-
-/**
- * A database that only load part of the data initially. After user clicks on the `Load more`
- * button, more data will be loaded.
- */
-@Injectable()
-export class SiteDatabase {
-  batchNumber = 5;
-  dataChange = new BehaviorSubject<SiteNode[]>([]);
-  nodeMap = new Map<string, SiteNode>();
-
-  /** The data */
-  rootLevelNodes: string[] = ["My Site"];
-  dataMap = new Map<string, string[]>([
-    ["My Site", ['Fruits', 'Vegetables']],
-    ['Fruits', ['Apple', 'Orange', 'Banana']],
-    ['Vegetables', ['Tomato', 'Potato', 'Onion']],
-    ['Apple', ['Fuji', 'Macintosh']],
-    ['Onion', ['Yellow', 'White', 'Purple', 'Green', 'Shallot', 'Sweet', 'Red', 'Leek']],
-  ]);
-
-  initialize() {
-    const data = this.rootLevelNodes.map(name => this._generateNode(name));
-    this.dataChange.next(data);
-  }
-
-  /** Expand a node whose children are not loaded */
-  loadMore(item: string, onlyFirstTime = false) {
-    if (!this.nodeMap.has(item) || !this.dataMap.has(item)) {
-      return;
-    }
-    const parent = this.nodeMap.get(item)!;
-    const children = this.dataMap.get(item)!;
-    if (onlyFirstTime && parent.children!.length > 0) {
-      return;
-    }
-    const newChildrenNumber = parent.children!.length + this.batchNumber;
-    const nodes = children.slice(0, newChildrenNumber)
-      .map(name => this._generateNode(name));
-    if (newChildrenNumber < children.length) {
-      // Need a new load more node
-      nodes.push(new SiteNode(LOAD_MORE, false, item));
-    }
-    parent.childrenChange.next(nodes);
-    this.dataChange.next(this.dataChange.value);
-  }
-
-  private _generateNode(item: string): SiteNode {
-    if (this.nodeMap.has(item)) {
-      return this.nodeMap.get(item)!;
-    }
-    const result = new SiteNode(item, this.dataMap.has(item));
-    this.nodeMap.set(item, result);
-    return result;
-  }
-}
+import { UploadZipfileDialogComponent } from '../../dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
+import { NewFolderDialogComponent } from '../../dialog/new-folder-dialog/new-folder-dialog.component';
+import { NewThemeDialogComponent } from '../../dialog/new-theme-dialog/new-theme-dialog.component';
+import { NewSiteareaDialogComponent } from '../../dialog/new-sitearea-dialog/new-sitearea-dialog.component';
+import { NewContentDialogComponent } from '../../dialog/new-content-dialog/new-content-dialog.component';
 
 @Component({
   selector: 'site-explorer',
   templateUrl: './site-explorer.component.html',
-  styleUrls: ['./site-explorer.component.scss'],
-  providers: [SiteDatabase]
+  styleUrls: ['./site-explorer.component.scss']
 })
-export class SiteExplorerComponent {
-  activeNode : SiteFlatNode = null; 
-  nodeMap = new Map<string, SiteFlatNode>();
-  treeControl: FlatTreeControl<SiteFlatNode>;
-  treeFlattener: MatTreeFlattener<SiteNode, SiteFlatNode>;
-  // Flat tree data source
-  dataSource: MatTreeFlatDataSource<SiteNode, SiteFlatNode>;
-  @ViewChild('site', {static: true}) tree;
-  @ViewChild('contextMenu', {static: true}) contextMenu: MatMenuTrigger;
-
+export class SiteExplorerComponent extends SiteNavigatorComponent implements OnInit, OnDestroy {
+  functionMap: {[key:string]:Function}= {};
+  jsonFormMap: {[key:string]: JsonForm} = {}; //TODO: it is loaded asynchronously during ngInit
   constructor(
-    //private modeshapeService: ModeshapeService,
-    private _database: SiteDatabase
+    protected wcmService: WcmService,
+    private modeshapeService: ModeshapeService,
+    protected store: Store<fromStore.WcmAppState>,
+    protected matDialog: MatDialog
   ) {
-    this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
-      this.isExpandable, this.getChildren);
+    super(wcmService, store, matDialog);
+  }
 
-    this.treeControl = new FlatTreeControl<SiteFlatNode>(this.getLevel, this.isExpandable);
+  ngOnInit() {
+    this.functionMap['Upload.file'] = this.uploadZipFile;
+    this.functionMap['Create.folder'] = this.createFolder;
+    this.functionMap['Create.theme'] = this.createTheme;
+    this.functionMap['Remove.folder'] = this.removeItem;
+    this.functionMap['Remove.file'] = this.removeItem;
+    this.functionMap['Delete.theme'] = this.removeItem;
+    
+    this.functionMap['Create.siteArea'] = this.createSiteArea;
+    this.functionMap['Delete.siteArea'] = this.removeItem;
+    this.functionMap['Create.content'] = this.createContent;
+    this.functionMap['Delete.content'] = this.removeItem;
 
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+    this.store.pipe(
+      takeUntil(this.unsubscribeAll),
+      select(fromStore.getJsonForms)
+    ).subscribe(
+      (jsonForms: {[key:string]:JsonForm}) => {
+        if (jsonForms) {
+          this.jsonFormMap = jsonForms;
+        }
+      },
+      response => {
+        console.log("getAuthoringTemplateAsJsonSchema call ended in error", response);
+        console.log(response);
+      },
+      () => {
+        console.log("getAuthoringTemplateAsJsonSchema observable is now completed.");
+      }
+    );
+    super.ngOnInit();
+  }
 
-    _database.dataChange.subscribe(data => {
-      this.dataSource.data = data;
+  /**
+    * On destroy
+    */
+  ngOnDestroy(): void {
+    this.unsubscribeAll.next();
+    this.unsubscribeAll.complete();
+    this.loadError && this.store.dispatch(new fromStore.WcmSystemClearError());
+  }
+
+  doNodeOperation(item:String, operation: WcmOperation) {
+    this.functionMap[`${operation.operation}.${operation.resourceName}`].call(this);
+  }
+
+  uploadZipFile() {
+    const node =  this.activeNode;
+    let dialogRef = this.matDialog.open(UploadZipfileDialogComponent, {
+      panelClass: 'zipfile-upload-dialog',
+      data: { 
+        nodePath: node.wcmPath,
+        repositoryName: node.repository,
+        workspaceName: node.workspace
+      }
     });
-    _database.initialize();
-    if (this.activeNode != null) {
-      this.activeNode.active = true;
-      this._database.loadMore(this.activeNode.item, true);
-    }
+    dialogRef.afterClosed()
+      .subscribe(response => {
+        this.load(node);
+    });
   }
 
-  ngAfterViewInit() {
-    //console.log(this.modeshapeService);
-    this.tree.treeControl.expand(this.activeNode);
+  createFolder() {
+    const node =  this.activeNode;
+    let dialogRef = this.matDialog.open(NewFolderDialogComponent, {
+      panelClass: 'folder-new-dialog',
+      data: {
+        jsonFormObject: this.jsonFormMap['bpwizard/default/system/folderType'].formSchema,
+        nodePath: node.wcmPath,
+        repositoryName: node.repository,
+        workspaceName: node.workspace
+      }
+    });
+    dialogRef.afterClosed()
+      .subscribe(response => {
+        this.load(node);
+          
+    });
   }
 
-  getChildren = (node: SiteNode): Observable<SiteNode[]> => node.childrenChange;
-
-  transformer = (node: SiteNode, level: number) => {
-    const existingNode = this.nodeMap.get(node.item);
-    if (existingNode) {
-      return existingNode;
-    }
-    const newNode = new SiteFlatNode(node.item, level, node.hasChildren, false, node.loadMoreParentItem);
-    this.nodeMap.set(node.item, newNode);
-    if (level == 0) {
-      this.activeNode = newNode;
-    }
-    return newNode;
+  createTheme() {
+    const node =  this.activeNode;
+    // node: JcrFlatNode, matDialog: MatDialog, modeshapeService: ModeshapeService, 
+    //   jcrNodeMap: Map<string, JcrNode>, nodeMap: Map<string, JcrFlatNode>, dataChange: BehaviorSubject<JcrNode[]>, callback: Function) {
+    let dialogRef = this.matDialog.open(NewThemeDialogComponent, {
+      panelClass: 'theme-new-dialog',
+      data: { 
+        jsonFormObject: this.jsonFormMap['bpwizard/default/system/themeType'].formSchema,
+        nodePath: node.wcmPath,
+        repositoryName: node.repository,
+        workspaceName: node.workspace
+      }
+    });
+    dialogRef.afterClosed()
+      .subscribe(response => {
+        this.load(node);          
+    });
   }
 
-  getLevel = (node: SiteFlatNode) => node.level;
-
-  isExpandable = (node: SiteFlatNode) => node.expandable;
-
-  hasChild = (_: number, _nodeData: SiteFlatNode) => _nodeData.expandable;
-
-  isLoadMore = (_: number, _nodeData: SiteFlatNode) => _nodeData.item === LOAD_MORE;
-
-  /** Load more nodes from data source */
-  loadMore(item: string) {
-    this._database.loadMore(item);
+  removeItem() {
+    const node =  this.activeNode;
+    // node: JcrFlatNode, matDialog: MatDialog, modeshapeService: ModeshapeService, 
+    //   jcrNodeMap: Map<string, JcrNode>, nodeMap: Map<string, JcrFlatNode>, dataChange: BehaviorSubject<JcrNode[]>, callback: Function) {
+    this.modeshapeService.deleteItem(
+      node.repository,
+      node.workspace,
+      node.wcmPath      
+    ).subscribe(
+      (event: any) => {
+        if (event.type===4) {
+          this.nodeRemoved(node);
+        }
+      },
+      response => {
+        console.log("removeFolder call in error", response);
+        console.log(response);
+      },
+      () => {
+        console.log("removeFolder observable is now completed.");
+      });
   }
 
-  loadChildren(node: SiteFlatNode) {
-    if (null != this.activeNode) {
-      this.activeNode.active = false;
-     
-    }
-    this.activeNode = node;
-    node.active = true;
-    this._database.loadMore(node.item, true);
+
+  createSiteArea() {
+    const node =  this.activeNode;
+    let dialogRef = this.matDialog.open(NewSiteareaDialogComponent, {
+      panelClass: 'sitearea-new-dialog',
+      data: { 
+        jsonFormObject: this.jsonFormMap['bpwizard/default/system/siteAreaType'].formSchema,
+        nodePath: node.wcmPath,
+        repositoryName: node.repository,
+        workspaceName: node.workspace
+      }
+    });
+    dialogRef.afterClosed()
+      .subscribe(response => {
+        this.load(node);           
+    });
+  }
+  
+  createContent(siteNavigator: SiteNavigatorComponent) {
+    const node =  siteNavigator.activeNode;
+    let dialogRef = this.matDialog.open(NewContentDialogComponent, {
+      panelClass: 'content-new-dialog',
+      data: { 
+        jsonFormObject: this.jsonFormMap['bpwizard/default/system/MyContent'].formSchema,
+        nodePath: node.wcmPath,
+        repositoryName: node.repository,
+        workspaceName: node.workspace
+      }
+    });
+    dialogRef.afterClosed()
+      .subscribe(response => {
+        siteNavigator.load(node);                
+    });
   }
 
-  editCurrentNode(item: String) {
-    alert(`Click on Action 1 for ${item}`);
-  }
-
-  deleteCurrentNode(item: String) {
-    alert(`Click on Action 2 for ${item}`);
-  }
-
-  newPageNode(item: String) {
-    alert(`Click on Action 2 for ${item}`);
-  }
-
-  newSiteAreaNode(item: String) {
-    alert(`Click on Action 2 for ${item}`);
-  }
-
-  newContentItem(item: String) {
-    alert(`Click on Action 2 for ${item}`);
-  }
-
-  newFile(item: String) {
-    alert(`Click on Action 2 for ${item}`);
+  editCurrentNode() {
+    throw new Error('Add impl');
   }
 }

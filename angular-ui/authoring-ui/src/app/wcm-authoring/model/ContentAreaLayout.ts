@@ -1,5 +1,4 @@
 import { HasName } from './HasName';
-import { ResourceViewer } from './ResourceViewer';
 import { LayoutRow } from './LayoutRow';
 import { SidePane} from './SidePane';
 export interface ContentAreaLayout extends HasName {

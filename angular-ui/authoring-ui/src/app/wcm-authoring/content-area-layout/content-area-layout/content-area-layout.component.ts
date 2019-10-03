@@ -1,27 +1,19 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
+import cloneDeep from 'lodash-es/cloneDeep';
 import { 
-  Theme,
   RenderTemplate,
   ContentAreaLayout,
   LayoutColumn,
-  LayoutRow
+  LayoutRow, 
+  RenderTemplateModel
 } from '../../model';
 import * as fromStore from '../../store';
-export interface ThemeModel {
-  value: String;
-  viewValue: String;
-}
-
-export interface RenderTemplateModel {
-  value: String;
-  viewValue: String;
-}
+import { SelectRenderTemplateDialog } from './select-render-template.dialog';
 
 @Component({
   selector: 'content-area-layout',
@@ -30,13 +22,11 @@ export interface RenderTemplateModel {
 })
 export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
   pageLayoutForm: FormGroup;
-
-  layout: ContentAreaLayout = null;
-  themes: ThemeModel[] = [];
-  
+  layout: ContentAreaLayout = null;  
   renderTemplates: RenderTemplateModel[] = [];
   private unsubscribeAll: Subject<any>;
   error: string;
+  
   constructor(
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
@@ -48,13 +38,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
   ngOnInit() {
       // Reactive Form
       this.pageLayoutForm = this.formBuilder.group({
-          name          : ['Page Layout Name', Validators.required],
-          theme         : ['tacos-2', Validators.required],
-          headerEnabled : [true, Validators.required],
-          footerEnabled : [true, Validators.required],
-          rows: this.formBuilder.array([
-            this.formBuilder.control(0, Validators.required)
-          ])
+          name          : ['Page Layout Name', Validators.required]
       });
 
       this.store.pipe(
@@ -67,29 +51,6 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
           }
       });
 
-      //jcrThemes: Theme[];
-      this.store.pipe(
-          takeUntil(this.unsubscribeAll),
-          select(fromStore.getThemes)          
-        ).subscribe(
-        (jcrThemes: Theme[]) => {
-          if (jcrThemes)
-          jcrThemes.forEach(jcrTheme => {
-            this.themes.push({
-              value: `${jcrTheme.repositoryName}/${jcrTheme.workspace}/${jcrTheme.library}/${jcrTheme.name}`, 
-              viewValue: jcrTheme.title
-            })
-          });
-        },
-        response => {
-          console.log("GET THEME call in error", response);
-          console.log(response);
-        },
-        () => {
-          console.log("The GET THEME observable is now completed.");
-        }
-      );
-
       this.store.pipe(
         takeUntil(this.unsubscribeAll),
           select(fromStore.getRenderTemplates)).subscribe(
@@ -98,7 +59,9 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
             for (let prop in rts) {
               this.renderTemplates.push({
                 value: prop, 
-                viewValue:rts[prop].title
+                title:rts[prop].title,
+                isQuery: rts[prop].isQuery,
+                resourceName: rts[prop].resourceName
               })
             }
           }
@@ -116,7 +79,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
           takeUntil(this.unsubscribeAll),
           select(fromStore.getContentAreaLayout)).subscribe(
         (layout: ContentAreaLayout) => {
-          this.layout = layout;
+          this.layout = cloneDeep(layout);
         }
       );
       
@@ -131,12 +94,8 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
     this.error && this.store.dispatch(new fromStore.ContentAreaLayoutClearError());
   }
 
-  get rows(): FormArray {
-      return this.pageLayoutForm.get('rows') as FormArray;
-  };
-
   addRow(): void {
-      this.rows.push(this.formBuilder.control(0, Validators.required));
+      // this.rows.push(this.formBuilder.control(0, Validators.required));
       this.layout.rows.push({
         columns : [ {
           width: 100,
@@ -177,13 +136,18 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
     currentRow.columns = columns;
   }
 
+  renderTemplate(renderTemplate: String): RenderTemplateModel {
+    return this.renderTemplates.find(rt => rt.value === renderTemplate);
+  }
+
   removeRow(i: number) {
-    this.rows.removeAt(i);
+    // this.rows.removeAt(i);
     this.layout.rows.splice(i, 1)
   }
 
   canRewmoveRow() : boolean {
-    return this.rows.length > 1;
+    return this.layout.rows.length > 1;
+    // return this.rows.length > 1;
   }
 
   removeViewer(rowNumber: number, columnNumber: number, viewerIndex: number): void {
@@ -251,7 +215,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
 
   public addSideViewer() {
    
-    const dialogRef = this.dialog.open(RenderTemplateDialog, {
+    const dialogRef = this.dialog.open(SelectRenderTemplateDialog, {
       width: '500px',
       data: {
         renderTemplates: this.renderTemplates,
@@ -262,7 +226,8 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(data => {
       if (data && data.selectedRenderTemplate) {
         this.layout.sidePane.viewers.push({
-          renderTemplate: data.selectedRenderTemplate
+          renderTemplate: data.selectedRenderTemplate.value,
+          title: data.selectedRenderTemplate.title
         });
       }
     });
@@ -276,7 +241,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
   }
 
   public addResourceViewer(rowNumber: number, colNumber: number) {
-    const dialogRef = this.dialog.open(RenderTemplateDialog, {
+    const dialogRef = this.dialog.open(SelectRenderTemplateDialog, {
       width: '500px',
       data: {
         renderTemplates: this.renderTemplates,
@@ -287,7 +252,8 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(data => {
       if (data && data.selectedRenderTemplate) {
         this.layout.rows[rowNumber].columns[colNumber].viewers.push({
-          renderTemplate: data.selectedRenderTemplate
+          renderTemplate: data.selectedRenderTemplate.value,
+          title: data.selectedRenderTemplate.title
         });
       }
     });
@@ -328,22 +294,5 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
 
   public cancelEditing() {
     console.log(this.layout);
-  }
-}
-
-@Component({
-  selector: 'render-template-dialog',
-  templateUrl: 'render-template.dialog.html',
-})
-export class RenderTemplateDialog {
-
-  constructor(
-    public dialogRef: MatDialogRef<RenderTemplateDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: {
-      renderTemplates: RenderTemplate[],
-      selectedRenderTemplate: string}) {}
-
-  onNoClick(): void {
-    this.dialogRef.close();
   }
 }

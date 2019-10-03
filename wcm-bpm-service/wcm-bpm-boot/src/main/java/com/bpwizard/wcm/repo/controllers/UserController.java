@@ -1,5 +1,7 @@
 package com.bpwizard.wcm.repo.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,18 +15,21 @@ import com.bpwizard.wcm.repo.domain.UserRepository;
 import com.bpwizard.wcm.repo.annotations.CurrentUser;
 import com.bpwizard.wcm.repo.exception.ResourceNotFoundException;
 import com.bpwizard.wcm.repo.payload.AuthResponse;
+import com.bpwizard.wcm.repo.rest.jcr.controllers.ModeshapeController;
 
 
 @RestController
 @RequestMapping("/user/api/rest")
 public class UserController {
-
+	private static final Logger logger = LogManager.getLogger(UserController.class);
     @Autowired
     private UserRepository userRepository;
     
     @GetMapping("/me")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_admin') or hasRole('admin') or hasRole('user')")
     public ResponseEntity<?> getCurrentUser(@CurrentUser SpringPrincipal userPrincipal) {
+
+    	logger.info(".............................>>>>>>>> me: " + userPrincipal);
     	User user = userRepository.findByEmail(userPrincipal.currentUser().getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.currentUser().getId()));
         return ResponseEntity.ok(AuthResponse.fromUserAndToken(user, ""));

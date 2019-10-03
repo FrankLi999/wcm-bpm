@@ -5,8 +5,8 @@
         <mat-form-field appearance="outline">
             <mat-label>Render Template:</mat-label>
             <mat-select [(ngModel)]="data.selectedRenderTemplate">
-                <mat-option *ngFor="let rt of data.renderTemplates" [value]="rt.value">
-                    {{rt.viewValue}}
+                <mat-option *ngFor="let rt of data.renderTemplates" [value]="rt">
+                    {{rt.value}}
                 </mat-option>
             </mat-select>               
         </mat-form-field>

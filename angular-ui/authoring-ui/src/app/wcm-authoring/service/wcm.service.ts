@@ -26,7 +26,9 @@ import {
   SiteArea,
   ContentItem,
   WcmSystem,
-  SiteConfig
+  SiteConfig,
+  WcmNode,
+  SiteNavigatorFilter
 } from '../model';
 @Injectable()
 @Client({
@@ -142,4 +144,12 @@ export class WcmService extends RestClient {
     @Query("path") contentItemPath: string
     //@Path('contentItemPath') ontentItemPath: string
   ): Observable<ContentItem> { return null; };
+
+  @Post('/wcmNodes')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  getWcmNodes(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Body filter: SiteNavigatorFilter): Observable<WcmNode[]> { return null; };
 }

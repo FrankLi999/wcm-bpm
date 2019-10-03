@@ -45,3 +45,6 @@ export { WcmWorkspace } from './WcmWorkspace';
 export { WcmLibrary } from './WcmLibrary';
 export { WcmOperation } from './WcmOperation';
 export { CurrentSite } from './CurrentSite';
+export { WcmNode } from './WcmNode';
+export { SiteNavigatorFilter } from './SiteNavigatorFilter';
+export { RenderTemplateModel } from './RenderTemplateModel';

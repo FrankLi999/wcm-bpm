@@ -3,6 +3,6 @@ export interface WcmOperation {
     resourceName: String;
     operation: String;
     defaultTitle: String;
-    defaultIcon: String;
+    defaultIcon: String
   }
   

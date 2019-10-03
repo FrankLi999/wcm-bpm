@@ -27,15 +27,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 
 import { ContentAreaDesignerComponent } from './content-area-designer/content-area-designer.component';
-import { 
-    ContentAreaLayoutComponent,
-    RenderTemplateDialog
-} from './content-area-layout/content-area-layout.component';
+import { ContentAreaLayoutComponent } from './content-area-layout/content-area-layout.component';
+import { SelectRenderTemplateDialog } from './content-area-layout/select-render-template.dialog';
 import { ContentAreaLayoutsComponent } from './content-area-layouts/content-area-layouts.component';
 import { ResourceViewerComponent } from './resource-viewer/resource-viewer.component';
 import { AuthGuard } from 'bpw-store';
 import * as fromGuards from '../store/guards';
-
+import { SelectContentItemDialog } from './/select-content-item-dialog/select-content-item.dialog';
+import { ContentSelectorComponent } from './content-selector/content-selector.component';
 const routes: Routes = [
     {
         path       : 'content-area-layout/edit',
@@ -55,7 +54,9 @@ const routes: Routes = [
         ContentAreaLayoutComponent,
         ContentAreaLayoutsComponent,
         ResourceViewerComponent,
-        RenderTemplateDialog
+        SelectRenderTemplateDialog,
+        SelectContentItemDialog,
+        ContentSelectorComponent
     ],
     imports        : [
         RouterModule.forChild(routes),
@@ -87,7 +88,8 @@ const routes: Routes = [
     providers      : [
     ],
     entryComponents: [
-        RenderTemplateDialog
+        SelectRenderTemplateDialog,
+        SelectContentItemDialog
     ]
 })
 export class ContentAreaLayoutModule { }

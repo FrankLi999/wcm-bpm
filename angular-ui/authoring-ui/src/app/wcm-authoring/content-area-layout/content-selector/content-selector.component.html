@@ -1,0 +1,50 @@
+<div id="template" class="page-layout carded left-sidebar inner-scroll">
+    <div *ngIf=loadError fxLayout="column" fxLayoutAlign="start"  fxFlex="1 0 auto">
+    {{loadError}}
+    </div>
+    <!-- SIDEBAR -->
+    <fuse-sidebar fxFlex="20" class="sidebar" name="page-template-side-bar" position="left" lockedOpen="gt-md">
+        <div fxLayout="column" fxLayoutAlign="start"  fxFlex="1 0 auto">
+            <mat-tree #siteNavigator [dataSource]="dataSource" [treeControl]="treeControl">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding [matTreeNodePaddingIndent]="10">
+                <button mat-icon-button
+                    [attr.aria-label]="'toggle ' + node.filename"  
+                    (click)="loadChildren(node)"                                      
+                    matTreeNodeToggle>
+                    <mat-icon class="mat-icon-rtl-mirror">
+                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                    </mat-icon>
+                    <mat-icon class="mat-icon-rtl-mirror">
+                        {{node.active ? 'folder_open' : 'folder'}}
+                    </mat-icon>
+                    <span style="margin-left: 8px;" [matMenuTriggerFor]="contextMenu"
+                        [matMenuTriggerData]="{item: node.id}">
+                    {{node.name}}
+                </span>
+                </button>
+                
+                </mat-tree-node>
+            </mat-tree>
+        </div>
+    </fuse-sidebar>
+    <!-- / SIDEBAR -->
+
+    <!-- CENTER -->
+    <div class="center" fxFlex="80">
+        <md-list>
+            <h3 matSubheader>Selected content items</h3>
+           
+            <md-list-item  *ngFor="let item of selectedContentItems;let itemIndex = index;">
+                <button mat-raised-button (click)="removeSelection(itemIndex)">Ok</button>
+                <span>{{item}}</span>
+            </md-list-item>
+        </md-list>
+    </div>
+    <!-- / CENTER -->
+</div>
+<mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item *ngFor="let operation of currentNodeOperations" disabled="disableOperation(item, operation)" (click)="doNodeOperation(item, operation)"><mat-icon>{{operation.defaultIcon}}</mat-icon><span>{{operation.defaultTitle}}</span></button>
+    </ng-template>
+</mat-menu>
+    

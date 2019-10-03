@@ -29,6 +29,25 @@
         "bpw:defaultTitle": "Remove File",
         "bpw:defaultIcon": "remove"
     },
+    "bpwizard/library/system/configuration/operations/bpwFile" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:file"
+    },
+    "bpwizard/library/system/configuration/operations/bpwFile/remove" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "file",
+        "bpw:operation": "Remove",
+        "bpw:defaultTitle": "Remove File",
+        "bpw:defaultIcon": "remove"
+    },
+    "bpwizard/library/system/configuration/operations/bpwFile/edit" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "file",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit File",
+        "bpw:defaultIcon": "edit"
+    },
+    
     "bpwizard/library/system/configuration/operations/jcrFolder" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "nt:folder"
@@ -54,6 +73,38 @@
         "bpw:defaultTitle": "Remove Folder",
         "bpw:defaultIcon": "remove"
     },
+        "bpwizard/library/system/configuration/operations/bpwFolder" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:folder"
+    },
+    "bpwizard/library/system/configuration/operations/bpwFolder/newfolder" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "folder",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Folder",
+        "bpw:defaultIcon": "create_new_folder"
+    },
+    "bpwizard/library/system/configuration/operations/bpwFolder/upload" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "file",
+        "bpw:operation": "Upload",
+        "bpw:defaultTitle": "Upload",
+        "bpw:defaultIcon": "cloud_upload"
+    },
+    "bpwizard/library/system/configuration/operations/bpwFolder/remove" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "folder",
+        "bpw:operation": "Remove",
+        "bpw:defaultTitle": "Remove Folder",
+        "bpw:defaultIcon": "remove"
+    },
+    "bpwizard/library/system/configuration/operations/bpwFolder/edit" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "folder",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Folder",
+        "bpw:defaultIcon": "edit"
+    },
     "bpwizard/library/system/configuration/operations/siteConfigFolder" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "bpw:siteConfigFolder"
@@ -76,6 +127,13 @@
         "bpw:defaultTitle": "Remove Site Configuration",
         "bpw:defaultIcon": "delete"
     },
+    "bpwizard/library/system/configuration/operations/siteConfig/editSiteConfig" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "siteConfig",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Site Configuration",
+        "bpw:defaultIcon": "edit"
+    },
     "bpwizard/library/system/configuration/operations/siteArea" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "bpw:siteArea"
@@ -94,6 +152,13 @@
         "bpw:defaultTitle": "Remove SiteArea",
         "bpw:defaultIcon": "delete"
     },
+    "bpwizard/library/system/configuration/operations/siteArea/editSiteArea" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "siteArea",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit SiteArea",
+        "bpw:defaultIcon": "edit"
+    },
     "bpwizard/library/system/configuration/operations/siteArea/createContent" : {
         "jcr:primaryType":"bpw:supportedOpertion",
         "bpw:resourceName": "content",
@@ -103,7 +168,7 @@
     },
      "bpwizard/library/system/configuration/operations/content" : {
         "jcr:primaryType":"bpw:supportedOpertions",
-        "bpw:jcrType": "bpw:contentType"
+        "bpw:jcrType": "bpw:content"
     },
     "bpwizard/library/system/configuration/operations/content/removeContent" : {
         "jcr:primaryType":"bpw:supportedOpertion",
@@ -111,6 +176,13 @@
         "bpw:operation": "Delete",
         "bpw:defaultTitle": "Remove Content Item",
         "bpw:defaultIcon": "delete"
+    },
+    "bpwizard/library/system/configuration/operations/content/editContent" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "content",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Content Item",
+        "bpw:defaultIcon": "edit"
     },
     "bpwizard/library/system/configuration/operations/themeFolder" : {
         "jcr:primaryType":"bpw:supportedOpertions",
@@ -133,6 +205,13 @@
         "bpw:operation": "Delete",
         "bpw:defaultTitle": "Remove Theme",
         "bpw:defaultIcon": "delete"
+    },
+    "bpwizard/library/system/configuration/operations/theme/edittheme" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "theme",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Theme",
+        "bpw:defaultIcon": "edit"
     },
     "bpwizard/library/system/configuration/operations/theme/upload" : {
         "jcr:primaryType":"bpw:supportedOpertion",
@@ -2106,6 +2185,7 @@
     },
     "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/sidePane/viewer_s0" : {
         "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "MySidePaneRenderTemplate",
         "bpw:renderTemplayeName": "bpwizard/default/design/MySidePaneRenderTemplate",
         "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1"
     },
@@ -2118,6 +2198,7 @@
     },
     "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row0/column0/viewer_c0_0_0" : {
         "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "MyRenderTemplate",
        "bpw:renderTemplayeName": "bpwizard/default/design/MyRenderTemplate",
        "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MyContent"
     },
@@ -2489,6 +2570,7 @@
     },
     "bpwizard/library/design/contentAreaLayout/MyLayout/sidePane/viewer_s0" : {
         "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "MySidePaneRenderTemplate",
         "bpw:renderTemplayeName": "bpwizard/default/design/MySidePaneRenderTemplate",
         "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent"
     },
@@ -2501,8 +2583,9 @@
     },
     "bpwizard/library/design/contentAreaLayout/MyLayout/row0/column0/viewer_c0_0_0" : {
         "jcr:primaryType":"bpw:resourceViewer",
-       "bpw:renderTemplayeName": "bpwizard/default/design/MyRenderTemplate",
-       "bpw:contentPath": "bpwizard/library/camunda/rootSiteArea/home/MyContent"
+        "bpw:title": "MyRenderTemplate",
+        "bpw:renderTemplayeName": "bpwizard/default/design/MyRenderTemplate",
+        "bpw:contentPath": "bpwizard/library/camunda/rootSiteArea/home/MyContent"
     },
     "bpwizard/library/camunda/siteConfig/bpm" : {
         "jcr:primaryType":"bpw:siteConfig",

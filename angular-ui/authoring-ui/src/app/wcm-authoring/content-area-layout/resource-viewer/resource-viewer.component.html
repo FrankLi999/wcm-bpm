@@ -1,10 +1,13 @@
 <div fxLayout="row" fxLayoutAlign="end">
-    <div fxLayout="column" fxLayoutAlign="start" fxFlex="100">
-      <a [routerLink]="" (click)="removeSideViewer(viewerIndex)"><mat-icon>remove_circle_outline</mat-icon>Remove Viewer</a>
+    <div fxLayout="column" fxLayoutAlign="start" fxFlex="50">
+      <a [routerLink]="" (click)="removeSideViewer(viewerIndex)" title="Remove viewer"><mat-icon>remove_circle_outline</mat-icon>&nbsp;</a>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start" fxFlex="50">
+      <a [routerLink]="" (click)="selectContentItems(viewerIndex)" title="Select content items"><mat-icon>edit</mat-icon>&nbsp;</a>
     </div>
 </div>
 <div fxLayout="row" fxLayoutAlign="start">
   <div fxLayout="column" fxLayoutAlign="start">
   <h4>Render Templates:</h4>
-  {{renderTemplate}}
+  {{resourceViewer.title}}
 </div>  

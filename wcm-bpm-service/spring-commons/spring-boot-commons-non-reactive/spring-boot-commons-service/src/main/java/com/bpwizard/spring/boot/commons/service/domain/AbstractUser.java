@@ -82,15 +82,14 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 //    @CollectionTable(name="usr_role", joinColumns=@JoinColumn(name="user_id"))
 //    @Column(name="role")
 //	protected Set<String> roles = new HashSet<>();
-	
-	@ManyToMany()
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", 
 	    joinColumns = @JoinColumn(name = "user_id"), 
 	    inverseJoinColumns = @JoinColumn(name = "role_id"))
 	protected Set<Role> roles = new HashSet<>();
 	
 	//@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = true)
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinTable(name = "tenant_membership",  
     joinColumns = { @JoinColumn(name = "user_id", referencedColumnName="id", nullable=true) },
     inverseJoinColumns = { @JoinColumn(name = "tenant_id", referencedColumnName="id", nullable=true) })
@@ -192,8 +191,8 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 		// which is not in another microservices not having Hibernate.
 		// So, let's convert it to HashSet
 		Set<String> userRoles = this.roles.stream()
-				// .map(role -> new SpringGrantedAuthority("ROLE_" + role))
-				.map(role -> role.getName())
+				//.map(role -> new SpringGrantedAuthority("ROLE_" + role))
+				.map(Role::getName)
 				.collect(Collectors.toCollection(() ->
 					new HashSet<String>(this.roles.size()))); 
 		

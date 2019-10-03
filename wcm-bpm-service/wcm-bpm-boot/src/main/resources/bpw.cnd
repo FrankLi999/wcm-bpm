@@ -374,8 +374,10 @@
 - bpw:isQuery (BOOLEAN)
 
 [bpw:resourceViewer]
+- bpw:title (STRING)
 - bpw:renderTemplayeName (STRING)
-- bpw:contentPath (STRING)
+- bpw:contentPath (STRING) multiple
++ bpw:parameterValues (bpw:keyValues)
    
 [bpw:layoutColumn]
 - bpw:width (LONG)

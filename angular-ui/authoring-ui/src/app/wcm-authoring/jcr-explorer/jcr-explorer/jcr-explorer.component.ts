@@ -27,7 +27,7 @@ import { NewContentDialogComponent } from '../../dialog/new-content-dialog/new-c
 import * as fromStore from '../../store';
 
 /** Nested node */
-export class JcrNode {
+class JcrNode {
   childrenChange = new BehaviorSubject<JcrNode[]>([]);
 
   get children(): JcrNode[] {
@@ -41,7 +41,7 @@ export class JcrNode {
 }
 
 /** Flat node with expandable and level information */
-export class JcrFlatNode {
+class JcrFlatNode {
   constructor(public id: string,
               public name: string,
               public value: WcmRepository|WcmWorkspace|RestNode,
@@ -69,17 +69,17 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
   // Flat tree data source
   dataSource: MatTreeFlatDataSource<JcrNode, JcrFlatNode>;
   dataChange = new BehaviorSubject<JcrNode[]>([]);
+  loadError: string;
   @ViewChild('jcrExplorer', {static: true}) tree;
   @ViewChild('contextMenu', {static: true}) contextMenu: MatMenuTrigger;
   // Private
   private unsubscribeAll: Subject<any>;
-  loadError: string;
+  
   constructor(
     private modeshapeService: ModeshapeService,
     // private wcmService: WcmService,
     private store: Store<fromStore.WcmAppState>,
     private matDialog: MatDialog) {
-
       this.unsubscribeAll = new Subject();
   }
 
@@ -92,9 +92,9 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
     this.functionMap['Delete.theme'] = this.removeItem;
     
     this.functionMap['Create.siteArea'] = this.createSiteArea;
-    this.functionMap['Delete.siteArea'] = this.removeSiteArea;
+    this.functionMap['Delete.siteArea'] = this.removeItem;
     this.functionMap['Create.content'] = this.createContent;
-    this.functionMap['Delete.content'] = this.removeContent;
+    this.functionMap['Delete.content'] = this.removeItem;
     this.functionMap['Create.siteConfig'] = this.createSiteConfig;
     this.functionMap['Delete.siteConfig'] = this.removeSiteConfig;
 
@@ -171,6 +171,11 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
     this.loadError && this.store.dispatch(new fromStore.WcmSystemClearError());
   }
 
+  ngAfterViewInit() {
+    //console.log(this.modeshapeService);
+    this.tree.treeControl.expand(this.activeNode);
+  }
+  
   private generateRepositoryNode(name: string, repository: WcmRepository): JcrNode {
     const repoId = `repo-${name}`;
     let jcrNode: JcrNode = this.jcrNodeMap[repoId];
@@ -349,6 +354,7 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
       this.currentNodeOperations = null;
     }
   }
+  
   doNodeOperation(item:String, operation: WcmOperation) {
     this.functionMap[`${operation.operation}.${operation.resourceName}`].call(this);
   }
@@ -465,10 +471,6 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
     });
   }
   
-  removeSiteArea() {
-    console.log('>>>>>>>>> removeSiteArea');
-  }
-  
   createContent() {
     const node = this.activeNode;
     let dialogRef = this.matDialog.open(NewContentDialogComponent, {
@@ -486,10 +488,6 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
         this.tree.treeControl.expand(this.activeNode);
           
     });
-  }
-  
-  removeContent() {
-    console.log('remove content');
   }
 
   createSiteConfig() {

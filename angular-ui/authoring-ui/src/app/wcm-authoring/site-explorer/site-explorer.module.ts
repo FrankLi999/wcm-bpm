@@ -20,7 +20,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
-
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { SiteExplorerComponent } from './site-explorer/site-explorer.component';
 import { FolderOverviewComponent } from './folder-overview/folder-overview.component';

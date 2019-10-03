@@ -49,7 +49,7 @@ public class SpringSecurityContext implements SecurityContext {
     public boolean hasRole(String roleName) {
         for (GrantedAuthority authority : auth.getAuthorities()) {
             //if (roleName.equals(authority.getAuthority())) {
-        	if (roleName.equalsIgnoreCase(authority.getAuthority())) {
+        	if (("ROLE_" + roleName).equalsIgnoreCase(authority.getAuthority())) {
                 logger.info("[{}] has [{}] role.", auth.getName(), roleName);
                 return true;
             }

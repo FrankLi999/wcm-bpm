@@ -1,4 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ResourceViewer, RenderTemplateModel } from '../../model';
+import { SelectContentItemDialog } from '../select-content-item-dialog/select-content-item.dialog';
+
 @Component({
   selector: 'resource-viewer',
   templateUrl: './resource-viewer.component.html',
@@ -6,20 +10,32 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ResourceViewerComponent implements OnInit {
   @Output() resourceViewerRemoved = new EventEmitter<number>();
-  // @Input() viewer: Viewer;
   @Input() viewerIndex: number;
-  @Input() renderTemplate: string;
-  constructor() { }
+  @Input() resourceViewer: ResourceViewer;
+  @Input() renderTemplate: RenderTemplateModel;
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
   }
-
-  // public addRenderTemplate() {
-  //   this.viewer.renderTemplates.push("a_render_tmplate");
-  // }
   
   public removeSideViewer(viewerIndex: number) {
     this.resourceViewerRemoved.emit(viewerIndex);
+    return false;
+  }
+
+  public selectContentItems(viewerIndex: number) {
+    const dialogRef = this.dialog.open(SelectContentItemDialog, {
+      height: '60%',
+      width: '60%',
+      data: {
+        authoringTemplate: this.renderTemplate.resourceName,
+        contentPath: this.resourceViewer.contentPath
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      console.log(data);
+    });
     return false;
   }
 }
