@@ -85,7 +85,6 @@ export class WcmFlatTreeNode {
     loadError: string;
     constructor(
       protected wcmService: WcmService,
-      // private wcmService: WcmService,
       protected store: Store<fromStore.WcmAppState>,
       protected matDialog: MatDialog) {
   
@@ -116,23 +115,6 @@ export class WcmFlatTreeNode {
           this.loadError = loadError;
         }
       });
-
-      this.store.pipe(
-        takeUntil(this.unsubscribeAll),
-        select(fromStore.getOperations)).subscribe(
-        (operations: {[key: string]: WcmOperation[]}) => {
-          if (operations) {
-            this.operationMap = operations;
-          }
-        },
-        response => {
-          console.log("GET call in error", response);
-          console.log(response);
-        },
-        () => {
-          console.log("The GET observable is now completed.");
-        }
-      );
 
       this.store.pipe(
         select(fromStore.getWcmRepositories),
@@ -180,7 +162,7 @@ export class WcmFlatTreeNode {
       const libraryPath = `${repository}/${workspace}/${library}`;
       let wcmNode: WcmTreeNode = this.wcmNodeMap[libraryPath];
       if (!wcmNode) {
-        wcmNode = new WcmTreeNode(libraryPath, name, repository, workspace, 'bpw:library', `bpwizard/library/${library}/rootSiteArea`, null);
+        wcmNode = new WcmTreeNode(libraryPath, library, repository, workspace, 'bpw:library', `bpwizard/library/${library}/rootSiteArea`, null);
         this.wcmNodeMap[wcmNode.id] = wcmNode;
       }
       return wcmNode;
@@ -283,17 +265,17 @@ export class WcmFlatTreeNode {
       this.loadMore(node, onlyFirstTime);
     }
   
-    resetCurrentOperations() {
-      if (this.activeNode) {
-        this.currentNodeOperations = this.operationMap[this.activeNode.name];
+    resetCurrentOperations() {      
+      if (this.activeNode) {             
+        this.currentNodeOperations = this.operationMap[this.activeNode.nodeType];
       } 
     }
 
-    disableOperation(item:String, operation: WcmOperation) {
+    disableOperation(item: String, operation: WcmOperation) {
       return false;
     }
 
-    doNodeOperation(item:String, operation: WcmOperation) {
+    doNodeOperation(item: String, operation: WcmOperation) {
       this.nodeOperation.emit({
         wcmOperation: operation,
         node: this.activeNode

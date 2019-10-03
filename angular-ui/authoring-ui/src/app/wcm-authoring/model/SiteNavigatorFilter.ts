@@ -3,7 +3,7 @@ export interface SiteNavigatorFilter {
   nodeTypes?: string[];
   filters?: {
     [nodeType: string] : {
-        [property: string]: string[]
+        [property: string]: string
     }
   }    
 }

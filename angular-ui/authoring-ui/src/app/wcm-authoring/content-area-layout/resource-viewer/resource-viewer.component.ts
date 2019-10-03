@@ -25,7 +25,7 @@ export class ResourceViewerComponent implements OnInit {
 
   public selectContentItems(viewerIndex: number) {
     const dialogRef = this.dialog.open(SelectContentItemDialog, {
-      height: '60%',
+      height: '80%',
       width: '60%',
       data: {
         authoringTemplate: this.renderTemplate.resourceName,
@@ -34,7 +34,9 @@ export class ResourceViewerComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(data => {
-      console.log(data);
+      if (data && data.selectedContentItems) {
+        this.resourceViewer.contentPath = data.selectedContentItems;
+      }
     });
     return false;
   }

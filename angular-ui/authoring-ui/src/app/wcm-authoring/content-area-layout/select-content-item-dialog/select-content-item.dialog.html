@@ -1,19 +1,15 @@
 <h1 mat-dialog-title>Select Content Items</h1>
 <div mat-dialog-content fxLayout="row">
     <div fxLayout="column" fxFlex="100">
-        Render Template: {{data.renderTemplate}}
-        <div *ngFor="let contentPath of data.contentPath; let contentIndex = index;">
-            Content Path: {{contentIndex}}: {{contentPath}}
-        </div>
+        Authoring Template: {{data.authoringTemplate}}
     </div>
-    
+</div>
+<div mat-dialog-content fxLayout="row">
     <div fxLayout="column" fxFlex="100">
         <div class="content-items-container">
-            <h3>Available content items</h3>
             <content-selector 
               [selectedContentItems]="selectedContentItems"
-              [authoringTemplate]="data.authoringTemplate"
-            >
+              [authoringTemplate]="data.authoringTemplate"            >
             </content-selector>
         </div>
     </div>

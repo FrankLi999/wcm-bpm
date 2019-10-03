@@ -271,21 +271,8 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
     this.layout.repository = 'bpwizard';
     this.layout.workspace = 'default';
     this.layout.library = 'design';
-
     this.store.dispatch(new fromStore.CreateContentAreaLayout(this.layout));
     
-    // this.wcmService.createContentAreaLayout(this.layout).subscribe(
-    //   (event: any) => {
-    //     console.log(event);
-    //   },
-    //   response => {
-    //     console.log("savePageLayout call in error", response);
-    //     console.log(response);
-    //   },
-    //   () => {
-    //     console.log("savePageLayout observable is now completed.");
-    //   }
-    // );
   }
 
   public publishPageLayout() {

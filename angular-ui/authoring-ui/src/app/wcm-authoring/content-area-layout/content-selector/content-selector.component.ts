@@ -30,7 +30,7 @@ export class ContentSelectorComponent extends SiteNavigatorComponent implements 
       nodeTypes: ['bpw:siteArea', 'bpw:content'],
       filters: {
         'bpw:content' : {
-          'authoringTemplate': [this.authoringTemplate]
+          'bpw:authoringTemplate': this.authoringTemplate
         }
       }
     }
@@ -53,16 +53,20 @@ export class ContentSelectorComponent extends SiteNavigatorComponent implements 
     super.ngOnInit();
   }
 
-  doNodeOperation(item:String, operation: WcmOperation) {
+  doNodeOperation(item: string, operation: WcmOperation) {
     this.functionMap[`${operation.operation}.${operation.resourceName}`].call(this);
   }
 
-  disableOperation(item:String, operation: WcmOperation) {
-    return this.selectedContentItems.includes(this.activeNode.wcmPath);
+  disableOperation(item: string, operation: WcmOperation) {
+    if ('bpw:content' === operation.jcrType) {
+      return this.selectedContentItems.includes(this.activeNode.wcmPath);
+    } else {
+      return false;
+    }
   }
 
   selectContent(siteNavigator: SiteNavigatorComponent) {
-    return this.selectedContentItems.push(siteNavigator.activeNode.wcmPath);
+    return this.selectedContentItems.push(this.activeNode.wcmPath);
   }
 
   removeSelection(index: number) {

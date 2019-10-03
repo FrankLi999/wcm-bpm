@@ -3,9 +3,11 @@ package com.bpwizard.wcm.repo.rest.jcr.controllers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -804,7 +806,7 @@ public class WcmRestController {
 		}
 	}
 	
-	@PostMapping(path = "/wcmNodes/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/wcmNodes/{repository}/{workspace}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public WcmNode[] getWcmNodes(
 			@PathVariable("repository") final String repository, 
 			@PathVariable("workspace") final String workspace,
@@ -817,7 +819,6 @@ public class WcmRestController {
 			final String siteAreaPath = filter.getNodePath().startsWith("/") ? filter.getNodePath() : "/" + filter.getNodePath();
 			RestNode saNode = (RestNode) this.itemHandler.item(request, repository, workspace,
 					siteAreaPath, 2);
-			System.out.println("..............getWcmNodes:" + filter);
 			WcmNode[] wcmNodes = saNode.getChildren().stream()
 			    .filter(node -> this.applyFilter(node, filter))
 			    .map(node -> this.toWcmNode(node, siteAreaPath))
@@ -835,7 +836,7 @@ public class WcmRestController {
 	};
 	
 	private boolean applyFilter(final RestNode node, SiteNavigatorFilter filter) {
-		return (filter == null || filter.getNodePath() == null) ?
+		return (filter == null || filter.getNodeTypes() == null) ?
 				node.getJcrProperties().stream()
 				.filter(property -> "jcr:primaryType".equals(property.getName()))
 				.map(property -> property.getValues().get(0))
@@ -845,11 +846,26 @@ public class WcmRestController {
 				.map(property -> property.getValues().get(0))
 				.anyMatch(nodeType -> Arrays.stream(
 						filter.getNodeTypes()).anyMatch(nodeType::equals) &&
-						this.propertyMatch(node, filter.getFilters().get(nodeType)));
+						this.propertyMatch(node, filter, nodeType));
 	}
 	
-	private boolean propertyMatch(RestNode node, Map<String, String> siteAreaPath) {
-		return true;
+	private boolean propertyMatch(RestNode node, SiteNavigatorFilter filter, String nodeType) {
+		if (filter.getFilters() == null || filter.getFilters().get(nodeType) == null) { return true; } 
+		System.out.println(">>>>>>>>>> propertyMatch 1: " + nodeType);
+		Map<String, String> nameValues = filter.getFilters().get(nodeType);
+		Set<String> properties = new HashSet<>();
+		properties.addAll(nameValues.keySet());
+		System.out.println(">>>>>>>>>> propertyMatch 2: " + nameValues.size());
+		System.out.println(">>>>>>>>>> propertyMatch 3: " + properties);
+		for (RestProperty property: node.getJcrProperties()) {
+			if (nameValues.get(property.getName()) != null && property.getValues().get(0).equals(nameValues.get(property.getName()))) {
+				properties.remove(property.getName());
+				if (properties.size() == 0) {
+					break;
+				}
+			} 
+		}
+		return properties.size() == 0;
 	}
 	
 	private WcmNode toWcmNode(RestNode node, String siteAreaPath) {
@@ -861,7 +877,7 @@ public class WcmRestController {
 				break;
 			} 
 		}
-		wcmNode.setNodeType(String.format("%s/%s", siteAreaPath, node.getName()));
+		wcmNode.setWcmPath(String.format("%s/%s", siteAreaPath, node.getName()));
 		return wcmNode;
 	}
 	

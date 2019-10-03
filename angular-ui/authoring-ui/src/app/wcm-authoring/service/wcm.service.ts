@@ -145,7 +145,7 @@ export class WcmService extends RestClient {
     //@Path('contentItemPath') ontentItemPath: string
   ): Observable<ContentItem> { return null; };
 
-  @Post('/wcmNodes')
+  @Post('/wcmNodes/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   getWcmNodes(

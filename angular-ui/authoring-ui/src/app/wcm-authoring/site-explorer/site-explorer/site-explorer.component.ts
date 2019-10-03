@@ -44,6 +44,10 @@ export class SiteExplorerComponent extends SiteNavigatorComponent implements OnI
     this.functionMap['Create.content'] = this.createContent;
     this.functionMap['Delete.content'] = this.removeItem;
 
+    this.nodeFileter = {
+      nodePath: '',
+      nodeTypes: ['bpw:siteArea', 'bpw:content', 'bpw:folder', 'bpw:file']
+    }
     this.store.pipe(
       takeUntil(this.unsubscribeAll),
       select(fromStore.getJsonForms)
@@ -61,6 +65,22 @@ export class SiteExplorerComponent extends SiteNavigatorComponent implements OnI
         console.log("getAuthoringTemplateAsJsonSchema observable is now completed.");
       }
     );
+    this.store.pipe(
+      takeUntil(this.unsubscribeAll),
+      select(fromStore.getOperations)).subscribe(
+      (operations: {[key: string]: WcmOperation[]}) => {
+        if (operations) {
+          this.operationMap = operations;
+        }
+      },
+      response => {
+        console.log("GET call in error", response);
+        console.log(response);
+      },
+      () => {
+        console.log("The GET observable is now completed.");
+      }
+    );
     super.ngOnInit();
   }
 
@@ -73,7 +93,7 @@ export class SiteExplorerComponent extends SiteNavigatorComponent implements OnI
     this.loadError && this.store.dispatch(new fromStore.WcmSystemClearError());
   }
 
-  doNodeOperation(item:String, operation: WcmOperation) {
+  doNodeOperation(item: String, operation: WcmOperation) {
     this.functionMap[`${operation.operation}.${operation.resourceName}`].call(this);
   }
 

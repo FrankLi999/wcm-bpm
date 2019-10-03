@@ -19,7 +19,7 @@ export class SelectContentItemDialog implements OnInit {
   }
 
   ngOnInit() {
-    this.selectedContentItems = [ ...this.data.contentPath];
+    this.selectedContentItems = this.data.contentPath ? [ ...this.data.contentPath] : [];
   }
 
   onNoClick(): void {

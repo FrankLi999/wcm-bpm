@@ -3,13 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule, Routes } from '@angular/router';
+import { CdkTableModule } from '@angular/cdk/table';
+import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -21,7 +25,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
@@ -66,21 +70,26 @@ const routes: Routes = [
         FlexLayoutModule,
         MatButtonModule,
         MatCheckboxModule,
-        MatDialogModule,
+        MatChipsModule,
+        MatDialogModule,        
+        MatExpansionModule,
         MatFormFieldModule,
+        MatGridListModule,
         MatIconModule,
         MatInputModule,
+        MatListModule,
         MatMenuModule,
         MatRippleModule,
-        MatSelectModule,
-        MatToolbarModule,
-        MatChipsModule,
-        MatExpansionModule,
         MatPaginatorModule,
+        MatSelectModule,
         MatSortModule,
         MatSnackBarModule,
-        MatTableModule,
         MatTabsModule,
+        MatTableModule,
+        MatToolbarModule,
+        MatTreeModule,
+        CdkTableModule,        
+        CdkTreeModule,
         TranslateModule,
         FuseSharedModule,
         FuseSidebarModule

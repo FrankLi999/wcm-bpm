@@ -16,8 +16,8 @@ export class ContentAreaLayoutEffects {
       return this.wcmService.createContentAreaLayout(
           action.payload)
         .pipe(
-            map((layout: ContentAreaLayout) => {
-                return new CreateContentAreaLayoutSuccess(layout);
+            map((response: any) => {
+                return new CreateContentAreaLayoutSuccess(action.payload);
             }),
             catchError(err => of(new CreateContentAreaLayoutFailed(err)))
         );
