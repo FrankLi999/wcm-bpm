@@ -22,38 +22,29 @@ import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bpwizard.wcm.repo.camunda.identity.service.SpringGroupService;
+import com.bpwizard.wcm.repo.camunda.identity.service.SpringTenantService;
 import com.bpwizard.wcm.repo.camunda.identity.service.SpringUserService;
 
-/**
- * <p>
- * {@link ProcessEnginePlugin} providing Ldap Identity Provider support
- * </p>
- *
- * <p>
- * This class extends {@link DatabaseConfiguration} such that the configuration
- * properties can be set directly on this class vie the
- * <code>&lt;properties .../&gt;</code> element in bpm-platform.xml /
- * processes.xml
- * </p>
- *
- * @author Daniel Meyer
- *
- */
 public class SpringIdentityProviderPlugin implements ProcessEnginePlugin {
     private SpringUserService userService;
     private SpringGroupService groupService;
+    private SpringTenantService tenantService;
     private PasswordEncoder passwordEncoder;
+    
 	public SpringIdentityProviderPlugin(
 			SpringUserService userService,
 			SpringGroupService groupService,
+			SpringTenantService tenantService,
 			PasswordEncoder passwordEncoder) {
 	    this.userService = userService;
 	    this.groupService = groupService;
+	    this.tenantService = tenantService;
 	    this.passwordEncoder = passwordEncoder;
 	}
 
 	public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
-		SpringIdentityProviderSessionFactory identityProviderSessionFactory = new SpringIdentityProviderSessionFactory(userService, groupService, passwordEncoder);
+		SpringIdentityProviderSessionFactory identityProviderSessionFactory = 
+				new SpringIdentityProviderSessionFactory(userService, groupService, tenantService, passwordEncoder);
 		processEngineConfiguration.setIdentityProviderSessionFactory(identityProviderSessionFactory);
 	}
 

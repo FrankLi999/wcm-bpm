@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.camunda.bpm.engine.identity.User;
@@ -39,10 +38,10 @@ public class SpringUser implements User {
 	    inverseJoinColumns = @JoinColumn(name = "role_id"))
 	protected Set<SpringGroup> groups = new HashSet<>();
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "tenant_membership",  
     joinColumns = { @JoinColumn(name = "user_id", referencedColumnName="id", nullable=true) },
     inverseJoinColumns = { @JoinColumn(name = "tenant_id", referencedColumnName="id", nullable=true) })
-	protected SpringTenant tenant;
+	protected Set<SpringTenant> tenants;
 	
 }

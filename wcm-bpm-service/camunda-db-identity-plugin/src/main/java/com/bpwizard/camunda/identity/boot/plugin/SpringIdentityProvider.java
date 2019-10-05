@@ -1,158 +1,174 @@
 package com.bpwizard.camunda.identity.boot.plugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.identity.*;
+import org.camunda.bpm.engine.authorization.Permission;
+import org.camunda.bpm.engine.authorization.Permissions;
+import org.camunda.bpm.engine.authorization.Resource;
+import org.camunda.bpm.engine.authorization.Resources;
+import org.camunda.bpm.engine.identity.Group;
+import org.camunda.bpm.engine.identity.GroupQuery;
+import org.camunda.bpm.engine.identity.NativeUserQuery;
+import org.camunda.bpm.engine.identity.Tenant;
+import org.camunda.bpm.engine.identity.TenantQuery;
+import org.camunda.bpm.engine.identity.User;
+import org.camunda.bpm.engine.identity.UserQuery;
+import org.camunda.bpm.engine.impl.AbstractQuery;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.camunda.bpm.engine.impl.persistence.AbstractManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import com.bpwizard.wcm.repo.camunda.identity.service.SpringGroupService;
-import com.bpwizard.wcm.repo.camunda.identity.service.SpringUserService;
 
 import com.bpwizard.wcm.repo.camunda.identity.domain.SpringGroup;
+import com.bpwizard.wcm.repo.camunda.identity.domain.SpringTenant;
 import com.bpwizard.wcm.repo.camunda.identity.domain.SpringUser;
+import com.bpwizard.wcm.repo.camunda.identity.service.SpringGroupService;
+import com.bpwizard.wcm.repo.camunda.identity.service.SpringTenantService;
+import com.bpwizard.wcm.repo.camunda.identity.service.SpringUserService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+public class SpringIdentityProvider extends AbstractManager implements ReadOnlyIdentityProvider {
 
-public class SpringIdentityProvider implements ReadOnlyIdentityProvider {
+	private final SpringUserService userService;
+	private final SpringGroupService groupService;
+	private final SpringTenantService tenantService;
+	private final PasswordEncoder passwordEncoder;
 
-    private final SpringUserService userService;
-    private final SpringGroupService groupService;
-    private final PasswordEncoder passwordEncoder;
-    
-    public SpringIdentityProvider(
-    		SpringUserService userService, 
-    		SpringGroupService groupService,
-    		PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.groupService = groupService;
-        this.passwordEncoder = passwordEncoder;
-    }
+	public SpringIdentityProvider(SpringUserService userService, SpringGroupService groupService,
+			SpringTenantService tenantService, PasswordEncoder passwordEncoder) {
+		this.userService = userService;
+		this.groupService = groupService;
+		this.tenantService = tenantService;
+		this.passwordEncoder = passwordEncoder;
+	}
 
-    // User ////////////////////////////////////////////
+	// User ////////////////////////////////////////////
 
-    @Override
-    public User findUserById(String userId) {
-        return userService.findById(userId);
-    }
+	@Override
+	public User findUserById(String userId) {
+		checkAuthorization(Permissions.READ, Resources.USER, userId);
+		return userService.findById(userId);
+	}
 
-    @Override
-    public UserQuery createUserQuery() {
-        return new SpringUserQuery(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired());
-    }
+	@Override
+	public UserQuery createUserQuery() {
+		return new SpringUserQuery(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired());
+	}
 
-    @Override
-    public UserQuery createUserQuery(CommandContext commandContext) {
-        return new SpringUserQuery();
-    }
+	@Override
+	public UserQuery createUserQuery(CommandContext commandContext) {
+		return new SpringUserQuery();
+	}
 
-    @Override
-    public NativeUserQuery createNativeUserQuery() {
-        throw new BadUserRequestException("not supported");
-    }
+	@Override
+	public NativeUserQuery createNativeUserQuery() {
+		throw new BadUserRequestException("not supported");
+	}
 
-    public long findUserCountByQueryCriteria(SpringUserQuery query) {
-        return findUserByQueryCriteria(query).size();
-    }
-    
-    protected boolean isNotGroupMember(SpringUser user, String groupId) {
-    	return user.getGroups().stream().filter(group -> group.getId().equals(groupId)).count() <= 0;
-    }
-    
-    public List<User> findUserByQueryCriteria(SpringUserQuery query) {
-    	//TODO: translate the SpringuserQuery into the Spring Data QBE <org.springframework.data.domain.Example>
-        Collection<SpringUser> users = userService.findAll();
+	public long findUserCountByQueryCriteria(SpringUserQuery query) {
+		configureQuery(query, Resources.USER);
+		return this.userService.countAll(query);
+	}
 
-        if(query.getId() != null)
-            users.removeIf(user -> !query.getId().equals(user.getId()));
-        if(query.getFirstName() != null)
-            users.removeIf(user -> !query.getFirstName().equals(user.getFirstName()));
-        if(query.getLastName() != null)
-            users.removeIf(user -> !query.getLastName().equals(user.getLastName()));
-        if(query.getEmail() != null)
-            users.removeIf(user -> !query.getEmail().equals(user.getEmail()));
-        if(query.getGroupId() != null)
-            users.removeIf(user -> isNotGroupMember(user, query.getGroupId()));
-        if(query.getTenantId() != null)
-            users.removeIf(user -> (user.getTenant() == null) || (!query.getTenantId().equals(user.getTenant().getId())));
+	public List<User> findUserByQueryCriteria(SpringUserQuery query) {
+		configureQuery(query, Resources.USER);
+		List<SpringUser> users = userService.findAll(query);
+		return new ArrayList<>(users);
+	}
 
-        return new ArrayList<>(users);
-    }
+	@Override
+	public boolean checkPassword(String userId, String password) {
 
-    @Override
-    public boolean checkPassword(String userId, String password) {
+		if (userId == null || password == null || userId.isEmpty() || password.isEmpty())
+			return false;
 
-        if(userId == null || password == null || userId.isEmpty() || password.isEmpty())
-            return false;
+		User user = findUserById(userId);
 
-        User user = findUserById(userId);
+		if (user == null)
+			return false;
 
-        if(user == null)
-            return false;
+		return user.getPassword().equals(passwordEncoder.encode(password));
+	}
 
-        return user.getPassword().equals(passwordEncoder.encode(password));
-    }
+	// Group //////////////////////////////////////////
 
-    // Group //////////////////////////////////////////
+	@Override
+	public Group findGroupById(String groupId) {
+		checkAuthorization(Permissions.READ, Resources.GROUP, groupId);
+		return groupService.findById(groupId);
+	}
 
-    @Override
-    public Group findGroupById(String groupId) {
-        return groupService.findById(groupId);
-    }
+	@Override
+	public GroupQuery createGroupQuery() {
+		return new SpringGroupQuery(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired());
+	}
 
-    @Override
-    public GroupQuery createGroupQuery() {
-        return new SpringGroupQuery(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired());
-    }
+	@Override
+	public GroupQuery createGroupQuery(CommandContext commandContext) {
+		return new SpringGroupQuery();
+	}
 
-    @Override
-    public GroupQuery createGroupQuery(CommandContext commandContext) {
-        return new SpringGroupQuery();
-    }
+	public long findGroupCountByQueryCriteria(SpringGroupQuery query) {
+		configureQuery(query, Resources.GROUP);
+		return this.groupService.countAll(query);
+	}
 
-    public long findGroupCountByQueryCriteria(SpringGroupQuery query) {
-        return findGroupByQueryCriteria(query).size();
-    }
+	public List<Group> findGroupByQueryCriteria(SpringGroupQuery query) {
+        configureQuery(query, Resources.GROUP);
+		List<SpringGroup> groups = this.groupService.findAll(query);
+		return new ArrayList<Group>(groups);
+	}
 
-    public List<Group> findGroupByQueryCriteria(SpringGroupQuery query) {
-        //TODO: translate the SpringGroupQuery into the Spring Data QBE <org.springframework.data.domain.Example>
-        return groupService.findAll().stream()
-                .filter(group -> group.getId().equals(query.getId()))
-                .filter(group -> group.getName().equals(query.getName()))
-                .filter(group -> group.getType().equals(query.getType()))
-                .collect(Collectors.toList());
+	// Tenant ////////////////////////////////////////
 
-    }
+	@Override
+	public Tenant findTenantById(String tenantId) {
+		checkAuthorization(Permissions.READ, Resources.TENANT, tenantId);
+		return tenantService.findById(tenantId);
+	}
 
-    // Tenant ////////////////////////////////////////
+	@Override
+	public TenantQuery createTenantQuery() {
+		return new SpringTenantQuery(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired());
+	}
 
-    @Override
-    public Tenant findTenantById(String tenantId) {
-        return null;
-    }
+	@Override
+	public TenantQuery createTenantQuery(CommandContext commandContext) {		
+		return new SpringTenantQuery();
+	}
 
-    @Override
-    public TenantQuery createTenantQuery() {
-        return new SpringTenantQuery(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired());
-    }
+	public long findTenantCountByQueryCriteria(SpringTenantQuery query) {
+		configureQuery(query, Resources.TENANT);
+		return this.tenantService.countAll(query);
+	}
 
-    @Override
-    public TenantQuery createTenantQuery(CommandContext commandContext) {
-        return new SpringTenantQuery();
-    }
+	public List<Tenant> findTenantByQueryCriteria(SpringTenantQuery query) {
+		configureQuery(query, Resources.TENANT);
+		List<SpringTenant> tenants = this.tenantService.findAll(query);
+		return new ArrayList<Tenant>(tenants);
+	}
 
-    @Override
-    public void flush() {
+	@Override
+	public void flush() {
+		// do nothing
+	}
 
-    }
+	@Override
+	public void close() {
+		// do nothing
+	}
 
-    @Override
-    public void close() {
+	// authorizations ////////////////////////////////////////////////////
 
-    }
+	@Override
+	protected void configureQuery(@SuppressWarnings("rawtypes") AbstractQuery query, Resource resource) {
+		Context.getCommandContext().getAuthorizationManager().configureQuery(query, resource);
+	}
+
+	@Override
+	protected void checkAuthorization(Permission permission, Resource resource, String resourceId) {
+		Context.getCommandContext().getAuthorizationManager().checkAuthorization(permission, resource, resourceId);
+	}
 }

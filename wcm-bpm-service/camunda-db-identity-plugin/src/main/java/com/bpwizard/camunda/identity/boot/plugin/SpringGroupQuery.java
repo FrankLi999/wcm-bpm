@@ -22,12 +22,14 @@ public class SpringGroupQuery extends GroupQueryImpl {
 
     @Override
     public long executeCount(CommandContext commandContext) {
+    	checkQueryOk();
         final SpringIdentityProvider provider = getSpringIdentityProvider(commandContext);
         return provider.findGroupCountByQueryCriteria(this);
     }
 
     @Override
     public List<Group> executeList(CommandContext commandContext, Page page) {
+    	checkQueryOk();
         final SpringIdentityProvider provider = getSpringIdentityProvider(commandContext);
         return provider.findGroupByQueryCriteria(this);
     }

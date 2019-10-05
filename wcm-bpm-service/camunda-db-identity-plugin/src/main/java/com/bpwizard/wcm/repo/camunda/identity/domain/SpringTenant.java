@@ -6,13 +6,10 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.camunda.bpm.engine.identity.Tenant;
-
-import com.bpwizard.wcm.repo.domain.Role;
-import com.bpwizard.wcm.repo.domain.User;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,10 +24,9 @@ public class SpringTenant implements Tenant {
     private String id;
     private String name;
     
-	// @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-	@OneToMany( mappedBy= "tenent", fetch = FetchType.LAZY)
+	@ManyToMany( mappedBy= "tenent", fetch = FetchType.LAZY)
     private Set<SpringUser> users = new HashSet<>();
 	
-	@OneToMany( mappedBy= "tenent", fetch = FetchType.LAZY)
+	@ManyToMany( mappedBy= "tenent", fetch = FetchType.LAZY)
     private Set<SpringGroup> groups = new HashSet<>();
 }

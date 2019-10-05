@@ -21,14 +21,18 @@ public class SpringUserQuery extends UserQueryImpl {
         super(commandExecutor);
     }
 
+    // results //////////////////////////////////////////////////////////
+
     @Override
     public long executeCount(CommandContext commandContext) {
+    	checkQueryOk();
         final SpringIdentityProvider provider = getSpringIdentityProvider(commandContext);
         return provider.findUserCountByQueryCriteria(this);
     }
 
     @Override
     public List<User> executeList(CommandContext commandContext, Page page) {
+    	checkQueryOk();
         final SpringIdentityProvider provider = getSpringIdentityProvider(commandContext);
         return provider.findUserByQueryCriteria(this);
     }

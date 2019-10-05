@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -134,27 +135,26 @@ public abstract class SpringService
 //			Tenant tenant = new Tenant();
 //			tenant.setName("default");
 //			tenantRepository.save(tenant);
-			Tenant tenant = null;
-
+			Set<Tenant> tenants = null;
 			String[] roleNames = properties.getRolename();
 			for (String roleName: roleNames) {
-				Role role = createRole(roleName, tenant);
+				Role role = createRole(roleName, tenants);
 				this.preloadedRoles.put(roleName, role);
 				
 			}
 			
 			SpringProperties.User[] users = properties.getUser();
 			for (SpringProperties.User user: users) {
-				createUser(user, this.preloadedRoles, tenant);
+				createUser(user, this.preloadedRoles, tenants);
 			}
 		}
 	}
 
-	protected Role createRole(String roleName, Tenant tenant) {
+	protected Role createRole(String roleName, Set<Tenant> tenants) {
 		Role role = new Role();
 		role.setName(roleName);
-		if (tenant != null) {
-			role.setTenant(tenant);
+		if (tenants != null) {
+			role.setTenants(tenants);
 		}
     	roleRepository.save(role);
 		return role;
@@ -164,7 +164,7 @@ public abstract class SpringService
 	 * Creates the initial Admin user.
 	 * Override this if needed.
 	 */
-	protected U createUser(SpringProperties.User user, Map<String, Role> roles, Tenant tenant) {
+	protected U createUser(SpringProperties.User user, Map<String, Role> roles, Set<Tenant> tenants) {
     	log.info("Creating the initial user: " + user.getUsername());
 
     	// create the user
@@ -173,8 +173,8 @@ public abstract class SpringService
     	newUser.setEmail(user.getEmail());
     	newUser.setPassword(passwordEncoder.encode(
 				user.getPassword()));
-    	if (tenant != null) {
-    		newUser.setTenant(tenant);
+    	if (tenants != null) {
+    		newUser.setTenants(tenants);
 		}
 		for (String rolename: user.getRolename()) {
 			if (null != roles.get(rolename)) {

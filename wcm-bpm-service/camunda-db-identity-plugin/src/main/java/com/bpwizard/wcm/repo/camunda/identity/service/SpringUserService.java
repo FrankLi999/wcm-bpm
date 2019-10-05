@@ -1,30 +1,33 @@
 package com.bpwizard.wcm.repo.camunda.identity.service;
 
-import com.bpwizard.wcm.repo.camunda.identity.domain.SpringUser;
-import com.bpwizard.wcm.repo.camunda.identity.domain.SpringUserRepository;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import com.bpwizard.camunda.identity.boot.plugin.SpringUserQuery;
+import com.bpwizard.wcm.repo.camunda.identity.domain.CustomeSpringUserRepository;
+import com.bpwizard.wcm.repo.camunda.identity.domain.SpringUser;
 
 @Service
 @Transactional
 public class SpringUserService {
 
-	private final SpringUserRepository repository;
-
 	@Autowired
-	public SpringUserService(SpringUserRepository repository) {
-		this.repository = repository;
-	}
+	private CustomeSpringUserRepository repository;
 
 	public SpringUser findById(String id) {
-		return repository.findById(id).get();
+		return repository.findById(id);
 	}
 
-	public Collection<SpringUser> findAll() {
-		return (Collection<SpringUser>) repository.findAll();
+	public List<SpringUser> findAll(SpringUserQuery query) {
+		return repository.findIdentityByQuery(query);
 	}
-
+	
+	public long countAll(SpringUserQuery query) {
+		return repository.countIdentityByQuery(query);
+	}
 }

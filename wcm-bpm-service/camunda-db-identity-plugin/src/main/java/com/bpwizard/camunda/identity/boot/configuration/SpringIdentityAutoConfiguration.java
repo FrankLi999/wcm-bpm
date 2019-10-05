@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.bpwizard.camunda.identity.boot.plugin.SpringIdentityProviderPlugin;
 import com.bpwizard.spring.boot.commons.service.AutoConfiguration;
 import com.bpwizard.wcm.repo.camunda.identity.service.SpringGroupService;
+import com.bpwizard.wcm.repo.camunda.identity.service.SpringTenantService;
 import com.bpwizard.wcm.repo.camunda.identity.service.SpringUserService;
 @Configuration
 @ConditionalOnClass(SpringIdentityProviderPlugin.class)
@@ -21,12 +22,15 @@ public class SpringIdentityAutoConfiguration {
 
 	@Autowired
     private SpringGroupService groupService;
+	
+	@Autowired
+    private SpringTenantService tenantService;
     
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	@Bean
 	public ProcessEnginePlugin dbIdentityProviderPlugin() {
-		return new SpringIdentityProviderPlugin(userService, groupService, passwordEncoder);
+		return new SpringIdentityProviderPlugin(userService, groupService, tenantService, passwordEncoder);
 	}
 }

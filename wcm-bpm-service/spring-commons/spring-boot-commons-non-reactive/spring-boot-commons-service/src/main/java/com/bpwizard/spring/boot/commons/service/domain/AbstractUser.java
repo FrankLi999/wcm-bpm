@@ -88,12 +88,11 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 	    inverseJoinColumns = @JoinColumn(name = "role_id"))
 	protected Set<Role> roles = new HashSet<>();
 	
-	//@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = true)
-	@ManyToOne(fetch = FetchType.EAGER, optional = true)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "tenant_membership",  
     joinColumns = { @JoinColumn(name = "user_id", referencedColumnName="id", nullable=true) },
     inverseJoinColumns = { @JoinColumn(name = "tenant_id", referencedColumnName="id", nullable=true) })
-	protected Tenant tenant;
+	protected Set<Tenant> tenants;
 	
 	@JsonView(UserUtils.SignupInput.class)
 	// @NotBlank(message = "{blank.name}", groups = {UserUtils.SignUpValidation.class, UserUtils.UpdateValidation.class})

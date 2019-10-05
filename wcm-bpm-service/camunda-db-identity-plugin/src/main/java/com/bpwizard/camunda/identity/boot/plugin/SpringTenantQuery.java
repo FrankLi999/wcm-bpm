@@ -1,13 +1,12 @@
 package com.bpwizard.camunda.identity.boot.plugin;
 
+import java.util.List;
+
 import org.camunda.bpm.engine.identity.Tenant;
 import org.camunda.bpm.engine.impl.Page;
 import org.camunda.bpm.engine.impl.TenantQueryImpl;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-
-import java.util.Collections;
-import java.util.List;
 
 
 public class SpringTenantQuery extends TenantQueryImpl {
@@ -24,11 +23,20 @@ public class SpringTenantQuery extends TenantQueryImpl {
 
     @Override
     public long executeCount(CommandContext commandContext) {
-        return 0;
+      checkQueryOk();
+      SpringIdentityProvider identityProvider = getSpringIdentityProvider(commandContext);
+      return identityProvider.findTenantCountByQueryCriteria(this);
     }
 
     @Override
     public List<Tenant> executeList(CommandContext commandContext, Page page) {
-        return Collections.emptyList();
+      checkQueryOk();
+      SpringIdentityProvider identityProvider = getSpringIdentityProvider(commandContext);
+      return identityProvider.findTenantByQueryCriteria(this);
     }
+
+    protected SpringIdentityProvider getSpringIdentityProvider(CommandContext commandContext) {
+        return (SpringIdentityProvider) commandContext.getReadOnlyIdentityProvider();
+    }
+    
 }

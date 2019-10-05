@@ -6,7 +6,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
@@ -35,9 +35,9 @@ public class Tenant extends SpringEntity<Long> {
     protected String name;
 	
 	// @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-	@OneToMany( mappedBy= "tenant", fetch = FetchType.LAZY)
+	@ManyToMany( mappedBy= "tenants", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
 	
-	@OneToMany( mappedBy= "tenant", fetch = FetchType.LAZY)
+	@ManyToMany( mappedBy= "tenants", fetch = FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
 }

@@ -8,12 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.camunda.bpm.engine.identity.Group;
-
-import com.bpwizard.wcm.repo.domain.User;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,10 +31,10 @@ public class SpringGroup implements Group {
 	@ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY)
 	protected Set<User> users;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "tenant_membership",  
     joinColumns = { @JoinColumn(name = "role_id", referencedColumnName="id", nullable=true) },
     inverseJoinColumns = { @JoinColumn(name = "tenant_id", referencedColumnName="id", nullable=true) })
-	protected SpringTenant tenant;
+	protected Set<SpringTenant> tenant;
 	
 }
