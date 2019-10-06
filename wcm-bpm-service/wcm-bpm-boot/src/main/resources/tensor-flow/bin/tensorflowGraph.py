@@ -1,6 +1,6 @@
 import tensorflow as tf
 graph = tf.Graph()
-builder = tf.saved_model.builder.SavedModelBuilder('./model')
+builder = tf.saved_model.builder.SavedModelBuilder('./tensor-flow/data/demo')
 writer = tf.summary.FileWriter('.')
 with graph.as_default():
   a = tf.constant(2, name='a')
