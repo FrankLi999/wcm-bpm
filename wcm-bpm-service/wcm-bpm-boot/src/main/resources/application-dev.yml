@@ -11,8 +11,8 @@ spring:
     show-sql: true
     # generate-ddl=true
     hibernate:
-      ddl-auto: update
-      # ddl-auto: none
+      # ddl-auto: update
+      ddl-auto: none
       #use-new-id-generator-mappings: false
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
@@ -36,6 +36,10 @@ spring:
     max-active: 15
     max-idle: 10
     max-wait: 8000
+    #hikari: 
+      #connectionTimeout: 30000
+      #idleTimeout: 600000
+      #maxLifetime: 1800000
 
   security:
     oauth2:
@@ -122,3 +126,36 @@ camunda:
       firstName: Demo
     filter:
       create: All tasks
+hazelcast:
+  backupCount: 1
+  port: 5701
+  members: 127.0.0.1:5701
+  groupName: wcm_bpm
+  instanceName: wcm_bpm
+  caches:
+    -
+      cacheName: wcm_bpm
+      timeToLiveSeconds: 2000
+      maxSize: 2000
+      maxSizePolicy: PER_NODE
+      evictionPolicy: LFU     
+#Use Jasypt to generate the encrypted password, download from http://www.jasypt.org/,
+# from jasypt\bin and use the encrypt.sh or encrypt.bat to encrypt your variables 
+#encrypt.bat input=MBcoder password=password
+#Password@1 encrypted with password
+  keyStorePassword: ENC(uTSqb9grs1+vUv3iN8lItC0kl65lMG+8)
+  # keyStorePassword: password
+  enableSSL: false
+  keyStore: keystore
+  keyManagerAlgorithm: SunX509
+  trustManagerAlgorithm: SunX509
+  enableEncryption: false
+  encryptionAlgorithm: PBEWithMD5AndDES
+##Password@2 encrypted with password
+  encryptionPassword: ENC(dQWokHUXXFe+OqXRZYWu22BpXoRZ0Drt)
+  #encryptionPassword: Password@2
+  encryptionSalt: salt
+  
+jasypt:
+  encryptor:
+    password: password

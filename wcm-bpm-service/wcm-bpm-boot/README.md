@@ -13,7 +13,7 @@ http://localhost:19090/swagger-ui.html
 
 ## How to run
 
-    $ mvn spring-boot:run -Dspring-boot.run.jvmArguments="-DLOG_ROOT_LEVEL=DEBUG -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm-boot"
+    $ mvn spring-boot:run -Djasypt.encryptor.password=Password@2 -Dspring-boot.run.jvmArguments="-DLOG_ROOT_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm-boot"
 
 mvn spring-boot:run -Dspring-boot.run.arguments=--mongo
 

@@ -19,29 +19,47 @@
 		<version>2.1.6.RELEASE</version>
 		<relativePath></relativePath>
 	</parent>
-
+    <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<hazelcast.version>3.12.3</hazelcast.version>
+		<hazelcast-jet.version>3.3-SNAPSHOT</hazelcast-jet.version>
+	</properties>
 	<modules>
 		<module>spring-boot-commons-exceptions</module>
 		<module>spring-boot-commons</module>
 		<module>spring-boot-commons-non-reactive</module>
+		<!--
 		<module>spring-boot-commons-reactive</module>
+		-->
 	</modules>
     <dependencyManagement>
     	<dependencies>
 	    	<dependency>
 			    <groupId>com.hazelcast</groupId>
 			    <artifactId>hazelcast</artifactId>
-			    <version>3.12</version>
+			    <version>${hazelcast.version}</version>
 			</dependency>			
 			<dependency>
 			    <groupId>com.hazelcast</groupId>
 			    <artifactId>hazelcast-spring</artifactId>
-			    <version>3.12</version>
+			    <version>${hazelcast.version}</version>
 			</dependency>					
 			<dependency>
 			    <groupId>com.github.ulisesbocchio</groupId>
 			    <artifactId>jasypt-spring-boot-starter</artifactId>
 			    <version>2.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.hazelcast.jet</groupId>
+				<artifactId>hazelcast-jet</artifactId>
+				<version>${hazelcast-jet.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.hazelcast.jet</groupId>
+				<artifactId>hazelcast-jet-spring</artifactId>
+				<version>${hazelcast-jet.version}</version>
 			</dependency>
 		</dependencies>
     </dependencyManagement>
@@ -96,12 +114,8 @@
 		</plugins>
 	</build>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-	</properties>
-      <repositories>
+
+    <repositories>
     <repository>
       <snapshots />
       <id>spring-snapshots</id>

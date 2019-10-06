@@ -21,6 +21,8 @@
 		<module>spring-boot-commons-web</module>
 		<module>spring-boot-commons-jpa</module>
 		<module>spring-boot-commons-service</module>
+		<!--
 		<module>spring-boot-commons-demo</module>
+		-->
 	</modules>
 </project>

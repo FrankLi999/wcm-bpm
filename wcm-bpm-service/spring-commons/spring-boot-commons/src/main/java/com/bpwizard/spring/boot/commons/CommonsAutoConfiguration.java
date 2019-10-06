@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -11,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.access.PermissionEvaluator;
@@ -36,16 +38,22 @@ import com.hazelcast.config.EvictionPolicy;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MaxSizeConfig;
 import com.hazelcast.config.TcpIpConfig;
-import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ManagedContext;
+import com.hazelcast.jet.Jet;
+import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.config.JetConfig;
+import com.hazelcast.spring.context.SpringManagedContext;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.KeyLengthException;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 
 @Configuration
-@ComponentScan(basePackageClasses=BadCredentialsExceptionHandler.class)
+@ComponentScan(basePackageClasses= {BadCredentialsExceptionHandler.class})
 @EnableAsync
 @EnableCaching
 @EnableEncryptableProperties
+// @PropertySource("classpath:hazelcast.properties")
+// @ConfigurationProperties(prefix="hazelcast")
 public class CommonsAutoConfiguration {
 
 	private static final Logger log = LogManager.getLogger(CommonsAutoConfiguration.class);
@@ -164,23 +172,25 @@ public class CommonsAutoConfiguration {
 	}
 	
 	@Bean
-	@ConditionalOnProperty(name="hazelcast.port", havingValue="")
-	public CacheManager cacheManager(HazelcastInstance hazelcastInstance) {
+	// @ConditionalOnProperty(name="hazelcast.port", havingValue="")
+	//public CacheManager cacheManager(HazelcastInstance hazelcastInstance) {
+	public CacheManager cacheManager(JetInstance jetInstance) {
+	
 		log.debug("Starting Hazelcast CacheManager");
-		return new com.hazelcast.spring.cache.HazelcastCacheManager(hazelcastInstance);
+		return new com.hazelcast.spring.cache.HazelcastCacheManager(jetInstance.getHazelcastInstance());
 	}
 
 	@Bean
-	@ConditionalOnProperty(name="hazelcast.port", havingValue="")
+	@ConfigurationProperties(prefix="hazelcast")
+	// @ConditionalOnProperty(name="hazelcast.port", havingValue="")
 	public HazelcastProperties hazelCastProperties() {
 		return new HazelcastProperties();
 	}
 	
-	@Bean
-	@ConditionalOnProperty(name="hazelcast.port", havingValue="")
-	public Config hazelCastConfig(HazelcastProperties hazelcastProperties) {
+	// @Bean
+	// @ConditionalOnProperty(name="hazelcast.port", havingValue="")
+	private Config hazelCastConfig(HazelcastProperties hazelcastProperties) {
 		Config config = new Config();
-		
 		config.setInstanceName(hazelcastProperties.getInstanceName());
 		config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false).setMulticastGroup("224.2.2.3").setMulticastPort(54327);
 		config.getNetworkConfig().setPortAutoIncrement(false).setPort(hazelcastProperties.getPort());
@@ -190,34 +200,36 @@ public class CommonsAutoConfiguration {
 		for (String member: hazelcastProperties.getMembers().split(",")) {
 			tcpipConfig.addMember(member);
 		}
-		
-		config.getNetworkConfig().getSSLConfig()
-			.setFactoryClassName("com.hazelcast.nio.ssl.BasicSSLContextFactor")
-			.setEnabled(hazelcastProperties.isEnableSSL())			
-			.setProperty("keyStore", hazelcastProperties.getKeyStore())
-			.setProperty("keyStorePassword", hazelcastProperties.getKeyStorePassword())
-			.setProperty("keyManagerAlgorithm", hazelcastProperties.getKeyManagerAlgorithm())
-			.setProperty("trustManagerAlgorithm", hazelcastProperties.getTrustManagerAlgorithm())
-			.setProperty("protocol", "TLS");
-		
-		config.getNetworkConfig().getSymmetricEncryptionConfig()
-			.setEnabled(hazelcastProperties.isEnableEncryption())
-			.setAlgorithm(hazelcastProperties.getEncryptionAlgorithm())
-			.setIterationCount(19)
-			.setPassword(hazelcastProperties.getEncryptionPassword())
-			.setSalt(hazelcastProperties.getEncryptionSalt());
-		
-		//config.getSecurityConfig().getMemberCredentialsConfig();
+
+		if (config.getNetworkConfig().getSSLConfig() != null) {
+			//Enterprise Edition Feature?
+			config.getNetworkConfig().getSSLConfig()
+				.setFactoryClassName("com.hazelcast.nio.ssl.BasicSSLContextFactor")
+				.setEnabled(hazelcastProperties.isEnableSSL())			
+				.setProperty("keyStore", hazelcastProperties.getKeyStore())
+				.setProperty("keyStorePassword", hazelcastProperties.getKeyStorePassword())
+				.setProperty("keyManagerAlgorithm", hazelcastProperties.getKeyManagerAlgorithm())
+				.setProperty("trustManagerAlgorithm", hazelcastProperties.getTrustManagerAlgorithm())
+				.setProperty("protocol", "TLS");
+		}
+		if (config.getNetworkConfig().getSymmetricEncryptionConfig() != null) {
+			//Enterprise Edition Feature?
+			config.getNetworkConfig().getSymmetricEncryptionConfig()
+				.setEnabled(hazelcastProperties.isEnableEncryption())
+				.setAlgorithm(hazelcastProperties.getEncryptionAlgorithm())
+				.setIterationCount(19)
+				.setPassword(hazelcastProperties.getEncryptionPassword())
+				.setSalt(hazelcastProperties.getEncryptionSalt());
+		}
 		for (CacheConfig cacheConfig: hazelcastProperties.getCaches()) {
 			config.getMapConfigs().put(cacheConfig.getCacheName(), this.initCache(cacheConfig));
 		}
-			
 		return config;
 	}
 	
 	private MapConfig initCache(CacheConfig cacheConfig) {
-		
 		MapConfig mapConfig = new MapConfig()
+			.setName(cacheConfig.getCacheName())	
 			.setMaxSizeConfig(new MaxSizeConfig(cacheConfig.getMaxSize(), 
 					MaxSizeConfig.MaxSizePolicy.valueOf(cacheConfig.getMaxSizePolicy())))
 			.setEvictionPolicy(EvictionPolicy.valueOf(cacheConfig.getEvictionPolicy()))
@@ -227,4 +239,24 @@ public class CommonsAutoConfiguration {
 		
 		
 	}
+	
+	/**
+     * A {@code ManagedContext} implementation bean which enables {@code @SpringAware}
+     * annotation for de-serialized objects.
+     */
+    @Bean
+    public ManagedContext managedContext() {
+        return new SpringManagedContext();
+    }
+
+    /**
+     * {@code JetInstance} bean which configured programmatically with {@code SpringManagedContext}
+     */
+    @Bean
+    public JetInstance JetInstance(HazelcastProperties hazelcastProperties) {
+    	Config config = hazelCastConfig(hazelcastProperties);
+        config.setManagedContext(managedContext());
+        JetConfig jetConfig = new JetConfig().setHazelcastConfig(config);
+        return Jet.newJetInstance(jetConfig);
+    }
 }

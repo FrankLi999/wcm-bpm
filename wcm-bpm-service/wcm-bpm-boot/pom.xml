@@ -27,8 +27,8 @@
 		<atomikos.version>4.0.6</atomikos.version>
 		<camunda.spring-boot.version>3.4.0-SNAPSHOT</camunda.spring-boot.version>
 		<camunda.version>7.12.0-SNAPSHOT</camunda.version>
-		<hazelcast.version>3.12.2</hazelcast.version>
-		<hazelcast-jet.version>3.1</hazelcast-jet.version>
+		<!--  <hazelcast.version>3.12.3</hazelcast.version> -->
+		<hazelcast-jet.version>3.3-SNAPSHOT</hazelcast-jet.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -43,7 +43,7 @@
 				<artifactId>hazelcast-spring</artifactId>
 				<version>${hazelcast.version}</version>
 			</dependency>
-			-->
+			 -->
 			<!-- https://mvnrepository.com/artifact/com.hazelcast.jet/hazelcast-jet -->
 			<dependency>
 			    <groupId>com.hazelcast.jet</groupId>
@@ -96,6 +96,26 @@
 			<artifactId>camunda-rest-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.hazelcast.jet</groupId>
+		    <artifactId>hazelcast-jet</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>com.hazelcast.jet</groupId>
+		    <artifactId>hazelcast-jet-spring</artifactId>
+		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast-spring</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		 -->	
 		<!-- 
 		<dependency>
 			<groupId>com.bpwizard.wcm</groupId>

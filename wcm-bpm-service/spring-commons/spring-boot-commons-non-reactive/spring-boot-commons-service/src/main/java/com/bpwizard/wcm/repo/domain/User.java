@@ -9,7 +9,10 @@ import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+/**
+ * TODO: config @EntityScan to rename to package
+ * https://docs.spring.io/spring-boot/docs/2.1.9.RELEASE/reference/html/howto-data-access.html#howto-separate-entity-definitions-from-spring-configuration
+ */
 @Entity
 @Table(name="usr", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @Getter @Setter 
