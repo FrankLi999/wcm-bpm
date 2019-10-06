@@ -191,6 +191,7 @@ public class CommonsAutoConfiguration {
 	// @ConditionalOnProperty(name="hazelcast.port", havingValue="")
 	private Config hazelCastConfig(HazelcastProperties hazelcastProperties) {
 		Config config = new Config();
+		config.setProperty("hazelcast.logging.type", hazelcastProperties.getLoggingType());
 		config.setInstanceName(hazelcastProperties.getInstanceName());
 		config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false).setMulticastGroup("224.2.2.3").setMulticastPort(54327);
 		config.getNetworkConfig().setPortAutoIncrement(false).setPort(hazelcastProperties.getPort());

@@ -34,7 +34,7 @@ import com.bpwizard.wcm.repo.payload.SignUpRequest;
 import com.bpwizard.wcm.repo.secureity.oauth2.AuthProvider;
 
 @RestController
-@RequestMapping("/auth/api/rest")
+@RequestMapping("/auth/api")
 public class AuthController {
 
     @Autowired
@@ -93,7 +93,7 @@ public class AuthController {
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/api/rest/me")
+                .fromCurrentContextPath().path("/user/api/me")
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location)

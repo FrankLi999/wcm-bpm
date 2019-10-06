@@ -33,7 +33,7 @@ export class RedirectHandlerComponent implements OnInit {
         },
       ));
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      this.http.get(`${this.apiConfigService.apiConfig.apiBaseUrl}/user/api/rest/me`, {headers}).subscribe(
+      this.http.get(`${this.apiConfigService.apiConfig.apiBaseUrl}/user/api/me`, {headers}).subscribe(
         (userProfile: fromStore.UserProfile) => {
           userProfile.accessToken = token;
           this.store.dispatch(new fromStore.LoginSucceedAction(userProfile));

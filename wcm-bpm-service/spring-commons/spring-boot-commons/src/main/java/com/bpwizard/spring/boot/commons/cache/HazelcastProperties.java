@@ -30,6 +30,7 @@ public class HazelcastProperties {
 	private String encryptionAlgorithm;
 	private String encryptionPassword;
 	private String encryptionSalt;
+	private String loggingType;
 	
 	List<CacheConfig> caches = new ArrayList<>();
 
@@ -145,6 +146,14 @@ public class HazelcastProperties {
 		this.encryptionSalt = encryptionSalt;
 	}
 
+	public String getLoggingType() {
+		return loggingType;
+	}
+
+	public void setLoggingType(String loggingType) {
+		this.loggingType = loggingType;
+	}
+
 	@Override
 	public String toString() {
 		return "HazelcastProperties [port=" + port + ", members=" + members + ", groupName=" + groupName
@@ -152,6 +161,6 @@ public class HazelcastProperties {
 				+ enableSSL + ", keyStore=" + keyStore + ", keyManagerAlgorithm=" + keyManagerAlgorithm
 				+ ", trustManagerAlgorithm=" + trustManagerAlgorithm + ", enableEncryption=" + enableEncryption
 				+ ", encryptionAlgorithm=" + encryptionAlgorithm + ", encryptionPassword=" + encryptionPassword
-				+ ", encryptionSalt=" + encryptionSalt + ", caches=" + caches + "]";
+				+ ", encryptionSalt=" + encryptionSalt + ", loggingType=" + loggingType + ", caches=" + caches + "]";
 	}
 }

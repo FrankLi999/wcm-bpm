@@ -23,7 +23,7 @@ import {
 })
 @Client({
   serviceId: 'auth-service',
-  baseUrl: '/auth/api/rest',
+  baseUrl: '/auth/api',
   headers: {
       'content-type': 'application/json'
   }

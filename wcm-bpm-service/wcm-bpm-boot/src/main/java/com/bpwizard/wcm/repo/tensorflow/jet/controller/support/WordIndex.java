@@ -16,7 +16,9 @@ import java.util.Map;
  * Utility to work with the word index for the IMDB review database.
  */
 public class WordIndex implements Serializable {
-    private static final int PAD = 0;
+
+	private static final long serialVersionUID = 1L;
+	private static final int PAD = 0;
     private static final int START = 1;
     private static final int UNKNOWN = 2;
     private final Map<String, Integer> wordIndex;

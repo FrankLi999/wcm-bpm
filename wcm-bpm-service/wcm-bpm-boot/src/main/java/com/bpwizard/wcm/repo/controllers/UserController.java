@@ -19,7 +19,7 @@ import com.bpwizard.wcm.repo.rest.jcr.controllers.ModeshapeController;
 
 
 @RestController
-@RequestMapping("/user/api/rest")
+@RequestMapping("/user/api")
 public class UserController {
 	private static final Logger logger = LogManager.getLogger(UserController.class);
     @Autowired

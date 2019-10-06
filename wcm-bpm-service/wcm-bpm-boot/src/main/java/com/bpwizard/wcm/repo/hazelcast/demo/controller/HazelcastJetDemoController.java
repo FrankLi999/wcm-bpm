@@ -32,7 +32,7 @@ public class HazelcastJetDemoController {
     @Autowired
     TestCache testCache;
     
-    @RequestMapping("/submitJob")
+    @GetMapping("/submitJob")
     public void submitJob() {
         Pipeline pipeline = Pipeline.create();
         pipeline.drawFrom(CustomSourceP.customSource())

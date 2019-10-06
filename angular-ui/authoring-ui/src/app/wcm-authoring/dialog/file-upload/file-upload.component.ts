@@ -79,7 +79,7 @@ export class FileUploadComponent implements OnInit {
   private uploadFile(file: FileUploadModel) {
       const fd = new FormData();
       fd.append(this.param, file.data);
-      const req = new HttpRequest('POST', `${this.apiConfigService.apiConfig.apiBaseUrl}/modeshape/api/rest/${this.repositoryName}/${this.workspaceName}/upload/${this.nodePath}/${file.relativePath.slice(file.relativePath.indexOf("/") + 1)}`, fd, {
+      const req = new HttpRequest('POST', `${this.apiConfigService.apiConfig.apiBaseUrl}/modeshape/api/${this.repositoryName}/${this.workspaceName}/upload/${this.nodePath}/${file.relativePath.slice(file.relativePath.indexOf("/") + 1)}`, fd, {
             reportProgress: true
       });
 
