@@ -25,7 +25,7 @@ import {
 @Injectable()
 @Client({
   serviceId: 'modeshape-service',
-  baseUrl: '/modeshape/api/rest',
+  baseUrl: '/modeshape/api',
   headers: {
       'content-type': 'application/json'
   }

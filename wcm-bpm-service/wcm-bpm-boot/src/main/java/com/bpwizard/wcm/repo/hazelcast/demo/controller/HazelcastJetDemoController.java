@@ -23,6 +23,7 @@ import com.hazelcast.jet.pipeline.Sinks;
  * annotation. This enables spring to auto-wire beans to created processors.
  */
 @RestController
+@RequestMapping("/jet/api")
 public class HazelcastJetDemoController {
 
     @Autowired
@@ -31,7 +32,7 @@ public class HazelcastJetDemoController {
     @Autowired
     TestCache testCache;
     
-    @RequestMapping("/jet/submitJob")
+    @RequestMapping("/submitJob")
     public void submitJob() {
         Pipeline pipeline = Pipeline.create();
         pipeline.drawFrom(CustomSourceP.customSource())

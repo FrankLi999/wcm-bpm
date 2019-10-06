@@ -101,7 +101,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @RequestMapping(WcmRestController.BASE_URI)
 public class WcmRestController {
 	private static final Logger logger = LogManager.getLogger(WcmRestController.class);
-	public static final String BASE_URI = "/wcm/api/rest";
+	public static final String BASE_URI = "/wcm/api";
 
 	@Autowired
 	private RestItemHandler itemHandler;

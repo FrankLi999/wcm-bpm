@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ModeshapeController.BASE_URI)
 public class ModeshapeController {
 	private static final Logger logger = LogManager.getLogger(ModeshapeController.class);
-	public static final String BASE_URI = "/modeshape/api/server";
+	public static final String BASE_URI = "/modeshape/server";
 	@Autowired
 	// private Repository repository;
 	private RepositoryManager repositoryManager;

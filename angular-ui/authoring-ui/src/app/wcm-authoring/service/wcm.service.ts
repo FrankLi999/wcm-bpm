@@ -33,7 +33,7 @@ import {
 @Injectable()
 @Client({
   serviceId: 'modeshape-service',
-  baseUrl: '/wcm/api/rest',
+  baseUrl: '/wcm/api',
   headers: {
       'content-type': 'application/json'
   }

@@ -55,7 +55,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 @RequestMapping(ModeShapeRestController.BASE_URI)
 public class ModeShapeRestController {
 	private static final Logger logger = LogManager.getLogger(ModeShapeRestController.class);
-	public static final String BASE_URI = "/modeshape/api/rest";
+	public static final String BASE_URI = "/modeshape/api";
 	private static final String REQUEST_URI_PREFIX = "/modeshape/api/rest/%s/%s/%s";
 	@Autowired
     private RestServerHandler serverHandler;
