@@ -1,22 +1,23 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription, Observable} from 'rxjs';
-import { switchMap, map} from 'rxjs/operators';
+import { Subscription, Observable, of} from 'rxjs';
+import { switchMap, map, filter } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
-import { JsonForm } from '../../model';
+import { JsonForm, ContentItem } from '../../model';
 import * as fromStore from '../../store';
 import { WcmService } from 'app/wcm-authoring/service/wcm.service';
 
 @Component({
   selector: 'new-content-item',
-  templateUrl: './new-content-item.component.html',
-  styleUrls: ['./new-content-item.component.scss']
+  templateUrl: './content-item.component.html',
+  styleUrls: ['./content-item.component.scss']
 })
-export class NewContentItemComponent implements OnInit, OnDestroy {
-  @Input() authoringTemplate: string;
+export class ContentItemComponent implements OnInit, OnDestroy {
   @Input() repository: string;
   @Input() workspace: string;
   @Input() nodePath: string;
+  @Input() editing: boolean = false;
+  @Input() contentItem: ContentItem;
   sub: Subscription;
   jsonForm: JsonForm;
   jsonFormOptions: any = {
@@ -37,20 +38,36 @@ export class NewContentItemComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log('NewContentItemComponent forkJoin');
     this.sub = this.route.queryParams.pipe(
-      switchMap(param => this.getJsonForms(param))
+      switchMap(param => this.getContentItem(param)),
+      filter(contentItem => contentItem != null),
+      switchMap(contentItem => this.getJsonForms(contentItem))
     ).subscribe(jsonForm => this.jsonForm = jsonForm);
   }
-
-  getJsonForms(param: any): Observable<JsonForm> {
-    this.authoringTemplate = param.authoringTemplate;
+  getContentItem(param: any): Observable<ContentItem> {
     this.nodePath = param.nodePath;
     this.workspace = param.workspace;
     this.repository = param.repository;
+    this.editing = param.editing === 'true';
+    if (this.editing) {
+      return this.wcmService.getContentItem(this.repository, this.workspace, this.nodePath);
+    } else {
+      return of({
+        repository: param.repository,
+        workspace: param.workspace,
+        nodePath: param.nodePath,
+        authoringTemplate: param.authoringTemplate,
+        contentElements: {}
+      })
+    }
+  }
+  getJsonForms(contentItem: ContentItem): Observable<JsonForm> {
+    this.contentItem = contentItem;
+    console.log('getContentItem', contentItem);
     return this.store.pipe(
       select(fromStore.getJsonForms),
       map(jsonForms => {
-        console.log(jsonForms[this.authoringTemplate]);
-        return jsonForms[this.authoringTemplate]})
+        console.log(jsonForms[this.contentItem.authoringTemplate]);
+        return jsonForms[this.contentItem.authoringTemplate]})
     );
   }
 
@@ -68,7 +85,7 @@ export class NewContentItemComponent implements OnInit, OnDestroy {
       repository: this.repository,
       nodePath: this.nodePath,
       workspace: this.workspace,
-      authoringTemplate: this.authoringTemplate
+      authoringTemplate: this.contentItem.authoringTemplate
     }
     console.log(contentItem);
     // this.wcmService.createContentItem(contentItem).subscribe((event: any) => {

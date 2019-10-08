@@ -1,9 +1,9 @@
-<div id="template" class="page-layout carded left-sidebar inner-scroll">
+<div *ngIf="jsonForm" id="template" class="page-layout carded left-sidebar inner-scroll">
     <div fxLayout="row" fxFlex="100" fxLayoutAlign="start"  fxFlex="1 0 auto">
-       <h3> Authoring Template: {{authoringTemplate}}</h3>
-       <h3> Repository: {{repository}}</h3>
-       <h3> Workspace: {{workspace}}</h3>
-       <h3> Node Path: {{nodePath}}</h3>
+        <h3> Site Area</h3>
+        <h3> Repository: {{repository}}</h3>
+        <h3> Workspace: {{workspace}}</h3>
+        <h3> Node Path: {{nodePath}}</h3>
     </div>
     <div fxLayout="row" fxFlex="100" fxLayoutAlign="start"  fxFlex="1 0 auto">
         <json-schema-form
@@ -11,8 +11,11 @@
             [form]="jsonForm.formSchema"
             [options]="jsonFormOptions"
             [framework]="selectedFramework"
-            [language]="selectedLanguage"        
+            [language]="selectedLanguage"    
+            [data]="siteArea"    
             (onSubmit)="createContent($event)">
         </json-schema-form>
     </div>
 </div>  
+        
+      

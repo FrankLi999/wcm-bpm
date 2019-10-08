@@ -7,7 +7,7 @@ import { NavigationBadge } from './NavigationBadge';
 export interface SiteArea extends HasName {
 	repository: string;
 	workspace: string;
-	nodePath: string;
+	nodePath?: string;
 	name: string;
 	title?: string;
 	description?: string;
@@ -19,15 +19,15 @@ export interface SiteArea extends HasName {
 	allowedFileExtension?: string;
 	allowedArtifactTypes?: string;
 
-	contentAreaLayout: string;
+	contentAreaLayout?: string;
 	cacheTTL?: number;
 	securePage?: boolean;
 	metadata?: KeyValues;
 	searchData?: SearchData;
 	siteAreaLayout?: SiteAreaLayout;
 
-	navigationId: string;
-	navigationType: string;
+	navigationId?: string;
+	navigationType?: string;
 	function?: string;
 	translate?: string;
 	icon?: string;

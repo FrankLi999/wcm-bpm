@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditContentItemComponent } from './edit-content-item.component';
+import { SiteAreaComponent } from './site-area.component';
 
-describe('EditContentItemComponent', () => {
-  let component: EditContentItemComponent;
-  let fixture: ComponentFixture<EditContentItemComponent>;
+describe('SiteAreaComponent', () => {
+  let component: SiteAreaComponent;
+  let fixture: ComponentFixture<SiteAreaComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditContentItemComponent ]
+      declarations: [ SiteAreaComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditContentItemComponent);
+    fixture = TestBed.createComponent(SiteAreaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

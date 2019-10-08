@@ -45,6 +45,7 @@ export class SiteExplorerComponent extends WcmNavigatorComponent implements OnIn
     this.functionMap['Delete.theme'] = this.removeItem;
     
     this.functionMap['Create.siteArea'] = this.createSiteArea;
+    this.functionMap['Edit.siteArea'] = this.editSiteArea;
     this.functionMap['Delete.siteArea'] = this.removeItem;
     this.functionMap['Create.content'] = this.createContent;
     this.functionMap['Edit.content'] = this.editContent;
@@ -182,21 +183,33 @@ export class SiteExplorerComponent extends WcmNavigatorComponent implements OnIn
 
   createSiteArea() {
     const node =  this.activeNode;
-    let dialogRef = this.matDialog.open(NewSiteareaDialogComponent, {
-      panelClass: 'sitearea-new-dialog',
-      data: { 
-        jsonFormObject: this.jsonFormMap['bpwizard/default/system/siteAreaType'].formSchema,
-        nodePath: node.wcmPath,
-        repositoryName: node.repository,
-        workspaceName: node.workspace
-      }
-    });
-    dialogRef.afterClosed()
-      .subscribe(response => {
-        this.load(node);           
-    });
+
+    this.router.navigate(
+      ['/wcm-authoring/site-explorer/new-sa'], 
+      { queryParams: {
+          nodePath: node.wcmPath,
+          repository: node.repository,
+          workspace: node.workspace,
+          editing: false
+        } 
+      }            
+    );
   }
   
+  editSiteArea() {
+    const node =  this.activeNode;
+    this.router.navigate(
+      ['/wcm-authoring/site-explorer/edit-sa'], 
+      { queryParams: {
+          nodePath: node.wcmPath,
+          repository: node.repository,
+          workspace: node.workspace,
+          editing: true
+        } 
+      }            
+    );
+  }
+
   createContent() {
     const node =  this.activeNode;
     let dialogRef = this.matDialog.open(SelectAuthoringTemplateDialogComponent, {
@@ -212,7 +225,8 @@ export class SiteExplorerComponent extends WcmNavigatorComponent implements OnIn
                 authoringTemplate: response.selectedAuthoringTemplate,
                 nodePath: node.wcmPath,
                 repository: node.repository,
-                workspace: node.workspace
+                workspace: node.workspace,
+                editing: false
               } 
             }            
           );
@@ -235,6 +249,7 @@ export class SiteExplorerComponent extends WcmNavigatorComponent implements OnIn
           nodePath: node.wcmPath,
           repository: node.repository,
           workspace: node.workspace,
+          editing: true
         } 
       }            
     );

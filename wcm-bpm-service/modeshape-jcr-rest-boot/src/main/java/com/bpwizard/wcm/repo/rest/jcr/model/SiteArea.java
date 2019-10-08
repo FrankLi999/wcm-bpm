@@ -22,9 +22,6 @@ public class SiteArea implements HasName {
 	private String contentAreaLayout;
 	private int cacheTTL;
 
-	private keyValues metadata;
-	private SearchData searchData;
-	
 	private String navigationId;
 	private String navigationType;
 	private String function;
@@ -34,6 +31,9 @@ public class SiteArea implements HasName {
 	private boolean exactMatch;
 	private boolean externalUrl;
 	private boolean openInNewTab;
+
+	private keyValues metadata;
+	private SearchData searchData;
 	private NavigationBadge badge;
 	private SiteAreaLayout siteAreaLayout;
 	

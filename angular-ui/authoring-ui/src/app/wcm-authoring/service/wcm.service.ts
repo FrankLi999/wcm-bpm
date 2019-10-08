@@ -130,6 +130,15 @@ export class WcmService extends RestClient {
   @Produces(MediaType.JSON)
   public createSiteArea(@Body sa: SiteArea): Observable<any> { return null; };
 
+  @Get('/siteArea/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public getSiteArea(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query("path") contentItemPath: string
+  ): Observable<SiteArea> { return null; };
+
   @Post('/ContentItem')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)

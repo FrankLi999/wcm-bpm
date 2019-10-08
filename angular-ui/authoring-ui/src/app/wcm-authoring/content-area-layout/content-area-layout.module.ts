@@ -39,8 +39,7 @@ import { AuthGuard } from 'bpw-store';
 import * as fromGuards from '../store/guards';
 import { SelectContentItemDialog } from './/select-content-item-dialog/select-content-item.dialog';
 import { ContentSelectorComponent } from './content-selector/content-selector.component';
-import { NewContentAreaLayoutComponent } from './new-content-area-layout/new-content-area-layout.component';
-import { EditContentAreaLayoutComponent } from './edit-content-area-layout/edit-content-area-layout.component';
+
 const routes: Routes = [
     {
         path       : 'content-area-layout/edit',
@@ -67,9 +66,7 @@ const routes: Routes = [
         ResourceViewerComponent,
         SelectRenderTemplateDialog,
         SelectContentItemDialog,
-        ContentSelectorComponent,
-        NewContentAreaLayoutComponent,
-        EditContentAreaLayoutComponent
+        ContentSelectorComponent
     ],
     imports        : [
         RouterModule.forChild(routes),

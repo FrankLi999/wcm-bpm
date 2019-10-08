@@ -31,8 +31,8 @@ import * as fromGuards from '../store/guards';
 import { AuthGuard } from 'bpw-store';
 import { SelectAuthoringTemplateDialogComponent } from './select-authoring-template-dialog/select-authoring-template-dialog.component';
 import { AuthoringTemplateSelectorComponent } from './authoring-template-selector/authoring-template-selector.component';
-import { NewContentItemComponent } from './new-content-item/new-content-item.component';
-import { EditContentItemComponent } from './edit-content-item/edit-content-item.component';
+import { ContentItemComponent } from './content-item/content-item.component';
+import { SiteAreaComponent } from './site-area/site-area.component';
 const routes: Routes = [
     {
         path       : 'site-explorer/navigator',
@@ -41,19 +41,24 @@ const routes: Routes = [
     },
     {
       path       : 'site-explorer/new-content',
-      component  : NewContentItemComponent,
+      component  : ContentItemComponent,
       canActivate: [AuthGuard, fromGuards.ResolveGuard]
     },
     {
       path       : 'site-explorer/edit-content',
-      component  : EditContentItemComponent,
+      component  : ContentItemComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    },
+    {
+      path       : 'site-explorer/new-sa',
+      component  : SiteAreaComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    },
+    {
+      path       : 'site-explorer/edit-sa',
+      component  : SiteAreaComponent,
       canActivate: [AuthGuard, fromGuards.ResolveGuard]
     }
-    
-  //   {
-  //     path       : 'site-explorer/**',
-  //     redirectTo: 'site-explorer/navigator'
-  // },
 ];
 @NgModule({
   declarations: [
@@ -61,8 +66,8 @@ const routes: Routes = [
     FolderOverviewComponent,
     SelectAuthoringTemplateDialogComponent,
     AuthoringTemplateSelectorComponent,
-    NewContentItemComponent,
-    EditContentItemComponent
+    ContentItemComponent,
+    SiteAreaComponent
   ],
   imports: [
     CommonModule,

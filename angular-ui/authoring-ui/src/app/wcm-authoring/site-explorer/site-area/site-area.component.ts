@@ -1,23 +1,23 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription, Observable} from 'rxjs';
+import { Subscription, Observable, of} from 'rxjs';
 import { switchMap, map, filter } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
-import { JsonForm, ContentItem } from '../../model';
+import { JsonForm, SiteArea } from '../../model';
 import * as fromStore from '../../store';
 import { WcmService } from 'app/wcm-authoring/service/wcm.service';
 
-
 @Component({
-  selector: 'edit-content-item',
-  templateUrl: './edit-content-item.component.html',
-  styleUrls: ['./edit-content-item.component.scss']
+  selector: 'app-site-area',
+  templateUrl: './site-area.component.html',
+  styleUrls: ['./site-area.component.scss']
 })
-export class EditContentItemComponent implements OnInit, OnDestroy {
+export class SiteAreaComponent implements OnInit, OnDestroy {
   @Input() repository: string;
   @Input() workspace: string;
   @Input() nodePath: string;
-  @Input() contentItem: ContentItem;
+  @Input() editing: boolean = false;
+  @Input() siteArea: SiteArea;
   sub: Subscription;
   jsonForm: JsonForm;
   jsonFormOptions: any = {
@@ -38,25 +38,38 @@ export class EditContentItemComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log('NewContentItemComponent forkJoin');
     this.sub = this.route.queryParams.pipe(
-      switchMap(param => this.getContentItem(param)),
+      switchMap(param => this.getSiteArea(param)),
       filter(contentItem => contentItem != null),
       switchMap(contentItem => this.getJsonForms(contentItem))
     ).subscribe(jsonForm => this.jsonForm = jsonForm);
   }
-  getContentItem(param: any): Observable<ContentItem> {
+
+  getSiteArea(param: any): Observable<SiteArea> {
+    console.log('................ getSiteArea 0', param);
     this.nodePath = param.nodePath;
     this.workspace = param.workspace;
     this.repository = param.repository;
-    return this.wcmService.getContentItem(this.repository, this.workspace, this.nodePath);
+    this.editing = param.editing === 'true';
+    if (this.editing) {
+      console.log('................ getSiteArea');
+      return this.wcmService.getSiteArea(this.repository, this.workspace, this.nodePath);
+    } else {
+      console.log('................ getSiteArea of');
+      return of({
+        repository: param.repository,
+        workspace: param.workspace,
+        name: 'site area name'
+      })
+    }
   }
-  getJsonForms(contentItem: ContentItem): Observable<JsonForm> {
-    this.contentItem = contentItem;
-    console.log('getContentItem', contentItem);
+  getJsonForms(siteArea: SiteArea): Observable<JsonForm> {
+    this.siteArea = siteArea;
+    console.log('getsiteArea', siteArea);
     return this.store.pipe(
       select(fromStore.getJsonForms),
       map(jsonForms => {
-        console.log(jsonForms[this.contentItem.authoringTemplate]);
-        return jsonForms[this.contentItem.authoringTemplate]})
+        return jsonForms['bpwizard/default/system/siteAreaType']
+      })
     );
   }
 
@@ -68,17 +81,18 @@ export class EditContentItemComponent implements OnInit, OnDestroy {
   }
 
   createContent(formData: any) {
-    console.log(formData)
-    const contentItem = {
-      contentElements: {...formData},
+    const sa: SiteArea = {
+      ...formData,
       repository: this.repository,
       nodePath: this.nodePath,
       workspace: this.workspace,
-      authoringTemplate: this.contentItem.authoringTemplate
     }
-    console.log(contentItem);
-    // this.wcmService.createContentItem(contentItem).subscribe((event: any) => {
-    //     console.log(event)
-    // });  
+    this.wcmService.createSiteArea(sa)
+      .subscribe((event: any) => {
+        console.log(event)
+    });
   } 
 }
+
+
+
