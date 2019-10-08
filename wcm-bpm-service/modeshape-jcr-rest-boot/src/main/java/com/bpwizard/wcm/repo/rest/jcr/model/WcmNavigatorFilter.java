@@ -3,7 +3,7 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 import java.util.Arrays;
 import java.util.Map;
 
-public class SiteNavigatorFilter {
+public class WcmNavigatorFilter {
 	private String nodePath;
 	private String[] nodeTypes;
 	private Map<String, Map<String, String>> filters;

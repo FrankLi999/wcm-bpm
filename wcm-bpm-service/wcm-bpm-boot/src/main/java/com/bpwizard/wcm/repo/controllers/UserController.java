@@ -15,7 +15,6 @@ import com.bpwizard.wcm.repo.domain.UserRepository;
 import com.bpwizard.wcm.repo.annotations.CurrentUser;
 import com.bpwizard.wcm.repo.exception.ResourceNotFoundException;
 import com.bpwizard.wcm.repo.payload.AuthResponse;
-import com.bpwizard.wcm.repo.rest.jcr.controllers.ModeshapeController;
 
 
 @RestController

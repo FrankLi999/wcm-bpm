@@ -73,7 +73,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.SidePanel;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
-import com.bpwizard.wcm.repo.rest.jcr.model.SiteNavigatorFilter;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmNavigatorFilter;
 import com.bpwizard.wcm.repo.rest.jcr.model.Theme;
 import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmLibrary;
@@ -120,7 +120,7 @@ public class WcmRestController {
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
-    //http://localhost:8080/wcm/api/rest/wcmSystem/bpwizard/default/camunda/bpm
+    //http://localhost:8080/wcm/api/wcmSystem/bpwizard/default/camunda/bpm
 	@GetMapping(path = "/wcmSystem/{repository}/{workspace}/{library}/{siteConfig}", 
 		produces = MediaType.APPLICATION_JSON_VALUE)
 	public WcmSystem getWcmSystem(
@@ -810,7 +810,7 @@ public class WcmRestController {
 	public WcmNode[] getWcmNodes(
 			@PathVariable("repository") final String repository, 
 			@PathVariable("workspace") final String workspace,
-			@RequestBody final SiteNavigatorFilter filter,
+			@RequestBody final WcmNavigatorFilter filter,
 			HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
@@ -835,7 +835,7 @@ public class WcmRestController {
 		}
 	};
 	
-	private boolean applyFilter(final RestNode node, SiteNavigatorFilter filter) {
+	private boolean applyFilter(final RestNode node, WcmNavigatorFilter filter) {
 		return (filter == null || filter.getNodeTypes() == null) ?
 				node.getJcrProperties().stream()
 				.filter(property -> "jcr:primaryType".equals(property.getName()))
@@ -849,7 +849,7 @@ public class WcmRestController {
 						this.propertyMatch(node, filter, nodeType));
 	}
 	
-	private boolean propertyMatch(RestNode node, SiteNavigatorFilter filter, String nodeType) {
+	private boolean propertyMatch(RestNode node, WcmNavigatorFilter filter, String nodeType) {
 		if (filter.getFilters() == null || filter.getFilters().get(nodeType) == null) { return true; } 
 		System.out.println(">>>>>>>>>> propertyMatch 1: " + nodeType);
 		Map<String, String> nameValues = filter.getFilters().get(nodeType);

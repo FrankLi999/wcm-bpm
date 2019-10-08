@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
@@ -6,32 +7,36 @@ import { WcmOperation, JsonForm } from '../../model';
 import * as fromStore from '../../store';
 import { ModeshapeService } from '../../service/modeshape.service';
 import { WcmService } from '../../service/wcm.service';
-import { SiteNavigatorComponent } from '../../components/site-navigator/site-navigator.component';
+import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-navigator.component';
 
 import { UploadZipfileDialogComponent } from '../../dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
 import { NewFolderDialogComponent } from '../../dialog/new-folder-dialog/new-folder-dialog.component';
 import { NewThemeDialogComponent } from '../../dialog/new-theme-dialog/new-theme-dialog.component';
 import { NewSiteareaDialogComponent } from '../../dialog/new-sitearea-dialog/new-sitearea-dialog.component';
-import { NewContentDialogComponent } from '../../dialog/new-content-dialog/new-content-dialog.component';
+// import { NewContentDialogComponent } from '../../dialog/new-content-dialog/new-content-dialog.component';
+import { SelectAuthoringTemplateDialogComponent } from '../select-authoring-template-dialog/select-authoring-template-dialog.component';
 
 @Component({
   selector: 'site-explorer',
   templateUrl: './site-explorer.component.html',
   styleUrls: ['./site-explorer.component.scss']
 })
-export class SiteExplorerComponent extends SiteNavigatorComponent implements OnInit, OnDestroy {
+export class SiteExplorerComponent extends WcmNavigatorComponent implements OnInit, OnDestroy {
   functionMap: {[key:string]:Function}= {};
   jsonFormMap: {[key:string]: JsonForm} = {}; //TODO: it is loaded asynchronously during ngInit
   constructor(
     protected wcmService: WcmService,
     private modeshapeService: ModeshapeService,
     protected store: Store<fromStore.WcmAppState>,
-    protected matDialog: MatDialog
+    protected matDialog: MatDialog,
+    private router: Router
   ) {
     super(wcmService, store, matDialog);
   }
 
   ngOnInit() {
+    this.rootNode = 'rootSiteArea';
+    this.rootNodeType = 'bpw:siteArea';
     this.functionMap['Upload.file'] = this.uploadZipFile;
     this.functionMap['Create.folder'] = this.createFolder;
     this.functionMap['Create.theme'] = this.createTheme;
@@ -42,6 +47,7 @@ export class SiteExplorerComponent extends SiteNavigatorComponent implements OnI
     this.functionMap['Create.siteArea'] = this.createSiteArea;
     this.functionMap['Delete.siteArea'] = this.removeItem;
     this.functionMap['Create.content'] = this.createContent;
+    this.functionMap['Edit.content'] = this.editContent;
     this.functionMap['Delete.content'] = this.removeItem;
 
     this.nodeFileter = {
@@ -191,24 +197,46 @@ export class SiteExplorerComponent extends SiteNavigatorComponent implements OnI
     });
   }
   
-  createContent(siteNavigator: SiteNavigatorComponent) {
-    const node =  siteNavigator.activeNode;
-    let dialogRef = this.matDialog.open(NewContentDialogComponent, {
+  createContent() {
+    const node =  this.activeNode;
+    let dialogRef = this.matDialog.open(SelectAuthoringTemplateDialogComponent, {
       panelClass: 'content-new-dialog',
-      data: { 
-        jsonFormObject: this.jsonFormMap['bpwizard/default/system/MyContent'].formSchema,
-        nodePath: node.wcmPath,
-        repositoryName: node.repository,
-        workspaceName: node.workspace
-      }
     });
     dialogRef.afterClosed()
       .subscribe(response => {
-        siteNavigator.load(node);                
+        console.log(response);
+        if (response && response.selectedAuthoringTemplate) {
+          this.router.navigate(
+            ['/wcm-authoring/site-explorer/new-content'], 
+            { queryParams: {
+                authoringTemplate: response.selectedAuthoringTemplate,
+                nodePath: node.wcmPath,
+                repository: node.repository,
+                workspace: node.workspace
+              } 
+            }            
+          );
+        }
+        //this.load(node);                
     });
   }
 
-  editCurrentNode() {
-    throw new Error('Add impl');
+  editContent() {
+    const node =  this.activeNode;
+    this.wcmService.getContentItem(node.repository, node.workspace, node.wcmPath).subscribe(
+      response => { 
+        console.log('editCurrentNode', response)
+      }
+    )
+
+    this.router.navigate(
+      ['/wcm-authoring/site-explorer/edit-content'], 
+      { queryParams: {
+          nodePath: node.wcmPath,
+          repository: node.repository,
+          workspace: node.workspace,
+        } 
+      }            
+    );
   }
 }

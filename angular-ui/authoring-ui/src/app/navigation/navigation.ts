@@ -85,7 +85,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.SITE_EXPLORER.TITLE',
                 type     : 'item',
                 icon     : 'archive',
-                url      : '/wcm-authoring/site-explorer'
+                url      : '/wcm-authoring/site-explorer/navigator'
             },
             {
                 id       : 'content-area-layout',
@@ -93,7 +93,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.CONTENT_AREA_LAYOUT.TITLE',
                 type     : 'item',
                 icon     : 'pageview',
-                url      : '/wcm-authoring/content-area-layout/edit'
+                url      : '/wcm-authoring/content-area-layout/list'
             },
             {
                 id       : 'resource-type',

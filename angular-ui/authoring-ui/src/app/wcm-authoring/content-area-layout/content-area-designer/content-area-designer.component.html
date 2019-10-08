@@ -34,7 +34,13 @@
 
                         <div class="order-details tab-content p-24" fusePerfectScrollbar>
                             <div class="section pb-48">
-                                <content-area-layout></content-area-layout>
+                                <content-area-layout
+                                    [editing]="editing"
+                                    [repository] = "repository"
+                                    [workspace] ="workspace"
+                                    [library] = "library"
+                                    [layoutName] ="layoutName"
+                                ></content-area-layout>
                             </div>
                         </div>
                     </mat-tab>

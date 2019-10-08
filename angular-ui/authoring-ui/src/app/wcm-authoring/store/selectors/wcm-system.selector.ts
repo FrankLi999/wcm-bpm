@@ -21,6 +21,11 @@ export const getRenderTemplates= createSelector(
     (wcmSystem: WcmSystem) => wcmSystem.renderTemplates
 );
 
+export const getContentAreaLayouts = createSelector(
+    getWcmSystem,
+    (wcmSystem: WcmSystem) => wcmSystem.contentAreaLayouts
+);
+
 export const getThemes= createSelector(
     getWcmSystem,
     (wcmSystem: WcmSystem) => wcmSystem.jcrThemes

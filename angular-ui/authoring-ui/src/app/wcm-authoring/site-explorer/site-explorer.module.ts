@@ -21,21 +21,48 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
+import {
+  JsonSchemaFormModule, 
+  MaterialDesignFrameworkModule
+} from 'bpw-form';
 import { SiteExplorerComponent } from './site-explorer/site-explorer.component';
 import { FolderOverviewComponent } from './folder-overview/folder-overview.component';
 import * as fromGuards from '../store/guards';
 import { AuthGuard } from 'bpw-store';
+import { SelectAuthoringTemplateDialogComponent } from './select-authoring-template-dialog/select-authoring-template-dialog.component';
+import { AuthoringTemplateSelectorComponent } from './authoring-template-selector/authoring-template-selector.component';
+import { NewContentItemComponent } from './new-content-item/new-content-item.component';
+import { EditContentItemComponent } from './edit-content-item/edit-content-item.component';
 const routes: Routes = [
     {
-        path       : 'site-explorer',
+        path       : 'site-explorer/navigator',
         component  : SiteExplorerComponent,
         canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    },
+    {
+      path       : 'site-explorer/new-content',
+      component  : NewContentItemComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    },
+    {
+      path       : 'site-explorer/edit-content',
+      component  : EditContentItemComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
     }
+    
+  //   {
+  //     path       : 'site-explorer/**',
+  //     redirectTo: 'site-explorer/navigator'
+  // },
 ];
 @NgModule({
   declarations: [
     SiteExplorerComponent,
-    FolderOverviewComponent
+    FolderOverviewComponent,
+    SelectAuthoringTemplateDialogComponent,
+    AuthoringTemplateSelectorComponent,
+    NewContentItemComponent,
+    EditContentItemComponent
   ],
   imports: [
     CommonModule,
@@ -62,7 +89,12 @@ const routes: Routes = [
     TranslateModule,
 
     FuseSharedModule,
-    FuseSidebarModule
+    FuseSidebarModule,
+    JsonSchemaFormModule, 
+    MaterialDesignFrameworkModule
+  ],
+  entryComponents: [
+    SelectAuthoringTemplateDialogComponent
   ]
 })
 export class SiteExplorerModule { }

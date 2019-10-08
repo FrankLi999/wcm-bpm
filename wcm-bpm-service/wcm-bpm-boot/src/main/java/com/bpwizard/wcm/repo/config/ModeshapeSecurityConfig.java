@@ -78,8 +78,8 @@ public class ModeshapeSecurityConfig extends SpringJpaSecurityConfig {
                 .permitAll()
             .antMatchers("/tensorflow/**", "/jet/**", "/hello/**", "/webdav/**")
                 .permitAll()
-//            .antMatchers("/modeshape/server/**", "/modeshape/api/**", "/wcm/api/**", "/camunda/api/**")
-//                .permitAll()
+            .antMatchers("/modeshape/server/**", "/modeshape/api/**", "/wcm/api/**", "/camunda/api/**")
+                .permitAll()
             .anyRequest()
             	//.permitAll();
                 .authenticated();

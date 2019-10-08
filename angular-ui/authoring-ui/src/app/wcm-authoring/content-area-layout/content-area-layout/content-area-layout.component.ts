@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
@@ -26,7 +26,11 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
   renderTemplates: RenderTemplateModel[] = [];
   private unsubscribeAll: Subject<any>;
   error: string;
-  
+  @Input() repository: string;
+  @Input() workspace: string;
+  @Input() library: string;
+  @Input() layoutName: string;
+  @Input() editing: boolean;
   constructor(
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
@@ -36,9 +40,23 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
+      this.layoutName = this.layoutName || 'Page Layout Name';
+  
+      if (this.editing) {
+        this.store.pipe(
+          takeUntil(this.unsubscribeAll),
+          select(fromStore.getContentAreaLayouts)
+          ).subscribe(
+            (contentAreaLayouts: {[key: string]: ContentAreaLayout}) => {
+            if (contentAreaLayouts) {              
+              this.layout = cloneDeep(contentAreaLayouts[`bpwizard/default/${this.library}/${this.layoutName}`]);
+              this.store.dispatch(new fromStore.CreateContentAreaLayoutSuccess(this.layout));
+            }
+        });
+      }
       // Reactive Form
       this.pageLayoutForm = this.formBuilder.group({
-          name          : ['Page Layout Name', Validators.required]
+          name          : [this.layoutName, Validators.required]
       });
 
       this.store.pipe(
@@ -78,11 +96,11 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
       this.store.pipe(
           takeUntil(this.unsubscribeAll),
           select(fromStore.getContentAreaLayout)).subscribe(
-        (layout: ContentAreaLayout) => {
+        (layout: ContentAreaLayout) => {          
           this.layout = cloneDeep(layout);
+          this.layoutName = this.layout.name;
         }
-      );
-      
+      );      
   }
 
   /**
@@ -206,11 +224,11 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
   }
   
   showLeftSidePanel() : boolean {
-      return this.layout.sidePane.width > 0 && this.layout.sidePane.left;
+      return this.layout.sidePane && this.layout.sidePane.width > 0 && this.layout.sidePane.left;
   }
 
   showRightSidePanel() : boolean {
-      return this.layout.sidePane.width > 0 && (!this.layout.sidePane.left);
+      return this.layout.sidePane && this.layout.sidePane.width > 0 && (!this.layout.sidePane.left);
   }
 
   public addSideViewer() {
@@ -268,9 +286,9 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
   public savePageLayout() {
     let formValue = this.pageLayoutForm.value;
     this.layout.name = formValue.name;
-    this.layout.repository = 'bpwizard';
-    this.layout.workspace = 'default';
-    this.layout.library = 'design';
+    this.layout.repository = this.repository;
+    this.layout.workspace = this.workspace;
+    this.layout.library = this.library;
     this.store.dispatch(new fromStore.CreateContentAreaLayout(this.layout));
     
   }

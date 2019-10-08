@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { SiteNavigatorComponent } from '../../components/site-navigator/site-navigator.component';
+import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-navigator.component';
 import * as fromStore from '../../store';
 import { WcmService } from '../../service/wcm.service';
 import { WcmOperation } from '../../model';
@@ -11,7 +11,7 @@ import { WcmOperation } from '../../model';
   templateUrl: './content-selector.component.html',
   styleUrls: ['./content-selector.component.scss']
 })
-export class ContentSelectorComponent extends SiteNavigatorComponent implements OnInit, OnDestroy {
+export class ContentSelectorComponent extends WcmNavigatorComponent implements OnInit, OnDestroy {
   functionMap: {[key:string]: Function};
   @Input() selectedContentItems: string[];
   @Input() authoringTemplate: string;
@@ -25,6 +25,8 @@ export class ContentSelectorComponent extends SiteNavigatorComponent implements 
   }
 
   ngOnInit() {
+    this.rootNode = 'rootSiteArea';
+    this.rootNodeType = 'bpw:siteArea';
     this.nodeFileter = {
       nodePath: '',
       nodeTypes: ['bpw:siteArea', 'bpw:content'],
@@ -65,7 +67,7 @@ export class ContentSelectorComponent extends SiteNavigatorComponent implements 
     }
   }
 
-  selectContent(siteNavigator: SiteNavigatorComponent) {
+  selectContent() {
     return this.selectedContentItems.push(this.activeNode.wcmPath);
   }
 

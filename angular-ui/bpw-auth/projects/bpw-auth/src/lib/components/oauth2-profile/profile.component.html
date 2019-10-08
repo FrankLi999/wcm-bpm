@@ -1,10 +1,12 @@
 <h3>User profile</h3>
 <div *ngIf="userProfile">
-  accessToken: {{userProfile.accessToken}}<br />
-  name: {{userProfile.name}}<br />
-  firstName: {{userProfile.firstName}}<br />
-  lastName: {{userProfile.lastName}}<br />
-  email: {{userProfile.email}}<br />
+  Access Token: {{userProfile.accessToken}}<br />
+  Name: {{userProfile.name}}<br />
+  First Name: {{userProfile.firstName}}<br />
+  Last Name: {{userProfile.lastName}}<br />
+  Email: {{userProfile.email}}<br />
+  Roles:<br />
+  <div *ngFor="let role of userProfile.roles">{{role}}<br/></div>
   <img *ngIf="userProfile.imageUrl" src="{{userProfile.imageUrl}}"><br />
   
   <button (click)="handleLogout()">

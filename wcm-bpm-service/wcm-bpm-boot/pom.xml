@@ -313,16 +313,20 @@
 		   <artifactId>flyway-core</artifactId>
 		</dependency>
 		-->
+		
+		<!-- 
 		<dependency>
 		    <groupId>org.tensorflow</groupId>
 		    <artifactId>tensorflow</artifactId>
 		    <version>${tensorflow.version}</version>		    
 		</dependency>
+		
 		<dependency>
             <groupId>org.tensorflow</groupId>
             <artifactId>libtensorflow_jni</artifactId>
             <version>${tensorflow.version}</version>
         </dependency>
+        -->
         <dependency>
             <groupId>org.tensorflow</groupId>
             <artifactId>proto</artifactId>

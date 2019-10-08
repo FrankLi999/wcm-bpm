@@ -39,9 +39,16 @@ import { AuthGuard } from 'bpw-store';
 import * as fromGuards from '../store/guards';
 import { SelectContentItemDialog } from './/select-content-item-dialog/select-content-item.dialog';
 import { ContentSelectorComponent } from './content-selector/content-selector.component';
+import { NewContentAreaLayoutComponent } from './new-content-area-layout/new-content-area-layout.component';
+import { EditContentAreaLayoutComponent } from './edit-content-area-layout/edit-content-area-layout.component';
 const routes: Routes = [
     {
         path       : 'content-area-layout/edit',
+        component  : ContentAreaDesignerComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard] 
+    },
+    {
+        path       : 'content-area-layout/new',
         component  : ContentAreaDesignerComponent,
         canActivate: [AuthGuard, fromGuards.ResolveGuard] 
     },
@@ -60,7 +67,9 @@ const routes: Routes = [
         ResourceViewerComponent,
         SelectRenderTemplateDialog,
         SelectContentItemDialog,
-        ContentSelectorComponent
+        ContentSelectorComponent,
+        NewContentAreaLayoutComponent,
+        EditContentAreaLayoutComponent
     ],
     imports        : [
         RouterModule.forChild(routes),

@@ -18,6 +18,17 @@
     "bpwizard/library/system/configuration/operations" : {
         "jcr:primaryType":"bpw:opertionsFolder"
     },
+    "bpwizard/library/system/configuration/operations/library" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:library"
+    },
+    "bpwizard/library/system/configuration/operations/library/createLibrary" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "library",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Library",
+        "bpw:defaultIcon": "create_new_folder"
+    },
     "bpwizard/library/system/configuration/operations/jcrFile" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "nt:file"
@@ -184,6 +195,35 @@
         "bpw:defaultTitle": "Edit Content Item",
         "bpw:defaultIcon": "edit"
     },
+    "bpwizard/library/system/configuration/operations/contentAreaLayoutFolder" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:contentAreaLayoutFolder"
+    },
+    "bpwizard/library/system/configuration/operations/contentAreaLayoutFolder/createContentAreaLayout" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "contentAreaLayout",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Content Area Layout",
+        "bpw:defaultIcon": "create"
+    },
+    "bpwizard/library/system/configuration/operations/contentAreaLayout" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:contentAreaLayout"
+    },
+    "bpwizard/library/system/configuration/operations/contentAreaLayout/editContentAreaLayout" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "contentAreaLayout",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Content Area Layout",
+        "bpw:defaultIcon": "edit"
+    },
+    "bpwizard/library/system/configuration/operations/contentAreaLayout/removeContentAreaLayout" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "contentAreaLayout",
+        "bpw:operation": "Delete",
+        "bpw:defaultTitle": "Remove Content Area Layout",
+        "bpw:defaultIcon": "delete"
+    },
     "bpwizard/library/system/configuration/operations/themeFolder" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "bpw:themesFolder"
@@ -194,7 +234,7 @@
         "bpw:operation": "Create",
         "bpw:defaultTitle": "New Theme",
         "bpw:defaultIcon": "create"
-    },
+    },    
     "bpwizard/library/system/configuration/operations/theme" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "bpw:themeType"

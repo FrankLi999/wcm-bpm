@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.rest.jcr.controllers;
+package com.bpwizard.wcm.repo.controllers;
 
 import java.security.Principal;
 

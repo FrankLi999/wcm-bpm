@@ -33,7 +33,7 @@ public class AppConfig {
      CleanupFilter cleanupFilter = new CleanupFilter();
 
      registrationBean.setFilter(cleanupFilter);
-     registrationBean.addUrlPatterns("/modeshape/api/rest/*");
+     registrationBean.addUrlPatterns("/modeshape/api/*");
      //registrationBean.setOrder(2); //set precedence
      return registrationBean;
     }
@@ -44,7 +44,7 @@ public class AppConfig {
      LoggingFilter loggingFilter = new LoggingFilter();
 
      registrationBean.setFilter(loggingFilter);
-     registrationBean.addUrlPatterns("/modeshape/api/rest/*");
+     registrationBean.addUrlPatterns("/modeshape/api/*");
      // registrationBean.setOrder(1); //set precedence
      return registrationBean;
     }

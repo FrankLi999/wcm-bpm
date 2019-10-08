@@ -54,7 +54,7 @@ import * as fromGuards from './store/guards';
 const routes: Routes = [
   {
       path      : '**',
-      redirectTo: 'jcr-explorer'
+      redirectTo: 'site-explorer/navigator'
       // ,canActivate: [fromGuards.ResolveGuard]
   }
 ];

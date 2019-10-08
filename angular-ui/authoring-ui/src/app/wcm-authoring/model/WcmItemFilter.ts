@@ -1,4 +1,4 @@
-export interface SiteNavigatorFilter {
+export interface WcmItemFilter {
   nodePath: string;
   nodeTypes?: string[];
   filters?: {

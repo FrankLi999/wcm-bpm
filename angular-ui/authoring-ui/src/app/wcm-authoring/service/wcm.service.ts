@@ -28,7 +28,7 @@ import {
   WcmSystem,
   SiteConfig,
   WcmNode,
-  SiteNavigatorFilter
+  WcmItemFilter
 } from '../model';
 @Injectable()
 @Client({
@@ -151,5 +151,5 @@ export class WcmService extends RestClient {
   getWcmNodes(
     @Path('repository') repository: string, 
     @Path('workspace') workspace: string,
-    @Body filter: SiteNavigatorFilter): Observable<WcmNode[]> { return null; };
+    @Body filter: WcmItemFilter): Observable<WcmNode[]> { return null; };
 }

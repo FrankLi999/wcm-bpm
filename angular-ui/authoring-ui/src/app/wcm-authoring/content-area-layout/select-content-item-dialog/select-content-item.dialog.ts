@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { WcmFlatTreeNode } from '../../components/site-navigator/site-navigator.component';
+import { WcmItemFlatTreeNode } from '../../components/wcm-navigator/wcm-navigator.component';
 @Component({
   selector: 'app-select-content-item-dialog',
   templateUrl: './select-content-item.dialog.html',
@@ -32,7 +32,7 @@ export class SelectContentItemDialog implements OnInit {
     });
   }
 
-  selectContent(activeNode: WcmFlatTreeNode) {
+  selectContent(activeNode: WcmItemFlatTreeNode) {
     return this.selectedContentItems.push(activeNode.wcmPath);
   }
 }

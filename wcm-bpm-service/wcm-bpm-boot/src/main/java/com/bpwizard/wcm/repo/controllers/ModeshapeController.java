@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.rest.jcr.controllers;
+package com.bpwizard.wcm.repo.controllers;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -204,10 +204,13 @@ public class ModeshapeController {
 	@GetMapping("/testACL")
 	public String testACL() throws Exception {
 		String path = "/bpwizard/library";
-		String[] privileges = new String[]{
-				Privilege.JCR_READ, 
-				Privilege.JCR_WRITE, 
-				Privilege.JCR_MODIFY_ACCESS_CONTROL};
+		String[] privileges = new String[] {
+				Privilege.JCR_ALL 
+//				Privilege.JCR_READ, 
+//				Privilege.JCR_WRITE,
+//				Privilege.JCR_ADD_CHILD_NODES, 
+//				Privilege.JCR_MODIFY_ACCESS_CONTROL
+		};
 		Principal principal = new TestPrincipal();
 		Principal adminPrincipal = new TestPrincipal("admin@example.com");  
 		Principal group = new TestGroup();

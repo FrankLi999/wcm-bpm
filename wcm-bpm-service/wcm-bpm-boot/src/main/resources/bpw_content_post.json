@@ -1,13 +1,13 @@
 {
-	"bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent" : {
-        "jcr:primaryType":"bpw:content",
-        "bpw:description":"MyContent",
-        "bpw:authoringTemplate":"bpwizard/default/design/MySidePaneContent",
-        "bpw:title":"MyContent"
+	"bpwizard/library/system/configuration/operations/library" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:library"
     },
-    "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent/body" : {
-        "jcr:primaryType":"bpw:contentElement",
-        "bpw:multiple":"false",
-        "bpw:value":"Content Body"
+    "bpwizard/library/system/configuration/operations/library/createLibrary" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "library",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Library",
+        "bpw:defaultIcon": "create_new_folder"
     }
 }
