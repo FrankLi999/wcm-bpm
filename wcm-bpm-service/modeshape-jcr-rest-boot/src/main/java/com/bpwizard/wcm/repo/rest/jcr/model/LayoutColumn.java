@@ -3,6 +3,7 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 import java.util.Arrays;
 
 public class LayoutColumn {
+	private String id;
     private int width;
     private ResourceViewer viewers[];
 	public int getWidth() {

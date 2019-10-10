@@ -39,22 +39,19 @@ export class SiteAreaComponent implements OnInit, OnDestroy {
     console.log('NewContentItemComponent forkJoin');
     this.sub = this.route.queryParams.pipe(
       switchMap(param => this.getSiteArea(param)),
-      filter(contentItem => contentItem != null),
-      switchMap(contentItem => this.getJsonForms(contentItem))
+      filter(siteArea => siteArea != null),
+      switchMap(siteArea => this.getJsonForms(siteArea))
     ).subscribe(jsonForm => this.jsonForm = jsonForm);
   }
 
   getSiteArea(param: any): Observable<SiteArea> {
-    console.log('................ getSiteArea 0', param);
     this.nodePath = param.nodePath;
     this.workspace = param.workspace;
     this.repository = param.repository;
     this.editing = param.editing === 'true';
     if (this.editing) {
-      console.log('................ getSiteArea');
       return this.wcmService.getSiteArea(this.repository, this.workspace, this.nodePath);
     } else {
-      console.log('................ getSiteArea of');
       return of({
         repository: param.repository,
         workspace: param.workspace,

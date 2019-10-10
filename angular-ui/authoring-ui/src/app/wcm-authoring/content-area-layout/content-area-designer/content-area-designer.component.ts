@@ -25,7 +25,7 @@ export class ContentAreaDesignerComponent implements OnInit, OnDestroy {
         this.workspace = param.workspace;
         this.library = param.library;
         this.layoutName = param.layoutName;
-        this.editing = param.editing;
+        this.editing = param.editing==='true';
     });
   }
 

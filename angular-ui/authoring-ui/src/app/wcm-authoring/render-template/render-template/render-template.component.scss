@@ -12,3 +12,11 @@
 .template-form-container .h2 {
     margin-top: 24px;
 }
+
+#render-template {
+  height: 100%;
+  min-height: 600px;
+}
+#render-template mat-tab-body {
+  flex-grow: 1;
+}

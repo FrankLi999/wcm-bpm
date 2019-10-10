@@ -361,6 +361,17 @@
 + bpw:constrait (bpw:queryConstraint)
 + * (bpw:querySortOrder)
 
+[bpw:ResourceElementRender]
+- bpw:name (STRING)
+
+[bpw:RenderTemplateLayoutColumn]
+- bpw:id (STRING)
+- bpw:width (LONG)
++ * (bpw:ResourceElementRender)
+
+[bpw:RenderTemplateLayoutRow]
++ * (bpw:RenderTemplateLayoutColumn)
+
 [bpw:renderTemplate] > mix:lastModified
 - bpw:name (STRING)
 - bpw:title (STRING)
@@ -372,6 +383,7 @@
 - bpw:note (STRING)
 - bpw:resourceName (STRING)
 - bpw:isQuery (BOOLEAN)
++ * (bpw:RenderTemplateLayoutRow)
 
 [bpw:resourceViewer]
 - bpw:title (STRING)

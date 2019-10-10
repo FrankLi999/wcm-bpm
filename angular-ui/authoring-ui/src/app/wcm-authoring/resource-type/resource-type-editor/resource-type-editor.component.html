@@ -1,5 +1,7 @@
 <div id="resource-type-editor" class="page-layout carded left-sidebar">
-
+    <div *ngIf=error fxLayout="row" fxLayoutAlign="start"  fxFlex="1 0 auto">
+        <div fxLayout="column" fxFlex="100">{{error}}</div>
+    </div>
     <!-- TOP BACKGROUND -->
     <div class="top-bg accent"></div>
     <!-- / TOP BACKGROUND -->
@@ -32,7 +34,11 @@
                     <mat-tab label="Resource Type Fields">
 
                         <div class="order-details tab-content p-24">
-                            <resource-type-layout [resourceTypeName]='resourceTypeName'></resource-type-layout>
+                            <resource-type-layout
+                              [resourceType]='resourceType'
+                              [controlFields]='controlFields'>
+
+                            </resource-type-layout>
                         </div>
                     </mat-tab>
 

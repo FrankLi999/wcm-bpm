@@ -1,7 +1,5 @@
-<div class="builder-container page-layout carded left-sidebar">
-    <div *ngIf=error fxLayout="row" fxLayoutAlign="start"  fxFlex="1 0 auto">
-        <div fxLayout="column" fxFlex="100">{{error}}</div>
-    </div>
+<div *ngIf="resourceType"  class="builder-container page-layout carded left-sidebar">
+
     <!-- RESOURCE TYPE -->
     <div fxFlex="100">
         <!-- HEADER -->
@@ -18,11 +16,6 @@
                     <div fxFlex="30">
                         {{resourceType.baseResourceType}}
                     </div>
-                    <!--
-                    <div fxFlex="70">
-                        ID: {{resourceType.id}}
-                    </div>
-                    -->
                 </div>
             </div>
             <div class="resource-type-action" fxFlex="50">

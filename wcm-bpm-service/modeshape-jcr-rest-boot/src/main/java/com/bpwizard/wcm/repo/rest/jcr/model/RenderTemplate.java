@@ -1,5 +1,7 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
+import java.util.Arrays;
+
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 
 public class RenderTemplate implements HasName {
@@ -16,6 +18,7 @@ public class RenderTemplate implements HasName {
 	private String note;
 	private boolean isQuery;
 	private String resourceName;
+	private RenderTemplateLayoutRow rows[];
 	public String getName() {
 		return name;
 	}
@@ -94,12 +97,17 @@ public class RenderTemplate implements HasName {
 	public void setLibrary(String library) {
 		this.library = library;
 	}
+	public RenderTemplateLayoutRow[] getRows() {
+		return rows;
+	}
+	public void setRows(RenderTemplateLayoutRow[] rows) {
+		this.rows = rows;
+	}
 	@Override
 	public String toString() {
 		return "RenderTemplate [repository=" + repository + ", workspace=" + workspace + ", library=" + library
 				+ ", name=" + name + ", title=" + title + ", description=" + description + ", code=" + code
 				+ ", preloop=" + preloop + ", postloop=" + postloop + ", maxEntries=" + maxEntries + ", note=" + note
-				+ ", isQuery=" + isQuery + ", resourceName=" + resourceName + "]";
+				+ ", isQuery=" + isQuery + ", resourceName=" + resourceName + ", rows=" + Arrays.toString(rows) + "]";
 	}
-	
 }

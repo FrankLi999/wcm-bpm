@@ -109,7 +109,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.RENDER_TEMPLATE.TITLE',
                 type     : 'item',
                 icon     : 'view_array',
-                url      : '/wcm-authoring/render-template/edit'
+                url      : '/wcm-authoring/render-template/list'
             },
             {
                 id       : 'query-builder',

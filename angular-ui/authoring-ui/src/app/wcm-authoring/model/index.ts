@@ -48,3 +48,6 @@ export { CurrentSite } from './CurrentSite';
 export { WcmNode } from './WcmNode';
 export { WcmItemFilter } from './WcmItemFilter';
 export { RenderTemplateModel } from './RenderTemplateModel';
+export { ResourceElementRender } from './ResourceElementRender';
+export { RenderTemplateLayoutColumn } from './RenderTemplateLayoutColumn';
+export { RenderTemplateLayoutRow } from './RenderTemplateLayoutRow';

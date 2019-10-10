@@ -51,6 +51,11 @@ const routes: Routes = [
         canActivate: [AuthGuard, fromGuards.ResolveGuard]
     },
     {
+      path       : 'resource-type/new',
+      component  : ResourceTypeEditorComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    },
+    {
         path       : 'resource-type/list',
         component  : ResourceTypeListComponent,
         canActivate: [AuthGuard, fromGuards.ResolveGuard]

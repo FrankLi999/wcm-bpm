@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, Input, Inject, ViewEncapsulation } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {CdkDragDrop, moveItemInArray, copyArrayItem, transferArrayItem, CdkDrag} from '@angular/cdk/drag-drop';
-import { select, Store } from '@ngrx/store';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { CdkDragDrop, moveItemInArray, copyArrayItem, transferArrayItem, CdkDrag } from '@angular/cdk/drag-drop';
+import { Store } from '@ngrx/store';
 import {
   ControlField,
   AuthoringTemplate,
@@ -15,9 +16,8 @@ import {
   FormColumn,
   TemplateField
 } from '../../model';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import * as fromStore from '../../store';
+
 
 const BASE_RESOURCE_TYPE: string[] = [
   'Content', 'Page', 'Widget', 'File', 'Key/Value', 'VanityURL', 'Form', 'Persona'
@@ -29,70 +29,23 @@ const BASE_RESOURCE_TYPE: string[] = [
   styleUrls: ['./resource-type-layout.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ResourceTypeLayoutComponent implements OnInit, OnDestroy {
+export class ResourceTypeLayoutComponent implements OnInit {
   
-  @Input() resourceTypeName: string;
-  
-  dropZones: string[] = ['builder-target1'];
-  controlFields: ControlField[] = [];
-  
+  // dropZones: string[] = ['builder-target1'];
+  @Input() controlFields: ControlField[] = [];
+  @Input() resourceType: AuthoringTemplate;
+
   builderTargets: string[] = [             
   ];
   baseResourceType: string = BASE_RESOURCE_TYPE[Math.round(Math.random() * (BASE_RESOURCE_TYPE.length - 1))];
-  resourceType: AuthoringTemplate = {
-    repository: 'bpwizard',
-    workspace: 'default',
-    library: 'design',
-    name: 'Resource Type name',
-    title: 'Title',
-    description: 'Content type',
-    baseResourceType: 'Content',
-    workflow: ['System'],
-    categories: [],
-    publishDate: new Date(2019, 0, 1),
-    formGroups: [],
-    formControls: {}
-  }
-
   private nextFieldGroupId: number = 0;
-  private unsubscribeAll: Subject<any>;
-  error: string;
   constructor(
-      // private wcmService: WcmService,
-      private store: Store<fromStore.WcmAppState>,
-      private dialog: MatDialog) { 
-    this.unsubscribeAll = new Subject();
+    private store: Store<fromStore.WcmAppState>,
+    private dialog: MatDialog) { 
   }
 
   ngOnInit() {
-    this.nextFieldGroupId = this.getNextFieldGroupId();
-    this.store.pipe(
-        takeUntil(this.unsubscribeAll),
-        select(fromStore.getCreateRenderTemplateError)).subscribe(
-      (error: string) => {
-        this.error = error;
-      }
-    )
-    //this.wcmService.getControlField('bpwizard', 'default').subscribe(
-    this.store.pipe(
-        takeUntil(this.unsubscribeAll),
-        select(fromStore.getControlFiels)).subscribe(
-      (controlFiels: ControlField[]) => {
-        if (controlFiels) {
-          this.controlFields = controlFiels;
-        }
-      }
-    )
-  }
-
-  /**
-  * On destroy
-  */
-  ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
-    this.unsubscribeAll.next();
-    this.unsubscribeAll.complete();
-    this.error && this.store.dispatch(new fromStore.AuthoringTemplateClearError());
+    this.nextFieldGroupId = this.getNextFieldGroupId();    
   }
 
   groupType(group: BaseFormGroup): string {
@@ -478,7 +431,6 @@ export class ResourceTypeLayoutComponent implements OnInit, OnDestroy {
   }
 
   saveResourceType() {
-    console.log(this.resourceType);
     this.store.dispatch(new fromStore.CreateAuthoringTemplate(this.resourceType));
   }
 }

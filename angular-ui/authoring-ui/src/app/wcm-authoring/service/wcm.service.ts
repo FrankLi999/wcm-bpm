@@ -70,10 +70,19 @@ export class WcmService extends RestClient {
   @Get('/at/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public getAuthoringTemplate(
+  public getAuthoringTemplates(
     @Path('repository') repository: string, 
     @Path('workspace') workspace: string
   ): Observable<AuthoringTemplate[]> { return null; };
+
+  @Get('/authoringTemplate/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public getAuthoringTemplate(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query('path') nodePath: string
+  ): Observable<AuthoringTemplate> { return null; };
 
   @Get('/wcmSystem/{repository}/{workspace}/{library}/{siteConfig}')
   @Timeout(2000) //In milliseconds
@@ -111,6 +120,14 @@ export class WcmService extends RestClient {
     @Path('workspace') workspace: string
   ): Observable<{[key:string]:RenderTemplate}> { return null; };
 
+  @Get('/renderTemplate/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public getRenderTemplate(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query('path') renderTemplatePath: string,
+  ): Observable<RenderTemplate> { return null; };
   
   @Post('/contentAreaLayout')
   @Timeout(2000) //In milliseconds

@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { CdkTableModule } from '@angular/cdk/table';
+import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRippleModule } from '@angular/material/core';
@@ -21,9 +23,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling'
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 
 import { RenderTemplateComponent } from './render-template/render-template.component';
@@ -32,12 +35,18 @@ import { SafePipe } from './pipes/safe.pipe';
 import { RenderTemplatesComponent } from './render-templates/render-templates.component';
 import * as fromGuards from '../store/guards';
 import { AuthGuard } from 'bpw-store';
+import { RenderLayoutDesignerComponent } from './render-layout-designer/render-layout-designer.component';
 
 const routes: Routes = [
   {
       path       : 'render-template/edit',
       component  : RenderTemplateComponent,
       canActivate: [AuthGuard, fromGuards.ResolveGuard]
+  },
+  {
+    path       : 'render-template/new',
+    component  : RenderTemplateComponent,
+    canActivate: [AuthGuard, fromGuards.ResolveGuard]
   },
   {
       path       : 'render-template/list',
@@ -51,7 +60,8 @@ const routes: Routes = [
   declarations: [
     RenderTemplateComponent,
     SafePipe,
-    RenderTemplatesComponent
+    RenderTemplatesComponent,
+    RenderLayoutDesignerComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -60,6 +70,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     FlexLayoutModule,
     AceEditorModule,
+    CdkTableModule,
+    CdkTreeModule,
     MatButtonModule,
     MatCheckboxModule,
     MatDialogModule,
@@ -77,6 +89,9 @@ const routes: Routes = [
     MatSnackBarModule,
     MatTableModule,
     MatTabsModule,
+    MatTreeModule,
+    DragDropModule,
+    ScrollingModule,
     TranslateModule,
     FuseSharedModule,
     FuseSidebarModule

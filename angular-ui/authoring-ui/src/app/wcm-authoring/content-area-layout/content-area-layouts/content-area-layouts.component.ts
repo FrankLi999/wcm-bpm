@@ -17,7 +17,7 @@ import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-naviga
 export class ContentAreaLayoutsComponent extends WcmNavigatorComponent implements OnInit, OnDestroy {
 
   functionMap: {[key:string]:Function}= {};
-  jsonFormMap: {[key:string]: JsonForm} = {}; //TODO: it is loaded asynchronously during ngInit
+  //jsonFormMap: {[key:string]: JsonForm} = {}; //TODO: it is loaded asynchronously during ngInit
   constructor(
     protected wcmService: WcmService,
     private modeshapeService: ModeshapeService,
@@ -40,23 +40,6 @@ export class ContentAreaLayoutsComponent extends WcmNavigatorComponent implement
       nodeTypes: ['bpw:contentAreaLayout', 'bpw:folder']
     }
     
-    this.store.pipe(
-      takeUntil(this.unsubscribeAll),
-      select(fromStore.getJsonForms)
-    ).subscribe(
-      (jsonForms: {[key:string]:JsonForm}) => {
-        if (jsonForms) {
-          this.jsonFormMap = jsonForms;
-        }
-      },
-      response => {
-        console.log("getJsonForm call ended in error", response);
-        console.log(response);
-      },
-      () => {
-        console.log("getJsonForm observable is now completed.");
-      }
-    );
     this.store.pipe(
       takeUntil(this.unsubscribeAll),
       select(fromStore.getOperations)).subscribe(

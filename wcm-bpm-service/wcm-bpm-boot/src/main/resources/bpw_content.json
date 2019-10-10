@@ -224,6 +224,64 @@
         "bpw:defaultTitle": "Remove Content Area Layout",
         "bpw:defaultIcon": "delete"
     },
+    "bpwizard/library/system/configuration/operations/renderTemplateFolder" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:renderTemplateFolder"
+    }, 
+    "bpwizard/library/system/configuration/operations/renderTemplateFolder/createRenderTemplate" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "renderTemplate",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Render Template",
+        "bpw:defaultIcon": "create"
+    },
+    "bpwizard/library/system/configuration/operations/renderTemplate" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:renderTemplate"
+    },
+    "bpwizard/library/system/configuration/operations/renderTemplate/editRenderTemplate" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "renderTemplate",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Render Template",
+        "bpw:defaultIcon": "edit"
+    },
+    "bpwizard/library/system/configuration/operations/renderTemplate/removeRenderTemplate" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "renderTemplate",
+        "bpw:operation": "Delete",
+        "bpw:defaultTitle": "Remove Render Template",
+        "bpw:defaultIcon": "delete"
+    },
+    "bpwizard/library/system/configuration/operations/authoringTemplateFolder" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:authoringTemplateFolder"
+    }, 
+    "bpwizard/library/system/configuration/operations/authoringTemplateFolder/createAuthoringTemplate" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "authoringTemplate",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Authoring Template",
+        "bpw:defaultIcon": "create"
+    },
+    "bpwizard/library/system/configuration/operations/authoringTemplate" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:authoringTemplate"
+    },
+    "bpwizard/library/system/configuration/operations/authoringTemplate/editAuthoringTemplate" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "authoringTemplate",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Authoring Template",
+        "bpw:defaultIcon": "edit"
+    },
+    "bpwizard/library/system/configuration/operations/authoringTemplate/removeAuthoringTemplate" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "authoringTemplate",
+        "bpw:operation": "Delete",
+        "bpw:defaultTitle": "Remove Authoring Template",
+        "bpw:defaultIcon": "delete"
+    },
     "bpwizard/library/system/configuration/operations/themeFolder" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "bpw:themesFolder"

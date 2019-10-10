@@ -146,7 +146,7 @@ public class WcmRestController {
 			wcmSystem.setRenderTemplates(renderTemplates);
 			Map<String, ContentAreaLayout> contentAreaLayouts = this.getContentAreaLayouts(repository, workspace, request);
 			wcmSystem.setContentAreaLayouts(contentAreaLayouts);
-			wcmSystem.setAuthoringTemplates(this.getAuthoringTemplate(repository, workspace, request));
+			wcmSystem.setAuthoringTemplates(this.getAuthoringTemplates(repository, workspace, request));
 			Node siteConfigNode = session.getNode(String.format("/bpwizard/library/%s/siteConfig/%s", library, siteConfigName));
 			SiteConfig siteConfig = this.getSiteConfig(siteConfigNode);
 			siteConfig.setRepository(repository);
@@ -247,7 +247,7 @@ public class WcmRestController {
 	}
 
 	@GetMapping(path = "/at/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Map<String, AuthoringTemplate> getAuthoringTemplate(@PathVariable("repository") String repository,
+	public Map<String, AuthoringTemplate> getAuthoringTemplates(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
@@ -264,6 +264,35 @@ public class WcmRestController {
 				logger.traceExit();
 			}
 			return authoringTemplates;
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}
+	
+	@GetMapping(path = "/authoringTemplate/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public AuthoringTemplate getAuthoringTemplate(
+			@PathVariable("repository") String repository,
+			@PathVariable("workspace") String workspace, 
+			@RequestParam("path") String atPath,
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			atPath = atPath.startsWith("/") ? atPath : "/" + atPath;
+			String library = atPath.split("/", 4)[3];
+			System.out.println(">>>>>>>>>>>>>>>> getAuthoringTemplate:" + library);
+			RestNode atNode = (RestNode) this.itemHandler.item(request, repository, workspace,
+					atPath, 7);
+			
+			AuthoringTemplate at = this.toAuthoringTemplate(atNode, repository, workspace, library);
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return at;
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (Throwable t) {
@@ -464,6 +493,35 @@ public class WcmRestController {
 		}	
 	}
 
+	@GetMapping(path = "/renderTemplate/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public RenderTemplate getRenderTemplate(
+			@PathVariable("repository") String repository,
+			@PathVariable("workspace") String workspace, 
+			@RequestParam("path") String rtPath,
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			rtPath = rtPath.startsWith("/") ? rtPath : "/" + rtPath;
+			String library = rtPath.split("/", 4)[3];
+			System.out.println(">>>>>>>>>>>>>>>> getRenderTemplate:" + library);
+			RestNode rtNode = (RestNode) this.itemHandler.item(request, repository, workspace,
+					rtPath, 1);
+			
+			RenderTemplate rt = this.toRenderTemplate(rtNode, repository, workspace, library);
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return rt;
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}
+	
 	@PostMapping(path = "/rt", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createRenderTemplate(
 			@RequestBody RenderTemplate rt, 
@@ -1570,11 +1628,11 @@ public class WcmRestController {
 		return result;
 	}
 
-	private RenderTemplate toRenderTemplate(RestNode node, RenderTemplate rt) {
+	private RenderTemplate toRenderTemplate(RestNode node, String repository, String workspace, String library) {
 		RenderTemplate result = new RenderTemplate();
-		result.setRepository(rt.getRepository());
-		result.setWorkspace(rt.getWorkspace());
-		result.setLibrary(rt.getLibrary());
+		result.setRepository(repository);
+		result.setWorkspace(workspace);
+		result.setLibrary(library);
 		result.setName(node.getName());
 		for (RestProperty property : node.getJcrProperties()) {
 			if ("bpw:title".equals(property.getName())) {
@@ -1789,7 +1847,7 @@ public class WcmRestController {
 			RestNode themeNode = (RestNode) this.itemHandler.item(request, rt.getRepository(), rt.getWorkspace(),
 					"/bpwizard/library/" + rt.getLibrary() + "/renderTemplate", 1);
 			return themeNode.getChildren().stream().filter(this::isRenderTemplate)
-					.map(node -> this.toRenderTemplate(node, rt));
+					.map(node -> this.toRenderTemplate(node, rt.getRepository(), rt.getWorkspace(), rt.getLibrary()));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
@@ -1870,7 +1928,7 @@ public class WcmRestController {
 			RestNode atNode = (RestNode) this.itemHandler.item(request, at.getRepository(), at.getWorkspace(),
 					"/bpwizard/library/" + at.getLibrary() + "/authoringTemplate", 7);
 			return atNode.getChildren().stream().filter(this::isAuthortingTemplate)
-					.map(node -> this.toAuthoringTemplate(node, at));
+					.map(node -> this.toAuthoringTemplate(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
 		} catch (RepositoryException e) {
 			e.printStackTrace();
 			throw new WcmRepositoryException(e);
@@ -1885,11 +1943,11 @@ public class WcmRestController {
 		return authoringTemplateWithLibrary;
 	}
 
-	private AuthoringTemplate toAuthoringTemplate(RestNode node, AuthoringTemplate at) {
+	private AuthoringTemplate toAuthoringTemplate(RestNode node, String repository, String workspace, String library) {
 		AuthoringTemplate result = new AuthoringTemplate();
-		result.setRepository(at.getRepository());
-		result.setWorkspace(at.getWorkspace());
-		result.setLibrary(at.getLibrary());
+		result.setRepository(repository);
+		result.setWorkspace(workspace);
+		result.setLibrary(library);
 		result.setName(node.getName());
 		for (RestProperty properties : node.getJcrProperties()) {
 			if ("bpw:baseResourceType".equals(properties.getName())) {

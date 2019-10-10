@@ -1,5 +1,6 @@
 
 import { HasName } from './HasName';
+import { RenderTemplateLayoutRow } from './RenderTemplateLayoutRow';
 
 export interface RenderTemplate extends HasName {
   repository: string;
@@ -7,11 +8,12 @@ export interface RenderTemplate extends HasName {
   library: string;
   title?: string;
   description?: string;
-  code: string;
+  code?: string;
   preloop?: string;
   postloop?: string;
   maxEntries?: number;
-  note: string;
-  isQuery: boolean;
+  note?: string;
+  isQuery?: boolean;
   resourceName?: string;
+  rows?: RenderTemplateLayoutRow[];
 }
