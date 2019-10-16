@@ -9,12 +9,16 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.camunda.bpm.engine.variable.Variables;
+import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.camunda.bpm.spring.boot.starter.event.PostDeployEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+//import org.camunda.bpm.engine.rest.filter.StatelessUserAuthenticationFilter;
+//import  org.camunda.bpm.engine.rest.filter.StatelessUserAuthenticationFilter;
 
 @Configuration
+@EnableProcessApplication("wcm-boot")
 public class CamundaConfig {
 	 @Autowired
 	 private RuntimeService runtimeService;
@@ -36,6 +40,7 @@ public class CamundaConfig {
 
 	}
 
+	@SuppressWarnings("unused")
 	@EventListener
 	private void evaluateDecisionTable(PostDeployEvent event) {
 		DecisionService decisionService = processEngine.getDecisionService();
@@ -49,4 +54,13 @@ public class CamundaConfig {
 				variables);
 		List<Object> beverages = beveragesDecisionResult.collectEntries("beverages");
 	}
+	
+//	@Bean
+//  public FilterRegistrationBean statelessUserAuthenticationFilter(){
+//      FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
+//      filterRegistration.setFilter(new StatelessUserAuthenticationFilter(processEngine));
+//      filterRegistration.setOrder(102); // make sure the filter is registered after the Spring Security Filter Chain
+//      filterRegistration.addUrlPatterns("/camunda/api/engine/*");
+//      return filterRegistration;
+//  }
 }
