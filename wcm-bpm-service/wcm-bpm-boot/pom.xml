@@ -97,6 +97,24 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.camunda.bpm.springboot</groupId>
+			<artifactId>camunda-bpm-spring-boot-starter-test</artifactId>
+			<version>${camunda.spring-boot.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.camunda.bpm.extension</groupId>
+			<artifactId>camunda-bpm-assert-scenario</artifactId>
+			<version>0.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.camunda.bpm.extension</groupId>
+			<artifactId>camunda-bpm-process-test-coverage</artifactId>
+			<version>0.3.2</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

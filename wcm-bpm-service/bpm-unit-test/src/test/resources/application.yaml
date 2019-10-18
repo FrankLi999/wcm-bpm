@@ -1,0 +1,14 @@
+#spring:
+#  datasource:
+#    url: jdbc:h2:mem:camundatest;DB_CLOSE_ON_EXIT=FALSE
+    #url: jdbc:h2:mem:camunda
+ 
+#camunda.bpm:
+#  generate-unique-process-engine-name: true
+#  generate-unique-process-application-name: true
+#  job-execution.enabled: false
+#  auto-deployment-enabled: false
+restProxyHost: api.test.org
+restProxyPort: 80
+#restProxyHost: localhost
+#restProxyPort: 8080
