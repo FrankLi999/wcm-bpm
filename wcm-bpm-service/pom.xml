@@ -21,7 +21,9 @@
 	
 	<modules>
         <!-- <module>bpm-ui</module> -->	
-		<module>wcm-bpm-boot</module>		
+		<module>wcm-bpm-boot</module>
+		<!-- <module>modeshape</module> -->
+		<!-- <module>camunda</module> -->
 	</modules>
     
 	<properties>
@@ -40,6 +42,7 @@
 		<gson.version>2.8.5</gson.version>
 		<checker-compat-qual.version>2.5.5</checker-compat-qual.version>
 	</properties>
+	
 	<dependencyManagement>
 		<dependencies>
 		    <!-- 
@@ -54,7 +57,7 @@
 				<version>${hazelcast.version}</version>
 			</dependency>
 			 -->
-			<dependency>
+		    <dependency>
 			    <groupId>org.camunda.bpm</groupId>
                 <artifactId>camunda-bom</artifactId>
 			    <type>pom</type>
