@@ -1,4 +1,5 @@
-Copied from https://github.com/vaquarkhan/flowing-retail-microservice-kafka-
+# Copied from https://github.com/vaquarkhan/flowing-retail-microservice-kafka
+
 # Order fulfillment sample application demonstrating concepts in the context of DDD and Microservices. 
 
 This sample application shows how to implement

@@ -7,10 +7,12 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<spring.boot.version>2.0.4.RELEASE</spring.boot.version>
-		<spring-cloud-stream.version>Finchley.SR1</spring-cloud-stream.version>
-		<camunda.spring.boot.version>3.0.0</camunda.spring.boot.version>
-		<camunda.version>7.9.0</camunda.version>
+		<spring.boot.version>2.1.9.RELEASE</spring.boot.version>
+		<spring-cloud-stream.version>Greenwich.SR3</spring-cloud-stream.version>
+		<camunda.spring.boot.version>3.3.1</camunda.spring.boot.version>
+		<camunda.version>7.11.0</camunda.version>
+		<camunda-assert-scenario.version>0.2</camunda-assert-scenario.version>
+		<camunda-test-coverage.version>0.3.2</camunda-test-coverage.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -63,9 +65,6 @@
 			<artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
 			<version>${camunda.spring.boot.version}</version>
 		</dependency>
-		<!-- and include Enterprise Cockpit, see our Consulting Examples <dependency> 
-			<groupId>com.camunda.consulting.webapp</groupId> <artifactId>camunda-webapp-customized-webjar</artifactId> 
-			<version>7.7.2</version> <scope>provided</scope> </dependency> -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
