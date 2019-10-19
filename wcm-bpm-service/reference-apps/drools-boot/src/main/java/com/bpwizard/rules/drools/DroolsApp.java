@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // @ComponentScan("com.bpwizard.rules.drools.service")
 public class DroolsApp {
 	public static void main(String[] args) {
-        SpringApplication.run(DroolsApp.class, args);
-    }
+		SpringApplication.run(DroolsApp.class, args);
+	}
 }

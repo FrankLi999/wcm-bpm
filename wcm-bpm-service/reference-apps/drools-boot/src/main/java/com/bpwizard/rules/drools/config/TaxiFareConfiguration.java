@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TaxiFareConfiguration {
 
-    public static final String drlFile = "TAXI_FARE_RULE.drl";
+    public static final String drlFile = "taxi_fare_rule.drl";
     
     @Bean
     public KieContainer kieContainer() {

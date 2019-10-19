@@ -34,7 +34,28 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!-- ... -->
+        <!--  
+        <dependency>
+	      <groupId>org.drools</groupId>
+	      <artifactId>drools-decisiontables</artifactId>
+	      <version>${drools-version}</version>
+	    </dependency>
+	 
+	    <dependency>
+	      <groupId>org.drools</groupId>
+	      <artifactId>drools-core</artifactId>
+	      <version>${drools-version}</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.drools</groupId>
+	      <artifactId>drools-compiler</artifactId>
+	      <version>${drools-version}</version>
+	    </dependency>
+        -->
+        <!-- 
+        Drools KIE CI module, which allows us to load rules located in the different 
+        maven artefact (jar file) by using Maven Resolution strategies. 
+         -->
         <dependency>
             <groupId>org.kie</groupId>
             <artifactId>kie-ci</artifactId>
@@ -55,6 +76,7 @@
             <artifactId>drools-compiler</artifactId>
             <version>${drools-version}</version>
         </dependency>
+        
         <!--spring integration -->
         <dependency>
             <groupId>org.kie</groupId>
