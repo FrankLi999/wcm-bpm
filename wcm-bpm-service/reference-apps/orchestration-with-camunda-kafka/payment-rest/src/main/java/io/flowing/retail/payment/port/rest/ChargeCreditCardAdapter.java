@@ -11,50 +11,51 @@ import org.springframework.web.client.RestTemplate;
 @ConfigurationProperties
 public class ChargeCreditCardAdapter implements JavaDelegate {
 
-  @Autowired
-  private RestTemplate rest;
+	@Autowired
+	private RestTemplate rest;
 
-  /**
-   * Of course you could use Eureka for this
-   */
-  private String stripeChargeUrl = "http://localhost:8099/charge";
+	/**
+	 * Of course you could use Eureka for this
+	 */
+	private String stripeChargeUrl = "http://localhost:8099/charge";
 
-  public void execute(DelegateExecution ctx) throws Exception {
-    CreateChargeRequest request = new CreateChargeRequest();
-    request.amount = (int) ctx.getVariable("remainingAmount");
+	public void execute(DelegateExecution ctx) throws Exception {
+		CreateChargeRequest request = new CreateChargeRequest();
+		request.amount = (int) ctx.getVariable("remainingAmount");
 
-    CreateChargeResponse response = rest.postForObject( //
-        stripeChargeUrl, //
-        request, //
-        CreateChargeResponse.class);
-    
-    // TODO Add error scenarios to StripeFake and then raise "Error_CreditCardError" here 
+		CreateChargeResponse response = rest.postForObject( //
+				stripeChargeUrl, //
+				request, //
+				CreateChargeResponse.class);
 
-    ctx.setVariable("paymentTransactionId", response.transactionId);
-  }
-  
-  public static class CreateChargeRequest {
-    public long amount;
-  }
+		// TODO Add error scenarios to StripeFake and then raise "Error_CreditCardError"
+		// here
 
-  public static class CreateChargeResponse {
-    public String transactionId;
-  }
+		ctx.setVariable("paymentTransactionId", response.transactionId);
+	}
 
-  public RestTemplate getRest() {
-    return rest;
-  }
+	public static class CreateChargeRequest {
+		public long amount;
+	}
 
-  public void setRest(RestTemplate rest) {
-    this.rest = rest;
-  }
+	public static class CreateChargeResponse {
+		public String transactionId;
+	}
 
-  public String getStripeChargeUrl() {
-    return stripeChargeUrl;
-  }
+	public RestTemplate getRest() {
+		return rest;
+	}
 
-  public void setStripeChargeUrl(String stripeChargeUrl) {
-    this.stripeChargeUrl = stripeChargeUrl;
-  }
+	public void setRest(RestTemplate rest) {
+		this.rest = rest;
+	}
+
+	public String getStripeChargeUrl() {
+		return stripeChargeUrl;
+	}
+
+	public void setStripeChargeUrl(String stripeChargeUrl) {
+		this.stripeChargeUrl = stripeChargeUrl;
+	}
 
 }

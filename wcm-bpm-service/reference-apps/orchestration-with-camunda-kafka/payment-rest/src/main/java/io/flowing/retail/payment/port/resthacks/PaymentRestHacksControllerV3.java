@@ -3,8 +3,6 @@ package io.flowing.retail.payment.port.resthacks;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 import java.util.UUID;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
@@ -12,24 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.builder.EndEventBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import com.netflix.hystrix.HystrixCommand;
-import com.netflix.hystrix.HystrixCommandGroupKey;
-
-import io.flowing.retail.payment.port.rest.NotifySemaphorAdapter;
-import io.flowing.retail.payment.port.rest.ChargeCreditCardAdapter.CreateChargeRequest;
-import io.flowing.retail.payment.port.rest.ChargeCreditCardAdapter.CreateChargeResponse;
 
 /**
  * Step3: Use Camunda state machine for long-running retry
@@ -92,7 +80,8 @@ public class PaymentRestHacksControllerV3 {
   }
 
   public void chargeCreditCard(String customerId, long remainingAmount) {
-    ProcessInstance pi = camunda.getRuntimeService() //
+    //ProcessInstance pi = 
+    camunda.getRuntimeService() //
         .startProcessInstanceByKey("payment", //
             Variables.putValue("amount", remainingAmount));
   }

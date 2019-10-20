@@ -81,7 +81,13 @@ kafka-topics.sh --list --zookeeper localhost:2181
 ```
 
 * Start the different microservices components by Spring Boot one by one, e.g.
-    
+
+> mvn -f kafka-checkout spring-boot:run
+> mvn -f kafka-camunda-order spring-boot:run
+> mvn -f kafka-camunda-payment spring-boot:run
+> > mvn -f kafka-inventory spring-boot:run    
+> > mvn -f kafka-shipping spring-boot:run
+> > mvn -f kafka-monitor spring-boot:run
 ```
 mvn -f checkout exec:java
 ...

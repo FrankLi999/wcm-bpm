@@ -1,28 +1,52 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>com.bpwizard.bpm.kafka.demo</groupId>
 	<artifactId>orchestration-with-camunda-kafka</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.0.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
-
+		<camunda.spring.boot.version>3.3.1</camunda.spring.boot.version>
+		<camunda.version>7.11.0</camunda.version>
+		<camunda-assert-scenario.version>0.2</camunda-assert-scenario.version>
+		<camunda-test-coverage.version>0.3.2</camunda-test-coverage.version>
+	</properties>    
+	<dependencyManagement>
+		<dependencies>
+		    <dependency>
+				<!-- Import dependency management from camunda -->
+				<groupId>org.camunda.bpm</groupId>
+				<artifactId>camunda-bom</artifactId>
+				<version>${camunda.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.camunda.bpm.dmn</groupId>
+				<artifactId>camunda-engine-dmn-bom</artifactId>
+				<version>${camunda.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>	
 	<modules>
-		<module>checkout</module>
-		<module>order</module>
-		<module>payment</module>
-		<module>inventory</module>
-		<module>shipping</module>
-		<module>monitor</module>
-	</modules>
-
+		<module>kafka-checkout</module>		
+		<module>kafka-camunda-order</module>
+		<module>kafka-camunda-payment</module>
+		<module>kafka-inventory</module>
+		<module>kafka-shipping</module>
+		<module>kafka-monitor</module>		
+	</modules>    
 	<build>
 		<defaultGoal>clean install</defaultGoal>
 	</build>
-
 </project>

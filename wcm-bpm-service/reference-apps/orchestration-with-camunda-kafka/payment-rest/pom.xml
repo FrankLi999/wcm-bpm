@@ -1,44 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>io.flowing.retail.java</groupId>
-	<artifactId>flowing-retail-java-kafka-or-rabbit-spring-boot-camunda-payment-rest</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<spring.boot.version>2.1.9.RELEASE</spring.boot.version>
-		<spring-cloud-stream.version>Greenwich.SR3</spring-cloud-stream.version>
-		<camunda.spring.boot.version>3.3.1</camunda.spring.boot.version>
-		<camunda.version>7.11.0</camunda.version>
-		<camunda-assert-scenario.version>0.2</camunda-assert-scenario.version>
-		<camunda-test-coverage.version>0.3.2</camunda-test-coverage.version>
-	</properties>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-dependencies</artifactId>
-				<version>${spring.boot.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.camunda.bpm</groupId>
-				<artifactId>camunda-bom</artifactId>
-				<version>${camunda.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.camunda.bpm.dmn</groupId>
-				<artifactId>camunda-engine-dmn-bom</artifactId>
-				<version>${camunda.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+	<artifactId>payment-rest</artifactId>
+	<parent>
+		<groupId>com.bpwizard.bpm.kafka.demo</groupId>
+	    <artifactId>orchestration-with-camunda-kafka</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -54,15 +25,10 @@
 			<artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
 			<version>${camunda.spring.boot.version}</version>
 		</dependency>
-		<!-- and include Enterprise Cockpit, see our Consulting Examples <dependency> 
-			<groupId>com.camunda.consulting.webapp</groupId> <artifactId>camunda-webapp-customized-webjar</artifactId> 
-			<version>7.7.2</version> <scope>provided</scope> </dependency> -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -89,6 +55,7 @@
 	</repositories>
 	<build>
 		<plugins>
+		    <!--
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -96,6 +63,7 @@
 					<mainClass>io.flowing.retail.payment.PaymentRestApplication</mainClass>
 				</configuration>
 			</plugin>
+			-->
 		</plugins>
 	</build>
 </project>
