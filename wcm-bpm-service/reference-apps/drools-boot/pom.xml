@@ -55,7 +55,7 @@
         <!-- 
         Drools KIE CI module, which allows us to load rules located in the different 
         maven artefact (jar file) by using Maven Resolution strategies. 
-         -->
+        -->
         <dependency>
             <groupId>org.kie</groupId>
             <artifactId>kie-ci</artifactId>
