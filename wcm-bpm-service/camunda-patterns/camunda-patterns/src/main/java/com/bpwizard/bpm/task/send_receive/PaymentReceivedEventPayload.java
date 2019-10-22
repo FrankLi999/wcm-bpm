@@ -1,4 +1,4 @@
-package io.flowing.retail.payment.port.adapter;
+package com.bpwizard.bpm.task.send_receive;
 
 public class PaymentReceivedEventPayload {
 	private String refId;

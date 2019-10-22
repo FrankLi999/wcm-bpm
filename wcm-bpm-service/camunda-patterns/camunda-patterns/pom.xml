@@ -38,10 +38,11 @@
 			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
 			<version>${camunda.spring-boot.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.camunda.spin/camunda-spin-dataformat-json-jackson -->
+		
 		<dependency>
 		    <groupId>org.camunda.spin</groupId>
 		    <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+		    <!-- <artifactId>camunda-spin-dataformat-all</artifactId> -->
 		    <version>1.7.1</version>
 		</dependency>
 		<dependency>
@@ -49,6 +50,7 @@
 		    <artifactId>camunda-engine-plugin-spin</artifactId>
 		    <version>${camunda.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -128,6 +130,17 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Kafka -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

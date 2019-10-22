@@ -1,4 +1,4 @@
-package com.bpwizard.bpm.task;
+package com.bpwizard.bpm.task.business_rule;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
