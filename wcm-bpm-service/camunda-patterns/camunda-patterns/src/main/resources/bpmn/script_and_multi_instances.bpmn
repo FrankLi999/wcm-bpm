@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1sz7mis" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:process id="Script_and_Multi_Instances" name="Script and Multi Instances" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_18hg1jc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_18hg1jc" sourceRef="StartEvent_1" targetRef="Set_Variables_1pk7q9i" />
+    <bpmn:endEvent id="EndEvent_06080pi">
+      <bpmn:incoming>SequenceFlow_1mqe0nz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1xhg8m3" sourceRef="Set_Variables_1pk7q9i" targetRef="Script_Task1_001ds90" />
+    <bpmn:scriptTask id="Set_Variables_1pk7q9i" name="Set Variables" scriptFormat="JavaScript">
+      <bpmn:incoming>SequenceFlow_18hg1jc</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1xhg8m3</bpmn:outgoing>
+      <bpmn:script>var collection = S('{ "collection" : ["System 1", "System 2", "System 3", "System 4", "System 5", "System 6"] }');
+execution.setVariable("collection", collection);</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1mqe0nz" sourceRef="Script_User_Task_1k6cye5" targetRef="EndEvent_06080pi" />
+    <bpmn:userTask id="Script_User_Task_1k6cye5" name="Script User Task">
+      <bpmn:incoming>SequenceFlow_0tpgvs3</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1mqe0nz</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0tpgvs3" sourceRef="Script_Task2_19hxmyh" targetRef="Script_User_Task_1k6cye5" />
+    <bpmn:scriptTask id="Script_Task2_19hxmyh" name="Script Task2" scriptFormat="Javascript" camunda:resource="script/script2.js">
+      <bpmn:incoming>SequenceFlow_1kq0wk0</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0tpgvs3</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true" camunda:collection="${collection.prop(&#39;collection&#39;).elements()}" camunda:elementVariable="collectionElem" />
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1kq0wk0" sourceRef="Script_Task1_001ds90" targetRef="Script_Task2_19hxmyh" />
+    <bpmn:scriptTask id="Script_Task1_001ds90" name="Script Task1" scriptFormat="JavaScript">
+      <bpmn:incoming>SequenceFlow_1xhg8m3</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1kq0wk0</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${collection.prop(&#39;collection&#39;).elements()}" camunda:elementVariable="collectionElem" />
+      <bpmn:script>var system = java.lang.System;
+system.out.println('&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; script task 1');
+
+var elem1 = execution.getVariable('collectionElem')
+system.out.println('&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; script task 1, elem1:' + elem1);
+// set process variable
+execution.setVariable('task1' + loopCounter, elem1)</bpmn:script>
+    </bpmn:scriptTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Script_and_Multi_Instances">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="132" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_18hg1jc_di" bpmnElement="SequenceFlow_18hg1jc">
+        <di:waypoint x="168" y="117" />
+        <di:waypoint x="250" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_06080pi_di" bpmnElement="EndEvent_06080pi">
+        <dc:Bounds x="882" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1xhg8m3_di" bpmnElement="SequenceFlow_1xhg8m3">
+        <di:waypoint x="350" y="117" />
+        <di:waypoint x="420" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_0j0gwo5_di" bpmnElement="Set_Variables_1pk7q9i">
+        <dc:Bounds x="250" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1mqe0nz_di" bpmnElement="SequenceFlow_1mqe0nz">
+        <di:waypoint x="830" y="117" />
+        <di:waypoint x="882" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0o9x5wl_di" bpmnElement="Script_User_Task_1k6cye5">
+        <dc:Bounds x="730" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0tpgvs3_di" bpmnElement="SequenceFlow_0tpgvs3">
+        <di:waypoint x="680" y="117" />
+        <di:waypoint x="730" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_1k2je2d_di" bpmnElement="Script_Task2_19hxmyh">
+        <dc:Bounds x="580" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1kq0wk0_di" bpmnElement="SequenceFlow_1kq0wk0">
+        <di:waypoint x="520" y="117" />
+        <di:waypoint x="580" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_1lpkjkh_di" bpmnElement="Script_Task1_001ds90">
+        <dc:Bounds x="420" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

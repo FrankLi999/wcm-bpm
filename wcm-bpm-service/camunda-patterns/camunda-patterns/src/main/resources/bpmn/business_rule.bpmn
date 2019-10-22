@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="_DdZocL47EeOQo_IRkjDF6w" targetNamespace="http://camunda.org/schema/1.0/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <bpmn2:process id="business_rule" name="Business Rule" isExecutable="true" camunda:candidateStarterGroups="wcm-admins">
+    <bpmn2:startEvent id="StartEvent_1" name="Loan Request&#10;Received">
+      <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:sequenceFlow id="SequenceFlow_1" name="" sourceRef="StartEvent_1" targetRef="Select_Dish_0dfv74n" />
+    <bpmn2:endEvent id="EndEvent_1" name="Loan Request&#10;Processed">
+      <bpmn2:incoming>SequenceFlow_13qdqs1</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:businessRuleTask id="Select_Dish_0dfv74n" name="Select Dish" camunda:resultVariable="desiredDish" camunda:decisionRef="dish" camunda:mapDecisionResult="singleEntry">
+      <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_0moyomu</bpmn2:outgoing>
+    </bpmn2:businessRuleTask>
+    <bpmn2:sequenceFlow id="SequenceFlow_1lag5tw" sourceRef="Select_Beverage_0iffy2h" targetRef="Calculate_Customer_Discount_1hw214a" />
+    <bpmn2:businessRuleTask id="Select_Beverage_0iffy2h" name="Select Beverage" camunda:resultVariable="beverages" camunda:decisionRef="beverages" camunda:mapDecisionResult="collectEntries">
+      <bpmn2:incoming>SequenceFlow_0moyomu</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_1lag5tw</bpmn2:outgoing>
+    </bpmn2:businessRuleTask>
+    <bpmn2:businessRuleTask id="Select_My_Dish_0b2lbkr" name="Select My Dish" camunda:class="com.bpwizard.bpm.task.MyDishDelegate">
+      <bpmn2:incoming>SequenceFlow_1f1oyyw</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_125geum</bpmn2:outgoing>
+    </bpmn2:businessRuleTask>
+    <bpmn2:userTask id="Serve_Beverages_1cy81xp" name="Serve Beverages">
+      <bpmn2:incoming>SequenceFlow_125geum</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_13qdqs1</bpmn2:outgoing>
+    </bpmn2:userTask>
+    <bpmn2:businessRuleTask id="Calculate_Customer_Discount_1hw214a" name="Calculate Customer Discount" camunda:expression="${customerDiscountBean.customerDiscount()}" camunda:resultVariable="customerDiscount">
+      <bpmn2:incoming>SequenceFlow_1lag5tw</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_1pao2mw</bpmn2:outgoing>
+    </bpmn2:businessRuleTask>
+    <bpmn2:businessRuleTask id="Calculation_Taxi_Fare_0m5vlpk" name="Calculation Taxi Fare" camunda:delegateExpression="${taxiFareCalculationBean}">
+      <bpmn2:incoming>SequenceFlow_1pao2mw</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_1f1oyyw</bpmn2:outgoing>
+    </bpmn2:businessRuleTask>
+    <bpmn2:sequenceFlow id="SequenceFlow_1pao2mw" sourceRef="Calculate_Customer_Discount_1hw214a" targetRef="Calculation_Taxi_Fare_0m5vlpk" />
+    <bpmn2:sequenceFlow id="SequenceFlow_13qdqs1" sourceRef="Serve_Beverages_1cy81xp" targetRef="EndEvent_1" />
+    <bpmn2:sequenceFlow id="SequenceFlow_1f1oyyw" sourceRef="Calculation_Taxi_Fare_0m5vlpk" targetRef="Select_My_Dish_0b2lbkr" />
+    <bpmn2:sequenceFlow id="SequenceFlow_0moyomu" sourceRef="Select_Dish_0dfv74n" targetRef="Select_Beverage_0iffy2h" />
+    <bpmn2:sequenceFlow id="SequenceFlow_125geum" sourceRef="Select_My_Dish_0b2lbkr" targetRef="Serve_Beverages_1cy81xp" />
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="business_rule">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_3" bpmnElement="StartEvent_1">
+        <dc:Bounds x="172" y="104" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="156" y="140" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_1" bpmnElement="SequenceFlow_1" sourceElement="_BPMNShape_StartEvent_3" targetElement="BusinessRuleTask_0rojka8_di">
+        <di:waypoint x="208" y="122" />
+        <di:waypoint x="270" y="122" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="240" y="157" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_3" bpmnElement="EndEvent_1">
+        <dc:Bounds x="1212" y="104" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1196" y="140" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BusinessRuleTask_0rojka8_di" bpmnElement="Select_Dish_0dfv74n">
+        <dc:Bounds x="270" y="82" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1lag5tw_di" bpmnElement="SequenceFlow_1lag5tw">
+        <di:waypoint x="530" y="122" />
+        <di:waypoint x="590" y="122" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BusinessRuleTask_149fsff_di" bpmnElement="Select_Beverage_0iffy2h">
+        <dc:Bounds x="430" y="82" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BusinessRuleTask_1e14zry_di" bpmnElement="Select_My_Dish_0b2lbkr">
+        <dc:Bounds x="910" y="82" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0bh4lh4_di" bpmnElement="Serve_Beverages_1cy81xp">
+        <dc:Bounds x="1060" y="82" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BusinessRuleTask_1byfgin_di" bpmnElement="Calculate_Customer_Discount_1hw214a">
+        <dc:Bounds x="590" y="82" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BusinessRuleTask_0gwdiwa_di" bpmnElement="Calculation_Taxi_Fare_0m5vlpk">
+        <dc:Bounds x="740" y="82" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1pao2mw_di" bpmnElement="SequenceFlow_1pao2mw">
+        <di:waypoint x="690" y="122" />
+        <di:waypoint x="740" y="122" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_13qdqs1_di" bpmnElement="SequenceFlow_13qdqs1">
+        <di:waypoint x="1160" y="122" />
+        <di:waypoint x="1212" y="122" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1f1oyyw_di" bpmnElement="SequenceFlow_1f1oyyw">
+        <di:waypoint x="840" y="122" />
+        <di:waypoint x="910" y="122" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0moyomu_di" bpmnElement="SequenceFlow_0moyomu">
+        <di:waypoint x="370" y="122" />
+        <di:waypoint x="430" y="122" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_125geum_di" bpmnElement="SequenceFlow_125geum">
+        <di:waypoint x="1010" y="122" />
+        <di:waypoint x="1060" y="122" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>
