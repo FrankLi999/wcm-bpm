@@ -76,13 +76,16 @@
     <bpmn:sequenceFlow id="SequenceFlow_1tf7qvp" sourceRef="BoundaryEvent_0jzuwjh" targetRef="EndEvent_1ca7iw8" />
     <bpmn:sequenceFlow id="SequenceFlow_12fjz3g" sourceRef="BoundaryEvent_1xt5wwu" targetRef="EndEvent_1dhbmiu" />
     <bpmn:sequenceFlow id="SequenceFlow_0u90anu" sourceRef="BoundaryEvent_0gvgrc5" targetRef="EndEvent_01expkl" />
-    <bpmn:endEvent id="EndEvent_04qc5qg" />
     <bpmn:association id="Association_1yrlvxy" associationDirection="One" sourceRef="BoundaryEvent_0f90mr7" targetRef="ServiceTask_1paas5u" />
   </bpmn:process>
   <bpmn:message id="Message_19oquph" name="OrderPlacedEvent" />
   <bpmn:message id="Message_0tyft1z" name="PaymentReceivedEvent" />
   <bpmn:message id="Message_0eynsxn" name="PaymentReceivedEvent" />
   <bpmn:message id="Message_1hej5rj" name="GoodsShippedEvent" />
+  <bpmn:error id="Error_0tv9h3m" name="Error_2jgvs08" />
+  <bpmn:escalation id="Escalation_10hrva9" name="Escalation_Name" escalationCode="Escalation_Name" />
+  <bpmn:signal id="Signal_08rhtt1" name="Signal_2a0qn0f" />
+  <bpmn:message id="Message_0b2frag" name="Message_2r3s0o0" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Send_Receive_Event_1kympyv">
       <bpmndi:BPMNShape id="SendTask_1raqdtf_di" bpmnElement="SendTask_1raqdtf">
@@ -205,9 +208,6 @@
         <di:waypoint x="510" y="176" />
         <di:waypoint x="544" y="176" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="EndEvent_04qc5qg_di" bpmnElement="EndEvent_04qc5qg">
-        <dc:Bounds x="1032" y="462" width="36" height="36" />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
