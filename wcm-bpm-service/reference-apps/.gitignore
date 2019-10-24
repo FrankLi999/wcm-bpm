@@ -2,7 +2,6 @@
 jeasy
 rule-engines
 spring-5-reactive-oauth
-camunda-boot-batch
 ##########################
 HELP.md
 target/

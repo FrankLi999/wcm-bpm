@@ -1,0 +1,2 @@
+https://medium.com/@zambrovski/batch-processing-with-camunda-1df2fd2776ea
+https://medium.com/@zambrovski/implementing-camunda-custom-job-handler-f574a7b08ee1
