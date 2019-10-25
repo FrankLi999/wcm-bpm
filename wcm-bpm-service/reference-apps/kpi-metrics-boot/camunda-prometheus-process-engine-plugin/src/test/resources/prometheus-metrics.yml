@@ -1,0 +1,125 @@
+# Camunda Prometheus Metrics configuration
+# each object is a timer configuration
+---
+system:
+- collector: io.digitalstate.camunda.prometheus.collectors.camunda.BpmnExecution
+  enable: false
+  startDate: 2015-10-03T17:59:38+00:00
+  endDate: now
+  startDelay: 0
+  frequency: 5000
+- collector: io.digitalstate.camunda.prometheus.collectors.camunda.DmnExecution
+  enable: false
+  startDate: 2015-10-03T17:59:38+00:00
+  endDate: now
+  startDelay: 0
+  frequency: 5000
+- collector: io.digitalstate.camunda.prometheus.collectors.camunda.JobExecutor
+  enable: false
+  startDate: 2015-10-03T17:59:38+00:00
+  endDate: now
+  startDelay: 0
+  frequency: 5000
+
+custom:
+- collector: ./target/test-classes/customcollectors/UserTasks.groovy
+  enable: false
+  startDelay: 0
+  frequency: 5000
+- collector: ./target/test-classes/customcollectors/BpmnProcessDefinition.groovy
+  enable: false
+  startDelay: 0
+  frequency: 5000
+- collector: ./target/test-classes/customcollectors/EventsMetrics.groovy
+  enable: false
+  startDelay: 0
+  frequency: 5000
+- collector: ./target/test-classes/customcollectors/IdentityServiceMetrics.groovy
+  enable: false
+  startDelay: 0
+  frequency: 5000
+- collector: classpath:/prometheus/customcollectors/IncidentMetrics.groovy
+  enable: false
+  startDelay: 0
+  frequency: 5000
+- collector: classpath:/prometheus/customcollectors/ProcessInstances.groovy
+  enable: false
+  startDelay: 0
+  frequency: 5000
+- collector: classpath:prometheus/customcollectors/TimerMetrics.groovy
+  enable: false
+  startDelay: 0
+  frequency: 5000
+- collector: ./target/test-classes/customcollectors/UserOperationLog.groovy
+  enable: false
+  startDelay: 0
+  frequency: 5000
+- collector: ./target/test-classes/customcollectors/ExternalTasks.groovy
+  enable: false
+  startDelay: 0
+  frequency: 5000
+- collector: ./target/test-classes/customcollectors/ExternalTasksCustomTopics.groovy
+  enable: true
+  startDelay: 0
+  frequency: 10000
+  config:
+    topics:
+      - myTopic1
+      - myTopic2
+      - someCustomTopic
+- collector: ./target/test-classes/customcollectors/ExternalTasksCustomTopics.groovy
+  enable: true
+  startDelay: 0
+  frequency: 8000
+  config:
+    topics:
+    - myTopic3
+    - myTopic4
+    - someOtherCustomTopic
+- collector: ./target/test-classes/customcollectors/ExternalTasksCustomWorkers.groovy
+  enable: true
+  startDelay: 0
+  frequency: 2000
+  config:
+    workers:
+    - someWorkerID123
+    - someOtherWorkerId567890
+    - someLegacyWorker001
+- collector: ./target/test-classes/customcollectors/ExternalTasksCustomWorkers.groovy
+  enable: true
+  startDelay: 0
+  frequency: 2000
+  config:
+    workers:
+    - someWorkerJohn
+    - someOtherWorkerChris
+    - someLegacyWorkerFrank
+- collector: classpath:prometheus/customcollectors/HistoricActivityStatisticsPerProcessDefinition.groovy
+  enable: true
+  startDelay: 0
+  frequency: 10000
+  config:
+    processDefinitionKeys:
+      - testProcess
+      - employeeOnboarding
+      - ccProcessing
+    processDefinitionIds:
+      - aProcessDefinitionId
+      - someOtherProcessDefinitionId
+
+durationTracking:
+  activity_instance_duration:
+    help: "Core activity instance duration tracking. Used to track all activity instances."
+    buckets: [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0, 5.0, 10.0, 20.0, 30.0, 60.0, 120.0]
+  process_instance_duration:
+    help: "Generic Process Instance Duration Tracking"
+    buckets: [1, 5, 10, 15, 20, 30, 60, 120, 300, 600, 1200, 2400]
+  some_specific_type_of_processes:
+    help: "A specific type of process that is run that we track specific metrics against"
+    buckets: [60, 300, 600, 1200, 1800, 3600, 7200, 10800, 14400, 18000, 28800, 86400, 129600]
+  mycustom_metric_duration:
+    help: "Some custom metric i am tracking"
+    buckets: [1, 5, 10, 20, 50]
+  some_userTask_metric:
+    help: "Tracking the duration of specific user tasks: 1m, 2m, 3m, 4m, 5m, 10m, 15m, 30m, 60m, 8h, 24h."
+    buckets: [60, 120, 180, 240, 300, 600, 900, 1800, 3600, 28800, 86400]

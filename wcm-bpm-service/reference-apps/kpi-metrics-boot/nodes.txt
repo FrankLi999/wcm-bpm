@@ -1,0 +1,5 @@
+metrics:
+	https://github.com/StephenOTT/camunda-prometheus-process-engine-plugin
+	https://github.com/camunda-consulting/prometheus-camunda-exporter
+	https://github.com/camunda/camunda-bpm-elasticsearch
+	https://github.com/camunda/camunda-bpm-elasticsearch.git

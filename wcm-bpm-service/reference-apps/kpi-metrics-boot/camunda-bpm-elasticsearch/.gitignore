@@ -1,0 +1,30 @@
+*.class
+.DS_Store
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# IntelliJ files #
+.idea
+*.iml
+
+# eclipse files #
+.classpath
+.project
+.settings
+
+# vim #
+.swp
+
+# Generated folders #
+distro
+target
+
+# Generated files
+test*.json
+
+#elastic search data #
+**/data/elasticsearch
+*Test.json
