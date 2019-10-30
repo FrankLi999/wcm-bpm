@@ -1,0 +1,11 @@
+<div class="row justify-content-between">
+  <app-search-result-item
+    class="col mb-sm-4 mx-sm-1 border"
+    [product]="product"
+    *ngFor="let product of searchResults; trackBy: trackBy"
+  ></app-search-result-item>
+  <div
+    class="results-li-dummy col mb-5 mx-sm-1"
+    *ngFor="let _ of dummyResults"
+  ></div>
+</div>

@@ -1,0 +1,155 @@
+<div *ngIf="!isMobile" class="col-12 p-0">
+  <div class="col-12 p-0">
+    <h1 itemprop="name" class="title">{{ product.name }}</h1>
+    <div class="product-subtitle">
+      <a
+        [routerLink]="['/s']"
+        [queryParams]="{ f: 'Brand:' + brand.name }"
+        *ngIf="brand"
+      >
+        <small>
+          By {{ brand.name }}
+          <span itemprop="brand"></span>
+        </small>
+      </a>
+    </div>
+  </div>
+  <div class="col-12 p-0">
+    <div class="product-header-extras">
+      <div class="ugc pr-3">
+        <a
+          class="hide-phone js-revScrollTo reviewlink pl-1"
+          (click)="scrollToReview()"
+        >
+          <ngx-input-star-rating
+            disabled="true"
+            value="{{ product.rating_summary.average_rating }}"
+            required
+          ></ngx-input-star-rating>
+          {{ product.rating_summary.review_count }} Reviews
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 d-flex p-0">
+    <div class="buybox-wrapper col-12 p-0">
+      <div id="product-vitals">
+        <div id="pricing">
+          <ul class="product-price">
+            <li>
+              <ul>
+                <li>
+                  List Price:
+                </li>
+                <li>{{ currency }}{{ product.max_retail_price.amount }}</li>
+              </ul>
+            </li>
+            <li>
+              <ul>
+                <li>Price:</li>
+                <li>
+                  <span class="d-block float-left">
+                    {{ currency }}{{ product.selling_price.amount }}</span
+                  >
+                  <span
+                    class="free-shipping d-block float-left d-xs-none d-sm-none d-none d-lg-block"
+                    >FREE 1-2 Day
+                    <span>Shipping on this item</span>
+                  </span>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <ul *ngIf="discount > 0">
+                <li>You Save:</li>
+                <li>{{ currency }}{{ discount }} ({{ discountPercent }})</li>
+              </ul>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div
+          id="featured-promotions"
+          class="pt-3"
+          *ngIf="customOptionTypesHash"
+        >
+          <app-product-variants
+            [customOptionTypesHash]="customOptionTypesHash"
+            [currentSelectedOptions]="currentSelectedOptions"
+            (onOptionClickEvent)="onOptionClick($event)"
+            [correspondingOptions]="correspondingOptions"
+            [mainOptions]="mainOptions"
+            class="row m-0"
+          ></app-product-variants>
+        </div>
+        <!-- <app-check-pincode></app-check-pincode> -->
+      </div>
+      <div id="buybox" class="">
+        <app-product-count
+          (onAddToCart)="addToCart($event)"
+          (onMarkAsFavorites)="markAsFavorites()"
+          [isOrderable]="isOrderable"
+        ></app-product-count>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isMobile">
+  <div class="col-12 p-0">
+    <div class="buybox-wrapper">
+      <div id="product-vitals">
+        <div id="pricing">
+          <ul class="product-price pl-3">
+            <li>
+              <ul>
+                <li>List Price:</li>
+                <li>{{ currency }}{{ product.max_retail_price.amount }}</li>
+              </ul>
+            </li>
+            <li>
+              <ul>
+                <li>Price:</li>
+                <li>
+                  <span class="ga-eec__price">
+                    {{ currency }}{{ product.selling_price.amount }}</span
+                  >
+                  <span
+                    class="free-shipping  d-xs-none d-sm-none d-none d-lg-block"
+                    >FREE 1-2 Day
+                    <span>Shipping on this item</span>
+                  </span>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <ul *ngIf="discount > 0">
+                <li>You Save:</li>
+                <li>{{ currency }}{{ discount }} ({{ discountPercent }})</li>
+              </ul>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div id="featured-promotions" *ngIf="customOptionTypesHash">
+          <app-product-variants
+            [customOptionTypesHash]="customOptionTypesHash"
+            [currentSelectedOptions]="currentSelectedOptions"
+            (onOptionClickEvent)="onOptionClick($event)"
+            [correspondingOptions]="correspondingOptions"
+            [mainOptions]="mainOptions"
+            class="row m-0"
+          ></app-product-variants>
+        </div>
+      </div>
+      <div id="buybox" class="">
+        <app-product-count
+          (onAddToCart)="addToCart($event)"
+          (onMarkAsFavorites)="markAsFavorites()"
+          [isOrderable]="isOrderable"
+        ></app-product-count>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <!-- <app-check-pincode></app-check-pincode> -->
+  </div>
+</div>

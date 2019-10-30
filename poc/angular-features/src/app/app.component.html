@@ -1,0 +1,38 @@
+<h1>
+  Tech Talks
+</h1>
+
+<filters-cmp (change)="handleFiltersChange($event)"></filters-cmp>
+<talks-cmp [talks]="app.talks"></talks-cmp>
+
+<my-tabs>
+  <my-tab [tabTitle]="'People'">
+    <h3>List of People</h3>
+    <people-list
+      [people]="people"
+      (addPerson)="onAddPerson()"
+      (editPerson)="onEditPerson($event)">
+    </people-list>
+    <hr />
+    <button class="btn btn-default" (click)="onOpenAbout()"><i class="glyphicon glyphicon-question-sign"></i> About this</button>
+  </my-tab>
+</my-tabs>
+
+<ng-template let-person="person" #personEdit>
+  <person-edit [person]="person" (savePerson)="onPersonFormSubmit($event)"></person-edit>
+</ng-template>
+<ng-template #about>
+  <p>
+    Hi, I hope this demo was useful to learn more about dynamic components
+    in Angular, in specific about <code>ViewContainerRef</code>,
+    <code>ComponentResolverFactory</code> etc.
+  </p>
+  <p>
+    Also check out the <a href="https://juristr.com/blog/2017/07/ng2-dynamic-tab-component/">according blog article</a>. You
+    may also want to read the <a href="https://juristr.com/blog/2016/02/learning-ng2-creating-tab-component/">article about
+    creating basic tabs with <code>@ContentChildren</code> and <code>@QueryList</code></a>.
+  </p>
+  <p>
+    Visit me on <a href="https://twitter.com/juristr">Twitter</a> or on <a href="https://juristr.com/blog">blog</a>.
+  </p>
+</ng-template>

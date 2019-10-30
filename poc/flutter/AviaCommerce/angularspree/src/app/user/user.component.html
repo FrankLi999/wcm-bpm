@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 my-3">
+      <h5 *ngIf="selectedProfileMenu; else elseBlock">
+        My Account > {{ selectedProfileMenu.name }}
+      </h5>
+      <ng-template #elseBlock>
+        <h5>My Account</h5>
+      </ng-template>
+      <hr />
+    </div>
+
+    <div class="sidebar col-md-3 d-none d-lg-block">
+      <!-- <p><a routerLink="/user/overview" routerLinkActive="active">Overview</a></p> -->
+      <!-- <hr> -->
+      <p>
+        <!-- <a routerLink="/user/profile" routerLinkActive="active">My Profile</a> -->
+      </p>
+      <hr />
+      <p>
+        <a routerLink="/user/orders" routerLinkActive="active">My Orders</a>
+      </p>
+      <!-- <hr> -->
+      <!-- <p>
+        <a routerLink="/user/addresses" routerLinkActive="active">My Address</a>
+      </p> -->
+      <!-- <hr> -->
+      <!-- <p>
+        <a routerLink="/user/favorite-products" routerLinkActive="active">My Favorite Products</a>
+      </p> -->
+    </div>
+    <div class="col-md-9">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
