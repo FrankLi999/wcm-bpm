@@ -65,10 +65,10 @@ policies             ["root"]
 1. Create test db
 2. Create admin account used to create dynamic accounts:
 
-create schema fakebank;
-create user 'fakebank-admin'@'%' identified by 'Sup&rSecre7!'
-grant all privileges on fakebank.* to 'fakebank-admin'@'%' with grant option;
-grant create user on *.* to 'fakebank-admin' with grant option;
+create schema mydb;
+create user 'myuser'@'%' identified by 'mypassword'
+grant all privileges on mydb.* to 'myuser'@'%' with grant option;
+grant create user on *.* to 'myuser' with grant option;
 flush privileges;
 
 
@@ -76,27 +76,27 @@ flush privileges;
 > vault secrets enable database
 
 ==== Create db configuration
-> vault write database/config/mysql-fakebank ^
+> vault write database/config/mysql-mydb ^
   plugin_name=mysql-legacy-database-plugin ^
-  connection_url="{{username}}:{{password}}@tcp(192.168.0.180:3306)/fakebank" ^
+  connection_url="{{username}}:{{password}}@tcp(192.168.0.168:3306)/mydb" ^
   allowed_roles="*" ^
-  username="root" ^
-  password="P@ssw0rd" 
+  username="myuser" ^
+  password="mypassword" 
   
 ==== Create roles
-> vault write database/roles/fakebank-accounts-ro ^
-    db_name=mysql-fakebank ^
-    creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON fakebank.* TO '{{name}}'@'%';" ^
+> vault write database/roles/mydb-accounts-ro ^
+    db_name=mydb ^
+    creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON mydb.* TO '{{name}}'@'%';" ^
     default_ttl="1h" ^
     max_ttl="24h"  
 
-> vault write database/roles/fakebank-accounts-rw ^
-    db_name=mysql-fakebank ^
-    creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT,INSERT,UPDATE ON fakebank.* TO '{{name}}'@'%';" ^
+> vault write database/roles/mydb-accounts-rw ^
+    db_name=mydb ^
+    creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT,INSERT,UPDATE ON mydb.* TO '{{name}}'@'%';" ^
     default_ttl="5m" ^
     max_ttl="30m"  
 	
 === Get credentials
-> vault read database/creds/fakebank-accounts-rw
+> vault read database/creds/mydb-accounts-rw
 
 

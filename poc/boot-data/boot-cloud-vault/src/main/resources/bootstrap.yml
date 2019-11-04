@@ -20,7 +20,7 @@ spring:
 #        
       database:
         enabled: true
-        role: fakebank-accounts-rw
+        role: mydb-accounts-rw
         backend: database
         username-property: spring.datasource.username
         password-property: spring.datasource.password
