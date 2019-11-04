@@ -18,7 +18,7 @@ mvn spring-boot:run -Dspring-boot.run.jvmArguments="-DLOG_ROOT_LEVEL=INFO -DAPP_
 
     $ mvn spring-boot:run -Djasypt.encryptor.password=password -Dagentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -Dspring-boot.run.jvmArguments="-DLOG_ROOT_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm-boot"
 
-
+    java -Djasypt.encryptor.password=password -DLOG_ROOT_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm-boot -jar target/wcm-bpm-boot-0.0.1-SNAPSHOT.jar
 mvn spring-boot:run -Dspring-boot.run.arguments=--mongo
 
 mvn spring-boot:run -Dspring-boot.run.arguments=--mongo -Dspring-boot.run.jvmArguments="-DLOG_ROOT_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/bpw-wcm"
