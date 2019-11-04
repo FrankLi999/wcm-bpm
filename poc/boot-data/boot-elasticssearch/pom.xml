@@ -11,7 +11,7 @@
 	<groupId>com.bpwizard.data</groupId>
 	<artifactId>boot-elasticssearch</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bboot-elasticssearch</name>
+	<name>boot-elasticssearch</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

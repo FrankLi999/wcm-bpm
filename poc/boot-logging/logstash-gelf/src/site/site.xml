@@ -1,0 +1,74 @@
+<project name="Logstash/Gelf Loggers">
+    <bannerLeft>
+        <name>Logstash/Gelf Loggers</name>
+        <href>http://logging.paluch.biz/</href>
+    </bannerLeft>
+
+    <body>
+        <menu name="Overview">
+            <item name="Introduction" href="index.html" />
+            <item name="Download" href="download.html" />
+        </menu>
+
+        <menu name="Examples">
+            <item name="Java Util Logging" href="examples/jul.html" />
+            <item name="Java Util Logging Formatter" href="examples/jul-json.html"/>
+            <item name="log4j v1.2.x" href="examples/log4j-1.2.x.html" />
+            <item name="log4j v1.2.x JSON Layout" href="examples/log4j-1.2.x-json.html" />
+            <item name="log4j v2.x" href="examples/log4j-2.x.html" />
+            <item name="JBoss AS7" href="examples/jbossas7.html" />
+            <item name="WildFly" href="examples/wildfly.html" />
+            <item name="WildFly JSON Formatter"
+                  href="examples/wildfly-json.html"/>
+            <item name="Thorntail (WildFly Swarm)" href="examples/wildfly-swarm-thorntail.html" />
+            <item name="Logback" href="examples/logback.html" />
+        </menu>
+
+        <menu name="Documentation">
+            <item name="MDC Values" href="mdc.html"/>
+            <item name="MDC Profiling" href="mdcprofiling.html" />
+            <item name="Hostname Lookup" href="hostname-lookup.html" />
+            <item name="Default Fields" href="default-fields.html" />
+            <item name="Syslog Level Mapping" href="syslog-level-mapping.html"/>
+            <item name="Stack Trace Filter" href="stack-trace-filter.html"/>
+            <item name="TCP Transport" href="tcp.html" />
+            <item name="UDP Transport" href="udp.html" />
+            <item name="HTTP Transport" href="http.html" />
+            <item name="Kafka Transport" href="kafka.html" />
+            <item name="Redis Transport" href="redis.html"/>
+            <item name="Datenpumpe" href="datenpumpe.html" />
+        </menu>
+
+        <menu name="Project Documentation">
+            <item name="JavaDoc" href="apidocs/index.html" />
+        </menu>
+
+        <menu ref="reports" />
+    </body>
+
+    <custom>
+        <fluidoSkin>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+            <gitHub>
+                <projectId>mp911de/logstash-gelf</projectId>
+                <ribbonOrientation>right</ribbonOrientation>
+                <ribbonColor>black</ribbonColor>
+            </gitHub>
+            <twitter>
+                <user>mp911de</user>
+                <showUser>true</showUser>
+                <showFollowers>true</showFollowers>
+            </twitter>
+            <piwik>
+                <piwikUrl>piwik.paluch.biz</piwikUrl>
+                <idsite>4</idsite>
+            </piwik>
+        </fluidoSkin>
+    </custom>
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.5</version>
+    </skin>
+</project>

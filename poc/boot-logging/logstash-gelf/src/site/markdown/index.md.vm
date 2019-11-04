@@ -1,0 +1,44 @@
+Introduction [![Build Status](https://travis-ci.org/mp911de/logstash-gelf.svg?branch=master)](https://travis-ci.org/mp911de/logstash-gelf)
+=============
+
+${project.name} (${project.artifactId})
+
+Provides logging to logstash using the Graylog Extended Logging Format (GELF) 1.0 and 1.1. Following log frameworks/integrations are supported:
+
+* [Java Util Logging](examples/jul.html)
+* [Java Util Logging JSON Formatter](examples/jul-json.html)
+* [log4j 1.2.x](examples/log4j-1.2.x.html)
+* [log4j 1.2.x JSON Layout](examples/log4j-1.2.x-json.html)
+* [log4j 2.x](examples/log4j-2.x.html)
+* [JBoss 7](examples/jbossas7.html)
+* [WildFly](examples/wildfly.html)
+* [WildFly JSON Formatter](examples/wildfly-json.html)
+* [Thorntail (WildFly Swarm 2.x)](examples/wildfly-swarm-thorntail.html)
+* [Logback](examples/logback.html)
+
+`logstash-gelf` requires as of version 1.14.0 Java 7 or higher. Version 1.13.x and older require Java 6.
+
+How to get
+-------------
+
+Maven:
+
+    <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>${project.artifactId}</artifactId>
+        <version>${logstash-gelf-release-version}</version>
+    </dependency>
+
+Direct download from [Maven Central](http://search.maven.org/remotecontent?filepath=biz/paluch/logging/${project.artifactId}/${logstash-gelf-release-version}/${project.artifactId}-${logstash-gelf-release-version}.jar)
+
+
+JBoss AS/WildFly Module Download:
+
+    <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>${project.artifactId}</artifactId>
+        <version>${logstash-gelf-release-version}</version>
+        <classifier>logging-module</classifier>
+    </dependency>
+
+Direct download from [Maven Central](http://search.maven.org/remotecontent?filepath=biz/paluch/logging/${project.artifactId}/${logstash-gelf-release-version}/${project.artifactId}-${logstash-gelf-release-version}-logging-module.zip)

@@ -1,0 +1,18 @@
+# logback config
+#logging:
+#  file: /home/frank/tools/elk-logs/spring-logback/application.log
+
+#log4jv2 config
+#logging.config: classpath:log4j2-spring.xml
+#---
+#spring:
+#   profiles: test
+#logging.config: classpath:log4j2-spring.xml
+#---
+#spring:
+#   profiles: devel
+#logging.config: classpath:log4j2-spring.xml
+#---
+#spring:
+#   profiles: prod
+#logging.config: classpath:log4j2-spring-prod.xml

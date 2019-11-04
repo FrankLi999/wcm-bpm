@@ -1,0 +1,105 @@
+WildFly
+=========
+
+Following settings can be used:
+
+| Attribute Name    | Description                          | Default |
+| ----------------- |:------------------------------------:|:-------:|
+| enabled           | Whether this handler is enabled  | `true` |
+| host              | Hostname/IP-Address of the Logstash host. The `host` field accepts following forms: <ul><li>`tcp:hostname` for TCP transport, e. g. `tcp:127.0.0.1` or `tcp:some.host.com` </li><li>`udp:hostname` for UDP transport, e. g. `udp:127.0.0.1`, `udp:some.host.com` or just `some.host.com`  </li><li>`redis://[:password@]hostname:port/db-number#listname` for Redis transport. See [Redis transport for logstash-gelf](../redis.html) for details. </li><li>`redis-sentinel://[:password@]hostname:port/db-number?masterId=masterId#listname` for Redis transport with Sentinel lookup. See [Redis transport for logstash-gelf](../redis.html) for details. </li></ul> | none |
+| port              | Port of the Logstash host  | `12201` |
+| version           | GELF Version `1.0` or `1.1` | `1.0` |
+| originHost        | Originating Hostname  | FQDN Hostname |
+| extractStackTrace | Send the Stack-Trace to the StackTrace field (`true`/`false`)  | `false` |
+| filterStackTrace  | Perform Stack-Trace filtering (`true`/`false`)| `false` |
+| includeLocation   | Include source code location | `true` |
+| includeLogMessageParameters | Include message parameters from the log event | `true` |
+| facility          | Name of the Facility  | `logstash-gelf` |
+| mdcProfiling      | Perform Profiling (Call-Duration) based on MDC Data. See [MDC Profiling](../mdcprofiling.html) for details  | `false` |
+| level             | Log-Level threshold | `INFO` |
+| filter            | Class-Name of a Log-Filter  | none |
+| additionalFields  | Send additional static fields. The fields are specified as key-value pairs are comma-separated. Example: `additionalFields=fieldName=Value,fieldName2=Value2` | none |
+| additionalFieldTypes | Type specification for additional and MDC fields. Supported types: `String`, `long`, `Long`, `double`, `Double` and `discover` (default if not specified, discover field type on parseability). Eg. field=String,field2=double | `discover` for all additional fields |
+| mdcFields         | Send additional fields whose values are obtained from MDC. Name of the Fields are comma-separated. Example: `mdcFields=Application,Version,SomeOtherFieldName` | none |
+| dynamicMdcFields  | Dynamic MDC Fields allows you to extract MDC values based on one or more regular expressions. Multiple regexes are comma-separated. The name of the MDC entry is used as GELF field name. | none |
+| dynamicMdcFieldTypes | Pattern-based type specification for additional and MDC fields. Key-value pairs are comma-separated. Example: `my_field.*=String,business\..*\.field=double` | none |
+| includeFullMdc    | Include all fields from the MDC. | `false` |
+| maximumMessageSize| Maximum message size (in bytes). If the message size is exceeded, the appender will submit the message in multiple chunks. | `8192` |
+| timestampPattern  | Date/time pattern for the `Time` field| `yyyy-MM-dd HH:mm:ss,SSS` |
+
+The only mandatory field is `host`. All other fields are optional.
+
+Preliminary Steps
+--------------
+
+If you want to get started with the logstash-gelf support for WildFly, you will need to integrate logstash-gelf as a module within
+the server. It is possible to create the module manually, but it's easier to use the prepackaged binary. Please
+follow the steps to integrate the module:
+
+1. Obtain the logging module from [Maven](http://search.maven.org/remotecontent?filepath=biz/paluch/logging/logstash-gelf/${logstash-gelf-release-version}/logstash-gelf-${logstash-gelf-release-version}-logging-module.zip) or [Github](https://github.com/mp911de/logstash-gelf/releases/download/logstash-gelf-${logstash-gelf-release-version}/logstash-gelf-${logstash-gelf-release-version}-logging-module.zip)
+2. Extract the module to `<WildFly Home>/modules/system/layers/base`.
+3. Configure the logging subsystem by either adopting the changes in the XML files or by using the CLI
+
+
+WildFly Logging Configuration
+--------------
+
+XML Configuration:
+
+     <custom-handler name="GelfLogger" class="biz.paluch.logging.gelf.wildfly.WildFlyGelfLogHandler" module="biz.paluch.logging" enabled="true">
+        <level name="INFO" />
+        <properties>
+            <property name="host" value="udp:localhost" />
+            <property name="port" value="12201" />
+            <property name="version" value="1.0" />
+            <property name="facility" value="logstash-gelf" />
+            <property name="extractStackTrace" value="true" />
+            <property name="filterStackTrace" value="true" />
+            <property name="includeLogMessageParameters" value="true" />
+            <property name="includeLocation" value="true" />
+            <property name="mdcProfiling" value="true" />
+            <property name="timestampPattern" value="yyyy-MM-dd HH:mm:ss,SSS" />
+            <property name="maximumMessageSize" value="8192" />
+            <property name="additionalFields" value="fieldName1=fieldValue1,fieldName2=fieldValue2" />
+            <property name="additionalFieldTypes" value="fieldName1=String,fieldName2=Double,fieldName3=Long" />
+            <property name="mdcFields" value="mdcField1,mdcField2" />
+            <property name="dynamicMdcFields" value="mdc.*,(mdc|MDC)fields" />
+            <property name="includeFullMdc" value="true" />
+        </properties>
+    </custom-handler>
+
+    ...
+
+    <root-logger>
+        <level name="INFO"/>
+        <handlers>
+            <handler name="FILE"/>
+            <handler name="CONSOLE"/>
+            <handler name="GelfLogger"/>
+        </handlers>
+    </root-logger>
+
+
+CLI Configuration:
+
+    /subsystem=logging/custom-handler=GelfLogger/:add(module=biz.paluch.logging,class=biz.paluch.logging.gelf.wildfly.WildFlyGelfLogHandler,properties={ \
+           host="udp:localhost", \
+           port="12201", \
+           version="1.0", \
+		   facility="logstash-gelf", \
+		   extractStackTrace=true, \
+		   filterStackTrace=true, \
+		   includeLogMessageParameters=true, \
+		   mdcProfiling=true, \
+		   timestampPattern="yyyy-MM-dd HH:mm:ss,SSS", \
+		   maximumMessageSize=8192, \
+		   additionalFields="fieldName1=fieldValue1,fieldName2=fieldValue2", \
+		   additionalFieldTypes="fieldName1=String,fieldName2=Double,fieldName3=Long", \
+		   mdcFields="mdcField1,mdcField2" \
+		   dynamicMdcFields="mdc.*,(mdc|MDC)fields" \
+		   dynamicMdcFieldTypes="my_field.*=String,business\..*\.field=double" \
+		   includeFullMdc=true \
+    })
+
+    /subsystem=logging/root-logger=ROOT/:write-attribute(name=handlers,value=["FILE","CONSOLE","GelfLogger"])
+

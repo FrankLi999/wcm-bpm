@@ -1,0 +1,48 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>logging-module</id>
+
+    <formats>
+        <format>dir</format>
+        <format>zip</format>
+    </formats>
+
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>biz/paluch/logging/main</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>*sources*</exclude>
+                <exclude>*javadoc*</exclude>
+                <exclude>*tests*</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>biz/paluch/logging/main</outputDirectory>
+            <includes>
+                <include>redis.clients:jedis</include>
+                <include>org.apache.commons:commons-pool2</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
+
+    <files>
+        <file>
+            <source>src/main/assembly/module.xml</source>
+            <filtered>true</filtered>
+            <outputDirectory>biz/paluch/logging/main</outputDirectory>
+        </file>
+        <file>
+            <source>src/main/assembly/module-thorntail.xml</source>
+            <filtered>true</filtered>
+            <outputDirectory>biz/paluch/logging/main</outputDirectory>
+        </file>
+    </files>
+</assembly>
