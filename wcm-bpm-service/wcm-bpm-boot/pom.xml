@@ -243,24 +243,18 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-web</artifactId>
-		    <!--  
 		    <exclusions>
 		        <exclusion>
 		            <groupId>org.springframework.boot</groupId>
 		            <artifactId>spring-boot-starter-tomcat</artifactId>
 		        </exclusion>
 		    </exclusions>
-		    -->
 		</dependency>
-		<!-- 
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-undertow</artifactId>
 		</dependency>
-        -->
-        
-      
-		<!--SpringFox dependencies -->
+        <!--SpringFox dependencies -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
@@ -392,7 +386,7 @@
 		    <version>3.17</version> <!--  overwite the default v3.15 -->
 		</dependency>
 
-        <!-- -->
+        <!-- 
 		<dependency>
 		    <groupId>org.camunda.bpm</groupId>
 		    <artifactId>camunda-engine</artifactId>
@@ -410,6 +404,7 @@
 		    <groupId>org.mybatis</groupId>
 		    <artifactId>mybatis</artifactId>
 		</dependency>
+		-->
 	</dependencies>
 
 	<build>

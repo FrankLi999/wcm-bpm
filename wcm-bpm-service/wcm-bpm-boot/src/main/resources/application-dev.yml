@@ -127,6 +127,7 @@ camunda:
     filter:
       create: All tasks
 hazelcast:
+  loggingType: slf4j
   backupCount: 1
   port: 5701
   members: 127.0.0.1:5701
