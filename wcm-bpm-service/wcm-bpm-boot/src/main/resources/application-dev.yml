@@ -1,8 +1,8 @@
 ## Development environment
 flyway:
-  url: jdbc:mysql://192.168.0.180:3306/mysql
-  schemas: camunda711
-  user: root
+  url: jdbc:mysql://192.168.0.160:3306/mysql
+  schemas: wcm_bpm
+  user: wcmbpm
   password: P@ssw0rd
   #locations:classpath:/db/migration,classpath:/dev/db/migration
 
@@ -20,8 +20,8 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         #jdbc.lob.non_contextual_creation: true
   datasource:
-    url: jdbc:mysql://192.168.0.180:3306/camunda711?useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-    username: root
+    url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    username: wcmbpm
     password: P@ssw0rd
     #url: jdbc:postgresql://localhost:5432/bpwdb
     #url: jdbc:h2:mem:modeshape;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE

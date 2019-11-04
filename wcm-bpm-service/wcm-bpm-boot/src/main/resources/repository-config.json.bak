@@ -10,11 +10,11 @@
         },
         "persistence" : {
             "type" : "db",
-            "connectionUrl": "jdbc:mysql://192.168.0.180:3306/modeshape?useSSL=false",
+            "connectionUrl": "jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
             "driver": "com.mysql.jdbc.Driver",
             "createOnStart" : true,
             "dropOnExit" : true,
-            "username": "root",
+            "username": "wcmbpm",
             "password": "P@ssw0rd"
         },
         "binaryStorage" : {
@@ -23,8 +23,8 @@
             // "minimumBinarySizeInBytes" : 999
             "type"  : "database",
             "driverClass" : "com.mysql.jdbc.Driver",
-            "url" : "jdbc:mysql://192.168.0.180:3306/modeshape_binary?useSSL=false",
-            "username" : "root",
+            "url" : "jdbc:mysql://192.168.0.168:3306/modeshape_binary?allowPublicKeyRetrieval=true&useSSL=false",
+            "username" : "wcmbpm",
             "password" : "P@ssw0rd"
         }
     },

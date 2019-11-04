@@ -4,7 +4,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.bpwizard.wcm-bpm</groupId>
 	<artifactId>modeshape</artifactId>
 	<packaging>pom</packaging>
 	<name>modeshape-parent</name>
@@ -18,11 +17,10 @@
 	</parent>
 	
 	<modules>
-        <module>modeshape-commons-boot</module>	
-		<module>modeshape-jcr-boot</module>	
-		<module>modeshape-jcr-webdav-boot</module>	
-		<module>modeshape-webdav-boot</module>			
+	    <module>modeshape-jcr-boot</module>
+	    <module>modeshape-commons-boot</module>
+		<module>modeshape-jcr-webdav-boot</module>
+		<module>modeshape-webdav-boot</module>					
 	</modules>
     
-	
 </project>	

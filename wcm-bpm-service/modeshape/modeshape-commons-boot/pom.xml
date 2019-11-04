@@ -4,10 +4,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>modeshape-webdav-boot</artifactId>
+	<artifactId>modeshape-commons-boot</artifactId>
 	<packaging>jar</packaging>
-	<name>modeshape-webdav-boot</name>
-	<description>Spring Boot Modeshape WebDav</description>
+	<name>modeshape-commons-boot</name>
+	<description>Spring Boot Modeshape commons</description>
 
 	<parent>
 	    <groupId>com.bpwizard.wcm-bpm</groupId>
@@ -15,7 +15,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	
+
 	<dependencies>
 
 		<dependency>
@@ -43,10 +43,6 @@
 			<artifactId>spring-beans</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-		</dependency>
-		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-api</artifactId>
 		  </dependency>
@@ -63,21 +59,31 @@
 			<groupId>org.modeshape</groupId>
 			<artifactId>modeshape-jcr</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>com.bpwizard.wcm</groupId>
-            <artifactId>modeshape-jcr-boot</artifactId>
-			<version>${project.version}</version>
-        </dependency>
-        <dependency>
-		    <groupId>com.bpwizard.wcm</groupId>
-			<artifactId>modeshape-webdav</artifactId>
-			<version>${project.version}</version>
-        </dependency>
-        <dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.1.0</version>
-		    <scope>provided</scope>
+		<dependency>
+			<groupId>org.modeshape</groupId>
+			<artifactId>modeshape-sequencer-images</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.modeshape</groupId>
+			<artifactId>modeshape-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.modeshape</groupId>
+			<artifactId>modeshape-persistence-relational</artifactId>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>modeshape-jcr-boot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- required after JDK 9+ -->
+		<!--  
+		<dependency>
+		    <groupId>javax.annotation</groupId>
+		    <artifactId>javax.annotation-api</artifactId>
+		</dependency>
+	    -->
 	</dependencies>
+
 </project>

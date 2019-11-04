@@ -4,11 +4,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    
-	<artifactId>modeshape-jcr-webdav-boot</artifactId>
+    <artifactId>modeshape-jcr-boot</artifactId>
 	<packaging>jar</packaging>
-	<name>modeshape-jcr-webdav-boot</name>
-	<description>Spring Boot Modeshape JCR WebDav</description>
+	<name>modeshape-jcr-boot</name>
+	<description>Spring Boot Modeshape JCR</description>
 
 	<parent>
 	    <groupId>com.bpwizard.wcm-bpm</groupId>
@@ -16,9 +15,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	
 	<dependencies>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
@@ -60,21 +57,37 @@
 			<groupId>org.modeshape</groupId>
 			<artifactId>modeshape-jcr</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>com.bpwizard.wcm</groupId>
-            <artifactId>modeshape-jcr-boot</artifactId>
-			<version>${project.version}</version>
-        </dependency>
-        <dependency>
-		    <groupId>com.bpwizard.wcm</groupId>
-			<artifactId>modeshape-webdav-boot</artifactId>
-			<version>${project.version}</version>
-        </dependency>
-        <dependency>
+		<dependency>
+			<groupId>org.modeshape</groupId>
+			<artifactId>modeshape-sequencer-images</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.modeshape</groupId>
+			<artifactId>modeshape-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.modeshape</groupId>
+			<artifactId>modeshape-persistence-relational</artifactId>
+		</dependency>   
+		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.1.0</version>
 		    <scope>provided</scope>
 		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>modeshape-commons-boot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		-->
+		<!-- required after JDK 9+ -->
+		<!--  
+		<dependency>
+		    <groupId>javax.annotation</groupId>
+		    <artifactId>javax.annotation-api</artifactId>
+		</dependency>
+		-->
 	</dependencies>
+
 </project>

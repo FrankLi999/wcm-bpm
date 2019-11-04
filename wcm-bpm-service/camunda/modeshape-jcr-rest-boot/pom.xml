@@ -63,12 +63,12 @@
 			<artifactId>modeshape-jcr</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.bpwizard.wcm</groupId>
+			<groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>modeshape-commons-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.bpwizard.wcm</groupId>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>modeshape-jcr-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>

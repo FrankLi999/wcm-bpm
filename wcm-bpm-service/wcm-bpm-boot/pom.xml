@@ -52,9 +52,14 @@
 		    <groupId>org.camunda.bpm</groupId>
 		    <artifactId>camunda-engine-plugin-spin</artifactId>
 		</dependency>
+		
+		<dependency>
+	        <groupId>org.camunda.bpm.dmn</groupId>
+	        <artifactId>camunda-engine-dmn</artifactId>
+	    </dependency>
 		<!-- 
 		<dependency>
-			<groupId>com.bpwizard.wcm</groupId>
+			<groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>camunda-rest-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -81,7 +86,7 @@
 		 -->	
 		<!-- 
 		<dependency>
-			<groupId>com.bpwizard.wcm</groupId>
+			<groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>camunda-db-identity-plugin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -129,12 +134,21 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-client</artifactId>
         </dependency>
+        <!-- 
 		<dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>6.0.6</version>
             <scope>runtime</scope>
         </dependency>
+        -->
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>8.0.17</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
@@ -166,18 +180,18 @@
 			<version>${project.version}</version>
 		</dependency>
         <dependency>
-		    <groupId>com.bpwizard.wcm</groupId>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>modeshape-commons-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.bpwizard.wcm</groupId>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>modeshape-jcr-rest-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- 
 		<dependency>
-		    <groupId>com.bpwizard.wcm</groupId>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>modeshape-jcr-webdav-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -229,18 +243,21 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-web</artifactId>
+		    <!--  
 		    <exclusions>
 		        <exclusion>
 		            <groupId>org.springframework.boot</groupId>
 		            <artifactId>spring-boot-starter-tomcat</artifactId>
 		        </exclusion>
 		    </exclusions>
+		    -->
 		</dependency>
+		<!-- 
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-undertow</artifactId>
 		</dependency>
-        
+        -->
         
       
 		<!--SpringFox dependencies -->
@@ -374,6 +391,27 @@
 		    <artifactId>poi</artifactId>
 		    <version>3.17</version> <!--  overwite the default v3.15 -->
 		</dependency>
+
+        <!-- -->
+		<dependency>
+		    <groupId>org.camunda.bpm</groupId>
+		    <artifactId>camunda-engine</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.camunda.bpm.model</groupId>
+		    <artifactId>camunda-cmmn-model</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.camunda.bpm.model</groupId>
+		    <artifactId>camunda-bpmn-model</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis</artifactId>
+		</dependency>
+		
+		
 	</dependencies>
 
 	<build>

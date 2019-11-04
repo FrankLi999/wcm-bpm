@@ -4,10 +4,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>modeshape-commons-boot</artifactId>
+	<artifactId>modeshape-webdav-boot</artifactId>
 	<packaging>jar</packaging>
-	<name>modeshape-commons-boot</name>
-	<description>Spring Boot Modeshape commons</description>
+	<name>modeshape-webdav-boot</name>
+	<description>Spring Boot Modeshape WebDav</description>
 
 	<parent>
 	    <groupId>com.bpwizard.wcm-bpm</groupId>
@@ -15,7 +15,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-
+	
 	<dependencies>
 
 		<dependency>
@@ -43,6 +43,10 @@
 			<artifactId>spring-beans</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-api</artifactId>
 		  </dependency>
@@ -59,23 +63,23 @@
 			<groupId>org.modeshape</groupId>
 			<artifactId>modeshape-jcr</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.modeshape</groupId>
-			<artifactId>modeshape-sequencer-images</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.modeshape</groupId>
-			<artifactId>modeshape-common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.modeshape</groupId>
-			<artifactId>modeshape-persistence-relational</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>com.bpwizard.wcm</groupId>
-			<artifactId>modeshape-jcr-boot</artifactId>
+        <dependency>
+            <groupId>com.bpwizard.wcm-bpm</groupId>
+            <artifactId>modeshape-jcr-boot</artifactId>
 			<version>${project.version}</version>
-		</dependency>  
+        </dependency>
+        <!-- 
+        <dependency>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>modeshape-webdav</artifactId>
+			<version>${project.version}</version>
+        </dependency>
+        -->
+        <dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>3.1.0</version>
+		    <scope>provided</scope>
+		</dependency>
 	</dependencies>
-
 </project>

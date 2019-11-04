@@ -14,16 +14,16 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<!-- <version>2.2.0.M3</version> -->
+		<!-- <version>2.2.0.RELEASE</version> -->
 		<version>2.1.6.RELEASE</version>
-		<relativePath></relativePath>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	
 	<modules>
-        <!-- <module>bpm-ui</module> -->	
+        <module>bpm-ui</module>	
+		<module>modeshape</module>
+		<module>camunda</module>
 		<module>wcm-bpm-boot</module>
-		<!-- <module>modeshape</module> -->
-		<!-- <module>camunda</module> -->
 	</modules>
     
 	<properties>
@@ -91,6 +91,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<!-- 	
 	<repositories>
 		<repository>
 			<snapshots />
@@ -123,4 +124,5 @@
 			<url>https://repo.spring.io/milestone</url>
 		</pluginRepository>
 	</pluginRepositories>
+	-->
 </project>	
