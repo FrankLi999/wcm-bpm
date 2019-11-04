@@ -4,7 +4,7 @@
                monitorInterval="30"
                shutdownHook="disable">
   <Properties>
-    <Property name="baseDir">$${env:HOME}/tools/logs</Property>
+    <Property name="baseDir">$${env:HOME}/tools/app-logs</Property>
     <Property name="applicationName">my-application</Property>
   </Properties>
   <Appenders>
