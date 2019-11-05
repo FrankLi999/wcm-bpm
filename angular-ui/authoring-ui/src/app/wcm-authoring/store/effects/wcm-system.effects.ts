@@ -54,7 +54,7 @@ export class WcmSystemEffects {
 
   @Effect()
   createAuthoringTemplate$: Observable<WcmSystemActions> = this.actions$.pipe(
-    ofType<CreateAuthoringTemplate>(WcmSystemActionTypes.CREATE_RENDER_TEMPLATE),
+    ofType<CreateAuthoringTemplate>(WcmSystemActionTypes.CREATE_AUTHORING_TEMPLATE),
     switchMap((action) => {
       return this.wcmService.createAuthoringTemplate(action.payload)
         .pipe(

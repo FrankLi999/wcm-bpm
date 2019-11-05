@@ -1,35 +1,41 @@
 1. render template    
+   right side panel
+   drag and drop to create layout -- rendering test
+       http://192.168.0.168:8080/wcm/api/rt
+       {"repository":"bpwizard","workspace":"default","library":"renderTemplate","name":"RenderTemplate1","title":"Render Template1","description":"Render Template1","code":"","preloop":"","postloop":"","maxEntries":"10","note":"Render Template using layout","isQuery":false,"resourceName":"MyContent","rows":[{"columns":[{"id":"fieldgroup1","width":100,"elements":[{"name":"name"}]}]},{"columns":[{"id":"fieldgroup2","width":50,"elements":[{"name":"title"}]},{"id":"fieldgroup3","width":50,"elements":[{"name":"body"}]}]}]}
 
-2. Site exoloer
+   use angular custome elements for rendering instead of via dynamic components - angular 9 ivy plug and play
+2. content item workflow 
+3, access control
+4. syndication
+5. Site expoloer
    right side panel
    content item editor
    new content item - select at popup
        post: http://192.168.0.168:8080/wcm/api/wcmNodes/bpwizard/default
            {"nodePath":"bpwizard/library/design/authoringTemplate","nodeTypes":["bpw:authoringTemplate"]}
-3. resource type - at
+6. resource type - at
         http://192.168.0.168:8080/wcm/api/wcmNodes/bpwizard/default
         {"nodePath":"bpwizard/library/design/authoringTemplate","nodeTypes":["bpw:authoringTemplate","bpw:folder"]}
     right side panel
-4. content area layout
+7. content area layout
    post: http://192.168.0.168:8080/wcm/api/wcmNodes/bpwizard/default
          {"nodePath":"bpwizard/library/design/contentAreaLayout","nodeTypes":["bpw:contentAreaLayout","bpw:folder"]}
    right side panel
 
-5. category
+8. category
    add impl
-6. content item workflow    
-7. query builder
+   
+9. query builder
     add impl
-8. validation rules
+10. validation rules
     add imple
-9. Navigation Tree improve look and feel
+11. Navigation Tree improve look and feel
     > https://leovo2708.github.io/ngx-treeview/#/components
     > right click drop down menu
-10. over all layout
+12. over all layout
     > check with browser with small screen size
-11. resource libraries - right side panel
-12, access control
-13. syndication
+13. resource libraries - right side panel
 14. Keycloak integration
 15. enhance camunda, use hazelcast (The CP Subsystem of Hazelcast IDMG 3.12) jet or jgroup for cluster support, bpm status caching/event based process instance excution
 16. spring reactive security/oauth, populate google use like spring security/web
