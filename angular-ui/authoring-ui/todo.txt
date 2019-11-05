@@ -1,0 +1,36 @@
+1. render template    
+
+2. Site exoloer
+   right side panel
+   content item editor
+   new content item - select at popup
+       post: http://192.168.0.168:8080/wcm/api/wcmNodes/bpwizard/default
+           {"nodePath":"bpwizard/library/design/authoringTemplate","nodeTypes":["bpw:authoringTemplate"]}
+3. resource type - at
+        http://192.168.0.168:8080/wcm/api/wcmNodes/bpwizard/default
+        {"nodePath":"bpwizard/library/design/authoringTemplate","nodeTypes":["bpw:authoringTemplate","bpw:folder"]}
+    right side panel
+4. content area layout
+   post: http://192.168.0.168:8080/wcm/api/wcmNodes/bpwizard/default
+         {"nodePath":"bpwizard/library/design/contentAreaLayout","nodeTypes":["bpw:contentAreaLayout","bpw:folder"]}
+   right side panel
+
+5. category
+   add impl
+6. content item workflow    
+7. query builder
+    add impl
+8. validation rules
+    add imple
+9. Navigation Tree improve look and feel
+    > https://leovo2708.github.io/ngx-treeview/#/components
+    > right click drop down menu
+10. over all layout
+    > check with browser with small screen size
+11. resource libraries - right side panel
+12, access control
+13. syndication
+14. Keycloak integration
+15. enhance camunda, use hazelcast (The CP Subsystem of Hazelcast IDMG 3.12) jet or jgroup for cluster support, bpm status caching/event based process instance excution
+16. spring reactive security/oauth, populate google use like spring security/web
+17. Mongodb support in addition to mysql

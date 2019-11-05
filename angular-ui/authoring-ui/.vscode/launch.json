@@ -5,24 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "firefox",
-            "request": "launch",
-            "reAttach": true,
-            "name": "Launch wcm authoring ui on firefox",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}"
-        },
-        {
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}",
-            "runtimeExecutable": "/usr/bin/chromium-browser",
-            "runtimeArgs": [
-                "--no-default-browser-check",
-                "http://localhost:3000/auth/login?url=%2Fwcm-authoring%2Fsite-explorer%2Fnavigator"
-              ]
         },
         {
             "type": "browser-preview",
@@ -33,21 +20,8 @@
             "type": "browser-preview",
             "request": "launch",
             "name": "Browser Preview: Launch",
-            "url": "http://localhost:3000/#",
+            "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}",
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chromium",
-            "url": "http://localhost:3000/#",
-            "webRoot": "${workspaceFolder}",
-            "preLaunchTask": "npm: start",
-            "runtimeExecutable": "/usr/bin/chromium-browser",
-            "runtimeArgs": [
-              "--no-default-browser-check",
-              "http://localhost:3000/auth/login?url=%2Fwcm-authoring%2Fsite-explorer%2Fnavigator"
-            ]
         }
     ]
 }
