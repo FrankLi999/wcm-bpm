@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Framework } from '../framework';
 import { FrameworkLibraryService } from '../framework-library.service';

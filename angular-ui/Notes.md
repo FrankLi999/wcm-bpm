@@ -60,7 +60,67 @@ There are multiple ways to prevent this:
    ng new bpw-dynamic-ui --create-application=false
    ng generate library bpw-dynamic-ui --prefix=bpw-dynamic-ui
    
+2. Build shared compoments
+
    
+   cd bpw-rest-client
+   npm install
+   ng build bpw-rest-client
+   cd dist/bpw-rest-client 
+   npm pack
+
+   cd bpw-form
+   npm install
+   ng build bpw-form
+   cd dist/bpw-form & npm pack
+
+   cd bpw-components
+   npm install
+   npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz
+   ng build bpw-components
+   npm run build-bpw-components-styles
+   # npm run bpw-components-scss-bundle
+   npm run cp-bpw-components-assets
+
+   cd dist/bpw-components 
+   npm pack
+   
+   ng build bpw-store
+   cd dist/bpw-store
+   npm pack
+
+   cd bpw-layout
+   
+   npm install
+   npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
+   ng build bpw-layout
+   npm run build-bpw-layout-styles
+   cd dist/bpw-layout
+   npm pack
+
+   cd bpw-auth
+   npm install
+   npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
+   npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
+   npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
+   npm install ../bpw-components/dist/bpw-store/bpw-store-0.0.1.tgz --save
+   ng build bpw-auth
+   npm run build-bpw-auth-styles
+   cd dist/bpw-auth
+   npm pack
+   
+   
+   cd authoring-ui
+   npm install
+   npm install ../bpw-auth/dist/bpw-auth/bpw-auth-0.0.1.tgz --save
+   npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
+   npm install ../bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save
+   npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
+   npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
+   npm install ../bpw-components/dist/bpw-store/bpw-store-0.0.1.tgz --save
+   npm run start
+
+3. 
    npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz	
     npm install ../bpw--form/dist/bpw-form/bpw-form-0.0.1.tgz
    npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz	

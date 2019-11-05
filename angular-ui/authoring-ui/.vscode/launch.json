@@ -1,0 +1,53 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "name": "Launch wcm authoring ui on firefox",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}",
+            "runtimeExecutable": "/usr/bin/chromium-browser",
+            "runtimeArgs": [
+                "--no-default-browser-check",
+                "http://localhost:3000/auth/login?url=%2Fwcm-authoring%2Fsite-explorer%2Fnavigator"
+              ]
+        },
+        {
+            "type": "browser-preview",
+            "name": "Browser Preview: Attach",
+            "request": "attach"
+        },
+        {
+            "type": "browser-preview",
+            "request": "launch",
+            "name": "Browser Preview: Launch",
+            "url": "http://localhost:3000/#",
+            "webRoot": "${workspaceFolder}",
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chromium",
+            "url": "http://localhost:3000/#",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "npm: start",
+            "runtimeExecutable": "/usr/bin/chromium-browser",
+            "runtimeArgs": [
+              "--no-default-browser-check",
+              "http://localhost:3000/auth/login?url=%2Fwcm-authoring%2Fsite-explorer%2Fnavigator"
+            ]
+        }
+    ]
+}

@@ -6,6 +6,15 @@
 @import "bpw-components/lib/components/theme-options/theme-options.theme";
 @import "bpw-components/lib/components/widget/widget.theme";
 
+// @import "../components/countdown/countdown.theme";
+// @import "../components/material-color-picker/material-color-picker.theme";
+// @import "../components/search-bar/search-bar.theme";
+// @import "../components/shortcuts/shortcuts.theme";
+// @import "../components/sidebar/sidebar.theme";
+// @import "../components/theme-options/theme-options.theme";
+// @import "../components/widget/widget.theme";
+
+
 @mixin fuse-core-theme($theme) {
 
     // Theming for Fuse core styles

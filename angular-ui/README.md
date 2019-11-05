@@ -28,7 +28,7 @@ NOTE: ts file name should not has the same name and the folder name, otherwise, 
 NOTES: global styles in the library. check bpw-components.
 
 Rest client:
-
+cd bpw-rest-client
 ng build rest-client
 ng build bpw-components
 npm run build-bpw-components-styles
