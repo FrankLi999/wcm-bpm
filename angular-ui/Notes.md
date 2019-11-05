@@ -72,11 +72,13 @@ There are multiple ways to prevent this:
    cd bpw-form
    npm install
    ng build bpw-form
-   cd dist/bpw-form & npm pack
+   cd dist/bpw-form 
+   npm pack
 
    cd bpw-components
+   
+   npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --savebpw-rest-client-0.0.1.tgz --save
    npm install
-   npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz
    ng build bpw-components
    npm run build-bpw-components-styles
    # npm run bpw-components-scss-bundle
@@ -90,20 +92,25 @@ There are multiple ways to prevent this:
    npm pack
 
    cd bpw-layout
-   
-   npm install
    npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
+   npm install
+   
    ng build bpw-layout
    npm run build-bpw-layout-styles
    cd dist/bpw-layout
    npm pack
 
    cd bpw-auth
-   npm install
+   
    npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
+
    npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
+   
    npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
+   
    npm install ../bpw-components/dist/bpw-store/bpw-store-0.0.1.tgz --save
+   
+   npm install
    ng build bpw-auth
    npm run build-bpw-auth-styles
    cd dist/bpw-auth
@@ -111,15 +118,27 @@ There are multiple ways to prevent this:
    
    
    cd authoring-ui
-   npm install
+   
    npm install ../bpw-auth/dist/bpw-auth/bpw-auth-0.0.1.tgz --save
+
    npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
+   
    npm install ../bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save
+
    npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
+
    npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
+   
    npm install ../bpw-components/dist/bpw-store/bpw-store-0.0.1.tgz --save
+   
+   npm install
+   
    npm run start
 
+# Test
+
+   http://localhost:3000
+   login with: admin@example.com/admin!
 3. 
    npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz	
     npm install ../bpw--form/dist/bpw-form/bpw-form-0.0.1.tgz

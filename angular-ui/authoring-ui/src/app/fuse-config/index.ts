@@ -8,7 +8,7 @@ import { ApiConfig } from 'bpw-rest-client';
  * constructor method to learn more about changing these options per component basis.
  */
 export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect';
-export const API_BASE_URL = 'http://localhost:8080';
+export const API_BASE_URL = 'http://192.168.0.168:8080';
 export const apiConfig: ApiConfig = {
     apiBaseUrl: API_BASE_URL,
     accessToken: 'accessToken',

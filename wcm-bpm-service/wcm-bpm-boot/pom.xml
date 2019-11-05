@@ -457,6 +457,7 @@
                     </execution>
                 </executions>
             </plugin>
+			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -472,6 +473,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -486,13 +488,14 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Download redoc (enable it when building for production) -->
+ 			<!--
 			<plugin>
 				<groupId>com.googlecode.maven-download-plugin</groupId>
 				<artifactId>download-maven-plugin</artifactId>
 				<version>1.3.0</version>
 				<executions>
-				<!-- Download redoc (enable it when building for production) -->
-        	        <execution>
+				       	        <execution>
                         <phase>validate</phase>
                         <goals>
                             <goal>wget</goal>
@@ -505,6 +508,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 			<!--
 			<plugin>
 				<groupId>io.fabric8</groupId>
