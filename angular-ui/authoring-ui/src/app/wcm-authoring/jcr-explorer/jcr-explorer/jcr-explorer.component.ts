@@ -90,6 +90,7 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
     this.functionMap['Remove.folder'] = this.removeItem;
     this.functionMap['Remove.file'] = this.removeItem;
     this.functionMap['Delete.theme'] = this.removeItem;
+    this.functionMap['Delete.renderTemplate'] = this.removeItem;
     
     this.functionMap['Create.siteArea'] = this.createSiteArea;
     this.functionMap['Delete.siteArea'] = this.removeItem;

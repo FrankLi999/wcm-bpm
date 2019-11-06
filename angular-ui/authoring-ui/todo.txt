@@ -2,7 +2,9 @@
    right side panel
    drag and drop to create layout -- rendering test
        http://192.168.0.168:8080/wcm/api/rt
-       {"repository":"bpwizard","workspace":"default","library":"renderTemplate","name":"RenderTemplate1","title":"Render Template1","description":"Render Template1","code":"","preloop":"","postloop":"","maxEntries":"10","note":"Render Template using layout","isQuery":false,"resourceName":"MyContent","rows":[{"columns":[{"id":"fieldgroup1","width":100,"elements":[{"name":"name"}]}]},{"columns":[{"id":"fieldgroup2","width":50,"elements":[{"name":"title"}]},{"id":"fieldgroup3","width":50,"elements":[{"name":"body"}]}]}]}
+       {"repository":"bpwizard","workspace":"default",
+       "library":"renderTemplate",
+       "name":"RenderTemplate1","title":"Render Template1","description":"Render Template1","code":"","preloop":"","postloop":"","maxEntries":"10","note":"Render Template using layout","isQuery":false,"resourceName":"MyContent","rows":[{"columns":[{"id":"fieldgroup1","width":100,"elements":[{"name":"name"}]}]},{"columns":[{"id":"fieldgroup2","width":50,"elements":[{"name":"title"}]},{"id":"fieldgroup3","width":50,"elements":[{"name":"body"}]}]}]}
 
    use angular custome elements for rendering instead of via dynamic components - angular 9 ivy plug and play
 2. content item workflow 

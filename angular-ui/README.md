@@ -29,7 +29,7 @@ NOTES: global styles in the library. check bpw-components.
 
 Rest client:
 cd bpw-rest-client
-ng build rest-client
+ng build bpw-rest-client
 ng build bpw-components
 npm run build-bpw-components-styles
 npm run bpw-components-scss-bundle

@@ -1,12 +1,16 @@
-import { Component, OnInit, OnDestroy, Input, Inject, ViewEncapsulation } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { CdkDragDrop, moveItemInArray, copyArrayItem, transferArrayItem, CdkDrag } from '@angular/cdk/drag-drop';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import {
   RenderTemplateLayoutRow,
   RenderTemplateLayoutColumn,
-  ResourceElementRender
+  ResourceElementRender,
+  AuthoringTemplate,
+  Query
 } from '../../model';
 import * as fromStore from '../../store';
 
@@ -17,22 +21,46 @@ import * as fromStore from '../../store';
   styleUrls: ['./render-layout-designer.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class RenderLayoutDesignerComponent implements OnInit {
-  
-  @Input() contentElements: string[] = [];
+export class RenderLayoutDesignerComponent implements OnInit, OnDestroy {
+  contentElementsMap = new Map<String, string[]>();
+  @Input() selectedContentType: string;
   @Input() rows: RenderTemplateLayoutRow[];
 
   builderTargets: string[] = [             
   ];
 
+  // queryElementsMap = new Map<String, string[]>();
   private nextFieldGroupId: number = 0;
+  private unsubscribeAll: Subject<any>;
   constructor(
     private store: Store<fromStore.WcmAppState>,
     private dialog: MatDialog) { 
+      this.unsubscribeAll = new Subject();
   }
 
   ngOnInit() {
-    this.nextFieldGroupId = 1;    
+    this.nextFieldGroupId = 1;
+    this.store.pipe(
+      takeUntil(this.unsubscribeAll),
+      select(fromStore.getAuthoringTemplates)).subscribe(
+        (authoringTemplates: {[key: string]: AuthoringTemplate}) => {
+          if (authoringTemplates) {
+            Object.entries(authoringTemplates).forEach(([key, at]) => {
+              // this.contentTypes.push(at.name);
+              let formControls: string[] = [...Object.keys(at.formControls)];
+              this.contentElementsMap.set(`${at.repository}/${at.workspace}/${at.library}/${at.name}`, formControls);
+            });
+          }
+        }
+      );   
+  }
+
+  /**
+  * On destroy
+  */
+  ngOnDestroy(): void {
+    this.unsubscribeAll.next();
+    this.unsubscribeAll.complete();
   }
 
   rowRemovable(row: RenderTemplateLayoutRow): boolean {
@@ -46,12 +74,18 @@ export class RenderLayoutDesignerComponent implements OnInit {
   deleteRow(index: number, rows: RenderTemplateLayoutRow[]) {
     rows.splice(index, 1);
   }
+  
+  contentElements(): string[] {
+    
+    return this.selectedContentType ? this.contentElementsMap.get(this.selectedContentType) : [];
+  }
 
   addNewRow(numOfColumn: number) {
 
     // let rows = this.isRows(this.resourceType.formGroups[this.resourceType.formGroups.length - 1]) ? 
     // this.resourceType.formGroups[this.resourceType.formGroups.length - 1] as FormRows:
     //     { rows: []} as FormRows;
+    this.rows = this.rows || [];
     this.rows.push({
       columns: []
     });

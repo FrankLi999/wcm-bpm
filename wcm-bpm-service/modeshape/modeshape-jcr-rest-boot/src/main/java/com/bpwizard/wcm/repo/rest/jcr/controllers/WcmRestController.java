@@ -65,6 +65,9 @@ import com.bpwizard.wcm.repo.rest.jcr.model.NavigationItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationType;
 import com.bpwizard.wcm.repo.rest.jcr.model.PageLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
+import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplateLayoutColumn;
+import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplateLayoutRow;
+import com.bpwizard.wcm.repo.rest.jcr.model.ResourceElementRender;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceNode;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceViewer;
 import com.bpwizard.wcm.repo.rest.jcr.model.SearchData;
@@ -505,10 +508,9 @@ public class WcmRestController {
 		}
 		try {
 			rtPath = rtPath.startsWith("/") ? rtPath : "/" + rtPath;
-			String library = rtPath.split("/", 4)[3];
-			System.out.println(">>>>>>>>>>>>>>>> getRenderTemplate:" + library);
+			String library = rtPath.split("/", 5)[3];
 			RestNode rtNode = (RestNode) this.itemHandler.item(request, repository, workspace,
-					rtPath, 1);
+					rtPath, 4);
 			
 			RenderTemplate rt = this.toRenderTemplate(rtNode, repository, workspace, library);
 			if (logger.isDebugEnabled()) {
@@ -560,6 +562,28 @@ public class WcmRestController {
 				rtNode.setProperty("bpw:resourceName", rt.getResourceName());
 			}
 			rtNode.setProperty("bpw:isQuery", rt.isQuery());
+			
+			if (rt.getRows() != null && rt.getRows().length > 0) {
+				int rowCount = 1;
+				for(RenderTemplateLayoutRow row: rt.getRows()) {
+					Node rowNode = rtNode.addNode("row" + rowCount++, "bpw:RenderTemplateLayoutRow");
+					int columnCount = 1;
+					for (RenderTemplateLayoutColumn column: row.getColumns()) {
+						Node columnNode = rowNode.addNode("column" + columnCount++, "bpw:RenderTemplateLayoutColumn");
+						if (StringUtils.hasText(column.getId())) {
+							columnNode.setProperty("bpw:id", column.getId());
+						}
+						if (column.getWidth() > 0) {
+							columnNode.setProperty("bpw:width", column.getWidth());
+						}
+						for (ResourceElementRender element: column.getElements()) {
+							Node elementNode = columnNode.addNode(element.getName(), "bpw:ResourceElementRender");
+							elementNode.setProperty("bpw:name", element.getName());
+						}
+					    
+					}
+				}
+			}
 			session.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -1654,6 +1678,43 @@ public class WcmRestController {
 			} else if ("bpw:isQuery".equals(property.getName())) {
 				result.setQuery(Boolean.parseBoolean(property.getValues().get(0)));
 			}
+		}
+		
+		List<RenderTemplateLayoutRow> rows = new ArrayList<>();
+		for (RestNode rowNode: node.getChildren()) {
+			if (this.checkNodeType(rowNode, "bpw:RenderTemplateLayoutRow")) {
+				RenderTemplateLayoutRow row = new RenderTemplateLayoutRow();
+				rows.add(row);
+				List<RenderTemplateLayoutColumn> columns = new ArrayList<>();
+				for (RestNode columnNode: rowNode.getChildren()) {
+					if (this.checkNodeType(columnNode, "bpw:RenderTemplateLayoutColumn")) {
+						RenderTemplateLayoutColumn column = new RenderTemplateLayoutColumn();
+						columns.add(column);	
+						for (RestProperty property : columnNode.getJcrProperties()) {
+							if ("bpw:id".equals(property.getName())) {
+								column.setId(property.getValues().get(0));
+							} else if ("bpw:widtd".equals(property.getName())) {
+								column.setWidth(Integer.parseInt(property.getValues().get(0)));
+							} 
+						}
+						List<ResourceElementRender> elements = new ArrayList<>();
+						for (RestNode elementNode: columnNode.getChildren()) {
+							if (this.checkNodeType(elementNode, "bpw:ResourceElementRender")) {
+								ResourceElementRender element = new ResourceElementRender();
+								elements.add(element);
+								element.setName(elementNode.getName());
+							}
+						}
+						column.setElements(elements.toArray(new ResourceElementRender[elements.size()]));
+						
+					}
+				}
+				row.setColumns(columns.toArray(new RenderTemplateLayoutColumn[columns.size()]));
+			}
+		}
+		
+		if (rows.size() > 0) {
+			result.setRows(rows.toArray(new RenderTemplateLayoutRow[rows.size()]));
 		}
 		return result;
 	}

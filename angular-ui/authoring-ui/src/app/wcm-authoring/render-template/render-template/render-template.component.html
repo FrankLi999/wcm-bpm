@@ -113,29 +113,32 @@
                                     mat-raised-button type="button">Select Query</button>
                             </div>
                         </div>
+
+                        <div *ngIf="hasContentItems()" fxLayout="row" style="border: 0px;" fxLayoutAlign="start center">
+                            <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="20">
+                                <div class="h2">Pre Loop</div>
+                            </div>
+                        </div>
+                        <div *ngIf="hasContentItems()" fxLayout="row" fxLayoutAlign="start center">
+                            <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
+                                <ace-editor [(text)]="code.preloop"
+                                    [autoUpdateContent]="true" theme="github"
+                                    style="min-height: 200px; width:100%; overflow: auto;"
+                                    mode="html">
+                                </ace-editor>
+                            </div>
+                        </div>
+
                         <div fxLayout="row" fxLayoutAlign="start center">
-                            <mat-tab-group fxLayout="column" fxFlex>
-                                <mat-tab label="Layout Design">
-                                    <render-layout-designer
-                                      [contentElements] = "contentElements"
+                            <mat-tab-group [selectedIndex]="layoutTabIndex()" fxLayout="column" fxFlex>
+                                <mat-tab label="Layout Design" >
+                                    <render-layout-designer *ngIf="renderTemplate"
+                                      [selectedContentType] = "selectedContentType()"
                                       [rows]="renderTemplate.rows"
                                     ></render-layout-designer>
                                 </mat-tab>
-                                <mat-tab label="Fragment">
-                                    <div *ngIf="hasContentItems()" fxLayout="row" style="border: 0px;" fxLayoutAlign="start center">
-                                        <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="20">
-                                            <div class="h2">Pre Loop</div>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="hasContentItems()" fxLayout="row" fxLayoutAlign="start center">
-                                        <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
-                                            <ace-editor [(text)]="code.preloop"
-                                                [autoUpdateContent]="true" theme="github"
-                                                style="min-height: 200px; width:100%; overflow: auto;"
-                                                mode="html">
-                                            </ace-editor>
-                                        </div>
-                                    </div>
+                                <mat-tab label="Fragment" >
+                                    
                                     <div fxLayout="row" fxLayoutAlign="start center" style="margin-top:24px;">
                                         <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start">
                                             <div class="h2">Code</div>
@@ -172,24 +175,26 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div *ngIf="hasContentItems()" fxLayout="row" style="border: 0px;" fxLayoutAlign="start center">
-                                        <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="20">
-                                            <div class="h2">Post Loop</div>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="hasContentItems()" fxLayout="row" fxLayoutAlign="start center">
-                                        <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
-                                            <ace-editor [(text)]="code.postloop"
-                                                [autoUpdateContent]="true" theme="github"
-                                                style="min-height: 200px; width:100%; overflow: auto;"
-                                                mode="html">
-                                            </ace-editor>
-                                        </div>
-                                    </div>
+                                    
                                 </mat-tab>
                             </mat-tab-group>
                         </div>
+                        <div *ngIf="hasContentItems()" fxLayout="row" style="border: 0px;" fxLayoutAlign="start center">
+                            <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="20">
+                                <div class="h2">Post Loop</div>
+                            </div>
+                        </div>
+                        <div *ngIf="hasContentItems()" fxLayout="row" fxLayoutAlign="start center">
+                            <div fxLayout="column" class="template-form-container" fxLayoutAlign="start start" fxFlex="100">
+                                <ace-editor [(text)]="code.postloop"
+                                    [autoUpdateContent]="true" theme="github"
+                                    style="min-height: 200px; width:100%; overflow: auto;"
+                                    mode="html">
+                                </ace-editor>
+                            </div>
+                        </div>
                     </mat-tab>
+
                     <mat-tab label="Permissions">
                         <div class="tab-content p-24" fusePerfectScrollbar>
                             properties
