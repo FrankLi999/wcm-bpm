@@ -18,8 +18,7 @@
 	
 	<modules>
         <module>camunda-db-identity-plugin</module>	
-		<module>camunda-rest-boot</module>	
-		<module>modeshape-jcr-rest-boot</module>		
+	    <module>camunda-rest-boot</module>	
 	</modules>    
 	
 </project>	

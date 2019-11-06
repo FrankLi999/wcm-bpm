@@ -102,7 +102,7 @@ bpw:
     secret: 841D8A6C80CBA4FCAD32D5367C18C53B
     # expiration-millis: 864000000 # 10 days
     # short-lived-millis: 120000   # two minutes
-    
+    short-lived-millis: 864000000 # 10 days
 org:
   modeshape:
     backupLocation: "c:/temp"

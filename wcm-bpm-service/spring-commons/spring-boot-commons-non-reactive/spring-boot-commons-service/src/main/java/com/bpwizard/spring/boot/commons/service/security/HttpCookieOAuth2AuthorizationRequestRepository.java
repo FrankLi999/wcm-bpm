@@ -26,7 +26,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
 	
 	public HttpCookieOAuth2AuthorizationRequestRepository(SpringProperties properties) {
 
-		cookieExpirySecs = properties.getJwt().getShortLivedMillis() / 1000;
+		cookieExpirySecs = (int)properties.getJwt().getShortLivedMillis() / 1000;
 	}
 
 	/**

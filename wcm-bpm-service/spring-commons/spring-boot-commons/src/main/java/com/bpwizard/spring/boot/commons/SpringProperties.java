@@ -239,6 +239,6 @@ public class SpringProperties {
 		/**
 		 * Expiration milliseconds for short-lived tokens and cookies
 		 */
-		private int shortLivedMillis = 120000; // Two minutes
+		private long shortLivedMillis = 120000; // Two minutes
 	}	
 }

@@ -19,8 +19,10 @@
 	<modules>
 	    <module>modeshape-jcr-boot</module>
 	    <module>modeshape-commons-boot</module>
-		<module>modeshape-jcr-webdav-boot</module>
-		<module>modeshape-webdav-boot</module>					
+            <module>modeshape-jcr-rest-boot</module>
+	    <module>modeshape-jcr-webdav-boot</module>
+	    <module>modeshape-webdav-boot</module>	
+            					
 	</modules>
     
 </project>	
