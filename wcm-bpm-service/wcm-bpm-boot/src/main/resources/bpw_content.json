@@ -2656,6 +2656,64 @@
 		"bpw:resourceName": "bpwizard/default/design/MyContent",
 		"bpw:isQuery": "false"
 	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "MyContentRenderLayout",
+		"bpw:title": "MyContentRenderLayout",
+		"bpw:description": "MyContent Render Layout",
+		"bpw:preloop": "<div>preloop</div>",
+		"bpw:postloop": "<div>postloop</div>",
+		
+		"bpw:maxEntries": "10",
+		"bpw:note": "MyContentRenderLayout note",
+		"bpw:resourceName": "bpwizard/default/design/MyContent",
+		"bpw:isQuery": "false"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row1/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "100"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row1/column1/name": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+	    "bpw:name": "name"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row2": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row2/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "50"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row2/column1/title": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+	    "bpw:name": "title"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row2/column2": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup2",
+		"bpw:width": "50"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row2/column2/description": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+	    "bpw:name": "description"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row3": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row3/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "100"
+	},
+	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row3/column1/body": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+		"bpw:name": "body"
+	},
     "bpwizard/library/design/contentAreaLayout/MyLayout" : {
         "jcr:primaryType":"bpw:contentAreaLayout",
         "bpw:name": "sampleLayout",
