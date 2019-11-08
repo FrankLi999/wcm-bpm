@@ -1,0 +1,71 @@
+import {
+  Component,
+  OnInit,
+  Input,
+  Compiler,
+  SecurityContext,
+  ComponentRef
+} from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { RenderTemplate, ContentItem } from '../../model';
+import { WcmService } from '../../service/wcm.service';
+import { RendererService } from '../renderer.service';
+
+//https://blog.angularindepth.com/building-an-aot-friendly-dynamic-content-outlet-in-angular-59c1a96171a
+@Component({
+  selector: 'resource-renderer',
+  templateUrl: './resource-renderer.component.html',
+  styleUrls: ['./resource-renderer.component.scss']
+})
+export class ResourceRendererComponent implements OnInit {
+
+  @Input() renderer;
+  @Input() navigationId;
+  @Input() rendererTemplate: RenderTemplate;
+  @Input() content: string;
+  contentItem: ContentItem;
+  // @ViewChild('container', { static: true, read: ViewContainerRef })
+  // container: ViewContainerRef;
+  private componentRef: ComponentRef<{}>;
+  constructor(
+    private wcmService: WcmService,
+    private sanitizer: DomSanitizer,
+    private rendererService: RendererService) { }
+
+  ngOnInit() {
+    console.log("ResourceRendererComponent", this.rendererTemplate, this.content);
+    const [repository, workspace] = this.content.split("/", 2);
+    const contentItemPath = this.content.slice(`${repository}/${workspace}/`.length);
+    this.sanitizer.bypassSecurityTrustHtml(this.rendererTemplate.code);
+    // this.rendererTemplate = {
+    //   ...this.rendererTemplate,
+    //   code: this.sanitizer.sanitize(SecurityContext.HTML, this.rendererTemplate.code),
+    //   postloop: this.sanitizer.sanitize(SecurityContext.HTML, this.rendererTemplate.postloop),
+    //   preloop: this.sanitizer.sanitize(SecurityContext.HTML, this.rendererTemplate.preloop)
+    // }
+    this.wcmService.getContentItem(repository, workspace, contentItemPath).subscribe(
+      (contentItem: ContentItem) => {
+        if (contentItem) {
+          this.contentItem = contentItem;
+          this.rendererService.addContentItem(this.contentId(), this.contentItem);
+        }
+      },
+      response => {
+        console.log("getContentItem call ended in error", response);
+        console.log(response);
+      },
+      () => {
+        console.log("getContentItem observable is now completed.");
+      }
+    );
+  }
+  
+  contentId(): string {
+    return `${this.navigationId}-${this.renderer}`;
+  }
+
+  get templateContent(): string {
+    return `${this.rendererTemplate.preloop}${this.rendererTemplate.code}${this.rendererTemplate.postloop}`;
+    // return `${this.rendererTemplate.preloop}${this.rendererTemplate.postloop}<custom-button>Test</custom-button>`;
+  }
+}

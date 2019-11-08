@@ -1,0 +1,16 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Page</title>
+  <script src="output.js"></script>
+</head>
+<body>
+  <custom-button text="Click me!"></custom-button>
+  <script>
+    const button = document.querySelector('custom-button');
+    button.addEventListener('countChanged', (event) => {
+      console.log('Count changed event', event.detail);
+    });
+  </script>
+</body>
+</html>

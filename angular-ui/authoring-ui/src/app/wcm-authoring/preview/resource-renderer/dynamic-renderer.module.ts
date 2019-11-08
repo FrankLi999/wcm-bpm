@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule,  Routes } from '@angular/router';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
@@ -26,13 +24,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 
-// import { PreviewModule } from '../preview.module';
-import { RenderElementComponent } from '../render-element/render-element.component';
-
 @NgModule({
-  declarations: [
-    RenderElementComponent
-  ],
   imports: [
     CdkTableModule,
     CdkTreeModule,
@@ -59,9 +51,6 @@ import { RenderElementComponent } from '../render-element/render-element.compone
     TranslateModule,
     FuseSharedModule,
     FuseSidebarModule
-  ],
-  exports: [
-    RenderElementComponent
   ]
 })
-export class RendererModule { }
+export class DynamicRendererModule { }

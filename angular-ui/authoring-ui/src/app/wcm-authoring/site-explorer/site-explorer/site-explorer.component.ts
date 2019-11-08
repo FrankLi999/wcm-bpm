@@ -12,8 +12,6 @@ import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-naviga
 import { UploadZipfileDialogComponent } from '../../dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
 import { NewFolderDialogComponent } from '../../dialog/new-folder-dialog/new-folder-dialog.component';
 import { NewThemeDialogComponent } from '../../dialog/new-theme-dialog/new-theme-dialog.component';
-import { NewSiteareaDialogComponent } from '../../dialog/new-sitearea-dialog/new-sitearea-dialog.component';
-// import { NewContentDialogComponent } from '../../dialog/new-content-dialog/new-content-dialog.component';
 import { SelectAuthoringTemplateDialogComponent } from '../select-authoring-template-dialog/select-authoring-template-dialog.component';
 
 @Component({
@@ -45,6 +43,7 @@ export class SiteExplorerComponent extends WcmNavigatorComponent implements OnIn
     this.functionMap['Delete.theme'] = this.removeItem;
     
     this.functionMap['Create.siteArea'] = this.createSiteArea;
+    this.functionMap['Preview.siteArea'] = this.previewSiteArea;
     this.functionMap['Edit.siteArea'] = this.editSiteArea;
     this.functionMap['Delete.siteArea'] = this.removeItem;
     this.functionMap['Create.content'] = this.createContent;
@@ -180,6 +179,15 @@ export class SiteExplorerComponent extends WcmNavigatorComponent implements OnIn
       });
   }
 
+  previewSiteArea() {
+    const node =  this.activeNode;
+    console.log('preview site area:', node);
+    this.router.navigate(['/wcm-authoring/preview'],{
+      queryParams: {
+        siteArea: node.wcmPath
+      } 
+    });
+  }
 
   createSiteArea() {
     const node =  this.activeNode;

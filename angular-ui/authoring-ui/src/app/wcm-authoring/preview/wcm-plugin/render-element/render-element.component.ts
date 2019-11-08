@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Host } from '@angular/core';
+import { Component, OnInit, Input, Host, Optional } from '@angular/core';
 import { ContentIdDirective } from '../content-id.directive';
-import { RendererService } from '../renderer.service';
-import { ContentItem } from '../../model';
+import { RendererService } from '../../renderer.service';
+import { ContentItem } from '../../../model';
 @Component({
   selector: 'render-element',
   templateUrl: './render-element.component.html',
@@ -13,9 +13,10 @@ export class RenderElementComponent implements OnInit {
   contentItem: ContentItem;
   constructor(
     private rendererService: RendererService,
-    @Host() private contentIdDirective: ContentIdDirective) { }
+    @Host() private contentIdDirective: ContentIdDirective
+  ) { }
 
   ngOnInit() {
-    this.contentItem = this.rendererService.getContentItem(this.contentIdDirective.contentId);
+    this.contentItem = this.contentIdDirective ? this.rendererService.getContentItem(this.contentIdDirective.contentId) : null;
   }
 }

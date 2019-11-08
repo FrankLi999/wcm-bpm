@@ -22,7 +22,9 @@ import {
   RestWorkspaces,
   RestItem
 } from '../model';
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 @Client({
   serviceId: 'modeshape-service',
   baseUrl: '/modeshape/api',

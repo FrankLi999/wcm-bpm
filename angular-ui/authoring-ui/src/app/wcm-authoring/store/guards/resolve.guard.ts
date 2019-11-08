@@ -10,7 +10,9 @@ import { WcmAppState } from '../reducers';
 import * as fromStore from '../';
 import { getWcmSystemLoaded } from '../selectors';
 import { getRouteState, RouteSnapshot } from 'bpw-store';
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ResolveGuard implements CanActivate {
     routerState: RouteSnapshot;
 

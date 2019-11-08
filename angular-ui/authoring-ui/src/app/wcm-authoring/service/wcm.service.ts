@@ -30,7 +30,9 @@ import {
   WcmNode,
   WcmItemFilter
 } from '../model';
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 @Client({
   serviceId: 'modeshape-service',
   baseUrl: '/wcm/api',

@@ -1,44 +1,65 @@
 1. render template    
    right side panel
-   drag and drop to create layout -- rendering test
-       http://192.168.0.168:8080/wcm/api/rt
-       {"repository":"bpwizard","workspace":"default",
-       "library":"renderTemplate",
-       "name":"RenderTemplate1","title":"Render Template1","description":"Render Template1","code":"","preloop":"","postloop":"","maxEntries":"10","note":"Render Template using layout","isQuery":false,"resourceName":"MyContent","rows":[{"columns":[{"id":"fieldgroup1","width":100,"elements":[{"name":"name"}]}]},{"columns":[{"id":"fieldgroup2","width":50,"elements":[{"name":"title"}]},{"id":"fieldgroup3","width":50,"elements":[{"name":"body"}]}]}]}
+   at selection -> /repo/ws/lib/atName -> make it a treeview
 
-   use angular custome elements for rendering instead of via dynamic components - angular 9 ivy plug and play
-2. content item workflow 
-3, access control
-4. syndication
-5. Site expoloer
+    
+2. preview
+    
+   ngx-build-plus
+   select default contents on SiteArea Layout Template
+   select contents on SiteArea
+  
+
+   preview with angular custome elements for rendering instead of via dynamic components - 
+   preview site area with theme
+   
+   in place editing on preview page 
+   angular 9 ivy plug and play: https://next.angular.io/guide/updating-to-version-9
+
+   custom element build
+   custom element: https://angular-extensions.github.io/elements/#/home
+                   https://medium.com/@tomastrajan/the-best-way-to-lazy-load-angular-elements-97a51a5c2007
+
+3. content item workflow 
+   content item workflow/lock/unlock
+   at/pt/rt updates with lock/unlock/versioning suport
+4, access control
+5. syndication
+6. Site expoloer
    right side panel
    content item editor
    new content item - select at popup
        post: http://192.168.0.168:8080/wcm/api/wcmNodes/bpwizard/default
            {"nodePath":"bpwizard/library/design/authoringTemplate","nodeTypes":["bpw:authoringTemplate"]}
-6. resource type - at
+7. resource type - at
         http://192.168.0.168:8080/wcm/api/wcmNodes/bpwizard/default
         {"nodePath":"bpwizard/library/design/authoringTemplate","nodeTypes":["bpw:authoringTemplate","bpw:folder"]}
     right side panel
-7. content area layout
+8. content area layout
    post: http://192.168.0.168:8080/wcm/api/wcmNodes/bpwizard/default
          {"nodePath":"bpwizard/library/design/contentAreaLayout","nodeTypes":["bpw:contentAreaLayout","bpw:folder"]}
    right side panel
 
-8. category
+9. category
    add impl
    
-9. query builder
+10. query builder
     add impl
-10. validation rules
+11. validation rules
     add imple
-11. Navigation Tree improve look and feel
+12. Navigation Tree improve look and feel
     > https://leovo2708.github.io/ngx-treeview/#/components
     > right click drop down menu
-12. over all layout
+13. over all layout
     > check with browser with small screen size
-13. resource libraries - right side panel
-14. Keycloak integration
-15. enhance camunda, use hazelcast (The CP Subsystem of Hazelcast IDMG 3.12) jet or jgroup for cluster support, bpm status caching/event based process instance excution
-16. spring reactive security/oauth, populate google use like spring security/web
-17. Mongodb support in addition to mysql
+14. resource libraries - right side panel
+15. Keycloak integration
+16. enhance camunda, use hazelcast (The CP Subsystem of Hazelcast IDMG 3.12) jet or jgroup for cluster support, bpm status caching/event based process instance excution
+17. spring reactive security/oauth, populate google use like spring security/web
+18. Mongodb support in addition to mysql
+19. https://quarkus.io/guides/hibernate-search-elasticsearch and https://www.graalvm.org/, https://github.com/wildfly-security/wildfly-elytron
+    https://www.baeldung.com/quarkus-io
+
+    spring boot and graalvm
+    https://blogs.oracle.com/emeapartnerweblogic/running-reactive-spring-boot-on-graalvm-in-docker-by-maarten-smeets
+    https://github.com/MaartenSmeets/provisioning/blob/master/ubuntudev/Vagrantfile

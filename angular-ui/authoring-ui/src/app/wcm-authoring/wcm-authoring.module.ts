@@ -39,6 +39,7 @@ import { ValidationRuleModule } from './validation-rule/validation-rule.module';
 import { PreviewModule } from './preview/preview.module';
 import { ModeshapeService } from './service/modeshape.service';
 import { WcmService } from './service/wcm.service';
+// import { RendererService } from './preview/renderer.service';
 import { UploadZipfileDialogComponent } from './dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
 import { FileUploadComponent } from './dialog/file-upload/file-upload.component';
 import { NewFolderDialogComponent } from './dialog/new-folder-dialog/new-folder-dialog.component';
@@ -112,8 +113,6 @@ const routes: Routes = [
     exports     : [
     ],
     providers   : [
-        ModeshapeService,
-        WcmService,
         fromGuards.ResolveGuard,
         {
           provide: HTTP_INTERCEPTORS,

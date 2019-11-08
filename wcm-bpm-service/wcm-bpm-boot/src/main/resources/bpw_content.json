@@ -156,6 +156,13 @@
         "bpw:defaultTitle": "New SiteArea",
         "bpw:defaultIcon": "create"
     },
+    "bpwizard/library/system/configuration/operations/siteArea/previewSiteArea" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "siteArea",
+        "bpw:operation": "Preview",
+        "bpw:defaultTitle": "Preview SiteArea",
+        "bpw:defaultIcon": "pageview"
+    },
     "bpwizard/library/system/configuration/operations/siteArea/removeSiteArea" : {
         "jcr:primaryType":"bpw:supportedOpertion",
         "bpw:resourceName": "siteArea",
@@ -2300,6 +2307,19 @@
        "bpw:renderTemplayeName": "bpwizard/default/design/MyRenderTemplate",
        "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MyContent"
     },
+    "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row1" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row1/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row1/column0/viewer_c1_0_0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "MyRenderTemplate",
+       "bpw:renderTemplayeName": "bpwizard/default/design/MyContentRenderLayout",
+       "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MyContent"
+    },
     "bpwizard/library/camunda/rootSiteArea/tasklist" : {
         "jcr:primaryType":"bpw:siteArea",
         "bpw:name":"tasklist",
@@ -2741,6 +2761,19 @@
         "jcr:primaryType":"bpw:resourceViewer",
         "bpw:title": "MyRenderTemplate",
         "bpw:renderTemplayeName": "bpwizard/default/design/MyRenderTemplate",
+        "bpw:contentPath": "bpwizard/library/camunda/rootSiteArea/home/MyContent"
+    },
+    "bpwizard/library/design/contentAreaLayout/MyLayout/row1" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "bpwizard/library/design/contentAreaLayout/MyLayout/row1/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "bpwizard/library/design/contentAreaLayout/MyLayout/row1/column0/viewer_c1_0_0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "MyRenderTemplate",
+        "bpw:renderTemplayeName": "bpwizard/default/design/MyContentRenderLayout",
         "bpw:contentPath": "bpwizard/library/camunda/rootSiteArea/home/MyContent"
     },
     "bpwizard/library/camunda/siteConfig/bpm" : {

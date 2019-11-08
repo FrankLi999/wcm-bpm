@@ -1906,7 +1906,7 @@ public class WcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode themeNode = (RestNode) this.itemHandler.item(request, rt.getRepository(), rt.getWorkspace(),
-					"/bpwizard/library/" + rt.getLibrary() + "/renderTemplate", 1);
+					"/bpwizard/library/" + rt.getLibrary() + "/renderTemplate", 5);
 			return themeNode.getChildren().stream().filter(this::isRenderTemplate)
 					.map(node -> this.toRenderTemplate(node, rt.getRepository(), rt.getWorkspace(), rt.getLibrary()));
 		} catch (RepositoryException e) {

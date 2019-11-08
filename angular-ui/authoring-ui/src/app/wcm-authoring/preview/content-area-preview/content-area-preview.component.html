@@ -1,4 +1,4 @@
-<div id="template" class="page-layout carded left-sidebar inner-scroll">
+<div *ngIf="wcmSystem" id="template" class="page-layout carded left-sidebar inner-scroll">
   <!-- LEFT SIDE PANEL -->
   <!--
   <fuse-sidebar fxFlex="layout.sidePane?.width" class="sidebar" name="page-template-side-bar" position="left" lockedOpen="gt-md" *ngIf="leftSidePane()">
@@ -9,8 +9,8 @@
             <resource-renderer
                 [navigationId]="siteArea.navigationId"
                 [renderer]="sideRenderId(viewerIndex)"
-                [rendererTemplate]="applicationConfig.renderTemplates[layout.sidePane.viewers[viewerIndex].renderTemplate]"
-                [content]="layout.sidePane.viewers[viewerIndex].contentPath">
+                [rendererTemplate]="wcmSystem.renderTemplates[layout.sidePane.viewers[viewerIndex].renderTemplate]"
+                [content]="layout.sidePane.viewers[viewerIndex].contentPath[0]">
             </resource-renderer>
         </div>
       </div>
@@ -29,8 +29,8 @@
                       <resource-renderer
                           [navigationId]="siteArea.navigationId"
                           [renderer]="contentRenderId(rowIndex, columnIndex, viewerIndex)"
-                          [rendererTemplate]="applicationConfig.renderTemplates[layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex].renderTemplate]"
-                          [content]="layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex].contentPath">
+                          [rendererTemplate]="wcmSystem.renderTemplates[layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex].renderTemplate]"
+                          [content]="layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex].contentPath[0]">
                       </resource-renderer>
                   </div>
               </div>
@@ -49,8 +49,8 @@
               <resource-renderer
                   [navigationId]="siteArea.navigationId"
                   [renderer]="sideRenderId(viewerIndex)"
-                  [rendererTemplate]="applicationConfig.renderTemplates[layout.sidePane.viewers[viewerIndex].renderTemplate]"
-                  [content]="layout.sidePane.viewers[viewerIndex].contentPath">
+                  [rendererTemplate]="wcmSystem.renderTemplates[layout.sidePane.viewers[viewerIndex].renderTemplate]"
+                  [content]="layout.sidePane.viewers[viewerIndex].contentPath[0]">
               </resource-renderer>
           </div>
       </div>

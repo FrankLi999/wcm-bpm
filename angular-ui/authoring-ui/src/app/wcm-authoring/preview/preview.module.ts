@@ -1,7 +1,6 @@
-import { NgModule } from '@angular/core';
+import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { RouterModule,  Routes } from '@angular/router';
-
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -28,10 +27,10 @@ import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 
 import { ContentAreaPreviewComponent } from './content-area-preview/content-area-preview.component';
 import { ResourceRendererComponent } from './resource-renderer/resource-renderer.component';
-import { RenderElementComponent } from './render-element/render-element.component';
-import { ContentIdDirective } from './content-id.directive';
+import { WcmPluginModule } from './wcm-plugin/wcm-plugin.module';
 import * as fromGuards from '../store/guards';
 import { AuthGuard } from 'bpw-store';
+import { KeepHtmlPipe } from './keep-html.pipe';
 
 const routes: Routes = [
   {
@@ -43,9 +42,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     ContentAreaPreviewComponent, 
-    ResourceRendererComponent, 
-    RenderElementComponent, 
-    ContentIdDirective
+    ResourceRendererComponent,
+    KeepHtmlPipe
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -74,11 +72,13 @@ const routes: Routes = [
     HttpClientModule,
     TranslateModule,
     FuseSharedModule,
-    FuseSidebarModule
-  ],
+    FuseSidebarModule,
+    WcmPluginModule
+  ],  
   exports: [
-    RenderElementComponent,
-    ContentIdDirective
+    ResourceRendererComponent,
+    KeepHtmlPipe
   ]
 })
-export class PreviewModule { }
+export class PreviewModule { 
+}

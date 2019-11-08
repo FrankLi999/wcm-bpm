@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -12,9 +13,7 @@ import {
   WcmRepository,
   WcmWorkspace,
   RestNode,
-  //ApplicationConfig,
   WcmOperation,
-  // Workspace,
   JsonForm
 } from '../../model';
 
@@ -79,6 +78,7 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
     private modeshapeService: ModeshapeService,
     // private wcmService: WcmService,
     private store: Store<fromStore.WcmAppState>,
+    private router: Router,
     private matDialog: MatDialog) {
       this.unsubscribeAll = new Subject();
   }
@@ -91,8 +91,9 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
     this.functionMap['Remove.file'] = this.removeItem;
     this.functionMap['Delete.theme'] = this.removeItem;
     this.functionMap['Delete.renderTemplate'] = this.removeItem;
-    
+
     this.functionMap['Create.siteArea'] = this.createSiteArea;
+    this.functionMap['Preview.siteArea'] = this.previewSiteArea;
     this.functionMap['Delete.siteArea'] = this.removeItem;
     this.functionMap['Create.content'] = this.createContent;
     this.functionMap['Delete.content'] = this.removeItem;
@@ -452,6 +453,15 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
       });
   }
 
+  previewSiteArea() {      
+      const node =  this.activeNode;
+      console.log('preview site area:', (node.value as RestNode).nodePath);
+      this.router.navigate(['/wcm-authoring/preview'],{
+        queryParams: {
+          siteArea: (node.value as RestNode).nodePath
+        } 
+      });
+  }
 
   createSiteArea() {
     const node = this.activeNode;

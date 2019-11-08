@@ -30,14 +30,13 @@ export class ContentAreaPreviewComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.rendererService.clearup();
-    //this.wcmService.getWcmSystem('bpwizard', 'default', 'camunda', 'bpm').subscribe(
-      this.store.pipe(
+    this.store.pipe(
         takeUntil(this.unsubscribeAll),
         select(fromStore.getWcmSystem)).subscribe(
       (wcmSystem: WcmSystem) => {
         if (wcmSystem) {
           this.wcmSystem = wcmSystem;
-          this.siteArea = this.wcmSystem.siteAreas[this.navigationId];
+          this.siteArea = this.wcmSystem.siteAreas[this.navigationId];  
           this.layout = cloneDeep(this.wcmSystem.contentAreaLayouts[this.siteArea.contentAreaLayout]||{});
           if (this.siteArea.siteAreaLayout) {
             this.layout.sidePane = cloneDeep(this.siteArea.siteAreaLayout.sidePane);

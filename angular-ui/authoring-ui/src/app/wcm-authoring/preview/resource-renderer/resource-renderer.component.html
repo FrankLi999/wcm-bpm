@@ -1,6 +1,15 @@
-<div class="card, row-layout" [innerHTML]="rendererTemplate.preloop">
+<!--
+<div contentId="{{contentId()}}" class="card, row-layout" [innerHTML]="templateContent|keepHtml">
 </div>
+-->
 <div class="card, row-layout" #container>
-</div>
-<div class="card, row-layout" [innerHTML]="rendererTemplate.postloop">
+    <ng-container *ngIf="renderLayout()">
+        <div class="card container" fxLayout="row" style="padding: 6px" *ngFor="let row of rendererTemplate.rows; let rowIndex = index;">
+            <div fxLayout="column" *ngFor="let column of row.columns; let columnIndex = index;" fxLayoutAlign="start"  fxFlex="{{column.width ? column.width : 100}}">
+                <div fxLayout="column" *ngFor="let element of column.elements; let elementIndex = index;" fxLayoutAlign="start"  fxFlex="{{column.width ? column.width : 100}}">
+                    <render-element contentId="{{contentId()}}" [elementName]="element.name"></render-element>
+                </div>    
+            </div>      
+        </div>
+    </ng-container>    
 </div>
