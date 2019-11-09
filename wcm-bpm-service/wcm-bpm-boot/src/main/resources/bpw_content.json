@@ -177,6 +177,13 @@
         "bpw:defaultTitle": "Edit SiteArea",
         "bpw:defaultIcon": "edit"
     },
+    "bpwizard/library/system/configuration/operations/siteArea/editLayout" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "siteArea",
+        "bpw:operation": "EditLayout",
+        "bpw:defaultTitle": "Edit SiteArea Layout",
+        "bpw:defaultIcon": "view_quilt"
+    },
     "bpwizard/library/system/configuration/operations/siteArea/createContent" : {
         "jcr:primaryType":"bpw:supportedOpertion",
         "bpw:resourceName": "content",
@@ -2281,7 +2288,8 @@
         "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
     },
     "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout" : {
-        "jcr:primaryType":"bpw:siteAreaLayout"
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "80"
     },
     "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/sidePane" : {
         "jcr:primaryType":"bpw:contentAreaSidePanel",

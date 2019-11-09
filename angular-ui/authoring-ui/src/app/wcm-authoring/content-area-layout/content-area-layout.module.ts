@@ -5,6 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule, Routes } from '@angular/router';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -32,15 +33,15 @@ import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 
 import { ContentAreaDesignerComponent } from './content-area-designer/content-area-designer.component';
 import { ContentAreaLayoutComponent } from './content-area-layout/content-area-layout.component';
-import { SelectRenderTemplateDialog } from './content-area-layout/select-render-template.dialog';
 import { ContentAreaLayoutsComponent } from './content-area-layouts/content-area-layouts.component';
-import { ResourceViewerComponent } from './resource-viewer/resource-viewer.component';
 import { AuthGuard } from 'bpw-store';
 import * as fromGuards from '../store/guards';
-import { SelectContentItemDialog } from './/select-content-item-dialog/select-content-item.dialog';
-import { ContentSelectorComponent } from './content-selector/content-selector.component';
-
-const routes: Routes = [
+import { ContentAreaLayoutTreeComponent } from './content-area-layout-tree/content-area-layout-tree.component';
+import { ComponentModule } from '../components/component.module';
+const routes: Routes = [{
+  path: '',
+  component: ContentAreaLayoutTreeComponent,
+  children: [
     {
         path       : 'content-area-layout/edit',
         component  : ContentAreaDesignerComponent,
@@ -56,6 +57,7 @@ const routes: Routes = [
         component  : ContentAreaLayoutsComponent,
         canActivate: [AuthGuard, fromGuards.ResolveGuard] 
     }
+  ]}  
 ];
 
 @NgModule({
@@ -63,10 +65,8 @@ const routes: Routes = [
         ContentAreaDesignerComponent,
         ContentAreaLayoutComponent,
         ContentAreaLayoutsComponent,
-        ResourceViewerComponent,
-        SelectRenderTemplateDialog,
-        SelectContentItemDialog,
-        ContentSelectorComponent
+
+        ContentAreaLayoutTreeComponent
     ],
     imports        : [
         RouterModule.forChild(routes),
@@ -96,15 +96,11 @@ const routes: Routes = [
         MatTreeModule,
         CdkTableModule,        
         CdkTreeModule,
+        ScrollingModule,
         TranslateModule,
         FuseSharedModule,
-        FuseSidebarModule
-    ],
-    providers      : [
-    ],
-    entryComponents: [
-        SelectRenderTemplateDialog,
-        SelectContentItemDialog
+        FuseSidebarModule,
+        ComponentModule
     ]
 })
 export class ContentAreaLayoutModule { }

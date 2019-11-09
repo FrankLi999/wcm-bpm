@@ -13,7 +13,7 @@ import {
   RenderTemplateModel
 } from '../../model';
 import * as fromStore from '../../store';
-import { SelectRenderTemplateDialog } from './select-render-template.dialog';
+import { SelectRenderTemplateDialog } from '../../components/select-render-template/select-render-template.dialog';
 
 @Component({
   selector: 'content-area-layout',
@@ -21,16 +21,17 @@ import { SelectRenderTemplateDialog } from './select-render-template.dialog';
   styleUrls: ['./content-area-layout.component.scss']
 })
 export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
-  pageLayoutForm: FormGroup;
-  layout: ContentAreaLayout = null;  
-  renderTemplates: RenderTemplateModel[] = [];
-  private unsubscribeAll: Subject<any>;
-  error: string;
+
   @Input() repository: string;
   @Input() workspace: string;
   @Input() library: string;
   @Input() layoutName: string;
   @Input() editing: boolean;
+  pageLayoutForm: FormGroup;
+  layout: ContentAreaLayout = null;  
+  renderTemplates: RenderTemplateModel[] = [];  
+  error: string;
+  private unsubscribeAll: Subject<any>;
   constructor(
     private dialog: MatDialog,
     private formBuilder: FormBuilder,

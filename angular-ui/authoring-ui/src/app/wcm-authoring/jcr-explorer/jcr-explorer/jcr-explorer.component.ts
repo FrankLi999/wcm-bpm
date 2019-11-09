@@ -93,8 +93,10 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
     this.functionMap['Delete.renderTemplate'] = this.removeItem;
 
     this.functionMap['Create.siteArea'] = this.createSiteArea;
+    this.functionMap['Edit.siteArea'] = this.editSiteArea;
     this.functionMap['Preview.siteArea'] = this.previewSiteArea;
     this.functionMap['Delete.siteArea'] = this.removeItem;
+    this.functionMap['EditLayout.siteArea'] = this.editSiteAreaLayout;
     this.functionMap['Create.content'] = this.createContent;
     this.functionMap['Delete.content'] = this.removeItem;
     this.functionMap['Create.siteConfig'] = this.createSiteConfig;
@@ -455,31 +457,51 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
 
   previewSiteArea() {      
       const node =  this.activeNode;
-      console.log('preview site area:', (node.value as RestNode).nodePath);
       this.router.navigate(['/wcm-authoring/preview'],{
         queryParams: {
           siteArea: (node.value as RestNode).nodePath
         } 
       });
   }
+  editSiteAreaLayout() {
+    const node = this.activeNode;
+    this.router.navigate(
+      ['/wcm-authoring/site-explorer/edit-sa-layout'], 
+      { queryParams: {
+          nodePath: (node.value as RestNode).nodePath,
+          repository: (node.value as RestNode).repositoryName,
+          workspace: (node.value as RestNode).workspaceName,
+        } 
+      }            
+    );
+  }
+  
+  editSiteArea() {
+    const node =  this.activeNode;
+    this.router.navigate(
+      ['/wcm-authoring/site-explorer/edit-sa'], 
+      { queryParams: {
+          nodePath: (node.value as RestNode).nodePath,
+          repository: (node.value as RestNode).repositoryName,
+          workspace: (node.value as RestNode).workspaceName,
+          editing: true
+        } 
+      }            
+    );
+  }
 
   createSiteArea() {
-    const node = this.activeNode;
-    let dialogRef = this.matDialog.open(NewSiteareaDialogComponent, {
-      panelClass: 'sitearea-new-dialog',
-      data: { 
-        jsonFormObject: this.jsonFormMap['bpwizard/default/system/siteAreaType'].formSchema,
-        nodePath: (node.value as RestNode).nodePath,
-        repositoryName: (node.value as RestNode).repositoryName,
-        workspaceName: (node.value as RestNode).workspaceName
-      }
-    });
-    dialogRef.afterClosed()
-      .subscribe(response => {
-        this.loadChildren(node, false);
-        this.tree.treeControl.expand(this.activeNode);
-          
-    });
+    const node =  this.activeNode;
+    this.router.navigate(
+      ['/wcm-authoring/site-explorer/new-sa'], 
+      { queryParams: {
+          nodePath: (node.value as RestNode).nodePath,
+          repository: (node.value as RestNode).repositoryName,
+          workspace: (node.value as RestNode).workspaceName,
+          editing: true
+        } 
+      }            
+    );
   }
   
   createContent() {

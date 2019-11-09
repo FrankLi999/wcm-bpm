@@ -2,6 +2,7 @@
     <div *ngIf=error fxLayout="row" fxLayoutAlign="start"  fxFlex="1 0 auto">
         <div fxLayout="column" fxFlex="100">{{error}}</div>
     </div>
+    <cdk-virtual-scroll-viewport itemSize="30" class="content-area-layout-viewport"> 
     <div id="layout" class="page-layout carded inner-scroll center">
         <!-- CONTENT AREA -->
         <div fxLayout="row" fxLayoutAlign="start"  fxFlex="1 0 auto">
@@ -95,22 +96,8 @@
                 </div>
             </div>
         </div>
-        <!-- CONTENT AREA -->
-        <!-- FOOTER -->
-        <!--
-        <div class="card" id="footer-layout">
-            <div class="content">
-                <h4>FOOTER</h4>
-            </div>
-            <div class="layout-form-card">
-                <div class="layout-form-button-container">
-                    <mat-checkbox formControlName="footerEnabled">Show Footer</mat-checkbox>
-                </div>
-            </div>
-        </div>
-        -->
-        <!-- / FOOTER -->
     </div>
+    </cdk-virtual-scroll-viewport>
 </form>
 
 <mat-menu #updateRowMenu="matMenu">

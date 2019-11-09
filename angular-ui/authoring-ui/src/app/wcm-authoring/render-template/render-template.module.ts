@@ -36,23 +36,28 @@ import { RenderTemplatesComponent } from './render-templates/render-templates.co
 import * as fromGuards from '../store/guards';
 import { AuthGuard } from 'bpw-store';
 import { RenderLayoutDesignerComponent } from './render-layout-designer/render-layout-designer.component';
+import { RenderTemplateTreeComponent } from './render-template-tree/render-template-tree.component';
 
-const routes: Routes = [
-  {
-      path       : 'render-template/edit',
+const routes: Routes = [{
+  path: '',
+  component: RenderTemplateTreeComponent,
+  children: [
+    {
+        path       : 'render-template/edit',
+        component  : RenderTemplateComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    },
+    {
+      path       : 'render-template/new',
       component  : RenderTemplateComponent,
       canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  },
-  {
-    path       : 'render-template/new',
-    component  : RenderTemplateComponent,
-    canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  },
-  {
-      path       : 'render-template/list',
-      component  : RenderTemplatesComponent,
-      canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  }
+    },
+    {
+        path       : 'render-template/list',
+        component  : RenderTemplatesComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    }
+  ]}
 ];
 
 
@@ -61,7 +66,8 @@ const routes: Routes = [
     RenderTemplateComponent,
     SafePipe,
     RenderTemplatesComponent,
-    RenderLayoutDesignerComponent
+    RenderLayoutDesignerComponent,
+    RenderTemplateTreeComponent
   ],
   imports: [
     RouterModule.forChild(routes),

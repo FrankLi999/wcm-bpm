@@ -26,22 +26,27 @@ import { WorkflowComponent } from './workflow/workflow.component';
 import { WorkflowsComponent } from './workflows/workflows.component';
 import * as fromGuards from '../store/guards';
 import { AuthGuard } from 'bpw-store';
+import { WorkflowTreeComponent } from './workflow-tree/workflow-tree.component';
 
-const routes: Routes = [
-  {
-      path       : 'workflow/edit',
-      component  : WorkflowComponent,
-      canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  },
-  {
-      path       : 'workflow/list',
-      component  : WorkflowsComponent,
-      canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  }
+const routes: Routes = [{
+  path: '',
+  component: WorkflowTreeComponent,
+  children: [
+    {
+        path       : 'workflow/edit',
+        component  : WorkflowComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    },
+    {
+        path       : 'workflow/list',
+        component  : WorkflowsComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    }
+  ]}
 ];
 
 @NgModule({
-  declarations: [WorkflowComponent, WorkflowsComponent],
+  declarations: [WorkflowComponent, WorkflowsComponent, WorkflowTreeComponent],
   imports: [
     RouterModule.forChild(routes),
     MatButtonModule,

@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { WcmItemFlatTreeNode } from '../../components/wcm-navigator/wcm-navigator.component';
+import { WcmItemFlatTreeNode } from '../wcm-navigator/wcm-navigator.component';
 @Component({
   selector: 'app-select-content-item-dialog',
   templateUrl: './select-content-item.dialog.html',

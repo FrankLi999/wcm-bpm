@@ -192,6 +192,7 @@
 
 
 [bpw:siteAreaLayout]
+- bpw:contentWidth (LONG)
 + sidePane (bpw:contentAreaSidePanel)
 + * (bpw:layoutRow)
 

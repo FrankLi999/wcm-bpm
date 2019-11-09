@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { select, Store } from '@ngrx/store';
 
+import { ActivatedRoute } from '@angular/router';
 import { ContentAreaLayout, WcmSystem, SiteArea } from '../../model';
-// import { WcmService } from '../../service/wcm.service';
+import { select, Store } from '@ngrx/store';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Subscription, Observable } from 'rxjs';
+import { takeUntil, switchMap, filter } from 'rxjs/operators';
 import { RendererService } from '../renderer.service';
 import * as fromStore from '../../store';
-
+import { WcmService } from 'app/wcm-authoring/service/wcm.service';
 @Component({
   selector: 'app-content-area-preview',
   templateUrl: './content-area-preview.component.html',
@@ -20,9 +20,12 @@ export class ContentAreaPreviewComponent implements OnInit, OnDestroy {
   siteArea: SiteArea;
   layout?: ContentAreaLayout;
   wcmSystem: WcmSystem;
+  sub: Subscription;
   private unsubscribeAll: Subject<any>;
+  
   constructor(
-    // private wcmService: WcmService,
+    private route: ActivatedRoute,
+    private wcmService: WcmService,
     private store: Store<fromStore.WcmAppState>,
     private rendererService: RendererService
   ) { 
@@ -30,9 +33,16 @@ export class ContentAreaPreviewComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.rendererService.clearup();
-    this.store.pipe(
-        takeUntil(this.unsubscribeAll),
-        select(fromStore.getWcmSystem)).subscribe(
+    this.sub = this.route.queryParams.pipe(
+      switchMap(param => this.getSiteArea(param)),
+      filter(siteArea => siteArea != null),
+      switchMap(siteArea => {
+        this.navigationId = siteArea.navigationId;
+        return this.store.pipe(
+          takeUntil(this.unsubscribeAll),
+          select(fromStore.getWcmSystem))
+      })
+    ).subscribe(
       (wcmSystem: WcmSystem) => {
         if (wcmSystem) {
           this.wcmSystem = wcmSystem;
@@ -54,12 +64,17 @@ export class ContentAreaPreviewComponent implements OnInit, OnDestroy {
     );
   }
 
+  getSiteArea(param: any): Observable<SiteArea> {
+    return this.wcmService.getSiteArea(param.repository, param.workspace, param.nodePath);
+  }
+
   /**
     * On destroy
     */
   ngOnDestroy(): void {
     this.unsubscribeAll.next();
     this.unsubscribeAll.complete();
+    this.sub.unsubscribe();
   }
 
   leftSidePane(): boolean {

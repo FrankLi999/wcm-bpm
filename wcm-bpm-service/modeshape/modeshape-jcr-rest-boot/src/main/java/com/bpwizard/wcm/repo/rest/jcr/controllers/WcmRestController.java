@@ -770,6 +770,7 @@ public class WcmRestController {
 			Node siteAreaLayoutNode = saNode.addNode("siteAreaLayout", "bpw:siteAreaLayout");
 			if (sa.getSiteAreaLayout() != null) {
 				Node sidePaneNode = siteAreaLayoutNode.addNode("sidePane", "bpw:contentAreaSidePanel");
+				sidePaneNode.setProperty("bpw:contentWidth", sa.getSiteAreaLayout().getContentWidth());
 				this.addSidePaneNode(sidePaneNode, sa.getSiteAreaLayout().getSidePane());
 				this.addPageLayoutNodes(siteAreaLayoutNode, sa.getSiteAreaLayout().getRows());
 			}
@@ -799,7 +800,7 @@ public class WcmRestController {
 		try {
 			saPath = saPath.startsWith("/") ? saPath : "/" + saPath;
 			RestNode saNode = (RestNode) this.itemHandler.item(request, repository, workspace,
-					saPath, 2);
+					saPath, 4);
 			
 			SiteArea sa = new SiteArea(); 
 			sa.setRepository(repository);
@@ -940,6 +941,12 @@ public class WcmRestController {
 			   } else if (this.checkNodeType(node, "bpw:siteAreaLayout") && ("siteAreaLayout".equals(node.getName()))) {
 				   SiteAreaLayout siteAreaLayout = new SiteAreaLayout();
 				   List<LayoutRow> rows = new ArrayList<>();
+				   for (RestProperty property : node.getJcrProperties()) {
+						if ("bpw:contentWidth".equals(property.getName())) {
+							siteAreaLayout.setContentWidth(Integer.parseInt(property.getValues().get(0)));
+							break;
+						} 
+				   }
 				   for (RestNode childNode: node.getChildren()) {
 					   if (this.checkNodeType(childNode, "bpw:contentAreaSidePanel") && "sidePane".equals(node.getName())) {
 						   SidePane sidePane = new SidePane();
@@ -2469,6 +2476,12 @@ public class WcmRestController {
 			} else if (this.checkNodeType(node, "bpw:siteAreaLayout")) {
 				SiteAreaLayout siteAreaLayout = new SiteAreaLayout();
 				List<LayoutRow> rows = new ArrayList<>();
+				for (RestProperty property : node.getJcrProperties()) {
+					if ("bpw:contentWidth".equals(property.getName())) {
+						siteAreaLayout.setContentWidth(Integer.parseInt(property.getValues().get(0)));
+						break;
+					} 
+				}
 				node.getChildren().forEach(childNode -> {
 					if (this.checkNodeType(childNode, "bpw:contentAreaSidePanel")) {
 						SidePane sidepane = new SidePane();

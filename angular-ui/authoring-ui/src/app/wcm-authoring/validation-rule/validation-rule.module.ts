@@ -4,21 +4,26 @@ import { ValidationRuleComponent } from './validation-rule/validation-rule.compo
 import { ValidationRulesComponent } from './validation-rules/validation-rules.component';
 import * as fromGuards from '../store/guards';
 import { AuthGuard } from 'bpw-store';
+import { ValidationRuleTreeComponent } from './validation-rule-tree/validation-rule-tree.component';
 
-const routes: Routes = [
-  {
-      path       : 'validation-rule/edit',
-      component  : ValidationRuleComponent,
-      canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  },
-  {
-      path       : 'validation-rule/list',
-      component  : ValidationRulesComponent,
-      canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  }
+const routes: Routes = [{
+  path: '',
+  component: ValidationRuleTreeComponent,
+  children: [
+    {
+        path       : 'validation-rule/edit',
+        component  : ValidationRuleComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    },
+    {
+        path       : 'validation-rule/list',
+        component  : ValidationRulesComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    }
+  ]}
 ];
 @NgModule({
-  declarations: [ValidationRuleComponent, ValidationRulesComponent],
+  declarations: [ValidationRuleComponent, ValidationRulesComponent, ValidationRuleTreeComponent],
   imports: [
     RouterModule.forChild(routes)
   ]

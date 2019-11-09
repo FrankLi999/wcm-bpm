@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-navigator.component';
+import { WcmNavigatorComponent } from '../wcm-navigator/wcm-navigator.component';
 import * as fromStore from '../../store';
 import { WcmService } from '../../service/wcm.service';
 import { WcmOperation } from '../../model';

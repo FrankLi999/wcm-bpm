@@ -3,8 +3,16 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 import java.util.Arrays;
 
 public class SiteAreaLayout {
+	int contentWidth;
 	SidePane sidePane;
 	LayoutRow rows[];
+	
+	public int getContentWidth() {
+		return contentWidth;
+	}
+	public void setContentWidth(int contentWidth) {
+		this.contentWidth = contentWidth;
+	}
 	public SidePane getSidePane() {
 		return sidePane;
 	}
@@ -19,6 +27,7 @@ public class SiteAreaLayout {
 	}
 	@Override
 	public String toString() {
-		return "SiteAreaLayout [sidePane=" + sidePane + ", rows=" + Arrays.toString(rows) + "]";
+		return "SiteAreaLayout [contentWidth=" + contentWidth + ", sidePane=" + sidePane + ", rows="
+				+ Arrays.toString(rows) + "]";
 	}
 }

@@ -1,114 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import { Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
-import { select, Store } from '@ngrx/store';
-import { MatDialog } from '@angular/material/dialog';
-import { WcmOperation, JsonForm } from '../../model';
-import * as fromStore from '../../store';
-import { ModeshapeService } from '../../service/modeshape.service';
-import { WcmService } from '../../service/wcm.service';
-import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-navigator.component';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'resource-type-list',
   templateUrl: './resource-type-list.component.html',
   styleUrls: ['./resource-type-list.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ]
 })
-export class ResourceTypeListComponent extends WcmNavigatorComponent implements OnInit, OnDestroy {
+export class ResourceTypeListComponent implements OnInit {
 
-  functionMap: {[key:string]:Function}= {};
-  //jsonFormMap: {[key:string]: JsonForm} = {}; //TODO: it is loaded asynchronously during ngInit
-  constructor(
-    protected wcmService: WcmService,
-    private modeshapeService: ModeshapeService,
-    protected store: Store<fromStore.WcmAppState>,
-    protected matDialog: MatDialog,
-    private router: Router
-  ) {
-    super(wcmService, store, matDialog);
-  }
+  constructor() { }
 
   ngOnInit() {
-    this.rootNode = 'authoringTemplate';
-    this.rootNodeType = 'bpw:authoringTemplateFolder';
-    this.functionMap['Create.authoringTemplate'] = this.createAuthoringTemplate;
-    this.functionMap['Edit.authoringTemplate'] = this.editAuthoringTemplate;
-    this.functionMap['Delete.authoringTemplate'] = this.removeAuthoringTemplate;
-
-    this.nodeFileter = {
-      nodePath: '',
-      nodeTypes: ['bpw:authoringTemplate', 'bpw:folder']
-    }
-    
-    this.store.pipe(
-      takeUntil(this.unsubscribeAll),
-      select(fromStore.getOperations)).subscribe(
-      (operations: {[key: string]: WcmOperation[]}) => {
-        if (operations) {
-          this.operationMap = operations;
-        }
-      },
-      response => {
-        console.log("GET call in error", response);
-        console.log(response);
-      },
-      () => {
-        console.log("The GET observable is now completed.");
-      }
-    );
-    super.ngOnInit();
-  }
-
-  /**
-    * On destroy
-    */
-  ngOnDestroy(): void {
-    this.unsubscribeAll.next();
-    this.unsubscribeAll.complete();
-    this.loadError && this.store.dispatch(new fromStore.WcmSystemClearError());
-  }
-
-  doNodeOperation(item: String, operation: WcmOperation) {
-    this.functionMap[`${operation.operation}.${operation.resourceName}`].call(this);
-  }
-
-  createAuthoringTemplate() {
-    const node = this.activeNode;
-    const library = node.wcmPath.split('/', 4)[3];
-    this.router.navigate(['/wcm-authoring/resource-type/new'],{
-      queryParams: {
-        library: library,
-        repository: node.repository,
-        workspace: node.workspace,
-        wcmPath: node.wcmPath,
-        editing: false
-      } 
-    });
-  }
-
-  removeAuthoringTemplate() {
-    console.log('removeContentAreaLayout');
-  }
-
-  editAuthoringTemplate() {
-    const node = this.activeNode;
-    const library = node.wcmPath.split('/', 4)[3];
-    this.router.navigate(['/wcm-authoring/resource-type/edit'],{
-      queryParams: {
-        library: library,
-        repository: node.repository,
-        workspace: node.workspace,
-        wcmPath: node.wcmPath,
-        editing: true
-      } 
-    });
   }
 }

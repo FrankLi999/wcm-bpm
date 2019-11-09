@@ -26,23 +26,27 @@ import * as fromGuards from '../store/guards';
 import { AuthGuard } from 'bpw-store';
 import { LibrariesComponent } from './libraries/libraries.component';
 import { LibraryComponent } from './library/library.component';
+import { ResourceLibraryTreeComponent } from './resource-library-tree/resource-library-tree.component';
 
-const routes: Routes = [
-  {
+const routes: Routes = [{
+  path: '',
+  component: ResourceLibraryTreeComponent,
+  children: [{
       path       : 'resource-library/edit',
       component  : LibraryComponent,
       canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  },
-  {
-      path       : 'resource-library/list',
-      component  : LibrariesComponent,
-      canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  }
+    },
+    {
+        path       : 'resource-library/list',
+        component  : LibrariesComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    }
+  ]}
 ];
 @NgModule({
   declarations: [
     LibrariesComponent, 
-    LibraryComponent
+    LibraryComponent, ResourceLibraryTreeComponent
   ],
   imports: [
     CommonModule,

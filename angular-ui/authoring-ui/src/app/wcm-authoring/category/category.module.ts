@@ -25,16 +25,21 @@ import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import { CategoryComponent } from './category/category.component';
 import { AuthGuard } from 'bpw-store';
 import * as fromGuards from '../store/guards';
+import { CategoryTreeComponent } from './category-tree/category-tree.component';
 
-const routes: Routes = [
-  {
-    path       : 'category',
-    component  :  CategoryComponent,
-    canActivate: [AuthGuard, fromGuards.ResolveGuard] 
-  }
+const routes: Routes = [{
+  path: '',
+  component: CategoryTreeComponent,
+  children: [
+    {
+      path       : 'category',
+      component  :  CategoryComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard] 
+    }
+  ]}
 ];
 @NgModule({
-  declarations: [CategoryComponent],
+  declarations: [CategoryComponent, CategoryTreeComponent],
   imports: [
     RouterModule.forChild(routes),
     MatButtonModule,

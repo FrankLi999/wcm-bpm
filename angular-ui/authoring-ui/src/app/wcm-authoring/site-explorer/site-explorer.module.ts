@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRippleModule } from '@angular/material/core';
@@ -33,7 +35,12 @@ import { SelectAuthoringTemplateDialogComponent } from './select-authoring-templ
 import { AuthoringTemplateSelectorComponent } from './authoring-template-selector/authoring-template-selector.component';
 import { ContentItemComponent } from './content-item/content-item.component';
 import { SiteAreaComponent } from './site-area/site-area.component';
-const routes: Routes = [
+import { SiteAreaLayoutComponent } from './site-area-layout/site-area-layout.component';
+import { SiteTreeComponent } from './site-tree/site-tree.component';
+import { ComponentModule } from '../components/component.module';
+
+const routes: Routes = [{
+  path: '', component: SiteTreeComponent, children: [
     {
         path       : 'site-explorer/navigator',
         component  : SiteExplorerComponent,
@@ -58,7 +65,13 @@ const routes: Routes = [
       path       : 'site-explorer/edit-sa',
       component  : SiteAreaComponent,
       canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    },
+    {
+      path       : 'site-explorer/edit-sa-layout',
+      component  : SiteAreaLayoutComponent,
+      canActivate: [AuthGuard, fromGuards.ResolveGuard]
     }
+  ]}
 ];
 @NgModule({
   declarations: [
@@ -67,13 +80,17 @@ const routes: Routes = [
     SelectAuthoringTemplateDialogComponent,
     AuthoringTemplateSelectorComponent,
     ContentItemComponent,
-    SiteAreaComponent
+    SiteAreaComponent,
+    SiteAreaLayoutComponent,
+    SiteTreeComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    FlexLayoutModule,
     CdkTableModule,
     CdkTreeModule,
+    ScrollingModule,
     MatButtonModule,
     MatCheckboxModule,
     MatDialogModule,
@@ -96,7 +113,8 @@ const routes: Routes = [
     FuseSharedModule,
     FuseSidebarModule,
     JsonSchemaFormModule, 
-    MaterialDesignFrameworkModule
+    MaterialDesignFrameworkModule,
+    ComponentModule
   ],
   entryComponents: [
     SelectAuthoringTemplateDialogComponent

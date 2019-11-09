@@ -36,7 +36,6 @@ export class SiteAreaComponent implements OnInit, OnDestroy {
     private store: Store<fromStore.WcmAppState>) { }
 
   ngOnInit() {
-    console.log('NewContentItemComponent forkJoin');
     this.sub = this.route.queryParams.pipe(
       switchMap(param => this.getSiteArea(param)),
       filter(siteArea => siteArea != null),
@@ -59,6 +58,7 @@ export class SiteAreaComponent implements OnInit, OnDestroy {
       })
     }
   }
+  
   getJsonForms(siteArea: SiteArea): Observable<JsonForm> {
     this.siteArea = siteArea;
     console.log('getsiteArea', siteArea);

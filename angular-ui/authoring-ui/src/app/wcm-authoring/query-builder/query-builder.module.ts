@@ -52,18 +52,23 @@ import {
 } from './query-builder';
 import * as fromGuards from '../store/guards';
 import { AuthGuard } from 'bpw-store';
+import { QueryTreeComponent } from './query-tree/query-tree.component';
 
-const routes: Routes = [
-  {
-      path       : 'query-builder/edit',
-      component  : QueryEditorComponent,
-      canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  },
-  {
-      path       : 'query-builder/list',
-      component  : QueryListComponent,
-      canActivate: [AuthGuard, fromGuards.ResolveGuard]
-  }
+const routes: Routes = [{
+  path: '',
+  component: QueryTreeComponent,
+  children: [
+    {
+        path       : 'query-builder/edit',
+        component  : QueryEditorComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    },
+    {
+        path       : 'query-builder/list',
+        component  : QueryListComponent,
+        canActivate: [AuthGuard, fromGuards.ResolveGuard]
+    }
+  ]}
 ];
 @NgModule({
   declarations: [
@@ -80,7 +85,8 @@ const routes: Routes = [
     QuerySwitchGroupDirective,
     QueryRemoveButtonDirective,
     QueryEmptyWarningDirective,
-    QueryArrowIconDirective
+    QueryArrowIconDirective,
+    QueryTreeComponent
   ],
   imports: [
     RouterModule.forChild(routes),

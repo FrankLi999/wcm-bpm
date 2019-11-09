@@ -44,7 +44,11 @@ import {
   TabEditorDialog } from './resource-type-layout/resource-type-layout.component';
 import * as fromGuards from '../store/guards';
 import { AuthGuard } from 'bpw-store';
-const routes: Routes = [
+import { ResourceTypeTreeComponent } from './resource-type-tree/resource-type-tree.component';
+const routes: Routes = [{
+  path: '',
+  component: ResourceTypeTreeComponent,
+  children: [
     {
         path       : 'resource-type/edit',
         component  : ResourceTypeEditorComponent,
@@ -60,6 +64,7 @@ const routes: Routes = [
         component  : ResourceTypeListComponent,
         canActivate: [AuthGuard, fromGuards.ResolveGuard]
     }
+  ]}
 ];
 @NgModule({
   declarations: [
@@ -69,7 +74,8 @@ const routes: Routes = [
     ResourceTypeDialog,
     ResourceFieldDialog,
     StepEditorDialog,
-    TabEditorDialog
+    TabEditorDialog,
+    ResourceTypeTreeComponent
   ],
   imports: [
     RouterModule.forChild(routes),
