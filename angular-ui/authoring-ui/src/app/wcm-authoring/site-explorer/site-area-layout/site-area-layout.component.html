@@ -1,5 +1,5 @@
 <cdk-virtual-scroll-viewport itemSize="30" class="site-area-layout-viewport"> 
-<div *ngIf="layout" id="layout" class="page-layout carded inner-scroll center">
+<div *ngIf="layout" id="layout" fxLayout="column" class="page-layout carded inner-scroll center">
     <!-- CONTENT AREA -->
     <div fxLayout="row" fxLayoutAlign="start"  fxFlex="1 0 auto">
         <div fxLayout="column" fxFlex="20">
@@ -13,12 +13,12 @@
         <div fxLayout="column" fxFlex="20">
             <button mat-icon-button type="button" 
                 [matMenuTriggerFor]="saveMenu">
-                <mat-icon>build</mat-icon>Save
+                <mat-icon>build</mat-icon>Actions
             </button>
         </div>         
     </div>
     <!-- / HEADER -->
-    <div class="card" id="page-layout">
+    <div class="card" fxLayout="row" id="page-layout">
         <div class="card" id="sidePanel-layout" fxFlex="{{layout.sidePane.width}}" *ngIf="showLeftSidePanel()">
             <!-- Add container link-->
             <a [routerLink]="" (click)="addSideViewer()"><mat-icon>add_circle_outline</mat-icon>Add Viewer</a>
@@ -110,7 +110,7 @@
     <button mat-menu-item (click)="updateSidePane(6)">Righ Side Navigation (40%)</button>
 </mat-menu>
 <mat-menu #saveMenu="matMenu">
-    <button mat-menu-item (click)="savePageLayout()">Save</button>
-    <button mat-menu-item (click)="publishPageLayout()">Publish</button>
-    <button mat-menu-item (click)="cancelEditing()">Cancel</button>
+    <button mat-menu-item (click)="commitLayout()">Commit Sitearea Layout</button>
+    <button mat-menu-item (click)="clearLayout()">Clear Sitearea Layout</button>
+    <button mat-menu-item (click)="resolveLayout()">Resolve from Page Layout</button>
 </mat-menu>

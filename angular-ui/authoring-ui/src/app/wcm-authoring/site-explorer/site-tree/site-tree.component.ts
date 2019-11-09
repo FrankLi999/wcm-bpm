@@ -46,7 +46,6 @@ export class SiteTreeComponent extends WcmNavigatorComponent implements OnInit, 
     this.functionMap['Edit.siteArea'] = this.editSiteArea;
     this.functionMap['Preview.siteArea'] = this.previewSiteArea;
     this.functionMap['Delete.siteArea'] = this.removeItem;
-    this.functionMap['EditLayout.siteArea'] = this.editSiteAreaLayout;
     this.functionMap['Create.content'] = this.createContent;
     this.functionMap['Edit.content'] = this.editContent;
     this.functionMap['Delete.content'] = this.removeItem;
@@ -210,20 +209,6 @@ export class SiteTreeComponent extends WcmNavigatorComponent implements OnInit, 
     const node =  this.activeNode;
     this.router.navigate(
       ['/wcm-authoring/site-explorer/edit-sa'], 
-      { queryParams: {
-          nodePath: node.wcmPath,
-          repository: node.repository,
-          workspace: node.workspace,
-          editing: true
-        } 
-      }            
-    );
-  }
-
-  editSiteAreaLayout() {
-    const node =  this.activeNode;
-    this.router.navigate(
-      ['/wcm-authoring/site-explorer/edit-sa-layout'], 
       { queryParams: {
           nodePath: node.wcmPath,
           repository: node.repository,

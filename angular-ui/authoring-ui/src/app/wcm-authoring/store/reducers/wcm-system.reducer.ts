@@ -1,6 +1,7 @@
 
 import { WcmSystemActions, WcmSystemActionTypes } from '../actions/wcm-system.actions';
 import { WcmSystem } from '../../model';
+import { ɵangular_packages_platform_browser_dynamic_platform_browser_dynamic_a } from '@angular/platform-browser-dynamic';
 export interface WcmSystemState {
     wcmSystem?: WcmSystem;
     loading: boolean;
@@ -62,6 +63,21 @@ export function WcmSystemReducer(state = WcmSystemInitialState, action: WcmSyste
                 loaded : false,
                 loadError: action.payload
             };
+        case WcmSystemActionTypes.UPDATE_SITE_AREA_LAYOUT: {
+            let siteAreas = {
+                ...state.wcmSystem.siteAreas
+            }
+            siteAreas[action.payload.navigationId] = action.payload;
+            return {
+                ...state,
+                wcmSystem: {
+                    ...state.wcmSystem,
+                    siteAreas: siteAreas
+                },
+                loading: false,
+                loaded : false
+            };
+        }    
         case WcmSystemActionTypes.CREATE_RENDER_TEMPLATE_SUCCESS: {            
             let wcmSystem: WcmSystem = { ... state.wcmSystem };
             wcmSystem.renderTemplates[`${action.payload.repository}/${action.payload.workspace}/${action.payload.library}/${action.payload.name}`] = action.payload;

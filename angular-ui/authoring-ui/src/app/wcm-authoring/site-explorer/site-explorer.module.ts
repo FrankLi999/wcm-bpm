@@ -20,6 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
@@ -65,11 +66,6 @@ const routes: Routes = [{
       path       : 'site-explorer/edit-sa',
       component  : SiteAreaComponent,
       canActivate: [AuthGuard, fromGuards.ResolveGuard]
-    },
-    {
-      path       : 'site-explorer/edit-sa-layout',
-      component  : SiteAreaLayoutComponent,
-      canActivate: [AuthGuard, fromGuards.ResolveGuard]
     }
   ]}
 ];
@@ -104,6 +100,7 @@ const routes: Routes = [{
     MatRippleModule,
     MatSelectModule,
     MatSortModule,
+    MatTabsModule,
     MatTableModule,
     MatToolbarModule,
     MatTreeModule,

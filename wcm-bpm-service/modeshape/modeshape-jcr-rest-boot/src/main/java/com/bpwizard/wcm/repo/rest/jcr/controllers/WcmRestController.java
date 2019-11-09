@@ -948,7 +948,7 @@ public class WcmRestController {
 						} 
 				   }
 				   for (RestNode childNode: node.getChildren()) {
-					   if (this.checkNodeType(childNode, "bpw:contentAreaSidePanel") && "sidePane".equals(node.getName())) {
+					   if (this.checkNodeType(childNode, "bpw:contentAreaSidePanel") && "sidePane".equals(childNode.getName())) {
 						   SidePane sidePane = new SidePane();
 						   for (RestProperty property : childNode.getJcrProperties()) {
 								if ("bpw:isLeft".equals(property.getName())) {

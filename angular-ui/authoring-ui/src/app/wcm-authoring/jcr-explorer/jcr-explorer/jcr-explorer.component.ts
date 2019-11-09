@@ -20,7 +20,6 @@ import {
 import { UploadZipfileDialogComponent } from '../../dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
 import { NewFolderDialogComponent } from '../../dialog/new-folder-dialog/new-folder-dialog.component';
 import { NewThemeDialogComponent } from '../../dialog/new-theme-dialog/new-theme-dialog.component';
-import { NewSiteareaDialogComponent } from '../../dialog/new-sitearea-dialog/new-sitearea-dialog.component';
 import { NewSiteConfigDialogComponent } from '../../dialog/new-site-config-dialog/new-site-config-dialog.component';
 import { NewContentDialogComponent } from '../../dialog/new-content-dialog/new-content-dialog.component';
 import * as fromStore from '../../store';
@@ -96,7 +95,6 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
     this.functionMap['Edit.siteArea'] = this.editSiteArea;
     this.functionMap['Preview.siteArea'] = this.previewSiteArea;
     this.functionMap['Delete.siteArea'] = this.removeItem;
-    this.functionMap['EditLayout.siteArea'] = this.editSiteAreaLayout;
     this.functionMap['Create.content'] = this.createContent;
     this.functionMap['Delete.content'] = this.removeItem;
     this.functionMap['Create.siteConfig'] = this.createSiteConfig;
@@ -462,18 +460,6 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
           siteArea: (node.value as RestNode).nodePath
         } 
       });
-  }
-  editSiteAreaLayout() {
-    const node = this.activeNode;
-    this.router.navigate(
-      ['/wcm-authoring/site-explorer/edit-sa-layout'], 
-      { queryParams: {
-          nodePath: (node.value as RestNode).nodePath,
-          repository: (node.value as RestNode).repositoryName,
-          workspace: (node.value as RestNode).workspaceName,
-        } 
-      }            
-    );
   }
   
   editSiteArea() {

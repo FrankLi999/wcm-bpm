@@ -177,13 +177,6 @@
         "bpw:defaultTitle": "Edit SiteArea",
         "bpw:defaultIcon": "edit"
     },
-    "bpwizard/library/system/configuration/operations/siteArea/editLayout" : {
-        "jcr:primaryType":"bpw:supportedOpertion",
-        "bpw:resourceName": "siteArea",
-        "bpw:operation": "EditLayout",
-        "bpw:defaultTitle": "Edit SiteArea Layout",
-        "bpw:defaultIcon": "view_quilt"
-    },
     "bpwizard/library/system/configuration/operations/siteArea/createContent" : {
         "jcr:primaryType":"bpw:supportedOpertion",
         "bpw:resourceName": "content",

@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription, Observable, Subject} from 'rxjs';
-import { switchMap, takeUntil, filter } from 'rxjs/operators';
+import { Subject} from 'rxjs';
+import { takeUntil, filter } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import cloneDeep from 'lodash-es/cloneDeep';
 
@@ -12,31 +11,26 @@ import {
   LayoutRow,
   LayoutColumn,
   RenderTemplate,
-  RenderTemplateModel
+  RenderTemplateModel,
+  ContentAreaLayout
 } from '../../model';
 import * as fromStore from '../../store';
-import { WcmService } from 'app/wcm-authoring/service/wcm.service';
 import { SelectRenderTemplateDialog } from '../../components/select-render-template/select-render-template.dialog';
 
 @Component({
-  selector: 'app-site-area-layout',
+  selector: 'site-area-layout',
   templateUrl: './site-area-layout.component.html',
   styleUrls: ['./site-area-layout.component.scss']
 })
 export class SiteAreaLayoutComponent implements OnInit, OnDestroy {
-  @Input() repository: string;
-  @Input() workspace: string;
-  @Input() nodePath: string;
-  @Input() editing: boolean = false;
   @Input() siteArea: SiteArea;
+  @Output() layoutCommitted = new EventEmitter<SiteAreaLayout>();
+  
   renderTemplates: RenderTemplateModel[] = [];
-  sub: Subscription;
   layout: SiteAreaLayout;
-
+  contentAreaLayouts: {[key: string]: ContentAreaLayout};
   private unsubscribeAll: Subject<any>;
   constructor(
-    private wcmService: WcmService,
-    private route: ActivatedRoute,
     private store: Store<fromStore.WcmAppState>,
     private dialog: MatDialog
 
@@ -45,27 +39,16 @@ export class SiteAreaLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {    
-
-    this.sub = this.route.queryParams.pipe(
-      switchMap(param => this.getSiteArea(param)),
-      filter(siteArea => siteArea != null),
-      switchMap(siteArea => {
-        this.siteArea = siteArea;
-        this.editing = this.siteArea.siteAreaLayout != undefined;
-        return this.store.pipe(
-          takeUntil(this.unsubscribeAll),
-          select(fromStore.getWcmSystem))
-      }),
-      filter(wcmSystem => wcmSystem != null),
-    ).subscribe(wcmSystem => {   
-      let contentAreaLayout = wcmSystem.contentAreaLayouts[this.siteArea.contentAreaLayout];
-      this.layout = this.editing ? cloneDeep(this.siteArea.siteAreaLayout) :
-        {
-          contentWidth: contentAreaLayout ? contentAreaLayout.contentWidth : 100,
-          sidePane: contentAreaLayout ? cloneDeep(contentAreaLayout.sidePane) : {},
-          rows: contentAreaLayout ? cloneDeep(contentAreaLayout.rows) : []
-        }
-    });
+    console.log(" SiteAreaLayoutComponent >>>>>>>>>>>>>>");
+    this.store.pipe(
+      takeUntil(this.unsubscribeAll),
+      select(fromStore.getWcmSystem),
+      filter(wcmSystem => wcmSystem != null)).subscribe(wcmSystem => {   
+        this.contentAreaLayouts = wcmSystem.contentAreaLayouts;
+        
+        this.layout = (this.siteArea.siteAreaLayout != undefined) ? cloneDeep(this.siteArea.siteAreaLayout) : 
+          this.emptyLayout();
+      });
 
     this.store.pipe(
       takeUntil(this.unsubscribeAll),
@@ -93,14 +76,8 @@ export class SiteAreaLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
-
-  getSiteArea(param: any): Observable<SiteArea> {
-    this.nodePath = param.nodePath;
-    this.workspace = param.workspace;
-    this.repository = param.repository;
-    return this.wcmService.getSiteArea(this.repository, this.workspace, this.nodePath);
+    this.unsubscribeAll.next();
+    this.unsubscribeAll.complete();
   }
 
   addRow(): void {
@@ -274,22 +251,51 @@ export class SiteAreaLayoutComponent implements OnInit, OnDestroy {
       return false;
   }
 
-  public savePageLayout() {
-    console.log('save page layout', this.layout);
-    // let formValue = this.pageLayoutForm.value;
-    // this.layout.name = formValue.name;
-    // this.layout.repository = this.repository;
-    // this.layout.workspace = this.workspace;
-    // this.layout.library = this.library;
-    // this.store.dispatch(new fromStore.CreateContentAreaLayout(this.layout));
-    
+  public commitLayout() {
+    this.siteArea = {
+      ... this.siteArea,
+      siteAreaLayout: this.layout
+    }
+    this.store.dispatch(new fromStore.UpdateSiteareaLayout(this.siteArea));
+    this.layoutCommitted.emit(this.layout);
   }
 
-  public publishPageLayout() {
-    console.log(this.layout);
+  public resolveLayout() {
+    this.siteArea = {
+      ... this.siteArea,
+      siteAreaLayout: this.resolveLayoutFromPageLayout()
+    }
+    this.store.dispatch(new fromStore.UpdateSiteareaLayout(this.siteArea));
+    this.layoutCommitted.emit(this.layout);
   }
 
-  public cancelEditing() {
-    console.log(this.layout);
+  public clearLayout() {
+    this.layout = this.emptyLayout();
+    this.siteArea = {
+      ... this.siteArea,
+      siteAreaLayout: null
+    }
+    this.store.dispatch(new fromStore.UpdateSiteareaLayout(this.siteArea));
+    this.layoutCommitted.emit(null);
+  }
+
+  private resolveLayoutFromPageLayout(): SiteAreaLayout {
+    let contentAreaLayout = this.siteArea.contentAreaLayout ? this.contentAreaLayouts[this.siteArea.contentAreaLayout] : null;
+    return {
+      contentWidth: contentAreaLayout ? contentAreaLayout.contentWidth : 100,
+      sidePane: contentAreaLayout ? cloneDeep(contentAreaLayout.sidePane) : {},
+      rows: contentAreaLayout ? cloneDeep(contentAreaLayout.rows) : []
+    }
+  }
+  private emptyLayout(): SiteAreaLayout {
+    return {
+      contentWidth: 100,
+      rows: [],
+      sidePane: {
+        left: true,
+        width: 0,
+        viewers: []
+      }
+    };
   }
 }

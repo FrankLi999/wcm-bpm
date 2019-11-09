@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription, Observable, of} from 'rxjs';
 import { switchMap, map, filter } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
-import { JsonForm, SiteArea } from '../../model';
+import { JsonForm, SiteArea, SiteAreaLayout } from '../../model';
 import * as fromStore from '../../store';
 import { WcmService } from 'app/wcm-authoring/service/wcm.service';
 
@@ -61,7 +61,6 @@ export class SiteAreaComponent implements OnInit, OnDestroy {
   
   getJsonForms(siteArea: SiteArea): Observable<JsonForm> {
     this.siteArea = siteArea;
-    console.log('getsiteArea', siteArea);
     return this.store.pipe(
       select(fromStore.getJsonForms),
       map(jsonForms => {
@@ -89,6 +88,13 @@ export class SiteAreaComponent implements OnInit, OnDestroy {
         console.log(event)
     });
   } 
+
+  commitLayout(layout: SiteAreaLayout) {
+    this.siteArea = {
+      ...this.siteArea,
+      siteAreaLayout: layout
+    }
+  }
 }
 
 

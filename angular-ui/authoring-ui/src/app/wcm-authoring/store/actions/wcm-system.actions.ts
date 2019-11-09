@@ -1,9 +1,10 @@
 import { Action } from '@ngrx/store';
-import { CurrentSite, RenderTemplate, AuthoringTemplate } from '../../model/';
+import { CurrentSite, RenderTemplate, AuthoringTemplate, SiteArea } from '../../model/';
 export enum WcmSystemActionTypes {
   GET_WCMSYSTEM = '[WcmSystem] Get WcmSystem',
   GET_WCMSYSTEM_SUCCESS = '[WcmSystem] Get WcmSystem Success',
   GET_WCMSYSTEM_FAILED = '[WcmSystem] Get WcmSystem Failed',
+  UPDATE_SITE_AREA_LAYOUT = '[WcmSystem] Update Sitearea Layout',
   WCMSYSTEM_CLEAR_ERROR = '[WcmSystem] Clear Error',
   CREATE_RENDER_TEMPLATE = '[WcmSystem - RenderTemplate] Create',
   CREATE_RENDER_TEMPLATE_SUCCESS = '[WcmSystem- RenderTemplate] Create Success',
@@ -30,6 +31,12 @@ export class GetWcmSystemSuccess implements Action {
 export class GetWcmSystemFailed implements Action {
   readonly type = WcmSystemActionTypes.GET_WCMSYSTEM_FAILED;
   constructor(public payload: string) {
+  }
+}
+
+export class UpdateSiteareaLayout implements Action {
+  readonly type = WcmSystemActionTypes.UPDATE_SITE_AREA_LAYOUT;
+  constructor(public payload: SiteArea) {
   }
 }
 
@@ -91,6 +98,7 @@ export type WcmSystemActions =
     GetWcmSystem | 
     GetWcmSystemSuccess | 
     GetWcmSystemFailed |
+    UpdateSiteareaLayout |
     WcmSystemClearError |
     CreateRenderTemplate |
     CreateRenderTemplateSuccess | 
