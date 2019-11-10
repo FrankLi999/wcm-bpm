@@ -1,4 +1,4 @@
-import { Input, Component, ViewEncapsulation, EventEmitter, Output } from '@angular/core';
+import { Component, ViewEncapsulation, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   template: `<button (click)="handleClick()"><slot></slot>:{{clicksCt}}</button>`,
@@ -10,7 +10,8 @@ import { Input, Component, ViewEncapsulation, EventEmitter, Output } from '@angu
       font-size: 20px;
     }
   `],
-  encapsulation: ViewEncapsulation.ShadowDom
+  encapsulation: ViewEncapsulation.ShadowDom,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomButtonComponent {
   //@Input() label = 'default label';

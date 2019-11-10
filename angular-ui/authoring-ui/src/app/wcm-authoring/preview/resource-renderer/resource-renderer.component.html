@@ -2,6 +2,11 @@
 <div contentId="{{contentId()}}" class="card, row-layout" [innerHTML]="templateContent|keepHtml">
 </div>
 -->
+<div class="card, row-layout" id="resource-viewer" [innerHTML]="templateContent|keepHtml">
+    <!-- 
+    <external-dashboard-tile a="10" b="15" c="20"></external-dashboard-tile>
+    -->
+</div>
 <div class="card, row-layout" #container>
     <ng-container *ngIf="renderLayout()">
         <div class="card container" fxLayout="row" style="padding: 6px" *ngFor="let row of rendererTemplate.rows; let rowIndex = index;">

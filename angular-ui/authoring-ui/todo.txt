@@ -5,21 +5,28 @@
     
 2. preview
     
-   ngx-build-plus
+   
    select default contents on SiteArea Layout Template
    select contents on SiteArea
   
-
+   ngx-build-plus
    preview with angular custome elements for rendering instead of via dynamic components - 
+
+   custom element build
+   custom element: 
+
+        https://www.softwarearchitekt.at/aktuelles/your-options-for-building-angular-elements/
+        https://www.softwarearchitekt.at/aktuelles/angular-elements-part-i/
+
+        https://angular-extensions.github.io/elements/#/home
+        https://medium.com/@tomastrajan/the-best-way-to-lazy-load-angular-elements-97a51a5c2007
+
    preview site area with theme
    
    in place editing on preview page 
    angular 9 ivy plug and play: https://next.angular.io/guide/updating-to-version-9
 
-   custom element build
-   custom element: https://angular-extensions.github.io/elements/#/home
-                   https://medium.com/@tomastrajan/the-best-way-to-lazy-load-angular-elements-97a51a5c2007
-
+   
 3. content item workflow 
    content item workflow/lock/unlock
    at/pt/rt updates with lock/unlock/versioning suport
