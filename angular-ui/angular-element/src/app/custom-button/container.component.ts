@@ -5,6 +5,7 @@ import { Input, Component, ViewEncapsulation, EventEmitter, Output } from '@angu
   encapsulation: ViewEncapsulation.Native
 })
 export class ContainerComponent {
+
   onClicksCt() {
     console.log("Clicks count!!!");
   }

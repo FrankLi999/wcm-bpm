@@ -1044,7 +1044,7 @@ public class WcmRestController {
 			contentItemPath = contentItemPath.startsWith("/") ? contentItemPath : "/" + contentItemPath;
 			//contentItemPath = contentItemPath.startsWith("/") ? contentItemPath : "/" + contentItemPath;
 			RestNode contentItemNode = (RestNode) this.itemHandler.item(request, repository, workspace,
-					contentItemPath, 2);
+					contentItemPath, 3);
 			
 			ContentItem contentItem = new ContentItem(); 
 			contentItem.setRepository(repository);

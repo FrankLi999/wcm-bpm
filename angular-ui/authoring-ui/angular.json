@@ -33,11 +33,20 @@
               "src/styles.scss"
             ],
             "scripts": [
+              "src/assets/external-elements.js",
               "node_modules/ace-builds/src-min/ace.js",
               "node_modules/ace-builds/src-min/mode-html.js",
               "node_modules/ace-builds/src-min/worker-html.js",
               {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
+              },
+              {
+                "bundleName": "polyfill-webcomp-es5",
+                "input": "node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+              },
+              {
+                "bundleName": "polyfill-webcomp",
+                "input": "node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js"
               }
             ]
           },
@@ -63,11 +72,6 @@
                   "type": "initial",
                   "maximumWarning": "3mb",
                   "maximumError": "6mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
                 }
               ]
             },

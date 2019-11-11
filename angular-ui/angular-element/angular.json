@@ -34,12 +34,6 @@
               {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
               },
-              {
-                "input": "node_modules/document-register-element/build/document-register-element.js"
-              },
-              {
-                "input": "node_modules/document-register-element/build/document-register-element.js"
-              },
               "node_modules/rxjs/bundles/rxjs.umd.js",
               "node_modules/@angular/core/bundles/core.umd.js",
               "node_modules/@angular/common/bundles/common.umd.js",

@@ -27,6 +27,6 @@ export class AppModule {
       customElements.define('custom-button', customButtonComponent);
 
       const ContainerComponent = createCustomElement(CustomButtonComponent, { injector: this.injector });
-      customElements.define('Container-component', ContainerComponent);
+      customElements.define('my-container-component', ContainerComponent);
   }
 }

@@ -8,6 +8,14 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-    <my-app></my-app>
+    <custom-button>Test Custome Element</custom-button>
+	<script>
+
+	  if (!window['customElements'] && "noModule" in HTMLScriptElement.prototype) {
+		const script = document.createElement('script');
+		script.src = './assets/webcomponentsjs/bundles/webcomponents-sd-ce.js';
+		document.writeln(script.outerHTML);
+	  }
+  </script>
 </body>
 </html>

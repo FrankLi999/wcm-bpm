@@ -19,7 +19,7 @@ import {
   import { ExternalElementService } from '../external-element.service';
   //https://blog.angularindepth.com/building-an-aot-friendly-dynamic-content-outlet-in-angular-59c1a96171a
   @Component({
-    selector: 'resource-renderer',
+    selector: 'resource-renderer-component',
     templateUrl: './resource-renderer.component.html',
     styleUrls: ['./resource-renderer.component.scss'],
     providers:[ RendererService ]
@@ -31,7 +31,7 @@ import {
     @Input() rendererTemplate: RenderTemplate;
     @Input() content: string;
     contentItem: ContentItem;
-    templateContent = '<custom-button></custom-button>';
+    templateContent = '<custom-button>yyy</custom-button>';
     @ViewChild('container', { static: true, read: ViewContainerRef })
     container: ViewContainerRef;
     private componentRef: ComponentRef<{}>;
@@ -43,7 +43,7 @@ import {
       private compiler: Compiler) { }
   
     ngOnInit() {
-      this.externalElementService.load();
+      // this.externalElementService.load();
       // this.add('external-dashboard-tile');
       const [repository, workspace] = this.content.split("/", 2);
       const contentItemPath = this.content.slice(`${repository}/${workspace}/`.length);
@@ -69,9 +69,13 @@ import {
         }
       );
     }
-    
+
     contentId(): string {
-      return `${this.navigationId}-${this.renderer}`;
+      return `${this.navigationId}_${this.renderer}`;
+    }
+    
+    renderCode() :boolean {
+      return this.rendererService.getContentItem(this.contentId()) != undefined && this.rendererTemplate.code != undefined;
     }
     
     renderLayout() :boolean {
@@ -100,18 +104,5 @@ import {
       class RuntimeComponentModule { }
       let module: ModuleWithComponentFactories<any> = compiler.compileModuleAndAllComponentsSync(RuntimeComponentModule);
       return module.componentFactories.find(f => f.componentType === decoratedCmp);
-    }
-
-    add(externalElementName: string): void {
-
-      const tile = document.createElement(externalElementName);
-      // tile.setAttribute('class', 'col-lg-4 col-md-3 col-sm-2');
-      tile.setAttribute('a', '' + 10);
-      tile.setAttribute('b', '' + 15);
-      tile.setAttribute('c', '' + 20);
-  
-      const content = document.getElementById('resource-viewer');
-      content.appendChild(tile);
-  
     }
   }
