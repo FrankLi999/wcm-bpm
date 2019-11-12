@@ -97,11 +97,9 @@
 		    <scope>provided</scope>
 		</dependency>
 		<!-- required after JDK 9+ -->
-		<!--
 		<dependency>
 		    <groupId>javax.annotation</groupId>
 		    <artifactId>javax.annotation-api</artifactId>
 		</dependency>
-		-->
 	</dependencies>
 </project>

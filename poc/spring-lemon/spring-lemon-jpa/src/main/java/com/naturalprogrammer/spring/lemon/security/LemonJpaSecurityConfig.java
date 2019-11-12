@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,18 +27,16 @@ public class LemonJpaSecurityConfig extends LemonWebSecurityConfig {
 	private LemonAuthenticationSuccessHandler authenticationSuccessHandler;
 	private LemonOidcUserService oidcUserService;
 	private LemonOAuth2UserService<?, ?> oauth2UserService;
-	private OAuth2AuthenticationSuccessHandler<?> oauth2AuthenticationSuccessHandler;
+	private OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler;
 	private OAuth2AuthenticationFailureHandler oauth2AuthenticationFailureHandler;
-	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	public void createLemonSecurityConfig(LemonProperties properties, LemonUserDetailsService<?, ?> userDetailsService,
 			LemonAuthenticationSuccessHandler authenticationSuccessHandler,
 			LemonOidcUserService oidcUserService,
 			LemonOAuth2UserService<?, ?> oauth2UserService,
-			OAuth2AuthenticationSuccessHandler<?> oauth2AuthenticationSuccessHandler,
-			OAuth2AuthenticationFailureHandler oauth2AuthenticationFailureHandler,
-			PasswordEncoder passwordEncoder) {
+			OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler,
+			OAuth2AuthenticationFailureHandler oauth2AuthenticationFailureHandler) {
 
 		this.properties = properties;
 		this.userDetailsService = userDetailsService;
@@ -47,7 +45,6 @@ public class LemonJpaSecurityConfig extends LemonWebSecurityConfig {
 		this.oauth2UserService = oauth2UserService;
 		this.oauth2AuthenticationSuccessHandler = oauth2AuthenticationSuccessHandler;
 		this.oauth2AuthenticationFailureHandler = oauth2AuthenticationFailureHandler;
-		this.passwordEncoder = passwordEncoder;
 		
 		log.info("Created");
 	}
@@ -96,7 +93,7 @@ public class LemonJpaSecurityConfig extends LemonWebSecurityConfig {
 	 */
 	protected String loginPage() {
 		
-		return "/api/core/login";
+		return properties.getLoginUrl();
 	}
 
 	
@@ -116,6 +113,7 @@ public class LemonJpaSecurityConfig extends LemonWebSecurityConfig {
 	/**
 	 * Configuring token authentication filter
 	 */
+	@Override
 	protected void tokenAuthentication(HttpSecurity http) throws Exception {
 		
 		http.addFilterBefore(new LemonJpaTokenAuthenticationFilter(blueTokenService, userDetailsService),

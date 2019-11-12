@@ -5,11 +5,16 @@ import java.io.Serializable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.WebFilterChainServerAuthenticationSuccessHandler;
+import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 
+import com.naturalprogrammer.spring.lemon.commons.LemonProperties;
 import com.naturalprogrammer.spring.lemon.commons.security.BlueTokenService;
 import com.naturalprogrammer.spring.lemon.commons.security.UserDto;
+import com.naturalprogrammer.spring.lemon.commons.util.LecUtils;
 import com.naturalprogrammer.spring.lemon.commonsreactive.security.LemonCommonsReactiveSecurityConfig;
 import com.naturalprogrammer.spring.lemonreactive.domain.AbstractMongoUser;
 import com.naturalprogrammer.spring.lemonreactive.util.LerUtils;
@@ -17,17 +22,24 @@ import com.nimbusds.jwt.JWTClaimsSet;
 
 import reactor.core.publisher.Mono;
 
-public class LemonReactiveSecurityConfig <U extends AbstractMongoUser<ID>, ID extends Serializable> extends LemonCommonsReactiveSecurityConfig {
+public class LemonReactiveSecurityConfig<U extends AbstractMongoUser<ID>, ID extends Serializable> extends LemonCommonsReactiveSecurityConfig {
 
 	private static final Log log = LogFactory.getLog(LemonReactiveSecurityConfig.class);
 	
 	protected LemonReactiveUserDetailsService<U, ID> userDetailsService;
+	private LemonProperties properties;
+	private ReactiveOAuth2AuthenticationSuccessHandler<U,ID> reactiveOAuth2AuthenticationSuccessHandler;
 
 	public LemonReactiveSecurityConfig(BlueTokenService blueTokenService,
-			LemonReactiveUserDetailsService<U, ID> userDetailsService) {
+			LemonReactiveUserDetailsService<U, ID> userDetailsService,
+			ReactiveOAuth2AuthenticationSuccessHandler<U,ID> reactiveOAuth2AuthenticationSuccessHandler,
+			LemonProperties properties) {
 		
 		super(blueTokenService);
 		this.userDetailsService = userDetailsService;
+		this.reactiveOAuth2AuthenticationSuccessHandler = reactiveOAuth2AuthenticationSuccessHandler;
+		this.properties = properties;
+		
 		log.info("Created");
 	}
 
@@ -38,8 +50,9 @@ public class LemonReactiveSecurityConfig <U extends AbstractMongoUser<ID>, ID ex
 	protected void formLogin(ServerHttpSecurity http) {
 		
 		http.formLogin()
+			.securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
 			.loginPage(loginPage()) // Should be "/login" by default, but not providing that overwrites our AuthenticationFailureHandler, because this is called later 
-			.authenticationFailureHandler(authenticationFailureHandler())
+			.authenticationFailureHandler((exchange, exception) -> Mono.error(exception))
 			.authenticationSuccessHandler(new WebFilterChainServerAuthenticationSuccessHandler());
 	}
 
@@ -57,7 +70,11 @@ public class LemonReactiveSecurityConfig <U extends AbstractMongoUser<ID>, ID ex
 	@Override
 	protected void oauth2Login(ServerHttpSecurity http) {
 
-		http.oauth2Login(); // TODO: Configure properly
+		http.oauth2Login()
+			.securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
+			.authorizedClientRepository(new ReactiveCookieServerOAuth2AuthorizedClientRepository(properties))
+			.authenticationSuccessHandler(reactiveOAuth2AuthenticationSuccessHandler)
+			.authenticationFailureHandler(this::onOauth2AuthenticationFailure);
 	}
 	
 	@Override
@@ -72,5 +89,14 @@ public class LemonReactiveSecurityConfig <U extends AbstractMongoUser<ID>, ID ex
 		        LerUtils.ensureCredentialsUpToDate(claims, user);
 			})
 			.map(AbstractMongoUser::toUserDto);
+	}
+	
+	protected Mono<Void> onOauth2AuthenticationFailure(WebFilterExchange webFilterExchange, AuthenticationException exception) {
+		
+		ReactiveCookieServerOAuth2AuthorizedClientRepository.deleteCookies(webFilterExchange.getExchange(),
+				LecUtils.AUTHORIZATION_REQUEST_COOKIE_NAME,
+				LecUtils.LEMON_REDIRECT_URI_COOKIE_PARAM_NAME);
+		
+		return Mono.error(exception);
 	}
 }

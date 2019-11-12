@@ -4,7 +4,23 @@ https://blog.angularindepth.com/creating-a-library-in-angular-6-part-2-6e2bc1e14
 https://blog.angularindepth.com/the-angular-library-series-publishing-ce24bb673275
 https://blog.angularindepth.com/npm-peer-dependencies-f843f3ac4e7f
 
+npm install -g @angular/cli@latest
 
+npm uninstall -g angular-cli
+npm cache clean
+npm cache verify
+npm cache verify --force
+
+If you are facing issue with angular/cli then use the following commands:
+npm uninstall -g angular-cli to uninstall the angular/cli.
+npm cache clean to clean your npm cache from app data folder under your username.
+use npm cache verify to verify your cache whether it is corrupted or not.
+use npm cache verify --force to clean your entire cache from your system.
+
+Note:
+You can also delete by the following the paths
+C:\Users\"Your_syste_User_name"\AppData\Roaming\npm and
+C:\Users\"Your_syste_User_name"\AppData\Roaming\npm-cache
 =====================================================================================
 
 
