@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
-import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
+// import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
@@ -53,7 +53,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
         prePostEnabled = true
 )
 @AutoConfigureBefore({
-	ValidationAutoConfiguration.class,
+	// ValidationAutoConfiguration.class,
 	WebMvcAutoConfiguration.class,
 	ErrorMvcAutoConfiguration.class,
 	SecurityAutoConfiguration.class,
@@ -178,57 +178,14 @@ public class CommonsWebAutoConfiguration {
 	}
 	
 	/**
-	 * Configures ErrorResponseComposer if missing
-	 */	
-	@Bean
-	@ConditionalOnMissingBean(ErrorResponseComposer.class)
-	public <T extends Throwable>
-	ErrorResponseComposer<T> errorResponseComposer(List<AbstractExceptionHandler<T>> handlers) {
-		
-        log.info("Configuring ErrorResponseComposer");       
-		return new ErrorResponseComposer<T>(handlers);
-	}
-
-	
-	/**
-	 * Configures ExceptionCodeMaker if missing
-	 */	
-	@Bean
-	@ConditionalOnMissingBean(ExceptionIdMaker.class)
-	public ExceptionIdMaker exceptionIdMaker() {
-		
-        log.info("Configuring ExceptionIdMaker");
-        return ex -> {
-        	
-        	if (ex == null)
-        		return null;
-        	
-        	return ex.getClass().getSimpleName();
-        };
-	}
-
-	
-	/**
-	 * Configures LexUtils
-	 */
-	@Bean
-	public SpringExceptionUtils springExceptionUtils(MessageSource messageSource,
-			LocalValidatorFactoryBean validator,
-			ExceptionIdMaker exceptionIdMaker) {
-
-        log.info("Configuring LexUtils");       		
-		return new SpringExceptionUtils(messageSource, validator, exceptionIdMaker);
-	}
-
-	/**
 	 * Merge ValidationMessages.properties into messages.properties
 	 */	
-    @Bean
-	@ConditionalOnMissingBean(Validator.class)
-    public Validator validator(MessageSource messageSource) {
-
-        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-        localValidatorFactoryBean.setValidationMessageSource(messageSource);
-        return localValidatorFactoryBean;
-    }
+//    @Bean
+//	@ConditionalOnMissingBean(Validator.class)
+//    public Validator validator(MessageSource messageSource) {
+//
+//        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+//        localValidatorFactoryBean.setValidationMessageSource(messageSource);
+//        return localValidatorFactoryBean;
+//    }
 }

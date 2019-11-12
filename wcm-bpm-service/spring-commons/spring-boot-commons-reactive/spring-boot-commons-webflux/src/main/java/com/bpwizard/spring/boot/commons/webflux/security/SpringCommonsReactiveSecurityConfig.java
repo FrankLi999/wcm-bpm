@@ -45,13 +45,13 @@ public class SpringCommonsReactiveSecurityConfig { //extends ReactiveSecurityAut
 		return http
 			.securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
 			.exceptionHandling()
-				.accessDeniedHandler(accessDeniedHandler())
-				.authenticationEntryPoint(authenticationEntryPoint())
+				.accessDeniedHandler((exchange, exception) -> Mono.error(exception))
+				.authenticationEntryPoint((exchange, exception) -> Mono.error(exception))
 			.and()
 				.cors()
 			.and()
 				.csrf().disable()
-				.addFilterAt(bearerAuthenticationFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
+				.addFilterAt(tokenAuthenticationFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
 			.logout().disable()
 			.build();
 	}
@@ -83,12 +83,12 @@ public class SpringCommonsReactiveSecurityConfig { //extends ReactiveSecurityAut
 	}
 
 
-	protected AuthenticationWebFilter bearerAuthenticationFilter() {
+	protected AuthenticationWebFilter tokenAuthenticationFilter() {
 		
 		AuthenticationWebFilter filter = new AuthenticationWebFilter(tokenAuthenticationManager());		
 		filter.setServerAuthenticationConverter(tokenAuthenticationConverter());
-		filter.setAuthenticationFailureHandler(authenticationFailureHandler());
-		
+		// filter.setAuthenticationFailureHandler(authenticationFailureHandler());
+		filter.setAuthenticationFailureHandler((exchange, exception) -> Mono.error(exception));
 		return filter;
 	}
 	
@@ -136,21 +136,5 @@ public class SpringCommonsReactiveSecurityConfig { //extends ReactiveSecurityAut
 
 			return Mono.just(new UsernamePasswordAuthenticationToken(null, authorization.substring(SecurityUtils.TOKEN_PREFIX_LENGTH)));		
 		};
-	}
-	
-	protected ServerAuthenticationFailureHandler authenticationFailureHandler() {
-		
-		return (webFilterExchange, exception) -> Mono.error(exception);		
-	}
-	
-	protected ServerAccessDeniedHandler accessDeniedHandler() {
-		
-		return (exchange, exception) -> Mono.error(exception);
-	}
-	
-	protected ServerAuthenticationEntryPoint authenticationEntryPoint() {
-		
-		return (exchange, exception) -> Mono.error(exception);
-	}
-	
+	}	
 }

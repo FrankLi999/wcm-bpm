@@ -1,6 +1,9 @@
 package com.bpwizard.spring.boot.commons.reactive.demo.services;
 
+import java.util.Map;
+
 import org.bson.types.ObjectId;
+import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.stereotype.Service;
 
 import com.bpwizard.spring.boot.commons.reactive.demo.domain.User;
@@ -32,6 +35,28 @@ public class MyService extends SpringReactiveService<User, ObjectId> {
         user.setName(updatedUser.getName());
     }
 
+	@Override
+    public void fillAdditionalFields(String registrationId, User user, Map<String, Object> attributes) {
+    	
+    	String nameKey;
+    	
+    	switch (registrationId) {
+    		
+    	case "facebook":
+    		nameKey = StandardClaimNames.NAME;
+    		break;
+    		
+    	case "google":
+			nameKey = StandardClaimNames.NAME;
+			break;
+			
+		default:
+			throw new UnsupportedOperationException("Fetching name from " + registrationId + " login not supprrted");
+    	}
+    	
+    	user.setName((String) attributes.get(nameKey));
+    }
+	
 	@Override
 	protected ObjectId toId(String id) {
 		return new ObjectId(id);

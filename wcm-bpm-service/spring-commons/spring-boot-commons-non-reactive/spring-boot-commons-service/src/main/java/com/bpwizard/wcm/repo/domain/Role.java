@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.bpwizard.spring.boot.commons.domain.SpringUser;
 import com.bpwizard.spring.boot.commons.jpa.SpringEntity;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;

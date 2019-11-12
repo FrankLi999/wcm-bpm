@@ -11,6 +11,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.security.core.CredentialsContainer;
 
+import com.bpwizard.spring.boot.commons.domain.SpringUser;
 import com.bpwizard.spring.boot.commons.mongo.AbstractDocument;
 import com.bpwizard.spring.boot.commons.reactive.service.validation.UniqueEmail;
 import com.bpwizard.spring.boot.commons.security.UserDto;
@@ -28,7 +29,7 @@ import lombok.ToString;
 @Getter @Setter
 public abstract class AbstractMongoUser
 	<ID extends Serializable>
-	extends AbstractDocument<ID> implements CredentialsContainer {
+	extends AbstractDocument<ID> implements CredentialsContainer, SpringUser<ID> {
 
 	public static final int NAME_MIN = 1;
     public static final int NAME_MAX = 50;
@@ -56,7 +57,7 @@ public abstract class AbstractMongoUser
 	@Password(groups = {UserUtils.SignUpValidation.class, UserUtils.ChangeEmailValidation.class})
 	protected String password;
 	
-	protected Set<String> roles = new HashSet<>();
+	protected Set<String> roleNames = new HashSet<>();
 	
 	@Indexed(unique = true, sparse = true)
 	protected String newEmail;
@@ -80,7 +81,7 @@ public abstract class AbstractMongoUser
     private String providerId;
     
 	public final boolean hasRole(String role) {
-		return roles.contains(role);
+		return roleNames.contains(role);
 	}	
 	
 	/**
@@ -99,7 +100,7 @@ public abstract class AbstractMongoUser
 	 */
 	@Override
 	public String toString() {
-		return "AbstractUser [email=" + email + ", roles=" + roles + "]";
+		return "AbstractUser [email=" + email + ", roleNames=" + roleNames + "]";
 	}
 
 
@@ -122,7 +123,7 @@ public abstract class AbstractMongoUser
 		// roles would be org.hibernate.collection.internal.PersistentSet,
 		// which is not in another microservices not having Hibernate.
 		// So, let's convert it to HashSet
-		userDto.setRoles(new HashSet<String>(roles));
+		userDto.setRoles(new HashSet<String>(roleNames));
 		
 		userDto.setTag(toTag());
 		

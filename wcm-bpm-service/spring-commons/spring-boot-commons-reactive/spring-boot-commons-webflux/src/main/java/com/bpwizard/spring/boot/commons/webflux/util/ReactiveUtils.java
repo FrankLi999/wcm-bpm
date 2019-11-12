@@ -8,7 +8,9 @@ import javax.annotation.PostConstruct;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpCookie;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.web.server.ServerWebExchange;
 
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.security.UserDto;
@@ -31,6 +33,10 @@ public class ReactiveUtils {
 	@PostConstruct
 	public void postConstruct() {
 		NOT_FOUND_MONO = Mono.error(SpringExceptionUtils.NOT_FOUND_EXCEPTION);
+	}
+	
+	public static Optional<HttpCookie> fetchCookie(ServerWebExchange exchange, String cookieName) {		
+		return Optional.ofNullable(exchange.getRequest().getCookies().getFirst(cookieName));
 	}
 	
 	/**
@@ -56,36 +62,4 @@ public class ReactiveUtils {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	/**
-	 * Fetches a cookie from the request
-	 */
-//	public static Optional<Cookie> fetchCookie(HttpServletRequest request, String name) {
-//		
-//		Cookie[] cookies = request.getCookies();
-//	
-//		if (cookies != null && cookies.length > 0)
-//			for (int i = 0; i < cookies.length; i++)
-//				if (cookies[i].getName().equals(name))
-//					return Optional.of(cookies[i]);
-//		
-//		return Optional.empty();
-//	}
-//	
-	/**
-	 * Utility for deleting related cookies
-	 */
-//	public static void deleteCookies(HttpServletRequest request, HttpServletResponse response, String... cookiesToDelete) {
-//		
-//		Cookie[] cookies = request.getCookies();
-//		if (cookies != null && cookies.length > 0) {
-//			for (int i = 0; i < cookies.length; i++)
-//				if (ArrayUtils.contains(cookiesToDelete, cookies[i].getName())) {					
-//					cookies[i].setValue("");
-//					cookies[i].setPath("/");
-//					cookies[i].setMaxAge(0);
-//					response.addCookie(cookies[i]);
-//				}
-//		}
-//	}
 }

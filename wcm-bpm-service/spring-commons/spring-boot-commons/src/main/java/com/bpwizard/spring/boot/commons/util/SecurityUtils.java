@@ -40,6 +40,12 @@ public class SecurityUtils {
 	
 	private static final Logger log = LogManager.getLogger(SecurityUtils.class);
 	
+//	public static final String AUTHORIZATION_REQUEST_COOKIE_NAME = "spring_oauth2_authorization_request";
+//	public static final String BPW_REDIRECT_URI_COOKIE_PARAM_NAME = "spring_redirect_uri";
+	
+	public static final String AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
+	public static final String BPW_REDIRECT_URI_COOKIE_PARAM_NAME = "redirect_uri";
+	
 	// Computed authorities
 	public static final String GOOD_ADMIN = "GOOD_ADMIN";
 	public static final String GOOD_USER = "GOOD_USER";
@@ -48,7 +54,7 @@ public class SecurityUtils {
 	public static final String TOKEN_PREFIX = "Bearer ";
 	public static final int TOKEN_PREFIX_LENGTH = TOKEN_PREFIX.length();
 	public static final String TOKEN_RESPONSE_HEADER_NAME = "Authorization";
-
+	// public static final String TOKEN_RESPONSE_HEADER_NAME = "Spring-Authorization";
 
 	public static ApplicationContext applicationContext;
 	public static ObjectMapper objectMapper;

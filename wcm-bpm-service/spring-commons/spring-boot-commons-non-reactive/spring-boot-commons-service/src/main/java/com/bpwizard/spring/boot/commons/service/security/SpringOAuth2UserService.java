@@ -87,40 +87,38 @@ public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Seri
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		
 		OAuth2User oath2User = super.loadUser(userRequest);
-		return buildPrincipal(userRequest, oath2User);
+		return buildPrincipal(oath2User, userRequest.getClientRegistration().getRegistrationId());
 	}
 
 	/**
 	 * Builds the security principal from the given userReqest.
 	 * Registers the user if not already reqistered
 	 */
-	public SpringPrincipal buildPrincipal(OAuth2UserRequest userRequest, OAuth2User oath2User) {
-		String registrationId = userRequest.getClientRegistration().getRegistrationId();	
+	// public SpringPrincipal buildPrincipal(OAuth2UserRequest userRequest, OAuth2User oath2User) {
+	public SpringPrincipal buildPrincipal(OAuth2User oath2User, String registrationId) {
+		//String registrationId = userRequest.getClientRegistration().getRegistrationId();	
 		
 		Map<String, Object> attributes = oath2User.getAttributes();
 		OAuth2UserInfo oauth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
 				registrationId, 
 				attributes);
 		String email = springService.getOAuth2Email(registrationId, attributes);
-    	Optional<U> optionalUser = userDetailsService.findUserByEmail(email);
-    	U user;
-    	if (optionalUser.isPresent()) {
-    		user = optionalUser.get();
-//    		if(!user.getProvider().equals(AuthProvider.valueOf(registrationId))) {
-//                throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
-//                        user.getProvider() + " account. Please use your " + user.getProvider() +
-//                        " account to login.");
-//            }
-    		// user = updateExistingUser(user, oauth2UserInfo);
-    	} else {
-    		user = this.registerNewUser(registrationId, email, attributes, oauth2UserInfo);
+		SpringExceptionUtils.validate(email != null, "com.bpwizard.spring.oauth2EmailNeeded", registrationId).go();
+		
+		boolean emailVerified = springService.getOAuth2AccountVerified(registrationId, attributes);
+		SpringExceptionUtils.validate(emailVerified, "com.bpwizard.spring.oauth2EmailNotVerified", registrationId).go();
+		
+ 
+    	U user = userDetailsService.findUserByUsername(email).orElseGet(()  -> {
+    		U newUser = this.registerNewUser(registrationId, email, attributes, oauth2UserInfo);
 			try {
-				springService.mailForgotPasswordLink(user);
+				springService.mailForgotPasswordLink(newUser);
 			} catch (Throwable e) {
 				// In case of exception, just log the error and keep silent			
 				log.error(ExceptionUtils.getStackTrace(e));
 			}
-		}
+            return newUser;		
+    	});
     	UserDto userDto = user.toUserDto();
     	SpringPrincipal principal = new SpringPrincipal(userDto);
 		principal.setAttributes(attributes);
@@ -153,10 +151,10 @@ public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Seri
 		return user;
     }
 	
-	private U updateExistingUser(U existingUser, OAuth2UserInfo oauth2UserInfo) {
-        existingUser.setName(oauth2UserInfo.getName());
-        existingUser.setImageUrl(oauth2UserInfo.getImageUrl());
-        springService.save(existingUser);
-        return existingUser;
-    }
+//	private U updateExistingUser(U existingUser, OAuth2UserInfo oauth2UserInfo) {
+//        existingUser.setName(oauth2UserInfo.getName());
+//        existingUser.setImageUrl(oauth2UserInfo.getImageUrl());
+//        springService.save(existingUser);
+//        return existingUser;
+//    }
 }

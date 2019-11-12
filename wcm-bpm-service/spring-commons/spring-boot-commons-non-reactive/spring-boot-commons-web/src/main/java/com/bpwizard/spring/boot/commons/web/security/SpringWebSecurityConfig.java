@@ -7,7 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import com.bpwizard.spring.boot.commons.security.BlueTokenService;
 
 /**
@@ -37,21 +37,17 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		sessionCreationPolicy(http); // set session creation policy
-		csrf(http); // CSRF configuration
-		cors(http); // CORS configuration
-		login(http); // authentication
+		// login(http); // authentication
 		logout(http); // logout related configuration
 		exceptionHandling(http); // exception handling
-		oauth2Client(http);
+		tokenAuthentication(http); // configure token authentication filter
+		// oauth2Client(http);
+		csrf(http); // CSRF configuration
+		cors(http); // CORS configuration
 		authorizeRequests(http); // authorize requests
 		otherConfigurations(http); // override this to add more configurations
-		tokenAuthentication(http); // configure token authentication filter
 	}
 
-	protected void login(HttpSecurity http) throws Exception {
-	    //does nothing
-	}
-	
 	/**
 	 * Configuring session creation policy
 	 */
@@ -83,8 +79,8 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
 			 * To prevent redirection to the login page
 			 * when someone tries to access a restricted page
 			 **********************************************/
-			// .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
-			.authenticationEntryPoint(new RestAuthenticationEntryPoint());
+			.authenticationEntryPoint(new Http403ForbiddenEntryPoint());
+			// .authenticationEntryPoint(new RestAuthenticationEntryPoint());
 	}
 
 
@@ -114,9 +110,6 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors();
 	}
 
-	protected void oauth2Client(HttpSecurity http) throws Exception {
-		// does nothing
-	}
 	/**
 	 * URL based authorization configuration. Override this if needed.
 	 */

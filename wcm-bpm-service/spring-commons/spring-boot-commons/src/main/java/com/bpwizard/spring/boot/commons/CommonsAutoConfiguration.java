@@ -2,6 +2,7 @@ package com.bpwizard.spring.boot.commons;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,7 +13,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.access.PermissionEvaluator;
@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bpwizard.spring.boot.commons.cache.CacheConfig;
 import com.bpwizard.spring.boot.commons.cache.HazelcastProperties;
+import com.bpwizard.spring.boot.commons.exceptions.CommonsExceptionsAutoConfiguration;
 import com.bpwizard.spring.boot.commons.exceptions.handlers.BadCredentialsExceptionHandler;
 import com.bpwizard.spring.boot.commons.mail.MailSender;
 import com.bpwizard.spring.boot.commons.mail.MockMailSender;
@@ -54,6 +55,8 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 @EnableEncryptableProperties
 // @PropertySource("classpath:hazelcast.properties")
 // @ConfigurationProperties(prefix="hazelcast")
+@AutoConfigureBefore({
+	CommonsExceptionsAutoConfiguration.class})
 public class CommonsAutoConfiguration {
 
 	private static final Logger log = LogManager.getLogger(CommonsAutoConfiguration.class);
@@ -154,11 +157,11 @@ public class CommonsAutoConfiguration {
 		return new SecurityUtils(applicationContext, objectMapper);
 	}
 	
-	@Bean
-	@ConditionalOnMissingBean(RestTemplateBuilder.class)
-	public RestTemplateBuilder restTemplateBuilder() {
-		return new RestTemplateBuilder();
-	}
+//	@Bean
+//	@ConditionalOnMissingBean(RestTemplateBuilder.class)
+//	public RestTemplateBuilder restTemplateBuilder() {
+//		return new RestTemplateBuilder();
+//	}
 	
 	/**
 	 * Configures CaptchaValidator if missing

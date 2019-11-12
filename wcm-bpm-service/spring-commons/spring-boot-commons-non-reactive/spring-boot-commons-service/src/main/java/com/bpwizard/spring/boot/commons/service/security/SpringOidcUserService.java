@@ -28,7 +28,8 @@ public class SpringOidcUserService extends OidcUserService {
 	public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 		
 		OidcUser oidcUser = super.loadUser(userRequest);
-		SpringPrincipal principal = oauth2UserService.buildPrincipal(userRequest, oidcUser);
+		SpringPrincipal principal = oauth2UserService.buildPrincipal(oidcUser,
+				userRequest.getClientRegistration().getRegistrationId());
 		
 		principal.setClaims(oidcUser.getClaims());
 		principal.setIdToken(oidcUser.getIdToken());

@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+// import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -29,7 +29,7 @@ public class SpringJpaSecurityConfig extends SpringWebSecurityConfig {
 	private SpringOAuth2UserService<?, ?> oauth2UserService;
 	private OAuth2AuthenticationSuccessHandler<?> oauth2AuthenticationSuccessHandler;
 	private OAuth2AuthenticationFailureHandler oauth2AuthenticationFailureHandler;
-	private PasswordEncoder passwordEncoder;
+	// private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	public void createSpringSecurityConfig(SpringProperties properties, SpringUserDetailsService<?, ?> userDetailsService,
@@ -37,8 +37,8 @@ public class SpringJpaSecurityConfig extends SpringWebSecurityConfig {
 			SpringOidcUserService oidcUserService,
 			SpringOAuth2UserService<?, ?> oauth2UserService,
 			OAuth2AuthenticationSuccessHandler<?> oauth2AuthenticationSuccessHandler,
-			OAuth2AuthenticationFailureHandler oauth2AuthenticationFailureHandler,
-			PasswordEncoder passwordEncoder) {
+			// PasswordEncoder passwordEncoder
+			OAuth2AuthenticationFailureHandler oauth2AuthenticationFailureHandler) {
 		this.properties = properties;
 		this.userDetailsService = userDetailsService;
 		this.authenticationSuccessHandler = authenticationSuccessHandler;
@@ -46,10 +46,22 @@ public class SpringJpaSecurityConfig extends SpringWebSecurityConfig {
 		this.oauth2UserService = oauth2UserService;
 		this.oauth2AuthenticationSuccessHandler = oauth2AuthenticationSuccessHandler;
 		this.oauth2AuthenticationFailureHandler = oauth2AuthenticationFailureHandler;
-		this.passwordEncoder = passwordEncoder;
+		//this.passwordEncoder = passwordEncoder;
 		log.info("Created");
 	}
 
+	/**
+	 * Security configuration, calling protected methods
+	 */
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		
+		super.configure(http);
+		login(http); // authentication
+		exceptionHandling(http); // exception handling
+		oauth2Client(http);
+	}
+	
 	/**
 	 * Configuring authentication.
 	 */
@@ -81,7 +93,7 @@ public class SpringJpaSecurityConfig extends SpringWebSecurityConfig {
 	 */
 	protected String loginPage() {
 		
-		return "/api/core/login";
+		return properties.getLoginUrl(); //"/api/core/login";
 	}
 
 	
@@ -89,18 +101,22 @@ public class SpringJpaSecurityConfig extends SpringWebSecurityConfig {
 		
 		http.oauth2Login()
 			    .authorizationEndpoint()
-			        .baseUri("/oauth2/authorize")
+			        // .baseUri("/oauth2/authorize")
 				    .authorizationRequestRepository(new HttpCookieOAuth2AuthorizationRequestRepository(properties))
 			        .and()
-			    .redirectionEndpoint()
-                    .baseUri("/oauth2/callback/*")
-                    .and()
-                .userInfoEndpoint()
-    				.oidcUserService(oidcUserService)
-    				.userService(oauth2UserService)
-    				.and()
+			    // .redirectionEndpoint()
+                    // .baseUri("/oauth2/callback/*")
+                    // .and()
+                // .userInfoEndpoint()
+    				// .oidcUserService(oidcUserService)
+    				// .userService(oauth2UserService)
+    				// .and()
 			    .successHandler(oauth2AuthenticationSuccessHandler)
-			    .failureHandler(oauth2AuthenticationFailureHandler);
+			    .failureHandler(oauth2AuthenticationFailureHandler)
+				.userInfoEndpoint()
+					 .oidcUserService(oidcUserService)
+					 .userService(oauth2UserService);
+	
 	}	
 
 	

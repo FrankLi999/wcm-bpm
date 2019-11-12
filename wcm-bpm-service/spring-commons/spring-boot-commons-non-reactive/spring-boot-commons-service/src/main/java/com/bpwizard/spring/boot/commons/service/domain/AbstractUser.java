@@ -27,6 +27,7 @@ import com.bpwizard.spring.boot.commons.service.validation.UniqueEmail;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.validation.Password;
 import com.bpwizard.spring.boot.commons.vlidation.Captcha;
+import com.bpwizard.spring.boot.commons.domain.SpringUser;
 import com.bpwizard.wcm.repo.domain.Role;
 import com.bpwizard.wcm.repo.domain.Tenant;
 import com.bpwizard.wcm.repo.secureity.oauth2.AuthProvider;
@@ -45,7 +46,7 @@ import lombok.ToString;
  */
 @Getter @Setter
 @MappedSuperclass
-public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
+public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> implements SpringUser<ID> {
     public static final int NAME_MIN = 1;
     public static final int NAME_MAX = 50;
     
@@ -143,7 +144,11 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
     private String providerId;
     
 	public final boolean hasRole(String role) {
-		return roles.contains(role);
+		return roles.stream().anyMatch(r -> r.getName().equals(role));
+	}	
+	
+	public final void removeRole(String roleName) {
+		this.roles = this.roles.stream().filter(r -> r.getName().equals(roleName)).collect(Collectors.toSet());
 	}	
 	
 	/**
@@ -167,6 +172,9 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> {
 	}
 
 
+	public Set<String> getRoleNames() {
+		return this.getRoles().stream().map(r -> r.getName()).collect(Collectors.toSet());
+	}
 	/**
 	 * Makes a User DTO
 	 */

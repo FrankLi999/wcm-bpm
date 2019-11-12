@@ -29,25 +29,32 @@ public class SpringProperties {
     public SpringProperties() {
 		log.info("Created");
 	}
+
+	/**
+	 * URL of the login endpoint 
+	 * e.g. POST /api/core/login
+	 */
+    private String loginUrl = "/api/core/login";
+
     
-    private final OAuth2 oauth2 = new OAuth2();
-
-    public static final class OAuth2 {
-        private List<String> authorizedRedirectUris = new ArrayList<>();
-
-        public List<String> getAuthorizedRedirectUris() {
-            return authorizedRedirectUris;
-        }
-
-        public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
-            this.authorizedRedirectUris = authorizedRedirectUris;
-            return this;
-        }
-    }
-
-    public OAuth2 getOauth2() {
-        return oauth2;
-    }
+//    private final OAuth2 oauth2 = new OAuth2();
+//
+//    public static final class OAuth2 {
+//        private List<String> authorizedRedirectUris = new ArrayList<>();
+//
+//        public List<String> getAuthorizedRedirectUris() {
+//            return authorizedRedirectUris;
+//        }
+//
+//        public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
+//            this.authorizedRedirectUris = authorizedRedirectUris;
+//            return this;
+//        }
+//    }
+//
+//    public OAuth2 getOauth2() {
+//        return oauth2;
+//    }
 
     /**
 	 * Client web application's base URL.
@@ -74,7 +81,7 @@ public class SpringProperties {
     /**
 	 * Properties related to the initial Admin user to be created
 	 */
-	// private Admin admin = new Admin();
+	private Admin admin = new Admin();
 	private String rolename[];
 	private User user[];
 	
@@ -184,23 +191,21 @@ public class SpringProperties {
 	
 	/**
 	 * Properties regarding the initial Admin user to be created
-	 * 
-	 * @author Sanjay Patel
 	 */
-//	@Getter @Setter
-//	public static class Admin {
-//		
-//		/**
-//		 * Login ID of the initial Admin user to be created 
-//		 */
-//		private String username;
-//		
-//		/**
-//		 * Password of the initial Admin user to be created 
-//		 */		
-//		private String password;
-//	}
-//	
+	@Getter @Setter
+	public static class Admin {
+		
+		/**
+		 * Login ID of the initial Admin user to be created 
+		 */
+		private String username;
+		
+		/**
+		 * Password of the initial Admin user to be created 
+		 */		
+		private String password;
+	}
+	
 	@Getter @Setter
 	public static class User {
 		

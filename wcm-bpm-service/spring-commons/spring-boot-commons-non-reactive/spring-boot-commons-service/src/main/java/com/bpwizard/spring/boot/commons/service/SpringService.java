@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import com.bpwizard.spring.boot.commons.AbstractSpringService;;
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.domain.ChangePasswordForm;
 import com.bpwizard.spring.boot.commons.domain.ResetPasswordForm;
@@ -59,7 +60,8 @@ import com.nimbusds.jwt.JWTClaimsSet;
 @Validated
 @Transactional(propagation=Propagation.SUPPORTS, readOnly=true)
 public abstract class SpringService
-	<U extends AbstractUser<ID>, ID extends Serializable> {
+	<U extends AbstractUser<ID>, ID extends Serializable>
+    extends AbstractSpringService<U, ID> {
 
     private static final Logger log = LogManager.getLogger(SpringService.class);
     
@@ -242,18 +244,29 @@ public abstract class SpringService
 		log.debug("Getting context ...");
 
 		// make the context
-		Map<String, Object> sharedProperties = new HashMap<String, Object>(2);
-		sharedProperties.put("reCaptchaSiteKey", properties.getRecaptcha().getSitekey());
-		sharedProperties.put("shared", properties.getShared());
+//		Map<String, Object> sharedProperties = new HashMap<String, Object>(2);
+//		sharedProperties.put("reCaptchaSiteKey", properties.getRecaptcha().getSitekey());
+//		sharedProperties.put("shared", properties.getShared());
+//		
+//		UserDto currentUser = WebUtils.currentUser();
+//		if (currentUser != null)
+//			addAuthHeader(response, currentUser.getUsername(),
+//				expirationMillis.orElse(properties.getJwt().getExpirationMillis()));
+//		
+//		return SecurityUtils.mapOf(
+//				"context", sharedProperties,
+//				"user", WebUtils.currentUser());
+		
+		Map<String, Object> context = buildContext();
 		
 		UserDto currentUser = WebUtils.currentUser();
-		if (currentUser != null)
+		if (currentUser != null) {
 			addAuthHeader(response, currentUser.getUsername(),
 				expirationMillis.orElse(properties.getJwt().getExpirationMillis()));
+			context.put("user", currentUser);
+		}
 		
-		return SecurityUtils.mapOf(
-				"context", sharedProperties,
-				"user", WebUtils.currentUser());	
+		return context;	
 	}
 	
 	
@@ -302,47 +315,47 @@ public abstract class SpringService
 	}
 	
 	
-	/**
-	 * Sends verification mail to a unverified user.
-	 */
-	protected void sendVerificationMail(final U user) {
-		try {
-			
-			log.debug("Sending verification mail to: " + user);
-			
-			String verificationCode = greenTokenService.createToken(
-					GreenTokenService.VERIFY_AUDIENCE,
-					user.getId().toString(), properties.getJwt().getExpirationMillis(),
-					SecurityUtils.mapOf("email", user.getEmail()));
-
-			// make the link
-			String verifyLink = properties.getApplicationUrl()
-				+ "/users/" + user.getId() + "/verification?code=" + verificationCode;
-
-			// send the mail
-			sendVerificationMail(user, verifyLink);
-
-			log.debug("Verification mail to " + user.getEmail() + " queued.");
-			
-		} catch (Throwable e) {
-			// In case of exception, just log the error and keep silent
-			log.error(ExceptionUtils.getStackTrace(e));
-		}
-	}	
-
-	
-	/**
-	 * Sends verification mail to a unverified user.
-	 * Override this method if you're using a different MailData
-	 */
-	protected void sendVerificationMail(final U user, String verifyLink) {
-		
-		// send the mail
-		mailSender.send(SpringMailData.of(user.getEmail(),
-			SpringExceptionUtils.getMessage("com.bpwizard.spring.verifySubject"),
-			SpringExceptionUtils.getMessage(
-				"com.bpwizard.spring.verifyEmail",	verifyLink)));
-	}	
+//	/**
+//	 * Sends verification mail to a unverified user.
+//	 */
+//	protected void sendVerificationMail(final U user) {
+//		try {
+//			
+//			log.debug("Sending verification mail to: " + user);
+//			
+//			String verificationCode = greenTokenService.createToken(
+//					GreenTokenService.VERIFY_AUDIENCE,
+//					user.getId().toString(), properties.getJwt().getExpirationMillis(),
+//					SecurityUtils.mapOf("email", user.getEmail()));
+//
+//			// make the link
+//			String verifyLink = properties.getApplicationUrl()
+//				+ "/users/" + user.getId() + "/verification?code=" + verificationCode;
+//
+//			// send the mail
+//			sendVerificationMail(user, verifyLink);
+//
+//			log.debug("Verification mail to " + user.getEmail() + " queued.");
+//			
+//		} catch (Throwable e) {
+//			// In case of exception, just log the error and keep silent
+//			log.error(ExceptionUtils.getStackTrace(e));
+//		}
+//	}	
+//
+//	
+//	/**
+//	 * Sends verification mail to a unverified user.
+//	 * Override this method if you're using a different MailData
+//	 */
+//	protected void sendVerificationMail(final U user, String verifyLink) {
+//		
+//		// send the mail
+//		mailSender.send(SpringMailData.of(user.getEmail(),
+//			SpringExceptionUtils.getMessage("com.bpwizard.spring.verifySubject"),
+//			SpringExceptionUtils.getMessage(
+//				"com.bpwizard.spring.verifyEmail",	verifyLink)));
+//	}	
 
 	
 	/**
@@ -355,7 +368,7 @@ public abstract class SpringService
 		SpringExceptionUtils.ensureFound(user);
 		
 		// must be unverified
-		SpringExceptionUtils.validate(user.getRoles().contains(UserUtils.Role.UNVERIFIED),
+		SpringExceptionUtils.validate(user.hasRole(UserUtils.Role.UNVERIFIED),
 				"com.bpwizard.spring.alreadyVerified").go();	
 
 		// send the verification mail
@@ -412,7 +425,7 @@ public abstract class SpringService
 				claims.getClaim("email").equals(user.getEmail()),
 				"com.bpwizard.spring.wrong.verificationCode");
 		
-		user.getRoles().remove(UserUtils.Role.UNVERIFIED); // make him verified
+		user.removeRole(UserUtils.Role.UNVERIFIED); // make him verified
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 		userRepository.save(user);
 		
@@ -444,43 +457,43 @@ public abstract class SpringService
 	}
 	
 	
-	/**
-	 * Mails the forgot password link.
-	 * 
-	 * @param user
-	 */
-	public void mailForgotPasswordLink(U user) {
-		
-		log.debug("Mailing forgot password link to user: " + user);
-
-		String forgotPasswordCode = greenTokenService.createToken(
-				GreenTokenService.FORGOT_PASSWORD_AUDIENCE,
-				user.getEmail(), properties.getJwt().getExpirationMillis());
-
-		// make the link
-		String forgotPasswordLink =	properties.getApplicationUrl()
-			    + "/reset-password?code=" + forgotPasswordCode;
-		
-		mailForgotPasswordLink(user, forgotPasswordLink);
-		
-		log.debug("Forgot password link mail queued.");
-	}
+//	/**
+//	 * Mails the forgot password link.
+//	 * 
+//	 * @param user
+//	 */
+//	public void mailForgotPasswordLink(U user) {
+//		
+//		log.debug("Mailing forgot password link to user: " + user);
+//
+//		String forgotPasswordCode = greenTokenService.createToken(
+//				GreenTokenService.FORGOT_PASSWORD_AUDIENCE,
+//				user.getEmail(), properties.getJwt().getExpirationMillis());
+//
+//		// make the link
+//		String forgotPasswordLink =	properties.getApplicationUrl()
+//			    + "/reset-password?code=" + forgotPasswordCode;
+//		
+//		mailForgotPasswordLink(user, forgotPasswordLink);
+//		
+//		log.debug("Forgot password link mail queued.");
+//	}
 
 	
-	/**
-	 * Mails the forgot password link.
-	 * 
-	 * Override this method if you're using a different MailData
-	 */
-	public void mailForgotPasswordLink(U user, String forgotPasswordLink) {
-		
-		// send the mail
-		mailSender.send(SpringMailData.of(user.getEmail(),
-				SpringExceptionUtils.getMessage("com.bpwizard.spring.forgotPasswordSubject"),
-				SpringExceptionUtils.getMessage("com.bpwizard.spring.forgotPasswordEmail",
-					forgotPasswordLink)));
-	}
-	
+//	/**
+//	 * Mails the forgot password link.
+//	 * 
+//	 * Override this method if you're using a different MailData
+//	 */
+//	public void mailForgotPasswordLink(U user, String forgotPasswordLink) {
+//		
+//		// send the mail
+//		mailSender.send(SpringMailData.of(user.getEmail(),
+//				SpringExceptionUtils.getMessage("com.bpwizard.spring.forgotPasswordSubject"),
+//				SpringExceptionUtils.getMessage("com.bpwizard.spring.forgotPasswordEmail",
+//					forgotPasswordLink)));
+//	}
+//	
 	/**
 	 * Resets the password.
 	 */
@@ -601,7 +614,7 @@ public abstract class SpringService
 			} else {
 				
 				if (user.hasRole(UserUtils.Role.UNVERIFIED))
-					user.getRoles().remove(UserUtils.Role.UNVERIFIED); // make user verified
+					user.removeRole(UserUtils.Role.UNVERIFIED); // make user verified
 			}
 			
 			user.setRoles(updatedUser.getRoles());
@@ -728,7 +741,7 @@ public abstract class SpringService
 		
 		// make the user verified if he is not
 		if (user.hasRole(UserUtils.Role.UNVERIFIED))
-			user.getRoles().remove(UserUtils.Role.UNVERIFIED);
+			user.removeRole(UserUtils.Role.UNVERIFIED);
 		
 		userRepository.save(user);
 		
@@ -743,40 +756,40 @@ public abstract class SpringService
 	}
 
 
-	/**
-	 * Extracts the email id from user attributes received from OAuth2 provider, e.g. Google
-	 * 
-	 */
-	public String getOAuth2Email(String registrationId, Map<String, Object> attributes) {
-
-		return (String) attributes.get(StandardClaimNames.EMAIL);
-	}
+//	/**
+//	 * Extracts the email id from user attributes received from OAuth2 provider, e.g. Google
+//	 * 
+//	 */
+//	public String getOAuth2Email(String registrationId, Map<String, Object> attributes) {
+//
+//		return (String) attributes.get(StandardClaimNames.EMAIL);
+//	}
+//
+//	
+//	/**
+//	 * Extracts additional fields, e.g. name from user attributes received from OAuth2 provider, e.g. Google
+//	 * Override this if you introduce more user fields, e.g. name
+//	 */
+//	public void fillAdditionalFields(String clientId, U user, Map<String, Object> attributes) {
+//		
+//	}
 
 	
-	/**
-	 * Extracts additional fields, e.g. name from user attributes received from OAuth2 provider, e.g. Google
-	 * Override this if you introduce more user fields, e.g. name
-	 */
-	public void fillAdditionalFields(String clientId, U user, Map<String, Object> attributes) {
-		
-	}
-
-	
-	/**
-	 * Checks if the account at the OAuth2 provider is verified 
-	 */
-	public boolean getOAuth2AccountVerified(String registrationId, Map<String, Object> attributes) {
-
-		Object verified = attributes.get(StandardClaimNames.EMAIL_VERIFIED);
-		if (verified == null)
-			verified = attributes.get("verified");
-		
-		try {
-			return (boolean) verified;
-		} catch (Throwable t) {
-			return false;
-		}
-	}
+//	/**
+//	 * Checks if the account at the OAuth2 provider is verified 
+//	 */
+//	public boolean getOAuth2AccountVerified(String registrationId, Map<String, Object> attributes) {
+//
+//		Object verified = attributes.get(StandardClaimNames.EMAIL_VERIFIED);
+//		if (verified == null)
+//			verified = attributes.get("verified");
+//		
+//		try {
+//			return (boolean) verified;
+//		} catch (Throwable t) {
+//			return false;
+//		}
+//	}
 
 
 	/**

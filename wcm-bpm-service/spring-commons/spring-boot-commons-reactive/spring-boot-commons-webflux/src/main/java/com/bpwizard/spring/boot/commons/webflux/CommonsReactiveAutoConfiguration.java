@@ -47,7 +47,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 @Configuration
 @EnableReactiveMethodSecurity
 @AutoConfigureBefore({
-	WebFluxAutoConfiguration.EnableWebFluxConfiguration.class,
+	// WebFluxAutoConfiguration.EnableWebFluxConfiguration.class,
 	WebFluxAutoConfiguration.class,
 	ErrorWebFluxAutoConfiguration.class,
 	ReactiveSecurityAutoConfiguration.class,
@@ -146,58 +146,58 @@ public class CommonsReactiveAutoConfiguration {
 		return new ReactiveUtils();
 	}
 	
-	/**
-	 * Configures ErrorResponseComposer if missing
-	 */	
-	@Bean
-	@ConditionalOnMissingBean(ErrorResponseComposer.class)
-	public <T extends Throwable>
-	ErrorResponseComposer<T> errorResponseComposer(List<AbstractExceptionHandler<T>> handlers) {
-		
-        log.info("Configuring ErrorResponseComposer");       
-		return new ErrorResponseComposer<T>(handlers);
-	}
-
-	
-	/**
-	 * Configures ExceptionCodeMaker if missing
-	 */	
-	@Bean
-	@ConditionalOnMissingBean(ExceptionIdMaker.class)
-	public ExceptionIdMaker exceptionIdMaker() {
-		
-        log.info("Configuring ExceptionIdMaker");
-        return ex -> {
-        	
-        	if (ex == null)
-        		return null;
-        	
-        	return ex.getClass().getSimpleName();
-        };
-	}
-
-	
-	/**
-	 * Configures LexUtils
-	 */
-	@Bean
-	public SpringExceptionUtils springExceptionUtils(MessageSource messageSource,
-			LocalValidatorFactoryBean validator,
-			ExceptionIdMaker exceptionIdMaker) {
-
-        log.info("Configuring LexUtils");       		
-		return new SpringExceptionUtils(messageSource, validator, exceptionIdMaker);
-	}
-	
-	/**
-	 * Merge ValidationMessages.properties into messages.properties
-	 */	
-    @Bean
-	@ConditionalOnMissingBean(Validator.class)
-    public Validator validator(MessageSource messageSource) {
-
-        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-        localValidatorFactoryBean.setValidationMessageSource(messageSource);
-        return localValidatorFactoryBean;
-    }
+//	/**
+//	 * Configures ErrorResponseComposer if missing
+//	 */	
+//	@Bean
+//	@ConditionalOnMissingBean(ErrorResponseComposer.class)
+//	public <T extends Throwable>
+//	ErrorResponseComposer<T> errorResponseComposer(List<AbstractExceptionHandler<T>> handlers) {
+//		
+//        log.info("Configuring ErrorResponseComposer");       
+//		return new ErrorResponseComposer<T>(handlers);
+//	}
+//
+//	
+//	/**
+//	 * Configures ExceptionCodeMaker if missing
+//	 */	
+//	@Bean
+//	@ConditionalOnMissingBean(ExceptionIdMaker.class)
+//	public ExceptionIdMaker exceptionIdMaker() {
+//		
+//        log.info("Configuring ExceptionIdMaker");
+//        return ex -> {
+//        	
+//        	if (ex == null)
+//        		return null;
+//        	
+//        	return ex.getClass().getSimpleName();
+//        };
+//	}
+//
+//	
+//	/**
+//	 * Configures LexUtils
+//	 */
+//	@Bean
+//	public SpringExceptionUtils springExceptionUtils(MessageSource messageSource,
+//			LocalValidatorFactoryBean validator,
+//			ExceptionIdMaker exceptionIdMaker) {
+//
+//        log.info("Configuring LexUtils");       		
+//		return new SpringExceptionUtils(messageSource, validator, exceptionIdMaker);
+//	}
+//	
+//	/**
+//	 * Merge ValidationMessages.properties into messages.properties
+//	 */	
+//    @Bean
+//	@ConditionalOnMissingBean(Validator.class)
+//    public Validator validator(MessageSource messageSource) {
+//
+//        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+//        localValidatorFactoryBean.setValidationMessageSource(messageSource);
+//        return localValidatorFactoryBean;
+//    }
 }

@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.security.BlueTokenService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
+import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 import com.bpwizard.wcm.repo.exception.BadRequestException;
 
@@ -38,15 +39,16 @@ public class OAuth2AuthenticationSuccessHandler<ID extends Serializable>
 	private SpringProperties properties;
 	private BlueTokenService blueTokenService;
 
-	@Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        super.onAuthenticationSuccess(request, response, authentication);
-        this.clearAuthenticationAttributes(request, response);
-    }
+//	@Override
+//    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//        super.onAuthenticationSuccess(request, response, authentication);
+//        this.clearAuthenticationAttributes(request, response);
+//    }
 	
 	@Override
 	protected String determineTargetUrl(HttpServletRequest request,
 			HttpServletResponse response) {
+		
 		
 		UserDto currentUser = WebUtils.currentUser();
 		
@@ -56,42 +58,17 @@ public class OAuth2AuthenticationSuccessHandler<ID extends Serializable>
 				(long) properties.getJwt().getShortLivedMillis());
 
 		String targetUrl = WebUtils.fetchCookie(request,
-				HttpCookieOAuth2AuthorizationRequestRepository.BPW_REDIRECT_URI_COOKIE_PARAM_NAME)
+				SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME)
 				.map(Cookie::getValue)
-				.orElse(properties.getOauth2AuthenticationSuccessUrl());
+			.orElse(properties.getOauth2AuthenticationSuccessUrl());
 		
-		if(!isAuthorizedRedirectUri(targetUrl)) {
-            throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
-        }
-		clearAuthenticationAttributes(request, response);
+		WebUtils.deleteCookies(request, response,
+				SecurityUtils.AUTHORIZATION_REQUEST_COOKIE_NAME,
+				SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME);
 		
-		// return targetUrl + shortLivedAuthToken;
-		return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", shortLivedAuthToken)
-                .build().toUriString();
+		return targetUrl + shortLivedAuthToken;
+//		return UriComponentsBuilder.fromUriString(targetUrl)
+//                .queryParam("token", shortLivedAuthToken)
+//                .build().toUriString();
 	}
-	
-	protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-		WebUtils.deleteCookies(
-			request,
-			response, 
-			HttpCookieOAuth2AuthorizationRequestRepository.AUTHORIZATION_REQUEST_COOKIE_NAME,
-			HttpCookieOAuth2AuthorizationRequestRepository.BPW_REDIRECT_URI_COOKIE_PARAM_NAME);
-    }
-	
-	private boolean isAuthorizedRedirectUri(String uri) {
-        URI clientRedirectUri = URI.create(uri);
-
-        return properties.getOauth2().getAuthorizedRedirectUris()
-                .stream()
-                .anyMatch(authorizedRedirectUri -> {
-                    // Only validate host and port. Let the clients use different paths if they want to
-                    URI authorizedURI = URI.create(authorizedRedirectUri);
-                    if(authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
-                            && authorizedURI.getPort() == clientRedirectUri.getPort()) {
-                        return true;
-                    }
-                    return false;
-                });
-    }
 }

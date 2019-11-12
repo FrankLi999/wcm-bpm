@@ -19,13 +19,9 @@ import com.bpwizard.spring.boot.commons.web.util.WebUtils;
  */
 public class HttpCookieOAuth2AuthorizationRequestRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 	
-	public static final String AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
-	public static final String BPW_REDIRECT_URI_COOKIE_PARAM_NAME = "redirect_uri";
-    
 	private int cookieExpirySecs;
 	
 	public HttpCookieOAuth2AuthorizationRequestRepository(SpringProperties properties) {
-
 		cookieExpirySecs = (int)properties.getJwt().getShortLivedMillis() / 1000;
 	}
 
@@ -37,7 +33,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
 		
 		Assert.notNull(request, "request cannot be null");
 		
-		return WebUtils.fetchCookie(request, AUTHORIZATION_REQUEST_COOKIE_NAME)
+		return WebUtils.fetchCookie(request, SecurityUtils.AUTHORIZATION_REQUEST_COOKIE_NAME)
 					.map(this::deserialize)
 					.orElse(null);
 	}
@@ -55,19 +51,19 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
 		Assert.notNull(response, "response cannot be null");
 		
 		if (authorizationRequest == null) {			
-			WebUtils.deleteCookies(request, response, AUTHORIZATION_REQUEST_COOKIE_NAME, BPW_REDIRECT_URI_COOKIE_PARAM_NAME);
+			WebUtils.deleteCookies(request, response, SecurityUtils.AUTHORIZATION_REQUEST_COOKIE_NAME, SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME);
 			return;
 		}
 		
-		Cookie cookie = new Cookie(AUTHORIZATION_REQUEST_COOKIE_NAME, SecurityUtils.serialize(authorizationRequest));
+		Cookie cookie = new Cookie(SecurityUtils.AUTHORIZATION_REQUEST_COOKIE_NAME, SecurityUtils.serialize(authorizationRequest));
 		cookie.setPath("/");
 		cookie.setHttpOnly(true);
 		cookie.setMaxAge(cookieExpirySecs);
 		response.addCookie(cookie);
 		
-		String springRedirectUri = request.getParameter(BPW_REDIRECT_URI_COOKIE_PARAM_NAME);
+		String springRedirectUri = request.getParameter(SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME);
 		if (StringUtils.isNotBlank(springRedirectUri)) {
-			cookie = new Cookie(BPW_REDIRECT_URI_COOKIE_PARAM_NAME, springRedirectUri);
+			cookie = new Cookie(SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME, springRedirectUri);
 			cookie.setPath("/");
 			cookie.setHttpOnly(true);
 			cookie.setMaxAge(cookieExpirySecs);
@@ -80,7 +76,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
 			HttpServletRequest request, 
 			HttpServletResponse response) {		
 		OAuth2AuthorizationRequest originalRequest = loadAuthorizationRequest(request);
-		WebUtils.deleteCookies(request, response, AUTHORIZATION_REQUEST_COOKIE_NAME);
+		WebUtils.deleteCookies(request, response, SecurityUtils.AUTHORIZATION_REQUEST_COOKIE_NAME);
 		return originalRequest;
 	}
 	

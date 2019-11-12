@@ -16,6 +16,10 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +27,7 @@ import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 import com.bpwizard.spring.boot.commons.reactive.demo.domain.User;
 import com.bpwizard.spring.boot.commons.reactive.demo.dto.TestErrorResponse;
+import com.bpwizard.spring.boot.commons.reactive.demo.dto.TestSpringFieldError;
 import com.bpwizard.spring.boot.commons.reactive.demo.dto.TestUser;
 import com.bpwizard.spring.boot.commons.reactive.demo.dto.TestUserDto;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
@@ -73,6 +78,21 @@ public class SignupTests extends AbstractTests {
 						"userMono.email",
 						"userMono.password",
 						"userMono.name");
+				Collection<TestSpringFieldError> errors = errorResponseResult.getResponseBody().getErrors();
+				assertTrue(errors.stream()
+						.map(TestSpringFieldError::getCode).collect(Collectors.toSet())
+						.containsAll(Arrays.asList(
+								"NotBlank",
+								"Size",
+								"Email")));
+				
+				assertTrue(errors.stream()
+						.map(TestSpringFieldError::getMessage).collect(Collectors.toSet())
+						.containsAll(Arrays.asList(
+								"Not a well formed email address",
+								"Name required",
+								"Email must be between 4 and 250 characters",
+								"Password must be between 6 and 50 characters")));
 			});
 		
 		verify(mailSender, never()).send(any());

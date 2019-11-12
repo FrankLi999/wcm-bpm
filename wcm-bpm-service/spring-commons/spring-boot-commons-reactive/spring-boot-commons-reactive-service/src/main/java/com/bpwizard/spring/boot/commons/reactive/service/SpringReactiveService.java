@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
 
+import com.bpwizard.spring.boot.commons.AbstractSpringService;
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.SpringProperties.Admin;
 import com.bpwizard.spring.boot.commons.domain.ChangePasswordForm;
@@ -47,7 +48,8 @@ import reactor.util.function.Tuple3;
 import reactor.util.function.Tuples;
 
 public abstract class SpringReactiveService
-	<U extends AbstractMongoUser<ID>, ID extends Serializable> {
+	<U extends AbstractMongoUser<ID>, ID extends Serializable>
+    extends AbstractSpringService<U, ID> {
 
     private static final Logger log = LogManager.getLogger(SpringReactiveService.class);
     
@@ -127,7 +129,7 @@ public abstract class SpringReactiveService
     	user.setEmail(initialAdmin.getUsername());
 		user.setPassword(passwordEncoder.encode(
 			properties.getAdmin().getPassword()));
-		user.getRoles().add(UserUtils.Role.ADMIN);
+		user.getRoleNames().add(UserUtils.Role.ADMIN);
 		
 		return user;
 	}
@@ -223,7 +225,7 @@ public abstract class SpringReactiveService
 	 */
 	protected void makeUnverified(U user) {
 		
-		user.getRoles().add(UserUtils.Role.UNVERIFIED);
+		user.getRoleNames().add(UserUtils.Role.UNVERIFIED);
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 	}
 	
@@ -297,7 +299,7 @@ public abstract class SpringReactiveService
 	protected void resendVerificationMail(U user) {
 
 		// must be unverified
-		SpringExceptionUtils.validate(user.getRoles().contains(UserUtils.Role.UNVERIFIED),
+		SpringExceptionUtils.validate(user.getRoleNames().contains(UserUtils.Role.UNVERIFIED),
 				"com.bpwizard.spring.alreadyVerified").go();	
 
 		// send the verification mail
@@ -338,7 +340,7 @@ public abstract class SpringReactiveService
 				claims.getClaim("email").equals(user.getEmail()),
 				"com.bpwizard.spring.wrong.verificationCode");
 		
-		user.getRoles().remove(UserUtils.Role.UNVERIFIED); // make him verified
+		user.getRoleNames().remove(UserUtils.Role.UNVERIFIED); // make him verified
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 		
 		return user;
@@ -535,7 +537,7 @@ public abstract class SpringReactiveService
 
 			// update the roles
 			
-			if (user.getRoles().equals(updatedUser.getRoles())) // roles are same
+			if (user.getRoleNames().equals(updatedUser.getRoleNames())) // roles are same
 				return;
 			
 			if (updatedUser.hasRole(UserUtils.Role.UNVERIFIED)) {
@@ -547,10 +549,10 @@ public abstract class SpringReactiveService
 			} else {
 				
 				if (user.hasRole(UserUtils.Role.UNVERIFIED))
-					user.getRoles().remove(UserUtils.Role.UNVERIFIED); // make user verified
+					user.getRoleNames().remove(UserUtils.Role.UNVERIFIED); // make user verified
 			}
 			
-			user.setRoles(updatedUser.getRoles());
+			user.setRoleNames(updatedUser.getRoleNames());
 			user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 		}
 	}
@@ -771,7 +773,7 @@ public abstract class SpringReactiveService
 		
 		// make the user verified if he is not
 		if (user.hasRole(UserUtils.Role.UNVERIFIED))
-			user.getRoles().remove(UserUtils.Role.UNVERIFIED);
+			user.getRoleNames().remove(UserUtils.Role.UNVERIFIED);
 		
 		return user;
 	}

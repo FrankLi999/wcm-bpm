@@ -12,7 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.domain.IdConverter;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.mongo.CommonsMongoAutoConfiguration;
@@ -20,6 +22,7 @@ import com.bpwizard.spring.boot.commons.reactive.service.domain.AbstractMongoUse
 import com.bpwizard.spring.boot.commons.reactive.service.domain.AbstractMongoUserRepository;
 import com.bpwizard.spring.boot.commons.reactive.service.security.SpringReactiveSecurityConfig;
 import com.bpwizard.spring.boot.commons.reactive.service.security.SpringReactiveUserDetailsService;
+import com.bpwizard.spring.boot.commons.reactive.service.security.ReactiveOAuth2AuthenticationSuccessHandler;
 import com.bpwizard.spring.boot.commons.reactive.service.util.ReactiveServiceUtils;
 import com.bpwizard.spring.boot.commons.security.BlueTokenService;
 
@@ -43,15 +46,43 @@ public class ReactiveAutoConfiguration {
 	}
 	
 	@Bean
+	@ConditionalOnMissingBean(ReactiveOAuth2AuthenticationSuccessHandler.class)
+	public <U extends AbstractMongoUser<ID>, ID extends Serializable>
+		ReactiveOAuth2AuthenticationSuccessHandler<U, ID> reactiveOAuth2AuthenticationSuccessHandler(
+				BlueTokenService blueTokenService,
+				AbstractMongoUserRepository<U, ID> userRepository,
+				SpringReactiveUserDetailsService<U, ID> userDetailsService,
+				SpringReactiveService<U, ID> lemonService,
+				PasswordEncoder passwordEncoder,
+				SpringProperties properties) {
+		
+		log.info("Configuring ReactiveOAuth2AuthenticationSuccessHandler ...");
+
+		return new ReactiveOAuth2AuthenticationSuccessHandler<U,ID>(
+				blueTokenService,
+				userRepository,
+				userDetailsService,
+				lemonService,
+				passwordEncoder,
+				properties);
+	}
+	
+	@Bean
 	@ConditionalOnMissingBean(SpringReactiveSecurityConfig.class)
 	public <U extends AbstractMongoUser<ID>, ID extends Serializable>
 		SpringReactiveSecurityConfig<U,ID> springReactiveSecurityConfig(
 				BlueTokenService blueTokenService,
-				SpringReactiveUserDetailsService<U, ID> userDetailsService) {
+				SpringReactiveUserDetailsService<U, ID> userDetailsService,
+				ReactiveOAuth2AuthenticationSuccessHandler<U,ID> reactiveOAuth2AuthenticationSuccessHandler,
+				SpringProperties properties) {
 		
 		log.info("Configuring SpringReactiveSecurityConfig ...");
 
-		return new SpringReactiveSecurityConfig<U,ID>(blueTokenService, userDetailsService);
+		return new SpringReactiveSecurityConfig<U,ID>(
+				blueTokenService, 
+				userDetailsService,
+				reactiveOAuth2AuthenticationSuccessHandler,
+				properties);
 	}
 	
 	
@@ -67,14 +98,15 @@ public class ReactiveAutoConfiguration {
 		return new SpringReactiveUserDetailsService<U, ID>(userRepository);
 	}
 
-	@Bean	
-	@ConditionalOnMissingBean(ReactiveAuthenticationManager.class)
-	public <U extends AbstractMongoUser<ID>, ID extends Serializable> ReactiveAuthenticationManager ReactiveAuthenticationManager(SpringReactiveUserDetailsService<U, ID> userDetailsService) {
-		log.info("Configuring ReactiveAuthenticationManager");     
-		return new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
-	}
+//	@Bean	
+//	@ConditionalOnMissingBean(ReactiveAuthenticationManager.class)
+//	public <U extends AbstractMongoUser<ID>, ID extends Serializable> ReactiveAuthenticationManager ReactiveAuthenticationManager(SpringReactiveUserDetailsService<U, ID> userDetailsService) {
+//		log.info("Configuring ReactiveAuthenticationManager");     
+//		return new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+//	}
+	
 	/**
-	 * Configures LeeUtils
+	 * Configures ReactiveServiceUtils
 	 */
 	@Bean
 	public ReactiveServiceUtils reactiveServiceUtils(SpringExceptionUtils lexUtils) {
