@@ -22,6 +22,13 @@
    cd bpw-layout
    ng generate library bpw-layout --prefix=bpw-layout
 
+
+   ng new bpw-theme --create-application=false
+   cd bpw-theme
+   ng generate library wcm-authoring-theme --prefix=wcm-authoring-theme
+   ng generate library bpm-theme --prefix=bpm-theme
+
+
 # Build
 NOTE: ts file name should not has the same name and the folder name, otherwise, ng-packer is going to fail.
 

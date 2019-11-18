@@ -3,7 +3,7 @@ import { FuseNavigation } from 'bpw-components';
 import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
 
 export interface NavigationState {
-    navigation?: FuseNavigation,
+    navigation?: FuseNavigation[],
     error?: string;
 }
 
@@ -17,7 +17,7 @@ export function NavigationReducer(state = NavigationStateInitialState, action: N
         case NavigationActionTypes.SET_FUSE_NAVIGATION:
 
             return {
-                navigation: {...action.payload},
+                navigation: [...action.payload],
                 error: null
             };
         default:

@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "bpw-auth-store": {
+      "projectType": "library",
+      "root": "projects/bpw-auth-store",
+      "sourceRoot": "projects/bpw-auth-store/src",
+      "prefix": "bpw-auth-store",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/bpw-auth-store/tsconfig.lib.json",
+            "project": "projects/bpw-auth-store/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/bpw-auth-store/src/test.ts",
+            "tsConfig": "projects/bpw-auth-store/tsconfig.spec.json",
+            "karmaConfig": "projects/bpw-auth-store/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/bpw-auth-store/tsconfig.lib.json",
+              "projects/bpw-auth-store/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }},
+  "defaultProject": "bpw-auth-store"
+}

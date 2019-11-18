@@ -1,0 +1,94 @@
+<div id="query-list">
+  <div fxLayout="row">
+      <div fxFlex="80">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+          </mat-form-field>
+      </div>
+      <div fxFlex="20">
+          <button mat-icon-button 
+                [matMenuTriggerFor]="newQueryMenu">
+              <mat-icon class="mat-icon-rtl-mirror">add_circle</mat-icon>
+          </button>
+      </div>
+  </div>
+  <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <!-- [indeterminate]="selection.hasValue() && !isAllSelected()" -->
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"                      
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row;let rowIndex = dataIndex;">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row, rowIndex)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- Query name Column -->
+    <ng-container matColumnDef="queryName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{displayedColumns[1]}}</th>
+      <td mat-cell *matCellDef="let row"> {{row.queryName}} </td>
+    </ng-container>
+
+    <!-- Variable Column -->
+    <ng-container matColumnDef="variable">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{displayedColumns[2]}}</th>
+      <td mat-cell *matCellDef="let row"> {{row.variable}} </td>
+    </ng-container>
+
+    <!-- Description Column-->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[3]}} </th>
+      <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+    </ng-container>
+
+    <!-- Number of entries Column-->
+    <ng-container matColumnDef="numberOfEntries">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[4]}} </th>
+      <td mat-cell *matCellDef="let row"> {{row.numberOfEntries}} </td>
+    </ng-container>
+
+    <!-- Description Column-->
+    <ng-container matColumnDef="lastEditDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[5]}} </th>
+      <td mat-cell *matCellDef="let row"> {{row.lastEditDate}} </td>
+    </ng-container>
+
+    <!-- Actions Column-->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> {{displayedColumns[6]}} </th>
+      <td mat-cell *matCellDef="let row; let rowIndex = dataIndex;">
+          <button mat-icon-button 
+                [matMenuTriggerFor]="contextMenu"
+                [matMenuTriggerData]="{item: rowIndex}">
+              <mat-icon class="mat-icon-rtl-mirror">more_vert</mat-icon>
+          </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnProperties"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnProperties;">
+        <!-- (click)="selection.toggle(row)"> -->
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+<mat-menu #newQueryMenu="matMenu">
+    <button mat-menu-item (click)="newQuery()"><mat-icon class="mat-icon-rtl-mirror">archive</mat-icon>New Query</button>
+    <button mat-menu-item (click)="removeSelected()"><mat-icon class="mat-icon-rtl-mirror">archive</mat-icon>Remove Selected</button>
+</mat-menu>
+<mat-menu #contextMenu="matMenu">
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="editQuery(item)">Edit</button>
+  <button mat-menu-item (click)="deleteQuery(item)">Delete</button>
+  </ng-template>
+</mat-menu>
+  

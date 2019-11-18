@@ -17,17 +17,16 @@ import {
   FuseTranslationLoaderService
 } from 'bpw-components';
 
-import { navigation } from 'app/navigation/navigation';
-import { locale as navigationEnglish } from 'app/navigation/i18n/en';
-import { locale as navigationTurkish } from 'app/navigation/i18n/tr';
+import { navigation } from './navigation/navigation';
+import { locale as navigationEnglish } from './navigation/i18n/en';
+import { locale as navigationTurkish } from './navigation/i18n/tr';
 
 @Component({
-    selector   : 'app',
-    templateUrl: './app.component.html',
-    styleUrls  : ['./app.component.scss']
+  selector   : 'bpw-app',
+  templateUrl: './app.component.html',
+  styleUrls  : ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy
-{
+export class AppComponent implements OnInit, OnDestroy {
     fuseConfig: any;
     navigation: any;
 
@@ -129,13 +128,11 @@ export class AppComponent implements OnInit, OnDestroy
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         // Subscribe to config changes
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((config) => {
-
                 this.fuseConfig = config;
 
                 // Boxed

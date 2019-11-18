@@ -4,7 +4,7 @@
 export * from './lib/utils/fuse-utils';
 export * from './lib/mat-colors/fuse-mat-colors';
 
-export * from './lib/fuse.module';
+export * from './lib/fuse-config.module';
 export * from './lib/services/config.service';
 export * from './lib/services/copier.service';
 export * from './lib/services/match-media.service';
@@ -47,7 +47,6 @@ export * from './lib/components/material-color-picker/material-color-picker.comp
 
 export * from './lib/components/navigation/navigation.module';
 export * from './lib/components/navigation/navigation.component';
-export * from './lib/components/navigation/navigation.service';
 export * from './lib/components/navigation/horizontal/collapsable/collapsable.component';
 export * from './lib/components/navigation/horizontal/item/item.component';
 

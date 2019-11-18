@@ -1,23 +1,32 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import * as fromStore from 'bpw-store';
+import { fuseAnimations, FuseConfigService } from 'bpw-components';
+import { authLayoutConfig } from '../../config';
+import * as fromStore from 'bpw-auth-store';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'user-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  animations   : fuseAnimations
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   private unsubscribeAll: Subject<any>;
   userProfile: fromStore.UserProfile;
 
   constructor(
+    private _fuseConfigService: FuseConfigService,
     private store: Store<fromStore.AuthState>,
     private router: Router) { 
       this.unsubscribeAll = new Subject<any>();
+      // Configure the layout
+      this._fuseConfigService.config = {
+        ...authLayoutConfig
+    };
   }
 
   /**

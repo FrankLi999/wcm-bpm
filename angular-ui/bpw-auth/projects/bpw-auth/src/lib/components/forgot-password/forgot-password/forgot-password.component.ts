@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { FuseConfigService } from 'bpw-components';
 import { fuseAnimations } from 'bpw-components';
+import { authLayoutConfig } from '../../../config';
 
 @Component({
     selector     : 'forgot-password',
@@ -24,25 +25,11 @@ export class ForgotPasswordComponent implements OnInit
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _formBuilder: FormBuilder
-    )
-    {
-        // Configure the layout
-        this._fuseConfigService.config = {
-            layout: {
-                navbar   : {
-                    hidden: true
-                },
-                toolbar  : {
-                    hidden: true
-                },
-                footer   : {
-                    hidden: true
-                },
-                sidepanel: {
-                    hidden: true
-                }
-            }
-        };
+    ) {
+            // Configure the layout
+            this._fuseConfigService.config = {
+                ...authLayoutConfig
+            };
     }
 
     // -----------------------------------------------------------------------------------------------------

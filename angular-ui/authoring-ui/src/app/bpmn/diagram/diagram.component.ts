@@ -8,12 +8,11 @@ import {
   Output,
   ViewChild,
   SimpleChanges,
-  EventEmitter,
-  ViewEncapsulation
+  EventEmitter
 } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { map, catchError, retry } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 /**
  * You may include a different variant of BpmnJS:

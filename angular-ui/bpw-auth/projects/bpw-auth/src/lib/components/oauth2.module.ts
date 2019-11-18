@@ -16,7 +16,9 @@ import { Oauth2RedirectHandlerModule } from './oauth2-redirect-handler/oauth2-re
 @NgModule({
   imports: [
     Oauth2ProfileModule,
-    Oauth2RedirectHandlerModule
+    Oauth2RedirectHandlerModule,
+    // RestClientConfigModule.forChild(authApiConfig),
+    // FuseConfigModule.forChild(authLayoutConfig)
   ],
   exports: [
     Oauth2ProfileModule,

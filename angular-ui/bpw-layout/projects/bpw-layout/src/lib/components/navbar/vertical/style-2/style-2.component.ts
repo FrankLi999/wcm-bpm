@@ -22,7 +22,7 @@ import { getNavigation } from '../../../../store/selectors/navigation.selectors'
 export class NavbarVerticalStyle2Component implements OnInit, OnDestroy
 {
     fuseConfig: any;
-    navigation: FuseNavigation;
+    navigation: FuseNavigation[];
 
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
@@ -95,7 +95,7 @@ export class NavbarVerticalStyle2Component implements OnInit, OnDestroy
      */
     ngOnInit(): void {
         this._store.pipe(select(getNavigation), takeUntil(this._unsubscribeAll)).subscribe(
-          (navigation: FuseNavigation) => {
+          (navigation: FuseNavigation[]) => {
                 if (navigation) {
                     this.navigation = navigation
                 };

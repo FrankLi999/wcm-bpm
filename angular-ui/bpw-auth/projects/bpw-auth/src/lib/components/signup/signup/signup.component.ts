@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { FuseConfigService } from 'bpw-components';
 import { fuseAnimations } from 'bpw-components';
+import { authLayoutConfig } from '../../../config';
 
 @Component({
     selector     : 'signup',
@@ -27,20 +28,7 @@ export class SignupComponent implements OnInit, OnDestroy
     {
         // Configure the layout
         this._fuseConfigService.config = {
-            layout: {
-                navbar   : {
-                    hidden: true
-                },
-                toolbar  : {
-                    hidden: true
-                },
-                footer   : {
-                    hidden: true
-                },
-                sidepanel: {
-                    hidden: true
-                }
-            }
+            ...authLayoutConfig
         };
 
         // Set the private defaults

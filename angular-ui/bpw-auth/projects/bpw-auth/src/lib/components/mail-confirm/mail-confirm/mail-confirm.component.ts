@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 
 import { FuseConfigService } from 'bpw-components';
 import { fuseAnimations } from 'bpw-components';
-
+import { authLayoutConfig } from '../../../config';
 @Component({
     selector     : 'mail-confirm',
     templateUrl  : './mail-confirm.component.html',
@@ -19,24 +19,10 @@ export class MailConfirmComponent
      */
     constructor(
         private _fuseConfigService: FuseConfigService
-    )
-    {
+    ) {
         // Configure the layout
         this._fuseConfigService.config = {
-            layout: {
-                navbar   : {
-                    hidden: true
-                },
-                toolbar  : {
-                    hidden: true
-                },
-                footer   : {
-                    hidden: true
-                },
-                sidepanel: {
-                    hidden: true
-                }
-            }
+            ...authLayoutConfig
         };
     }
 }

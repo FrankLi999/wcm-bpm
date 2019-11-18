@@ -12,7 +12,6 @@ export class BpmnComponent {
   importError?: Error;
 
   handleImported(event) {
-
     const {
       type,
       error,

@@ -24,13 +24,11 @@
       ],
       "bpw-components/*": [
         "dist/bpw-components/*"
-      ],
-      "bpw-store": [
-        "dist/bpw-store"
-      ],
-      "bpw-store/*": [
-        "dist/bpw-store/*"
       ]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }

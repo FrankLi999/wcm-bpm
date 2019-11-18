@@ -21,3 +21,4 @@ export * from './lib/components/signup/signup/signup.component';
 
 export * from './lib/components/oauth2-redirect-handler/redirect-handler.component';
 export * from './lib/components/oauth2-profile/profile.component';
+export * from './lib/config';

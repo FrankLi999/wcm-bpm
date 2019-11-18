@@ -17,6 +17,9 @@ import { LockScreenModule } from './lock-screen/lock-screen.module';
 import { MailConfirmModule } from './mail-confirm/mail-confirm.module';
 import { ResetPasswordModule } from './reset-password/reset-password.module';
 import { SignupModule } from './signup/signup.module';
+import { RestClientConfigModule } from 'bpw-rest-client';
+import { FuseConfigModule } from 'bpw-components';
+// import { authApiConfig, authLayoutConfig } from '../config';
 
 // const routes = [
 //   {
@@ -51,7 +54,9 @@ import { SignupModule } from './signup/signup.module';
     ResetPasswordModule,
     SignupModule,
     LockScreenModule,
-    MailConfirmModule
+    MailConfirmModule,
+    // RestClientConfigModule.forChild(authApiConfig),
+    // FuseConfigModule.forChild(authLayoutConfig)
   ],
   exports: [
     LoginModule,

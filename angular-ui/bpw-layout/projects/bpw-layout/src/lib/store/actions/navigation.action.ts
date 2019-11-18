@@ -6,7 +6,7 @@ export enum NavigationActionTypes {
 
 export class SetNavigation implements Action {
   readonly type = NavigationActionTypes.SET_FUSE_NAVIGATION;
-  constructor(public payload: FuseNavigation) {
+  constructor(public payload: FuseNavigation[]) {
   }
 }
 

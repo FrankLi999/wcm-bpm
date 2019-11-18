@@ -20,7 +20,7 @@ import { getNavigation } from '../../../../store/selectors/navigation.selectors'
 export class NavbarHorizontalStyle1Component implements OnInit, OnDestroy
 {
     fuseConfig: any;
-    navigation: FuseNavigation;
+    navigation: FuseNavigation[];
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -52,7 +52,7 @@ export class NavbarHorizontalStyle1Component implements OnInit, OnDestroy
      */
     ngOnInit(): void {
         this._store.pipe(select(getNavigation), takeUntil(this._unsubscribeAll)).subscribe(
-          (navigation: FuseNavigation) => {
+          (navigation: FuseNavigation[]) => {
             if (navigation) {
                 this.navigation = navigation
             };

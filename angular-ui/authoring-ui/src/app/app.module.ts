@@ -1,57 +1,60 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { TranslateModule } from '@ngx-translate/core';
+
+import 'hammerjs';
+
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { TranslateModule } from '@ngx-translate/core';
-import { AuthHttpInterceptor } from 'bpw-store';
-import 'hammerjs';
-import { RestClientConfigModule } from 'bpw-rest-client';
+
 import {
-  FuseModule,
+  FuseConfigModule,
   FuseSharedModule,
   FuseProgressBarModule,
   FuseSidebarModule,
   FuseThemeOptionsModule
 } from 'bpw-components';
 
-import { AuthModule } from 'bpw-store';
 
-import { fuseConfig, apiConfig } from 'app/fuse-config';
+import { LayoutModule } from 'bpw-layout';
+import { AuthStoreModule, AuthHttpInterceptor } from 'bpw-auth-store';
 
+import { environment } from 'environments/environment';
 import { AppComponent } from 'app/app.component';
 import { AppStoreModule } from 'app/store/store.module';
-import { LayoutModule } from 'bpw-layout';
-import { FakeDbService } from 'app/fake-db/fake-db.service';
-import { environment } from 'environments/environment';
+
+import { appApiConfig, appLayoutConfig} from './config';
+import { RestClientConfigModule } from 'bpw-rest-client';
 
 const appRoutes: Routes = [
     {
-        path        : 'wcm-authoring',
-        loadChildren: './wcm-authoring/wcm-authoring.module#WcmAuthoringModule'
-    },
-    {
         path        : 'auth',
         // loadChildren: () => import('bpw-auth').then(m => m.AuthenticationModule)
-        loadChildren: './lazy-module/lazy.module#LazyModule'
+        loadChildren: './auth/auth-lazy.module#AuthenticationLazyModule'
     },
     {
         path        : 'oauth2',
         // loadChildren: () => import('bpw-auth').then(m => m.OAuth2Module)
-        loadChildren: './lazy-module/lazy.module#LazyModule'
+        loadChildren: './oauth2/oauth2-lazy.module#Oauth2LazyModule'
     },
     {
         path        : 'bpmn',
         loadChildren: './bpmn/bpmn.module#BpmnModule'
     },
     {
+        path      : 'wcm-authoring',
+        loadChildren: './wcm/wcm-authoring-lazy.module#WcmAuthoringLazyModule'
+    },
+    {
         path      : '**',
-        redirectTo: 'wcm-authoring'
+        redirectTo: '/wcm-authoring/site-explorer/navigator'
     }
 ];
 
@@ -62,40 +65,31 @@ const appRoutes: Routes = [
     imports     : [
         BrowserModule,
         BrowserAnimationsModule,
-        HttpClientModule,
         RouterModule.forRoot(appRoutes,
             environment.production ? {} : {
                 enableTracing: false, // <-- debugging purposes only
                 preloadingStrategy: PreloadAllModules
               }
         ),
-
+        HttpClientModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        FlexLayoutModule,
         TranslateModule.forRoot(),
-        InMemoryWebApiModule.forRoot(FakeDbService, {
-            delay             : 0,
-            passThruUnknownUrl: true
-        }),
-        // Material moment date module
         MatMomentDateModule,
-
-        // Material
         MatButtonModule,
         MatIconModule,
+        RestClientConfigModule.forRoot(appApiConfig),
 
-        RestClientConfigModule.forRoot(apiConfig),
-
-        // Fuse modules
-        FuseModule.forRoot(fuseConfig),
+        // // Fuse modules
+        FuseConfigModule.forRoot(appLayoutConfig),
         FuseProgressBarModule,
         FuseSharedModule,
         FuseSidebarModule,
         FuseThemeOptionsModule,
-
-        // App modules
         LayoutModule,
-        AppStoreModule,
-        FlexLayoutModule,
-        AuthModule
+        AuthStoreModule,
+        AppStoreModule
     ],
     providers: [{
         provide: HTTP_INTERCEPTORS,

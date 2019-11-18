@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Store } from '@ngrx/store';
-import * as fromStore from 'bpw-store';
+import * as fromStore from 'bpw-auth-store';
 import { ApiConfigService } from 'bpw-rest-client';
 
 @Component({
@@ -46,7 +46,8 @@ export class RedirectHandlerComponent implements OnInit {
           console.log("get user profile observable is now completed.");
         }
       );
-      this.router.navigateByUrl('/oauth2/profile');
+      // this.router.navigateByUrl('/oauth2/profile');
+      this.router.navigateByUrl('/wcm-authoring/jcr-explorer');
     } else {
       //uiService.showError
       this.router.navigateByUrl('/auth/login');    

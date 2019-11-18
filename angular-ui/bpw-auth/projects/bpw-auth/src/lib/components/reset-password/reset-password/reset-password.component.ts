@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/internal/operators';
 
 import { FuseConfigService } from 'bpw-components';
 import { fuseAnimations } from 'bpw-components';
+import { authLayoutConfig } from '../../../config';
 
 @Component({
     selector     : 'reset-password',
@@ -23,24 +24,10 @@ export class ResetPasswordComponent implements OnInit, OnDestroy
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _formBuilder: FormBuilder
-    )
-    {
+    ) {
         // Configure the layout
         this._fuseConfigService.config = {
-            layout: {
-                navbar   : {
-                    hidden: true
-                },
-                toolbar  : {
-                    hidden: true
-                },
-                footer   : {
-                    hidden: true
-                },
-                sidepanel: {
-                    hidden: true
-                }
-            }
+            ...authLayoutConfig
         };
 
         // Set the private defaults

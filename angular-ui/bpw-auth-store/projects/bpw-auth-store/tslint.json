@@ -1,0 +1,17 @@
+{
+  "extends": "../../tslint.json",
+  "rules": {
+    "directive-selector": [
+      true,
+      "attribute",
+      "bpwAuthStore",
+      "camelCase"
+    ],
+    "component-selector": [
+      true,
+      "element",
+      "bpw-auth-store",
+      "kebab-case"
+    ]
+  }
+}

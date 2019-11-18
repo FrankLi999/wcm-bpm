@@ -26,7 +26,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     rightNavbar: boolean;
     hiddenNavbar: boolean;
     languages: any;
-    navigation: FuseNavigation;
+    navigation: FuseNavigation[];
     selectedLanguage: any;
     userStatusOptions: any[];
 
@@ -104,7 +104,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void {
         this._store.pipe(select(getNavigation), takeUntil(this._unsubscribeAll)).subscribe(
-          (navigation: FuseNavigation) => {
+          (navigation: FuseNavigation[]) => {
             if (navigation) {
                 this.navigation = navigation
             };

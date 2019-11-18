@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FuseSharedModule } from 'bpw-components';
 import { RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile.component';
-import { AuthGuard } from 'bpw-store';
+import { AuthGuard } from 'bpw-auth-store';
 const routes = [
   {
     path     : 'profile',
@@ -14,6 +16,8 @@ const routes = [
   declarations: [ProfileComponent],
   imports: [
     CommonModule,
+    FlexLayoutModule,
+    FuseSharedModule,
     RouterModule.forChild(routes)
   ],
   exports: [ProfileComponent]

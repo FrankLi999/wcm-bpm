@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { FuseConfigService } from 'bpw-components';
 import { fuseAnimations } from 'bpw-components';
-import { takeUntil, flatMap, filter } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ApiConfigService } from 'bpw-rest-client';
-import * as fromStore from 'bpw-store';
+import { authLayoutConfig } from '../../../config';
+import * as fromStore from 'bpw-auth-store';
 
 @Component({
     selector     : 'login',
@@ -49,20 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy
         this.unsubscribeAll = new Subject<any>();
         // Configure the layout
         this._fuseConfigService.config = {
-            layout: {
-                navbar   : {
-                    hidden: true
-                },
-                toolbar  : {
-                    hidden: true
-                },
-                footer   : {
-                    hidden: true
-                },
-                sidepanel: {
-                    hidden: true
-                }
-            }
+            ...authLayoutConfig
         };
     }
 
@@ -100,14 +87,12 @@ export class LoginComponent implements OnInit, OnDestroy
             // flatMap(loggedIn => this.store.select(getRouteSnapshot)))
           .subscribe(
               (loggedIn) => {
-                this.router.navigateByUrl('/oauth2/profile');
+                // this.router.navigateByUrl('/oauth2/profile');
+                this.router.navigateByUrl('/wcm-authoring/jcr-explorer');
               }
             // (routeSnapshotOrError: RouteSnapshot) => {
-            //     console.log(">>>>>>>>>>>>>>> logged in already");
             //     let redirectUrl = (routeSnapshotOrError as RouteSnapshot).paramMap['url'];
-            //     console.log(">>>>>>>>>>>>>>> redirectUrl:" + redirectUrl);
             //     redirectUrl = redirectUrl || '/oauth2/profile';
-            //     console.log(">>>>>>>>>>>>>>> redirectUrl2:" + redirectUrl);
             //     this.router.navigateByUrl(redirectUrl);
             // }
         );
