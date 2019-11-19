@@ -7,7 +7,7 @@ import { fuseAnimations } from 'bpw-components';
 import { takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ApiConfigService } from 'bpw-rest-client';
-import { authLayoutConfig } from '../../../config';
+import { authLayoutConfig } from '../../../config/auth.config';
 import * as fromStore from 'bpw-auth-store';
 
 @Component({

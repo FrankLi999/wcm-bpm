@@ -28,7 +28,6 @@ import { createCustomElement } from '@angular/elements';
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 
 import { ContentAreaPreviewComponent } from './content-area-preview/content-area-preview.component';
-import { ResourceRendererComponent } from './resource-renderer/resource-renderer.component';
 import { ResourceRendererElementComponent } from './resource-renderer/resource-renderer-element.component';
 import { RenderElementElementComponent } from './wcm-plugin/render-element/render-element-element.component';
 import { WcmPluginModule } from './wcm-plugin/wcm-plugin.module';
@@ -37,7 +36,6 @@ import { KeepHtmlPipe } from './keep-html.pipe';
 @NgModule({
   declarations: [
     ContentAreaPreviewComponent, 
-    ResourceRendererComponent,
     ResourceRendererElementComponent,
     RenderElementElementComponent,
     KeepHtmlPipe
@@ -77,7 +75,6 @@ import { KeepHtmlPipe } from './keep-html.pipe';
   ],
   exports: [
     ContentAreaPreviewComponent, 
-    ResourceRendererComponent,
     ResourceRendererElementComponent,
     RenderElementElementComponent,
     KeepHtmlPipe

@@ -15,7 +15,7 @@ import { isLoggedIn, getUserProfile } from '../selectors/auth.selectors';
 import { map, mergeMap } from 'rxjs/operators';
 import { iif, of } from 'rxjs';
 import { UserProfile } from '../../model/user-profile.model';
-import { UiService } from 'bpw-components';
+import { UiService } from '../../service/ui.service';
 
 @Injectable({
   providedIn: 'root'

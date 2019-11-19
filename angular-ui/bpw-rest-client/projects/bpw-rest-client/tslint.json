@@ -4,13 +4,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "bpwRestClient",
+      "restClient",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "bpw-rest-client",
+      "rest-client",
       "kebab-case"
     ]
   }

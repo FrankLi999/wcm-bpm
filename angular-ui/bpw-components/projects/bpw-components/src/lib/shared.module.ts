@@ -3,10 +3,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSnackBarModule} from '@angular/material/snack-bar';
-import { MatDialogModule} from '@angular/material/dialog';
 import { FuseDirectivesModule } from './directives/directives';
 import { FusePipesModule } from './pipes/pipes.module';
-import { SimpleDialogComponent, UiService } from './services/ui.service';
 
 @NgModule({
     imports  : [
@@ -17,16 +15,11 @@ import { SimpleDialogComponent, UiService } from './services/ui.service';
 
         FuseDirectivesModule,
         FusePipesModule,
-        MatSnackBarModule,
-        MatDialogModule,
-    ],
-    declarations: [
-        SimpleDialogComponent
+        MatSnackBarModule
     ],
     exports  : [
         FuseDirectivesModule,
-        FusePipesModule,
-        SimpleDialogComponent
+        FusePipesModule
     ]
 })
 export class FuseSharedModule {

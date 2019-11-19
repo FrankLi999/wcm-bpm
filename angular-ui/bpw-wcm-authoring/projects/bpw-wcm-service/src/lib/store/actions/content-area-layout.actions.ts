@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { ContentAreaLayout } from '../../model/';
+import { ContentAreaLayout } from '../../model/ContentAreaLayout';
 export enum ContentAreaLayoutActionTypes {
   CREATE_CONTENT_AREA_LAYOUT = '[ContentAreaLayout] Create',  
   CREATE_CONTENT_AREA_LAYOUT_SUCCESS = '[ContentAreaLayout] Create Success',  

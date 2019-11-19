@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { FuseConfigService } from 'bpw-components';
 import { fuseAnimations } from 'bpw-components';
-import { authLayoutConfig } from '../../../config';
+import { authLayoutConfig } from '../../../config/auth.config';
 
 @Component({
     selector     : 'forgot-password',

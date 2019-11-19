@@ -13,10 +13,8 @@ import {
   ApiConfigService
 } from 'bpw-rest-client';
 
-import {
-  UserProfile,
-  Login
-} from '../model';
+import { UserProfile } from '../model/user-profile.model';
+import { Login } from '../model/login.model';
 
 @Injectable({ 
     providedIn: 'root' 

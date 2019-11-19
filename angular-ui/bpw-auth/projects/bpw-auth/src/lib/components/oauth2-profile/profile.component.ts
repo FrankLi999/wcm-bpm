@@ -4,7 +4,7 @@ import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { fuseAnimations, FuseConfigService } from 'bpw-components';
-import { authLayoutConfig } from '../../config';
+import { authLayoutConfig } from '../../config/auth.config';
 import * as fromStore from 'bpw-auth-store';
 
 @Component({

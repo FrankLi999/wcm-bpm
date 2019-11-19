@@ -4,7 +4,9 @@ import { of, Observable } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { WcmSystemActionTypes, WcmSystemActions } from '../actions/wcm-system.actions';
 import { WcmService } from '../../service/wcm.service'; 
-import { WcmSystem, RenderTemplate, AuthoringTemplate } from '../../model';
+import { WcmSystem } from '../../model/WcmSystem';
+import { RenderTemplate } from '../../model/RenderTemplate';
+import { AuthoringTemplate } from '../../model/AuthoringTemplate';
 import { 
   GetWcmSystem, 
   GetWcmSystemFailed, 

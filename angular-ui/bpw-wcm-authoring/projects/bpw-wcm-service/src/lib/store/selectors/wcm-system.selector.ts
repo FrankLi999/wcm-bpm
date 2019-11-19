@@ -1,7 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { WcmSystemState } from '../reducers/wcm-system.reducer';
 import { getWcmAppState, WcmAppState } from '../reducers/wcm-authoring.reducer';
-import { WcmSystem } from '../../model';
+import { WcmSystem } from '../../model/WcmSystem';
 export const getWcmSystemState = createSelector(
     getWcmAppState,
     (state: WcmAppState) => state.wcmSystem

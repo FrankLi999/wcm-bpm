@@ -11,21 +11,6 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-
-    "emitDecoratorMetadata": true,
-    "noEmitHelpers": false,
-    "pretty": true,
-    "allowUnreachableCode": true,
-    "allowUnusedLabels": true,
-    "noImplicitAny": false,
-    "noImplicitReturns": false,
-    "noImplicitUseStrict": false,
-    "noFallthroughCasesInSwitch": false,
-    "allowSyntheticDefaultImports": true,
-    "suppressExcessPropertyErrors": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "resolveJsonModule": true,
-
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -41,10 +26,9 @@
         "dist/bpw-form/*"
       ]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
-  // ,
-  // "angularCompilerOptions": {
-  //   "fullTemplateTypeCheck": true,
-  //   "strictInjectionParameters": true
-  // }
 }

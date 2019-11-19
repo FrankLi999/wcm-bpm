@@ -6,7 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
-import { NgxDnDModule } from '@swimlane/ngx-dnd';
+// import { NgxDnDModule } from '@swimlane/ngx-dnd';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -79,7 +79,7 @@ import { QueryTreeComponent } from './query-tree/query-tree.component';
     ScrollingModule,
     CdkTableModule,
     CdkTreeModule,
-    NgxDnDModule,
+    // NgxDnDModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,

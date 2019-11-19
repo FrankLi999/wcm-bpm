@@ -14,7 +14,7 @@ import {
 AppConfigurationState,
 SetNavigation
 } from 'bpw-layout';
-import { wcmAuthoringLayoutConfig } from '../../config';
+import { wcmAuthoringLayoutConfig } from '../../config/wcm-authoring.config';
 import { navigation } from '../../navigation/navigation';
 import { locale as navigationEnglish } from '../../navigation/i18n/en';
 import { locale as navigationTurkish } from '../../navigation/i18n/tr';

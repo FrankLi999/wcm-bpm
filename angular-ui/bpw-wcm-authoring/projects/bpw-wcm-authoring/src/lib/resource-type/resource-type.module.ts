@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
-import { NgxDnDModule } from '@swimlane/ngx-dnd';
+// import { NgxDnDModule } from '@swimlane/ngx-dnd';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -62,7 +62,7 @@ import { ResourceTypeTreeComponent } from './resource-type-tree/resource-type-tr
     ScrollingModule,
     CdkTableModule,
     CdkTreeModule,
-    NgxDnDModule,
+    // NgxDnDModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,

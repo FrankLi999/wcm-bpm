@@ -1,43 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1,
+  "version": 1, 
   "newProjectRoot": "projects",
   "projects": {
-    "bpw-wcm-authoring": {
-      "projectType": "library",
-      "root": "projects/bpw-wcm-authoring",
-      "sourceRoot": "projects/bpw-wcm-authoring/src",
-      "prefix": "bpw-wcm-authoring",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/bpw-wcm-authoring/tsconfig.lib.json",
-            "project": "projects/bpw-wcm-authoring/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/bpw-wcm-authoring/src/test.ts",
-            "tsConfig": "projects/bpw-wcm-authoring/tsconfig.spec.json",
-            "karmaConfig": "projects/bpw-wcm-authoring/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/bpw-wcm-authoring/tsconfig.lib.json",
-              "projects/bpw-wcm-authoring/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
     "bpw-wcm-service": {
       "projectType": "library",
       "root": "projects/bpw-wcm-service",
@@ -49,6 +14,11 @@
           "options": {
             "tsConfig": "projects/bpw-wcm-service/tsconfig.lib.json",
             "project": "projects/bpw-wcm-service/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/bpw-wcm-service/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -84,6 +54,11 @@
           "options": {
             "tsConfig": "projects/bpw-wcm-preview/tsconfig.lib.json",
             "project": "projects/bpw-wcm-preview/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/bpw-wcm-preview/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -107,6 +82,46 @@
           }
         }
       }
+    },
+    "bpw-wcm-authoring": {
+      "projectType": "library",
+      "root": "projects/bpw-wcm-authoring",
+      "sourceRoot": "projects/bpw-wcm-authoring/src",
+      "prefix": "bpw-wcm-authoring",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/bpw-wcm-authoring/tsconfig.lib.json",
+            "project": "projects/bpw-wcm-authoring/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/bpw-wcm-authoring/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/bpw-wcm-authoring/src/test.ts",
+            "tsConfig": "projects/bpw-wcm-authoring/tsconfig.spec.json",
+            "karmaConfig": "projects/bpw-wcm-authoring/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/bpw-wcm-authoring/tsconfig.lib.json",
+              "projects/bpw-wcm-authoring/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
-  "defaultProject": "bpw-wcm-authoring"
+  "defaultProject": "bpw-wcm-service"
 }

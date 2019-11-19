@@ -11,7 +11,8 @@ import {
   LoginFailedAction
 } from '../actions/auth.actions';
 import { AuthService } from '../../service/auth.service';
-import { UserProfile } from '../../model';
+import { UserProfile } from '../../model/user-profile.model';
+
 @Injectable()
 export class AuthEffects {
 

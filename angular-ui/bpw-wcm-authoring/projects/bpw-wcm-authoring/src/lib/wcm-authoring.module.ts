@@ -34,7 +34,7 @@ import { LayoutModule } from 'bpw-layout';
 
 import {
   JsonSchemaFormModule, 
-  MaterialDesignFrameworkModule
+  // MaterialDesignFrameworkModule
 } from 'bpw-form';
 
 import { AuthGuard } from 'bpw-auth-store';
@@ -310,7 +310,7 @@ const routes: Routes = [{
         MatSelectModule,
         MatToolbarModule,
 
-        MaterialDesignFrameworkModule,
+        // MaterialDesignFrameworkModule,
         JsonSchemaFormModule,
         TranslateModule,
 

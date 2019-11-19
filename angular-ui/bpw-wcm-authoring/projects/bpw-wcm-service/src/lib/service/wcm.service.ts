@@ -16,20 +16,19 @@ import {
   ApiConfigService
 } from 'bpw-rest-client';
 
-import { 
-  JsonForm,
-  Theme,
-  ControlField,
-  AuthoringTemplate,
-  RenderTemplate,
-  ContentAreaLayout,
-  SiteArea,
-  ContentItem,
-  WcmSystem,
-  SiteConfig,
-  WcmNode,
-  WcmItemFilter
-} from '../model';
+import { JsonForm } from '../model/JsonForm';
+import { Theme } from '../model/Theme';
+import { ControlField } from '../model/ControlField';
+import { AuthoringTemplate } from '../model/AuthoringTemplate';
+import { RenderTemplate } from '../model/RenderTemplate';
+import { ContentAreaLayout } from '../model/ContentAreaLayout';
+import { SiteArea } from '../model/SiteArea';
+import { ContentItem } from '../model/ContentItem';
+import { WcmSystem } from '../model/WcmSystem';
+import { SiteConfig } from '../model/SiteConfig';
+import { WcmNode } from '../model/WcmNode';
+import { WcmItemFilter } from '../model/WcmItemFilter';
+ 
 @Injectable({
   providedIn: 'root'
 })

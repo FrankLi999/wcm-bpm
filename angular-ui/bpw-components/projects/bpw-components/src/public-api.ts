@@ -10,7 +10,6 @@ export * from './lib/services/copier.service';
 export * from './lib/services/match-media.service';
 export * from './lib/services/splash-screen.service';
 export * from './lib/services/translation-loader.service';
-export * from './lib/services/ui.service';
 export * from './lib/types/fuse-config';
 export * from './lib/types/fuse-navigation';
 
@@ -22,7 +21,9 @@ export * from './lib/pipes/getById.pipe';
 export * from './lib/pipes/htmlToPlaintext.pipe';
 export * from './lib/pipes/filter.pipe';
 export * from './lib/pipes/camelCaseToDash.pipe';
+export * from './lib/pipes/pipes.module';
 
+export * from './lib/directives/directives';
 export * from './lib/directives/fuse-if-on-dom/fuse-if-on-dom.directive';
 export * from './lib/directives/fuse-inner-scroll/fuse-inner-scroll.directive';
 export * from './lib/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';

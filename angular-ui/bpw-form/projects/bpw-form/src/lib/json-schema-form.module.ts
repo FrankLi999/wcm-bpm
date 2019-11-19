@@ -13,7 +13,8 @@ import { fixAngularFlex } from './angular-flex-monkey-patch';
     WidgetLibraryModule, MaterialDesignFrameworkModule
   ],
   declarations: [JsonSchemaFormComponent],
-  exports: [JsonSchemaFormComponent, WidgetLibraryModule]
+  // exports: [JsonSchemaFormComponent, WidgetLibraryModule]
+  exports: [JsonSchemaFormComponent]
 })
 export class JsonSchemaFormModule {
   constructor() {

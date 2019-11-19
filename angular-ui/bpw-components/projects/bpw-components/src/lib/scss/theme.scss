@@ -1,18 +1,19 @@
-@import "bpw-components/lib/components/countdown/countdown.theme";
-@import "bpw-components/lib/components/material-color-picker/material-color-picker.theme";
-@import "bpw-components/lib/components/search-bar/search-bar.theme";
-@import "bpw-components/lib/components/shortcuts/shortcuts.theme";
-@import "bpw-components/lib/components/sidebar/sidebar.theme";
-@import "bpw-components/lib/components/theme-options/theme-options.theme";
-@import "bpw-components/lib/components/widget/widget.theme";
+// @import "~bpw-components/lib/components/countdown/countdown.theme";
+// @import "~bpw-components/lib/components/material-color-picker/material-color-picker.theme";
+// @import "~bpw-components/lib/components/search-bar/search-bar.theme";
+// @import "~bpw-components/lib/components/shortcuts/shortcuts.theme";
+// @import "~bpw-components/lib/components/sidebar/sidebar.theme";
+// @import "~bpw-components/lib/components/theme-options/theme-options.theme";
+// @import "~bpw-components/lib/components/widget/widget.theme";
 
-// @import "../components/countdown/countdown.theme";
-// @import "../components/material-color-picker/material-color-picker.theme";
-// @import "../components/search-bar/search-bar.theme";
-// @import "../components/shortcuts/shortcuts.theme";
-// @import "../components/sidebar/sidebar.theme";
-// @import "../components/theme-options/theme-options.theme";
-// @import "../components/widget/widget.theme";
+@import "../components/countdown/countdown.theme";
+@import "../components/material-color-picker/material-color-picker.theme";
+@import "../components/search-bar/search-bar.theme";
+@import "../components/shortcuts/shortcuts.theme";
+@import "../components/sidebar/sidebar.theme";
+@import "../components/theme-options/theme-options.theme";
+@import "../components/widget/widget.theme";
+
 
 
 @mixin fuse-core-theme($theme) {

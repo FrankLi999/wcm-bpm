@@ -4,6 +4,8 @@ https://blog.angularindepth.com/creating-a-library-in-angular-6-part-2-6e2bc1e14
 https://blog.angularindepth.com/the-angular-library-series-publishing-ce24bb673275
 https://blog.angularindepth.com/npm-peer-dependencies-f843f3ac4e7f
 
+https://www.softwarearchitekt.at/aktuelles/your-options-for-building-angular-elements/
+
 npm install -g @angular/cli@latest
 
 npm uninstall -g angular-cli
@@ -55,6 +57,7 @@ There are multiple ways to prevent this:
    ng generate library bpw-rest-client --prefix=rest-client
    
    ng new bpw-form --create-application=false
+   cd bpw-form
    ng generate library bpw-form --prefix=bpw-form
    
    ng new bpw-components --create-application=false
@@ -78,10 +81,16 @@ There are multiple ways to prevent this:
    ng new bpw-wcm-authoring --create-application=false
    cd bpw-wcm-authoring
    ng generate library bpw-wcm-service --prefix=bpw-wcm-service
-   ng generate library bpw-wcm-authoring --prefix=bpw-wcm-authoring
    ng generate library bpw-wcm-preview --prefix=bpw-wcm-preview
+   ng generate library bpw-wcm-authoring --prefix=bpw-wcm-authoring
+   
 
-   ng new bpw-wcm-authoring-element
+   ng new bpw-wcm-elements --create-application=false
+   cd  bpw-wcm-elements
+   ng add @angular/elements
+   ng add ngx-build-plus
+   ng g ngx-build-plus:wc-polyfill
+   ng g ngx-build-plus:externals
 
    ng new bpw-auth --create-application=false
    cd bpw-auth
@@ -107,7 +116,7 @@ There are multiple ways to prevent this:
 
    cd bpw-components
    
-   npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --savebpw-rest-client-0.0.1.tgz --save
+   
    npm install
    ng build bpw-components
    npm run build-bpw-components-styles
@@ -148,6 +157,7 @@ There are multiple ways to prevent this:
    npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
    
    npm install ../bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save
+   
 
    npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
    
@@ -167,8 +177,6 @@ There are multiple ways to prevent this:
     npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
 
     npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
-
-    npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
    
     npm install ../bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz --save
    
@@ -189,7 +197,7 @@ There are multiple ways to prevent this:
 
    npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
    
-    npm install ../bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz --save
+   npm install ../bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz --save
 
    npm install ../bpw-auth/dist/bpw-auth/bpw-auth-0.0.1.tgz --save  
 

@@ -1,5 +1,5 @@
 import { ContentAreaLayoutActions, ContentAreaLayoutActionTypes } from '../actions/content-area-layout.actions';
-import { ContentAreaLayout } from '../../model';
+import { ContentAreaLayout } from '../../model/ContentAreaLayout';
 export interface ContentAreaLayoutState {
     contentAreaLayout?: ContentAreaLayout,
     error?: string;

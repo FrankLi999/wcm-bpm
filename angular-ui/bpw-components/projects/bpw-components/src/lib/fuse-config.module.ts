@@ -4,13 +4,13 @@ import { FUSE_CONFIG } from './services/config.service';
 
 @NgModule()
 export class FuseConfigModule {
-    // constructor(@Optional() @SkipSelf() parentModule: FuseConfigModule) {
-    //     if ( parentModule ) {
-    //         throw new Error('FuseModule is already loaded. Import it in the AppModule only!');
-    //     }
-    // }
+    constructor(@Optional() @SkipSelf() parentModule: FuseConfigModule) {
+        if ( parentModule ) {
+            throw new Error('FuseModule is already loaded. Import it in the AppModule only!');
+        }
+    }
 
-    static forRoot(config): ModuleWithProviders {
+    static forRoot(config): ModuleWithProviders<FuseConfigModule> {
         return {
             ngModule : FuseConfigModule,
             providers: [

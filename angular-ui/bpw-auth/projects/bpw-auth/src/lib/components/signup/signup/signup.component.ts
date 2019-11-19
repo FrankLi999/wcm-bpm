@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { FuseConfigService } from 'bpw-components';
 import { fuseAnimations } from 'bpw-components';
-import { authLayoutConfig } from '../../../config';
+import { authLayoutConfig } from '../../../config/auth.config';
 
 @Component({
     selector     : 'signup',

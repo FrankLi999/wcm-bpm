@@ -17,11 +17,9 @@ import {
   ApiConfigService
 } from 'bpw-rest-client';
 
-import { 
-  RestRepositories,
-  RestWorkspaces,
-  RestItem
-} from '../model';
+import { RestRepositories} from '../model/RestRepositories';
+import { RestWorkspaces } from '../model/RestWorkspaces';
+import { RestItem } from '../model/RestItem';
 @Injectable({
   providedIn: 'root'
 })

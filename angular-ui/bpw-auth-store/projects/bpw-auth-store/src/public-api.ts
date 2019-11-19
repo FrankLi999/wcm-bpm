@@ -10,7 +10,7 @@ export * from './lib/auth/model/user-profile.model';
 
 export * from './lib/auth/service/auth-http.interceptor';
 export * from './lib/auth/service/auth.service';
-
+export * from './lib/auth/service/ui.service';
 export * from './lib/auth/auth-store.module';
 export * from './lib/auth/store/actions/auth.actions';
 export * from './lib/auth/store/reducers/auth.reducers';

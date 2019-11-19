@@ -1,5 +1,8 @@
 import { Action } from '@ngrx/store';
-import { CurrentSite, RenderTemplate, AuthoringTemplate, SiteArea } from '../../model/';
+import { CurrentSite } from '../../model/CurrentSite';
+import { RenderTemplate } from '../../model/RenderTemplate';
+import { AuthoringTemplate } from '../../model/AuthoringTemplate';
+import { SiteArea } from '../../model/SiteArea';
 export enum WcmSystemActionTypes {
   GET_WCMSYSTEM = '[WcmSystem] Get WcmSystem',
   GET_WCMSYSTEM_SUCCESS = '[WcmSystem] Get WcmSystem Success',

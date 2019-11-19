@@ -14,10 +14,7 @@ import {
 AppConfigurationState,
 SetNavigation
 } from 'bpw-layout';
-import { wcmAuthoringLayoutConfig } from '../config';
-import { navigation } from '../navigation/navigation';
-import { locale as navigationEnglish } from '../navigation/i18n/en';
-import { locale as navigationTurkish } from '../navigation/i18n/tr';
+import { wcmAuthoringLayoutConfig } from './wcm-authoring.config';
 
 @Injectable({
   providedIn: 'root'

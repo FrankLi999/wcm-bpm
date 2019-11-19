@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 
 import { FuseConfigService } from 'bpw-components';
 import { fuseAnimations } from 'bpw-components';
-import { authLayoutConfig } from '../../../config';
+import { authLayoutConfig } from '../../../config/auth.config';
 @Component({
     selector     : 'mail-confirm',
     templateUrl  : './mail-confirm.component.html',

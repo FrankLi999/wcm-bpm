@@ -19,12 +19,6 @@
       "dom"
     ],
     "paths": {
-      "bpw-wcm-authoring": [
-        "dist/bpw-wcm-authoring"
-      ],
-      "bpw-wcm-authoring/*": [
-        "dist/bpw-wcm-authoring/*"
-      ],
       "bpw-wcm-service": [
         "dist/bpw-wcm-service"
       ],
@@ -36,11 +30,17 @@
       ],
       "bpw-wcm-preview/*": [
         "dist/bpw-wcm-preview/*"
+      ],
+      "bpw-wcm-authoring": [
+        "dist/bpw-wcm-authoring"
+      ],
+      "bpw-wcm-authoring/*": [
+        "dist/bpw-wcm-authoring/*"
       ]
     }
-  } //,
-  // "angularCompilerOptions": {
-  //   "fullTemplateTypeCheck": true,
-  //   "strictInjectionParameters": true
-  // }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
 }

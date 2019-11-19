@@ -1,6 +1,6 @@
 
 import { WcmSystemActions, WcmSystemActionTypes } from '../actions/wcm-system.actions';
-import { WcmSystem } from '../../model';
+import { WcmSystem } from '../../model/WcmSystem';
 export interface WcmSystemState {
     wcmSystem?: WcmSystem;
     loading: boolean;

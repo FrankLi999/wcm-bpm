@@ -25,8 +25,8 @@ import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
 import {
-  JsonSchemaFormModule, 
-  MaterialDesignFrameworkModule
+  JsonSchemaFormModule 
+  // MaterialDesignFrameworkModule
 } from 'bpw-form';
 import { SiteExplorerComponent } from './site-explorer/site-explorer.component';
 import { FolderOverviewComponent } from './folder-overview/folder-overview.component';
@@ -79,7 +79,7 @@ import { ComponentModule } from '../components/component.module';
     FuseSharedModule,
     FuseSidebarModule,
     JsonSchemaFormModule, 
-    MaterialDesignFrameworkModule,
+    // MaterialDesignFrameworkModule,
     ComponentModule
   ],
   exports: [

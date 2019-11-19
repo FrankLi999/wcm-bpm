@@ -32,8 +32,8 @@ import { RepositoryComponent } from './repository/repository.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { DynamicUiComponent } from './dynamic-ui/dynamic-ui.component';
 import {
-  JsonSchemaFormModule, 
-  MaterialDesignFrameworkModule
+  JsonSchemaFormModule
+  // MaterialDesignFrameworkModule
 } from 'bpw-form';
 import { AceEditorDirective } from './dynamic-ui/ace-editor.directive';
 
@@ -74,7 +74,7 @@ import { AceEditorDirective } from './dynamic-ui/ace-editor.directive';
     FlexLayoutModule,
     // HttpClientModule,
     
-    MaterialDesignFrameworkModule,
+    // MaterialDesignFrameworkModule,
     JsonSchemaFormModule,
     // JsonSchemaFormModule.forRoot(
     //   // NoFrameworkModule,
