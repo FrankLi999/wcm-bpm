@@ -12,7 +12,16 @@ import {
   LayoutRow, 
   RenderTemplateModel
 } from 'bpw-wcm-service';
-import * as fromStore from 'bpw-wcm-service';
+import { 
+  WcmAppState,
+  getContentAreaLayouts,
+  CreateContentAreaLayoutSuccess,
+  getContentAreaLayoutError,
+  getRenderTemplates,
+  getContentAreaLayout,
+  ContentAreaLayoutClearError,
+  CreateContentAreaLayout
+} from 'bpw-wcm-service';
 import { SelectRenderTemplateDialog } from '../../components/select-render-template/select-render-template.dialog';
 
 @Component({
@@ -35,7 +44,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
-    private store: Store<fromStore.WcmAppState>
+    private store: Store<WcmAppState>
     ) { 
       this.unsubscribeAll = new Subject()
     }
@@ -46,12 +55,12 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
       if (this.editing) {
         this.store.pipe(
           takeUntil(this.unsubscribeAll),
-          select(fromStore.getContentAreaLayouts)
+          select(getContentAreaLayouts)
           ).subscribe(
             (contentAreaLayouts: {[key: string]: ContentAreaLayout}) => {
             if (contentAreaLayouts) {              
               this.layout = cloneDeep(contentAreaLayouts[`bpwizard/default/${this.library}/${this.layoutName}`]);
-              this.store.dispatch(new fromStore.CreateContentAreaLayoutSuccess(this.layout));
+              this.store.dispatch(new CreateContentAreaLayoutSuccess(this.layout));
             }
         });
       }
@@ -62,7 +71,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
 
       this.store.pipe(
         takeUntil(this.unsubscribeAll),
-        select(fromStore.getContentAreaLayoutError)
+        select(getContentAreaLayoutError)
         ).subscribe(
           (error: string) => {
           if (error) {
@@ -72,7 +81,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
 
       this.store.pipe(
         takeUntil(this.unsubscribeAll),
-          select(fromStore.getRenderTemplates)).subscribe(
+          select(getRenderTemplates)).subscribe(
         (rts: {[key:string]:RenderTemplate}) => {
           if (rts) {
             for (let prop in rts) {
@@ -96,7 +105,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
 
       this.store.pipe(
           takeUntil(this.unsubscribeAll),
-          select(fromStore.getContentAreaLayout)).subscribe(
+          select(getContentAreaLayout)).subscribe(
         (layout: ContentAreaLayout) => {          
           this.layout = cloneDeep(layout);
           this.layoutName = this.layout.name;
@@ -110,7 +119,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribeAll.next();
     this.unsubscribeAll.complete();
-    this.error && this.store.dispatch(new fromStore.ContentAreaLayoutClearError());
+    this.error && this.store.dispatch(new ContentAreaLayoutClearError());
   }
 
   addRow(): void {
@@ -290,7 +299,7 @@ export class ContentAreaLayoutComponent implements OnInit, OnDestroy {
     this.layout.repository = this.repository;
     this.layout.workspace = this.workspace;
     this.layout.library = this.library;
-    this.store.dispatch(new fromStore.CreateContentAreaLayout(this.layout));
+    this.store.dispatch(new CreateContentAreaLayout(this.layout));
     
   }
 

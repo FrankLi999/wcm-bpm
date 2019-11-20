@@ -800,7 +800,7 @@
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/tabs/contentTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["name", "title", "description", "url", "pageLayout", "cacheTTL", "securePage"]
+        "bpw:fieldNames": ["name", "title", "description", "url", "cacheTTL", "securePage", "sorderOrder", "defaultContent"]
     },
     
     "bpwizard/library/system/authoringTemplate/siteAreaType/tabs/propertiesTab" : {
@@ -812,7 +812,7 @@
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/tabs/propertiesTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["friendlyURL", "showOnMenu", "sorderOrder", "allowedFileExtension", "allowedArtifactTypes", "defaultContent", "metadata", "searchData"]
+        "bpw:fieldNames": ["contentAreaLayout", "siteConfig", "friendlyURL", "showOnMenu", "allowedArtifactTypes", "allowedFileExtension", "metadata", "searchData"]
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/tabs/propertiesTab/firstRow/firstColumn/searchData" : {
         "jcr:primaryType":"bpw:fieldLayout"
@@ -846,7 +846,7 @@
     
     "bpwizard/library/system/authoringTemplate/siteAreaType/tabs/navigationTab" : {
         "jcr:primaryType":"bpw:formTab",
-        "bpw:tabName": "Properties"
+        "bpw:tabName": "Navigation"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/tabs/navigationTab/firstRow" : {
         "jcr:primaryType":"bpw:formRow"
@@ -966,11 +966,18 @@
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/pageLayout" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/siteConfig" : {
         "jcr:primaryType": "bpw:formControl",
-        "bpw:title": "Page Layout",
+        "bpw:title": "Site Config",
         "bpw:controlName": "select",
-        "bpw:options": "jcr://pageLayout",
+        "bpw:options": "jcr://siteConfig",
+        "bpw:mandatory": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/contentAreaLayout" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Content Area Layout",
+        "bpw:controlName": "select",
+        "bpw:options": "jcr://contentAreaLayout",
         "bpw:mandatory": "true"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/elements/cacheTTL" : {
@@ -2265,6 +2272,7 @@
         "bpw:title":"BPM",
         "bpw:navigationId": "bpm",
         "bpw:navigationType": "group",
+        "bpw:siteConfig": "bpm",        
         "bpw:url": "/bpm",
         "bpw:translate": "NAV.BPM.APPLICATIONS",
         "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
@@ -2411,6 +2419,7 @@
     "bpwizard/library/apigateway/siteConfig" : {
         "jcr:primaryType":"bpw:siteConfigFolder"
     },
+    
     "bpwizard/library/apigateway/contentAreaLayout" : {
         "jcr:primaryType":"bpw:contentAreaLayoutFolder"
     },
@@ -2435,6 +2444,7 @@
         "bpw:title":"API GATEWAY",
         "bpw:navigationId": "apigateway",
         "bpw:navigationType": "group",
+        "bpw:siteConfig": "apigateway", 
         "bpw:url": "/api_gateway",
         "bpw:translate": "NAV.API.APPLICATIONS",
         "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
@@ -2493,6 +2503,46 @@
         "bpw:url": "/bpm/monitor",
         "bpw:translate": "NAV.API.MONITOR.TITLE",
         "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+    },
+    "bpwizard/library/apigateway/siteConfig/apigateway" : {
+        "jcr:primaryType":"bpw:siteConfig",
+        "bpw:name":"apigateway",
+        "bpw:colorTheme":"theme-default",
+        "bpw:rootSiteArea":"rootSiteArea",
+        "bpw:customScrollbars":"false"
+    },
+    "bpwizard/library/apigateway/siteConfig/apigateway/layout" : {
+        "jcr:primaryType":"bpw:pageLayout",
+        "bpw:style":"horizontal-layout-1",
+        "bpw:width":"fullwidth"
+    },
+    "bpwizard/library/apigateway/siteConfig/apigateway/layout/navbar" : {
+        "jcr:primaryType":"bpw:navbar",
+        "primaryBackground":"navbar-primary",
+        "secondaryBackground":"navbar-second",
+        "hidden":"false",
+        "folded":"false",
+        "position":"left",
+        "variant":"vertical-style-1"
+    },
+    "bpwizard/library/apigateway/siteConfig/apigateway/layout/toolbar" : {
+        "jcr:primaryType":"bpw:toolbar",
+        "customBackgroundColor":"false",
+        "background":"toolbar",
+        "hidden":"false",
+        "position":"above"
+    },
+    "bpwizard/library/apigateway/siteConfig/apigateway/layout/footer" : {
+        "jcr:primaryType":"bpw:footer",
+        "customBackgroundColor":"false",
+        "background":"footer",
+        "hidden":"false",
+        "position":"above"
+    },
+    "bpwizard/library/apigateway/siteConfig/apigateway/layout/sidePanel" : {
+        "jcr:primaryType":"bpw:sidePanel",
+        "hidden":"false",
+        "position":"right"
     },
     "bpwizard/library/design" : {
         "jcr:primaryType":"bpw:library",
@@ -2780,7 +2830,7 @@
     "bpwizard/library/camunda/siteConfig/bpm" : {
         "jcr:primaryType":"bpw:siteConfig",
         "bpw:name":"bpm",
-        "bpw:colorTheme":"bpm",
+        "bpw:colorTheme":"theme-default",
         "bpw:rootSiteArea":"rootSiteArea",
         "bpw:customScrollbars":"false"
     },

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewEncapsulation, Input } from '@angular
 import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from 'bpw-components';
 import { Subscription } from 'rxjs';
-import { WcmConfigService } from '../../config/wcm-config.service';
+import { WcmConfigService } from 'bpw-wcm-service';
 import { WcmConfigurableComponent } from '../../components/wcm-configurable.component';
 @Component({
   selector: 'content-area-designer',

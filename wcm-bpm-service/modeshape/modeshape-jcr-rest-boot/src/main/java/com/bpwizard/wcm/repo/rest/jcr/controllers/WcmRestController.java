@@ -63,6 +63,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.Navigation;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationBadge;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationType;
+import com.bpwizard.wcm.repo.rest.jcr.model.PageConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.PageLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplateLayoutColumn;
@@ -351,6 +352,42 @@ public class WcmRestController {
 		}	
 	}
 
+	//http://localhost:8080/wcm/api/wcmSystem/bpwizard/default/camunda/bpm
+	@GetMapping(path = "/pageConfig/{repository}/{workspace}/{library}/{siteConfig}", 
+		produces = MediaType.APPLICATION_JSON_VALUE)
+	public PageConfig getSiteConfig(
+			@PathVariable("repository") String repository,
+			@PathVariable("workspace") String workspace, 
+			@PathVariable("library") String library, 
+			@PathVariable("siteConfig") String siteConfigName,
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+		
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			PageConfig pageConfig = new PageConfig();
+			Session session = repositoryManager.getSession(repository, workspace);
+			Node siteConfigNode = session.getNode(String.format("/bpwizard/library/%s/siteConfig/%s", library, siteConfigName));
+			SiteConfig siteConfig = this.getSiteConfig(siteConfigNode);
+			siteConfig.setRepository(repository);
+			siteConfig.setWorkspace(workspace);
+			siteConfig.setLibrary(library);
+			pageConfig.setSiteConfig(siteConfig);
+			pageConfig.setNavigations(this.getNavigations(
+				request, repository, workspace, library, siteConfig.getRootSiteArea()));
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return pageConfig;
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}		
+	}
+		
 	@PostMapping(path = "/siteConfig", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createSiteConfig(
 			@RequestBody SiteConfig siteConfig, HttpServletRequest request) 
@@ -700,6 +737,7 @@ public class WcmRestController {
 			}
 	
 			saNode.setProperty("bpw:contentAreaLayout", sa.getContentAreaLayout());
+			saNode.setProperty("bpw:siteConfig", sa.getSiteConfig());
 			saNode.setProperty("bpw:securePage", sa.isSecurePage());
 			saNode.setProperty("bpw:cacheTTL", sa.getCacheTTL());
 	
@@ -849,6 +887,10 @@ public class WcmRestController {
 					sa.setContentAreaLayout(property.getValues().get(0));
 				}
 		
+				if ("bpw:siteConfig".equals(property.getName())) {
+					sa.setSiteConfig(property.getValues().get(0));
+				}
+				
 				if ("bpw:securePage".equals(property.getName())) {
 					sa.setSecurePage(Boolean.parseBoolean(property.getValues().get(0)));
 				}
@@ -2416,6 +2458,8 @@ public class WcmRestController {
 				sa.setDefaultContent(property.getValues().get(0));
 			} else if ("bpw:contentAreaLayout".equals(property.getName())) {
 				sa.setContentAreaLayout(property.getValues().get(0));
+			} else if ("bpw:siteConfig".equals(property.getName())) {
+				sa.setSiteConfig(property.getValues().get(0));
 			} else if ("bpw:cacheTTL".equals(property.getName())) {
 				sa.setCacheTTL(Integer.parseInt(property.getValues().get(0)));
 			} else if ("bpw:securePage".equals(property.getName())) {

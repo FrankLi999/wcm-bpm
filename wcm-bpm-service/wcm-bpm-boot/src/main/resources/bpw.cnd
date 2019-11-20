@@ -207,6 +207,7 @@
 - bpw:allowedArtifactTypes (STRING) multiple COPY
 - bpw:description (STRING) COPY
 - bpw:defaultContent (STRING) COPY
+- bpw:siteConfig (STRING) COPY
 - bpw:contentAreaLayout (STRING)
 - bpw:cacheTTL (LONG)
 - bpw:securePage (BOOLEAN) COPY

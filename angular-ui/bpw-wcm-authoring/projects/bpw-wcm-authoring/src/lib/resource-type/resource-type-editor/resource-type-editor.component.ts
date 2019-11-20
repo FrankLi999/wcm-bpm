@@ -9,7 +9,7 @@ import { Subject, Observable, of } from 'rxjs';
 import { takeUntil, switchMap, filter } from 'rxjs/operators';
 import * as fromStore from 'bpw-wcm-service';
 import { WcmService } from 'bpw-wcm-service';
-import { WcmConfigService } from '../../config/wcm-config.service';
+import { WcmConfigService } from 'bpw-wcm-service';
 import { WcmConfigurableComponent } from '../../components/wcm-configurable.component';
 @Component({
   selector: 'resource-type-editor',

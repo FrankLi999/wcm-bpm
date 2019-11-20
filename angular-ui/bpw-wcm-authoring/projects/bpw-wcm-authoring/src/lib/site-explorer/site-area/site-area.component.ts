@@ -6,7 +6,7 @@ import { select, Store } from '@ngrx/store';
 import { JsonForm, SiteArea, SiteAreaLayout } from 'bpw-wcm-service';
 import * as fromStore from 'bpw-wcm-service';
 import { WcmService } from 'bpw-wcm-service';
-import { WcmConfigService } from '../../config/wcm-config.service';
+import { WcmConfigService } from 'bpw-wcm-service';
 import { WcmConfigurableComponent } from '../../components/wcm-configurable.component';
 
 @Component({

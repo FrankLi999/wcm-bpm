@@ -9,7 +9,7 @@ import {
 } from 'bpw-wcm-service';
 import { Subject } from 'rxjs';
 import { takeUntil, switchMap, filter } from 'rxjs/operators';
-import { WcmConfigService } from '../../config/wcm-config.service';
+import { WcmConfigService } from 'bpw-wcm-service';
 import { WcmConfigurableComponent } from '../../components/wcm-configurable.component';
 
 export interface Code {

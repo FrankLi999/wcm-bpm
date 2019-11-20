@@ -15,6 +15,7 @@ export interface SiteArea extends HasName {
 	sorderOrder?: number;
 	friendlyURL?: string;
 	showOnMenu?: boolean;
+	siteConfig?: string;
 	contentPath?: string;
 	allowedFileExtension?: string;
 	allowedArtifactTypes?: string;

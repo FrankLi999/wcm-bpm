@@ -7,16 +7,22 @@ import { takeUntil } from 'rxjs/operators';
 import { MatMenuTrigger } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
-import { ModeshapeService } from 'bpw-wcm-service';
 
 import { 
   WcmRepository,
   WcmWorkspace,
   RestNode,
   WcmOperation,
-  JsonForm
+  JsonForm,
+  WcmAppState,
+  ModeshapeService,
+  getGetWcmSystemError,
+  getWcmRepositories,
+  getJsonForms,
+  WcmSystemClearError,
+  getOperations
 } from 'bpw-wcm-service';
-import { WcmConfigService } from '../../config/wcm-config.service';
+import { WcmConfigService } from 'bpw-wcm-service';
 import { WcmConfigurableComponent } from '../../components/wcm-configurable.component';
 
 import { UploadZipfileDialogComponent } from '../../dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
@@ -24,7 +30,6 @@ import { NewFolderDialogComponent } from '../../dialog/new-folder-dialog/new-fol
 import { NewThemeDialogComponent } from '../../dialog/new-theme-dialog/new-theme-dialog.component';
 import { NewSiteConfigDialogComponent } from '../../dialog/new-site-config-dialog/new-site-config-dialog.component';
 import { NewContentDialogComponent } from '../../dialog/new-content-dialog/new-content-dialog.component';
-import * as fromStore from 'bpw-wcm-service';
 
 /** Nested node */
 class JcrNode {
@@ -79,7 +84,7 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
     private wcmConfigService: WcmConfigService,
     private modeshapeService: ModeshapeService,
     // private wcmService: WcmService,
-    private store: Store<fromStore.WcmAppState>,
+    private store: Store<WcmAppState>,
     private router: Router,
     private matDialog: MatDialog) {
       super(wcmConfigService);
@@ -116,7 +121,7 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
       this.resetCurrentOperations();
     });
     this.store.pipe(
-        select(fromStore.getGetWcmSystemError),
+        select(getGetWcmSystemError),
         takeUntil(this.unsubscribeAll)       
       ).subscribe(
         (loadError: string) => {
@@ -125,7 +130,7 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
         }
     });
     this.store.pipe(
-      select(fromStore.getWcmRepositories),
+      select(getWcmRepositories),
       takeUntil(this.unsubscribeAll)
     ).subscribe(
       (repositories: WcmRepository[]) => {
@@ -151,7 +156,7 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
     
     this.store.pipe(
         takeUntil(this.unsubscribeAll),
-        select(fromStore.getJsonForms)
+        select(getJsonForms)
     ).subscribe(
       (jsonForms: {[key:string]:JsonForm}) => {
         if (jsonForms) {
@@ -174,7 +179,7 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
   ngOnDestroy(): void {
     this.unsubscribeAll.next();
     this.unsubscribeAll.complete();
-    this.loadError && this.store.dispatch(new fromStore.WcmSystemClearError());
+    this.loadError && this.store.dispatch(new WcmSystemClearError());
   }
 
   ngAfterViewInit() {
@@ -210,7 +215,7 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
     //this.modeshapeService.getItems(repositoryName, workspaceName, 'bpwizard/library/system/configuration/operations', 2).subscribe(
       this.store.pipe(
         takeUntil(this.unsubscribeAll),
-        select(fromStore.getOperations)).subscribe(
+        select(getOperations)).subscribe(
       (operations: {[key: string]: WcmOperation[]}) => {
         if (operations) {
           this.operationMap = operations;
@@ -461,6 +466,8 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
       const node =  this.activeNode;
       this.router.navigate(['/wcm-authoring/preview'],{
         queryParams: {
+          repository: (node.value as RestNode).repositoryName,
+          workspace: (node.value as RestNode).workspaceName,
           siteArea: (node.value as RestNode).nodePath
         } 
       });

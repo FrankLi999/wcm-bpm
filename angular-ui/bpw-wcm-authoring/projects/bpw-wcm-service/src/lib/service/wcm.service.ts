@@ -25,6 +25,7 @@ import { ContentAreaLayout } from '../model/ContentAreaLayout';
 import { SiteArea } from '../model/SiteArea';
 import { ContentItem } from '../model/ContentItem';
 import { WcmSystem } from '../model/WcmSystem';
+import { PageConfig } from '../model/PageConfig';
 import { SiteConfig } from '../model/SiteConfig';
 import { WcmNode } from '../model/WcmNode';
 import { WcmItemFilter } from '../model/WcmItemFilter';
@@ -94,6 +95,16 @@ export class WcmService extends RestClient {
     @Path('library') library: string, 
     @Path('siteConfig') siteConfig: string
   ): Observable<WcmSystem> { return null; };
+
+  @Get('/pageConfig/{repository}/{workspace}/{library}/{siteConfig}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public getPageConfig(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Path('library') library: string, 
+    @Path('siteConfig') siteConfig: string
+  ): Observable<PageConfig> { return null; };
 
   @Get('/jsonform/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds

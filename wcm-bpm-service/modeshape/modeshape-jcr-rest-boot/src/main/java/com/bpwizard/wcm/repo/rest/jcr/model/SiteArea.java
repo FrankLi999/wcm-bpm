@@ -19,6 +19,7 @@ public class SiteArea implements HasName {
 	private String allowedArtifactTypes;
 	
 	private boolean securePage;
+	private String siteConfig;
 	private String contentAreaLayout;
 	private int cacheTTL;
 
@@ -211,17 +212,23 @@ public class SiteArea implements HasName {
 	public void setSiteAreaLayout(SiteAreaLayout siteAreaLayout) {
 		this.siteAreaLayout = siteAreaLayout;
 	}
+	public String getSiteConfig() {
+		return siteConfig;
+	}
+	public void setSiteConfig(String siteConfig) {
+		this.siteConfig = siteConfig;
+	}
 	@Override
 	public String toString() {
 		return "SiteArea [repository=" + repository + ", workspace=" + workspace + ", nodePath=" + nodePath + ", name="
 				+ name + ", title=" + title + ", description=" + description + ", url=" + url + ", sorderOrder="
 				+ sorderOrder + ", friendlyURL=" + friendlyURL + ", showOnMenu=" + showOnMenu + ", defaultContent="
 				+ defaultContent + ", allowedFileExtension=" + allowedFileExtension + ", allowedArtifactTypes="
-				+ allowedArtifactTypes + ", securePage=" + securePage + ", contentAreaLayout=" + contentAreaLayout
-				+ ", cacheTTL=" + cacheTTL + ", metadata=" + metadata + ", searchData=" + searchData + ", navigationId="
+				+ allowedArtifactTypes + ", securePage=" + securePage + ", siteConfig=" + siteConfig
+				+ ", contentAreaLayout=" + contentAreaLayout + ", cacheTTL=" + cacheTTL + ", navigationId="
 				+ navigationId + ", navigationType=" + navigationType + ", function=" + function + ", translate="
 				+ translate + ", icon=" + icon + ", classes=" + classes + ", exactMatch=" + exactMatch
-				+ ", externalUrl=" + externalUrl + ", openInNewTab=" + openInNewTab + ", badge=" + badge
-				+ ", siteAreaLayout=" + siteAreaLayout + "]";
+				+ ", externalUrl=" + externalUrl + ", openInNewTab=" + openInNewTab + ", metadata=" + metadata
+				+ ", searchData=" + searchData + ", badge=" + badge + ", siteAreaLayout=" + siteAreaLayout + "]";
 	}
 }

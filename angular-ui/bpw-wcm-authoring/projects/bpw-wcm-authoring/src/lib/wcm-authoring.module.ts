@@ -99,8 +99,7 @@ const routes: Routes = [{
   children: [
     {
       path: 'jcr-explorer',
-      component: JcrExplorerComponent
-      // canActivate: [AuthGuard, fromGuards.ResolveGuard]       
+      component: JcrExplorerComponent    
     },
     {
       path: 'category',
@@ -109,7 +108,6 @@ const routes: Routes = [{
         {
           path       : 'item',
           component  :  CategoryComponent
-          // canActivate: [AuthGuard, fromGuards.ResolveGuard] 
         }
       ]
     },
@@ -120,24 +118,20 @@ const routes: Routes = [{
         {
             path       : 'edit',
             component  : ContentAreaDesignerComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard] 
         },
         {
             path       : 'new',
             component  : ContentAreaDesignerComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard] 
         },
         {
             path       : 'list',
             component  : ContentAreaLayoutsComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard] 
         }
       ]
     },
     {
       path     : 'preview',
-      component: ContentAreaPreviewComponent
-      // canActivate: [AuthGuard, fromGuards.ResolveGuard]       
+      component: ContentAreaPreviewComponent   
     },
     {
       path: 'query-builder',
@@ -146,12 +140,10 @@ const routes: Routes = [{
         {
             path       : 'edit',
             component  : QueryEditorComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
             path       : 'list',
             component  : QueryListComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         }
       ]
     },
@@ -162,17 +154,14 @@ const routes: Routes = [{
         {
             path       : 'edit',
             component  : RenderTemplateComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
           path       : 'new',
           component  : RenderTemplateComponent
-          // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
             path       : 'list',
             component  : RenderTemplatesComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         }
       ]
     },
@@ -182,12 +171,10 @@ const routes: Routes = [{
       children: [{
           path       : 'edit',
           component  : LibraryComponent
-          // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
             path       : 'list',
             component  : LibrariesComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         }
       ]
     },
@@ -198,17 +185,14 @@ const routes: Routes = [{
         {
             path       : 'edit',
             component  : ResourceTypeEditorComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
           path       : 'new',
           component  : ResourceTypeEditorComponent
-          // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
             path       : 'list',
             component  : ResourceTypeListComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         }
       ]
     },
@@ -219,27 +203,22 @@ const routes: Routes = [{
         {
             path       : 'navigator',
             component  : SiteExplorerComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
           path       : 'new-content',
           component  : ContentItemComponent
-          // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
           path       : 'edit-content',
           component  : ContentItemComponent
-          // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
           path       : 'new-sa',
           component  : SiteAreaComponent
-          // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
           path       : 'edit-sa',
           component  : SiteAreaComponent
-          // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         }
       ]
     },
@@ -250,12 +229,10 @@ const routes: Routes = [{
         {
             path       : 'edit',
             component  : ValidationRuleComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
             path       : 'list',
             component  : ValidationRulesComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         }
       ]
     },
@@ -266,12 +243,10 @@ const routes: Routes = [{
         {
             path       : 'edit',
             component  : WorkflowComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         },
         {
             path       : 'list',
             component  : WorkflowsComponent
-            // canActivate: [AuthGuard, fromGuards.ResolveGuard]
         }
       ]
     }
@@ -293,8 +268,6 @@ const routes: Routes = [{
         CommonModule,
         FormsModule, 
         ReactiveFormsModule,
-        // HttpClientModule,
-        
         FlexLayoutModule,
         MatButtonModule,
         MatCheckboxModule,        
@@ -310,7 +283,6 @@ const routes: Routes = [{
         MatSelectModule,
         MatToolbarModule,
 
-        // MaterialDesignFrameworkModule,
         JsonSchemaFormModule,
         TranslateModule,
 
@@ -318,14 +290,11 @@ const routes: Routes = [{
         FuseSidebarModule,
         AceEditorModule,
        
-        // FuseConfigModule.forChild(wcmAuthoringLayoutConfig), //todo, add forChild to FuseModule
         FuseProgressBarModule,
         FuseThemeOptionsModule,
 
-        // RestClientConfigModule.forChild(wcmAuthoringApiConfig),
         LayoutModule,
  
-        // AuthStoreModule,
         WcmAppStoreModule,
         ComponentModule,
         JcrExplorerModule,
@@ -342,11 +311,6 @@ const routes: Routes = [{
     ],
     providers   : [
       fromGuards.ResolveGuard
-      // {
-      //   provide: HTTP_INTERCEPTORS,
-      //   useClass: AuthHttpInterceptor,
-      //   multi: true
-      // }
     ],
     exports: [
       WcmAuthoringComponent

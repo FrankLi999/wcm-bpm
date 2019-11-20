@@ -26,7 +26,9 @@ export { FormColumn } from './lib/model/FormColumn';
 export { TemplateField } from './lib/model/TemplateField';
 export { RenderTemplate } from './lib/model/RenderTemplate';
 export { Query } from './lib/model/Query';
+export { Locale } from './lib/model/Locale';
 export { LayoutRow } from './lib/model/LayoutRow';
+export { PageConfig } from './lib/model/PageConfig';
 export { SiteConfig } from './lib/model/SiteConfig';
 export { ContentAreaLayout } from './lib/model/ContentAreaLayout';
 export { ResourceViewer } from './lib/model/ResourceViewer';
@@ -56,8 +58,10 @@ export { RenderTemplateModel } from './lib/model/RenderTemplateModel';
 export { ResourceElementRender } from './lib/model/ResourceElementRender';
 export { RenderTemplateLayoutColumn } from './lib/model/RenderTemplateLayoutColumn';
 export { RenderTemplateLayoutRow } from './lib/model/RenderTemplateLayoutRow';
+
 export * from './lib/service/wcm.service';
 export * from './lib/service/modeshape.service';
+export * from './lib/service/wcm-config.service';
 
 export * from './lib/store/actions/content-area-layout.actions';
 export * from './lib/store/actions/wcm-system.actions';
