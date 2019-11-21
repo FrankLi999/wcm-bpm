@@ -78,24 +78,41 @@ There are multiple ways to prevent this:
    ng generate library bpm-theme --prefix=bpm-theme -->
 
    
-   ng new bpw-wcm-authoring --create-application=false
-   cd bpw-wcm-authoring
+   ng new bpw-wcm --create-application=false
+   cd bpw-wcm
    ng generate library bpw-wcm-service --prefix=bpw-wcm-service
    ng generate library bpw-wcm-preview --prefix=bpw-wcm-preview
    ng generate library bpw-wcm-authoring --prefix=bpw-wcm-authoring
-   
 
-   ng new bpw-wcm-elements --create-application=false
-   cd  bpw-wcm-elements
+   ng add @angular/elements
+
+   ng new bpw-elements --create-application=false
+   cd bpw-elements
+   ng g application dashboard-title
+   ng g application playground-app
+
    ng add @angular/elements
    ng add ngx-build-plus
    ng g ngx-build-plus:wc-polyfill
    ng g ngx-build-plus:externals
 
+
    ng new bpw-auth --create-application=false
    cd bpw-auth
    ng generate library bpw-auth --prefix=bpw-auth
    
+
+   ng new authoring-ui 
+   cd authoring-ui
+   ng add @angular/elements
+   ng add ngx-build-plus
+   ng g ngx-build-plus:wc-polyfill
+
+   ng new bpm-ui 
+   ng add @angular/elements
+   ng add ngx-build-plus
+   ng g ngx-build-plus:wc-polyfill
+
    ng new bpw-dynamic-ui --create-application=false
    ng generate library bpw-dynamic-ui --prefix=bpw-dynamic-ui
    
@@ -144,11 +161,7 @@ There are multiple ways to prevent this:
    cd dist/bpw-layout
    npm pack
 
-   cd bpw-wcm-authoring
-
-   #ng add @angular/elements
-   #ng add ngx-build-plus
-   #ng build wcm-authoring-theme
+   cd bpw-wcm
    
    npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
 
@@ -203,10 +216,24 @@ There are multiple ways to prevent this:
 
    npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
 
-   npm install ../bpw-wcm-authoring/dist/bpw-wcm-service/bpw-wcm-service-0.0.1.tgz --save
-   npm install ../bpw-wcm-authoring/dist/bpw-wcm-preview/bpw-wcm-preview-0.0.1.tgz --save
-   npm install ../bpw-wcm-authoring/dist/bpw-wcm-authoring/bpw-wcm-authoring-0.0.1.tgz --save
+   npm install ../bpw-wcm/dist/bpw-wcm-service/bpw-wcm-service-0.0.1.tgz --save
+   npm install ../bpw-wcm/dist/bpw-wcm-preview/bpw-wcm-preview-0.0.1.tgz --save
+   npm install ../bpw-wcm/dist/bpw-wcm-authoring/bpw-wcm-authoring-0.0.1.tgz --save
    
+   bpm-ui
+   npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
+
+   npm install ../bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save
+
+   npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
+   
+   npm install ../bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz --save
+
+   npm install ../bpw-auth/dist/bpw-auth/bpw-auth-0.0.1.tgz --save  
+
+   npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
+
+   npm install ../bpw-wcm/dist/bpw-wcm-service/bpw-wcm-service-0.0.1.tgz --save
 
    npm install
    

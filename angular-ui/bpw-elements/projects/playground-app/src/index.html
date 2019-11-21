@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>PlaygroundApp</title>
+  <base href="/">
+
+  <!-- Theme -->
+  <link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="./assets/css/paper-dashboard.css" rel="stylesheet"/>
+  <link href="./assets/css/demo.css" rel="stylesheet" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+  <link href="./assets/css/themify-icons.css" rel="stylesheet">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body style="background-color: #f4f3ef">
+
+  <app-root></app-root>
+  <script>
+
+  if (!window['customElements'] && "noModule" in HTMLScriptElement.prototype) {
+    const script = document.createElement('script');
+    script.src = './assets/webcomponentsjs/bundles/webcomponents-sd-ce.js';
+    document.writeln(script.outerHTML);
+  }
+  </script>
+
+</body>
+</html>
