@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0r7zht4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:collaboration id="Collaboration_05shpxl">
+    <bpmn:participant id="Participant_0358cr7" processRef="content-item-simple-flow" />
+  </bpmn:collaboration>
+  <bpmn:process id="content-item-simple-flow" name="content-item-simple-flow" isExecutable="true" camunda:candidateStarterUsers="demo" camunda:versionTag="v1.0">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_18a59t1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="save-draft" name="Save Draft" camunda:type="external" camunda:topic="wcm-draft">
+      <bpmn:incoming>SequenceFlow_18a59t1</bpmn:incoming>
+      <bpmn:incoming>cotent-item-not-approved2</bpmn:incoming>
+      <bpmn:incoming>cotent-item-not-approved</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0wbesgp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="review-content-item" name="Review Content Item" camunda:assignee="demo" camunda:candidateGroups="wcm-reviewers">
+      <bpmn:extensionElements>
+        <camunda:taskListener event="complete">
+          <camunda:script scriptFormat="javascript">task.getExecution().setVariable("fourEyesLastUser",task.getAssignee());</camunda:script>
+        </camunda:taskListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0wbesgp</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1yedfxm</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="review-content-item-second" name="Review Content Item Second " camunda:assignee="demo" camunda:candidateGroups="wcm-reviewers">
+      <bpmn:extensionElements>
+        <camunda:taskListener event="create">
+          <camunda:script scriptFormat="javascript">var auth = task.getExecution().getProcessEngineServices().getAuthorizationService().createNewAuthorization(2); 
+// 2 for DENY permission type
+// you need to create this object, it is an input param for #removePermission
+var permissions = Java.type('org.camunda.bpm.engine.authorization.Permissions'); 
+// creating DENY permission type 
+auth.removePermission(permissions.ALL);
+// choosing resource ID which is task id of this task
+auth.setResourceId(task.getId()); 
+auth.setUserId(task.getExecution().getVariable('fourEyesLastUser')); 
+//setting user for who will be the permission created 
+auth.setResourceType(7); // setting resource type for task
+// set the created authorization
+task.getExecution().getProcessEngineServices().getAuthorizationService().saveAuthorization(auth);</camunda:script>
+        </camunda:taskListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>cotent-item-approved</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1x2zzvm</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="approved" name="Approved?">
+      <bpmn:incoming>SequenceFlow_1yedfxm</bpmn:incoming>
+      <bpmn:outgoing>cotent-item-not-approved</bpmn:outgoing>
+      <bpmn:outgoing>cotent-item-approved</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="approved2" name="Approved?">
+      <bpmn:incoming>SequenceFlow_1x2zzvm</bpmn:incoming>
+      <bpmn:outgoing>cotent-item-approved2</bpmn:outgoing>
+      <bpmn:outgoing>cotent-item-not-approved2</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="cotent-item-not-approved2" name="No" sourceRef="approved2" targetRef="save-draft">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!contentApproved2}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="cotent-item-approved2" name="Yes" sourceRef="approved2" targetRef="publish-content-item">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${contentApproved2}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1x2zzvm" sourceRef="review-content-item-second" targetRef="approved2" />
+    <bpmn:sequenceFlow id="SequenceFlow_1hwsfgo" sourceRef="publish-content-item" targetRef="EndEvent_0vf671e" />
+    <bpmn:sequenceFlow id="cotent-item-approved" name="Yes" sourceRef="approved" targetRef="review-content-item-second">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${contentApproved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1yedfxm" sourceRef="review-content-item" targetRef="approved" />
+    <bpmn:sequenceFlow id="cotent-item-not-approved" name="No" sourceRef="approved" targetRef="save-draft">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!contentApproved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0wbesgp" sourceRef="save-draft" targetRef="review-content-item" />
+    <bpmn:sequenceFlow id="SequenceFlow_18a59t1" sourceRef="StartEvent_1" targetRef="save-draft" />
+    <bpmn:serviceTask id="publish-content-item" name="Publish Content Item" camunda:class="com.bpwizard.bpm.content.task.ContentItemPublish">
+      <bpmn:incoming>cotent-item-approved2</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1hwsfgo</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_0vf671e">
+      <bpmn:incoming>SequenceFlow_1hwsfgo</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:textAnnotation id="TextAnnotation_1g6exgr">
+      <bpmn:text>There is a task listener on the complete event which will fill the variable called "fourEyesLastUser" with the user who has completed the task.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_1l3bdl1">
+      <bpmn:text>There is a task listener on the create event which will do the following things:
+1) create an authorization obj
+2) set a permission for revoking the access
+3) get id of the task
+4) get id of the user
+5) set both ids to the auth object
+6) create a permission</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0ye5ueu" sourceRef="save-draft" targetRef="TextAnnotation_1oc3x5k" />
+    <bpmn:association id="Association_0v6acyz" sourceRef="review-content-item" targetRef="TextAnnotation_1j09v05" />
+    <bpmn:association id="Association_18aqtz3" sourceRef="review-content-item-second" targetRef="TextAnnotation_0rehn49" />
+    <bpmn:association id="Association_1p1iiuj" sourceRef="review-content-item" targetRef="TextAnnotation_1g6exgr" />
+    <bpmn:association id="Association_0wfym9v" sourceRef="review-content-item-second" targetRef="TextAnnotation_1l3bdl1" />
+    <bpmn:textAnnotation id="TextAnnotation_1j09v05">
+      <bpmn:text>Allow Users: All from group wcm_reviewers</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_1oc3x5k">
+      <bpmn:text>First time save, create draft. Later on save draft before review.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_0rehn49">
+      <bpmn:text>Allow Users: All from group wcm_reviewers excelt for the user  who completed the first review.</bpmn:text>
+    </bpmn:textAnnotation>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_05shpxl">
+      <bpmndi:BPMNShape id="Participant_0358cr7_di" bpmnElement="Participant_0358cr7" isHorizontal="true">
+        <dc:Bounds x="170" y="80" width="1110" height="540" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="222" y="172" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_01wwgqi_di" bpmnElement="save-draft">
+        <dc:Bounds x="320" y="150" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0x0vhu8_di" bpmnElement="review-content-item">
+        <dc:Bounds x="490" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1xyx4vz_di" bpmnElement="approved" isMarkerVisible="true">
+        <dc:Bounds x="655" y="315" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="653" y="375" width="53" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0vf671e_di" bpmnElement="EndEvent_0vf671e">
+        <dc:Bounds x="1202" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_083ndm7_di" bpmnElement="publish-content-item">
+        <dc:Bounds x="1070" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1j8ef2q_di" bpmnElement="approved2" isMarkerVisible="true">
+        <dc:Bounds x="955" y="315" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="953" y="375" width="53" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1oc3x5k_di" bpmnElement="TextAnnotation_1oc3x5k">
+        <dc:Bounds x="470" y="90" width="100" height="84" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1j09v05_di" bpmnElement="TextAnnotation_1j09v05">
+        <dc:Bounds x="540" y="200" width="100" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0rehn49_di" bpmnElement="TextAnnotation_0rehn49">
+        <dc:Bounds x="700" y="104" width="100" height="113" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1g6exgr_di" bpmnElement="TextAnnotation_1g6exgr">
+        <dc:Bounds x="410" y="442" width="100" height="156" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1l3bdl1_di" bpmnElement="TextAnnotation_1l3bdl1">
+        <dc:Bounds x="740" y="450" width="240" height="140" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1l7htcc_di" bpmnElement="review-content-item-second">
+        <dc:Bounds x="780" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_11qgg09_di" bpmnElement="cotent-item-not-approved2">
+        <di:waypoint x="980" y="315" />
+        <di:waypoint x="980" y="180" />
+        <di:waypoint x="420" y="180" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="993" y="253" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1jr38el_di" bpmnElement="cotent-item-approved2">
+        <di:waypoint x="1005" y="340" />
+        <di:waypoint x="1120" y="340" />
+        <di:waypoint x="1120" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1027" y="322" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1hwsfgo_di" bpmnElement="SequenceFlow_1hwsfgo">
+        <di:waypoint x="1170" y="210" />
+        <di:waypoint x="1202" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_18a59t1_di" bpmnElement="SequenceFlow_18a59t1">
+        <di:waypoint x="258" y="190" />
+        <di:waypoint x="320" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0ye5ueu_di" bpmnElement="Association_0ye5ueu">
+        <di:waypoint x="420" y="171" />
+        <di:waypoint x="470" y="152" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0v6acyz_di" bpmnElement="Association_0v6acyz">
+        <di:waypoint x="558" y="300" />
+        <di:waypoint x="578" y="255" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1p1iiuj_di" bpmnElement="Association_1p1iiuj">
+        <di:waypoint x="522" y="380" />
+        <di:waypoint x="495" y="442" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_18aqtz3_di" bpmnElement="Association_18aqtz3">
+        <di:waypoint x="812" y="300" />
+        <di:waypoint x="775" y="217" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0wfym9v_di" bpmnElement="Association_0wfym9v">
+        <di:waypoint x="837" y="380" />
+        <di:waypoint x="848" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_14ylqjp_di" bpmnElement="cotent-item-not-approved">
+        <di:waypoint x="680" y="315" />
+        <di:waypoint x="680" y="180" />
+        <di:waypoint x="420" y="180" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="663" y="271" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1x2zzvm_di" bpmnElement="SequenceFlow_1x2zzvm">
+        <di:waypoint x="880" y="340" />
+        <di:waypoint x="955" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_17ddo2s_di" bpmnElement="cotent-item-approved">
+        <di:waypoint x="705" y="340" />
+        <di:waypoint x="780" y="340" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="753" y="322" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1yedfxm_di" bpmnElement="SequenceFlow_1yedfxm">
+        <di:waypoint x="590" y="340" />
+        <di:waypoint x="655" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0wbesgp_di" bpmnElement="SequenceFlow_0wbesgp">
+        <di:waypoint x="420" y="210" />
+        <di:waypoint x="455" y="210" />
+        <di:waypoint x="455" y="340" />
+        <di:waypoint x="490" y="340" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

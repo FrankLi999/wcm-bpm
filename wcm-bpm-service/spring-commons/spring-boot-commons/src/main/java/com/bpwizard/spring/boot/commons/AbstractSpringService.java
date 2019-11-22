@@ -30,6 +30,7 @@ public abstract class AbstractSpringService
 	protected SpringProperties properties;
 	protected BlueTokenService blueTokenService;
 	protected GreenTokenService greenTokenService;
+	@SuppressWarnings("rawtypes")
 	protected MailSender mailSender;
 
     /**
@@ -132,6 +133,7 @@ public abstract class AbstractSpringService
 	 * Sends verification mail to a unverified user.
 	 * Override this method if you're using a different MailData
 	 */
+	@SuppressWarnings("unchecked")
 	protected void sendVerificationMail(final U user, String verifyLink) {
 		
 		// send the mail
@@ -169,6 +171,7 @@ public abstract class AbstractSpringService
 	 * 
 	 * Override this method if you're using a different MailData
 	 */
+	@SuppressWarnings("unchecked")
 	public void mailForgotPasswordLink(U user, String forgotPasswordLink) {
 		
 		// send the mail

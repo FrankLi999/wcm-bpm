@@ -1,8 +1,5 @@
 package com.bpwizard.spring.boot.commons.cache;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class CacheConfig {
 	private int backupCount;
 	private String cacheName;

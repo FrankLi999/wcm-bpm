@@ -1,7 +1,5 @@
 package com.bpwizard.spring.boot.commons;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;

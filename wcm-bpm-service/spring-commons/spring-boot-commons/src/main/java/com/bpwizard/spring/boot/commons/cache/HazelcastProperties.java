@@ -5,10 +5,6 @@ import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Validated
 //@PropertySource("classpath:hazelcast.properties")
 //@ConfigurationProperties(prefix="hazelcast")
@@ -16,6 +12,7 @@ public class HazelcastProperties {
 	
 	public HazelcastProperties() {}
 	private int port;
+	private int cpMemberCounts = 0;
 	private String members;
 	private String groupName;
 	private String instanceName;
@@ -154,13 +151,32 @@ public class HazelcastProperties {
 		this.loggingType = loggingType;
 	}
 
+	
+	public int getCpMemberCounts() {
+		return cpMemberCounts;
+	}
+
+	public void setCpMemberCounts(int cpMemberCounts) {
+		this.cpMemberCounts = cpMemberCounts;
+	}
+
 	@Override
 	public String toString() {
-		return "HazelcastProperties [port=" + port + ", members=" + members + ", groupName=" + groupName
-				+ ", instanceName=" + instanceName + ", keyStorePassword=" + keyStorePassword + ", enableSSL="
-				+ enableSSL + ", keyStore=" + keyStore + ", keyManagerAlgorithm=" + keyManagerAlgorithm
-				+ ", trustManagerAlgorithm=" + trustManagerAlgorithm + ", enableEncryption=" + enableEncryption
-				+ ", encryptionAlgorithm=" + encryptionAlgorithm + ", encryptionPassword=" + encryptionPassword
-				+ ", encryptionSalt=" + encryptionSalt + ", loggingType=" + loggingType + ", caches=" + caches + "]";
+		return "HazelcastProperties [port=" + port + ", cpMemberCounts=" + cpMemberCounts + ", members=" + members
+				+ ", groupName=" + groupName + ", instanceName=" + instanceName + ", keyStorePassword="
+				+ keyStorePassword + ", enableSSL=" + enableSSL + ", keyStore=" + keyStore + ", keyManagerAlgorithm="
+				+ keyManagerAlgorithm + ", trustManagerAlgorithm=" + trustManagerAlgorithm + ", enableEncryption="
+				+ enableEncryption + ", encryptionAlgorithm=" + encryptionAlgorithm + ", encryptionPassword="
+				+ encryptionPassword + ", encryptionSalt=" + encryptionSalt + ", loggingType=" + loggingType
+				+ ", caches=" + caches + ", getPort()=" + getPort() + ", getMembers()=" + getMembers()
+				+ ", getGroupName()=" + getGroupName() + ", getInstanceName()=" + getInstanceName() + ", getCaches()="
+				+ getCaches() + ", getKeyStorePassword()=" + getKeyStorePassword() + ", isEnableSSL()=" + isEnableSSL()
+				+ ", getKeyStore()=" + getKeyStore() + ", getKeyManagerAlgorithm()=" + getKeyManagerAlgorithm()
+				+ ", getTrustManagerAlgorithm()=" + getTrustManagerAlgorithm() + ", isEnableEncryption()="
+				+ isEnableEncryption() + ", getEncryptionAlgorithm()=" + getEncryptionAlgorithm()
+				+ ", getEncryptionPassword()=" + getEncryptionPassword() + ", getEncryptionSalt()="
+				+ getEncryptionSalt() + ", getLoggingType()=" + getLoggingType() + ", getCpMemberCounts()="
+				+ getCpMemberCounts() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
+				+ super.toString() + "]";
 	}
 }

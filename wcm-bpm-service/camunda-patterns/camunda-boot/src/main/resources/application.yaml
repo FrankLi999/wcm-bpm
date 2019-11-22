@@ -1,0 +1,51 @@
+#spring.datasource.url=jdbc:h2:./camunda-db-order;DB_CLOSE_ON_EXIT=false
+kafka:
+  bootstrapAddress: localhost:9092
+message:
+  topic:
+    name: flowing-retail
+  group: order
+server:
+  port: 8091
+
+camunda.bpm:
+  admin-user:
+    id: demo
+    password: demo
+    firstName: Demo
+  filter:
+    create: All tasks
+spring:
+  jpa:
+    show-sql: true
+    # generate-ddl=true
+    hibernate:
+      ddl-auto: update
+      # ddl-auto: none
+      #use-new-id-generator-mappings: false
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        #jdbc.lob.non_contextual_creation: true
+  datasource:
+    url: jdbc:mysql://192.168.0.180:3306/camundapat?useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    username: root
+    password: P@ssw0rd
+    #url: jdbc:postgresql://localhost:5432/bpwdb
+    #url: jdbc:h2:mem:modeshape;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    #username: bpw
+    #password: bpw
+    
+    testOnBorrow: true
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 1
+    max-active: 15
+    max-idle: 10
+    max-wait: 8000
+    #hikari: 
+      #connectionTimeout: 30000
+      #idleTimeout: 600000
+      #maxLifetime: 1800000
