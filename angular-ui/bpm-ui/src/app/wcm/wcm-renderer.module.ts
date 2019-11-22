@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -34,23 +34,21 @@ import { JsonSchemaFormModule} from 'bpw-form';
 
 import { AuthGuard } from 'bpw-auth-store';
 
-// import { ResolveGuard } from 'bpw-wcm-service'
-// import { wcmAuthoringLayoutConfig, wcmAuthoringApiConfig } from '../wcm-authoring-config';
 import { WcmAppStoreModule } from 'bpw-wcm-service';
 
 
-// import { ResolveGuard } from 'bpw-wcm-service'
+import { ResolveGuard } from 'bpw-wcm-service'
 import { WcmRendererComponent } from './entry/wcm-renderer/wcm-renderer.component';
-// import { WcmElementsModule } from 'bpw-wcm-elements';
-// import { ResourceRenderComponent } from './renderer/resource-render/resource-render.component';
+import { WcmElementsModule } from 'bpw-wcm-elements';
+import { ResourceRenderComponent } from './renderer/resource-render/resource-render.component';
 const routes: Routes = [{
     path: '**',
-    component: WcmRendererComponent
-    // canActivate: [AuthGuard, ResolveGuard],
+    component: WcmRendererComponent,
+    canActivate: [AuthGuard, ResolveGuard],
 }];
 @NgModule({
   declarations: [
-    // ResourceRenderComponent,
+    ResourceRenderComponent,
     WcmRendererComponent    
   ],
   imports : [
@@ -81,15 +79,19 @@ const routes: Routes = [{
     FuseProgressBarModule,
     FuseThemeOptionsModule,
     JsonSchemaFormModule,
-    LayoutModule
-    // WcmAppStoreModule,
-    // WcmElementsModule
+    LayoutModule,
+    WcmAppStoreModule,
+    WcmElementsModule
   ],
-  // providers   : [
-  //   ResolveGuard
-  // ],
+  providers   : [
+    ResolveGuard
+  ],
+  schemas: [
+      CUSTOM_ELEMENTS_SCHEMA
+  ],
   exports: [
-    WcmRendererComponent
+    WcmRendererComponent,
+    ResourceRenderComponent
   ]
 })
 export class WcmRendererModule {

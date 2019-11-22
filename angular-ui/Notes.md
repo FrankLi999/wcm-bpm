@@ -147,7 +147,6 @@ There are multiple ways to prevent this:
    cd bpw-auth-store
    npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
 
-   npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
 
    ng build bpw-auth-store
    cd dist/bpw-auth-store
@@ -227,9 +226,11 @@ There are multiple ways to prevent this:
 
    npm install ../bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save
 
+   npm install ../bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz --save
+
    npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
    
-   npm install ../bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz --save
+   
 
    npm install ../bpw-auth/dist/bpw-auth/bpw-auth-0.0.1.tgz --save  
 

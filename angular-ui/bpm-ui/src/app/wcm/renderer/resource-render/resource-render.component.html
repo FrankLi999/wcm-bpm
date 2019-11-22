@@ -1,12 +1,14 @@
 <div class="card, row-layout" *ngIf="renderCode()" id="resource-viewer-{{contentId()}}"> <!-- [innerHTML]="templateContent|keepHtml"> -->
 </div>
-<div class="card, row-layout" #container>
+<div class="card, row-layout">
     <ng-container *ngIf="renderLayout()">
         <div class="card container" fxLayout="row" style="padding: 6px" *ngFor="let row of rendererTemplate.rows; let rowIndex = index;">
             <div fxLayout="column" *ngFor="let column of row.columns; let columnIndex = index;" fxLayoutAlign="start"  fxFlex="{{column.width ? column.width : 100}}">
-                <div fxLayout="column" *ngFor="let element of column.elements; let elementIndex = index;" fxLayoutAlign="start"  fxFlex="{{column.width ? column.width : 100}}">
-                    <!-- {{contentId()}}-{{element.name}} -->
-                    <render-element [content]="contentId()" [element]="element.name"></render-element>
+                <div fxLayout="row" id="resource-viewer-{{contentId()}}-{{element.name}}" *ngFor="let element of column.elements; let elementIndex = index;" fxLayoutAlign="start"  fxFlex="{{column.width ? column.width : 100}}">
+                    <!--
+                    <render-element content="{{contentId()}}" element="{{element.name}}"></render-element>
+                    -->
+                    {{contentId()}}-{{element.name}}
                 </div>    
             </div>      
         </div>
