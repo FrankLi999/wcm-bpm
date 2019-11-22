@@ -122,6 +122,46 @@
           }
         }
       }
+    },
+    "bpw-wcm-elements": {
+      "projectType": "library",
+      "root": "projects/bpw-wcm-elements",
+      "sourceRoot": "projects/bpw-wcm-elements/src",
+      "prefix": "bpw-wcm-elements",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/bpw-wcm-elements/tsconfig.lib.json",
+            "project": "projects/bpw-wcm-elements/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/bpw-wcm-elements/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/bpw-wcm-elements/src/test.ts",
+            "tsConfig": "projects/bpw-wcm-elements/tsconfig.spec.json",
+            "karmaConfig": "projects/bpw-wcm-elements/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/bpw-wcm-elements/tsconfig.lib.json",
+              "projects/bpw-wcm-elements/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "bpw-wcm-service"
 }

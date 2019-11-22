@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { ApiConfigService } from 'bpw-rest-client';
 import { authLayoutConfig } from '../../../config/auth.config';
 import * as fromStore from 'bpw-auth-store';
-
+declare var appConfig: any;
 @Component({
     selector     : 'login',
     templateUrl  : './login.component.html',
@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit, OnDestroy
           .subscribe(
               (loggedIn) => {
                 // this.router.navigateByUrl('/oauth2/profile');
-                this.router.navigateByUrl('/wcm-authoring/jcr-explorer');
+                this.router.navigateByUrl(appConfig && appConfig.defaultUrl ? appConfig.defaultUrl : '/oauth2/profile');
               }
             // (routeSnapshotOrError: RouteSnapshot) => {
             //     let redirectUrl = (routeSnapshotOrError as RouteSnapshot).paramMap['url'];

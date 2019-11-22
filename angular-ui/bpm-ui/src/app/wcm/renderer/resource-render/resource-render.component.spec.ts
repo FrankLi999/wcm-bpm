@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BpmnComponent } from './bpmn.component';
+import { ResourceRenderComponent } from './resource-render.component';
 
-describe('BpmnComponent', () => {
-  let component: BpmnComponent;
-  let fixture: ComponentFixture<BpmnComponent>;
+describe('ResourceRenderComponent', () => {
+  let component: ResourceRenderComponent;
+  let fixture: ComponentFixture<ResourceRenderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BpmnComponent ]
+      declarations: [ ResourceRenderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BpmnComponent);
+    fixture = TestBed.createComponent(ResourceRenderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

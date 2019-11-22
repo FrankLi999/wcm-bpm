@@ -2485,7 +2485,7 @@ public class WcmRestController {
 			*/		
 		}
 		
-		siteAreas.put(sa.getNavigationId(), sa);
+		siteAreas.put(sa.getUrl().replace("/", "~"), sa);
 		for (RestNode node :saNode.getChildren()) {
 			if (this.checkNodeType(node, "bpw:navigationBadge")) {
 				NavigationBadge badge = new NavigationBadge();

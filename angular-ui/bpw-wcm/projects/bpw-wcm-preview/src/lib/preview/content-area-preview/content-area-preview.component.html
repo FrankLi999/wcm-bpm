@@ -7,7 +7,7 @@
     <div fxLayout="column" fxLayoutAlign="start"  fxFlex="1 0 auto">
         <div class="card container" *ngFor="let viewer of layout.sidePane?.viewers; let viewerIndex = index;">
             <resource-renderer
-                [navigationId]="siteArea.navigationId"
+                [siteAreaKey]="getSiteAreaKey(siteArea)"
                 [renderer]="sideRenderId(viewerIndex)"
                 [rendererTemplate]="wcmSystem.renderTemplates[layout.sidePane.viewers[viewerIndex].renderTemplate]"
                 [content]="layout.sidePane.viewers[viewerIndex].contentPath[0]">
@@ -27,7 +27,7 @@
               <div class="column-layout" *ngFor="let column of row.columns; let columnIndex = index;" fxFlex="{{column.width}}">
                   <div class="card container" *ngFor="let viewer of column.viewers; let viewerIndex = index;">
                       <resource-renderer
-                          [navigationId]="siteArea.navigationId"
+                          [siteAreaKey]="getSiteAreaKey(siteArea)"
                           [renderer]="contentRenderId(rowIndex, columnIndex, viewerIndex)"
                           [rendererTemplate]="wcmSystem.renderTemplates[layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex].renderTemplate]"
                           [content]="layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex].contentPath[0]">
@@ -47,7 +47,7 @@
       <div fxLayout="column" fxLayoutAlign="start"  fxFlex="1 0 auto">
           <div class="card container" *ngFor="let viewer of layout.sidePane?.viewers; let viewerIndex = index;">
               <resource-renderer
-                  [navigationId]="siteArea.navigationId"
+                  [siteAreaKey]="getSiteAreaKey(siteArea)"
                   [renderer]="sideRenderId(viewerIndex)"
                   [rendererTemplate]="wcmSystem.renderTemplates[layout.sidePane.viewers[viewerIndex].renderTemplate]"
                   [content]="layout.sidePane.viewers[viewerIndex].contentPath[0]">

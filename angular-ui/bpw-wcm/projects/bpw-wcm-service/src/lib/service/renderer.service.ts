@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ContentItem } from 'bpw-wcm-service';
+import { ContentItem } from '../model/ContentItem';
 
 @Injectable({
   providedIn: 'root'

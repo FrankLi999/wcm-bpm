@@ -9,6 +9,8 @@ import { Navigation } from './Navigation';
 import { SiteArea } from './SiteArea';
 import { AuthoringTemplate } from './AuthoringTemplate';
 import { ControlField } from './ControlField';
+import { Locale } from './Locale';
+
 export interface WcmSystem {
     wcmRepositories: WcmRepository[];
     jcrThemes: Theme[];
@@ -23,5 +25,7 @@ export interface WcmSystem {
 	//Navigation id to SiteArea map
     siteAreas: {[key: string]: SiteArea};
     authoringTemplates: {[key: string]: AuthoringTemplate};
-    controlFiels: ControlField[]
+    controlFiels: ControlField[],
+    langs?: string[];
+    locales?: Locale[];
 }

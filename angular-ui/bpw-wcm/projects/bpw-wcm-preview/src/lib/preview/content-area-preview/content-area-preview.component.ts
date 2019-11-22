@@ -6,7 +6,7 @@ import { select, Store } from '@ngrx/store';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { Subject, Subscription, Observable, of } from 'rxjs';
 import { takeUntil, switchMap, filter } from 'rxjs/operators';
-import { RendererService } from '../renderer.service';
+import { RendererService } from 'bpw-wcm-service';
 import { WcmAppState, getWcmSystem } from 'bpw-wcm-service';
 import { WcmService, PageConfig, WcmConfigService } from 'bpw-wcm-service';
 import {
@@ -21,7 +21,7 @@ import {
 })
 export class ContentAreaPreviewComponent implements OnInit, OnDestroy {
 
-  navigationId: string = 'bpm-home';
+  siteAreaKey: string = 'bpm~home';
   siteArea: SiteArea;
   layout?: ContentAreaLayout;
   wcmSystem: WcmSystem;
@@ -43,7 +43,7 @@ export class ContentAreaPreviewComponent implements OnInit, OnDestroy {
       switchMap(param => this.getSiteArea(param)),
       filter(siteArea => siteArea != null),
       switchMap(siteArea => {
-        this.navigationId = siteArea.navigationId;
+        this.siteAreaKey = siteArea.url.replace(/\//g, '~');
         return this.store.pipe(
           takeUntil(this.unsubscribeAll),
           select(getWcmSystem))
@@ -73,10 +73,10 @@ export class ContentAreaPreviewComponent implements OnInit, OnDestroy {
     );
   }
 
-  getPageConfig(wcmSystem: WcmSystem): Observable<PageConfig> {
+  getPageConfig(wcmSystem: WcmSystem): Observable<PageConfig> {    
     this.wcmSystem = wcmSystem;
-    this.siteArea = this.wcmSystem.siteAreas[this.navigationId];  
-    this.layout = cloneDeep(this.wcmSystem.contentAreaLayouts[this.siteArea.contentAreaLayout]||{});
+    this.siteArea = wcmSystem.siteAreas[this.siteAreaKey]; 
+    this.layout = cloneDeep(wcmSystem.contentAreaLayouts[this.siteArea.contentAreaLayout]||{});
     if (this.siteArea.siteAreaLayout) {
       this.layout.sidePane = cloneDeep(this.siteArea.siteAreaLayout.sidePane);
       this.layout.rows = cloneDeep(this.siteArea.siteAreaLayout.rows);
@@ -96,6 +96,7 @@ export class ContentAreaPreviewComponent implements OnInit, OnDestroy {
         locales: null
       });
     }
+    
   }
 
   getSiteArea(param: any): Observable<SiteArea> {
@@ -125,5 +126,9 @@ export class ContentAreaPreviewComponent implements OnInit, OnDestroy {
 
   contentRenderId(rowIndex, columnIndex, viewerIndex) {
     return `c_${rowIndex}_${columnIndex}_${viewerIndex}`;
+  }
+
+  getSiteAreaKey(siteArea: SiteArea): string {
+    return siteArea.url.replace(/\//g, '~');
   }
 }

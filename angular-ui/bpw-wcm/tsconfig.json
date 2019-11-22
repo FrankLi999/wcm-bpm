@@ -36,6 +36,12 @@
       ],
       "bpw-wcm-authoring/*": [
         "dist/bpw-wcm-authoring/*"
+      ],
+      "bpw-wcm-elements": [
+        "dist/bpw-wcm-elements"
+      ],
+      "bpw-wcm-elements/*": [
+        "dist/bpw-wcm-elements/*"
       ]
     }
   },

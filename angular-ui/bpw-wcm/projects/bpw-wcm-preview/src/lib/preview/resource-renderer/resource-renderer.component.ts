@@ -7,20 +7,23 @@ import {
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
-import { RenderTemplate, ContentItem } from 'bpw-wcm-service';
-import { WcmService } from 'bpw-wcm-service';
-import { RendererService } from '../renderer.service';
+import {
+  RenderTemplate,
+  ContentItem,
+  WcmService,
+  RendererService
+} from 'bpw-wcm-service';
 
 //https://blog.angularindepth.com/building-an-aot-friendly-dynamic-content-outlet-in-angular-59c1a96171a
 @Component({
   selector: 'resource-renderer',
-  templateUrl: './resource-renderer-element.component.html',
-  styleUrls: ['./resource-renderer-element.component.scss']
+  templateUrl: './resource-renderer.component.html',
+  styleUrls: ['./resource-renderer.component.scss']
 })
-export class ResourceRendererElementComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ResourceRendererComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() renderer;
-  @Input() navigationId;
+  @Input() siteAreaKey: string;
   @Input() rendererTemplate: RenderTemplate;
   @Input() content: string;
   contentItemChange = new BehaviorSubject<ContentItem>(null);
@@ -75,7 +78,7 @@ export class ResourceRendererElementComponent implements OnInit, OnDestroy, Afte
     this.contentItemChange.unsubscribe();
   }
   contentId(): string {
-    return `${this.navigationId}_${this.renderer}`;
+    return `${this.siteAreaKey}_${this.renderer}`;
   }
 
   renderCode() :boolean {

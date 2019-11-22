@@ -12,7 +12,7 @@ export class ExternalElementService {
   load(): void {
     if (this.loaded) return;
     const script = document.createElement('script');
-    script.src = 'assets/external-elements.js';
+    script.src = 'assets/bpw-wcm-elements.js';
     document.body.appendChild(script);
     this.loaded = true;
   }

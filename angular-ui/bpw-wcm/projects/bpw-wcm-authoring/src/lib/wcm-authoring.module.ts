@@ -38,6 +38,8 @@ import {
 } from 'bpw-form';
 
 import { AuthGuard } from 'bpw-auth-store';
+
+import { ResolveGuard } from 'bpw-wcm-service'
 // import { wcmAuthoringLayoutConfig, wcmAuthoringApiConfig } from '../wcm-authoring-config';
 import { WcmAppStoreModule } from 'bpw-wcm-service';
 import { ComponentModule } from './components/component.module';
@@ -60,7 +62,6 @@ import { NewSiteareaDialogComponent } from './dialog/new-sitearea-dialog/new-sit
 import { NewContentDialogComponent } from './dialog/new-content-dialog/new-content-dialog.component';
 import { NewSiteConfigDialogComponent } from './dialog/new-site-config-dialog/new-site-config-dialog.component';
 
-import * as fromGuards from 'bpw-wcm-service';
 import { WcmAuthoringComponent } from './entry/wcm-authoring/wcm-authoring.component';
 import { JcrExplorerComponent } from './jcr-explorer/jcr-explorer/jcr-explorer.component';
 import { CategoryTreeComponent } from './category/category-tree/category-tree.component';
@@ -95,7 +96,7 @@ import { WorkflowComponent } from './workflow/workflow/workflow.component';
 const routes: Routes = [{
   path: '',
   component: WcmAuthoringComponent,
-  canActivate: [AuthGuard, fromGuards.ResolveGuard],
+  canActivate: [AuthGuard, ResolveGuard],
   children: [
     {
       path: 'jcr-explorer',
@@ -310,7 +311,7 @@ const routes: Routes = [{
         PreviewModule,
     ],
     providers   : [
-      fromGuards.ResolveGuard
+      ResolveGuard
     ],
     exports: [
       WcmAuthoringComponent

@@ -33,7 +33,6 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "src/assets/bpw-wcm-elements.js",
               {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
               },
@@ -66,13 +65,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "6mb"
                 }
               ]
             },

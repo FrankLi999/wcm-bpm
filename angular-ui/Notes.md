@@ -81,6 +81,7 @@ There are multiple ways to prevent this:
    ng new bpw-wcm --create-application=false
    cd bpw-wcm
    ng generate library bpw-wcm-service --prefix=bpw-wcm-service
+     ng generate library bpw-wcm-elements --prefix=bpw-wcm-elements
    ng generate library bpw-wcm-preview --prefix=bpw-wcm-preview
    ng generate library bpw-wcm-authoring --prefix=bpw-wcm-authoring
 
@@ -217,6 +218,7 @@ There are multiple ways to prevent this:
    npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
 
    npm install ../bpw-wcm/dist/bpw-wcm-service/bpw-wcm-service-0.0.1.tgz --save
+   npm install ../bpw-wcm/dist/bpw-wcm-elements/bpw-wcm-elements-0.0.1.tgz --save
    npm install ../bpw-wcm/dist/bpw-wcm-preview/bpw-wcm-preview-0.0.1.tgz --save
    npm install ../bpw-wcm/dist/bpw-wcm-authoring/bpw-wcm-authoring-0.0.1.tgz --save
    
@@ -234,6 +236,7 @@ There are multiple ways to prevent this:
    npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
 
    npm install ../bpw-wcm/dist/bpw-wcm-service/bpw-wcm-service-0.0.1.tgz --save
+   npm install ../bpw-wcm/dist/bpw-wcm-elements/bpw-wcm-elements-0.0.1.tgz --save
 
    npm install
    

@@ -66,7 +66,7 @@ export function WcmSystemReducer(state = WcmSystemInitialState, action: WcmSyste
             let siteAreas = {
                 ...state.wcmSystem.siteAreas
             }
-            siteAreas[action.payload.navigationId] = action.payload;
+            siteAreas[action.payload.url.replace(/\//g, '~')] = action.payload;
             return {
                 ...state,
                 wcmSystem: {

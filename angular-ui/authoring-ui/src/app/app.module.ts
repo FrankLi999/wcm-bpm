@@ -43,11 +43,7 @@ const appRoutes: Routes = [
         loadChildren: () => import('./oauth2/oauth2-lazy.module').then(m => m.Oauth2LazyModule)
     },
     {
-        path        : 'bpmn',
-        loadChildren: () => import('./bpmn/bpmn.module').then(m => m.BpmnModule)
-    },
-    {
-        path      : 'wcm-authoring',
+        path      : appConfig.baseUrl,
         loadChildren: () => import('./wcm/wcm-authoring-lazy.module').then(m => m.WcmAuthoringLazyModule)
     },
     {

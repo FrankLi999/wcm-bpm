@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import * as fromStore from 'bpw-auth-store';
 import { ApiConfigService } from 'bpw-rest-client';
+declare var appConfig: any;
 
 @Component({
   selector: 'redirect-handler',
@@ -47,7 +48,8 @@ export class RedirectHandlerComponent implements OnInit {
         }
       );
       // this.router.navigateByUrl('/oauth2/profile');
-      this.router.navigateByUrl('/wcm-authoring/jcr-explorer');
+      // this.router.navigateByUrl('/wcm-authoring/jcr-explorer');
+      this.router.navigateByUrl(appConfig && appConfig.defaultUrl ? appConfig.defaultUrl : '/oauth2/profile');
     } else {
       //uiService.showError
       this.router.navigateByUrl('/auth/login');    

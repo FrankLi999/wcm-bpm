@@ -62,6 +62,8 @@ export { RenderTemplateLayoutRow } from './lib/model/RenderTemplateLayoutRow';
 export * from './lib/service/wcm.service';
 export * from './lib/service/modeshape.service';
 export * from './lib/service/wcm-config.service';
+export * from './lib/service/external-element.service';
+export * from './lib/service/renderer.service';
 
 export * from './lib/store/actions/content-area-layout.actions';
 export * from './lib/store/actions/wcm-system.actions';

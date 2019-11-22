@@ -43,7 +43,11 @@ const appRoutes: Routes = [
         loadChildren: () => import('./oauth2/oauth2-lazy.module').then(m => m.Oauth2LazyModule)
     },
     {
-        path        : 'bpmn',
+        path        : appConfig.baseUrl,
+        loadChildren: () => import('./wcm/wcm-renderer.module').then(m => m.WcmRendererModule)
+    },
+    {
+        path        : 'test-bpmn',
         loadChildren: () => import('./bpmn/bpmn.module').then(m => m.BpmnModule)
     },
     {
