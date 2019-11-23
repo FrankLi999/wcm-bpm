@@ -20,7 +20,6 @@
 	</parent>
 	
 	<modules>
-        <module>bpm-ui</module>	
 		<module>modeshape</module>
 		<module>camunda</module>
 		<module>wcm-bpm-boot</module>

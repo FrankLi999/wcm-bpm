@@ -1,0 +1,4 @@
+server:
+  contextPath: /
+  servlet.session.persistent: false
+  port: 3000

@@ -82,6 +82,7 @@ bpw:
     # We're not using cookies because they won't work well in mobile clients.
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
+      - http://localhost:4000/oauth2/redirect
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
   #application-url: http://localhost:19090
@@ -91,7 +92,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://localhost:3000
+    allowed-origins: http://localhost:3000, http://localhost:4000
     
   recaptcha:
     sitekey: 6LdwxRcUAAAAABkhOGWQXhl9FsR27D5YUJRuGzx0
