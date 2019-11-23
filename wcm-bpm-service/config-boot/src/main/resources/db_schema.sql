@@ -1,0 +1,2 @@
+create table properties (id integer not null auto_increment, CREATED_ON datetime ,APPLICATION varchar(255), PROFILE varchar(255), LABEL varchar(255), PROP_KEY varchar(255), VALUE varchar(255), primary key (id)) engine=InnoDB;
+INSERT INTO properties (CREATED_ON, APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE) VALUES (NULL,'wcm_bpm','dev','latest','test-property','This is my test value');
