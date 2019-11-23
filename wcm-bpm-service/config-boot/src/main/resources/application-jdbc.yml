@@ -1,0 +1,43 @@
+management:
+  endpoint:
+    logfile:
+      external-file: "logs/configserver.log"
+
+spring:
+  security:
+    user:
+      name: "config"
+      password: "Passw0rd"
+  profiles:
+    include:
+      - "default"
+  datasource:
+    hikari:
+      connection-timeout: 5000
+      maximum-pool-size: 10
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.0.168:3306/config?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    username: wcmbpm
+    password: P@ssw0rd
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+#  h2:
+#    console:
+#      enabled: true
+#  liquibase:
+#    change-log: "classpath:liquibase/liquibase-changelog.xml"
+#    contexts: "jdbc"
+  cloud:
+    config:
+      server:
+        jdbc:
+          sql: SELECT PROP_KEY, VALUE from properties where APPLICATION=? and PROFILE=? and LABEL=?
+          order: 1
+        # encrypt:
+          # enabled: false
+
+# moved encrypt property to bootstrap.yml, seems to be an known issue
+#encrypt:
+#  key: "e46b46cf-3ec5-4dee-943b-8fa4a69b62f6"

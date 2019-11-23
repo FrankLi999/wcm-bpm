@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="01-create-properties-h2" author="lie zeilstra" context="jdbc">
+        <sql>
+            create table properties
+            (
+                application varchar(255) not null,
+                profile     varchar(255) not null,
+                label       varchar(255) not null,
+                key         varchar(2048) not null,
+                value       varchar(4096) not null,
+                primary key (application, profile, label, key)
+            );
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>

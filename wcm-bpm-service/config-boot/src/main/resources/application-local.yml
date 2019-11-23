@@ -1,0 +1,22 @@
+management:
+  endpoint:
+    logfile:
+      external-file: "logs/configserver.log"
+
+spring:
+  profiles:
+    include:
+      - "default"
+  liquibase:
+    enabled: false
+  cloud:
+    config:
+      server:
+        git:
+          uri: "file://${user.home}/config-repo"
+
+#/{application}/{profile}[/{label}]
+#/{application}-{profile}.yml
+#/{label}/{application}-{profile}.yml
+#/{application}-{profile}.properties
+#/{label}/{application}-{profile}.properties          

@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    config:
+      name: "configserver-client"
+      profile: "dev"
+      label: "master"
+      uri: "http://localhost:8888/configserver"
+      username: "config"
+      password: "Passw0rd"
+      fail-fast: true
+
+encrypt:
+  key-store:
+    location: "classpath:/config-client.jks"
+    password: "Passw0rd"
+    alias: "bpm_ui"
+    secret: "Passw0rd"

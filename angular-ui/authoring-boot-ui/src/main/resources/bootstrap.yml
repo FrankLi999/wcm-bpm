@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    config:
+      name: "authoring-ui"
+      profile: "dev"
+      label: "master"
+      uri: "http://localhost:8888/configserver"
+      username: "config"
+      password: "Passw0rd"
+      fail-fast: true
+
+encrypt:
+  key-store:
+    location: "classpath:/jks/authoring-ui-client.jks"
+    password: "Passw0rd"
+    alias: "authoring_ui"
+    secret: "Passw0rd"

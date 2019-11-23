@@ -1,29 +1,29 @@
+
+app:
+  name: "@project.artifactId@"
+  version: "@project.version@"
+
 server:
   port: 8888
+  servlet:
+    context-path: "/configserver"
 spring:
   profiles:
     active: jdbc
-  datasource:
-    hikari:
-      connection-timeout: 5000
-      maximum-pool-size: 10
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.0.168:3306/config?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-    username: wcmbpm
-    password: P@ssw0rd
-  cloud:
-    config:
-      server:
-        # git: 
-          #uri: https://github.com/xxxx/config-repo.git
-        jdbc:
-          sql: SELECT PROP_KEY, VALUE from PROPERTIES where APPLICATION=? and PROFILE=? and LABEL=?
-          order: 1
-        # encrypt:
-          # enabled: false
-encrypt:
-  key: secretkey
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka
+
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework: INFO
+    com.bpwizard.config: INFO
+    
+# for actuator endpoints (spring boot 2)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    logfile:
+      external-file: "/var/log/cfgserver/configserver.log"
