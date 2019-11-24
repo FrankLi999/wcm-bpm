@@ -16,6 +16,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        web.ignoring().antMatchers("/encrypt/**");
 //        web.ignoring().antMatchers("/decrypt/**");
         web.ignoring().antMatchers("/error/**");
+        web.ignoring().antMatchers("/api/**");
     }
 
     @Override

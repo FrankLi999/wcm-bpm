@@ -4,6 +4,8 @@ spring:
       server:
         encrypt:
           enabled: false
+  app:
+    name: config-server
 encrypt:
   key-store:
     location: "classpath:/jks/config-server.jks"
