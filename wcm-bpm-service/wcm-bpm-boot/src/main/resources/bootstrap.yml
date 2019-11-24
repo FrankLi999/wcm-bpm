@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    vault:
+      connection-timeout: 5000
+      read-timeout: 15000
+      authentication: TOKEN
+      token: s.wekXqQdqmi6banjmsdaipGGK
+      # uri: http://192.168.0.168:8200
+      uri: https://192.168.0.168:8200
+      ssl:
+        trust-store: classpath:/jks/vault.jks
+        trust-store-password: changeit
+      generic:
+        enabled: true        
+        application-name: wcm_bpm
+      kv:
+        enabled: true
+      #  backend: kv
+        backend: secret
+        profile-separator: '/'
+        default-context: application
+        application-name: wcm_bpm
+      database:
+        enabled: true
+        role: wcmbpm-accounts-admin
+        backend: database
+        username-property: spring.datasource.username
+        password-property: spring.datasource.password

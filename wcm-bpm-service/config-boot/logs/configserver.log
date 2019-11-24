@@ -40,3 +40,43 @@
 2019-11-24 00:11:25,349 [INFO] org.apache.juli.logging.DirectJDKLog: Initializing Spring DispatcherServlet 'dispatcherServlet'
 2019-11-24 00:11:25,354 [INFO] org.springframework.web.servlet.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
 2019-11-24 00:11:25,363 [INFO] org.springframework.web.servlet.FrameworkServlet: Completed initialization in 8 ms
+2019-11-24 09:09:50,239 [WARN] com.zaxxer.hikari.pool.HikariPool$HouseKeeper: HikariPool-13 - Thread starvation or clock leap detected (housekeeper delta=8h8m31s673ms643µs).
+2019-11-24 09:27:03,140 [INFO] org.springframework.scheduling.concurrent.ExecutorConfigurationSupport: Shutting down ExecutorService 'applicationTaskExecutor'
+2019-11-24 09:27:03,141 [INFO] org.springframework.orm.jpa.AbstractEntityManagerFactoryBean: Closing JPA EntityManagerFactory for persistence unit 'default'
+2019-11-24 09:27:03,143 [INFO] com.zaxxer.hikari.HikariDataSource: HikariPool-13 - Shutdown initiated...
+2019-11-24 09:27:03,145 [INFO] com.zaxxer.hikari.HikariDataSource: HikariPool-13 - Shutdown completed.
+2019-11-24 09:27:04,673 [INFO] org.springframework.boot.SpringApplication: The following profiles are active: jdbc,default
+2019-11-24 09:27:05,029 [INFO] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-11-24 09:27:05,041 [INFO] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 11ms. Found 1 repository interfaces.
+2019-11-24 09:27:05,126 [INFO] org.springframework.cloud.context.scope.GenericScope: BeanFactory id=7d87bfc3-43f1-3170-9b3d-857f14d286b2
+2019-11-24 09:27:05,160 [INFO] org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker: Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-11-24 09:27:05,166 [INFO] org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker: Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$25fef894] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-11-24 09:27:05,212 [WARN] org.apache.juli.logging.DirectJDKLog: The MBean registry cannot be disabled because it has already been initialised
+2019-11-24 09:27:05,253 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 8843 (https) 8888 (http)
+2019-11-24 09:27:05,254 [INFO] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["https-jsse-nio-8843"]
+2019-11-24 09:27:05,255 [INFO] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8888"]
+2019-11-24 09:27:05,256 [INFO] org.apache.juli.logging.DirectJDKLog: Starting service [Tomcat]
+2019-11-24 09:27:05,257 [INFO] org.apache.juli.logging.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/9.0.27]
+2019-11-24 09:27:05,285 [INFO] org.apache.juli.logging.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2019-11-24 09:27:05,286 [INFO] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 610 ms
+2019-11-24 09:27:05,492 [INFO] org.hibernate.jpa.internal.util.LogHelper: HHH000204: Processing PersistenceUnitInfo [name: default]
+2019-11-24 09:27:05,500 [INFO] com.zaxxer.hikari.HikariDataSource: HikariPool-14 - Starting...
+2019-11-24 09:27:05,507 [INFO] com.zaxxer.hikari.HikariDataSource: HikariPool-14 - Start completed.
+2019-11-24 09:27:05,508 [INFO] org.hibernate.dialect.Dialect: HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2019-11-24 09:27:05,516 [WARN] org.hibernate.mapping.RootClass: HHH000038: Composite-id class does not override equals(): com.bpwizard.config.domain.PropertyId
+2019-11-24 09:27:05,517 [WARN] org.hibernate.mapping.RootClass: HHH000039: Composite-id class does not override hashCode(): com.bpwizard.config.domain.PropertyId
+2019-11-24 09:27:05,534 [INFO] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator: HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2019-11-24 09:27:05,535 [INFO] org.springframework.orm.jpa.AbstractEntityManagerFactoryBean: Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-11-24 09:27:05,561 [WARN] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration: spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-11-24 09:27:05,667 [INFO] org.springframework.security.web.DefaultSecurityFilterChain: Creating filter chain: Ant [pattern='/login/**'], []
+2019-11-24 09:27:05,668 [INFO] org.springframework.security.web.DefaultSecurityFilterChain: Creating filter chain: Ant [pattern='/error/**'], []
+2019-11-24 09:27:05,668 [INFO] org.springframework.security.web.DefaultSecurityFilterChain: Creating filter chain: Ant [pattern='/api/**'], []
+2019-11-24 09:27:05,677 [INFO] org.springframework.security.web.DefaultSecurityFilterChain: Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@322334a, org.springframework.security.web.context.SecurityContextPersistenceFilter@2d0b7e62, org.springframework.security.web.header.HeaderWriterFilter@22711223, org.springframework.security.web.authentication.logout.LogoutFilter@19446fc8, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@fd97f68, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@705dbe19, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5a974a3b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@f8e01da, org.springframework.security.web.session.SessionManagementFilter@b44602b, org.springframework.security.web.access.ExceptionTranslationFilter@22ffee94, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@298087b5]
+2019-11-24 09:27:05,718 [INFO] org.springframework.scheduling.concurrent.ExecutorConfigurationSupport: Initializing ExecutorService 'applicationTaskExecutor'
+2019-11-24 09:27:05,842 [INFO] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2019-11-24 09:27:06,301 [INFO] org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver: Exposing 16 endpoint(s) beneath base path '/actuator'
+2019-11-24 09:27:06,345 [INFO] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["https-jsse-nio-8843"]
+2019-11-24 09:27:06,910 [INFO] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["http-nio-8888"]
+2019-11-24 09:27:06,913 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat started on port(s): 8843 (https) 8888 (http) with context path '/configserver'
+2019-11-24 09:27:07,310 [INFO] org.springframework.boot.StartupInfoLogger: Started ConfigApplication in 3.537 seconds (JVM running for 37695.288)
+2019-11-24 09:27:07,312 [INFO] org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener: Condition evaluation unchanged

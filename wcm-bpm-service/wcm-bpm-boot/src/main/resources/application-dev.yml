@@ -7,6 +7,7 @@ flyway:
   #locations:classpath:/db/migration,classpath:/dev/db/migration
 
 spring:
+
   jpa:
     show-sql: true
     # generate-ddl=true
@@ -21,8 +22,8 @@ spring:
         #jdbc.lob.non_contextual_creation: true
   datasource:
     url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-    username: wcmbpm
-    password: P@ssw0rd
+    # username: wcmbpm
+    # password: P@ssw0rd
     #url: jdbc:postgresql://localhost:5432/bpwdb
     #url: jdbc:h2:mem:modeshape;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     #username: bpw
@@ -36,10 +37,15 @@ spring:
     max-active: 15
     max-idle: 10
     max-wait: 8000
-    #hikari: 
+    hikari:
+      connection-test-query: select 1
+      #idle-timeout: 5000
+      idle-timeout: 600000
+      #max-lifetime: 120000
+      max-lifetime: 1800000
+      maximum-pool-size: 5
+      minimum-idle: 5
       #connectionTimeout: 30000
-      #idleTimeout: 600000
-      #maxLifetime: 1800000
 
   security:
     oauth2:

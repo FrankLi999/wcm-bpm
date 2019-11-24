@@ -1,0 +1,140 @@
+== Vault server bootstrap
+/etc/systemd/system/vault.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now vault
+
+export VAULT_ADDR=https://127.0.0.1:8200
+export VAULT_TOKEN=s.wekXqQdqmi6banjmsdaipGGK
+export VAULT_SKIP_VERIFY=true
+https://serverip:8200/ui
+
+openssl req -nodes -new -x509 -keyout vault.key -out vault.cert 
+
+openssl req -new -out vault.cert -newkey rsa:2048 -nodes -sha256 -keyout vault.key -config req.conf
+-----------------------------------------------------------------------------------
+keytool -genkey -alias vault-server -keyalg RSA -storetype PKCS12 -keystore vault.p12 -ext SAN=dns:vault.bpwizard.com,dns:localhost,ip:127.0.0.1,ip:192.168.0.168 -validity 3650
+openssl pkcs12 -in vault.p12 -nodes -out vault.cert -passin pass:Passw0rd
+openssl pkcs12 -in vault.p12 -nodes -nocerts -out vault.key -passin pass:Passw0rd
+
+keytool -export -alias vault-server -file vault.crt -keystore vault.p12
+keytool -import -alias vault-server -file vault.crt -keystore vault.jks
+-------------------------------------------------------------------------------
+1. Run vaul-start in one shell
+
+2. Open another shell and execute the command below:
+> vault operator init
+
+
+Unseal Key 1: /kTN/ed22wzO9Jj6ugzIzD+x8jRLk07UPAlM4B85sLVD
+Unseal Key 2: DdnHdFe/XMTeDRxTskJseGN3CTABN87vDSO6BMCxphkm
+Unseal Key 3: y1bamM82+t4LoPEdKG+tYoqLWILpeeWZ8WLiEQVxMUq3
+Unseal Key 4: v9/xdEXNCA9iTXzRQXoV5zGWA7Z02vLKAuqoyjOXkusi
+Unseal Key 5: PMHUFbZJNg4LiaSfI88ilC73Sr4hp09mhVNk966xXIKN
+
+Initial Root Token: s.wekXqQdqmi6banjmsdaipGGK
+
+
+...
+
+== Admin token setup
+
+1. Set the VAULT_TOKEN environment variable with the root token value 
+export VAULT_TOKEN=d341fdaf-1cf9-936a-3c38-cf5eec94b5c0 (Linux) 
+set VAULT_TOKEN=d341fdaf-1cf9-936a-3c38-cf5eec94b5c0 (Windows)
+
+2. Create another admin token
+
+>vault token create -display-name=admin
+
+$ vault token create -display-name=admin
+Key                  Value
+---                  -----
+token                s.1FSvNaGGc4jRbmTk3BfmvVVy
+token_accessor       0u0pg1LJWkWJErBcbCnJDMJu
+token_duration       ∞
+token_renewable      false
+token_policies       ["root"]
+identity_policies    []
+policies             ["root"]
+
+
+3. Create ~/.vault-secret with your root token
+4. Unset the VAULT_TOKEN environment variable !
+
+=== Test DB setup (MySQL only, for now)
+
+1. Create test db
+2. Create admin account used to create dynamic accounts:
+
+create schema fakebank;
+create user 'fakebank-admin'@'%' identified by 'Sup&rSecre7!'
+grant all privileges on fakebank.* to 'fakebank-admin'@'%' with grant option;
+grant create user on *.* to 'fakebank-admin' with grant option;
+flush privileges;
+=============================================================
+export VAULT_SKIP_VERIFY=true
+-============================================================
+create wcm-bpm-kv-policy.hcl with:
+
+	path "secret/wcm_bpm/dev/" {
+	    capabilities = ["read"]
+	}
+
+
+==========================================================
+
+vault secrets enable -path=secret/ kv
+vault kv put secret/wcm-bpm/dev api_key=foo api_secret=bar
+vault kv get secret/wcm-bpm/dev
+============================================================
+vault policy write wcm-bpm-ro ./cm-bpm-kv-policy.hcl
+
+vault token create -policy=wcm-bpm-ro
+Key                  Value
+---                  -----
+token                s.URMz3JkwH4ZXDYkfxFLd8mNf
+token_accessor       SkQHVY1isueFyZjLwpoaZaZ4
+token_duration       10h
+token_renewable      true
+token_policies       ["default" "wcm-bpm-dev-ro"]
+identity_policies    []
+policies             ["default" "wcm-bpm-dev-ro"]
+
+
+
+=============================================================
+=== Database secret backend setup
+> vault secrets enable database
+
+==== Create db configuration
+> vault write database/config/mysql-wcm-bpm \
+  plugin_name=mysql-database-plugin \
+  connection_url="{{username}}:{{password}}@tcp(192.168.0.168:3306)/wcm_bpm" \
+  allowed_roles="*" \
+  username="wcmbpm" \
+  password="P@ssw0rd" 
+  
+  
+==== Create roles
+> vault write database/roles/wcmbpm-accounts-ro \
+    db_name=mysql-wcm-bpm \
+    creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON wcm_bpm.* TO '{{name}}'@'%';" \
+    default_ttl="1h" \
+    max_ttl="24h"  
+
+> vault write database/roles/wcmbpm-accounts-rw \
+    db_name=mysql-wcm-bpm \
+    creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT,INSERT,UPDATE ON wcm_bpm.* TO '{{name}}'@'%';" \
+    default_ttl="5m" \
+    max_ttl="30m"  
+
+> vault write database/roles/wcmbpm-accounts-admin \
+    db_name=mysql-wcm-bpm \
+    creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT ALL ON wcm_bpm.* TO '{{name}}'@'%';flush privileges;" \
+    default_ttl="500m" \
+    max_ttl="3000m"  
+
+
+=== Get credentials
+> vault read database/creds/wcmbpm-accounts-rw
+
