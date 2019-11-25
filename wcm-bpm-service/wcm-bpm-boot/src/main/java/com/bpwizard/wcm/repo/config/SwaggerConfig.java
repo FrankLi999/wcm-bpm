@@ -52,7 +52,8 @@ public class SwaggerConfig{
         return new ApiKey("Authorization", "", "header");             // <<< === Create a Heaader (We are createing header named "Authorization" here)
     }
 
-    @Bean
+    @SuppressWarnings("deprecation")
+	@Bean
     SecurityConfiguration security() {
         //return new SecurityConfiguration("emailSecurity_client", "secret", "Spring", "emailSecurity", "apiKey", ApiKeyVehicle.HEADER, "api_key", ",");
         return new SecurityConfiguration("emailSecurity_client", "secret", "Spring", "emailSecurity", "", ApiKeyVehicle.HEADER, "", ",");

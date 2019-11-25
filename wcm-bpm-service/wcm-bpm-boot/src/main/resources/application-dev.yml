@@ -3,7 +3,8 @@ flyway:
   url: jdbc:mysql://192.168.0.168:3306/mysql
   schemas: wcm_bpm
   user: wcmbpm
-  password: P@ssw0rd
+  #password: P@ssw0rd
+  password: ENC(hii16IIKWBHMYH9txsTLpvWOkNcDFy4D)
   #locations:classpath:/db/migration,classpath:/dev/db/migration
 
 spring:
@@ -22,8 +23,13 @@ spring:
         #jdbc.lob.non_contextual_creation: true
   datasource:
     url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-    # username: wcmbpm
-    # password: P@ssw0rd
+    username: wcmbpm
+    password: P@ssw0rd
+    # username: ${vaultConfiguration.dbUser}
+    # password: ${vaultConfiguration.dbPassword}
+    
+    #/secret/wcm-bpm/dev/vault.db_wcmbpm_password
+    #/secret/wcm-bpm/dev/vault.db_wcmbpm_user
     #url: jdbc:postgresql://localhost:5432/bpwdb
     #url: jdbc:h2:mem:modeshape;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     #username: bpw

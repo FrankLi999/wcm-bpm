@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/hello")
 public class HelloWorldControlloer {
-
 	@GetMapping("/create")
 	public String getCreate() {
 		return "Hello create";

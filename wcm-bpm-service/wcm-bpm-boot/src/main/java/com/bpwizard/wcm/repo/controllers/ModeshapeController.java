@@ -8,6 +8,7 @@ import java.security.Principal;
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
@@ -201,6 +202,18 @@ public class ModeshapeController {
 		return "{\"node-type\": \"up\"}";
 	}
 	
+	@GetMapping("/features")
+	public String features() throws Exception {
+		
+		Repository repo = this.repositoryManager.getRepository("bpwizard");
+		StringBuilder support = new StringBuilder("Descriptors").append(" : ");
+		for (String desc: repo.getDescriptorKeys()) {
+			support.append(desc).append("---:---").append(repo.getDescriptor(desc)).append("<br /><br />");
+		}
+		return support.toString();
+		
+		
+	}
 	@GetMapping("/testACL")
 	public String testACL() throws Exception {
 		String path = "/bpwizard/library";

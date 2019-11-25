@@ -1,3 +1,7 @@
+# jasypt
+java -cp c:/tools/jasypt/jasypt-1.9.2.jar org.jasypt.intf.cli.JasyptPBEStringEncryptionCLI input=P@ssw0rd password=password  
+  // algorithm=PBEWITHMD5ANDDES
+
 Spring Boot OAuth2 Social Login with Google, Facebook, and Github - Part 1
 https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-1/
 https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-2/

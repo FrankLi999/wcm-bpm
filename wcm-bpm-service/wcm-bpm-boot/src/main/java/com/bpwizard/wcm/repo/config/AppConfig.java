@@ -44,5 +44,4 @@ public class AppConfig {
      // registrationBean.setOrder(1); //set precedence
      return registrationBean;
     }
-	
 }
