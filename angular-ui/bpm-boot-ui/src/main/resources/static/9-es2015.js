@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{Mrgm:function(n,t,o){"use strict";o.r(t),o.d(t,"Oauth2LazyModule",(function(){return e}));var r=o("2cqD"),c=o("fXoL");let e=(()=>{class n{}return n.\u0275mod=c.bc({type:n}),n.\u0275inj=c.ac({factory:function(t){return new(t||n)},imports:[[r.b]]}),n})()}}]);

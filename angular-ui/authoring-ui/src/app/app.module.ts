@@ -19,11 +19,10 @@ import {
   FuseSharedModule,
   FuseProgressBarModule,
   FuseSidebarModule,
-  FuseThemeOptionsModule
+  FuseThemeOptionsModule,
+  LayoutModule
 } from 'bpw-components';
 
-
-import { LayoutModule } from 'bpw-layout';
 import { AuthStoreModule, AuthHttpInterceptor } from 'bpw-auth-store';
 
 import { environment } from '../environments/environment';

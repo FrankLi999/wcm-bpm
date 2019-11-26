@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { AuthenticationModule} from 'bpw-auth';
+import { AuthenticationModule} from 'bpw-components';
 
 @NgModule({
     imports  : [

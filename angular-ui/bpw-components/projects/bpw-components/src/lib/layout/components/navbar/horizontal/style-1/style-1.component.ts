@@ -1,0 +1,88 @@
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+
+import { FuseNavigation } from '../../../../../common/types/fuse-navigation'; 
+import { FuseConfigService } from '../../../../../common/services/config.service'; 
+import { FuseNavigationService } from '../../../../../common/components/navigation/navigation.service';
+import { FuseSidebarService } from '../../../../../common/components/sidebar/sidebar.service';
+
+import { AppConfigurationState } from '../../../../store/reducers/navigation.reducers';
+import { getNavigation } from '../../../../store/selectors/navigation.selectors';
+
+@Component({
+    selector     : 'navbar-horizontal-style-1',
+    templateUrl  : './style-1.component.html',
+    styleUrls    : ['./style-1.component.scss'],
+    encapsulation: ViewEncapsulation.None
+})
+export class NavbarHorizontalStyle1Component implements OnInit, OnDestroy
+{
+    fuseConfig: any;
+    navigation: FuseNavigation[];
+
+    // Private
+    private _unsubscribeAll: Subject<any>;
+
+    /**
+     * Constructor
+     *
+     * @ param {FuseConfigService} _fuseConfigService
+     * @ param {FuseNavigationService} _fuseNavigationService
+     * @ param {FuseSidebarService} _fuseSidebarService
+     */
+    constructor(
+        private _fuseConfigService: FuseConfigService,
+        private _fuseNavigationService: FuseNavigationService,
+        private _fuseSidebarService: FuseSidebarService,
+        private _store: Store<AppConfigurationState>
+    )
+    {
+        // Set the private defaults
+        this._unsubscribeAll = new Subject();
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Lifecycle hooks
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * On init
+     */
+    ngOnInit(): void {
+        this._store.pipe(select(getNavigation), takeUntil(this._unsubscribeAll)).subscribe(
+          (navigation: FuseNavigation[]) => {
+            if (navigation) {
+                this.navigation = navigation
+            };
+        });
+
+        // Get current navigation
+        this._fuseNavigationService.onNavigationChanged
+            .pipe(
+                filter(value => value !== null),
+                takeUntil(this._unsubscribeAll)
+            )
+            .subscribe(() => {
+                this.navigation = this._fuseNavigationService.getCurrentNavigation();
+            });
+
+        // Subscribe to the config changes
+        this._fuseConfigService.config
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((config) => {
+                this.fuseConfig = config;
+            });
+    }
+
+    /**
+     * On destroy
+     */
+    ngOnDestroy(): void
+    {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+    }
+}

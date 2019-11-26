@@ -9,6 +9,7 @@
     "build": "ng build",
     "build-stats": "ng build --dev --stats-json",
     "build-prod": "ng build --prod --output-hashing none",
+    "build-prod-aot": "ng build --prod --aot --buildOptimizer --commonChunk --vendorChunk --optimization --progress --output-hashing none",
     "build-prod-stats": "ng build --prod --stats-json",
     "test": "ng test",
     "lint": "ng lint",

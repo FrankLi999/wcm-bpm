@@ -208,14 +208,10 @@ There are multiple ways to prevent this:
 
    npm install ../bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save
 
-   npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
+   
    
    npm install ../bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz --save
-
-   npm install ../bpw-auth/dist/bpw-auth/bpw-auth-0.0.1.tgz --save  
-
-   npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
-
+   npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
    npm install ../bpw-wcm/dist/bpw-wcm-service/bpw-wcm-service-0.0.1.tgz --save
    npm install ../bpw-wcm/dist/bpw-wcm-elements/bpw-wcm-elements-0.0.1.tgz --save
    npm install ../bpw-wcm/dist/bpw-wcm-preview/bpw-wcm-preview-0.0.1.tgz --save

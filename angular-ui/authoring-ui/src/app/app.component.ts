@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { 
   AppConfigurationState,
   SetNavigation
-} from 'bpw-layout';
+} from 'bpw-components';
 import {
   FuseConfigService,
   FuseNavigationService,

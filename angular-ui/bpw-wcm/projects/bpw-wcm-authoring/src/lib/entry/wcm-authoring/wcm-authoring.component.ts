@@ -13,7 +13,7 @@ import {
 import { 
 AppConfigurationState,
 SetNavigation
-} from 'bpw-layout';
+} from 'bpw-components';
 import { wcmAuthoringLayoutConfig } from '../../config/wcm-authoring.config';
 import { navigation } from '../../navigation/navigation';
 import { locale as navigationEnglish } from '../../navigation/i18n/en';

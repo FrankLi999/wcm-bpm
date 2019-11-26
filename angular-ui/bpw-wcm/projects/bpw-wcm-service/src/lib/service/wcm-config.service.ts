@@ -13,7 +13,7 @@ import {
 import { 
 AppConfigurationState,
 SetNavigation
-} from 'bpw-layout';
+} from 'bpw-components';
 
 @Injectable({
   providedIn: 'root'

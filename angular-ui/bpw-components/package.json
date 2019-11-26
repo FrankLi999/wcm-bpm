@@ -9,7 +9,7 @@
       "lint": "ng lint",
       "e2e": "ng e2e",
       "build-bpw-components": "ng build bpw-components && npm run build-bpw-components-styles && npm run bpw-components-scss-bundle && npm run cp-bpw-components-assets",
-      "copy-bpw-components-style": "cpx \"./projects/bpw-components/src/lib/scss/**/*\" \"./dist/bpw-components/lib/scss\" && cpx \"./projects/bpw-components/src/lib/**/*.theme.scss\" \"./dist/bpw-components/lib\""   
+      "copy-styles": "cpx \"./projects/bpw-components/src/lib/common/scss/**/*\" \"./dist/bpw-components/lib/scss\" && cpx \"./projects/bpw-components/src/lib/**/*.theme.scss\" \"./dist/bpw-components/lib\""
    },
    "private": true,
    "dependencies": {
@@ -25,9 +25,16 @@
       "@angular/platform-browser": "~9.0.0-rc.2",
       "@angular/platform-browser-dynamic": "~9.0.0-rc.2",
       "@angular/router": "~9.0.0-rc.2",
+      "@ngrx/effects": "^8.5.1",
+      "@ngrx/entity": "^8.5.1",
+      "@ngrx/router-store": "^8.5.1",
+      "@ngrx/store": "^8.5.1",
+      "@ngrx/store-devtools": "^8.5.1",
       "@ngx-translate/core": "^11.0.1",
       "@swimlane/ngx-datatable": "^16.0.2",
       "@types/prismjs": "^1.16.0",
+      "bpw-auth-store": "file:../bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz",
+      "bpw-rest-client": "file:../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz",
       "lodash-es": "^4.17.15",
       "moment": "^2.24.0",
       "ngx-cookie-service": "^2.2.0",

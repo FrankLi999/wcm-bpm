@@ -30,7 +30,7 @@ import {
 } from 'bpw-components';
 
 // import { RestClientConfigModule } from 'bpw-rest-client';
-import { LayoutModule } from 'bpw-layout';
+import { LayoutModule } from 'bpw-components';
 
 import {
   JsonSchemaFormModule, 
