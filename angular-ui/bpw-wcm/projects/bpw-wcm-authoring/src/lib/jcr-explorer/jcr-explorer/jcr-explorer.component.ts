@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
@@ -8,6 +8,7 @@ import { MatMenuTrigger } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 
+import { fuseAnimations} from 'bpw-components';
 import { 
   WcmRepository,
   WcmWorkspace,
@@ -58,7 +59,9 @@ class JcrFlatNode {
 @Component({
   selector: 'jcr-explorer',
   templateUrl: './jcr-explorer.component.html',
-  styleUrls: ['./jcr-explorer.component.scss']
+  styleUrls: ['./jcr-explorer.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  animations   : fuseAnimations
 })
 export class JcrExplorerComponent extends WcmConfigurableComponent implements OnInit, OnDestroy {
   functionMap: {[key:string]:Function}= {};

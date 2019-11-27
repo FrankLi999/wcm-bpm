@@ -60,17 +60,17 @@ There are multiple ways to prevent this:
    cd bpw-form
    ng generate library bpw-form --prefix=bpw-form
    
-   ng new bpw-components --create-application=false
-   cd bpw-components
-   ng generate library bpw-components --prefix=bpw-components
-   
    ng new bpw-auth-store --create-application=false
    cd bpw-auth-store
    ng generate library bpw-auth-store --prefix=bpw-auth-store
 
-   ng new bpw-layout --create-application=false
-   cd bpw-layout
-   ng generate library bpw-layout --prefix=bpw-layout
+   ng new bpw-components --create-application=false
+   cd bpw-components
+   ng generate library bpw-components --prefix=bpw-components
+   
+
+
+
    
    <!-- ng new bpw-theme --create-application=false
    cd bpw-theme
@@ -81,11 +81,16 @@ There are multiple ways to prevent this:
    ng new bpw-wcm --create-application=false
    cd bpw-wcm
    ng generate library bpw-wcm-service --prefix=bpw-wcm-service
-     ng generate library bpw-wcm-elements --prefix=bpw-wcm-elements
+   ng generate library bpw-wcm-elements --prefix=bpw-wcm-elements
    ng generate library bpw-wcm-preview --prefix=bpw-wcm-preview
    ng generate library bpw-wcm-authoring --prefix=bpw-wcm-authoring
 
    ng add @angular/elements
+   ng generate application wcm-authoring
+   ng generate application bpm-ui
+   ng add ngx-build-plus
+   ng g ngx-build-plus:wc-polyfill
+
 
    ng new bpw-elements --create-application=false
    cd bpw-elements
@@ -164,15 +169,11 @@ There are multiple ways to prevent this:
    cd bpw-wcm
    
    npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
-
+   npm install ../bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save
    npm install ../bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz --save
 
    npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save
    
-   npm install ../bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save
-   
-
-   npm install ../bpw-layout/dist/bpw-layout/bpw-layout-0.0.1.tgz --save
    
    ng build bpw-wcm-service
    cd dist/bpw-wcm-service
@@ -200,15 +201,15 @@ There are multiple ways to prevent this:
    npm pack
    
 	
+	npm install ../angular-ui/bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
+	npm install ../angular-ui/bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save  
+    npm install ../angular-ui/bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz --save
    
    cd authoring-ui
    
    
    npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz --save
-
-   npm install ../bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save
-
-   
+   npm install ../bpw-form/dist/bpw-form/bpw-form-0.0.1.tgz --save  
    
    npm install ../bpw-auth-store/dist/bpw-auth-store/bpw-auth-store-0.0.1.tgz --save
    npm install ../bpw-components/dist/bpw-components/bpw-components-0.0.1.tgz --save

@@ -21,23 +21,24 @@ import { ApiConfig } from 'bpw-rest-client';
             secondaryBackground: 'fuse-navy-900',
             folded             : false,
             hidden             : false,
-            position           : 'left',
+            position           : 'top',
             variant            : 'vertical-style-1'
+            // variant            : 'horizontal-style-1'
         },
         toolbar  : {
             customBackgroundColor: false,
             background           : 'fuse-white-500',
             hidden               : false,
-            position             : 'below-static'
+            position             : 'below'
         },
         footer   : {
             customBackgroundColor: true,
             background           : 'fuse-navy-900',
             hidden               : false,
-            position             : 'below-fixed'
+            position             : 'above-static'
         },
         sidepanel: {
-            hidden  : false,
+            hidden  : true,
             position: 'left'
         }
     }

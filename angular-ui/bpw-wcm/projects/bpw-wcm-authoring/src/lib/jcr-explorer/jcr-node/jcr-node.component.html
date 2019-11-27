@@ -1,50 +1,51 @@
-<div id="jcr-node-overview">
-  <h1>JCR Node - {{restNode.name}}</h1> 
-  <span>{{restNode.id}}</span>
-  <div class="jcr-node-content" fxLayout="column" fxFlex="100">
-      <div class="profile-box info-box general" fxLayout="column" fxFlex="100">
-          <header class="accent">
-              <div class="title">JCR restNode URLs</div>
-          </header>
-          <div class="content">
-              <div class="info-line">
-                  <div class="title">URL</div>
-                  <div class="info">{{restNode.url}}</div>
-              </div>
-              <div class="info-line">
-                  <div class="title">Parent Url</div>
-                  <div class="info">{{restNode.parentUrl}}</div>
-              </div>
-          </div>
-      </div>
-      <div class="profile-box info-box general" fxLayout="column" fxFlex="100">
-          <header class="accent">
-              <div class="title">Custom Properties</div>
-          </header>
+<div class="jcr-node-header" fxLayout="row" fxLayoutAlign="space-between center">
+    <h1>JCR Node - {{restNode.name}}</h1> 
+    <span>{{restNode.id}}</span>
+</div>
+  
+<div class="jcr-node-content" fxLayout="column" fxFlex="100">
+    <div class="profile-box info-box general" fxLayout="column" fxFlex="100">
+        <header class="accent">
+            <div class="title">JCR restNode URLs</div>
+        </header>
+        <div class="content">
+            <div class="info-line">
+                <div class="title">URL</div>
+                <div class="info">{{restNode.url}}</div>
+            </div>
+            <div class="info-line">
+                <div class="title">Parent Url</div>
+                <div class="info">{{restNode.parentUrl}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="profile-box info-box general" fxLayout="column" fxFlex="100">
+        <header class="accent">
+            <div class="title">Custom Properties</div>
+        </header>
 
-          <div class="content">
-              <div class="info-line" *ngFor="let item of restNode.customProperties | keyvalue">
-                  <div class="title">{{item.key}}</div>
-                  <div class="info">{{item.value}}</div>
-              </div>
-          </div>
-      </div>
-      <div class="profile-box info-box general" fxLayout="column" fxFlex="100">
-          <header class="accent">
-              <div class="title">JCR Properties</div>
-          </header>
+        <div class="content">
+            <div class="info-line" *ngFor="let item of restNode.customProperties | keyvalue">
+                <div class="title">{{item.key}}</div>
+                <div class="info">{{item.value}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="profile-box info-box general" fxLayout="column" fxFlex="100">
+        <header class="accent">
+            <div class="title">JCR Properties</div>
+        </header>
 
-          <div class="content">
-              <div class="info-line" *ngFor="let jcrProperty of restNode.jcrProperties">
-                  <div class="title">{{jcrProperty.name}}</div>
-                  <div class="info">
-                      <span *ngFor="let value of jcrProperty.values; let i = index">
-                          <span style="margin-right:4px" *ngIf="i > 0">,</span><span>{{value}}</span>
-                      </span>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+        <div class="content">
+            <div class="info-line" *ngFor="let jcrProperty of restNode.jcrProperties">
+                <div class="title">{{jcrProperty.name}}</div>
+                <div class="info">
+                    <span *ngFor="let value of jcrProperty.values; let i = index">
+                        <span style="margin-right:4px" *ngIf="i > 0">,</span><span>{{value}}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
   

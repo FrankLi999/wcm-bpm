@@ -20,20 +20,20 @@ export const authLayoutConfig: FuseConfig = {
             secondaryBackground: 'fuse-navy-900',
             folded             : false,
             hidden             : true,
-            position           : 'left',
+            position           : 'top',
             variant            : 'vertical-style-1'
         },
         toolbar  : {
             customBackgroundColor: false,
             background           : 'fuse-white-500',
             hidden               : true,
-            position             : 'below-static'
+            position             : 'below'
         },
         footer   : {
             customBackgroundColor: true,
             background           : 'fuse-navy-900',
             hidden               : true,
-            position             : 'below-fixed'
+            position             : 'below-static'
         },
         sidepanel: {
             hidden  : true,

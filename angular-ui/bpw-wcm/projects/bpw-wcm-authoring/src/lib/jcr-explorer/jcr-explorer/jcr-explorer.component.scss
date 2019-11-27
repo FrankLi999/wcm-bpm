@@ -1,8 +1,36 @@
-.center {
-    padding: 2.6em;
+@import "~bpw-components/lib/scss/fuse";
+jcr-explorer {
+    width: 100%;
+    .center {
+        padding: 2.6em;
+    }
+
+    // #jcr-explorer {
+    //     display: flex;
+    //     flex-direction: row;
+    //     align-self: flex-start;
+    // }
+
+    #jcr-explorer-side-bar {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+        height: 100%;
+    
+        .header {
+    
+            .logo {
+    
+                .logo-icon {
+                    margin: 0 16px 0 0;
+                }
+    
+                .logo-text {
+                    font-size: 24px;
+                    line-height: 24px;
+                }
+            }
+        }
+    }
 }
-#template {
-    display: flex;
-    flex-direction: row;
-    align-self: flex-start;
-}
+

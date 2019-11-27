@@ -102,7 +102,7 @@
                             <outputDirectory>${project.build.directory}/classes/static/</outputDirectory >
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/../authoring-ui/dist/authoring-ui</directory>
+                                    <directory>${project.basedir}/../bpw-wcm/dist/wcm-authoring</directory>
                                     <excludes>
                 	                    <exclude>*.gz</exclude>
                 	                    <!-- <exclude>*.html</exclude>-->

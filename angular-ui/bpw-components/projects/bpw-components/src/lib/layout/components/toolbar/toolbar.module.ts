@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
-
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FuseSharedModule } from '../../../common/shared.module';
 import { FuseSearchBarModule } from '../../../common/components/search-bar/search-bar.module';
 import { FuseShortcutsModule } from '../../../common/components/shortcuts/shortcuts.module';
@@ -23,7 +23,8 @@ import { ToolbarComponent } from './toolbar.component';
         MatIconModule,
         MatMenuModule,
         MatToolbarModule,
-
+        FlexLayoutModule,
+        
         FuseSharedModule,
         FuseSearchBarModule,
         FuseShortcutsModule

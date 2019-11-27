@@ -99,7 +99,7 @@
                             <outputDirectory>${project.build.directory}/classes/static/</outputDirectory >
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/../bpm-ui/dist/bpm-ui</directory>
+                                    <directory>${project.basedir}/../bpm-wcm/dist/bpm-ui</directory>
                                     <excludes>
                 	                    <exclude>*.gz</exclude>
                                         <exclude>*.html</exclude>
