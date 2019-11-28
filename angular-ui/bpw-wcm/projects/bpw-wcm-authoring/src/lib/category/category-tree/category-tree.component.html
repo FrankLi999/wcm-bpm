@@ -1,1 +1,33 @@
-<router-outlet></router-outlet>
+<div id="category-tree" class="page-layout carded left-sidebar inner-scroll">
+    <!-- SIDEBAR -->
+    <fuse-sidebar class="sidebar" id="query-tree-side-bar" position="left" lockedOpen="gt-md">
+        <!-- SIDEBAR HEADER -->
+        <div fxLayout="column" fxLayoutAlign="space-between start"  class="header accent p-24 pb-4">
+            <div class="logo" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    check_box
+                </mat-icon>
+                <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Categories</span>
+            </div>        
+        </div>
+        <!-- / SIDEBAR HEADER -->
+        <!-- SIDEBAR CONTENT -->
+        <div class="content" fusePerfectScrollbar [@animate]="{value:'*',params:{y:'50px'}}">
+        <div class="nav material2">
+            <!-- Query Tree -->
+            Category Tree Place Holder
+        </div>
+        </div>
+        <!-- SIDEBAR CONTENT -->
+    </fuse-sidebar>
+    <!-- / SIDEBAR -->
+    <!-- CENTER -->
+    <div class="center">
+        <div class="content" fxFlexAlign="row">
+            <!-- FOLDER OVERVIEW -->       
+            <router-outlet></router-outlet>
+            <!-- / FOLDER OVERVIEW -->
+        </div>
+    </div>
+</div>
+    

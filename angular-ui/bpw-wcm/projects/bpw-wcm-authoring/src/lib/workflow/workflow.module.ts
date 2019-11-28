@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -29,6 +30,7 @@ import { WorkflowTreeComponent } from './workflow-tree/workflow-tree.component';
 @NgModule({
   declarations: [WorkflowComponent, WorkflowsComponent, WorkflowTreeComponent],
   imports: [
+    CommonModule,
     RouterModule,
     MatButtonModule,
     MatCheckboxModule,

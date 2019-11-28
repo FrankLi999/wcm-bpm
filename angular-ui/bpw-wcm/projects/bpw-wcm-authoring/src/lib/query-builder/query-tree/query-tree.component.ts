@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewEncapsulation } from '@angular/core';
+import { fuseAnimations } from 'bpw-components';
 
 @Component({
-  selector: 'app-query-tree',
+  selector: 'query-tree',
   templateUrl: './query-tree.component.html',
-  styleUrls: ['./query-tree.component.scss']
+  styleUrls: ['./query-tree.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  animations   : fuseAnimations
 })
 export class QueryTreeComponent implements OnInit {
 

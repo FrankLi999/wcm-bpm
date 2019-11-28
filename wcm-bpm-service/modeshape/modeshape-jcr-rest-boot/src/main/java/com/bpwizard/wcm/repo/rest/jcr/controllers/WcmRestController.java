@@ -418,7 +418,7 @@ public class WcmRestController {
 			navbarNode.setProperty("secondaryBackground", layout.getNavbar().getSecondaryBackground());
 			navbarNode.setProperty("hidden", layout.getNavbar().isHidden());
 			navbarNode.setProperty("folded", layout.getNavbar().isFolded());
-			navbarNode.setProperty("position", layout.getNavbar().getPosition().name());
+			navbarNode.setProperty("position", layout.getNavbar().getPosition());
 			navbarNode.setProperty("variant", layout.getNavbar().getVariant());
 	
 			
@@ -426,17 +426,17 @@ public class WcmRestController {
 			toolbarNode.setProperty("customBackgroundColor", layout.getToolbar().isCustomBackgroundColor());
 			toolbarNode.setProperty("background", layout.getToolbar().getBackground());
 			toolbarNode.setProperty("hidden", layout.getToolbar().isHidden());
-			toolbarNode.setProperty("position", layout.getToolbar().getPosition().name());
+			toolbarNode.setProperty("position", layout.getToolbar().getPosition());
 			
 			Node footerNode = layoutNode.addNode("footer", "bpw:footer");
 			footerNode.setProperty("customBackgroundColor", layout.getFooter().isCustomBackgroundColor());
 			footerNode.setProperty("background", layout.getFooter().getBackground());
 			footerNode.setProperty("hidden", layout.getFooter().isHidden());
-			footerNode.setProperty("position", layout.getFooter().getPosition().name());
+			footerNode.setProperty("position", layout.getFooter().getPosition());
 	
 			Node sidePanelNode = layoutNode.addNode("sidePanel", "bpw:sidePanel");
 			sidePanelNode.setProperty("hidden", layout.getSidePanel().isHidden());
-			sidePanelNode.setProperty("position", layout.getSidePanel().getPosition().name());
+			sidePanelNode.setProperty("position", layout.getSidePanel().getPosition());
 			session.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -2364,7 +2364,7 @@ public class WcmRestController {
 		navbar.setPrimaryBackground(navbarNode.getProperty("primaryBackground").getString());
 		navbar.setSecondaryBackground(navbarNode.getProperty("secondaryBackground").getString());
 		navbar.setVariant(navbarNode.getProperty("variant").getString());
-		navbar.setPosition(NavBar.Position.valueOf(navbarNode.getProperty("position").getString()));
+		navbar.setPosition(navbarNode.getProperty("position").getString());
 		navbar.setHidden(navbarNode.getProperty("hidden").getBoolean());
 		
 		
@@ -2374,7 +2374,7 @@ public class WcmRestController {
 		toolbar.setCustomBackgroundColor(toolbarNode.getProperty("customBackgroundColor").getBoolean());
 		toolbar.setBackground(toolbarNode.getProperty("background").getString());
 		toolbar.setHidden(toolbarNode.getProperty("hidden").getBoolean());
-		toolbar.setPosition(Toolbar.Position.valueOf(toolbarNode.getProperty("position").getString()));
+		toolbar.setPosition(toolbarNode.getProperty("position").getString());
 		
 		Node footerNode = layoutNode.getNode("footer");
 		Footer footer = new Footer();
@@ -2382,13 +2382,13 @@ public class WcmRestController {
 		footer.setCustomBackgroundColor(footerNode.getProperty("customBackgroundColor").getBoolean());
 		footer.setBackground(footerNode.getProperty("background").getString());
 		footer.setHidden(footerNode.getProperty("hidden").getBoolean());
-		footer.setPosition(Footer.Position.valueOf(footerNode.getProperty("position").getString()));
+		footer.setPosition(footerNode.getProperty("position").getString());
 		
 		Node sidePanelNode = layoutNode.getNode("sidePanel");
 		SidePanel sidePanel = new SidePanel();
 		layout.setSidePanel(sidePanel);
 		sidePanel.setHidden(sidePanelNode.getProperty("hidden").getBoolean());
-		sidePanel.setPosition(SidePanel.Position.valueOf(sidePanelNode.getProperty("position").getString()));
+		sidePanel.setPosition(sidePanelNode.getProperty("position").getString());
 		return siteConfig;
 	}
 	

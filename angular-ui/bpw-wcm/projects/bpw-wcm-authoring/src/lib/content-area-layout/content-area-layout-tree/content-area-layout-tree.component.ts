@@ -1,18 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
-import { WcmOperation, JsonForm } from 'bpw-wcm-service';
+
+import { fuseAnimations } from 'bpw-components';
+import { WcmOperation, ModeshapeService, WcmService } from 'bpw-wcm-service';
 import * as fromStore from 'bpw-wcm-service';
-import { ModeshapeService } from 'bpw-wcm-service';
-import { WcmService } from 'bpw-wcm-service';
 import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-navigator.component';
 
 @Component({
   selector: 'content-area-layout-tree',
   templateUrl: './content-area-layout-tree.component.html',
-  styleUrls: ['./content-area-layout-tree.component.scss']
+  styleUrls: ['./content-area-layout-tree.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  animations   : fuseAnimations
 })
 export class ContentAreaLayoutTreeComponent extends WcmNavigatorComponent implements OnInit, OnDestroy {
 

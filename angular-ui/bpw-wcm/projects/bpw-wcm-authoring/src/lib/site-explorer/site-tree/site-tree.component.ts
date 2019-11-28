@@ -1,12 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
-import { WcmOperation, JsonForm } from 'bpw-wcm-service';
+import { fuseAnimations } from 'bpw-components';
+import { WcmOperation, JsonForm, ModeshapeService, WcmService } from 'bpw-wcm-service';
 import * as fromStore from 'bpw-wcm-service';
-import { ModeshapeService } from 'bpw-wcm-service';
-import { WcmService } from 'bpw-wcm-service';
 import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-navigator.component';
 
 import { UploadZipfileDialogComponent } from '../../dialog/upload-zipfile-dialog/upload-zipfile-dialog.component';
@@ -17,7 +16,9 @@ import { SelectAuthoringTemplateDialogComponent } from '../select-authoring-temp
 @Component({
   selector: 'site-tree',
   templateUrl: './site-tree.component.html',
-  styleUrls: ['./site-tree.component.scss']
+  styleUrls: ['./site-tree.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  animations   : fuseAnimations
 })
 export class SiteTreeComponent extends WcmNavigatorComponent implements OnInit, OnDestroy {
   functionMap: {[key:string]:Function}= {};

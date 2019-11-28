@@ -1,17 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
-import { WcmOperation, JsonForm } from 'bpw-wcm-service';
+
+import { fuseAnimations } from 'bpw-components';
+import { WcmOperation, JsonForm, ModeshapeService, WcmService } from 'bpw-wcm-service';
 import * as fromStore from 'bpw-wcm-service';
-import { ModeshapeService } from 'bpw-wcm-service';
-import { WcmService } from 'bpw-wcm-service';
 import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-navigator.component';
 
 @Component({
   selector: 'resource-library-tree',
   templateUrl: './resource-library-tree.component.html',
-  styleUrls: ['./resource-library-tree.component.scss']
+  styleUrls: ['./resource-library-tree.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  animations   : fuseAnimations
 })
 export class ResourceLibraryTreeComponent extends WcmNavigatorComponent implements OnInit, OnDestroy {
   

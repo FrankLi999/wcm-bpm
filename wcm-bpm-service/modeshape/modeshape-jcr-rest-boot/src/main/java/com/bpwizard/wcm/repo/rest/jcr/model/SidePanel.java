@@ -1,22 +1,22 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 public class SidePanel {
-	public enum Position {
-		left,
-		right
-	}
+//	public enum Position {
+//		left,
+//		right
+//	}
 	private boolean hidden;
-    private Position position;
+    private String position;
 	public boolean isHidden() {
 		return hidden;
 	}
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
 	}
-	public Position getPosition() {
+	public String getPosition() {
 		return position;
 	}
-	public void setPosition(Position position) {
+	public void setPosition(String position) {
 		this.position = position;
 	}
 	@Override

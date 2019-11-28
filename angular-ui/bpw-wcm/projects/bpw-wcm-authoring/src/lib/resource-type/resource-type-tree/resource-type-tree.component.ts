@@ -1,9 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
+
+import { fuseAnimations } from 'bpw-components';
 import { WcmOperation, JsonForm } from 'bpw-wcm-service';
 import * as fromStore from 'bpw-wcm-service';
 import { ModeshapeService } from 'bpw-wcm-service';
@@ -14,13 +16,8 @@ import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-naviga
   selector: 'resource-type-tree',
   templateUrl: './resource-type-tree.component.html',
   styleUrls: ['./resource-type-tree.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ]
+  encapsulation: ViewEncapsulation.None,
+  animations   : fuseAnimations
 })
 export class ResourceTypeTreeComponent extends WcmNavigatorComponent implements OnInit, OnDestroy {
 

@@ -2,16 +2,16 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 
 public class NavBar {
 	
-	public enum Position {
-		left,
-		right,
-		top
-	}
+//	public enum Position {
+//		left,
+//		right,
+//		top
+//	}
 	private String primaryBackground;
 	private String secondaryBackground;
 	private boolean hidden;
 	private boolean folded;
-    private Position position;
+    private String position;
     private String variant;
 	public String getPrimaryBackground() {
 		return primaryBackground;
@@ -37,10 +37,10 @@ public class NavBar {
 	public void setFolded(boolean folded) {
 		this.folded = folded;
 	}
-	public Position getPosition() {
+	public String getPosition() {
 		return position;
 	}
-	public void setPosition(Position position) {
+	public void setPosition(String position) {
 		this.position = position;
 	}
 	public String getVariant() {

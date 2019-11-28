@@ -1,27 +1,27 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 public class Footer {
-	public enum Position {
-		above("above"),
-		above_static("above-static"),
-		above_fixed("above-fixed"),
-		below("below"),
-		below_static("below-static"),
-		below_fixed("below-fixed");
-		
-		private final String position;
-		private Position(String position) {
-			this.position = position;
-		}
-		
-		public String getPosition() {
-	        return this.position;
-	    }
-	}
+//	public enum Position {
+//		above("above"),
+//		above_static("above-static"),
+//		above_fixed("above-fixed"),
+//		below("below"),
+//		below_static("below-static"),
+//		below_fixed("below-fixed");
+//		
+//		private final String position;
+//		private Position(String position) {
+//			this.position = position;
+//		}
+//		
+//		public String getPosition() {
+//	        return this.position;
+//	    }
+//	}
 	private boolean customBackgroundColor;
 	private String background;
 	private boolean hidden;
-	private Position position;
+	private String position;
 	public boolean isCustomBackgroundColor() {
 		return customBackgroundColor;
 	}
@@ -40,10 +40,10 @@ public class Footer {
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
 	}
-	public Position getPosition() {
+	public String getPosition() {
 		return position;
 	}
-	public void setPosition(Position position) {
+	public void setPosition(String position) {
 		this.position = position;
 	}
 	@Override
