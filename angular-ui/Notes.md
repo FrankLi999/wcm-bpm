@@ -67,9 +67,12 @@ There are multiple ways to prevent this:
    ng new bpw-components --create-application=false
    cd bpw-components
    ng generate library bpw-components --prefix=bpw-components
+   ng generate application bpw-skeleton
+   make bpw-skeleton the default app in angular.json
+   ng add ngx-build-plus
+   ng g ngx-build-plus:wc-polyfill
    
-
-
+   ng generate application bpw-reference-app
 
    
    <!-- ng new bpw-theme --create-application=false
@@ -84,10 +87,12 @@ There are multiple ways to prevent this:
    ng generate library bpw-wcm-elements --prefix=bpw-wcm-elements
    ng generate library bpw-wcm-preview --prefix=bpw-wcm-preview
    ng generate library bpw-wcm-authoring --prefix=bpw-wcm-authoring
+   
 
    ng add @angular/elements
    ng generate application wcm-authoring
    ng generate application bpm-ui
+   make wcm-authoring the default app in angular.json
    ng add ngx-build-plus
    ng g ngx-build-plus:wc-polyfill
 
@@ -107,17 +112,6 @@ There are multiple ways to prevent this:
    cd bpw-auth
    ng generate library bpw-auth --prefix=bpw-auth
    
-
-   ng new authoring-ui 
-   cd authoring-ui
-   ng add @angular/elements
-   ng add ngx-build-plus
-   ng g ngx-build-plus:wc-polyfill
-
-   ng new bpm-ui 
-   ng add @angular/elements
-   ng add ngx-build-plus
-   ng g ngx-build-plus:wc-polyfill
 
    ng new bpw-dynamic-ui --create-application=false
    ng generate library bpw-dynamic-ui --prefix=bpw-dynamic-ui

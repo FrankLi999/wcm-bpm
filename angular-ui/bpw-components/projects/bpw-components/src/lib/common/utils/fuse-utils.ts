@@ -1,10 +1,11 @@
-export class FuseUtils {
+export class FuseUtils
+{
     /**
      * Filter array by string
      *
-     * @ param mainArr
-     * @ param searchText
-     * @ returns {any}
+     * @param mainArr
+     * @param searchText
+     * @returns {any}
      */
     public static filterArrayByString(mainArr, searchText): any
     {
@@ -23,9 +24,9 @@ export class FuseUtils {
     /**
      * Search in object
      *
-     * @ param itemObj
-     * @ param searchText
-     * @ returns {boolean}
+     * @param itemObj
+     * @param searchText
+     * @returns {boolean}
      */
     public static searchInObj(itemObj, searchText): boolean
     {
@@ -67,9 +68,9 @@ export class FuseUtils {
     /**
      * Search in array
      *
-     * @ param arr
-     * @ param searchText
-     * @ returns {boolean}
+     * @param arr
+     * @param searchText
+     * @returns {boolean}
      */
     public static searchInArray(arr, searchText): boolean
     {
@@ -96,9 +97,9 @@ export class FuseUtils {
     /**
      * Search in string
      *
-     * @ param value
-     * @ param searchText
-     * @ returns {any}
+     * @param value
+     * @param searchText
+     * @returns {any}
      */
     public static searchInString(value, searchText): any
     {
@@ -108,7 +109,7 @@ export class FuseUtils {
     /**
      * Generate a unique GUID
      *
-     * @ returns {string}
+     * @returns {string}
      */
     public static generateGUID(): string
     {
@@ -125,8 +126,8 @@ export class FuseUtils {
     /**
      * Toggle in array
      *
-     * @ param item
-     * @ param array
+     * @param item
+     * @param array
      */
     public static toggleInArray(item, array): void
     {
@@ -143,16 +144,16 @@ export class FuseUtils {
     /**
      * Handleize
      *
-     * @ param text
-     * @ returns {string}
+     * @param text
+     * @returns {string}
      */
-    // public static handleize(text): string
-    // {
-    //     return text.toString().toLowerCase()
-    //                .replace(/\s+/g, '-')           // Replace spaces with -
-    //                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-    //                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-    //                .replace(/^-+/, '')             // Trim - from start of text
-    //                .replace(/-+$/, '');            // Trim - from end of text
-    // }
+    public static handleize(text): string
+    {
+        return text.toString().toLowerCase()
+                   .replace(/\s+/g, '-')           // Replace spaces with -
+                   .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+                   .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+                   .replace(/^-+/, '')             // Trim - from start of text
+                   .replace(/-+$/, '');            // Trim - from end of text
+    }
 }

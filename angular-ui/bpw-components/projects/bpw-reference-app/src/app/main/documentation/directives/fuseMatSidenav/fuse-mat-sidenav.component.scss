@@ -1,0 +1,8 @@
+// @import "src/@fuse/scss/fuse";
+@import "../../../../../../../../dist/bpw-components/lib/scss/fuse";
+:host {
+
+    code {
+        white-space: nowrap;
+    }
+}

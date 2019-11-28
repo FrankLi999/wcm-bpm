@@ -73,12 +73,6 @@ $typography: mat-typography-config(
 // Setup the typography
 @include angular-material-typography($typography);
 
-@import "~bpw-components/lib/auth/login/login.theme";
-@import "~bpw-components/lib/auth/signup/signup.theme";
-@import "~bpw-components/lib/auth/reset-password/reset-password.theme";
-@import "~bpw-components/lib/auth/forgot-password/forgot-password.theme";
-@import "~bpw-components/lib/auth/lock-screen/lock-screen.theme";
-@import "~bpw-components/lib/auth/mail-confirm/mail-confirm.theme";
 // -----------------------------------------------------------------------------------------------------
 // @ Component theming
 // -----------------------------------------------------------------------------------------------------
@@ -86,6 +80,13 @@ $typography: mat-typography-config(
 // Import app and page component themes here to enable theming for them
 // @import "src/app/layout/components/chat-panel/chat-panel.theme";
 @import "~bpw-components/lib/layout/components/toolbar/toolbar.theme";
+
+@import "~bpw-components/lib/auth/login/login.theme";
+@import "~bpw-components/lib/auth/signup/signup.theme";
+@import "~bpw-components/lib/auth/reset-password/reset-password.theme";
+@import "~bpw-components/lib/auth/forgot-password/forgot-password.theme";
+@import "~bpw-components/lib/auth/lock-screen/lock-screen.theme";
+@import "~bpw-components/lib/auth/mail-confirm/mail-confirm.theme";
 
 // Define a mixin for easier access
 @mixin components-theme($theme) {

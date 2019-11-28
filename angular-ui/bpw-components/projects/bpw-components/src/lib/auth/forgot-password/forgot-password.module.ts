@@ -19,6 +19,10 @@ const routes = [
 @NgModule({
   declarations: [ForgotPasswordComponent],
   imports: [
+      CommonModule,
+      FormsModule,
+      ReactiveFormsModule,
+      FlexLayoutModule,
       RouterModule.forChild(routes),
       CommonModule,
       FormsModule, 
