@@ -31,6 +31,7 @@
 * [Opacity Widget](#opacity-widget)
 * [Wrap Widget](#wrap-widget)
 * [ClipRRect Widget](#cliprrect-widget)
+* [SafeArea Widget](#safearea-widget)
 
 ## Container Widget
 Container widget, here to see flutter [Container widget](https://docs.flutter.io/flutter/widgets/Container-class.html) definition.
@@ -68,6 +69,7 @@ TextSpan, here to see flutter [TextSpan](https://docs.flutter.io/flutter/paintin
 
 | property        | definition   | type  | value  | sample |
 | ---| ---| ---   | ---| ---|
+| recognizer |Url route string, for example: "route://productDetail?goods_id=123" for navigating to product detail page. Currently only supports TapGestureRecognizer |String|  |"route://productDetail?goods_id=123"|
 | text|The text contained in the span.|String| |"I am a text"|
 | style|The style to apply to the text and the children.|TextStyle| | {"color": "#00FFFF", "fontSize": 26.0}|
 | children|Additional spans to include as children. |List&#60;TextSpan&#62;| | |
@@ -79,9 +81,11 @@ TextStyle, here to see flutter [TextStyle](https://docs.flutter.io/flutter/paint
 | ---| ---| ---   | ---| ---|
 | color|The color to use when painting the text.|String|"#AARRGGBB" or "#RRGGBB"|"#FF00FF"<br>"#00FF00FF"|
 | debugLabel|A human-readable description of this text style. |String| |  |
+| decoration|The name of the decoration. |String| One of the following string: none (default)<br>lineThrough<br>overline<br>underline | "underline" |
 | fontFamily|The name of the font to use when painting the text (e.g., Roboto). If the font is defined in a package, this will be prefixed with 'packages/package_name/' (e.g. 'packages/cool_fonts/Roboto'). The prefixing is done by the constructor when the package argument is provided.|String| | |
 | fontSize|The size of glyphs (in logical pixels) to use when painting the text. |double| |  |
 | fontStyle|The typeface variant to use when drawing the letters (e.g., italics). |String|One of the following string: italic (default)<br> normal | "italic" |
+| fontWeight|The typeface thickness to use when painting the text (e.g., bold). |String|One of the following string: w100<br> w200<br> w300<br> w400<br> w500<br> w600<br> w700<br> w800<br> w900<br> normal (default)<br> bold | "bold" |
 
 ## RaisedButton Widget
 RaisedButton widget, here to see flutter [RaisedButton widget](https://docs.flutter.io/flutter/widgets/Text-class.html) definition. Supported json properties:
@@ -388,4 +392,16 @@ ClipRRect, here to see flutter [TextSpan](https://api.flutter.dev/flutter/widget
 | ---| ---| ---   | ---| ---|
 | borderRadius|The border radius of the rounded corners. |String| |"topLeft,topRight,bottomLeft,bottomRight"|
 | clipBehavior|Controls how to clip (default to "antiAlias")|String|enum values, please see enum Clip, default value is antiAlias. | "hardEdge"|
+| child|The widget below this widget in the tree.  |Widget|| |
+
+## SafeArea Widget
+SafeArea, here to see flutter [SafeArea](https://api.flutter.dev/flutter/widgets/SafeArea-class.html) definition. Supported json properties:
+
+| property        | definition   | type  | value  | sample |
+| ---| ---| ---   | ---| ---|
+| bottom |Whether to avoid system intrusions on the bottom side of the screen.|bool| true or false, default is true|true|
+| right |Whether to avoid system intrusions on the right.|bool| true or false, default is true|true|
+| top |Whether to avoid system intrusions at the top of the screen, typically the system status bar.|bool| true or false, default is true|true|
+| left |Whether to avoid system intrusions on the left.|bool| true or false, default is true|true|
+| minimum |This minimum padding to apply.|String|left,top,right,bottom|"8,10,12,8"|
 | child|The widget below this widget in the tree.  |Widget|| |

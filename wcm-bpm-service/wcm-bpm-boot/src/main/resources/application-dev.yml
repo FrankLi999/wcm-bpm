@@ -1,6 +1,7 @@
 ## Development environment
 flyway:
-  url: jdbc:mysql://192.168.0.168:3306/mysql
+  #url: jdbc:mysql://192.168.0.168:3306/mysql
+  url: jdbc:mysql://127.0.0.1:3306/wcm_bpm
   schemas: wcm_bpm
   user: wcmbpm
   #password: P@ssw0rd
@@ -22,7 +23,8 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         #jdbc.lob.non_contextual_creation: true
   datasource:
-    url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    # url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    url: jdbc:mysql://127.0.0.1:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     username: wcmbpm
     password: P@ssw0rd
     # username: ${vaultConfiguration.dbUser}

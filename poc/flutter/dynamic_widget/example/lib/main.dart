@@ -263,6 +263,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         builder: (context) => CodeEditorPage(cliprrectJson)));
               },
             ),
+            RaisedButton(
+              child: Text("SafeArea"),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CodeEditorPage(safeareaJson)));
+              },
+            ),
           ],
         ));
   }
@@ -360,7 +369,8 @@ class PreviewPage extends StatelessWidget {
   }
 
   Future<Widget> _buildWidget(BuildContext context) async {
-    return DynamicWidgetBuilder().build(jsonString, context, new DefaultClickListener());
+    return DynamicWidgetBuilder()
+        .build(jsonString, context, new DefaultClickListener());
   }
 }
 

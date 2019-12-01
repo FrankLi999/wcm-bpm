@@ -109,7 +109,7 @@ policies             ["default" "wcm-bpm-dev-ro"]
 ==== Create db configuration
 > vault write database/config/mysql-wcm-bpm \
   plugin_name=mysql-database-plugin \
-  connection_url="{{username}}:{{password}}@tcp(192.168.0.168:3306)/wcm_bpm" \
+  connection_url="{{username}}:{{password}}@tcp(127.0.0.1:3306)/wcm_bpm" \
   allowed_roles="*" \
   username="wcmbpm" \
   password="P@ssw0rd" 

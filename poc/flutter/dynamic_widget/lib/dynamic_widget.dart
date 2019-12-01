@@ -14,6 +14,7 @@ import 'package:dynamic_widget/dynamic_widget/basic/opacity_widget_parser.dart';
 import 'package:dynamic_widget/dynamic_widget/basic/padding_widget_parser.dart';
 import 'package:dynamic_widget/dynamic_widget/basic/placeholder_widget_parser.dart';
 import 'package:dynamic_widget/dynamic_widget/basic/row_column_widget_parser.dart';
+import 'package:dynamic_widget/dynamic_widget/basic/safearea_widget_parser.dart';
 import 'package:dynamic_widget/dynamic_widget/basic/sizedbox_widget_parser.dart';
 import 'package:dynamic_widget/dynamic_widget/basic/stack_positioned_widgets_parser.dart';
 import 'package:dynamic_widget/dynamic_widget/basic/text_widget_parser.dart';
@@ -38,7 +39,6 @@ class DynamicWidgetBuilder {
     ColumnWidgetParser(),
     AssetImageWidgetParser(),
     NetworkImageWidgetParser(),
-    FileImageWidgetParser(),
     PlaceholderWidgetParser(),
     GridViewWidgetParser(),
     ListViewWidgetParser(),
@@ -57,12 +57,14 @@ class DynamicWidgetBuilder {
     SizedBoxWidgetParser(),
     OpacityWidgetParser(),
     WrapWidgetParser(),
-    ClipRRectWidgetParser()
+    ClipRRectWidgetParser(),
+    SafeAreaWidgetParser()
   ];
 
   // use this method for adding your custom widget parser
-  static void addParser(WidgetParser parser){
-    log.info("add custom widget parser, make sure you don't overwirte the widget type.");
+  static void addParser(WidgetParser parser) {
+    log.info(
+        "add custom widget parser, make sure you don't overwirte the widget type.");
     _parsers.add(parser);
   }
 
@@ -74,7 +76,8 @@ class DynamicWidgetBuilder {
     return widget;
   }
 
-  static Widget buildFromMap(Map<String, dynamic> map, BuildContext buildContext, ClickListener listener) {
+  static Widget buildFromMap(Map<String, dynamic> map,
+      BuildContext buildContext, ClickListener listener) {
     String widgetName = map['type'];
 
     for (var parser in _parsers) {
@@ -100,7 +103,8 @@ class DynamicWidgetBuilder {
 /// extends this class to make a Flutter widget parser.
 abstract class WidgetParser {
   /// parse the json map into a flutter widget.
-  Widget parse(Map<String, dynamic> map, BuildContext buildContext, ClickListener listener);
+  Widget parse(Map<String, dynamic> map, BuildContext buildContext,
+      ClickListener listener);
 
   /// check the matched widget type. for example:
   /// {"type" : "Text", "data" : "Denny"}

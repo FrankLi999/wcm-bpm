@@ -1,0 +1,12 @@
+opentracing:
+  jaeger:
+    log-spans: true
+    service-name: spring-monitoring
+    enable-b3-propagation: true
+---
+spring:
+  profiles: local
+opentracing:
+  jaeger:
+    http-sender:
+      url: http://jaeger-collector-dev.2886795321-80-kitek02.environments.katacoda.com/api/traces
