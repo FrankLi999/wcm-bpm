@@ -15,7 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
-import com.bpwizard.wcm.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.repo.domain.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class RequestEmailChangeMvcTests extends AbstractMvcTests {

@@ -1,16 +1,21 @@
 package com.bpwizard.wcm.repo.config;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.bpwizard.wcm.repo.rest.filter.CleanupFilter;
 import com.bpwizard.wcm.repo.rest.filter.LoggingFilter;
 
 
 @Configuration
-//@ComponentScan(basePackages= {"com.bpwizard.spring.boot.commons.service.domain"})
+@EntityScan(basePackages= {"com.bpwizard.spring.boot.commons.service.repo"})
+@EnableJpaRepositories({"com.bpwizard.spring.boot.commons.service.repo"})
+@ComponentScan(basePackages={"com.bpwizard.spring.boot.commons.service.repo"})
 public class AppConfig {
 	@Autowired 
 	ProcessEngine processEngine;

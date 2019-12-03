@@ -9,3 +9,4 @@
 *.launch
 .settings/
 *.sublime-workspace
+spring-bpm/

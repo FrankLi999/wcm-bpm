@@ -1,7 +1,7 @@
 package com.bpwizard.wcm.repo.payload;
 
-import com.bpwizard.wcm.repo.domain.User;
-import com.bpwizard.wcm.repo.domain.Role;
+import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
 public class AuthResponse {
     private String id;
 	private String email;

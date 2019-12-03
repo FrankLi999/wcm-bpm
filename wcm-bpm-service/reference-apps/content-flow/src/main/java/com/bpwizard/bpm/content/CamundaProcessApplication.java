@@ -25,5 +25,4 @@ public class CamundaProcessApplication {
 	public static void main(String... args) {
 		SpringApplication.run(CamundaProcessApplication.class, args);
 	}
-
 }

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
-import com.bpwizard.wcm.repo.domain.User;
-import com.bpwizard.wcm.repo.domain.UserRepository;
+import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.repo.domain.UserRepository;
 import com.bpwizard.wcm.repo.annotations.CurrentUser;
-import com.bpwizard.wcm.repo.exception.ResourceNotFoundException;
+import com.bpwizard.spring.boot.commons.service.repo.exception.ResourceNotFoundException;
 import com.bpwizard.wcm.repo.payload.AuthResponse;
 
 

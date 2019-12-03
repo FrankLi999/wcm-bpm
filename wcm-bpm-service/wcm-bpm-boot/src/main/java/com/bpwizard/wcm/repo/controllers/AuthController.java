@@ -21,17 +21,17 @@ import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.security.BlueTokenService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.service.SpringService;
-import com.bpwizard.wcm.repo.domain.User;
-import com.bpwizard.wcm.repo.domain.UserRepository;
+import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.repo.domain.UserRepository;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
-import com.bpwizard.wcm.repo.exception.BadRequestException;
-import com.bpwizard.wcm.repo.exception.ResourceNotFoundException;
+import com.bpwizard.spring.boot.commons.service.repo.exception.BadRequestException;
+import com.bpwizard.spring.boot.commons.service.repo.exception.ResourceNotFoundException;
 import com.bpwizard.wcm.repo.payload.ApiResponse;
 import com.bpwizard.wcm.repo.payload.AuthResponse;
 import com.bpwizard.wcm.repo.payload.LoginRequest;
 import com.bpwizard.wcm.repo.payload.SignUpRequest;
-import com.bpwizard.wcm.repo.secureity.oauth2.AuthProvider;
+import com.bpwizard.spring.boot.commons.service.repo.secureity.oauth2.AuthProvider;
 
 @RestController
 @RequestMapping("/auth/api")

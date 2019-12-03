@@ -29,12 +29,12 @@ import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.service.SpringService;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
+import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
+import com.bpwizard.spring.boot.commons.service.repo.secureity.oauth2.AuthProvider;
+import com.bpwizard.spring.boot.commons.service.repo.secureity.oauth2.user.OAuth2UserInfo;
+import com.bpwizard.spring.boot.commons.service.repo.secureity.oauth2.user.OAuth2UserInfoFactory;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
-import com.bpwizard.wcm.repo.domain.Role;
-import com.bpwizard.wcm.repo.secureity.oauth2.AuthProvider;
-import com.bpwizard.wcm.repo.secureity.oauth2.user.OAuth2UserInfo;
-import com.bpwizard.wcm.repo.secureity.oauth2.user.OAuth2UserInfoFactory;
 
 /**
  * Logs in or registers a user after OAuth2 SignIn/Up

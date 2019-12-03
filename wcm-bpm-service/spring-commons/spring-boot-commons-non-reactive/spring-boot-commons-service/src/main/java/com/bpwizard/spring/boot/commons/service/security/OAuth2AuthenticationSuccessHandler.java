@@ -18,9 +18,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.security.BlueTokenService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
+import com.bpwizard.spring.boot.commons.service.repo.exception.BadRequestException;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
-import com.bpwizard.wcm.repo.exception.BadRequestException;
 
 import lombok.AllArgsConstructor;
 

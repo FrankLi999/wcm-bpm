@@ -2,10 +2,9 @@ package com.bpwizard.spring.boot.commons.service;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -23,12 +22,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import com.bpwizard.spring.boot.commons.AbstractSpringService;;
+import com.bpwizard.spring.boot.commons.AbstractSpringService;
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.domain.ChangePasswordForm;
 import com.bpwizard.spring.boot.commons.domain.ResetPasswordForm;
@@ -42,15 +40,14 @@ import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.security.UserEditPermission;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUserRepository;
+import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
+import com.bpwizard.spring.boot.commons.service.repo.domain.RoleRepository;
+import com.bpwizard.spring.boot.commons.service.repo.domain.Tenant;
+import com.bpwizard.spring.boot.commons.service.repo.domain.TenantRepository;
 import com.bpwizard.spring.boot.commons.service.util.ServiceUtils;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
-import com.bpwizard.wcm.repo.domain.Role;
-import com.bpwizard.wcm.repo.domain.User;
-import com.bpwizard.wcm.repo.domain.RoleRepository;
-import com.bpwizard.wcm.repo.domain.Tenant;
-import com.bpwizard.wcm.repo.domain.TenantRepository;
 import com.nimbusds.jwt.JWTClaimsSet;
 /**
  * The Spring Commons Service class

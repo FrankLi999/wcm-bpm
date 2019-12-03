@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.bpwizard.spring.boot.commons.service.AutoConfiguration;
 import com.bpwizard.spring.boot.commons.service.security.SpringJpaSecurityConfig;
 import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsService;
-import com.bpwizard.wcm.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.repo.domain.User;
 
 @Configuration
 @EnableWebSecurity

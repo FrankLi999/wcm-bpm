@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -24,6 +23,8 @@ import com.bpwizard.spring.boot.commons.jpa.CommonsJpaAutoConfiguration;
 import com.bpwizard.spring.boot.commons.security.BlueTokenService;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUserRepository;
+import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
+import com.bpwizard.spring.boot.commons.service.repo.domain.RoleRepository;
 import com.bpwizard.spring.boot.commons.service.security.OAuth2AuthenticationFailureHandler;
 import com.bpwizard.spring.boot.commons.service.security.OAuth2AuthenticationSuccessHandler;
 import com.bpwizard.spring.boot.commons.service.security.SpringAuthenticationSuccessHandler;
@@ -35,8 +36,6 @@ import com.bpwizard.spring.boot.commons.service.util.ServiceUtils;
 import com.bpwizard.spring.boot.commons.service.validation.UniqueEmailValidator;
 import com.bpwizard.spring.boot.commons.validation.RetypePasswordValidator;
 import com.bpwizard.spring.boot.commons.web.security.SpringWebSecurityConfig;
-import com.bpwizard.wcm.repo.domain.Role;
-import com.bpwizard.wcm.repo.domain.RoleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -46,7 +45,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaAuditing
+// @EnableJpaAuditing
 @AutoConfigureBefore({CommonsJpaAutoConfiguration.class})
 public class AutoConfiguration {
 	
