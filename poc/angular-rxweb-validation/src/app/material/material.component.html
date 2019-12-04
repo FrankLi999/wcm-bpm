@@ -1,0 +1,29 @@
+<h2 class="mat-title">Sign-up form:</h2>
+<form class="example-form" [formGroup]='userForm'>
+  <mat-form-field>
+    <input type="text" matInput placeholder="Username" formControlName='username'>
+    <mat-error *ngIf="userForm.controls.username.errors && userForm.controls.username.errors.alpha">
+        {{userForm.controls.username.errors.alpha.message}}
+    </mat-error>
+    <mat-error *ngIf="userForm.controls.username.errors && userForm.controls.username.errors.email">
+        {{userForm.controls.username.errors.email.message}}
+    </mat-error>
+    <!--
+    <small class="form-text text-danger" *ngIf="userFormGroup.controls.userName.errors">{{userFormGroup.controls.userName.errors.alpha.message}}</small>
+    -->
+  </mat-form-field>
+  <mat-form-field>
+    <input type="password" matInput placeholder="Password" formControlName='password'>
+  </mat-form-field>
+  <mat-form-field>
+    <input type="password" matInput placeholder="Verify Password" formControlName='verifyPassword' [errorStateMatcher]="errorMatcher">
+    <mat-error *ngIf="userForm.hasError('passwordsDoNotMatch')">
+      Passwords do not match!
+    </mat-error>
+  </mat-form-field>
+
+  <div class="state">
+    Do passwords match? 
+    <strong>{{!userForm.hasError('passwordsDoNotMatch')}}</strong>
+  </div>
+</form>

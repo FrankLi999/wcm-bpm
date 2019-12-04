@@ -1,0 +1,22 @@
+.form-text{
+    display: inline;
+}
+.mt10{
+    margin-top: 10px;
+}
+input.ng-invalid,.form-control.ng-invalid:focus{
+    background-color:#DA5235;
+    color:white;
+  }
+
+ select.ng-invalid{
+    background-color:#DA5235;
+    color:white;
+  }
+  
+  .fade.show {
+    opacity: 1;
+}
+
+
+

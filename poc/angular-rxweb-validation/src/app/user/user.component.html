@@ -1,0 +1,191 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="true">User Registration Form</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="value-tab" data-toggle="tab" href="#value" role="tab" aria-controls="value" aria-selected="false">User Registration Form Value</a>
+    </li>
+    <li style="padding-top:5px; width:60%; text-align:center;">
+      <h3>  rxweb reactive form validation decorator examples</h3>
+    </li>
+    
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="form" role="tabpanel" aria-labelledby="form-tab">
+      <div class="row"><div class="col-12"><button style="float:right;" [disabled]="!userFormGroup.valid " class="btn btn-primary ">Save</button></div></div>
+      <div  class="row" [formGroup]="userFormGroup">
+        <div class="col-12 col-sm-6 col-xl-3 ">
+          <div class="form-group">
+            <label>User Name</label> - <small class="form-text text-info  ">@alpha()</small>
+            <input type="text" formControlName="userName" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.userName.errors">{{userFormGroup.controls.userName.errors.alpha.message}}</small>
+  
+          </div>
+          <div class="form-group">
+            <label>Area Code</label> - <small class="form-text text-info  ">@alphaNumeric()</small>
+            <input type="text" formControlName="areaCode" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.areaCode.errors">{{userFormGroup.controls.areaCode.errors.alphaNumeric.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Old Password</label> - <small class="form-text text-info  ">@prop()</small>
+            <input type="text" formControlName="oldPassword" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.oldPassword.errors">{{userFormGroup.controls.oldPassword.errors.compare.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>New Password</label> - <small class="form-text text-info  ">@compare()</small>
+            <input type="text" formControlName="newPassword" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.newPassword.errors">{{userFormGroup.controls.newPassword.errors.compare.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Role Name</label> - <small class="form-text text-info  ">@contains()</small>
+            <input type="text" formControlName="roleName" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.roleName.errors">{{userFormGroup.controls.roleName.errors.contains.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Credit Card No</label> - <small class="form-text text-info  ">@creditCard()</small>
+            <input type="text" formControlName="creditCardNo" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.creditCardNo.errors">{{userFormGroup.controls.creditCardNo.errors.creditCard.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Joining Age</label> - <small class="form-text text-info  ">@digit()</small>
+            <input type="text" formControlName="joiningAge" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.joiningAge.errors">{{userFormGroup.controls.joiningAge.errors.digit.message}}</small>
+          </div>
+          <h5>Nested <span class="p-3 mb-2 text-dark" style="background-color:#ffc107!important">FormGroup</span> - UserAddress</h5><hr />
+          <div class="form-group" [formGroup]="userFormGroup.controls.userAddress">
+            <label>Mobile Number</label> - <small class="form-text text-info  ">@prop()</small>
+            <input type="text" formControlName="mobileNo" class="form-control" />
+          </div>
+          <hr />
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="form-group">
+            <label>Email</label> - <small class="form-text text-info  ">@email()</small>
+            <input type="text" formControlName="email" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.email.errors">{{userFormGroup.controls.email.errors.email.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Retirement Age</label> - <small class="form-text text-info  ">@greaterThan()</small>
+            <input type="text" formControlName="retirementAge" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.retirementAge.errors">{{userFormGroup.controls.retirementAge.errors.greaterThan.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Current Age</label> - <small class="form-text text-info  ">@greaterThanEqualTo()</small>
+            <input type="text" formControlName="currentAge" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.currentAge.errors">{{userFormGroup.controls.currentAge.errors.greaterThanEqualTo.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Team Color Code</label> - <small class="form-text text-info  ">@hexColor()</small>
+            <input type="text" formControlName="teamColorCode" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.teamColorCode.errors">{{userFormGroup.controls.teamColorCode.errors.hexColor.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Json</label> - <small class="form-text text-info  ">@json()</small>
+            <input type="text" formControlName="json" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.json.errors">{{userFormGroup.controls.json.errors.json.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Current Experience</label> - <small class="form-text text-info  ">@prop()</small>
+            <input type="text" formControlName="currentExperience" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Minimum Experience</label> - <small class="form-text text-info  ">@lessThanEqualTo()</small>
+            <input type="text" formControlName="minimumExperience" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.minimumExperience.errors">{{userFormGroup.controls.minimumExperience.errors.lessThanEqualTo.message}}</small>
+          </div>
+          <h5>Nested <span class="p-3 mb-2 bg-warning text-dark">FormArray</span> - Course </h5><hr />
+          <div class="form-group" [formGroup]="userFormGroup['controls'].courses['controls'][0]">
+            <label>Course Name</label> - <small class="form-text text-info  ">@required()</small>
+            <input type="text" formControlName="courseName" class="form-control" />
+          </div>
+          <hr />
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="form-group">
+            <label>Experience</label> - <small class="form-text text-info  ">@lessThan()</small>
+            <input type="text" formControlName="experience" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.experience.errors">{{userFormGroup.controls.experience.errors.lessThan.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>City Name</label> - <small class="form-text text-info  ">@lowerCase()</small>
+            <input type="text" formControlName="cityName" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.cityName.errors">{{userFormGroup.controls.cityName.errors.lowerCase.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Mobile No</label> - <small class="form-text text-info  ">@maxLength()</small>
+            <input type="text" formControlName="mobileNumber" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.mobileNumber.errors">{{userFormGroup.controls.mobileNumber.errors.maxLength.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Maximum Bank Account</label> - <small class="form-text text-info  ">@maxNumber()</small>
+            <input type="text" formControlName="maximumBankAccount" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.maximumBankAccount.errors">{{userFormGroup.controls.maximumBankAccount.errors.maxNumber.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Landline No</label> - <small class="form-text text-info  ">@minLength()</small>
+            <input type="text" formControlName="landlineNo" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.landlineNo.errors">{{userFormGroup.controls.landlineNo.errors.minLength.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Minimum Bank Account</label> - <small class="form-text text-info  ">@minNumber()</small>
+            <input type="text" formControlName="minimumBankAccount" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.minimumBankAccount.errors">{{userFormGroup.controls.minimumBankAccount.errors.minNumber.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Zip Code</label> - <small class="form-text text-info  ">@pattern()</small>
+            <input type="text" formControlName="zipCode" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.zipCode.errors">{{userFormGroup.controls.zipCode.errors.zipCode.message}}</small>
+          </div>
+  
+  
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="form-group">
+            <label>Range</label> - <small class="form-text text-info  ">@range()</small>
+            <input type="text" formControlName="eligiblityAge" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.eligiblityAge.errors">{{userFormGroup.controls.eligiblityAge.errors.range.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>State Name</label> - <small class="form-text text-info  ">@required()</small>
+            <input type="text" formControlName="stateName" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Entry Time</label> - <small class="form-text text-info  ">@time()</small>
+            <input type="text" formControlName="entryTime" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.entryTime.errors">{{userFormGroup.controls.entryTime.errors.time.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Country Code</label> - <small class="form-text text-info  ">@upperCase()</small>
+            <input type="text" formControlName="countryCode" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.countryCode.errors">{{userFormGroup.controls.countryCode.errors.upperCase.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Social Profile Url</label> - <small class="form-text text-info  ">@url()</small>
+            <input type="text" formControlName="socialProfileUrl" class="form-control" />
+            <small class="form-text text-danger" *ngIf="userFormGroup.controls.socialProfileUrl.errors">{{userFormGroup.controls.socialProfileUrl.errors.url.message}}</small>
+          </div>
+          <div class="form-group">
+            <label>Driving License Issue Date</label> - <small class="form-text text-info  ">@minDate()</small>
+            <input type="text" formControlName="licenseDate" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Driving License Exp. Date</label> - <small class="form-text text-info  ">@maxDate()</small>
+            <input type="text" formControlName="licenseExpiration" class="form-control" />
+          </div>
+  
+        </div>
+        
+  
+      </div>
+    </div>
+  
+    <div class="tab-pane fade" id="value" role="tabpanel" aria-labelledby="value-tab">
+      <div style="margin:5px;" class="row">
+        <div class="col-12">
+          <h5>User From Group Value</h5><hr />
+          {{userFormGroup.value | json}}
+        </div>
+      </div>
+    </div>
+  </div>
+  
