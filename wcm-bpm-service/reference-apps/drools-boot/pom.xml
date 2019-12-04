@@ -14,7 +14,7 @@
 		<spring-boot.version>2.2.0.RC1</spring-boot.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-        <drools-version>7.27.0.Final</drools-version>
+        <drools-version>7.30.0.Final</drools-version>
 	</properties>
 
 	<dependencyManagement>
@@ -76,7 +76,12 @@
             <artifactId>drools-compiler</artifactId>
             <version>${drools-version}</version>
         </dependency>
-        
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-pmml</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+                        
         <!--spring integration -->
         <dependency>
             <groupId>org.kie</groupId>

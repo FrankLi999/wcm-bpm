@@ -110,3 +110,10 @@ CREATE TABLE tenent_membership (
   user_id bigint(20) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_bin;
+
+CREATE TABLE hzelcast_jet_users (
+  id bigint(20) AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  email varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_bin;
