@@ -12,7 +12,6 @@ import com.bpwizard.wcm.repo.hazelcast.demo.model.HazelcastUser;
 import com.bpwizard.wcm.repo.hazelcast.demo.service.TestCache;
 import com.bpwizard.wcm.repo.hazelcast.demo.service.TopicListener;
 import com.bpwizard.wcm.repo.hazelcast.demo.source.CustomSourceP;
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastJsonValue;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.jet.JetInstance;
@@ -39,8 +38,8 @@ public class HazelcastJetDemoController {
     TestCache testCache;
     private static final String TOPIC_NAME = "mytopic";
 
-    @Autowired
-    private HazelcastInstance hazelcastInstance;
+//    @Autowired
+//    private HazelcastInstance hazelcastInstance;
     
     @Autowired
     private TopicListener topicListener;
@@ -53,12 +52,14 @@ public class HazelcastJetDemoController {
         dbPipeline.drawFrom(CustomSourceP.customSource())
                 .drainTo(Sinks.logger());
         
-        this.iTopic = this.hazelcastInstance.getTopic(TOPIC_NAME);
+        this.iTopic = this.instance.getHazelcastInstance().getTopic(TOPIC_NAME);
+        
+        System.out.println(">>>>>>>>>>>>>>>>>>> my topic" + this.iTopic);
         iTopic.addMessageListener(this.topicListener);
 
     }
     @GetMapping("/submitJob")
-    public void submitJob() {
+    public String submitJob() {
 //        Pipeline pipeline = Pipeline.create();
 //        pipeline.drawFrom(CustomSourceP.customSource())
 //                .drainTo(Sinks.logger());
@@ -66,17 +67,19 @@ public class HazelcastJetDemoController {
                 .addClass(HazelcastJetDemoController.class)
                 .addClass(CustomSourceP.class);
         instance.newJob(this.dbPipeline, jobConfig).join();
+        return "done";
     }
 
     @GetMapping("/addToTopic")
-    public void addToTopic() {
-    	iTopic.publish(new HazelcastJsonValue(String.format("{time: %s}", System.currentTimeMillis())));
+    public String addToTopic() {
+    	System.out.println(">>>>>>>>>>>>>>>>>> iTopic:" + this.iTopic);
+    	this.iTopic.publish(new HazelcastJsonValue(String.format("{time: %s}", System.currentTimeMillis())));
+    	return "done";
     }
 
     
     @GetMapping("/jet/testcache")
     public HazelcastUser testCache() {
-    	System.out.println(">>>>>>>>>>>>> cache miss");
     	HazelcastUser user = new HazelcastUser();
     	user.setEmail("abc@abc.com").setName("a_name").setId(120);
         return this.testCache.getSomething(user);
