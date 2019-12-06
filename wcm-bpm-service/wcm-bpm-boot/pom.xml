@@ -44,6 +44,12 @@
 			<version>${camunda.spring-boot.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.camunda.spin/camunda-spin-dataformat-json-jackson -->
+		
+		<dependency>
+		  <groupId>com.fasterxml.jackson.datatype</groupId>
+		  <artifactId>jackson-datatype-jdk8</artifactId>
+		</dependency>
+		
 		<dependency>
 		    <groupId>org.camunda.spin</groupId>
 		    <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
@@ -109,9 +115,21 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+		  <groupId>org.camunda.bpm.assert</groupId>
+		  <artifactId>camunda-bpm-assert</artifactId>
+		  <version>5.0.0</version>
+		</dependency>
+
+		<dependency>
+		  <groupId>org.assertj</groupId>
+		  <artifactId>assertj-core</artifactId>
+		  <version>3.13.2</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.camunda.bpm.extension</groupId>
 			<artifactId>camunda-bpm-assert-scenario</artifactId>
-			<version>0.2</version>
+			<version>0.2</version> 
 			<scope>test</scope>
 		</dependency>
 		<dependency>

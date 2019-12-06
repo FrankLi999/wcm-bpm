@@ -23,10 +23,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.bpwizard.wcm.repo.bpm.ExternalEditService;
+import com.bpwizard.wcm.repo.bpm.ExternalReviewService;
+import com.bpwizard.wcm.repo.bpm.WcmFlowService;
+import com.bpwizard.wcm.repo.bpm.model.CompleteEditRequest;
+import com.bpwizard.wcm.repo.bpm.model.CompleteReviewRequest;
+import com.bpwizard.wcm.repo.bpm.model.EditContentItemRequest;
+import com.bpwizard.wcm.repo.bpm.model.ReviewContentItemRequest;
+import com.bpwizard.wcm.repo.bpm.model.StartFlowRequest;
 
 @RestController
 //@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,12 +46,69 @@ import org.springframework.web.bind.annotation.RestController;
 public class ModeshapeController {
 	private static final Logger logger = LogManager.getLogger(ModeshapeController.class);
 	public static final String BASE_URI = "/modeshape/server";
-	@Autowired
-	// private Repository repository;
-	private RepositoryManager repositoryManager;
-//	@Autowired
-//	private Session session;
 
+	private RepositoryManager repositoryManager;
+
+	@Autowired
+	private ExternalReviewService externalRevieService;
+	
+	@Autowired
+	private ExternalEditService externalEditService;
+	
+	@Autowired
+	private WcmFlowService wcmFlowService;
+
+	@PostMapping(path="/create-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String startContentFlow(@RequestBody StartFlowRequest startFlowRequest) {
+		return wcmFlowService.startContentFlow(
+				startFlowRequest.getRepository(),
+				startFlowRequest.getWorkspace(),
+				startFlowRequest.getContentPath(),
+				startFlowRequest.getWorkflow());
+	}
+	
+	@GetMapping(path="/review-tasks/{topic}")
+	public String[] getReviewTasks(@PathVariable("topic")  String topic) {
+		return this.externalRevieService.getReviewTasks(topic);
+	}
+	
+	@PostMapping(path="/review-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String reviewContentItem(@RequestBody ReviewContentItemRequest reviewContentItemRequest) {
+		return this.externalRevieService.claimTask( 
+				reviewContentItemRequest.getReviewTopic(), 
+				reviewContentItemRequest.getWorkerId());
+	}
+	
+	@PostMapping(path="/complete-review-task", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String completeReview(@RequestBody CompleteReviewRequest completeReviewRequest) {
+		return this.externalRevieService.completeReview(
+				completeReviewRequest.getReviewTaskId(),
+				completeReviewRequest.getReviewTopic(),
+				completeReviewRequest.getWorkerId(), 
+				completeReviewRequest.isApproved(), 
+				completeReviewRequest.getComment());
+	}
+	
+	@GetMapping(path="/edit-tasks/{topic}")
+	public String[] getEditTasks(@PathVariable("topic")  String topic) {
+		return this.externalEditService.getEditTasks(topic);
+	}
+	
+	@PostMapping(path="/edit-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String editContentItem(@RequestBody EditContentItemRequest editContentItemRequest) {
+		return this.externalEditService.claimTask(
+				editContentItemRequest.getEditTopic(), 
+				editContentItemRequest.getWorkerId());
+	}
+	
+	@PostMapping(path="/complete-edit-task", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String completeEdit(@RequestBody CompleteEditRequest completeEditRequest) {
+		return this.externalEditService.completeEdit(
+				completeEditRequest.getEditTaskId(),
+				completeEditRequest.getEditTopic(),
+				completeEditRequest.getWorkerId());
+	}
+	
 	@GetMapping("/ping")
 	public String modeShape() {
 		Session session = null;

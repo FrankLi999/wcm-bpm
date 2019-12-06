@@ -12,10 +12,15 @@ import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.camunda.bpm.spring.boot.starter.event.PostDeployEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+
+import com.bpwizard.wcm.repo.bpm.ContentReviewTaskListener;
+import com.bpwizard.wcm.repo.bpm.PublishContentItemDelegate;
 //import org.camunda.bpm.engine.rest.filter.StatelessUserAuthenticationFilter;
 //import  org.camunda.bpm.engine.rest.filter.StatelessUserAuthenticationFilter;
+import com.bpwizard.wcm.repo.bpm.SaveDraftDelegate;
 
 @Configuration
 @EnableProcessApplication("wcm-boot")
@@ -63,4 +68,20 @@ public class CamundaConfig {
 //      filterRegistration.addUrlPatterns("/camunda/api/engine/*");
 //      return filterRegistration;
 //  }
+	
+	@Bean
+	public PublishContentItemDelegate publishContentItemDelegate() {
+		return new PublishContentItemDelegate();
+	}
+	
+	@Bean
+	public SaveDraftDelegate saveDraftDelegate() {
+		return new SaveDraftDelegate();
+	}
+	
+	@Bean
+	public ContentReviewTaskListener contentReviewTaskListener() {
+		return new ContentReviewTaskListener();
+	}
+
 }
