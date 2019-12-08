@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_09tertl" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:process id="wcm_content_flow" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1ur0rcf">
+      <bpmn:outgoing>SequenceFlow_08nawxs</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_18hnfsg</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="create-draft" name="Create Draft" camunda:delegateExpression="${saveDraftDelegate}">
+      <bpmn:incoming>SequenceFlow_08nawxs</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0i3t5du</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="review-content-item" name="Review Content Item" camunda:type="external" camunda:topic="wcm_review">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${contentReviewTaskStartListener}" event="start" />
+        <camunda:executionListener delegateExpression="${contentReviewTaskEndListener}" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0i3t5du</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1wf4qfl</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_02ysp30</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics>
+        <bpmn:loopCardinality>6</bpmn:loopCardinality>
+        <bpmn:completionCondition>${nrOfCompletedInstances/nrOfInstances &gt;= 0.5 || reviewRejected}</bpmn:completionCondition>
+      </bpmn:multiInstanceLoopCharacteristics>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="edit-task" name="Edit Draft" camunda:type="external" camunda:topic="wcm_edit">
+      <bpmn:incoming>SequenceFlow_18t02sg</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1wf4qfl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="ServiceTask_1wv7pc9" name="Publish Content Item" camunda:delegateExpression="${publishContentItemDelegate}">
+      <bpmn:incoming>SequenceFlow_1lpsqle</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_02bk0om</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_1d54o2u">
+      <bpmn:incoming>SequenceFlow_02bk0om</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0t7tewz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_08nawxs" sourceRef="StartEvent_1ur0rcf" targetRef="create-draft" />
+    <bpmn:sequenceFlow id="SequenceFlow_02bk0om" sourceRef="ServiceTask_1wv7pc9" targetRef="EndEvent_1d54o2u" />
+    <bpmn:sequenceFlow id="SequenceFlow_0i3t5du" sourceRef="create-draft" targetRef="review-content-item" />
+    <bpmn:exclusiveGateway id="ApprovedGateway" name="Approved">
+      <bpmn:incoming>SequenceFlow_02ysp30</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_18t02sg</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1lpsqle</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_02ysp30" sourceRef="review-content-item" targetRef="ApprovedGateway" />
+    <bpmn:sequenceFlow id="SequenceFlow_18t02sg" sourceRef="ApprovedGateway" targetRef="edit-task">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${reviewRejected}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1lpsqle" sourceRef="ApprovedGateway" targetRef="ServiceTask_1wv7pc9">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!reviewRejected}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1wf4qfl" sourceRef="edit-task" targetRef="review-content-item" />
+    <bpmn:sequenceFlow id="SequenceFlow_0t7tewz" sourceRef="delete-draft-message-event" targetRef="EndEvent_1d54o2u" />
+    <bpmn:intermediateCatchEvent id="delete-draft-message-event" name="Delete Draft Message Event">
+      <bpmn:incoming>SequenceFlow_18hnfsg</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0t7tewz</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_1v9zwcg" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_18hnfsg" sourceRef="StartEvent_1ur0rcf" targetRef="delete-draft-message-event" />
+    <bpmn:textAnnotation id="TextAnnotation_0ed6zw8">
+      <bpmn:text>contentId</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1w2kjr9" sourceRef="delete-draft-message-event" targetRef="TextAnnotation_0ed6zw8" />
+    <bpmn:textAnnotation id="TextAnnotation_07zxih4">
+      <bpmn:text>reporsitory, workspace, contentId, contentPath</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0a2m552" sourceRef="StartEvent_1ur0rcf" targetRef="TextAnnotation_07zxih4" />
+  </bpmn:process>
+  <bpmn:message id="Message_1v9zwcg" name="deleteDraftMessage" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="wcm_content_flow">
+      <bpmndi:BPMNShape id="StartEvent_1ur0rcf_di" bpmnElement="StartEvent_1ur0rcf">
+        <dc:Bounds x="152" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_11rb3n0_di" bpmnElement="create-draft">
+        <dc:Bounds x="230" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_01ppn5o_di" bpmnElement="review-content-item">
+        <dc:Bounds x="450" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0tzoxgb_di" bpmnElement="edit-task">
+        <dc:Bounds x="810" y="250" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1wv7pc9_di" bpmnElement="ServiceTask_1wv7pc9">
+        <dc:Bounds x="810" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1d54o2u_di" bpmnElement="EndEvent_1d54o2u">
+        <dc:Bounds x="973" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_08nawxs_di" bpmnElement="SequenceFlow_08nawxs">
+        <di:waypoint x="188" y="200" />
+        <di:waypoint x="230" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_02bk0om_di" bpmnElement="SequenceFlow_02bk0om">
+        <di:waypoint x="910" y="120" />
+        <di:waypoint x="973" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0i3t5du_di" bpmnElement="SequenceFlow_0i3t5du">
+        <di:waypoint x="330" y="200" />
+        <di:waypoint x="450" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0q9issy_di" bpmnElement="ApprovedGateway" isMarkerVisible="true">
+        <dc:Bounds x="645" y="175" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="727" y="190" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_02ysp30_di" bpmnElement="SequenceFlow_02ysp30">
+        <di:waypoint x="550" y="200" />
+        <di:waypoint x="645" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_18t02sg_di" bpmnElement="SequenceFlow_18t02sg">
+        <di:waypoint x="670" y="225" />
+        <di:waypoint x="670" y="290" />
+        <di:waypoint x="810" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1lpsqle_di" bpmnElement="SequenceFlow_1lpsqle">
+        <di:waypoint x="670" y="175" />
+        <di:waypoint x="670" y="120" />
+        <di:waypoint x="810" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1wf4qfl_di" bpmnElement="SequenceFlow_1wf4qfl">
+        <di:waypoint x="860" y="330" />
+        <di:waypoint x="860" y="380" />
+        <di:waypoint x="500" y="380" />
+        <di:waypoint x="500" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0t7tewz_di" bpmnElement="SequenceFlow_0t7tewz">
+        <di:waypoint x="708" y="480" />
+        <di:waypoint x="991" y="480" />
+        <di:waypoint x="991" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_159k90k_di" bpmnElement="delete-draft-message-event">
+        <dc:Bounds x="672" y="462" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="654" y="505" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0ed6zw8_di" bpmnElement="TextAnnotation_0ed6zw8">
+        <dc:Bounds x="800" y="520" width="100" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1w2kjr9_di" bpmnElement="Association_1w2kjr9">
+        <di:waypoint x="707" y="486" />
+        <di:waypoint x="804" y="520" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_07zxih4_di" bpmnElement="TextAnnotation_07zxih4">
+        <dc:Bounds x="190" y="40" width="100" height="68" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0a2m552_di" bpmnElement="Association_0a2m552">
+        <di:waypoint x="179" y="184" />
+        <di:waypoint x="222" y="108" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_18hnfsg_di" bpmnElement="SequenceFlow_18hnfsg">
+        <di:waypoint x="170" y="218" />
+        <di:waypoint x="170" y="480" />
+        <di:waypoint x="672" y="480" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

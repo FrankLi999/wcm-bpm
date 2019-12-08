@@ -2,6 +2,7 @@ package com.bpwizard.wcm.repo.bpm.model;
 
 public class EditContentItemRequest {
 	private String editTopic;
+	private String contentId;
 	private String workerId;
 	
 	
@@ -16,5 +17,16 @@ public class EditContentItemRequest {
 	}
 	public void setWorkerId(String workerId) {
 		this.workerId = workerId;
+	}
+	public String getContentId() {
+		return contentId;
+	}
+	public void setContentId(String contentId) {
+		this.contentId = contentId;
+	}
+	@Override
+	public String toString() {
+		return "EditContentItemRequest [editTopic=" + editTopic + ", contentId=" + contentId + ", workerId=" + workerId
+				+ "]";
 	}
 }

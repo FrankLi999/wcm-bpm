@@ -1,9 +1,10 @@
 package com.bpwizard.wcm.repo.bpm.model;
 
 public class CompleteEditRequest {
-	String editTaskId;
-	String editTopic;
-	String workerId;
+	private String editTaskId;
+	private String editTopic;
+	private String workerId;
+	
 	public String getEditTaskId() {
 		return editTaskId;
 	}

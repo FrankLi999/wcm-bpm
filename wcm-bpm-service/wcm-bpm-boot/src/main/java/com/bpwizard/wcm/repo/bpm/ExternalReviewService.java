@@ -11,43 +11,39 @@ import org.camunda.bpm.engine.variable.Variables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmRepository;
+import com.bpwizard.wcm.repo.bpm.model.ReviewTask;
 
 @Component
 public class ExternalReviewService {
 	@Autowired
 	ProcessEngine processEngine;
-//	private static final String EXTERNAL_WORKER_ID = "externalWorkerDelegate";
-//	private static final String TOPIC_WCM_REVIEW = "wcm_review";
-	LockedExternalTask lockedTask = null;
 	
-	public String[] getReviewTasks(String topic) {
-		ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
-	    List<ExternalTask> externalTasks = externalTaskService.createExternalTaskQuery()
-		    	.topicName(topic)
-		    	.list();
-	    return externalTasks.stream().map(ExternalTask::getId).toArray(String[]::new);
+	@Autowired
+	ReviewTaskRepo reviewTasks;
+	
+	public ReviewTask[] getReviewTasks(String topic) {
+		return this.reviewTasks.getReviewTasksByTopic(topic);
 	}
 	
-	public String claimTask(String topic, String workerId) {
+	public String claimTask(String contentId, String topic, String workerId) {
+		
 	    ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
-	    List<ExternalTask> externalTasks = externalTaskService.createExternalTaskQuery()
-		    	.topicName(topic)
-		    	.list();
-	    
-	    LockedExternalTask externalTask = externalTaskService.fetchAndLock(1, workerId).topic(topic, 24 * 60 * 1000).execute().get(0);
-	    
-	    
+	    List<LockedExternalTask> externalTasks = externalTaskService.fetchAndLock(1, workerId, true).topic(topic, 24 * 60 * 1000).processInstanceVariableEquals("contentId", contentId).execute();
+	    LockedExternalTask externalTask = (externalTasks != null && externalTasks.size() > 0) ? externalTasks.get(0) : null;
 	    if (externalTask != null) {
-	    	// ((ExternalTaskEntity)externalTask).lock(workerId, 24 * 60 * 1000);
-	    	// externalTaskService.fetchAndLock(1, EXTERNAL_WORKER_ID).topic(TOPIC_WCM_REVIEW, 300000).execute();
 	    	return externalTask.getId();
 	    } else {
 	    	return "n/a";
 	    }
 	}
 	
-	public String completeReview(String taskId, String topic, String workerId, boolean approved, String comment) {
+	public String completeReview(
+			String taskId, 
+			String topic, 
+			String workerId, 
+			boolean approved, 
+			String comment) {
+		
 	    ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
 	    ExternalTask externalTask = externalTaskService.createExternalTaskQuery()
 	    		.externalTaskId(taskId)
@@ -56,8 +52,14 @@ public class ExternalReviewService {
 		    	.topicName(topic)
 		    	.singleResult();
 	    System.out.println(">>>>>>>>>>>>>>>>>> to complete review task: " + externalTask);
-	    Map<String, Object> variables = Variables.createVariables().putValue("approved", approved).putValue("comment", comment);
-	    externalTaskService.complete(externalTask.getId(), workerId, variables);
-	    return "completed";
+	    //save content, with comment
+	    Map<String, Object> variables = approved ? Variables.createVariables().putValue("reviewRejected", Boolean.FALSE) : Variables.createVariables().putValue("reviewRejected", Boolean.TRUE).putValue("comment", comment);
+	    if (externalTask != null) {
+	    	externalTaskService.complete(externalTask.getId(), workerId, variables);
+	    	return "completed";
+	    } else {
+	    	return "n/a";
+	    }
+	    
 	}
 }

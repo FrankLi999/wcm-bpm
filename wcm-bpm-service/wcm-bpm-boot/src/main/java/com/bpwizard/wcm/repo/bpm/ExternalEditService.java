@@ -1,7 +1,5 @@
 package com.bpwizard.wcm.repo.bpm;
 
-import java.util.List;
-
 import org.camunda.bpm.engine.ExternalTaskService;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.externaltask.ExternalTask;
@@ -13,22 +11,24 @@ import org.springframework.stereotype.Component;
 public class ExternalEditService {
 	@Autowired
 	ProcessEngine processEngine;
-//	private static final String EXTERNAL_WORKER_ID = "externalWorkerDelegate";
-//	private static final String TOPIC_WCM_REVIEW = "wcm_review";
-	LockedExternalTask lockedTask = null;
-	public String[] getEditTasks(String topic) {
-		ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
-	    List<ExternalTask> externalTasks = externalTaskService.createExternalTaskQuery()
-		    	.topicName(topic)
-		    	.list();
-	    return externalTasks.stream().map(ExternalTask::getId).toArray(String[]::new);
-	}
+
+	@Autowired
+	ReviewTaskRepo reviewTasks;
+	
+//	public ReviewTask[] getEditTasks(String topic) {
+//		ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
+//	    List<ExternalTask> externalTasks = externalTaskService.createExternalTaskQuery()
+//		    	.topicName(topic)
+//		    	.active()
+//		    	.notLocked()
+//		    	.listPage(0, 10);
+//	    return externalTasks.stream().map(externalTask -> reviewTasks.findReviewTask(externalTask.getId())).toArray(ReviewTask[]::new);
+//	}
 	
 	
-	public String claimTask(String topic, String workerId) {
+	public String claimTask(String contentId, String topic, String workerId) {
 		ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
-	    LockedExternalTask externalTask = externalTaskService.fetchAndLock(1, workerId).topic(topic, 24 * 60 * 1000).execute().get(0);
-	    
+	    LockedExternalTask externalTask = externalTaskService.fetchAndLock(1, workerId).topic(topic, 24 * 60 * 1000).processInstanceVariableEquals("contentId", contentId).execute().get(0);
 	    
 	    if (externalTask != null) {
 	    	// ((ExternalTaskEntity)externalTask).lock(workerId, 24 * 60 * 1000);
@@ -39,7 +39,11 @@ public class ExternalEditService {
 	    }
 	}
 	
-	public String completeEdit(String taskId, String topic, String workerId) {
+	//One transaction
+	public String completeEdit(
+			String taskId, 
+			String topic, 
+			String workerId) {
 	    ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
 	    ExternalTask externalTask = externalTaskService.createExternalTaskQuery()
 	    		.externalTaskId(taskId)
@@ -47,7 +51,12 @@ public class ExternalEditService {
 	    		.workerId(workerId)
 		    	.topicName(topic)
 		    	.singleResult();
-	    externalTaskService.complete(externalTask.getId(), workerId);
-	    return "completed";
+	 
+	    if (externalTask != null) {
+	    	externalTaskService.complete(externalTask.getId(), workerId);
+	    	return "completed";
+	    } else {
+	    	return "n/a";
+	    }
 	}
 }

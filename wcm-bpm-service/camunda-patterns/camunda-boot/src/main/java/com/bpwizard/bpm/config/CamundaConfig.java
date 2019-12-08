@@ -35,7 +35,7 @@ public class CamundaConfig {
 
 	@EventListener
 	private void processPostDeploy(PostDeployEvent event) {
-		this.startFirstProcess();
+		// this.startFirstProcess();
 	}
 
 	public void startFirstProcess() {

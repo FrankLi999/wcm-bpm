@@ -24,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,8 +37,10 @@ import com.bpwizard.wcm.repo.bpm.ExternalReviewService;
 import com.bpwizard.wcm.repo.bpm.WcmFlowService;
 import com.bpwizard.wcm.repo.bpm.model.CompleteEditRequest;
 import com.bpwizard.wcm.repo.bpm.model.CompleteReviewRequest;
+import com.bpwizard.wcm.repo.bpm.model.DeleteDraftRequest;
 import com.bpwizard.wcm.repo.bpm.model.EditContentItemRequest;
 import com.bpwizard.wcm.repo.bpm.model.ReviewContentItemRequest;
+import com.bpwizard.wcm.repo.bpm.model.ReviewTask;
 import com.bpwizard.wcm.repo.bpm.model.StartFlowRequest;
 
 @RestController
@@ -64,17 +67,19 @@ public class ModeshapeController {
 				startFlowRequest.getRepository(),
 				startFlowRequest.getWorkspace(),
 				startFlowRequest.getContentPath(),
+				startFlowRequest.getContentId(),
 				startFlowRequest.getWorkflow());
 	}
 	
-	@GetMapping(path="/review-tasks/{topic}")
-	public String[] getReviewTasks(@PathVariable("topic")  String topic) {
+	@GetMapping(path="/review-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ReviewTask[] getReviewTasks(@PathVariable("topic")  String topic) {
 		return this.externalRevieService.getReviewTasks(topic);
 	}
 	
 	@PostMapping(path="/review-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String reviewContentItem(@RequestBody ReviewContentItemRequest reviewContentItemRequest) {
 		return this.externalRevieService.claimTask( 
+				reviewContentItemRequest.getContentId(),
 				reviewContentItemRequest.getReviewTopic(), 
 				reviewContentItemRequest.getWorkerId());
 	}
@@ -89,14 +94,15 @@ public class ModeshapeController {
 				completeReviewRequest.getComment());
 	}
 	
-	@GetMapping(path="/edit-tasks/{topic}")
-	public String[] getEditTasks(@PathVariable("topic")  String topic) {
-		return this.externalEditService.getEditTasks(topic);
-	}
-	
+//	@GetMapping(path="/edit-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ReviewTask[] getEditTasks(@PathVariable("topic")  String topic) {
+//		return this.externalEditService.getEditTasks(topic);
+//	}
+//	
 	@PostMapping(path="/edit-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String editContentItem(@RequestBody EditContentItemRequest editContentItemRequest) {
 		return this.externalEditService.claimTask(
+				editContentItemRequest.getContentId(),
 				editContentItemRequest.getEditTopic(), 
 				editContentItemRequest.getWorkerId());
 	}
@@ -107,6 +113,12 @@ public class ModeshapeController {
 				completeEditRequest.getEditTaskId(),
 				completeEditRequest.getEditTopic(),
 				completeEditRequest.getWorkerId());
+	}
+	
+	@DeleteMapping(path="/delete-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String completeEdit(@RequestBody DeleteDraftRequest deleteDraftRequest) {
+		this.wcmFlowService.deleteDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
+		return "Deleted";
 	}
 	
 	@GetMapping("/ping")

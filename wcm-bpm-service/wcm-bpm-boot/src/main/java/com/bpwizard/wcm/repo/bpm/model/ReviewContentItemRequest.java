@@ -3,6 +3,7 @@ package com.bpwizard.wcm.repo.bpm.model;
 public class ReviewContentItemRequest {
 	private String reviewTopic;
 	private String workerId;
+	private String contentId;
 	
 	public String getReviewTopic() {
 		return reviewTopic;
@@ -16,5 +17,15 @@ public class ReviewContentItemRequest {
 	public void setWorkerId(String workerId) {
 		this.workerId = workerId;
 	}
-	
+	public String getContentId() {
+		return contentId;
+	}
+	public void setContentId(String contentId) {
+		this.contentId = contentId;
+	}
+	@Override
+	public String toString() {
+		return "ReviewContentItemRequest [reviewTopic=" + reviewTopic + ", workerId=" + workerId + ", contentId="
+				+ contentId + "]";
+	}
 }

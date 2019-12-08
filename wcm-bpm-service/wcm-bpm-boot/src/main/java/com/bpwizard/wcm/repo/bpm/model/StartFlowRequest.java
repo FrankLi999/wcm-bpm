@@ -4,6 +4,7 @@ public class StartFlowRequest {
 	String repository;
 	String workspace;
 	String contentPath;
+	String contentId;
 	String workflow;
 	
 	public String getRepository() {
@@ -24,12 +25,21 @@ public class StartFlowRequest {
 	public void setContentPath(String contentPath) {
 		this.contentPath = contentPath;
 	}
+	public String getContentId() {
+		return contentId;
+	}
+	public void setContentId(String contentId) {
+		this.contentId = contentId;
+	}
 	public String getWorkflow() {
 		return workflow;
 	}
 	public void setWorkflow(String workflow) {
 		this.workflow = workflow;
 	}
-	
-	
+	@Override
+	public String toString() {
+		return "StartFlowRequest [repository=" + repository + ", workspace=" + workspace + ", contentPath="
+				+ contentPath + ", contentId=" + contentId + ", workflow=" + workflow + "]";
+	}
 }

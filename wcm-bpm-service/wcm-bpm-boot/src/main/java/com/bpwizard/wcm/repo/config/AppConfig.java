@@ -20,14 +20,6 @@ public class AppConfig {
 	@Autowired 
 	ProcessEngine processEngine;
 	
-//	
-//	@Value("${spring.datasource.username:xxx}")
-//	private String userValue;
-//
-//	
-//	@Value("${spring.datasource.password:yyy}")
-//	private String pwdValue;
-	
 	@Bean
     public FilterRegistrationBean <CleanupFilter> cleanupFilterRegistrationBean() {
      FilterRegistrationBean <CleanupFilter> registrationBean = new FilterRegistrationBean<>();
