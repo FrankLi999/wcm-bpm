@@ -1,15 +1,33 @@
 ## Development environment
-flyway:
-  #url: jdbc:mysql://192.168.0.168:3306/mysql
-  url: jdbc:mysql://127.0.0.1:3306/wcm_bpm
-  schemas: wcm_bpm
-  user: wcmbpm
-  #password: P@ssw0rd
-  password: ENC(hii16IIKWBHMYH9txsTLpvWOkNcDFy4D)
+# flyway:
+  # url: jdbc:mysql://192.168.0.168:3306/mysql
+  # url: jdbc:mysql://127.0.0.1:3306/wcm_bpm
+  # schemas: wcm_bpm
+  # user: wcmbpm
+  # password: P@ssw0rd
+  # password: ENC(hii16IIKWBHMYH9txsTLpvWOkNcDFy4D)
   #locations:classpath:/db/migration,classpath:/dev/db/migration
 
 spring:
-
+  mail:
+    host: localhost
+    port: 2525
+    username: username@gmail.com
+    password: password
+    # Other properties
+    # properties:
+      # mail:
+        # smtp:
+          # auth: true
+          # connectiontimeout: 5000
+          # timeout: 5000
+          # writetimeout: 5000
+# TLS , port 587
+          # starttls:
+            # enable: true
+# SSL, post 465
+          # socketFactory:
+            # port: 465
   jpa:
     show-sql: true
     # generate-ddl=true

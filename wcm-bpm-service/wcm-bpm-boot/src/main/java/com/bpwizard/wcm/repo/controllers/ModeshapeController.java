@@ -1,6 +1,7 @@
 package com.bpwizard.wcm.repo.controllers;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Principal;
@@ -18,10 +19,10 @@ import javax.jcr.security.AccessControlList;
 import javax.jcr.security.AccessControlManager;
 import javax.jcr.security.AccessControlPolicyIterator;
 import javax.jcr.security.Privilege;
+import javax.mail.MessagingException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -44,9 +45,9 @@ import com.bpwizard.wcm.repo.bpm.model.EditContentItemRequest;
 import com.bpwizard.wcm.repo.bpm.model.ReviewContentItemRequest;
 import com.bpwizard.wcm.repo.bpm.model.ReviewTask;
 import com.bpwizard.wcm.repo.bpm.model.StartFlowRequest;
+import com.bpwizard.wcm.repo.mail.service.MailService;
 
 @RestController
-//@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping(ModeshapeController.BASE_URI)
 public class ModeshapeController {
 	private static final Logger logger = LogManager.getLogger(ModeshapeController.class);
@@ -66,7 +67,10 @@ public class ModeshapeController {
 	@Autowired
     private SimpMessagingTemplate template;
 	
-	@PostMapping(path="/create-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Autowired
+    private MailService mailService;
+	
+    @PostMapping(path="/create-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String startContentFlow(@RequestBody StartFlowRequest startFlowRequest) {
 		
 		String processInstanceId = wcmFlowService.startContentFlow(
@@ -76,6 +80,17 @@ public class ModeshapeController {
 				startFlowRequest.getContentId(),
 				startFlowRequest.getWorkflow());
 		this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
+		try {
+		    this.mailService.sendEmailWithAttachment(
+            		"Testing from Spring Boot",
+            		new String[] {"a@yahoo.com", "b@gmail.com"},
+            		"<h1>Check attachment for image!</h1>",
+            		"android.png");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 		return processInstanceId;
 	}
 	
@@ -344,5 +359,4 @@ public class ModeshapeController {
 		session.save();
 		return "done";
 	}
-	
 }
