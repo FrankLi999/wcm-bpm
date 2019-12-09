@@ -18,6 +18,11 @@
         <link href="assets/icons/material-icons/outline/style.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700" rel="stylesheet">
         <script>
+            if (global === undefined) {
+                var global = window;
+            }
+        </script>
+        <script>
             var appConfig = {
               baseUrl: 'wcm-authoring',
               defaultUrl: 'wcm-authoring/jcr-explorer',

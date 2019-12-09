@@ -49,9 +49,10 @@
     <!-- CENTER -->
     <div class="center">
         <div class="content" fxFlexAlign="row">
-        <jcr-node *ngIf="isRestNode(activeNode)" [restNode]="activeNode.value" fusePerfectScrollbar fxFlex></jcr-node>
-        <repository *ngIf="isRepository(activeNode)" [repository]="activeNode.value" fusePerfectScrollbar fxFlex></repository>
-        <workspace *ngIf="isWorkspace(activeNode)" [workspace]="activeNode.value" fusePerfectScrollbar fxFlex></workspace>
+            jcrMessage: {{jcrMessage}} <br />
+            <jcr-node *ngIf="isRestNode(activeNode)" [restNode]="activeNode.value" fusePerfectScrollbar fxFlex></jcr-node>
+            <repository *ngIf="isRepository(activeNode)" [repository]="activeNode.value" fusePerfectScrollbar fxFlex></repository>
+            <workspace *ngIf="isWorkspace(activeNode)" [workspace]="activeNode.value" fusePerfectScrollbar fxFlex></workspace>
         </div>
     </div>
     <!-- / CENTER -->

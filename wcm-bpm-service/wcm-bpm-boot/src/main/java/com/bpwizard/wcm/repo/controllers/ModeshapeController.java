@@ -21,9 +21,11 @@ import javax.jcr.security.Privilege;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +51,7 @@ import com.bpwizard.wcm.repo.bpm.model.StartFlowRequest;
 public class ModeshapeController {
 	private static final Logger logger = LogManager.getLogger(ModeshapeController.class);
 	public static final String BASE_URI = "/modeshape/server";
-
+	@Autowired
 	private RepositoryManager repositoryManager;
 
 	@Autowired
@@ -61,14 +63,20 @@ public class ModeshapeController {
 	@Autowired
 	private WcmFlowService wcmFlowService;
 
+	@Autowired
+    private SimpMessagingTemplate template;
+	
 	@PostMapping(path="/create-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String startContentFlow(@RequestBody StartFlowRequest startFlowRequest) {
-		return wcmFlowService.startContentFlow(
+		
+		String processInstanceId = wcmFlowService.startContentFlow(
 				startFlowRequest.getRepository(),
 				startFlowRequest.getWorkspace(),
 				startFlowRequest.getContentPath(),
 				startFlowRequest.getContentId(),
 				startFlowRequest.getWorkflow());
+		this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
+		return processInstanceId;
 	}
 	
 	@GetMapping(path="/review-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -336,4 +344,5 @@ public class ModeshapeController {
 		session.save();
 		return "done";
 	}
+	
 }

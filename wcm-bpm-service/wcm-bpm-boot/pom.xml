@@ -43,8 +43,12 @@
 			<!-- <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId> -->
 			<version>${camunda.spring-boot.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.camunda.spin/camunda-spin-dataformat-json-jackson -->
 		
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        
 		<dependency>
 		  <groupId>com.fasterxml.jackson.datatype</groupId>
 		  <artifactId>jackson-datatype-jdk8</artifactId>
