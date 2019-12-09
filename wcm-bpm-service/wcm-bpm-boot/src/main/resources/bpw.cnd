@@ -180,11 +180,20 @@
 [bpw:elementFolder] > nt:folder
 + * (bpw:formControl)
 
+[bpw:propertiesFolder] > nt:folder
++ name (bpw:formControl)
++ title (bpw:formControl)
++ description (bpw:formControl)
++ category (bpw:formControl)
++ workflow (bpw:formControl)
++ * (bpw:formControl)
+
 [bpw:authoringTemplate] > bpw:resourceNode
 - bpw:baseResourceType (String)
 - bpw:workflow (String)
 + * (bpw:formGroup)
 + elements (bpw:elementFolder)
++ properties (bpw:propertyFolder)
 
 [bpw:themeType] > nt:folder, bpw:resourceNode
 - bpw:themeName (STRING)
@@ -525,6 +534,13 @@
  - bpw:multiple (BOOLEAN)
  - bpw:value (STRING) multiple
  
- [bpw:content] > bpw:resourceNode, bpw:lifecycle, mix:versionable, mix:lockable
- - bpw:authoringTemplate (STRING)
+[bpw:contentElementFolder] > nt:folder
 + * (bpw:contentElement)
+
+[bpw:propertyElementFolder] > nt:folder
++ * (bpw:contentElement)
+
+[bpw:content] > bpw:resourceNode, bpw:lifecycle, mix:versionable, mix:lockable
+ - bpw:authoringTemplate (STRING)
++ elements (bpw:contentElementFolder)
++ properties (bpw:propertyElementFolder)
