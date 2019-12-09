@@ -9,6 +9,10 @@
  * BPW  T Y P E S
  * ------------------------------------------------------------------------------
  */
+[bpw:lifecycle] mixin
+- bpw:lifecyclePolicy (STRING)
+- bpw:currentLifecycleState (STRING)
+
 [bpw:keyValue] 
 - bpw:name (STRING) COPY
 - bpw:value (STRING) COPY
@@ -178,6 +182,7 @@
 
 [bpw:authoringTemplate] > bpw:resourceNode
 - bpw:baseResourceType (String)
+- bpw:workflow (String)
 + * (bpw:formGroup)
 + elements (bpw:elementFolder)
 
@@ -520,6 +525,6 @@
  - bpw:multiple (BOOLEAN)
  - bpw:value (STRING) multiple
  
- [bpw:content] > bpw:resourceNode
+ [bpw:content] > bpw:resourceNode, bpw:lifecycle, mix:versionable, mix:lockable
  - bpw:authoringTemplate (STRING)
 + * (bpw:contentElement)

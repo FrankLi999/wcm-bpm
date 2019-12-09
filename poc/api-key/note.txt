@@ -1,0 +1,2 @@
+http://www.zakariaamine.com2019-06-14extending-keycloak
+https://www.freecodecamp.org/news/best-practices-for-building-api-keys-97c26eabfea9/
