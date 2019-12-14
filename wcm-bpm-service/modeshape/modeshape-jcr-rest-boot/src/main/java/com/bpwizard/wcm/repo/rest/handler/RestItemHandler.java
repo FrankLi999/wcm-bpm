@@ -162,6 +162,19 @@ public final class RestItemHandler extends ItemHandler {
         return createRestItem(request, 0, session, item);
     }
 
+    public RestItem updateItem( HttpServletRequest request,
+            String rawRepositoryName,
+            String rawWorkspaceName,
+            String path,
+            JsonNode jsonItem ) throws IOException, RepositoryException {
+		Session session = getSession(rawRepositoryName, rawWorkspaceName);
+		Item item = itemAtPath(path, session);
+		item = updateItem(item, jsonItem);
+		session.save();
+		
+		return createRestItem(request, 0, session, item);
+	}
+    
     private JsonNode inputStreamToJsonNode( InputStream requestBody ) throws IOException {
         return this.mapper.readTree(requestBody);
     }
@@ -173,10 +186,6 @@ public final class RestItemHandler extends ItemHandler {
     private ArrayNode stringToJsonArray( String requestBody ) throws IOException {
     	return StringUtil.isBlank(requestBody) ? this.mapper.createArrayNode() : (ArrayNode) this.mapper.readTree(requestBody);
     }
-    
-//    private JsonArray stringToJSONArray( String requestBody ) throws JSONException {
-//        return StringUtil.isBlank(requestBody) ? new JSONArray() : new JSONArray(requestBody);
-//    }
 
     /**
      * Performs a bulk creation of items, using a single {@link Session}. If any of the items cannot be created for whatever

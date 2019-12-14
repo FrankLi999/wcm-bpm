@@ -27,14 +27,19 @@ export class NewContentDialogComponent extends BaseMewResourceDialog implements 
   createContent(formData: any) {
     console.log(formData)
     const contentItem = {
-      contentElements: {...formData},
+      id: '',
+      elements: {...formData.elements},
+      properties: {...formData.properties},
       repository: this.data.repositoryName,
       nodePath: this.data.nodePath,
       workspace: this.data.workspaceName,
-      authoringTemplate: 'bpwizard/default/design/MyContent'
+      lifeCycleStage: 'darft',
+      checkedOut: false,
+      locked: false,
+      authoringTemplate: 'bpwizard/default/design/MyContent',
+      workflow: 'bpmn:wcm_content_flow'
     }
-    console.log(contentItem);
-    this.wcmService.createContentItem(contentItem).subscribe((event: any) => {
+    this.wcmService.saveContentItem(contentItem).subscribe((event: any) => {
         console.log(event)
     });   
   }

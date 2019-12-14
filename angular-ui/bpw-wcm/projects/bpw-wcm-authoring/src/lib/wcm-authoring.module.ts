@@ -51,6 +51,7 @@ import { ResourceTypeModule } from './resource-type/resource-type.module';
 import { RenderTemplateModule } from './render-template/render-template.module';
 import { QueryBuilderModule } from './query-builder/query-builder.module';
 import { CategoryModule } from './category/category.module';
+import { SiteConfigModule } from './site-config/site-config.module';
 import { WorkflowModule } from './workflow/workflow.module';
 import { ValidationRuleModule } from './validation-rule/validation-rule.module';
 import { PreviewModule } from 'bpw-wcm-preview';
@@ -86,6 +87,9 @@ import { SiteTreeComponent } from './site-explorer/site-tree/site-tree.component
 import { SiteAreaComponent } from './site-explorer/site-area/site-area.component';
 import { ContentItemComponent } from './site-explorer/content-item/content-item.component';
 import { SiteExplorerComponent } from './site-explorer/site-explorer/site-explorer.component';
+import { SiteConfigComponent } from './site-config/site-config/site-config.component';
+import { SiteConfigsComponent } from './site-config/site-configs/site-configs.component';
+import { SiteConfigTreeComponent } from './site-config/site-config-tree/site-config-tree.component';
 import { ValidationRuleTreeComponent } from './validation-rule/validation-rule-tree/validation-rule-tree.component';
 import { ValidationRulesComponent } from './validation-rule/validation-rules/validation-rules.component';
 import { ValidationRuleComponent } from './validation-rule/validation-rule/validation-rule.component';
@@ -194,6 +198,24 @@ const routes: Routes = [{
         {
             path       : 'list',
             component  : ResourceTypeListComponent
+        }
+      ]
+    },
+    {
+      path: 'site-config', 
+      component: SiteConfigTreeComponent, 
+      children: [
+        {
+            path       : 'list',
+            component  : SiteConfigsComponent
+        },
+        {
+          path       : 'new-siteconfig',
+          component  : SiteConfigComponent
+        },
+        {
+          path       : 'edit-siteconfig',
+          component  : SiteConfigComponent
         }
       ]
     },
@@ -307,8 +329,9 @@ const routes: Routes = [{
         QueryBuilderModule,
         CategoryModule,
         WorkflowModule,
+        SiteConfigModule,
         ValidationRuleModule,
-        PreviewModule,
+        PreviewModule
     ],
     providers   : [
       ResolveGuard

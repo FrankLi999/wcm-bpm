@@ -143,7 +143,7 @@ export class ResourceTypeLayoutComponent implements OnInit {
             (event.container.data as String[]),
             0,
             event.currentIndex);
-            this.resourceType.formControls[result.templateField.name] = result.templateField;
+            this.resourceType.elements[result.templateField.name] = result.templateField;
         }
       });
     }
@@ -163,14 +163,14 @@ export class ResourceTypeLayoutComponent implements OnInit {
 
   deleteTargetField(index:number, fields: string[]) {
       let fieldNames = fields.splice(index, 1);      	
-      delete this.resourceType.formControls[fieldNames[0]];
+      delete this.resourceType.elements[fieldNames[0]];
   }
 
   getControlFieldName(formControl:string): string {
-     return this.resourceType.formControls[formControl].controlName;
+     return this.resourceType.elements[formControl].controlName;
   }
   editTargetField(index:number, fields: string[]) {
-    let field:TemplateField  = this.resourceType.formControls[fields[index]];
+    let field:TemplateField  = this.resourceType.elements[fields[index]];
     const dialogRef = this.dialog.open(ResourceFieldDialog, {
       width: '500px',
       data: {
@@ -184,9 +184,9 @@ export class ResourceTypeLayoutComponent implements OnInit {
       if (result) {
         fields[index] = result.templateField.name;
         if (result.currentFieldName != result.templateField.name) {
-          delete this.resourceType.formControls[result.currentFieldName];
+          delete this.resourceType.elements[result.currentFieldName];
         }
-        this.resourceType.formControls[result.templateField.name] = result.templateField;
+        this.resourceType.elements[result.templateField.name] = result.templateField;
       }
     });
   }
@@ -196,7 +196,7 @@ export class ResourceTypeLayoutComponent implements OnInit {
   }
 
   getResourceFieldHint(templateFieldName: string): string {
-    let templateField = this.resourceType.formControls[templateFieldName];
+    let templateField = this.resourceType.elements[templateFieldName];
     let hint = '';
     if (templateField.hint) {
       hint = hint.concat(' (').concat(templateField.hint).concat(')');
@@ -205,7 +205,7 @@ export class ResourceTypeLayoutComponent implements OnInit {
   }
 
   getResourceFieldFlags(templateFieldName: string): string {
-    let templateField = this.resourceType.formControls[templateFieldName];
+    let templateField = this.resourceType.elements[templateFieldName];
     let fieldFlag = '';
     if (templateField.mandatory) {
       fieldFlag = fieldFlag.concat(' . ').concat('Required');
@@ -279,8 +279,8 @@ export class ResourceTypeLayoutComponent implements OnInit {
 
   addNewRow(numOfColumn: number) {
 
-    let rows = this.isRows(this.resourceType.formGroups[this.resourceType.formGroups.length - 1]) ? 
-    this.resourceType.formGroups[this.resourceType.formGroups.length - 1] as FormRows:
+    let rows = this.isRows(this.resourceType.elementGroups[this.resourceType.elementGroups.length - 1]) ? 
+    this.resourceType.elementGroups[this.resourceType.elementGroups.length - 1] as FormRows:
         { rows: []} as FormRows;
     rows.rows.push({
       columns: []
@@ -296,8 +296,8 @@ export class ResourceTypeLayoutComponent implements OnInit {
       this.builderTargets.push(fieldGroupId);
     }
 
-    if (!this.isRows(this.resourceType.formGroups[this.resourceType.formGroups.length - 1])) {
-      this.resourceType.formGroups.push(rows);
+    if (!this.isRows(this.resourceType.elementGroups[this.resourceType.elementGroups.length - 1])) {
+      this.resourceType.elementGroups.push(rows);
     }
     return false;
   }
@@ -368,8 +368,8 @@ export class ResourceTypeLayoutComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
         if (result) {
-            let tabs = this.isTabs(this.resourceType.formGroups[this.resourceType.formGroups.length - 1]) ? 
-            this.resourceType.formGroups[this.resourceType.formGroups.length - 1] as FormTabs:
+            let tabs = this.isTabs(this.resourceType.elementGroups[this.resourceType.elementGroups.length - 1]) ? 
+            this.resourceType.elementGroups[this.resourceType.elementGroups.length - 1] as FormTabs:
                 { tabs: []} as FormTabs;
            tabs.tabs.push({
               formGroups: [{
@@ -388,8 +388,8 @@ export class ResourceTypeLayoutComponent implements OnInit {
               this.builderTargets.push(fieldGroupId);
             }
 
-            if (!this.isTabs(this.resourceType.formGroups[this.resourceType.formGroups.length - 1])) {
-              this.resourceType.formGroups.push(tabs);
+            if (!this.isTabs(this.resourceType.elementGroups[this.resourceType.elementGroups.length - 1])) {
+              this.resourceType.elementGroups.push(tabs);
             }
         }
     });
@@ -404,8 +404,8 @@ export class ResourceTypeLayoutComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          let steps = this.isStepers(this.resourceType.formGroups[this.resourceType.formGroups.length - 1]) ? 
-          this.resourceType.formGroups[this.resourceType.formGroups.length - 1] as FormSteps:
+          let steps = this.isStepers(this.resourceType.elementGroups[this.resourceType.elementGroups.length - 1]) ? 
+          this.resourceType.elementGroups[this.resourceType.elementGroups.length - 1] as FormSteps:
               { steps: []} as FormSteps;
         
           (<FormSteps>steps).steps.push({
@@ -425,8 +425,8 @@ export class ResourceTypeLayoutComponent implements OnInit {
               this.builderTargets.push(fieldGroupId);
           }
 
-          if (!this.isStepers(this.resourceType.formGroups[this.resourceType.formGroups.length - 1])) {
-            this.resourceType.formGroups.push(steps);
+          if (!this.isStepers(this.resourceType.elementGroups[this.resourceType.elementGroups.length - 1])) {
+            this.resourceType.elementGroups.push(steps);
           }
         }
     });

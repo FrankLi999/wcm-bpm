@@ -56,11 +56,17 @@ export class ContentItemComponent extends WcmConfigurableComponent implements On
       return this.wcmService.getContentItem(this.repository, this.workspace, this.nodePath);
     } else {
       return of({
+        id: '',
         repository: param.repository,
         workspace: param.workspace,
         nodePath: param.nodePath,
         authoringTemplate: param.authoringTemplate,
-        contentElements: {}
+        locked: false,
+        lifeCycleStage: 'darft',
+        checkedOut: false,
+        workflow: 'bpmn:wcm_content_flow',
+        properties: {},
+        elements: {}
       })
     }
   }
@@ -84,16 +90,22 @@ export class ContentItemComponent extends WcmConfigurableComponent implements On
 
   createContent(formData: any) {
     console.log(formData)
-    const contentItem = {
-      contentElements: {...formData},
+    // editing;
+    const contentItem: ContentItem = {
+      id: this.contentItem.id,
+      elements: {...formData.elements},
+      properties: {...formData.properties},
       repository: this.repository,
+      locked: this.contentItem.locked,
+      lifeCycleStage: this.contentItem.lifeCycleStage,
+      checkedOut: this.contentItem.checkedOut,
       nodePath: this.nodePath,
       workspace: this.workspace,
-      authoringTemplate: this.contentItem.authoringTemplate
+      authoringTemplate: this.contentItem.authoringTemplate,
     }
     console.log(contentItem);
-    // this.wcmService.createContentItem(contentItem).subscribe((event: any) => {
-    //     console.log(event)
-    // });  
+    this.wcmService.saveContentItem(contentItem).subscribe((event: any) => {
+        console.log(event);
+    });
   } 
 }

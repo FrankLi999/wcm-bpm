@@ -1,6 +1,13 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
+import org.modeshape.jcr.api.JcrConstants;
+import org.springframework.util.StringUtils;
+
+import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class SiteArea implements HasName {
 
@@ -37,6 +44,7 @@ public class SiteArea implements HasName {
 	private SearchData searchData;
 	private NavigationBadge badge;
 	private SiteAreaLayout siteAreaLayout;
+	private String lockOwner;
 	
 	public String getRepository() {
 		return repository;
@@ -218,6 +226,231 @@ public class SiteArea implements HasName {
 	public void setSiteConfig(String siteConfig) {
 		this.siteConfig = siteConfig;
 	}
+	public String getLockOwner() {
+		return lockOwner;
+	}
+	public void setLockOwner(String lockOwner) {
+		this.lockOwner = lockOwner;
+	}	
+	public JsonNode toJson() {
+		ObjectNode jsonNode = JsonUtils.createObjectNode();
+		ObjectNode properties = JsonUtils.createObjectNode();
+		ObjectNode children = JsonUtils.createObjectNode();
+		
+		jsonNode.set("children", children);
+		jsonNode.set("properties", properties);
+		properties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:siteArea");
+		
+		properties.put("bpw:name", this.getName());
+		properties.put("bpw:title", StringUtils.hasText(this.getTitle()) ? this.getTitle() : this.getName());
+		if (StringUtils.hasText(this.getDescription())) {
+			properties.put("bpw:description", this.getDescription());
+		}
+		properties.put("bpw:url", StringUtils.hasText(this.getUrl()) ? this.getUrl() : this.getName());
+		if (StringUtils.hasText(this.getFriendlyURL())) {
+			properties.put("bpw:friendlyURL", this.getFriendlyURL());
+		}
+		properties.put("bpw:sorderOrder", this.getSorderOrder());
+		properties.put("bpw:showOnMenu", this.isShowOnMenu());
+
+		if (StringUtils.hasText(this.getDefaultContent())) {
+			properties.put("bpw:defaultContent", this.getDefaultContent());
+		}
+		if (StringUtils.hasText(this.getAllowedArtifactTypes())) {
+			String[] artifacts = this.getAllowedArtifactTypes().split(",");
+			ArrayNode artifactArray = JsonUtils.creatArrayNode();
+			for (String value : artifacts) {
+				artifactArray.add(value);
+			}
+			properties.set("bpw:allowedFileExtension", artifactArray);
+		}
+
+		if (StringUtils.hasText(this.getAllowedFileExtension())) {
+			String[] files = this.getAllowedFileExtension().split(",");
+			ArrayNode fileArray = JsonUtils.creatArrayNode();
+			for (String file : files) {
+				fileArray.add(file);
+			}
+			properties.set("bpw:allowedFileExtension", fileArray);
+		}
+
+		properties.put("bpw:contentAreaLayout", this.getContentAreaLayout());
+		properties.put("bpw:siteConfig", this.getSiteConfig());
+		properties.put("bpw:securePage", this.isSecurePage());
+		properties.put("bpw:cacheTTL", this.getCacheTTL());
+
+		if (StringUtils.hasText(this.getNavigationId())) {
+			properties.put("bpw:navigationId", this.getNavigationId());
+		}
+		
+		if (StringUtils.hasText(this.getNavigationType())) {
+			properties.put("bpw:navigationType", this.getNavigationType());
+		}
+		
+		if (StringUtils.hasText(this.getTranslate())) {
+			properties.put("bpw:translate", this.getTranslate());
+		}
+		
+		if (StringUtils.hasText( this.getIcon())) {
+			properties.put("bpw:function", this.getFunction());
+		}
+		
+		if (StringUtils.hasText(this.getIcon())) {
+			properties.put("bpw:icon", this.getIcon());
+		}
+		
+		if (StringUtils.hasText(this.getClasses())) {
+			properties.put("bpw:classes", this.getClasses());
+		}
+
+		properties.put("bpw:exactMatch", this.isExactMatch());
+		properties.put("bpw:externalUrl", this.isExternalUrl());
+		properties.put("bpw:openInNewTab", this.isOpenInNewTab());
+		
+		
+		if (this.getMetadata() != null && this.getMetadata().getKeyValues() != null) {
+			ObjectNode metaDataNode = JsonUtils.createObjectNode();
+			ObjectNode metaDataNodeProperties = JsonUtils.createObjectNode();
+			ObjectNode metaDataNodeChildren = JsonUtils.createObjectNode();
+			children.set("bpw:metaData", metaDataNode);
+			metaDataNode.set("properties", metaDataNodeProperties);
+			metaDataNode.set("children", metaDataNodeChildren);
+			metaDataNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:keyValues");
+			int count = 0;
+			for (KeyValue keyValue: this.getMetadata().getKeyValues()) {
+				
+				ObjectNode kvNode = JsonUtils.createObjectNode();
+				ObjectNode kvNodeProperties = JsonUtils.createObjectNode();
+				ObjectNode kvNodeChildren = JsonUtils.createObjectNode();
+				metaDataNodeChildren.set("kv" + count++, kvNode);
+				kvNode.set("properties", kvNodeProperties);
+				kvNode.set("children", kvNodeChildren);
+				kvNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:keyValue");
+				kvNodeProperties.put("bpw:name", keyValue.getName());
+				kvNodeProperties.put("bpw:value", keyValue.getValue());
+			}
+		}
+		
+		if (this.getSearchData() != null) {
+			ObjectNode searchDataDataNode = JsonUtils.createObjectNode();
+			ObjectNode searchDataDataNodeProperties = JsonUtils.createObjectNode();
+			children.set("bpw:searchData", searchDataDataNode);
+			searchDataDataNode.set("properties", searchDataDataNodeProperties);
+			searchDataDataNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:pageSearchData");
+			
+			if (StringUtils.hasText(this.getSearchData().getDescription())) {
+				searchDataDataNodeProperties.put("description", this.getSearchData().getDescription());
+			}
+			if (this.getSearchData().getKeywords() != null) {
+				String[] keywords = this.getSearchData().getKeywords();
+				ArrayNode keywordArray = JsonUtils.creatArrayNode();
+				for (String keyword : keywords) {
+					keywordArray.add(keyword);
+				}				
+				searchDataDataNodeProperties.set("keywords", keywordArray);
+			}
+		}
+		
+		if (this.getBadge() != null) {
+			ObjectNode badgeNode = JsonUtils.createObjectNode();
+			ObjectNode badgeNodeProperties = JsonUtils.createObjectNode();
+			children.set("bpw:badge", badgeNode);
+			badgeNode.set("properties", badgeNodeProperties);
+			badgeNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:navigationBadge");
+			
+			if (StringUtils.hasText(this.getBadge().getTitle())) {
+				badgeNodeProperties.put("bpw:title", this.getBadge().getTitle());
+			}
+			if (StringUtils.hasText(this.getBadge().getTranslate())) {
+				badgeNodeProperties.put("bpw:translate", this.getBadge().getTranslate());
+			}
+			if (StringUtils.hasText(this.getBadge().getBg())) {
+				badgeNodeProperties.put("bpw:bg", this.getBadge().getBg());
+			}
+			if (StringUtils.hasText(this.getBadge().getFg())) {
+				badgeNodeProperties.put("bpw:fg", this.getBadge().getFg());
+			}
+		}
+		if (this.getSiteAreaLayout() != null) {
+			ObjectNode siteAreaLayoutNode = JsonUtils.createObjectNode();
+			ObjectNode siteAreaLayoutNodeProperties = JsonUtils.createObjectNode();
+			ObjectNode siteAreaLayoutNodeChildren = JsonUtils.createObjectNode();
+			children.set("siteAreaLayout", siteAreaLayoutNode);
+			siteAreaLayoutNode.set("properties", siteAreaLayoutNodeProperties);
+			siteAreaLayoutNode.set("children", siteAreaLayoutNodeChildren);
+			siteAreaLayoutNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:siteAreaLayout");
+			
+			
+			ObjectNode sidePaneNode = JsonUtils.createObjectNode();
+			ObjectNode sidePaneNodeProperties = JsonUtils.createObjectNode();
+			ObjectNode sidePaneNodeChildren = JsonUtils.createObjectNode();
+			siteAreaLayoutNodeChildren.set("sidePane", siteAreaLayoutNode);
+			sidePaneNode.set("properties", sidePaneNodeProperties);
+			sidePaneNode.set("children", sidePaneNodeChildren);
+			sidePaneNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentAreaSidePanel");
+			
+			sidePaneNodeProperties.put("bpw:contentWidth", this.getSiteAreaLayout().getContentWidth());
+			
+			
+			this.addSidePaneNode(sidePaneNodeChildren, sidePaneNodeProperties, this.getSiteAreaLayout().getSidePane());
+			this.addPageLayoutNodes(siteAreaLayoutNodeChildren, this.getSiteAreaLayout().getRows());
+		}
+		return jsonNode;
+	}
+	
+	private void addPageLayoutNodes(ObjectNode pageLayoutNode, LayoutRow[] rows) {
+		int rowCount = 0;
+		for (LayoutRow row : rows) {
+			ObjectNode rowNode = JsonUtils.createObjectNode();
+			ObjectNode rowNodeProperties = JsonUtils.createObjectNode();
+			ObjectNode rowNodeChildren = JsonUtils.createObjectNode();
+			pageLayoutNode.set("row" + rowCount++, rowNode);
+			rowNode.set("properties", rowNodeProperties);
+			rowNode.set("children", rowNodeChildren);
+			rowNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:layoutRow");
+			
+			int columnCount = 0;
+			for (LayoutColumn column : row.getColumns()) {
+				ObjectNode columnNode = JsonUtils.createObjectNode();
+				ObjectNode columnNodeProperties = JsonUtils.createObjectNode();
+				ObjectNode columnNodeChildren = JsonUtils.createObjectNode();
+				pageLayoutNode.set("column" + columnCount++, rowNode);
+				columnNode.set("properties", columnNodeProperties);
+				columnNode.set("children", columnNodeChildren);
+				columnNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:layoutColumn");
+				columnNodeProperties.put("bpw:width", column.getWidth());
+				this.addResourceViewers(columnNodeChildren, column.getViewers());
+			}
+		}
+	}
+	
+	private void addSidePaneNode(ObjectNode sidenavNode, ObjectNode sidePaneNodeProperties, SidePane sidenav) {
+		sidePaneNodeProperties.put("bpw:isLeft", sidenav.isLeft());
+		sidePaneNodeProperties.put("bpw:width", sidenav.getWidth());
+		this.addResourceViewers(sidenavNode, sidenav.getViewers());
+	}
+	
+	private void addResourceViewers(ObjectNode sidenavNode, ResourceViewer viewers[]) {
+		int viewerCount = 0;
+		for (ResourceViewer viewer : viewers) {
+			ObjectNode viewerNode = JsonUtils.createObjectNode();
+			ObjectNode viewerNodeProperties = JsonUtils.createObjectNode();
+			sidenavNode.set("viewer" + viewerCount++, viewerNode);
+			viewerNode.set("properties", viewerNodeProperties);
+			viewerNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:resourceViewer");
+
+			viewerNodeProperties.put("bpw:renderTemplayeName", viewer.getRenderTemplate());
+			viewerNodeProperties.put("bpw:title", viewer.getTitle());
+			if (viewer.getContentPath() != null && viewer.getContentPath().length > 0) {
+				ArrayNode contentPathArray = JsonUtils.creatArrayNode();
+				for (String path : viewer.getContentPath()) {
+					contentPathArray.add(path);
+				}	
+				viewerNodeProperties.set("bpw:contentPath", contentPathArray);
+			}
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return "SiteArea [repository=" + repository + ", workspace=" + workspace + ", nodePath=" + nodePath + ", name="
@@ -229,6 +462,7 @@ public class SiteArea implements HasName {
 				+ navigationId + ", navigationType=" + navigationType + ", function=" + function + ", translate="
 				+ translate + ", icon=" + icon + ", classes=" + classes + ", exactMatch=" + exactMatch
 				+ ", externalUrl=" + externalUrl + ", openInNewTab=" + openInNewTab + ", metadata=" + metadata
-				+ ", searchData=" + searchData + ", badge=" + badge + ", siteAreaLayout=" + siteAreaLayout + "]";
+				+ ", searchData=" + searchData + ", badge=" + badge + ", siteAreaLayout=" + siteAreaLayout
+				+ ", lockOwner=" + lockOwner + "]";
 	}
 }

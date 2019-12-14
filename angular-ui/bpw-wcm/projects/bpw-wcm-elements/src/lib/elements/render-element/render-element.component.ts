@@ -17,4 +17,9 @@ export class RenderElementComponent implements OnInit {
   ngOnInit() {
     this.contentItem = this.content ? this.rendererService.getContentItem(this.content) : null;
   }
+
+  contentElement(): string {
+    let contentElement: string = this.contentItem.elements[this.element];
+    return contentElement ? contentElement : this.contentItem.properties[this.element]
+  }
 }

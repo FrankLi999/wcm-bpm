@@ -80,11 +80,69 @@ export class ResourceTypeEditorComponent extends WcmConfigurableComponent implem
         title: 'Title',
         description: 'Content type',
         baseResourceType: 'Content',
-        workflow: ['System'],
+        workflow: 'System',
         categories: [],
         publishDate: new Date(2019, 0, 1),
-        formGroups: [],
-        formControls: {}
+        propertyRow: {
+          rowName: 'property-row',
+          rowTitle: 'property-row',
+          columns: [{
+            id: 'property-column',
+            fxFlex: 100,
+            // formControls: TemplateField[];
+            formControls: ["name", "title", "description", "categories", "workflow"]
+          }]
+        },
+        elementGroups: [],
+        elements: {},
+        properties: {
+          name: {
+            name: 'name',
+            title: 'Name',
+            controlName: 'text',       
+            dataType: 'Text',
+            valditionRegEx: '[^(<[.\n]+>)]*',
+            mandatory: true,
+            systemIndexed: true,
+            userSearchable: true,
+            showInList: true
+          },
+          title: {
+            name: 'title',
+            title: 'Title',
+            controlName: 'text',       
+            dataType: 'Text',
+            valditionRegEx: '[^(<[.\n]+>)]*',
+            mandatory: true,
+            systemIndexed: true,
+            userSearchable: true,
+            showInList: true
+          },
+          description: {
+            name: 'description',
+            title: 'Description',
+            controlName: 'text',       
+            dataType: 'Text',
+            systemIndexed: true
+          }, 
+          categories: {
+            name: 'categories',
+            title: 'Category',
+            controlName: 'category',
+            userSearchable: true
+          }, 
+          workflow: {
+            name: 'workflow',
+            title: 'Workflow',
+            controlName: 'text',       
+            dataType: 'Text',
+            valditionRegEx: '[^(<[.\n]+>)]*',
+            mandatory: true,
+            systemIndexed: true,
+            userSearchable: true,
+            showInList: true
+          }
+        }
       })
     }
   }

@@ -2,7 +2,13 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.util.Arrays;
 
+import org.modeshape.jcr.api.JcrConstants;
+
+import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ContentAreaLayout implements HasName {
 	
@@ -13,6 +19,7 @@ public class ContentAreaLayout implements HasName {
 	int contentWidth;
 	SidePane sidePane;
 	LayoutRow rows[];
+	private String lockOwner;
 	
 	public String getName() {
 		return name;
@@ -56,10 +63,86 @@ public class ContentAreaLayout implements HasName {
 	public void setLibrary(String library) {
 		this.library = library;
 	}
+	public String getLockOwner() {
+		return lockOwner;
+	}
+	public void setLockOwner(String lockOwner) {
+		this.lockOwner = lockOwner;
+	}	
+	public JsonNode toJson() {
+		ObjectNode jsonNode = JsonUtils.createObjectNode();
+		ObjectNode properties = JsonUtils.createObjectNode();
+		ObjectNode children = JsonUtils.createObjectNode();
+		
+		jsonNode.set("children", children);
+		jsonNode.set("properties", properties);
+		properties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentAreaLayout");
+		properties.put("bpw:name", this.name);
+		properties.put("bpw:contentWidth", 80);
+		
+		ObjectNode sidePaneNode = JsonUtils.createObjectNode();
+		children.set("sidePane", sidePaneNode);
+		
+		ObjectNode sidePaneNodeProperties = JsonUtils.createObjectNode();
+		sidePaneNode.set("properties", sidePaneNodeProperties);
+		sidePaneNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentAreaSidePanel");
+		sidePaneNodeProperties.put("bpw:isLeft", this.sidePane.isLeft());
+		sidePaneNodeProperties.put("bpw:width", this.sidePane.getWidth());
+		this.addResourceViewers(this.sidePane.getViewers(), sidePaneNode);
+		
+		int rowCount = 0;
+		for (LayoutRow row : rows) {
+			ObjectNode rowNode = JsonUtils.createObjectNode();
+			children.set("row" + rowCount++, rowNode);
+			ObjectNode rowNodeProperties = JsonUtils.createObjectNode();
+			ObjectNode rowNodeChildren = JsonUtils.createObjectNode();
+			rowNode.set("properties", rowNodeProperties);
+			rowNode.set("children", rowNodeChildren);
+			rowNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:layoutRow");
+			int columnCount = 0;
+			
+			for (LayoutColumn column : row.getColumns()) {
+				ObjectNode columnNode = JsonUtils.createObjectNode();
+				rowNodeChildren.set("column" + columnCount++, columnNode);
+				ObjectNode columnNodeProperties = JsonUtils.createObjectNode();
+				columnNode.set("properties", columnNodeProperties);
+				columnNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:layoutColumn");
+				columnNodeProperties.put("bpw:width", column.getWidth());
+				this.addResourceViewers(column.getViewers(), columnNode);
+			}
+		}
+		
+		return jsonNode;
+	}
+	
+	private void addResourceViewers(ResourceViewer[] viewers, ObjectNode columnNode) {
+		int viewerCount = 0;
+		if (viewers.length > 0) {
+			ObjectNode sidePaneChildren = JsonUtils.createObjectNode(); 
+			columnNode.set("children", sidePaneChildren);
+			for (ResourceViewer viewer : viewers) {
+				ObjectNode viewerNode = JsonUtils.createObjectNode();
+				sidePaneChildren.set("viewer" + viewerCount++, viewerNode);
+				
+				ObjectNode viewerNodeProperties = JsonUtils.createObjectNode();
+				viewerNode.set("properties", viewerNodeProperties);
+				viewerNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:resourceViewer");
+				viewerNodeProperties.put("bpw:renderTemplayeName", viewer.getRenderTemplate());
+				viewerNodeProperties.put("bpw:title", viewer.getTitle());
+				if (viewer.getContentPath() != null && viewer.getContentPath().length > 0) {
+					ArrayNode contentArray = JsonUtils.creatArrayNode();
+					for (String cp : viewer.getContentPath()) {
+						contentArray.add(cp);
+					}
+					viewerNodeProperties.set("bpw:contentPath", contentArray);
+				}
+			}
+		}
+	}
 	@Override
 	public String toString() {
 		return "ContentAreaLayout [name=" + name + ", repository=" + repository + ", workspace=" + workspace
-				+ ", library=" + library + ", sidePane=" + sidePane + ", contentWidth=" + contentWidth + ", rows="
-				+ Arrays.toString(rows) + "]";
+				+ ", library=" + library + ", contentWidth=" + contentWidth + ", sidePane=" + sidePane + ", rows="
+				+ Arrays.toString(rows) + ", lockOwner=" + lockOwner + "]";
 	}
 }

@@ -5,12 +5,12 @@ import java.util.Arrays;
 public class ResourceNode {
 	private String title;
 	private String description;
-	private String[] workflow;
+	private String workflow;
 	private String workflowStage;
 	private String[] categories;
 	private String publishDate;
 	private String expireDate;
-	
+	private String lockOwner;
 	public String getTitle() {
 		return title;
 	}
@@ -23,10 +23,10 @@ public class ResourceNode {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String[] getWorkflow() {
+	public String getWorkflow() {
 		return workflow;
 	}
-	public void setWorkflow(String[] workflow) {
+	public void setWorkflow(String workflow) {
 		this.workflow = workflow;
 	}
 	public String getWorkflowStage() {
@@ -53,10 +53,16 @@ public class ResourceNode {
 	public void setExpireDate(String expireDate) {
 		this.expireDate = expireDate;
 	}
+	public String getLockOwner() {
+		return lockOwner;
+	}
+	public void setLockOwner(String lockOwner) {
+		this.lockOwner = lockOwner;
+	}
 	@Override
 	public String toString() {
-		return "ResourceNode [title=" + title + ", description=" + description + ", workflow="
-				+ Arrays.toString(workflow) + ", workflowStage=" + workflowStage + ", categories="
-				+ Arrays.toString(categories) + ", publishDate=" + publishDate + ", expireDate=" + expireDate + "]";
+		return "ResourceNode [title=" + title + ", description=" + description + ", workflow=" + workflow
+				+ ", workflowStage=" + workflowStage + ", categories=" + Arrays.toString(categories) + ", publishDate="
+				+ publishDate + ", expireDate=" + expireDate + ", lockOwner=" + lockOwner + "]";
 	}
 }

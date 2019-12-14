@@ -1,7 +1,12 @@
 export interface ContentItem {
+	id: string;
 	repository: string;
 	workspace: string;
 	nodePath: string;
+	lifeCycleStage: string;
+	locked: boolean;
+	checkedOut: boolean;
 	authoringTemplate: string;
-	contentElements: {[key: string]: string};
+	elements: {[key: string]: string};
+	properties: {[key: string]: string};
 }

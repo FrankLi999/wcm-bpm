@@ -7,6 +7,8 @@ import {
   Client, 
   Get,
   Post,
+  Put,
+  Delete,
   Body,
   Path,
   Timeout,
@@ -68,7 +70,12 @@ export class WcmService extends RestClient {
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public createAuthoringTemplate(@Body at: AuthoringTemplate): Observable<any> { return null; };
-  
+ 
+  @Put('/at')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public saveAuthoringTemplate(@Body at: AuthoringTemplate): Observable<any> { return null; };
+ 
   @Get('/at/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
@@ -77,13 +84,23 @@ export class WcmService extends RestClient {
     @Path('workspace') workspace: string
   ): Observable<AuthoringTemplate[]> { return null; };
 
-  @Get('/authoringTemplate/{repository}/{workspace}')
+  
+  @Get('/authoringTemplate/get/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public getAuthoringTemplate(
     @Path('repository') repository: string, 
     @Path('workspace') workspace: string,
     @Query('path') nodePath: string
+  ): Observable<AuthoringTemplate> { return null; };
+
+  @Put('/authoringTemplate/lock/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public lockAuthoringTemplate(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query('path') absPath: string
   ): Observable<AuthoringTemplate> { return null; };
 
   @Get('/wcmSystem/{repository}/{workspace}/{library}/{siteConfig}')
@@ -119,10 +136,38 @@ export class WcmService extends RestClient {
   @Produces(MediaType.JSON)
   public createRenderTemplate(@Body rt: RenderTemplate): Observable<any> { return null; };
 
+  @Put('/rt')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public saveRenderTemplate(@Body rt: RenderTemplate): Observable<any> { return null; };
+
   @Post('/siteConfig')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public createSiteConfig(@Body siteConfig: SiteConfig): Observable<any> { return null; };
+
+  @Put('/siteConfig')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public saveSiteConfig(@Body siteConfig: SiteConfig): Observable<any> { return null; };
+
+  @Get('/siteConfig/get/{repository}/{workspace}/{library}/{siteConfig}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public getSiteConfig(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Path('siteConfig') siteConfig: string 
+    ): Observable<SiteConfig> { return null; };
+
+  @Put('/siteConfig/lock/{repository}/{workspace}/{library}/{siteConfig}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public lockSiteConfig(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Path('siteConfig') siteConfig: string
+    ): Observable<SiteConfig> { return null; };
 
   @Get('/rt/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds
@@ -132,7 +177,7 @@ export class WcmService extends RestClient {
     @Path('workspace') workspace: string
   ): Observable<{[key:string]:RenderTemplate}> { return null; };
 
-  @Get('/renderTemplate/{repository}/{workspace}')
+  @Get('/renderTemplate/get/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public getRenderTemplate(
@@ -141,17 +186,50 @@ export class WcmService extends RestClient {
     @Query('path') renderTemplatePath: string,
   ): Observable<RenderTemplate> { return null; };
   
+  @Put('/renderTemplate/lock/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public lockRenderTemplate(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query('path') renderTemplatePath: string
+  ): Observable<RenderTemplate> { return null; };
+
   @Post('/contentAreaLayout')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public createContentAreaLayout(@Body contentAreaLayout: ContentAreaLayout): Observable<any> { return null; };
 
+  @Put('/contentAreaLayout')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public saveContentAreaLayout(@Body contentAreaLayout: ContentAreaLayout): Observable<any> { return null; };
+
   @Get('/contentAreaLayout/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public geContentAreaLayouts(
+  public getContentAreaLayouts(
     @Path('repository') repository: string, 
     @Path('workspace') workspace: string
+  ): Observable<{[key:string]:ContentAreaLayout}> { return null; };
+
+  @Get('/contentAreaLayout/get/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public getContentAreaLayout(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query('path') renderTemplatePath: string
+  ): Observable<ContentAreaLayout> { return null; };
+
+
+  @Put('/contentAreaLayout/lock/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public lockContentAreaLayout(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query('path') renderTemplatePath: string
   ): Observable<{[key:string]:ContentAreaLayout}> { return null; };
 
   @Post('/sitearea')
@@ -159,10 +237,24 @@ export class WcmService extends RestClient {
   @Produces(MediaType.JSON)
   public createSiteArea(@Body sa: SiteArea): Observable<any> { return null; };
 
-  @Get('/siteArea/{repository}/{workspace}')
+  @Post('/sitearea')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public saveSiteArea(@Body sa: SiteArea): Observable<any> { return null; };
+
+  @Get('/siteArea/get/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public getSiteArea(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query("path") contentItemPath: string
+  ): Observable<SiteArea> { return null; };
+
+  @Put('/siteArea/lock/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public lockSiteArea(
     @Path('repository') repository: string, 
     @Path('workspace') workspace: string,
     @Query("path") contentItemPath: string
@@ -173,7 +265,12 @@ export class WcmService extends RestClient {
   @Produces(MediaType.JSON)
   public createContentItem(@Body contentItem: ContentItem): Observable<any> { return null; };
 
-  @Get('/contentItem/{repository}/{workspace}')
+  @Put('/ContentItem/save')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public saveContentItem(@Body contentItem: ContentItem): Observable<any> { return null; };
+
+  @Get('/contentItem/get/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public getContentItem(
@@ -182,6 +279,58 @@ export class WcmService extends RestClient {
     @Query("path") contentItemPath: string
     //@Path('contentItemPath') ontentItemPath: string
   ): Observable<ContentItem> { return null; };
+
+  @Put('/contentItem/lock/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public lockContentItem(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query("path") contentItemPath: string
+    //@Path('contentItemPath') ontentItemPath: string
+  ): Observable<ContentItem> { return null; };
+
+  // @Delete('/ContentItem/remove/{repository}/{workspace}')
+  // @Timeout(2000) //In milliseconds
+  // @Produces(MediaType.JSON)
+  // public remmoveContentItem(
+  //   @Path('repository') repository: string, 
+  //   @Path('workspace') workspace: string,
+  //   @Query("path") absPath: string): Observable<any> { return null; };
+
+  @Put('/WcmItem/unlock/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public unlock(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query("path") absPath: string): Observable<null> { return null; };
+    
+  @Put('/WcmItem/restore/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public restore(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query("path") absPath: string, 
+    @Query("version") version: string): Observable<null> { return null; };
+
+  @Delete('/WcmItem/purge/{repository}/{workspace}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public purgeWcmItem(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Query("path") absPath: string): Observable<any> { return null; };
+
+  @Put('/ContentItem/workflow/{repository}/{workspace}/{state}')
+  @Timeout(2000) //In milliseconds
+  @Produces(MediaType.JSON)
+  public updateWcmItemWorkflowStage(
+    @Path('repository') repository: string, 
+    @Path('workspace') workspace: string,
+    @Path("state") state: string,
+    @Query("path") absPath: string): Observable<any> { return null; };
 
   @Post('/wcmNodes/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds

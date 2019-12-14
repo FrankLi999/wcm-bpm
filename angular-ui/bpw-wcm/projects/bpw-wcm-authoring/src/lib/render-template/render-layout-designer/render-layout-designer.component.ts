@@ -76,10 +76,6 @@ export class RenderLayoutDesignerComponent implements OnInit, OnDestroy {
   }
 
   addNewRow(numOfColumn: number) {
-
-    // let rows = this.isRows(this.resourceType.formGroups[this.resourceType.formGroups.length - 1]) ? 
-    // this.resourceType.formGroups[this.resourceType.formGroups.length - 1] as FormRows:
-    //     { rows: []} as FormRows;
     this.rows = this.rows || [];
     this.rows.push({
       columns: []

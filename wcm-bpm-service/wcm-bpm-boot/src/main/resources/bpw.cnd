@@ -137,7 +137,7 @@
 [bpw:category] > nt:hierarchyNode, mix:lastModified
 + * (bpw:category)
 
-[bpw:resourceNode] > nt:hierarchyNode, mix:lastModified abstract
+[bpw:resourceNode] > nt:hierarchyNode, mix:lastModified, mix:versionable, mix:lockable abstract
 - bpw:title (STRING) COPY
 - bpw:description (STRING) COPY
 - bpw:publishDate (STRING) COPY
@@ -188,10 +188,14 @@
 + workflow (bpw:formControl)
 + * (bpw:formControl)
 
+[bpw:formGroupFoler] > nt:folder
++ * (bpw:formGroup)
+
 [bpw:authoringTemplate] > bpw:resourceNode
 - bpw:baseResourceType (String)
 - bpw:workflow (String)
-+ * (bpw:formGroup)
++ propertyGroup (bpw:formRow)
++ elementGroups (bpw:formGroupFoler)
 + elements (bpw:elementFolder)
 + properties (bpw:propertyFolder)
 
@@ -532,7 +536,7 @@
 
 [bpw:contentElement] > nt:hierarchyNode
  - bpw:multiple (BOOLEAN)
- - bpw:value (STRING) multiple
+ - bpw:value (STRING)
  
 [bpw:contentElementFolder] > nt:folder
 + * (bpw:contentElement)
@@ -540,7 +544,7 @@
 [bpw:propertyElementFolder] > nt:folder
 + * (bpw:contentElement)
 
-[bpw:content] > bpw:resourceNode, bpw:lifecycle, mix:versionable, mix:lockable
- - bpw:authoringTemplate (STRING)
+[bpw:content] > bpw:resourceNode, bpw:lifecycle
+- bpw:authoringTemplate (STRING)
 + elements (bpw:contentElementFolder)
 + properties (bpw:propertyElementFolder)

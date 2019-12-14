@@ -99,7 +99,7 @@ export class RenderTemplateComponent extends WcmConfigurableComponent implements
           if (authoringTemplates) {
             Object.entries(authoringTemplates).forEach(([key, at]) => {
               this.contentTypes.push(at.name);
-              let formControls: string[] = [...Object.keys(at.formControls)];
+              let formControls: string[] = [...Object.keys(at.elements)];
               this.contentElementsMap.set(at.name, formControls);
             });
           }

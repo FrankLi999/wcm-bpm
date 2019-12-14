@@ -5,7 +5,8 @@ https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-3/
 https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo
 
 
-
+	
+	
 http://localhost:8080/oauth2/authorize/google?redirect_uri=http://localhost:3000/oauth2/redirect
 
 http://localhost:19090/api-docs

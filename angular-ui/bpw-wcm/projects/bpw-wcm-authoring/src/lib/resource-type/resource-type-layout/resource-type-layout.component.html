@@ -41,7 +41,7 @@
         <!-- / HEADER -->
         <!-- ROWS -->
         <cdk-virtual-scroll-viewport itemSize="30" class="resource-field-viewport">   
-            <div class="card resource-type-column" *ngFor="let group of resourceType.formGroups; let groupIndex = index">
+            <div class="card resource-type-column" *ngFor="let group of resourceType.elementGroups; let groupIndex = index">
                 <div *ngIf="isStepers(group)">
                     <div *ngFor="let step of group.steps; let stepIndex = index">
                         <div fxLayout="row">
