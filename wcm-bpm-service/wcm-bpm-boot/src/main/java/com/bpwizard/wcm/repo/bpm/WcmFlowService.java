@@ -30,14 +30,25 @@ public class WcmFlowService {
 		return processInstance.getId();
 	}
 	
-	public void deleteDraft(String workflow, String contentId) {
+	public void deleteReviewingDraft(String workflow, String contentId) {
 //		this.runtimeService.createMessageCorrelation("delete-draft-message")
 //		    .processInstanceBusinessKey("wcm_content_flow")
 //		    .processInstanceVariableEquals("contentId", contentId) 
 //		    .correlate();
 		Map<String,Object> correlation = new HashMap<>();
 		correlation.put("contentId", contentId);
-		this.runtimeService.correlateMessage("deleteDraftMessage", workflow + contentId, correlation);
+		this.runtimeService.correlateMessage("deleteReviewingDraftMessage", workflow + contentId, correlation);
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>> delete draft :");
+	}
+	
+	public void deleteEditingDraft(String workflow, String contentId) {
+//		this.runtimeService.createMessageCorrelation("delete-draft-message")
+//		    .processInstanceBusinessKey("wcm_content_flow")
+//		    .processInstanceVariableEquals("contentId", contentId) 
+//		    .correlate();
+		Map<String,Object> correlation = new HashMap<>();
+		correlation.put("contentId", contentId);
+		this.runtimeService.correlateMessage("deleteEditingDraftMessage", workflow + contentId, correlation);
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>> delete draft :");
 	}
 }

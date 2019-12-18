@@ -13,6 +13,7 @@ public class HazelcastProperties {
 	public HazelcastProperties() {}
 	private int port;
 	private int cpMemberCounts = 0;
+	private int cpGroupSize = 3;
 	private String members;
 	private String groupName;
 	private String instanceName;
@@ -30,7 +31,7 @@ public class HazelcastProperties {
 	private String loggingType;
 	
 	List<CacheConfig> caches = new ArrayList<>();
-
+	private ManagementCenter managementCenter = new ManagementCenter();
 	public int getPort() {
 		return port;
 	}
@@ -156,27 +157,69 @@ public class HazelcastProperties {
 		return cpMemberCounts;
 	}
 
+	public int getCpGroupSize() {
+		return cpGroupSize;
+	}
 	public void setCpMemberCounts(int cpMemberCounts) {
 		this.cpMemberCounts = cpMemberCounts;
 	}
 
+	public ManagementCenter getManagementCenter() {
+		return managementCenter;
+	}
+
+	public void setManagementCenter(ManagementCenter managementCenter) {
+		this.managementCenter = managementCenter;
+	}
+
+	public void setCpGroupSize(int cpGroupSize) {
+		this.cpGroupSize = cpGroupSize;
+	}
+
 	@Override
 	public String toString() {
-		return "HazelcastProperties [port=" + port + ", cpMemberCounts=" + cpMemberCounts + ", members=" + members
-				+ ", groupName=" + groupName + ", instanceName=" + instanceName + ", keyStorePassword="
-				+ keyStorePassword + ", enableSSL=" + enableSSL + ", keyStore=" + keyStore + ", keyManagerAlgorithm="
-				+ keyManagerAlgorithm + ", trustManagerAlgorithm=" + trustManagerAlgorithm + ", enableEncryption="
-				+ enableEncryption + ", encryptionAlgorithm=" + encryptionAlgorithm + ", encryptionPassword="
-				+ encryptionPassword + ", encryptionSalt=" + encryptionSalt + ", loggingType=" + loggingType
-				+ ", caches=" + caches + ", getPort()=" + getPort() + ", getMembers()=" + getMembers()
-				+ ", getGroupName()=" + getGroupName() + ", getInstanceName()=" + getInstanceName() + ", getCaches()="
-				+ getCaches() + ", getKeyStorePassword()=" + getKeyStorePassword() + ", isEnableSSL()=" + isEnableSSL()
-				+ ", getKeyStore()=" + getKeyStore() + ", getKeyManagerAlgorithm()=" + getKeyManagerAlgorithm()
-				+ ", getTrustManagerAlgorithm()=" + getTrustManagerAlgorithm() + ", isEnableEncryption()="
-				+ isEnableEncryption() + ", getEncryptionAlgorithm()=" + getEncryptionAlgorithm()
-				+ ", getEncryptionPassword()=" + getEncryptionPassword() + ", getEncryptionSalt()="
-				+ getEncryptionSalt() + ", getLoggingType()=" + getLoggingType() + ", getCpMemberCounts()="
-				+ getCpMemberCounts() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
+		return "HazelcastProperties [port=" + port + ", cpMemberCounts=" + cpMemberCounts + ", cpGroupSize="
+				+ cpGroupSize + ", members=" + members + ", groupName=" + groupName + ", instanceName=" + instanceName
+				+ ", keyStorePassword=" + keyStorePassword + ", enableSSL=" + enableSSL + ", keyStore=" + keyStore
+				+ ", keyManagerAlgorithm=" + keyManagerAlgorithm + ", trustManagerAlgorithm=" + trustManagerAlgorithm
+				+ ", enableEncryption=" + enableEncryption + ", encryptionAlgorithm=" + encryptionAlgorithm
+				+ ", encryptionPassword=" + encryptionPassword + ", encryptionSalt=" + encryptionSalt + ", loggingType="
+				+ loggingType + ", caches=" + caches + ", managementCenter=" + managementCenter + "]";
+	}
+
+	public static class ManagementCenter {
+		private String url = "";
+		private boolean enabled;
+		private long updateInterval;
+		private boolean scriptingEnabled;
+		public String getUrl() {
+			return url;
+		}
+		public void setUrl(String url) {
+			this.url = url;
+		}
+		public boolean isEnabled() {
+			return enabled;
+		}
+		public void setEnabled(boolean enabled) {
+			this.enabled = enabled;
+		}
+		public long getUpdateInterval() {
+			return updateInterval;
+		}
+		public void setUpdateInterval(long updateInterval) {
+			this.updateInterval = updateInterval;
+		}
+		public boolean isScriptingEnabled() {
+			return scriptingEnabled;
+		}
+		public void setScriptingEnabled(boolean scriptingEnabled) {
+			this.scriptingEnabled = scriptingEnabled;
+		}
+		@Override
+		public String toString() {
+			return "ManagementCenter [url=" + url + ", enabled=" + enabled + ", updateInterval=" + updateInterval
+					+ ", scriptingEnabled=" + scriptingEnabled + "]";
+		}
 	}
 }

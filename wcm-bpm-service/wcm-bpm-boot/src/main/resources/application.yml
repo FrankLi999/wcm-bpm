@@ -32,9 +32,9 @@ springfox:
           path: /api-docs
 server:
   contextPath: /
-  servlet.session.persistent: false
-  #port: 19090
-  port: 8080
+  # servlet.session.persistent: false
+  # port: 19090
+  port: ${PORT:8080}
 # Spring Commons related properties
 bpw:
 

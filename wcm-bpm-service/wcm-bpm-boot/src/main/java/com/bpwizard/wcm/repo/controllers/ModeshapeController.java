@@ -79,18 +79,18 @@ public class ModeshapeController {
 				startFlowRequest.getContentPath(),
 				startFlowRequest.getContentId(),
 				startFlowRequest.getWorkflow());
-		this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
-		try {
-		    this.mailService.sendEmailWithAttachment(
-            		"Testing from Spring Boot",
-            		new String[] {"a@yahoo.com", "b@gmail.com"},
-            		"<h1>Check attachment for image!</h1>",
-            		"android.png");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//		this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
+//		try {
+//		    this.mailService.sendEmailWithAttachment(
+//            		"Testing from Spring Boot",
+//            		new String[] {"a@yahoo.com", "b@gmail.com"},
+//            		"<h1>Check attachment for image!</h1>",
+//            		"android.png");
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 		return processInstanceId;
 	}
 	
@@ -138,9 +138,15 @@ public class ModeshapeController {
 				completeEditRequest.getWorkerId());
 	}
 	
-	@DeleteMapping(path="/delete-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String completeEdit(@RequestBody DeleteDraftRequest deleteDraftRequest) {
-		this.wcmFlowService.deleteDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
+	@DeleteMapping(path="/delete-reviewing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String deleteRevieingDraft(@RequestBody DeleteDraftRequest deleteDraftRequest) {
+		this.wcmFlowService.deleteReviewingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
+		return "Deleted";
+	}
+	
+	@DeleteMapping(path="/delete-editing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String deleteEditingDraft(@RequestBody DeleteDraftRequest deleteDraftRequest) {
+		this.wcmFlowService.deleteEditingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
 		return "Deleted";
 	}
 	

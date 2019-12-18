@@ -1,6 +1,9 @@
 package com.bpwizard.wcm.repo.payload;
 
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+
+import java.util.Arrays;
+
 import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
 public class AuthResponse {
     private String id;
@@ -13,8 +16,8 @@ public class AuthResponse {
 	private String roles[];
     private String accessToken;
     private String tokenType = "Bearer";
-
-    public static AuthResponse fromUserAndToken(User user, String accessToken) {
+    private String sessionId = "n/a";
+    public static AuthResponse fromUserAndToken(User user, String accessToken, String sessionId) {
     	AuthResponse authResponse = new AuthResponse();
     	authResponse.setAccessToken(accessToken);
     	authResponse.setId(user.getId().toString());
@@ -24,6 +27,7 @@ public class AuthResponse {
     	authResponse.setFirstName(user.getFirstName());
     	authResponse.setLastName(user.getLastName());
     	
+    	authResponse.setSessionId(sessionId);
     	authResponse.setRoles(user.getRoles().stream().map(Role::getName).toArray(String[]::new));
     	return authResponse;
     }
@@ -108,11 +112,23 @@ public class AuthResponse {
 		this.tokenType = tokenType;
 	}
 
+	
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
 	@Override
 	public String toString() {
 		return "AuthResponse [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name
 				+ ", firstName=" + firstName + ", lastName=" + lastName + ", imageUrl=" + imageUrl + ", roles="
-				+ roles + ", accessToken=" + accessToken + ", tokenType=" + tokenType + "]";
+				+ Arrays.toString(roles) + ", accessToken=" + accessToken + ", tokenType=" + tokenType + ", sessionId="
+				+ sessionId + "]";
 	}
+
+	
 
 }

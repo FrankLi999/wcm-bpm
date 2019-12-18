@@ -47,7 +47,7 @@ public class ModeshapeConfig {
 		logger.debug("Entering ...");
 		Map<String, Object> factoryParams = new HashMap<>();
 		factoryParams.put(RepositoriesContainer.REPOSITORY_NAME, "bpwizard");
-		factoryParams.put(RepositoriesContainer.URL, new ClassPathResource("repository-config.json").getURL().toExternalForm());
+		factoryParams.put(RepositoriesContainer.URL, new ClassPathResource("modeshape/repository-config.json").getURL().toExternalForm());
 		RepositoryManager repositoryManager = new RepositoryManager(factoryParams);
 		logger.debug("Exiting ...");
 		return repositoryManager;

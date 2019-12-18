@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.bpwizard.spring.boot.commons.SpringProperties;
@@ -72,7 +73,9 @@ public class AuthController {
 				(long) properties.getJwt().getShortLivedMillis());
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", loginRequest.getEmail()));
-        return ResponseEntity.ok(AuthResponse.fromUserAndToken(user, shortLivedAuthToken));
+        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> session id:" + sessionId);
+        return ResponseEntity.ok(AuthResponse.fromUserAndToken(user, shortLivedAuthToken, sessionId));
     }
 
     @PostMapping("/signup")

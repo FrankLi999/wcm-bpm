@@ -8,13 +8,10 @@
 
 	<properties>
 		<camunda.spring-boot.version>3.3.1</camunda.spring-boot.version>
-		<camunda.version>7.11.0</camunda.version>
-		
-		<spring-boot.version>2.2.0.RC1</spring-boot.version>
-		<!--  <springBoot.version>2.1.9.RELEASE</springBoot.version>   -->
+		<camunda.version>7.12.0</camunda.version>
+		<springBoot.version>2.2.1.RELEASE</springBoot.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<camunda.version>7.11.0</camunda.version>
 	</properties>
 
 	<dependencyManagement>	
@@ -113,10 +110,9 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<!-- For the demo I used ElephantSQL as cloud version of PostgreSQL -->
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<!-- <version>9.4-1201-jdbc4</version> -->
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <!-- <version>8.0.17</version>  -->
 		</dependency>
 	</dependencies>
 

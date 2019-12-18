@@ -1,5 +1,7 @@
 package com.bpwizard.spring.boot.commons;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -18,6 +20,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 
 import com.bpwizard.spring.boot.commons.cache.CacheConfig;
 import com.bpwizard.spring.boot.commons.cache.HazelcastProperties;
@@ -35,10 +38,15 @@ import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.vlidation.CaptchaValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.EntryListenerConfig;
 import com.hazelcast.config.EvictionPolicy;
+import com.hazelcast.config.ManagementCenterConfig;
+import com.hazelcast.config.MapAttributeConfig;
 import com.hazelcast.config.MapConfig;
+import com.hazelcast.config.MapIndexConfig;
 import com.hazelcast.config.MaxSizeConfig;
 import com.hazelcast.config.TcpIpConfig;
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ManagedContext;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
@@ -196,6 +204,7 @@ public class CommonsAutoConfiguration {
 		Config config = new Config();
 		if (hazelcastProperties.getCpMemberCounts() > 0) {
 			config.getCPSubsystemConfig().setCPMemberCount(hazelcastProperties.getCpMemberCounts());
+			config.getCPSubsystemConfig().setGroupSize(hazelcastProperties.getCpGroupSize());
 		}
 		config.setProperty("hazelcast.logging.type", hazelcastProperties.getLoggingType());
 		config.setInstanceName(hazelcastProperties.getInstanceName());
@@ -207,7 +216,17 @@ public class CommonsAutoConfiguration {
 		for (String member: hazelcastProperties.getMembers().split(",")) {
 			tcpipConfig.addMember(member);
 		}
-
+		
+		if (StringUtils.hasText(hazelcastProperties.getManagementCenter().getUrl())) {
+			ManagementCenterConfig managementCenterConfig = new ManagementCenterConfig();
+			//managementCenterConfig.setEnabled(true);
+			managementCenterConfig.setUrl(hazelcastProperties.getManagementCenter().getUrl());
+	//		managementCenterConfig.setUpdateInterval(updateInterval);
+	//		managementCenterConfig.setScriptingEnabled(scriptingEnabled);
+			managementCenterConfig.setEnabled(hazelcastProperties.getManagementCenter().isEnabled());
+			config.setManagementCenterConfig(managementCenterConfig);
+		}
+		
 		if (config.getNetworkConfig().getSSLConfig() != null) {
 			//Enterprise Edition Feature?
 			config.getNetworkConfig().getSSLConfig()
@@ -235,6 +254,7 @@ public class CommonsAutoConfiguration {
 	}
 	
 	private MapConfig initCache(CacheConfig cacheConfig) {
+		
 		MapConfig mapConfig = new MapConfig()
 			.setName(cacheConfig.getCacheName())	
 			.setMaxSizeConfig(new MaxSizeConfig(cacheConfig.getMaxSize(), 
@@ -242,6 +262,30 @@ public class CommonsAutoConfiguration {
 			.setEvictionPolicy(EvictionPolicy.valueOf(cacheConfig.getEvictionPolicy()))
 			.setTimeToLiveSeconds(cacheConfig.getTimeToLiveSeconds())
 			.setBackupCount(cacheConfig.getBackupCount());
+		
+		for (CacheConfig.EntryListener entryListener: cacheConfig.getEntryListeners()) {
+			EntryListenerConfig listenerConfig = new EntryListenerConfig();
+			listenerConfig.setClassName(entryListener.getListener());
+			listenerConfig.setLocal(entryListener.isLocal());
+			listenerConfig.setIncludeValue(entryListener.isIncludeValue());
+			mapConfig.addEntryListenerConfig(listenerConfig);
+		}
+		
+		for (CacheConfig.Index index: cacheConfig.getIndexes()) {
+			MapIndexConfig mapIndexConfig = new MapIndexConfig();
+			mapIndexConfig.setAttribute(index.getAttribute());
+			mapIndexConfig.setOrdered(index.isOrdered());
+			mapConfig.addMapIndexConfig(mapIndexConfig);
+		}
+		
+		for (CacheConfig.Attribute attribute: cacheConfig.getAttributes()) {
+			MapAttributeConfig mapAttributeConfig = new MapAttributeConfig();
+			mapAttributeConfig.setName(attribute.getName());
+			mapAttributeConfig.setExtractor(attribute.getExtractor());
+			mapConfig.addMapAttributeConfig(mapAttributeConfig);
+		}
+//		MapStoreConfig mapStoreConfig = new MapStoreConfig();
+//		mapConfig.setMapStoreConfig(mapStoreConfig);
 		return mapConfig;
 		
 		
@@ -260,10 +304,23 @@ public class CommonsAutoConfiguration {
      * {@code JetInstance} bean which configured programmatically with {@code SpringManagedContext}
      */
     @Bean
-    public JetInstance JetInstance(HazelcastProperties hazelcastProperties) {
+    public JetInstance jetInstance(HazelcastProperties hazelcastProperties) {
     	Config config = hazelCastConfig(hazelcastProperties);
         config.setManagedContext(managedContext());
         JetConfig jetConfig = new JetConfig().setHazelcastConfig(config);
-        return Jet.newJetInstance(jetConfig);
+        JetInstance jetInstance = Jet.newJetInstance(jetConfig);
+        if (hazelcastProperties.getCpMemberCounts() > 0) {
+	        try {
+	        	jetInstance.getHazelcastInstance().getCPSubsystem().getCPSubsystemManagementService().awaitUntilDiscoveryCompleted(1, TimeUnit.MINUTES);
+	        } catch (InterruptedException e) {
+	        	throw new RuntimeException(e);
+	        }
+        }
+		return jetInstance;
+    }
+    
+    @Bean
+    public HazelcastInstance HazelcastInstance(JetInstance jetInstance) {
+    	return jetInstance.getHazelcastInstance();
     }
 }

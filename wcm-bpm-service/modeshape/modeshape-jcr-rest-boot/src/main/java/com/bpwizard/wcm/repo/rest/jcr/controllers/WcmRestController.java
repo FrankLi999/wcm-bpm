@@ -811,7 +811,7 @@ public class WcmRestController {
 		}	
 	}
 	
-	@GetMapping(path = "/contentAreaLayout/get/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/contentAreaLayout/list/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, ContentAreaLayout> getContentAreaLayouts(
 			@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, 

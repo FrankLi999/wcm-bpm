@@ -1,16 +1,13 @@
 package com.bpwizard.bpm.config;
 
+import static org.camunda.bpm.engine.variable.Variables.createVariables;
+import static org.camunda.bpm.engine.variable.Variables.fileValue;
+
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import static org.camunda.bpm.engine.variable.Variables.createVariables;
-import static org.camunda.bpm.engine.variable.Variables.fileValue;
-
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
-import org.camunda.bpm.spring.boot.starter.event.PostDeployEvent;
-
 import org.camunda.bpm.engine.authorization.Groups;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
 import org.camunda.bpm.engine.impl.util.IoUtil;
@@ -18,10 +15,17 @@ import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
-
+import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
+import org.camunda.bpm.spring.boot.starter.event.PostDeployEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+
+import com.bpwizard.bpm.content.ContentReviewTaskEndListener;
+import com.bpwizard.bpm.content.ContentReviewTaskStartListener;
+import com.bpwizard.bpm.content.PublishContentItemDelegate;
+import com.bpwizard.bpm.content.SaveDraftDelegate;
 
 @Configuration
 @EnableProcessApplication
@@ -38,6 +42,27 @@ public class CamundaConfig {
 		// this.startFirstProcess();
 	}
 
+
+	@Bean
+	public PublishContentItemDelegate publishContentItemDelegate() {
+		return new PublishContentItemDelegate();
+	}
+	
+	@Bean
+	public SaveDraftDelegate saveDraftDelegate() {
+		return new SaveDraftDelegate();
+	}
+	
+	@Bean
+	public ContentReviewTaskStartListener contentReviewTaskStartListener() {
+		return new ContentReviewTaskStartListener();
+	}
+
+	@Bean
+	public ContentReviewTaskEndListener contentReviewTaskEndListener() {
+		return new ContentReviewTaskEndListener();
+	}
+	
 	public void startFirstProcess() {
 		createUsers();
 		startProcessInstances("invoice", 1);

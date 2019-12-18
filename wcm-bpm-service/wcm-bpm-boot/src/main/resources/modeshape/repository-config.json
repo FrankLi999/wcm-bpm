@@ -33,6 +33,12 @@
             }
         }
     },
+    "clustering": {
+        "clusterName": "wcm-bpm",
+        "configuration": "jgroups/jgroups-config.xml",
+        "description": "wcm-bpm cluster",
+        "locking" : "db"
+    },
     "workspaces" : {
         "default" : "default",
         "allowCreation" : true    

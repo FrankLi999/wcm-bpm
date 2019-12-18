@@ -6,8 +6,14 @@ message:
     name: flowing-retail
   group: order
 server:
-  port: 8091
-
+  # port: 8091
+  port: ${PORT}
+  servlet:
+    session:
+      cookie:
+        secure: true
+        http-only: true # Not possible for versions before 2.0.3
+        
 camunda.bpm:
   admin-user:
     id: demo
@@ -41,7 +47,7 @@ spring:
     max-active: 15
     max-idle: 10
     max-wait: 8000
-    #hikari: 
-      #connectionTimeout: 30000
-      #idleTimeout: 600000
-      #maxLifetime: 1800000
+    hikari: 
+      connectionTimeout: 30000
+      idleTimeout: 600000
+      maxLifetime: 1800000

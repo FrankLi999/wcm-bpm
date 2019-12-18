@@ -55,8 +55,8 @@ public class ModeshapeSecurityConfig extends SpringJpaSecurityConfig {
 	 * Configuring authentication.
 	 */
 	protected void login(HttpSecurity http) throws Exception {
-		http.formLogin().disable()
-        	.httpBasic().disable();
+		http.formLogin().disable();
+        	//.httpBasic().disable();
 	}
 	
 	@Override

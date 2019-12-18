@@ -205,7 +205,7 @@ export class WcmService extends RestClient {
   @Produces(MediaType.JSON)
   public saveContentAreaLayout(@Body contentAreaLayout: ContentAreaLayout): Observable<any> { return null; };
 
-  @Get('/contentAreaLayout/{repository}/{workspace}')
+  @Get('/contentAreaLayout/list/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public getContentAreaLayouts(
