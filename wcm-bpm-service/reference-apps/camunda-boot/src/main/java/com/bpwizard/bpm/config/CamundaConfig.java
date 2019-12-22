@@ -8,10 +8,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.authorization.Groups;
@@ -22,7 +18,6 @@ import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.extension.batch.CustomBatchBuilder;
 import org.camunda.bpm.extension.batch.plugin.CustomBatchHandlerPlugin;
 import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.camunda.bpm.spring.boot.starter.event.PostDeployEvent;
@@ -34,10 +29,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 
 import com.bpwizard.bpm.batch.handler.PrintStringBatchJobHandler;
+import com.bpwizard.bpm.batch.notification.client.NotificationService;
 import com.bpwizard.bpm.content.ContentReviewTaskEndListener;
 import com.bpwizard.bpm.content.ContentReviewTaskStartListener;
 import com.bpwizard.bpm.content.PublishContentItemDelegate;
 import com.bpwizard.bpm.content.SaveDraftDelegate;
+import com.bpwizard.bpm.content.TestEventDelegate;
 
 @Configuration
 @EnableProcessApplication
@@ -46,28 +43,12 @@ public class CamundaConfig {
 	@Autowired
 	ProcessEngine processEngine;
 
-	@Autowired
-	private PrintStringBatchJobHandler printStringBatchJobHandler;
-
-	@EventListener
-	public void afterEngineStarted(PostDeployEvent event) {
-		logger.info("Create new Batch");
-		final List<String> simpleStringList = IntStream.range(0, 200)
-				.mapToObj(i -> "SomeRandomBatchData_" + UUID.randomUUID()).collect(Collectors.toList());
-
-		CustomBatchBuilder.of(simpleStringList).configuration(event.getProcessEngine().getProcessEngineConfiguration())
-				.jobHandler(printStringBatchJobHandler).create();
-	}
-	
+//	@Autowired
+//	private PrintStringBatchJobHandler printStringBatchJobHandler;
 
 	@EventListener
 	private void processPostDeploy(PostDeployEvent event) {
 		// this.startFirstProcess();
-	}
-
-	@Bean
-	public PrintStringBatchJobHandler simpleCustomBatchJobHandler() {
-		return new PrintStringBatchJobHandler();
 	}
 
 	@Bean
@@ -83,6 +64,11 @@ public class CamundaConfig {
 	@Bean
 	public SaveDraftDelegate saveDraftDelegate() {
 		return new SaveDraftDelegate();
+	}
+	
+	@Bean
+	public TestEventDelegate testEventDelegate() {
+		return new TestEventDelegate();
 	}
 	
 	@Bean
@@ -211,6 +197,11 @@ public class CamundaConfig {
 			ClockUtil.reset();
 			processEngine.getIdentityService().clearAuthentication();
 		}
+	}
+	
+	@Bean
+	public NotificationService NotificationService() {
+		return new NotificationService();
 	}
 	
 //	@EventListener

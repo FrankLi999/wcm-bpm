@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="test-compensation_Definitions" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:process id="test-compensation" isExecutable="true" camunda:candidateStarterGroups="management1">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_0klhv36</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0klhv36" sourceRef="StartEvent_1" targetRef="Task_02b32up" />
+    <bpmn:sequenceFlow id="SequenceFlow_06iej0s" sourceRef="Task_02b32up" targetRef="Task_1kh5w2n" />
+    <bpmn:endEvent id="EndEvent_0fy5ifs">
+      <bpmn:incoming>SequenceFlow_0qoipj6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0qoipj6" sourceRef="Task_1kh5w2n" targetRef="EndEvent_0fy5ifs" />
+    <bpmn:sequenceFlow id="SequenceFlow_1r9nkyo" sourceRef="BoundaryEvent_1jtyuli" targetRef="EndEvent_182aczb" />
+    <bpmn:serviceTask id="Task_1kh5w2n" name="test event" camunda:delegateExpression="${testEventDelegate}">
+      <bpmn:incoming>SequenceFlow_06iej0s</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0qoipj6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Task_02b32up" name="create draft" camunda:delegateExpression="${saveDraftDelegate}">
+      <bpmn:incoming>SequenceFlow_0klhv36</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_06iej0s</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="BoundaryEvent_1jtyuli" attachedToRef="Task_1kh5w2n">
+      <bpmn:outgoing>SequenceFlow_1r9nkyo</bpmn:outgoing>
+      <bpmn:errorEventDefinition errorRef="Error_0q9gtpm" camunda:errorCodeVariable="Error_Create_Draft" />
+    </bpmn:boundaryEvent>
+    <bpmn:endEvent id="EndEvent_182aczb">
+      <bpmn:incoming>SequenceFlow_1r9nkyo</bpmn:incoming>
+      <bpmn:compensateEventDefinition />
+    </bpmn:endEvent>
+    <bpmn:boundaryEvent id="BoundaryEvent_18nd1bc" attachedToRef="Task_02b32up">
+      <bpmn:compensateEventDefinition />
+    </bpmn:boundaryEvent>
+    <bpmn:serviceTask id="Task_1468pk1" name="Review content item" isForCompensation="true" camunda:type="external" camunda:topic="wcm_review" />
+    <bpmn:association id="Association_167p6lb" associationDirection="One" sourceRef="BoundaryEvent_18nd1bc" targetRef="Task_1468pk1" />
+    <bpmn:textAnnotation id="TextAnnotation_1du1yjd">
+      <bpmn:text>throw BpmnError if contentId is '200'</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_073037x" sourceRef="Task_1kh5w2n" targetRef="TextAnnotation_1du1yjd" />
+  </bpmn:process>
+  <bpmn:error id="Error_0q9gtpm" name="Code_Error_Create_Draft1" errorCode="Code_Error_Create_Draft1" camunda:errorMessage="Failed to create draft" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="test-compensation">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0klhv36_di" bpmnElement="SequenceFlow_0klhv36">
+        <di:waypoint x="215" y="177" />
+        <di:waypoint x="270" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_06iej0s_di" bpmnElement="SequenceFlow_06iej0s">
+        <di:waypoint x="370" y="177" />
+        <di:waypoint x="430" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_0fy5ifs_di" bpmnElement="EndEvent_0fy5ifs">
+        <dc:Bounds x="592" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0qoipj6_di" bpmnElement="SequenceFlow_0qoipj6">
+        <di:waypoint x="530" y="177" />
+        <di:waypoint x="592" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1r9nkyo_di" bpmnElement="SequenceFlow_1r9nkyo">
+        <di:waypoint x="500" y="235" />
+        <di:waypoint x="500" y="260" />
+        <di:waypoint x="602" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1qu8snd_di" bpmnElement="Task_1kh5w2n">
+        <dc:Bounds x="430" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0bysqmk_di" bpmnElement="Task_02b32up">
+        <dc:Bounds x="270" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BoundaryEvent_0i2mmen_di" bpmnElement="BoundaryEvent_1jtyuli">
+        <dc:Bounds x="482" y="199" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1ajkqi9_di" bpmnElement="EndEvent_182aczb">
+        <dc:Bounds x="602" y="242" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BoundaryEvent_1o9fl3h_di" bpmnElement="BoundaryEvent_18nd1bc">
+        <dc:Bounds x="322" y="199" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_167p6lb_di" bpmnElement="Association_167p6lb">
+        <di:waypoint x="340" y="235" />
+        <di:waypoint x="340" y="380" />
+        <di:waypoint x="390" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0mdj3or_di" bpmnElement="Task_1468pk1">
+        <dc:Bounds x="390" y="340" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1du1yjd_di" bpmnElement="TextAnnotation_1du1yjd">
+        <dc:Bounds x="530" y="50" width="100" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_073037x_di" bpmnElement="Association_073037x">
+        <di:waypoint x="523" y="138" />
+        <di:waypoint x="542" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

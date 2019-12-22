@@ -1,5 +1,8 @@
 package com.bpwizard.bpm.content.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,30 @@ public class ContentServiceController {
 	
 //    @Autowired
 //    private MailService mailService;
+	
+	@PostMapping(path="/create-draft-with-message", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String startContentFlowWithMessage(@RequestBody StartFlowRequest startFlowRequest) {
+		
+		String processInstanceId = wcmFlowService.startContentFlowWithMessage(
+				startFlowRequest.getRepository(),
+				startFlowRequest.getWorkspace(),
+				startFlowRequest.getContentPath(),
+				startFlowRequest.getContentId(),
+				startFlowRequest.getWorkflow());
+		// this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
+//		try {
+//		    this.mailService.sendEmailWithAttachment(
+//            		"Testing from Spring Boot",
+//            		new String[] {"a@yahoo.com", "b@gmail.com"},
+//            		"<h1>Check attachment for image!</h1>",
+//            		"android.png");
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+		return processInstanceId;
+	}
 	
     @PostMapping(path="/create-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String startContentFlow(@RequestBody StartFlowRequest startFlowRequest) {
@@ -116,13 +143,21 @@ public class ContentServiceController {
 	
 	@DeleteMapping(path="/delete-reviewing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String deleteReviewingDraft(@RequestBody DeleteDraftRequest deleteDraftRequest) {
-		this.wcmFlowService.deleteReviewingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
+		String businessKey = String.format("%s%s", deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
+		Map<String, Object> variables = new HashMap<>();
+		variables.put("contentId", deleteDraftRequest.getClass());
+		this.wcmFlowService.sendMessage("deleteReviewingDraftMessage", businessKey, variables);
+		//this.wcmFlowService.deleteReviewingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
 		return "Deleted";
 	}
 	
 	@DeleteMapping(path="/delete-editing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String deleteEditingingDraft(@RequestBody DeleteDraftRequest deleteDraftRequest) {
-		this.wcmFlowService.deleteEditingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
+//		Map<String,Object> variables = new HashMap<>();
+//		variables.put("contentId", deleteDraftRequest.getContentId());
+		String signalName = String.format("deleteEditingDraftSignal-%s%s", 
+				deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
+		this.wcmFlowService.sendSignal(signalName, null);
 		return "Deleted";
 	}
 }

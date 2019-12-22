@@ -10,8 +10,8 @@
         },
         "persistence" : {
             "type" : "db",
-            "connectionUrl": "jdbc:mysql://127.0.0.1:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
-            "driver": "com.mysql.jdbc.Driver",
+            "connectionUrl": "jdbc:h2:file:C:/var/h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE",
+            "driver": "org.h2.Driver",
             "createOnStart" : true,
             "dropOnExit" : true,
             "username": "wcmbpm",
@@ -19,8 +19,8 @@
         },
         "binaryStorage" : {
             "type"  : "database",
-            "driverClass" : "com.mysql.jdbc.Driver",
-            "url" : "jdbc:mysql://127.0.0.1:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
+            "driverClass" : "org.h2.Driver",
+            "url" : "jdbc:h2:file:C:/var/h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE",
             "username" : "wcmbpm",
             "password" : "P@ssw0rd"
         }
@@ -32,12 +32,6 @@
                 "pathExpression" : "default://imagesContainer[@image] => default:/sequenced/images"
             }
         }
-    },
-    "clustering": {
-        "clusterName": "wcm-bpm",
-        "configuration": "jgroups/jgroups-config.xml",
-        "description": "wcm-bpm cluster",
-        "locking" : "db"
     },
     "workspaces" : {
         "default" : "default",

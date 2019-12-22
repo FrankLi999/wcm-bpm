@@ -1,6 +1,6 @@
 ## Development environment
 # flyway:
-  # url: jdbc:mysql://192.168.0.168:3306/mysql
+  # url: jdbc:h2:file:C:/var/h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
   # url: jdbc:mysql://127.0.0.1:3306/wcm_bpm
   # schemas: wcm_bpm
   # user: wcmbpm
@@ -44,12 +44,14 @@ spring:
     # generate-ddl=true
     hibernate:
       ddl-auto: update
+      # ddl-auto: update, create-drop, create, none
       # ddl-auto: none
       # use-new-id-generator-mappings: false
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: org.hibernate.dialect.H2Dialect
+        # dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         # jdbc.lob.non_contextual_creation: true        
         # cache:
           # use_second_level_cache: true
@@ -59,9 +61,11 @@ spring:
             # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
   datasource:
     # url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-    url: jdbc:mysql://127.0.0.1:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    # url: jdbc:mysql://127.0.0.1:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    url: jdbc:h2:file:C:/var/h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
     username: wcmbpm
     password: P@ssw0rd
+    driver-class-name: org.h2.Driver
     # username: ${vaultConfiguration.dbUser}
     # password: ${vaultConfiguration.dbPassword}
     
@@ -168,8 +172,9 @@ camunda:
   bpm:
     authorization:
       enabled: true
-    database:
-      schema-update: false
+    # database:
+      # schema-update: true, false, create, create-drop, drop-create, default: true
+      # schema-update: create
     admin-user:
       id: demo
       password: demo

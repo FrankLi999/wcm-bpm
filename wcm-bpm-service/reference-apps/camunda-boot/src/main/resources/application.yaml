@@ -10,19 +10,22 @@ spring:
     show-sql: true
     # generate-ddl=true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
+      # ddl-auto: update, create-drop, create, none
       # ddl-auto: none
       #use-new-id-generator-mappings: false
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: org.hibernate.dialect.H2Dialect
+        # dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         #jdbc.lob.non_contextual_creation: true
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/camundaboot?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    # url: jdbc:mysql://127.0.0.1:3306/camundaboot?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    url: jdbc:h2:file:C:/var/h2/camunda_boot/data;DB_CLOSE_ON_EXIT=FALSE
     username: wcmbpm
     password: P@ssw0rd
-
+    driver-class-name: org.h2.Driver
     testOnBorrow: true
     testWhileIdle: true
     timeBetweenEvictionRunsMillis: 60000
@@ -55,7 +58,12 @@ camunda.bpm:
     password: demo
     firstName: Demo
   filter:
-    create: All tasks        
+    create: All tasks
+  authorization:
+    enabled: true 
+  database:
+      # schema-update: true, false, create, create-drop, drop-create, default: true
+      schema-update: create       
 #camunda:
   #bpm:
     #application:

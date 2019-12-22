@@ -1325,7 +1325,7 @@
     "bpwizard/library/system/authoringTemplate/keyValueType/properties" : {
         "jcr:primaryType": "bpw:propertyFolder"
     },
-    "bpwizard/library/system/authoringTemplate/keyValueType/firstRows" : {
+    "bpwizard/library/system/authoringTemplate/keyValueType/elementGroups/firstRows" : {
         "jcr:primaryType":"bpw:formRows"
     },
     "bpwizard/library/system/authoringTemplate/keyValueType/elementGroups/firstRows/firstRow" : {
@@ -1384,13 +1384,13 @@
     "bpwizard/library/system/authoringTemplate/themeType/properties" : {
         "jcr:primaryType": "bpw:propertyFolder"
     },
-    "bpwizard/library/system/authoringTemplate/elementGroups/themeType/rows" : {
+    "bpwizard/library/system/authoringTemplate/themeType/elementGroups/rows" : {
         "jcr:primaryType":"bpw:formRows"
     },
-    "bpwizard/library/system/authoringTemplate/elementGroups/themeType/rows/firstRow" : {
+    "bpwizard/library/system/authoringTemplate/themeType/elementGroups/rows/firstRow" : {
         "jcr:primaryType":"bpw:formRow"
     },
-    "bpwizard/library/system/authoringTemplate/elementGroups/themeType/rows/firstRow/firstColumn" : {
+    "bpwizard/library/system/authoringTemplate/themeType/elementGroups/rows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
         "bpw:fieldNames": ["note"]
     },
@@ -1446,13 +1446,13 @@
     "bpwizard/library/system/authoringTemplate/folderType/properties" : {
         "jcr:primaryType": "bpw:propertyFolder"
     },
-    "bpwizard/library/system/authoringTemplate/elementGroups/folderType/rows" : {
+    "bpwizard/library/system/authoringTemplate/folderType/elementGroups/rows" : {
         "jcr:primaryType":"bpw:formRows"
     },
-    "bpwizard/library/system/authoringTemplate/elementGroups/folderType/rows/firstRow" : {
+    "bpwizard/library/system/authoringTemplate/folderType/elementGroups/rows/firstRow" : {
         "jcr:primaryType":"bpw:formRow"
     },
-    "bpwizard/library/system/authoringTemplate/elementGroups/folderType/rows/firstRow/firstColumn" : {
+    "bpwizard/library/system/authoringTemplate/folderType/elementGroups/rows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
         "bpw:fieldNames": ["note"]
     },
@@ -2910,14 +2910,14 @@
         "bpw:baseResourceType": "contentType",
         "bpw:workflow": "bpmn:wcm_content_flow"
     },
-    "bpwizard/library/system/authoringTemplate/MySidePaneContent/propertyGroup" : {
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/propertyGroup" : {
         "jcr:primaryType":"bpw:formRow"
     },
-    "bpwizard/library/system/authoringTemplate/MySidePaneContent/propertyGroup/firstColumn" : {
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
         "bpw:fieldNames": ["name", "title", "description", "categories", "workflow"]
     },    
-    "bpwizard/library/system/authoringTemplate/MySidePaneContent/elementGroups" : {
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
     },
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/elementGroups/rows" : {
@@ -2965,7 +2965,7 @@
         "bpw:dataType": "text",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/MySidePaneContent/properties/categories" : {
+    "bpwizard/library/design/authoringTemplate/MySidePaneContent/properties/categories" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Category",
         "bpw:controlName": "category",
@@ -2998,14 +2998,14 @@
         "bpw:baseResourceType": "contentType",
         "bpw:workflow": "bpmn:wcm_content_flow"
     },
-    "bpwizard/library/system/authoringTemplate/MyContent/propertyGroup" : {
+    "bpwizard/library/design/authoringTemplate/MyContent/propertyGroup" : {
         "jcr:primaryType":"bpw:formRow"
     },
-    "bpwizard/library/system/authoringTemplate/MyContent/propertyGroup/firstColumn" : {
+    "bpwizard/library/design/authoringTemplate/MyContent/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
         "bpw:fieldNames": ["name", "title", "description", "categories", "workflow"]
     },    
-    "bpwizard/library/system/authoringTemplate/MyContent/elementGroups" : {
+    "bpwizard/library/design/authoringTemplate/MyContent/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
     },
     "bpwizard/library/design/authoringTemplate/MyContent/elements" : {
@@ -3053,7 +3053,7 @@
         "bpw:dataType": "text",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/MyContent/properties/categories" : {
+    "bpwizard/library/design/authoringTemplate/MyContent/properties/categories" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Category",
         "bpw:controlName": "category",
@@ -3255,6 +3255,12 @@
         "bpw:authoringTemplate":"bpwizard/default/design/MyContent",
         "bpw:title":"MyContent"
     },
+    "bpwizard/library/camunda/rootSiteArea/home/MyContent/elements" : {
+        "jcr:primaryType":"bpw:contentElementFolder"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/MyContent/properties" : {
+        "jcr:primaryType":"bpw:propertyElementFolder"
+    },
     "bpwizard/library/camunda/rootSiteArea/home/MyContent/elements/body" : {
         "jcr:primaryType":"bpw:contentElement",
         "bpw:multiple":"false",
@@ -3271,6 +3277,12 @@
         "bpw:authoringTemplate":"bpwizard/default/design/MySidePaneContent",
         "bpw:title":"MySidePaneContent"
     },
+    "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent/elements" : {
+        "jcr:primaryType":"bpw:contentElementFolder"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent/properties" : {
+        "jcr:primaryType":"bpw:propertyElementFolder"
+    },
     "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent/elements/sidebody" : {
         "jcr:primaryType":"bpw:contentElement",
         "bpw:multiple":"false",
@@ -3286,6 +3298,12 @@
         "bpw:description":"MySidePaneContent1",
         "bpw:authoringTemplate":"bpwizard/default/design/MySidePaneContent",
         "bpw:title":"MySidePaneContent1"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1/elements" : {
+        "jcr:primaryType":"bpw:contentElementFolder"
+    },
+    "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1/properties" : {
+        "jcr:primaryType":"bpw:propertyElementFolder"
     },
     "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1/elements/sidebody" : {
         "jcr:primaryType":"bpw:contentElement",

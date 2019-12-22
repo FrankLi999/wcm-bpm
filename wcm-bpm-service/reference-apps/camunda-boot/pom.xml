@@ -87,12 +87,13 @@
 		    <artifactId>camunda-engine-plugin-spin</artifactId>
 		    <!--  <version>${camunda.version}</version> -->
 		</dependency>
- 
+ 		<!-- 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
@@ -148,7 +149,8 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>test</scope>
+			<!-- <scope>test</scope>  -->
+			<scope>runtime</scope>
 		</dependency>
 		<!-- Http connector -->
 		<dependency>

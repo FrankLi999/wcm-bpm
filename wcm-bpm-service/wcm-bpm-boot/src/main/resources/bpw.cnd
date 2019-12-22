@@ -180,7 +180,7 @@
 [bpw:elementFolder] > nt:folder
 + * (bpw:formControl)
 
-[bpw:propertiesFolder] > nt:folder
+[bpw:propertyFolder] > nt:folder
 + name (bpw:formControl)
 + title (bpw:formControl)
 + description (bpw:formControl)

@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.jgroups;
+package com.bpwizard.spring.boot.jgroup;
 
 import io.undertow.Undertow;
 import io.undertow.server.handlers.PathTemplateHandler;
