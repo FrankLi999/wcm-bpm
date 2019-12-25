@@ -42,6 +42,18 @@
       ],
       "bpw-wcm-elements/*": [
         "dist/bpw-wcm-elements/*"
+      ],
+      "bpw-components": [
+        "dist/bpw-components"
+      ],
+      "bpw-components/*": [
+        "dist/bpw-components/*"
+      ],
+      "bpw-rest-client": [
+        "dist/bpw-rest-client"
+      ],
+      "bpw-rest-client/*": [
+        "dist/bpw-rest-client/*"
       ]
     }
   },

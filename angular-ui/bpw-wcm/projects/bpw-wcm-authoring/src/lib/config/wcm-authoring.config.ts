@@ -1,14 +1,13 @@
-import { FuseConfig } from 'bpw-components';
-import { ApiConfig } from 'bpw-rest-client';
+import { UIConfig } from 'bpw-components';
 /**
- * Default Fuse Configuration
+ * Default WCM Configuration
  *
  * You can edit these options to change the default options. All these options also can be
  * changed per component basis. See `app/authentication/login/login.component.ts`
  * constructor method to learn more about changing these options per component basis.
  */
 
- export const wcmAuthoringLayoutConfig: FuseConfig = {
+ export const wcmAuthoringLayoutConfig: UIConfig = {
     // Color themes can be defined in src/app/app.theme.scss
     colorTheme      : 'theme-default',
     customScrollbars: true,
@@ -17,8 +16,8 @@ import { ApiConfig } from 'bpw-rest-client';
         style    : 'horizontal-layout-1',
         width    : 'fullwidth',
         navbar   : {
-            primaryBackground  : 'fuse-navy-700',
-            secondaryBackground: 'fuse-navy-900',
+            primaryBackground  : 'wcm-navy-700',
+            secondaryBackground: 'wcm-navy-900',
             folded             : false,
             hidden             : false,
             position           : 'top',
@@ -27,13 +26,13 @@ import { ApiConfig } from 'bpw-rest-client';
         },
         toolbar  : {
             customBackgroundColor: false,
-            background           : 'fuse-white-500',
+            background           : 'wcm-white-500',
             hidden               : false,
             position             : 'below'
         },
         footer   : {
             customBackgroundColor: true,
-            background           : 'fuse-navy-900',
+            background           : 'wcm-navy-900',
             hidden               : false,
             position             : 'above-static'
         },

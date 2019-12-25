@@ -1,27 +1,27 @@
 <!-- PROGRESS BAR -->
-<fuse-progress-bar></fuse-progress-bar>
+<progress-bar></progress-bar>
 <!-- / PROGRESS BAR -->
 
 <!-- VERTICAL LAYOUT 1 -->
-<ng-container *ngIf="fuseConfig.layout.style === 'vertical-layout-1'">
+<ng-container *ngIf="uiConfig.layout.style === 'vertical-layout-1'">
     <vertical-layout-1></vertical-layout-1>
 </ng-container>
 <!-- / VERTICAL LAYOUT 1 -->
 
 <!-- VERTICAL LAYOUT 2 -->
-<ng-container *ngIf="fuseConfig.layout.style === 'vertical-layout-2'">
+<ng-container *ngIf="uiConfig.layout.style === 'vertical-layout-2'">
     <vertical-layout-2></vertical-layout-2>
 </ng-container>
 <!-- / VERTICAL LAYOUT 2 -->
 
 <!-- VERTICAL LAYOUT 3 -->
-<ng-container *ngIf="fuseConfig.layout.style === 'vertical-layout-3'">
+<ng-container *ngIf="uiConfig.layout.style === 'vertical-layout-3'">
     <vertical-layout-3></vertical-layout-3>
 </ng-container>
 <!-- / VERTICAL LAYOUT 3 -->
 
 <!-- HORIZONTAL LAYOUT 1 -->
-<ng-container *ngIf="fuseConfig.layout.style === 'horizontal-layout-1'">
+<ng-container *ngIf="uiConfig.layout.style === 'horizontal-layout-1'">
     <horizontal-layout-1></horizontal-layout-1>
 </ng-container>
 <!-- / HORIZONTAL LAYOUT 1 -->
@@ -32,7 +32,7 @@
     <mat-icon>settings</mat-icon>
 </button>
 
-<fuse-sidebar name="themeOptionsPanel" class="theme-options-sidebar" position="right" [invisibleOverlay]="true">
-    <fuse-theme-options></fuse-theme-options>
-</fuse-sidebar>
+<sidebar name="themeOptionsPanel" class="theme-options-sidebar" position="right" [invisibleOverlay]="true">
+    <theme-options></theme-options>
+</sidebar>
 <!-- / THEME OPTIONS PANEL -->

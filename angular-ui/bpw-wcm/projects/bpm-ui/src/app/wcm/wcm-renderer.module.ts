@@ -22,21 +22,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AceEditorModule } from 'ng2-ace-editor';
 
 import {
-  FuseSharedModule,
-  FuseProgressBarModule,
-  FuseSidebarModule,
-  FuseThemeOptionsModule,
-  LayoutModule
+  SharedUIModule,
+  ProgressBarModule,
+  SidebarModule,
+  ThemeOptionsModule,
+  LayoutModule,
+  JsonSchemaFormModule,
+  AuthGuard
 } from 'bpw-components';
 
-import { JsonSchemaFormModule} from 'bpw-form';
-
-import { AuthGuard } from 'bpw-auth-store';
-
-import { WcmAppStoreModule } from 'bpw-wcm-service';
-
-
-import { ResolveGuard } from 'bpw-wcm-service'
+import { WcmAppStoreModule, ResolveGuard } from 'bpw-wcm-service';
 import { WcmRendererComponent } from './entry/wcm-renderer/wcm-renderer.component';
 import { WcmElementsModule } from 'bpw-wcm-elements';
 import { ResourceRenderComponent } from './renderer/resource-render/resource-render.component';
@@ -73,10 +68,10 @@ const routes: Routes = [{
     MatSelectModule,
     MatToolbarModule,
 
-    FuseSharedModule,
-    FuseSidebarModule,
-    FuseProgressBarModule,
-    FuseThemeOptionsModule,
+    SharedUIModule,
+    SidebarModule,
+    ProgressBarModule,
+    ThemeOptionsModule,
     JsonSchemaFormModule,
     LayoutModule,
     WcmAppStoreModule,

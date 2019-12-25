@@ -6,7 +6,7 @@
     {{loadError}}
     </div>
     <!-- SIDEBAR -->
-    <fuse-sidebar class="sidebar" id="jcr-explorer-side-bar" position="left" lockedOpen="gt-md">
+    <sidebar class="sidebar" id="jcr-explorer-side-bar" position="left" lockedOpen="gt-md">
         <!-- SIDEBAR HEADER -->
         <div fxLayout="column" fxLayoutAlign="space-between start"  class="header accent p-24 pb-4">
             <div class="logo" fxFlex fxLayout="row" fxLayoutAlign="start center">
@@ -19,7 +19,7 @@
         </div>
         <!-- / SIDEBAR HEADER -->
         <!-- SIDEBAR CONTENT -->
-        <div class="content" fusePerfectScrollbar [@animate]="{value:'*',params:{y:'50px'}}">
+        <div class="content" perfectScrollbar [@animate]="{value:'*',params:{y:'50px'}}">
         <div class="nav material2">
             <mat-tree #jcrExplorer [dataSource]="dataSource" [treeControl]="treeControl">
               <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding [matTreeNodePaddingIndent]="10">
@@ -44,15 +44,15 @@
         </div>
         </div>
         <!-- / SIDEBAR CONTENT -->
-    </fuse-sidebar>
+    </sidebar>
     <!-- / SIDEBAR -->
     <!-- CENTER -->
     <div class="center">
         <div class="content" fxFlexAlign="row">
             jcrMessage: {{jcrMessage}} <br />
-            <jcr-node *ngIf="isRestNode(activeNode)" [restNode]="activeNode.value" fusePerfectScrollbar fxFlex></jcr-node>
-            <repository *ngIf="isRepository(activeNode)" [repository]="activeNode.value" fusePerfectScrollbar fxFlex></repository>
-            <workspace *ngIf="isWorkspace(activeNode)" [workspace]="activeNode.value" fusePerfectScrollbar fxFlex></workspace>
+            <jcr-node *ngIf="isRestNode(activeNode)" [restNode]="activeNode.value" perfectScrollbar fxFlex></jcr-node>
+            <repository *ngIf="isRepository(activeNode)" [repository]="activeNode.value" perfectScrollbar fxFlex></repository>
+            <workspace *ngIf="isWorkspace(activeNode)" [workspace]="activeNode.value" perfectScrollbar fxFlex></workspace>
         </div>
     </div>
     <!-- / CENTER -->

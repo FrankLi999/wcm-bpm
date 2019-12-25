@@ -25,7 +25,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ValidationRuleComponent } from './validation-rule/validation-rule.component';
 import { ValidationRulesComponent } from './validation-rules/validation-rules.component';
 import { ValidationRuleTreeComponent } from './validation-rule-tree/validation-rule-tree.component';
-import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-components';
 @NgModule({
   declarations: [ValidationRuleComponent, ValidationRulesComponent, ValidationRuleTreeComponent],
   imports: [
@@ -49,8 +49,8 @@ import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
     MatTableModule,
     MatTabsModule,
     TranslateModule,
-    FuseSharedModule, 
-    FuseSidebarModule
+    SharedUIModule, 
+    SidebarModule
   ],
   exports: [ValidationRuleComponent, ValidationRulesComponent, ValidationRuleTreeComponent]
 })

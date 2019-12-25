@@ -1,0 +1,40 @@
+// @import "~bpw-components/lib/components/countdown/countdown.theme";
+// @import "~bpw-components/lib/components/material-color-picker/material-color-picker.theme";
+// @import "~bpw-components/lib/components/search-bar/search-bar.theme";
+// @import "~bpw-components/lib/components/shortcuts/shortcuts.theme";
+// @import "~bpw-components/lib/components/sidebar/sidebar.theme";
+// @import "~bpw-components/lib/components/theme-options/theme-options.theme";
+// @import "~bpw-components/lib/components/widget/widget.theme";
+
+@import "../common/components/countdown/countdown.theme";
+@import "../common/components/material-color-picker/material-color-picker.theme";
+@import "../common/components/search-bar/search-bar.theme";
+@import "../common/components/shortcuts/shortcuts.theme";
+@import "../common/components/sidebar/sidebar.theme";
+@import "../common/components/theme-options/theme-options.theme";
+@import "../common/components/widget/widget.theme";
+
+
+
+@mixin wcm-core-theme($theme) {
+
+    // Theming for Wcm core styles
+    @include colors-theme($theme);
+    @include cards-theme($theme);
+    @include material-theme($theme);
+    @include page-layouts-theme($theme);
+    @include typography-theme($theme);
+
+    // Theming for WCM components
+    @include countdown-theme($theme);
+    @include search-bar-theme($theme);
+    @include shortcuts-theme($theme);
+    @include sidebar-theme($theme);
+    @include theme-options-theme($theme);
+    @include material-color-picker-theme($theme);
+    @include widget-theme($theme);
+
+    // Theming for 3rd party components
+    @include ngx-datatable-theme($theme);
+}
+

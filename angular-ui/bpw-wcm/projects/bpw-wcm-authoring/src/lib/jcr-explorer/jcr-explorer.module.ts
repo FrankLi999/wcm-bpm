@@ -25,7 +25,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-components';
 import { JcrExplorerComponent } from './jcr-explorer/jcr-explorer.component';
 import { JcrNodeComponent } from './jcr-node/jcr-node.component';
 import { RepositoryComponent } from './repository/repository.component';
@@ -34,7 +34,7 @@ import { DynamicUiComponent } from './dynamic-ui/dynamic-ui.component';
 import {
   JsonSchemaFormModule
   // MaterialDesignFrameworkModule
-} from 'bpw-form';
+} from 'bpw-components';
 import { AceEditorDirective } from './dynamic-ui/ace-editor.directive';
 
 @NgModule({
@@ -85,8 +85,8 @@ import { AceEditorDirective } from './dynamic-ui/ace-editor.directive';
     // ),
     TranslateModule,
 
-    FuseSharedModule,
-    FuseSidebarModule
+    SharedUIModule,
+    SidebarModule
   ],
   exports: [
     AceEditorDirective, 

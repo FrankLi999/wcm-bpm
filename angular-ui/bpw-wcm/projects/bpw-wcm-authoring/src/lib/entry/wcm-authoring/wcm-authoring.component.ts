@@ -2,12 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
 import {
-  FuseNavigation,
-  FuseConfigService,
-  FuseNavigationService,
-  FuseSidebarService,
-  FuseSplashScreenService,
-  FuseTranslationLoaderService
+  Navigation,
+  UIConfigService,
+  NavigationService,
+  SidebarService,
+  SplashScreenService,
+  TranslationLoaderService
 } from 'bpw-components';
 
 import { 
@@ -25,28 +25,28 @@ import { locale as navigationTurkish } from '../../navigation/i18n/tr';
 })
 export class WcmAuthoringComponent implements OnInit, OnDestroy {
   constructor(
-      private _fuseConfigService: FuseConfigService,
-      private _fuseNavigationService: FuseNavigationService,
-      private _fuseSidebarService: FuseSidebarService,
-      private _fuseSplashScreenService: FuseSplashScreenService,
-      private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+      private _uiConfigService: UIConfigService,
+      private _navigationService: NavigationService,
+      private _sidebarService: SidebarService,
+      private _splashScreenService: SplashScreenService,
+      private _translationLoaderService: TranslationLoaderService,
       private _translateService: TranslateService,
       private _store: Store<AppConfigurationState>) {
     
-    this._fuseConfigService.config = {
+    this._uiConfigService.config = {
       ...wcmAuthoringLayoutConfig
     };
     
     // Get default navigation
-    const currentNavigation: FuseNavigation[] = (this._fuseNavigationService.getCurrentNavigation() as FuseNavigation[]);
-    this._fuseNavigationService.unregister("main");
+    const currentNavigation: Navigation[] = (this._navigationService.getCurrentNavigation() as Navigation[]);
+    this._navigationService.unregister("main");
     const wcmNavigation = [currentNavigation[0], ...navigation];
     this._store.dispatch(new SetNavigation(wcmNavigation));
     // Register the navigation to the service
-    this._fuseNavigationService.register('main', wcmNavigation);
+    this._navigationService.register('main', wcmNavigation);
     
     // Set the main navigation as our current navigation
-    this._fuseNavigationService.setCurrentNavigation('main');    
+    this._navigationService.setCurrentNavigation('main');    
     
     // Add languages
     this._translateService.addLangs(['en', 'tr']);
@@ -55,7 +55,7 @@ export class WcmAuthoringComponent implements OnInit, OnDestroy {
     this._translateService.setDefaultLang('en');
 
     // Set the navigation translations
-    this._fuseTranslationLoaderService.loadTranslations(navigationEnglish, navigationTurkish);
+    this._translationLoaderService.loadTranslations(navigationEnglish, navigationTurkish);
 
     // Use a language
     this._translateService.use('en');  

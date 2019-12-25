@@ -1,0 +1,108 @@
+<div id="widget" class="page-layout simple fullwidth docs">
+
+    <!-- HEADER -->
+    <div class="header accent p-24 h-160" fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="column" fxLayoutAlign="center start">
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="secondary-text s-18">home</mat-icon>
+                <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
+                <span class="secondary-text">Documentation</span>
+                <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
+                <span class="secondary-text">Components</span>
+            </div>
+            <div class="h2 mt-16">Widget</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+
+        <p>
+            <code>widget</code> is a custom built WCM component allows to create flippable widget boxes.
+        </p>
+
+        <div class="section-title">Sample</div>
+        <div>
+            <widget class="" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+
+                <!-- Front -->
+                <div class="widget-front mat-elevation-z2">
+                    <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                        <div>Widget title</div>
+
+                        <button mat-icon-button widgetToggle aria-label="more">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                    </div>
+
+                    <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                        Widget Content
+                    </div>
+                </div>
+                <!-- / Front -->
+
+                <!-- Back -->
+                <div class="widget-back p-16 pt-32 mat-elevation-z2">
+                    <button mat-icon-button widgetToggle class="widget-flip-button"
+                            aria-label="Flip widget">
+                        <mat-icon class="s-16">close</mat-icon>
+                    </button>
+
+                    <div>
+                        More widget info
+                    </div>
+                </div>
+                <!-- / Back -->
+
+            </widget>
+        </div>
+
+        <div class="section-title">Usage</div>
+        <p class="py-8">
+
+            <highlight lang="html">
+                <textarea #source>
+
+                    <widget class="" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+
+                        <!-- Front -->
+                        <div class="widget-front mat-elevation-z2">
+                            <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                                <div>Widget title</div>
+
+                                <button mat-icon-button widgetToggle aria-label="more">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                            </div>
+
+                            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                                Widget Content
+                            </div>
+                        </div>
+                        <!-- / Front -->
+
+                        <!-- Back -->
+                        <div class="widget-back p-16 pt-32 mat-elevation-z2">
+                            <button mat-icon-button widgetToggle class="widget-flip-button"
+                                    aria-label="Flip widget">
+                                <mat-icon class="s-16">close</mat-icon>
+                            </button>
+
+                            <div>
+                                More widget info
+                            </div>
+                        </div>
+                        <!-- / Back -->
+
+                    </widget>
+
+                </textarea>
+            </highlight>
+
+        </p>
+
+    </div>
+
+</div>
+

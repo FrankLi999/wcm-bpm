@@ -23,11 +23,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
-import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-components';
 import {
   JsonSchemaFormModule 
   // MaterialDesignFrameworkModule
-} from 'bpw-form';
+} from 'bpw-components';
 import { SiteExplorerComponent } from './site-explorer/site-explorer.component';
 import { FolderOverviewComponent } from './folder-overview/folder-overview.component';
 import { SelectAuthoringTemplateDialogComponent } from './select-authoring-template-dialog/select-authoring-template-dialog.component';
@@ -76,8 +76,8 @@ import { ComponentModule } from '../components/component.module';
     
     TranslateModule,
 
-    FuseSharedModule,
-    FuseSidebarModule,
+    SharedUIModule,
+    SidebarModule,
     JsonSchemaFormModule, 
     // MaterialDesignFrameworkModule,
     ComponentModule

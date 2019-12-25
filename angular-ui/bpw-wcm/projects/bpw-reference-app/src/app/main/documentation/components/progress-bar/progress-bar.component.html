@@ -1,0 +1,80 @@
+<div id="progress-bar" class="page-layout simple fullwidth docs">
+
+    <!-- HEADER -->
+    <div class="header accent p-24 h-160" fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="column" fxLayoutAlign="center start">
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="secondary-text s-18">home</mat-icon>
+                <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
+                <span class="secondary-text">Documentation</span>
+                <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
+                <span class="secondary-text">Components</span>
+            </div>
+            <div class="h2 mt-16">Progress Bar</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+
+        <p>
+            <code>progress-bar</code> is a custom built WCM component allows you to have a service controlled
+            progress bar. It internally uses <code>mat-progress-bar</code> and provides a global service to control it.
+        </p>
+
+        <p class="message-box info">
+            Due to the nature of global progress bars, <code>progress-bar</code> can only be used once in the
+            entire app and it's currently located at <code>app.component.html</code> file.
+        </p>
+
+        <div class="section-title">Usage</div>
+        <p class="py-8">
+            <highlight lang="html">
+                <textarea #source>
+                    <progress-bar></progress-bar>
+                </textarea>
+            </highlight>
+        </p>
+
+        <div class="section-title">Service Usage</div>
+        <p class="py-8">
+
+            <highlight lang="typescript">
+                <textarea #source>
+                    export class SomeComponent implements OnInit
+                    {
+                        /**
+                        * Constructor
+                        */
+                        constructor(
+                            private _progressBarService: ProgressBarService
+                        ) {}
+
+                        showcase()
+                        {
+                            // Show the progress bar
+                            this._progressBarService.hide();
+
+                            // Set the mode
+                            // mode: 'determinate' | 'indeterminate' | 'buffer' | 'query'
+                            this._progressBarService.setMode(mode);
+
+                            // Set the value
+                            // value: number
+                            this._progressBarService.setValue(value);
+
+                            // Set the buffer value
+                            // bufferValue: number
+                            this._progressBarService.setBufferValue(bufferValue);
+                        }
+                    }
+                </textarea>
+            </highlight>
+
+        </p>
+
+    </div>
+
+</div>
+

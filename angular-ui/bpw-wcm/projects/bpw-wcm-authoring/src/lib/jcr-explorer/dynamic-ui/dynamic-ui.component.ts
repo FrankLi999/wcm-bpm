@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import { Examples } from './example-schemas.model';
-import { JsonPointer } from 'bpw-form';
+import { JsonPointer } from 'bpw-components';
 
 @Component({
   selector: 'app-dynamic-ui',

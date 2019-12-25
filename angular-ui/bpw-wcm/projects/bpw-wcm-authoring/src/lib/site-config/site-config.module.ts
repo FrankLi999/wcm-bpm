@@ -22,7 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-components';
 import { SiteConfigComponent } from './site-config/site-config.component';
 import { SiteConfigsComponent } from './site-configs/site-configs.component';
 import { SiteConfigTreeComponent } from './site-config-tree/site-config-tree.component';
@@ -50,8 +50,8 @@ import { SiteConfigTreeComponent } from './site-config-tree/site-config-tree.com
     MatTableModule,
     MatTabsModule,
     TranslateModule,
-    FuseSharedModule,
-    FuseSidebarModule
+    SharedUIModule,
+    SidebarModule
   ],
   exports: [SiteConfigComponent, SiteConfigsComponent, SiteConfigTreeComponent]
 })

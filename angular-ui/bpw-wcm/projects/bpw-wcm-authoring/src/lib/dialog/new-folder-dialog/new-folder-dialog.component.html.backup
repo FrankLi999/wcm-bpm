@@ -8,7 +8,7 @@
         </mat-toolbar-row>
     </mat-toolbar>
 
-    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <div mat-dialog-content class="p-24 m-0" perfectScrollbar>
 
         <form name="newFolderForm" [formGroup]="newFolderForm" class="new-folder" fxLayout="column" fxFlex>
             <mat-form-field appearance="outline">

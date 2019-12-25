@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{gylR:function(n,t,o){"use strict";o.r(t),o.d(t,"AuthenticationLazyModule",(function(){return r}));var c=o("2cqD"),e=o("fXoL");let r=(()=>{class n{}return n.\u0275mod=e.bc({type:n}),n.\u0275inj=e.ac({factory:function(t){return new(t||n)},imports:[[c.a]]}),n})()}}]);

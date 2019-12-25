@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { fuseAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-components';
 import { Subscription } from 'rxjs';
 import { WcmConfigService } from 'bpw-wcm-service';
 import { WcmConfigurableComponent } from '../../components/wcm-configurable.component';
@@ -9,7 +9,7 @@ import { WcmConfigurableComponent } from '../../components/wcm-configurable.comp
   templateUrl: './content-area-designer.component.html',
   styleUrls: ['./content-area-designer.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  animations   : fuseAnimations
+  animations   : wcmAnimations
 })
 export class ContentAreaDesignerComponent extends WcmConfigurableComponent implements OnInit, OnDestroy {
   @Input() layoutName: string;

@@ -22,7 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-components';
 import { CategoryComponent } from './category/category.component';
 import { CategoryTreeComponent } from './category-tree/category-tree.component';
 
@@ -49,8 +49,8 @@ import { CategoryTreeComponent } from './category-tree/category-tree.component';
     MatTableModule,
     MatTabsModule,
     TranslateModule,
-    FuseSharedModule,
-    FuseSidebarModule
+    SharedUIModule,
+    SidebarModule
   ],
   exports: [
     CategoryComponent, 

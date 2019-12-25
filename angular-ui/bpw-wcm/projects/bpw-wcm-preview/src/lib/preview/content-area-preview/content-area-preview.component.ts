@@ -10,8 +10,8 @@ import { RendererService } from 'bpw-wcm-service';
 import { WcmAppState, getWcmSystem } from 'bpw-wcm-service';
 import { WcmService, PageConfig, WcmConfigService } from 'bpw-wcm-service';
 import {
-  FuseConfig,
-  FuseNavigation
+  UIConfig,
+  Navigation
 } from 'bpw-components';
 
 @Component({
@@ -53,15 +53,15 @@ export class ContentAreaPreviewComponent implements OnInit, OnDestroy {
       filter(pageConfig => pageConfig != null)
     ).subscribe(
       (pageConfig: PageConfig) => {
-        let fuseConfug: FuseConfig = {
+        let uiConfug: UIConfig = {
           colorTheme: pageConfig.siteConfig.colorTheme,
           customScrollbars: pageConfig.siteConfig.customScrollbars,
           layout: cloneDeep(pageConfig.siteConfig.layout)
         }
 
-        let fuseNavigation: FuseNavigation[] = [... pageConfig.navigations];
-        console.log('this.wcmConfigService.setupConfig', fuseConfug, fuseNavigation);
-        this.wcmConfigService.setupConfig(fuseConfug, fuseNavigation);       
+        let navigation: Navigation[] = [... pageConfig.navigations];
+        console.log('this.wcmConfigService.setupConfig', uiConfug, navigation);
+        this.wcmConfigService.setupConfig(uiConfug, navigation);       
       },
       response => {
         console.log("getApplicationConfig call ended in error", response);

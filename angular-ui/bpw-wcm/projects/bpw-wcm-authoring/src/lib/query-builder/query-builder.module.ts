@@ -33,7 +33,7 @@ import { MatRadioModule } from '@angular/material/radio';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-components';
 import { QueryListComponent } from './query-list/query-list.component';
 import { QueryEditorComponent } from './query-editor/query-editor.component';
 import { SearchCriteriaComponent } from './search-criteria/search-criteria.component';
@@ -106,8 +106,8 @@ import { QueryTreeComponent } from './query-tree/query-tree.component';
 
     TranslateModule,
 
-    FuseSharedModule,
-    FuseSidebarModule
+    SharedUIModule,
+    SidebarModule
   ],
   exports: [
     QueryListComponent,

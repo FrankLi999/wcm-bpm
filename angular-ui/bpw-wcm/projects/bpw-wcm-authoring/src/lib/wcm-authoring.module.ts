@@ -22,26 +22,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AceEditorModule } from 'ng2-ace-editor';
 
 import {
-  // FuseConfigModule,
-  FuseSharedModule,
-  FuseProgressBarModule,
-  FuseSidebarModule,
-  FuseThemeOptionsModule
+  SharedUIModule,
+  ProgressBarModule,
+  SidebarModule,
+  ThemeOptionsModule,
+  LayoutModule,
+  JsonSchemaFormModule,
+  AuthGuard
 } from 'bpw-components';
 
-// import { RestClientConfigModule } from 'bpw-rest-client';
-import { LayoutModule } from 'bpw-components';
-
-import {
-  JsonSchemaFormModule, 
-  // MaterialDesignFrameworkModule
-} from 'bpw-form';
-
-import { AuthGuard } from 'bpw-auth-store';
-
-import { ResolveGuard } from 'bpw-wcm-service'
-// import { wcmAuthoringLayoutConfig, wcmAuthoringApiConfig } from '../wcm-authoring-config';
-import { WcmAppStoreModule } from 'bpw-wcm-service';
+import { ResolveGuard, WcmAppStoreModule } from 'bpw-wcm-service'
 import { ComponentModule } from './components/component.module';
 import { JcrExplorerModule } from './jcr-explorer/jcr-explorer.module';
 import { ResourceLibraryModule } from './resource-library/resource-library.module';
@@ -309,12 +299,12 @@ const routes: Routes = [{
         JsonSchemaFormModule,
         TranslateModule,
 
-        FuseSharedModule,
-        FuseSidebarModule,
+        SharedUIModule,
+        SidebarModule,
         AceEditorModule,
        
-        FuseProgressBarModule,
-        FuseThemeOptionsModule,
+        ProgressBarModule,
+        ThemeOptionsModule,
 
         LayoutModule,
  

@@ -10,11 +10,11 @@ import {
   SetNavigation
 } from 'bpw-components';
 import {
-  FuseConfigService,
-  FuseNavigationService,
-  FuseSidebarService,
-  FuseSplashScreenService,
-  FuseTranslationLoaderService
+  UIConfigService,
+  NavigationService,
+  SidebarService,
+  SplashScreenService,
+  TranslationLoaderService
 } from 'bpw-components';
 
 import { navigation } from './navigation/navigation';
@@ -27,7 +27,7 @@ import { locale as navigationTurkish } from './navigation/i18n/tr';
   styleUrls  : ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-    fuseConfig: any;
+    uiConfig: any;
     navigation: any;
 
     // Private
@@ -37,21 +37,21 @@ export class AppComponent implements OnInit, OnDestroy {
      * Constructor
      *
      * @param DOCUMENT document
-     * @param FuseConfigService _fuseConfigService
-     * @param FuseNavigationService _fuseNavigationService
-     * @param FuseSidebarService _fuseSidebarService
-     * @param FuseSplashScreenService _fuseSplashScreenService
-     * @param FuseTranslationLoaderService _fuseTranslationLoaderService
+     * @param UIConfigService _uiConfigService
+     * @param NavigationService _navigationService
+     * @param SidebarService _sidebarService
+     * @param SplashScreenService _splashScreenService
+     * @param TranslationLoaderService _translationLoaderService
      * @param Platform _platform
      * @param TranslateService _translateService
      */
     constructor(
         @Inject(DOCUMENT) private document: any,
-        private _fuseConfigService: FuseConfigService,
-        private _fuseNavigationService: FuseNavigationService,
-        private _fuseSidebarService: FuseSidebarService,
-        private _fuseSplashScreenService: FuseSplashScreenService,
-        private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+        private _uiConfigService: UIConfigService,
+        private _navigationService: NavigationService,
+        private _sidebarService: SidebarService,
+        private _splashScreenService: SplashScreenService,
+        private _translationLoaderService: TranslationLoaderService,
         private _translateService: TranslateService,
         private _platform: Platform,
         private _store: Store<AppConfigurationState>
@@ -61,10 +61,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.navigation = navigation;
         this._store.dispatch(new SetNavigation(this.navigation));
         // Register the navigation to the service
-        this._fuseNavigationService.register('main', this.navigation);
+        this._navigationService.register('main', this.navigation);
 
         // Set the main navigation as our current navigation
-        this._fuseNavigationService.setCurrentNavigation('main');
+        this._navigationService.setCurrentNavigation('main');
 
         // Add languages
         this._translateService.addLangs(['en', 'tr']);
@@ -73,7 +73,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this._translateService.setDefaultLang('en');
 
         // Set the navigation translations
-        this._fuseTranslationLoaderService.loadTranslations(navigationEnglish, navigationTurkish);
+        this._translationLoaderService.loadTranslations(navigationEnglish, navigationTurkish);
 
         // Use a language
         this._translateService.use('en');
@@ -130,13 +130,13 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         // Subscribe to config changes
-        this._fuseConfigService.config
+        this._uiConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((config) => {
-                this.fuseConfig = config;
+                this.uiConfig = config;
 
                 // Boxed
-                if ( this.fuseConfig.layout.width === 'boxed' )
+                if ( this.uiConfig.layout.width === 'boxed' )
                 {
                     this.document.body.classList.add('boxed');
                 }
@@ -156,7 +156,7 @@ export class AppComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                this.document.body.classList.add(this.fuseConfig.colorTheme);
+                this.document.body.classList.add(this.uiConfig.colorTheme);
             });
     }
 
@@ -181,6 +181,6 @@ export class AppComponent implements OnInit, OnDestroy {
      */
     toggleSidebarOpen(key): void
     {
-        this._fuseSidebarService.getSidebar(key).toggleOpen();
+        this._sidebarService.getSidebar(key).toggleOpen();
     }
 }

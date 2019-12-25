@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { fuseAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-components';
 @Component({
   selector: 'workflow-tree',
   templateUrl: './workflow-tree.component.html',
   styleUrls: ['./workflow-tree.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  animations   : fuseAnimations
+  animations   : wcmAnimations
 })
 export class WorkflowTreeComponent implements OnInit {
 

@@ -1,21 +1,21 @@
 // -----------------------------------------------------------------------------------------------------
-// @ Custom color maps for Fuse
+// @ Custom color maps for wcm
 // -----------------------------------------------------------------------------------------------------
-$fuse-white: (
+$wcm-white: (
     500: white,
     contrast: (
         500: $dark-primary-text
     )
 );
 
-$fuse-black: (
+$wcm-black: (
     500: black,
     contrast: (
         500: $light-primary-text,
     )
 );
 
-$fuse-navy: (
+$wcm-navy: (
     50: #ECECEE,
     100: #C5C6CB,
     200: #9EA1A9,
@@ -48,14 +48,14 @@ $fuse-navy: (
     )
 );
 
-// Generate Fuse color classes for custom palettes
+// Generate WCM color classes for custom palettes
 $custom_palettes: (
-    fuse-white: $fuse-white,
-    fuse-black: $fuse-black,
-    fuse-navy: $fuse-navy
+    wcm-white: $wcm-white,
+    wcm-black: $wcm-black,
+    wcm-navy: $wcm-navy
 );
 
-@include fuse-color-classes($custom_palettes);
+@include wcm-color-classes($custom_palettes);
 
 // -----------------------------------------------------------------------------------------------------
 // @ Typography
@@ -73,20 +73,26 @@ $typography: mat-typography-config(
 // Setup the typography
 @include angular-material-typography($typography);
 
-@import "~bpw-components/lib/auth/login/login.theme";
-@import "~bpw-components/lib/auth/signup/signup.theme";
-@import "~bpw-components/lib/auth/reset-password/reset-password.theme";
-@import "~bpw-components/lib/auth/forgot-password/forgot-password.theme";
-@import "~bpw-components/lib/auth/lock-screen/lock-screen.theme";
-@import "~bpw-components/lib/auth/mail-confirm/mail-confirm.theme";
+// @import "~bpw-components/lib/auth/login/login.theme";
+// @import "~bpw-components/lib/auth/signup/signup.theme";
+// @import "~bpw-components/lib/auth/reset-password/reset-password.theme";
+// @import "~bpw-components/lib/auth/forgot-password/forgot-password.theme";
+// @import "~bpw-components/lib/auth/lock-screen/lock-screen.theme";
+// @import "~bpw-components/lib/auth/mail-confirm/mail-confirm.theme";
+@import "../../../../dist/bpw-components/lib/auth/components/login/login.theme";
+@import "../../../../dist/bpw-components/lib/auth/components/signup/signup.theme";
+@import "../../../../dist/bpw-components/lib/auth/components/reset-password/reset-password.theme";
+@import "../../../../dist/bpw-components/lib/auth/components/forgot-password/forgot-password.theme";
+@import "../../../../dist/bpw-components/lib/auth/components/lock-screen/lock-screen.theme";
+@import "../../../../dist/bpw-components/lib/auth/components/mail-confirm/mail-confirm.theme";
 // -----------------------------------------------------------------------------------------------------
 // @ Component theming
 // -----------------------------------------------------------------------------------------------------
 
 // Import app and page component themes here to enable theming for them
 // @import "src/app/layout/components/chat-panel/chat-panel.theme";
-@import "~bpw-components/lib/layout/components/toolbar/toolbar.theme";
-
+// @import "~bpw-components/lib/layout/components/toolbar/toolbar.theme";
+@import "../../../../dist/bpw-components/lib/layout/components/toolbar/toolbar.theme";
 // Define a mixin for easier access
 @mixin components-theme($theme) {
 
@@ -108,7 +114,7 @@ $typography: mat-typography-config(
 // -----------------------------------------------------------------------------------------------------
 
 // Define the primary, accent and warn palettes
-$default-primary-palette: mat-palette($fuse-navy);
+$default-primary-palette: mat-palette($wcm-navy);
 $default-accent-palette: mat-palette($mat-light-blue, 600, 400, 700);
 $default-warn-palette: mat-palette($mat-red);
 
@@ -122,20 +128,20 @@ body.theme-default {
     // Create an Angular Material theme from the $theme map
     @include angular-material-theme($theme);
 
-    // Apply the theme to the Fuse Core
-    @include fuse-core-theme($theme);
+    // Apply the theme to the WCM Core
+    @include wcm-core-theme($theme);
 
     // Apply the theme to the user components
     @include components-theme($theme);
 
-    // Generate Fuse color classes for primary, accent and warn colors
+    // Generate WCM color classes for primary, accent and warn colors
     $palettes: (
         primary: $default-primary-palette,
         accent: $default-accent-palette,
         warn: $default-warn-palette
     );
 
-    @include fuse-color-classes($palettes);
+    @include wcm-color-classes($palettes);
 }
 
 // -----------------------------------------------------------------------------------------------------
@@ -143,7 +149,7 @@ body.theme-default {
 // -----------------------------------------------------------------------------------------------------
 
 // Define the primary, accent and warn palettes
-$yellow-light-theme-primary-palette: mat-palette($fuse-navy, 600, 400, 700);
+$yellow-light-theme-primary-palette: mat-palette($wcm-navy, 600, 400, 700);
 $yellow-light-theme-accent-palette: mat-palette($mat-yellow, 600, 400, 700);
 $yellow-light-theme-warn-palette: mat-palette($mat-red);
 
@@ -157,20 +163,20 @@ body.theme-yellow-light {
     // Generate the Angular Material theme
     @include angular-material-theme($yellow-light-theme);
 
-    // Apply the theme to the Fuse Core
-    @include fuse-core-theme($yellow-light-theme);
+    // Apply the theme to the WCM Core
+    @include wcm-core-theme($yellow-light-theme);
 
     // Apply the theme to the user components
     @include components-theme($yellow-light-theme);
 
-    // Generate Fuse color classes for primary, accent and warn colors
+    // Generate WCM color classes for primary, accent and warn colors
     $palettes: (
         primary: $yellow-light-theme-primary-palette,
         accent: $yellow-light-theme-accent-palette,
         warn: $yellow-light-theme-warn-palette
     );
 
-    @include fuse-color-classes($palettes);
+    @include wcm-color-classes($palettes);
 }
 
 // -----------------------------------------------------------------------------------------------------
@@ -192,20 +198,20 @@ body.theme-blue-gray-dark {
     // Generate the Angular Material theme
     @include angular-material-theme($blue-gray-dark-theme);
 
-    // Apply the theme to the Fuse Core
-    @include fuse-core-theme($blue-gray-dark-theme);
+    // Apply the theme to the WCM Core
+    @include wcm-core-theme($blue-gray-dark-theme);
 
     // Apply the theme to the user components
     @include components-theme($blue-gray-dark-theme);
 
-    // Generate Fuse color classes for primary, accent and warn colors
+    // Generate WCM color classes for primary, accent and warn colors
     $palettes: (
         primary: $blue-gray-dark-theme-primary-palette,
         accent: $blue-gray-dark-theme-accent-palette,
         warn: $blue-gray-dark-theme-warn-palette
     );
 
-    @include fuse-color-classes($palettes);
+    @include wcm-color-classes($palettes);
 }
 
 // -----------------------------------------------------------------------------------------------------
@@ -227,18 +233,18 @@ body.theme-pink-dark {
     // Generate the Angular Material theme
     @include angular-material-theme($pink-dark-theme);
 
-    // Apply the theme to the Fuse Core
-    @include fuse-core-theme($pink-dark-theme);
+    // Apply the theme to the WCM Core
+    @include wcm-core-theme($pink-dark-theme);
 
     // Apply the theme to the user components
     @include components-theme($pink-dark-theme);
 
-    // Generate Fuse color classes for primary, accent and warn colors
+    // Generate WCM color classes for primary, accent and warn colors
     $palettes: (
         primary: $pink-dark-theme-primary-palette,
         accent: $pink-dark-theme-accent-palette,
         warn: $pink-dark-theme-warn-palette
     );
 
-    @include fuse-color-classes($palettes);
+    @include wcm-color-classes($palettes);
 }

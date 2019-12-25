@@ -1,0 +1,11 @@
+@mixin shortcuts-theme($theme) {
+
+    $background: map-get($theme, background);
+
+    #shortcuts {
+
+        &.show-mobile-panel {
+            background-color: map-get($background, background);
+        }
+    }
+}

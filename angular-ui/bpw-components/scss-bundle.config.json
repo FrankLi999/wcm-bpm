@@ -1,6 +1,0 @@
-{
-    "bundlerOptions": {
-        "ignoreImports": ["~@angular/.*", "~@swimlane/*", "~perfect-scrollbar/*", "fuse"],
-        "rootDir": "./"
-    }
-}

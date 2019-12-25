@@ -1,7 +1,8 @@
-import { FuseConfig } from 'bpw-components';
+import { UIConfig } from 'bpw-components';
 import { ApiConfig } from 'bpw-rest-client';
+
 /**
- * Default Fuse Configuration
+ * Default WCM Configuration
  *
  * You can edit these options to change the default options. All these options also can be
  * changed per component basis. See `app/authentication/login/login.component.ts`
@@ -19,4 +20,4 @@ export const appApiConfig: ApiConfig = {
     githubAuthUrl: `${APP_API_BASE_URL}/oauth2/authorize/github?redirect_uri=${APP_OAUTH2_REDIRECT_URI}`
 }
 
-export const appLayoutConfig: FuseConfig = appConfig.layoutConfig;
+export const appLayoutConfig: UIConfig = appConfig.layoutConfig;

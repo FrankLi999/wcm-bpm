@@ -8,7 +8,7 @@ import { MatMenuTrigger } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 
-import { fuseAnimations} from 'bpw-components';
+import { wcmAnimations} from 'bpw-components';
 import { 
   WcmRepository,
   WcmWorkspace,
@@ -61,7 +61,7 @@ class JcrFlatNode {
   templateUrl: './jcr-explorer.component.html',
   styleUrls: ['./jcr-explorer.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  animations   : fuseAnimations
+  animations   : wcmAnimations
 })
 export class JcrExplorerComponent extends WcmConfigurableComponent implements OnInit, OnDestroy {
   functionMap: {[key:string]:Function}= {};

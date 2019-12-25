@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 
 import com.bpwizard.wcm.repo.jcr.ModeshapeTransactionManagerLookup;
@@ -43,11 +44,25 @@ public class ModeshapeConfig {
 	
 	@Bean("webRepositoryManager")
 	@DependsOn({"transactionManager", "transactionManagerLookup"})
-	public RepositoryManager repositoryManager() throws IOException {
+	@Profile("dev")
+	public RepositoryManager repositoryManagerDev() throws IOException {
 		logger.debug("Entering ...");
 		Map<String, Object> factoryParams = new HashMap<>();
 		factoryParams.put(RepositoriesContainer.REPOSITORY_NAME, "bpwizard");
-		factoryParams.put(RepositoriesContainer.URL, new ClassPathResource("modeshape/repository-config.json").getURL().toExternalForm());
+		factoryParams.put(RepositoriesContainer.URL, new ClassPathResource("modeshape/repository-config-dev.json").getURL().toExternalForm());
+		RepositoryManager repositoryManager = new RepositoryManager(factoryParams);
+		logger.debug("Exiting ...");
+		return repositoryManager;
+	}
+	
+	@Bean("webRepositoryManager")
+	@DependsOn({"transactionManager", "transactionManagerLookup"})
+	@Profile("openshift")
+	public RepositoryManager repositoryManagerOpenshift() throws IOException {
+		logger.debug("Entering ...");
+		Map<String, Object> factoryParams = new HashMap<>();
+		factoryParams.put(RepositoriesContainer.REPOSITORY_NAME, "bpwizard");
+		factoryParams.put(RepositoriesContainer.URL, new ClassPathResource("modeshape/repository-config-openshift.json").getURL().toExternalForm());
 		RepositoryManager repositoryManager = new RepositoryManager(factoryParams);
 		logger.debug("Exiting ...");
 		return repositoryManager;

@@ -18,13 +18,11 @@
 		<!-- <version>2.1.6.RELEASE</version>  -->
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	
 	<modules>
 		<module>modeshape</module>
 		<module>camunda</module>
 		<module>wcm-bpm-boot</module>
 	</modules>
-    
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -41,6 +39,7 @@
 		<checker-compat-qual.version>2.5.5</checker-compat-qual.version>
 		<drools-version>7.27.0.Final</drools-version>
 		<spring-cloud.version>Hoxton.RC2</spring-cloud.version>
+		<spring-cloud-kubernetes.version>1.1.1.RELEASE</spring-cloud-kubernetes.version>
 	</properties>
 	
 	<dependencyManagement>
@@ -53,6 +52,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-kubernetes-dependencies</artifactId>
+				<version>${spring-cloud-kubernetes.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			  </dependency>
 		    <!-- 
 			<dependency>
 				<groupId>com.hazelcast</groupId>

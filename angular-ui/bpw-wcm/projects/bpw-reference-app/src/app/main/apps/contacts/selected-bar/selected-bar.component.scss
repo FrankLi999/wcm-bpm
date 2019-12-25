@@ -1,0 +1,10 @@
+@import "../../../../../../../../dist/bpw-components/lib/scss/wcm";
+:host {
+    flex: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 120px;
+    z-index: 99;
+}

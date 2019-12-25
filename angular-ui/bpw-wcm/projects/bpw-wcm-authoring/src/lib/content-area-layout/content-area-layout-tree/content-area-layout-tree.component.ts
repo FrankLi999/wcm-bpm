@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 
-import { fuseAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-components';
 import { WcmOperation, ModeshapeService, WcmService } from 'bpw-wcm-service';
 import * as fromStore from 'bpw-wcm-service';
 import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-navigator.component';
@@ -14,7 +14,7 @@ import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-naviga
   templateUrl: './content-area-layout-tree.component.html',
   styleUrls: ['./content-area-layout-tree.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  animations   : fuseAnimations
+  animations   : wcmAnimations
 })
 export class ContentAreaLayoutTreeComponent extends WcmNavigatorComponent implements OnInit, OnDestroy {
 

@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Subscription, of} from 'rxjs';
 import { map, tap, last, catchError } from 'rxjs/operators';
-import { ApiConfigService } from 'bpw-rest-client';
+import { ApiConfigService }  from 'bpw-rest-client';
 export class FileUploadModel {
   data: File;
   relativePath: String;

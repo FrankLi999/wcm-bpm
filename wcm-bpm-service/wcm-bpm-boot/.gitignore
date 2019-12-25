@@ -1,3 +1,4 @@
+h2/
 target/
 transaction-logs/
 !.mvn/wrapper/maven-wrapper.jar

@@ -22,7 +22,7 @@ spring:
         #jdbc.lob.non_contextual_creation: true
   datasource:
     # url: jdbc:mysql://127.0.0.1:3306/camundaboot?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-    url: jdbc:h2:file:C:/var/h2/camunda_boot/data;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:./h2/camunda_boot/data;DB_CLOSE_ON_EXIT=FALSE
     username: wcmbpm
     password: P@ssw0rd
     driver-class-name: org.h2.Driver

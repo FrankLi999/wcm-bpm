@@ -27,7 +27,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling'
-import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-components';
 
 import { RenderTemplateComponent } from './render-template/render-template.component';
 import { AceEditorModule } from 'ng2-ace-editor';
@@ -74,8 +74,8 @@ import { RenderTemplateTreeComponent } from './render-template-tree/render-templ
     DragDropModule,
     ScrollingModule,
     TranslateModule,
-    FuseSharedModule,
-    FuseSidebarModule
+    SharedUIModule,
+    SidebarModule
   ],
   exports: [
     RenderTemplateComponent,

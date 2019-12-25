@@ -6,7 +6,7 @@ import { storeFreeze } from 'ngrx-store-freeze';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 import { environment } from '../../environments/environment';
-import { RouterEffects, RouteSnapshotSerializer } from 'bpw-auth-store';
+import { RouterEffects, RouteSnapshotSerializer } from 'bpw-components';
 import { appReducers} from './app.reducer';
 export const metaReducers: MetaReducer<any>[] = !environment.production
     ? [storeFreeze]

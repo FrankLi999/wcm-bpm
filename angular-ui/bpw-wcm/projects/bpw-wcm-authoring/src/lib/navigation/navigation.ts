@@ -1,6 +1,6 @@
-import { FuseNavigation } from 'bpw-components';
+import { Navigation } from 'bpw-components';
 
-export const navigation: FuseNavigation[] = [
+export const navigation: Navigation[] = [
     {
         id      : 'wcm-authoring',
         title   : 'WCM Authoring',

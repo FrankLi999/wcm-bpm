@@ -1,5 +1,6 @@
-// Import Fuse core library
-@import "~bpw-components/lib/scss/core";
+// Import WCM core library
+// @import "~bpw-components/lib/scss/core";
+@import "../../../dist/bpw-components/lib/scss/core";
 
 // Import app.theme.scss
 @import "app/app.theme";

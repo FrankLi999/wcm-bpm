@@ -15,22 +15,21 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import {
-  FuseConfigModule,
-  FuseSharedModule,
-  FuseProgressBarModule,
-  FuseSidebarModule,
-  FuseThemeOptionsModule,
-  LayoutModule
+  UIConfigModule,
+  SharedUIModule,
+  ProgressBarModule,
+  SidebarModule,
+  ThemeOptionsModule,
+  LayoutModule,
+  AuthStoreModule,
+  AuthHttpInterceptor
 } from 'bpw-components';
-
-import { AuthStoreModule, AuthHttpInterceptor } from 'bpw-auth-store';
-
+import { RestClientConfigModule } from 'bpw-rest-client';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppStoreModule } from './store/store.module';
 
 import { appApiConfig, appLayoutConfig} from './config/app.config';
-import { RestClientConfigModule } from 'bpw-rest-client';
 declare var appConfig: any;
 const appRoutes: Routes = [
     {
@@ -74,12 +73,12 @@ const appRoutes: Routes = [
         MatIconModule,
         RestClientConfigModule.forRoot(appApiConfig),
 
-        // // Fuse modules
-        FuseConfigModule.forRoot(appLayoutConfig),
-        FuseProgressBarModule,
-        FuseSharedModule,
-        FuseSidebarModule,
-        FuseThemeOptionsModule,
+        // // WCM modules
+        UIConfigModule.forRoot(appLayoutConfig),
+        ProgressBarModule,
+        SharedUIModule,
+        SidebarModule,
+        ThemeOptionsModule,
         LayoutModule,
         AuthStoreModule,
         AppStoreModule

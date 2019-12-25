@@ -29,7 +29,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-components';
 
 import { ContentAreaDesignerComponent } from './content-area-designer/content-area-designer.component';
 import { ContentAreaLayoutComponent } from './content-area-layout/content-area-layout.component';
@@ -75,8 +75,8 @@ import { ComponentModule } from '../components/component.module';
         CdkTreeModule,
         ScrollingModule,
         TranslateModule,
-        FuseSharedModule,
-        FuseSidebarModule,
+        SharedUIModule,
+        SidebarModule,
         ComponentModule
     ],
     exports : [

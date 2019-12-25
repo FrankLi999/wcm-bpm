@@ -2,8 +2,7 @@
   "name": "bpw-wcm-service",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^9.0.0-rc.3",
-    "@angular/core": "^9.0.0-rc.3",
-    "tslib": "^1.10.0"
+    "@angular/common": "^9.0.0-rc.2",
+    "@angular/core": "^9.0.0-rc.2"
   }
 }

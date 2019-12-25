@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 
-import { fuseAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-components';
 import { WcmOperation, JsonForm } from 'bpw-wcm-service';
 import * as fromStore from 'bpw-wcm-service';
 import { ModeshapeService } from 'bpw-wcm-service';
@@ -17,7 +17,7 @@ import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-naviga
   templateUrl: './resource-type-tree.component.html',
   styleUrls: ['./resource-type-tree.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  animations   : fuseAnimations
+  animations   : wcmAnimations
 })
 export class ResourceTypeTreeComponent extends WcmNavigatorComponent implements OnInit, OnDestroy {
 

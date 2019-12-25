@@ -1,7 +1,7 @@
 <div *ngIf="wcmSystem" id="template" class="page-layout carded left-sidebar inner-scroll">
     <!-- LEFT SIDE PANEL -->
     <!--
-    <fuse-sidebar fxFlex="layout.sidePane?.width" class="sidebar" name="page-template-side-bar" position="left" lockedOpen="gt-md" *ngIf="leftSidePane()">
+    <sidebar fxFlex="layout.sidePane?.width" class="sidebar" name="page-template-side-bar" position="left" lockedOpen="gt-md" *ngIf="leftSidePane()">
     -->
     <div class="card sidePanel-layout" fxFlex="{{layout.sidePane.width}}" *ngIf="leftSidePane()">
       <div fxLayout="column" fxLayoutAlign="start"  fxFlex="1 0 auto">
@@ -16,7 +16,7 @@
         </div>
     </div>
     <!--    
-    </fuse-sidebar>
+    </sidebar>
     -->
   
     <div class="card content-layout" fxFlex="{{layout.contentWidth}}" *ngIf="layout">
@@ -42,7 +42,7 @@
     <!-- RIGT SIDE PANEL -->
     <div class="card sidePanel-layout" fxFlex="{{layout.sidePane.width}}" *ngIf="rightSidePane()">
     <!--
-    <fuse-sidebar fxFlex="layout.sidePane?.width" class="sidebar" name="page-template-side-bar" position="right" lockedOpen="gt-md" *ngIf="rightSidePane()">
+    <sidebar fxFlex="layout.sidePane?.width" class="sidebar" name="page-template-side-bar" position="right" lockedOpen="gt-md" *ngIf="rightSidePane()">
     -->
         <div fxLayout="column" fxLayoutAlign="start"  fxFlex="1 0 auto">
             <div class="card container" *ngFor="let viewer of layout.sidePane?.viewers; let viewerIndex = index;">
@@ -55,7 +55,7 @@
             </div>
         </div>
     <!--
-    </fuse-sidebar>
+    </sidebar>
     -->
     </div>
 </div>

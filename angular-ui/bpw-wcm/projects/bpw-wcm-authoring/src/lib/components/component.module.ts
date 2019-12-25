@@ -25,11 +25,10 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
-// import { TranslateModule } from '@ngx-translate/core';
 import { ResourceViewerComponent } from './resource-viewer/resource-viewer.component';
 import { SelectRenderTemplateDialog } from './select-render-template/select-render-template.dialog';
 import { SelectContentItemDialog } from './select-content-item-dialog/select-content-item.dialog';
-import { FuseSharedModule, FuseSidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-components';
 import { ContentSelectorComponent } from './content-selector/content-selector.component';
 @NgModule({
     declarations   : [
@@ -71,9 +70,8 @@ import { ContentSelectorComponent } from './content-selector/content-selector.co
         MatTreeModule,
         CdkTableModule,        
         CdkTreeModule,
-        // TranslateModule,
-        // FuseSharedModule,
-        FuseSidebarModule
+        SharedUIModule,
+        SidebarModule
     ],
     entryComponents: [
         SelectRenderTemplateDialog,
