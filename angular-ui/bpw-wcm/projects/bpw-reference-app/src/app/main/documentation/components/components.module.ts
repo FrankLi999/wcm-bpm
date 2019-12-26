@@ -9,7 +9,7 @@ import {
     HighlightModule,
     MaterialColorPickerModule,
     WidgetModule
-} from 'bpw-components';
+} from 'bpw-common';
 import { DocsComponentsCountdownComponent } from './countdown/countdown.component';
 import { DocsComponentsHighlightComponent } from './highlight/highlight.component';
 import { DocsComponentsMaterialColorPickerComponent } from '../components/material-color-picker/material-color-picker.component';

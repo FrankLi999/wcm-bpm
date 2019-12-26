@@ -12,7 +12,7 @@ import { WcmService, PageConfig, WcmConfigService } from 'bpw-wcm-service';
 import {
   UIConfig,
   Navigation
-} from 'bpw-components';
+} from 'bpw-common';
 
 @Component({
   selector: 'app-content-area-preview',

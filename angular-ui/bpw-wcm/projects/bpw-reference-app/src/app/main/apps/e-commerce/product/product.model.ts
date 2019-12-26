@@ -1,6 +1,6 @@
 import { MatChipInputEvent } from '@angular/material/chips';
 
-import { Utils } from 'bpw-components';
+import { Utils } from 'bpw-common';
 
 export class Product
 {

@@ -5,8 +5,7 @@ import { Subject } from 'rxjs';
 import { startOfDay, isSameDay, isSameMonth } from 'date-fns';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarMonthViewDay } from 'angular-calendar';
 
-import { ConfirmDialogComponent } from 'bpw-components';
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations, ConfirmDialogComponent } from 'bpw-common';
 
 import { CalendarService } from './calendar.service';
 import { CalendarEventModel } from './event.model';

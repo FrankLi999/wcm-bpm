@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
-import { SharedUIModule } from 'bpw-components';
+import { SharedUIModule } from 'bpw-common';
 
 import { Error404Component } from './error-404.component';
 

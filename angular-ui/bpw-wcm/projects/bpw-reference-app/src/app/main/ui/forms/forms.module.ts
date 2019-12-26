@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 
-import { SharedUIModule } from 'bpw-components';
+import { SharedUIModule } from 'bpw-common';
 
 import { FormsComponent } from './forms.component';
 

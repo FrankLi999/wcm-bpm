@@ -3,7 +3,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { wcmAnimations, SidebarService } from 'bpw-components';
+import { wcmAnimations, SidebarService } from 'bpw-common';
 
 import { FileManagerService } from '../file-manager.service';
 

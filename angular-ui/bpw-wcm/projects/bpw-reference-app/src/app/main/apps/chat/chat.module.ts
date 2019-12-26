@@ -17,7 +17,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { 
   SharedUIModule 
-} from 'bpw-components';
+} from 'bpw-common';
 
 import { ChatService } from './chat.service';
 import { ChatComponent } from './chat.component';

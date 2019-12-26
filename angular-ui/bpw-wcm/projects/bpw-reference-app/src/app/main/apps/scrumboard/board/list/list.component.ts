@@ -4,7 +4,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { ConfirmDialogComponent, PerfectScrollbarDirective } from 'bpw-components';
+import { ConfirmDialogComponent, PerfectScrollbarDirective } from 'bpw-common';
 
 import { ScrumboardService } from '../../scrumboard.service';
 import { Card } from '../../card.model';

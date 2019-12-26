@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
-import { Utils } from 'bpw-components';
+import { Utils } from 'bpw-common';
 
 @Injectable()
 export class ChatService implements Resolve<any>

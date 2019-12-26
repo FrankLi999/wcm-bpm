@@ -21,7 +21,7 @@ import {
   SidebarModule,
   ThemeOptionsModule,
   LayoutModule 
-} from 'bpw-components';
+} from 'bpw-common';
 
 
 import { environment } from '../environments/environment';
@@ -29,7 +29,7 @@ import { AppComponent } from './app.component';
 import { AppStoreModule } from './store/store.module';
 
 import { appApiConfig, appLayoutConfig} from './config/app.config';
-import { AuthStoreModule, AuthHttpInterceptor } from 'bpw-components';
+import { AuthStoreModule, AuthHttpInterceptor } from 'bpw-common';
 import { RestClientConfigModule } from 'bpw-rest-client';
 
 declare var appConfig: any;

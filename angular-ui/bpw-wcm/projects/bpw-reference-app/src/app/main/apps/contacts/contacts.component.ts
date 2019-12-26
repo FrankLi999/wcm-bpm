@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
-import { wcmAnimations, SidebarService } from 'bpw-components';
+import { wcmAnimations, SidebarService } from 'bpw-common';
 
 import { ContactsService } from './contacts.service';
 import { ContactsContactFormDialogComponent } from './contact-form/contact-form.component';

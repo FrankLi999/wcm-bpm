@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { SidebarService } from 'bpw-components';
+import { SidebarService } from 'bpw-common';
 
 @Component({
     selector   : 'simple-left-sidebar-4',

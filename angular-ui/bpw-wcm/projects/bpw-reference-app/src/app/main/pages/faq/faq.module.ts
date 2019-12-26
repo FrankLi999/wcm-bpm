@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 
-import { SharedUIModule } from 'bpw-components';
+import { SharedUIModule } from 'bpw-common';
 
 import { FaqService } from './faq.service';
 import { FaqComponent } from './faq.component';

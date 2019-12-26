@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 
 import { MailService } from '../../mail.service';
 import { MailComposeDialogComponent } from '../../dialogs/compose/compose.component';

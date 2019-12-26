@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsul
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { wcmAnimations, Utils } from 'bpw-components';
+import { wcmAnimations, Utils } from 'bpw-common';
 
 import { ScrumboardService } from '../../../../scrumboard.service';
 

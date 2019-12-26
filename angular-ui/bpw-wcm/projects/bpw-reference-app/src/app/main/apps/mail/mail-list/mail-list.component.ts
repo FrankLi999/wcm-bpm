@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 
 import { Mail } from '../mail.model';
 import { MailService } from '../mail.service';

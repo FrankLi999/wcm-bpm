@@ -15,7 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUIModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 
 import { MailService } from './mail.service';
 import { MailComponent } from './mail.component';

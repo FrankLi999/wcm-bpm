@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 import { WcmOperation, ModeshapeService, WcmService } from 'bpw-wcm-service';
 import * as fromStore from 'bpw-wcm-service';
 import { WcmNavigatorComponent } from '../../components/wcm-navigator/wcm-navigator.component';

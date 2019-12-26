@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { UIConfigService, wcmAnimations } from 'bpw-components';
+import { UIConfigService, wcmAnimations } from 'bpw-common';
 
 @Component({
     selector     : 'login',

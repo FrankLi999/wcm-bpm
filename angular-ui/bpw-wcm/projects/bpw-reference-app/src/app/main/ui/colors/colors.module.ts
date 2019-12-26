@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 
-import { SharedUIModule, DemoModule } from 'bpw-components';
+import { SharedUIModule, DemoModule } from 'bpw-common';
 
 import { ColorsComponent } from './colors.component';
 

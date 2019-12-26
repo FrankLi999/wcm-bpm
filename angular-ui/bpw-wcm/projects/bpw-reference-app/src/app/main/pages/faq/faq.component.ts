@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
-import { Utils } from 'bpw-components';
+import { Utils } from 'bpw-common';
 
 import { FaqService } from './faq.service';
 

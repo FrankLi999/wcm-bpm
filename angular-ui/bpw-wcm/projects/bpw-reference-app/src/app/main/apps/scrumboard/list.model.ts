@@ -1,4 +1,4 @@
-import { Utils } from 'bpw-components';
+import { Utils } from 'bpw-common';
 
 export class List
 {

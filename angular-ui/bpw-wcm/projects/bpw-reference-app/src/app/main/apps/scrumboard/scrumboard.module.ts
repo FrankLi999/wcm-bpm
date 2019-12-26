@@ -19,7 +19,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxDnDModule } from '@swimlane/ngx-dnd';
 
-import { SharedUIModule, ConfirmDialogModule, MaterialColorPickerModule } from 'bpw-components';
+import { SharedUIModule, ConfirmDialogModule, MaterialColorPickerModule } from 'bpw-common';
 
 import { BoardResolve, ScrumboardService } from './scrumboard.service';
 import { ScrumboardComponent } from './scrumboard.component';

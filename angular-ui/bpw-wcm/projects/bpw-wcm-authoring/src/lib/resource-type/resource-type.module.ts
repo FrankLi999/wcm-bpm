@@ -32,7 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
-import { SharedUIModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 
 import { ResourceTypeListComponent } from './resource-type-list/resource-type-list.component';
 import { ResourceTypeEditorComponent } from './resource-type-editor/resource-type-editor.component';

@@ -3,8 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 
-import { SharedUIModule } from 'bpw-components';
-import { HighlightModule } from 'bpw-components';
+import { SharedUIModule, HighlightModule } from 'bpw-common';
 
 import { HelperClassesComponent } from './helper-classes.component';
 import { HelperClassesPaddingMarginComponent } from './tabs/padding-margin/padding-margin.component';

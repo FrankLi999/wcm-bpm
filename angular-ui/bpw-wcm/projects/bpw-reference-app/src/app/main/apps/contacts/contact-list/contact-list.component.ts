@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { 
   wcmAnimations,
   ConfirmDialogComponent
-} from 'bpw-components';
+} from 'bpw-common';
 
 import { ContactsService } from '../contacts.service';
 import { ContactsContactFormDialogComponent } from '../contact-form/contact-form.component';

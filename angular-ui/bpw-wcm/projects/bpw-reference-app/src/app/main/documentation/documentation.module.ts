@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { MatIconModule } from '@angular/material/icon';
 
-import { SharedUIModule } from 'bpw-components';
+import { SharedUIModule } from 'bpw-common';
 
 import { DocsChangelogComponent } from './changelog/changelog.component';
 

@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { UIConfigService, wcmAnimations } from 'bpw-components';
+import { UIConfigService, wcmAnimations } from 'bpw-common';
 
 @Component({
     selector     : 'register-2',

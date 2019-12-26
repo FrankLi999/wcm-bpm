@@ -1,4 +1,4 @@
-import { UIConfig } from 'bpw-components';
+import { UIConfig } from 'bpw-common';
 import { ApiConfig } from 'bpw-rest-client';
 /**
  * Default WCM Configuration

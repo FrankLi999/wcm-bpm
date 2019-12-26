@@ -1,0 +1,22 @@
+// Include core Angular Material styles
+@include mat-core();
+
+@import "normalize";
+@import "scrollbars";
+@import "helpers";
+@import "general";
+@import "icons";
+@import "colors";
+@import "material";
+@import "angular-material-fix";
+@import "typography";
+@import "docs";
+@import "page-layouts";
+@import "cards";
+@import "navigation";
+@import "forms";
+@import "print";
+@import "components";
+
+// Plugins
+@import "plugins/plugins";

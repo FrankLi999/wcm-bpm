@@ -19,7 +19,7 @@ import {
     LayoutModule,
     AuthStoreModule,
     AuthHttpInterceptor 
-} from 'bpw-components';
+} from 'bpw-common';
 import { FakeDbService } from './fake-db/fake-db.service';
 import { environment } from '../environments/environment';
 import { AppStoreModule } from './store/store.module';

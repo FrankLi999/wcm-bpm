@@ -3,8 +3,7 @@ import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { SharedUIModule } from 'bpw-components';
-import { HighlightModule } from 'bpw-components';
+import { SharedUIModule, HighlightModule } from 'bpw-common';
 
 import { DocsDirectivesIfOnDomComponent } from './ifOnDom/if-on-dom.component';
 import { DocsDirectivesInnerScrollComponent } from './innerScroll/inner-scroll.component';

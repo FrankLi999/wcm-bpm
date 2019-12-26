@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavigationService } from 'bpw-components';
+import { NavigationService } from 'bpw-common';
 @Component({
     selector   : 'docs-components-navigation',
     templateUrl: './navigation.component.html',

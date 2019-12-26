@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { SharedUIModule } from 'bpw-components';
+import { SharedUIModule } from 'bpw-common';
 
 import { Error500Component } from './error-500.component';
 

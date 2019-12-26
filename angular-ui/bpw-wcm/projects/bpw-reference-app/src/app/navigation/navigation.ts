@@ -1,4 +1,4 @@
-import { Navigation } from 'bpw-components';
+import { Navigation } from 'bpw-common';
 export const navigation: Navigation[] = [
     {
         id       : 'applications',

@@ -13,7 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-import { SharedUIModule, SidebarModule, WidgetModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule, WidgetModule } from 'bpw-common';
 
 import { ProjectDashboardComponent } from './project.component';
 import { ProjectDashboardService } from './project.service';

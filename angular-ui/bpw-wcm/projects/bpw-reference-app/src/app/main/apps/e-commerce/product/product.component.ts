@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { wcmAnimations, Utils } from 'bpw-components';
+import { wcmAnimations, Utils } from 'bpw-common';
 
 import { Product } from './product.model';
 import { EcommerceProductService } from './product.service';

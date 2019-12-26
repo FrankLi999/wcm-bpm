@@ -13,7 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxDnDModule } from '@swimlane/ngx-dnd';
 
-import { SharedUIModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 
 import { TodoService } from './todo.service';
 import { TodoComponent } from './todo.component';

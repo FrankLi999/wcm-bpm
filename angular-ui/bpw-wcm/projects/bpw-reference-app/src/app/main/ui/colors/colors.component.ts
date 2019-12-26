@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { MatColors } from 'bpw-components';
+import { MatColors } from 'bpw-common';
 
 @Component({
     selector   : 'colors',

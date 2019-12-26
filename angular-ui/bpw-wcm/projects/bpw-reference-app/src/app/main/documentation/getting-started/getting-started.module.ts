@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
-import { SharedUIModule } from 'bpw-components';
-import { HighlightModule } from 'bpw-components';
+import { SharedUIModule, HighlightModule } from 'bpw-common';
 
 import { DocsGettingStartedIntroductionComponent } from './introduction/introduction.component';
 import { DocsGettingStartedInstallationComponent } from './installation/installation.component';

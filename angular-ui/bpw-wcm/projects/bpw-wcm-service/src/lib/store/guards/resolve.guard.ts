@@ -9,7 +9,7 @@ import { switchMap, catchError, tap, take, filter } from 'rxjs/operators';
 import { WcmAppState } from '../reducers/wcm-authoring.reducer';
 import { GetWcmSystem } from '../actions/wcm-system.actions';
 import { getWcmSystemLoaded } from '../selectors/wcm-system.selector';
-import { getRouteState, RouteSnapshot } from 'bpw-components';
+import { getRouteState, RouteSnapshot } from 'bpw-common';
 @Injectable({
     providedIn: 'root'
 })

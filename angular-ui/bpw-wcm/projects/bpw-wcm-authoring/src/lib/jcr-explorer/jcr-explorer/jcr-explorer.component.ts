@@ -8,7 +8,7 @@ import { MatMenuTrigger } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 
-import { wcmAnimations} from 'bpw-components';
+import { wcmAnimations} from 'bpw-common';
 import { 
   WcmRepository,
   WcmWorkspace,

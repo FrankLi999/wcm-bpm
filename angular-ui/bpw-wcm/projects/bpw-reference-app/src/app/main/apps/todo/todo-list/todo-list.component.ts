@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 
 import { Todo } from '../todo.model';
 import { TodoService } from '../todo.service';

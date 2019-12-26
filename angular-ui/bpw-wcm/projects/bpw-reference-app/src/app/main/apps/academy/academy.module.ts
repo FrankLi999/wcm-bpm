@@ -10,13 +10,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
-import { SharedUIModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 
 import { AcademyCoursesComponent } from './courses/courses.component';
 import { AcademyCourseComponent } from './course/course.component';
 import { AcademyCoursesService } from './courses.service';
 import { AcademyCourseService } from './course.service';
-import { SidebarModule } from 'bpw-components';
 
 const routes = [
     {

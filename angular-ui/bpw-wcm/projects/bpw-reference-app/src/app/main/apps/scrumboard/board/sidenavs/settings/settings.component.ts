@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 import { ScrumboardService } from '../../../scrumboard.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';

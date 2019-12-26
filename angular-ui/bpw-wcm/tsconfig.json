@@ -54,6 +54,12 @@
       ],
       "bpw-rest-client/*": [
         "dist/bpw-rest-client/*"
+      ],
+      "bpw-common": [
+        "dist/bpw-common"
+      ],
+      "bpw-common/*": [
+        "dist/bpw-common/*"
       ]
     }
   },

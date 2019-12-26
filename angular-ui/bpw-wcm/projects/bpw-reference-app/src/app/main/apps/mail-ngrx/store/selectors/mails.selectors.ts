@@ -1,4 +1,4 @@
-import { Utils } from 'bpw-components';
+import { Utils } from 'bpw-common';
 
 import { createSelector } from '@ngrx/store';
 import { getMailAppState, MailAppState, MailsState } from '../reducers';

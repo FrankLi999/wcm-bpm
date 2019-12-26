@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { MatColors } from 'bpw-components';
+import { MatColors } from 'bpw-common';
 
 import { ScrumboardService } from '../../../../scrumboard.service';
 

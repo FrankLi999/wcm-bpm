@@ -33,7 +33,7 @@ import { MatRadioModule } from '@angular/material/radio';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUIModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 import { QueryListComponent } from './query-list/query-list.component';
 import { QueryEditorComponent } from './query-editor/query-editor.component';
 import { SearchCriteriaComponent } from './search-criteria/search-criteria.component';

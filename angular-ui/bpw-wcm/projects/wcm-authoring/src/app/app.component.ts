@@ -7,15 +7,13 @@ import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { 
   AppConfigurationState,
-  SetNavigation
-} from 'bpw-components';
-import {
+  SetNavigation,
   UIConfigService,
   NavigationService,
   SidebarService,
   SplashScreenService,
   TranslationLoaderService
-} from 'bpw-components';
+} from 'bpw-common';
 
 import { navigation } from './navigation/navigation';
 import { locale as navigationEnglish } from './navigation/i18n/en';

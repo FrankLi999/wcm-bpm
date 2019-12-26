@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 
 @Component({
     selector     : 'profile',

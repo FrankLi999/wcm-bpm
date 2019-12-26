@@ -1,0 +1,91 @@
+@import "../../../scss/theming";
+:host {
+
+    .search-bar {
+        display: flex;
+        flex: 0 1 auto;
+        min-width: 64px;
+        height: 64px;
+        font-size: 13px;
+
+        @include media-breakpoint('xs') {
+            height: 56px;
+        }
+
+        .search-bar-content {
+            display: flex;
+            flex: 1 1 auto;
+            align-items: center;
+            justify-content: flex-start;
+
+            .search-bar-expander,
+            .search-bar-collapser {
+                cursor: pointer;
+                padding: 0 20px;
+                margin: 0;
+                width: 64px !important;
+                height: 64px !important;
+                line-height: 64px !important;
+
+                @include media-breakpoint('xs') {
+                    height: 56px !important;
+                    line-height: 56px !important;
+                }
+            }
+
+            .search-bar-loader {
+                width: 64px !important;
+                height: 64px !important;
+                line-height: 64px !important;
+
+                @include media-breakpoint('xs') {
+                    height: 56px !important;
+                    line-height: 56px !important;
+                }
+            }
+
+            .search-bar-collapser {
+                display: none;
+            }
+
+            #search-bar-input {
+                display: none;
+                flex: 1 0 auto;
+                min-height: 64px;
+                font-size: 16px;
+                background-color: transparent;
+                color: currentColor;
+            }
+        }
+
+        &.expanded {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 10;
+
+            .search-bar-content {
+
+                #search-bar-input {
+                    display: flex;
+                }
+
+                .search-bar-collapser {
+                    display: flex;
+                }
+            }
+        }
+    }
+
+    body {
+
+        &.search-bar-expanded {
+
+            #toolbar {
+                z-index: 999 !important;
+            }
+        }
+    }
+}

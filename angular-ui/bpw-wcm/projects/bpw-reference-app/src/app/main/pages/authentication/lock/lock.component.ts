@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { UIConfigService, wcmAnimations } from 'bpw-components';
+import { UIConfigService, wcmAnimations } from 'bpw-common';
 
 @Component({
     selector     : 'lock',
@@ -56,7 +56,7 @@ export class LockComponent implements OnInit
         this.lockForm = this._formBuilder.group({
             username: [
                 {
-                    value   : 'Katherine',
+                    value   : 'Frank',
                     disabled: true
                 }, Validators.required
             ],

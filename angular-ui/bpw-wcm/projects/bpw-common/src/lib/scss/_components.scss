@@ -1,0 +1,458 @@
+// -----------------------------------------------------------------------------------------------------
+// toolbar
+// -----------------------------------------------------------------------------------------------------
+
+@mixin toolbar-theme($theme) {
+
+    $foreground: map-get($theme, foreground);
+
+    toolbar {
+
+        .toolbar-separator {
+            background: map-get($foreground, divider);
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// search-bar
+// -----------------------------------------------------------------------------------------------------
+@mixin search-bar-theme($theme) {
+
+    $background: map-get($theme, background);
+
+    .search-bar {
+
+        &.expanded {
+            background-color: map-get($background, background);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------------------------------
+// theme-options
+// -----------------------------------------------------------------------------------------------------
+@mixin theme-options-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    theme-options {
+
+        .theme-options-panel {
+
+            form {
+
+                .group {
+                    border: 1px solid map-get($foreground, divider);
+
+                    h2 {
+                        background: map-get($background, background);
+                        color: map-get($foreground, secondary-text);
+                    }
+
+                    h3 {
+                        color: map-get($foreground, secondary-text);
+                    }
+                }
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// widget
+// -----------------------------------------------------------------------------------------------------
+@mixin widget-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    widget {
+
+        > .widget-front,
+        > .widget-back {
+            background: map-get($background, card);
+            border-color: map-get($foreground, divider);
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// sidebar
+// -----------------------------------------------------------------------------------------------------
+@mixin sidebar-theme($theme) {
+
+    $background: map-get($theme, background);
+
+    sidebar {
+        background: map-get($background, background);
+    }
+
+    .sidebar-overlay {
+        background-color: rgba(0, 0, 0, 0.6);
+
+        &.sidebar-overlay-invisible {
+            background-color: transparent;
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// shortcuts
+// -----------------------------------------------------------------------------------------------------
+@mixin shortcuts-theme($theme) {
+
+    $background: map-get($theme, background);
+
+    #shortcuts {
+
+        &.show-mobile-panel {
+            background-color: map-get($background, background);
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// material-color-picker
+// -----------------------------------------------------------------------------------------------------
+@mixin material-color-picker-theme($theme) {
+
+    $background: map-get($theme, background);
+
+    .material-color-picker-menu {
+
+        .mat-menu-content {
+
+            .views {
+                background: #303030;
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// shortcuts
+// -----------------------------------------------------------------------------------------------------
+@mixin shortcuts-theme($theme) {
+
+    $background: map-get($theme, background);
+
+    #shortcuts {
+
+        &.show-mobile-panel {
+            background-color: map-get($background, background);
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// countdown
+// -----------------------------------------------------------------------------------------------------
+@mixin countdown-theme($theme) {
+
+    $foreground: map-get($theme, foreground);
+
+    countdown {
+
+        .countdown {
+
+            .time {
+
+                .title {
+                    color: map-get($foreground, secondary-text);
+                }
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// login
+// -----------------------------------------------------------------------------------------------------
+@mixin login-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $accent: map-get($theme, accent);
+    $is-dark: map-get($theme, is-dark);
+
+    login {
+
+        #login {
+
+            #login-intro {
+                color: white;
+            }
+
+            #login-form-wrapper {
+                @if ($is-dark) {
+                    background: mat-color($wcm-navy, 600);
+                } @else {
+                    background: map-get($background, card);
+                }
+
+                #login-form {
+
+                    .separator {
+                        color: map-get($foreground, divider);
+
+                        .text {
+
+                            &:before,
+                            &:after {
+                                border-top-color: map-get($foreground, divider);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// signup
+// -----------------------------------------------------------------------------------------------------
+@mixin signup-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $accent: map-get($theme, accent);
+    $is-dark: map-get($theme, is-dark);
+
+    signup {
+
+        #register {
+
+            #register-intro {
+                color: white;
+            }
+
+            #register-form-wrapper {
+                @if ($is-dark) {
+                    background: mat-color($wcm-navy, 600);
+                } @else {
+                    background: map-get($background, card);
+                }
+
+                #register-form {
+
+                    .separator {
+                        color: map-get($foreground, divider);
+
+                        .text {
+
+                            &:before,
+                            &:after {
+                                border-top-color: map-get($foreground, divider);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// mail-confirm
+// -----------------------------------------------------------------------------------------------------
+@mixin mail-confirm-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $is-dark: map-get($theme, is-dark);
+
+    mail-confirm {
+
+        #mail-confirm {
+
+            #mail-confirm-form-wrapper {
+
+                #mail-confirm-form {
+                    @if ($is-dark) {
+                        background: mat-color($wcm-navy, 600);
+                    } @else {
+                        background: map-get($background, card);
+                    }
+
+                    .subtitle {
+                        color: map-get($foreground, secondary-text);
+                    }
+                }
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// reset-password
+// -----------------------------------------------------------------------------------------------------
+@mixin reset-password-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $accent: map-get($theme, accent);
+    $is-dark: map-get($theme, is-dark);
+
+    reset-password {
+
+        #reset-password {
+
+            #reset-password-intro {
+                color: white;
+            }
+
+            #reset-password-form-wrapper {
+                @if ($is-dark) {
+                    background: mat-color($wcm-navy, 600);
+                } @else {
+                    background: map-get($background, card);
+                }
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// lock-screen
+// -----------------------------------------------------------------------------------------------------
+@mixin lock-screen-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $is-dark: map-get($theme, is-dark);
+
+    lock-screen {
+
+        #lock {
+
+            #lock-form-wrapper {
+
+                #lock-form {
+                    @if ($is-dark) {
+                        background: mat-color($wcm-navy, 600);
+                    } @else {
+                        background: map-get($background, card);
+                    }
+
+                    .lock-form-header {
+
+                        .avatar-container {
+
+                            mat-icon {
+                                color: mat-color($mat-red, 500);
+                            }
+                        }
+
+                        .subtitle {
+                            color: map-get($foreground, secondary-text);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// forgot-password
+// -----------------------------------------------------------------------------------------------------
+@mixin forgot-password-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $accent: map-get($theme, accent);
+    $is-dark: map-get($theme, is-dark);
+
+    forgot-password {
+
+        #forgot-password {
+
+            #forgot-password-intro {
+                color: white;
+            }
+
+            #forgot-password-form-wrapper {
+                @if ($is-dark) {
+                    background: mat-color($wcm-navy, 600);
+                } @else {
+                    background: map-get($background, card);
+                }
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------------------------------
+// chat-panel
+// -----------------------------------------------------------------------------------------------------
+@mixin chat-panel-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $is-dark: map-get($theme, is-dark);
+
+    chat-panel {
+
+        #contacts-list {
+            background-color: map-get($background, app-bar);
+
+            .contacts-list-item {
+
+                &.active {
+                    background: map-get($background, hover);
+
+                    &:after {
+                        background-color: map-get($accent, default);
+                    }
+                }
+
+                .unread-count {
+                    background-color: map-get($accent, default);
+                    color: map-get($accent, default-contrast);
+                }
+
+                .status-icon {
+                    border-color: map-get($background, app-bar);
+                }
+            }
+        }
+
+        #chat {
+
+            .messages {
+
+                .message-row {
+
+                    &.contact {
+
+                        .bubble {
+                            background-color: map-get($primary, default);
+                            color: map-get($primary, default-contrast);
+                        }
+                    }
+
+                    &.me {
+
+                        .bubble {
+                            color: rgba(0, 0, 0, 0.87);
+                            background-color: #E0E0E0;
+                        }
+                    }
+                }
+            }
+
+            .reply-form {
+
+                .message-text {
+                    background-color: map-get($background, app-bar);
+                    border-color: map-get($foreground, divider);
+
+                    .mat-form-field-wrapper {
+
+                        .mat-form-field-flex {
+
+                            .mat-form-field-infix {
+                                @if ($is-dark == true) {
+                                    background-color: map-get($background, hover);
+                                } @else {
+                                    background-color: white;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

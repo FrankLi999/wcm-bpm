@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 @Component({
   selector: 'site-config',
   templateUrl: './site-config-tree.component.html',

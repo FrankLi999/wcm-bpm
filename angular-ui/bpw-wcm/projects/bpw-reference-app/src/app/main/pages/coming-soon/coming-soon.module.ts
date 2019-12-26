@@ -8,8 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { SharedUIModule } from 'bpw-components';
-import { CountdownModule } from 'bpw-components';
+import { SharedUIModule, CountdownModule } from 'bpw-common';
 
 import { ComingSoonComponent } from './coming-soon.component';
 

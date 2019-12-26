@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import 'prismjs/components/prism-scss';
 import 'prismjs/components/prism-typescript';
 
-import { wcmAnimations, CopierService } from 'bpw-components';
+import { wcmAnimations, CopierService } from 'bpw-common';
 
 import { EXAMPLE_COMPONENTS } from '../example-components';
 

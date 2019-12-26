@@ -1,8 +1,3 @@
-// Import WCM core library
-// @import "~bpw-components/lib/scss/core";
-@import "../../../dist/bpw-components/lib/scss/core";
-
-// Import app.theme.scss
 @import "app/app.theme";
 
 @import '~@angular/material/theming';

@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
 
-import { UIConfigService, wcmAnimations } from 'bpw-components';
+import { UIConfigService, wcmAnimations } from 'bpw-common';
 
 @Component({
     selector     : 'reset-password-2',

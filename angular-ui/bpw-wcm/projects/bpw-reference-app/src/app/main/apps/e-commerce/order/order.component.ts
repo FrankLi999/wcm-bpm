@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject} from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 
 import { orderStatuses } from './order-statuses';
 import { Order } from './order.model';

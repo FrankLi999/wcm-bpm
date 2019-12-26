@@ -29,7 +29,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUIModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 
 import { ContentAreaDesignerComponent } from './content-area-designer/content-area-designer.component';
 import { ContentAreaLayoutComponent } from './content-area-layout/content-area-layout.component';

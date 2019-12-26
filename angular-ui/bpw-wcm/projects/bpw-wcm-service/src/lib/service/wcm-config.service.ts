@@ -7,13 +7,10 @@ import {
   Navigation,
   UIConfigService,
   NavigationService,
-  TranslationLoaderService
-} from 'bpw-components';
-
-import { 
-AppConfigurationState,
-SetNavigation
-} from 'bpw-components';
+  TranslationLoaderService,
+  AppConfigurationState,
+  SetNavigation
+} from 'bpw-common';
 
 @Injectable({
   providedIn: 'root'

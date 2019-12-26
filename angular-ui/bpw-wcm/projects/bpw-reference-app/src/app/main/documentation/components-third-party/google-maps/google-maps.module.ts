@@ -6,8 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { AgmCoreModule } from '@agm/core';
 
-import { SharedUIModule } from 'bpw-components';
-import { HighlightModule } from 'bpw-components';
+import { SharedUIModule, HighlightModule } from 'bpw-common';
 
 import { DocsComponentsThirdPartyGoogleMapsComponent } from './google-maps.component';
 

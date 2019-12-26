@@ -1,4 +1,4 @@
-import { Utils } from 'bpw-components';
+import { Utils } from 'bpw-common';
 
 import { List } from './list.model';
 import { Card } from './card.model';

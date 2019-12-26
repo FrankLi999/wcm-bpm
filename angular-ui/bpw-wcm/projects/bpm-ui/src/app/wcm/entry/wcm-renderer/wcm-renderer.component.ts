@@ -10,7 +10,7 @@ import {
   SidebarService,
   SplashScreenService,
   TranslationLoaderService
-} from 'bpw-components';
+} from 'bpw-common';
 
 import {
   WcmSystem,

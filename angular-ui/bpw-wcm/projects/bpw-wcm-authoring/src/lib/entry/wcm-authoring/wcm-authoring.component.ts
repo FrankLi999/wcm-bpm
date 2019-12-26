@@ -7,13 +7,10 @@ import {
   NavigationService,
   SidebarService,
   SplashScreenService,
-  TranslationLoaderService
-} from 'bpw-components';
-
-import { 
-AppConfigurationState,
-SetNavigation
-} from 'bpw-components';
+  TranslationLoaderService,
+  AppConfigurationState,
+  SetNavigation
+} from 'bpw-common';
 import { wcmAuthoringLayoutConfig } from '../../config/wcm-authoring.config';
 import { navigation } from '../../navigation/navigation';
 import { locale as navigationEnglish } from '../../navigation/i18n/en';

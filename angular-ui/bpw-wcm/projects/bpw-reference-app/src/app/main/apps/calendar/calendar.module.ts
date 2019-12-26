@@ -15,7 +15,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { CalendarModule as AngularCalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
-import { SharedUIModule, ConfirmDialogModule } from 'bpw-components';
+import { SharedUIModule, ConfirmDialogModule } from 'bpw-common';
 
 import { CalendarComponent } from './calendar.component';
 import { CalendarService } from './calendar.service';

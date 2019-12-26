@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Repository } from 'bpw-wcm-service';
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 @Component({
   selector: 'repository',
   templateUrl: './repository.component.html',

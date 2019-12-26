@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import {PerfectScrollbarDirective } from 'bpw-components';
+import {PerfectScrollbarDirective } from 'bpw-common';
 
 import { ChatService } from '../chat.service';
 

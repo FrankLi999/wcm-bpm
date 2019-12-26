@@ -13,7 +13,7 @@ import {
   SidebarService,
   SplashScreenService,
   TranslationLoaderService
-} from 'bpw-components';
+} from 'bpw-common';
 
 import { navigation } from './navigation/navigation';
 import { locale as navigationEnglish } from './navigation/i18n/en';

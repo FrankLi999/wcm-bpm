@@ -6,7 +6,7 @@ import {
   wcmAnimations,
   PerfectScrollbarDirective,
   SidebarService
-} from 'bpw-components';
+} from 'bpw-common';
 
 import { AcademyCourseService } from '../course.service';
 

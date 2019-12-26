@@ -4,7 +4,7 @@ import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { SidebarService, TranslationLoaderService } from 'bpw-components';
+import { SidebarService, TranslationLoaderService } from 'bpw-common';
 
 import { Mail } from './mail.model';
 import { MailNgrxService } from './mail.service';

@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
-import { SidebarService, TranslationLoaderService } from 'bpw-components';
+import { SidebarService, TranslationLoaderService } from 'bpw-common';
 
 import { Mail } from './mail.model';
 import { MailService } from './mail.service';

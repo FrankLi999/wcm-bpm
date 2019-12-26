@@ -28,7 +28,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { ResourceViewerComponent } from './resource-viewer/resource-viewer.component';
 import { SelectRenderTemplateDialog } from './select-render-template/select-render-template.dialog';
 import { SelectContentItemDialog } from './select-content-item-dialog/select-content-item.dialog';
-import { SharedUIModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 import { ContentSelectorComponent } from './content-selector/content-selector.component';
 @NgModule({
     declarations   : [

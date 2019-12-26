@@ -1,3 +1,83 @@
+// @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~@angular/material/theming';
+
+// ngx-datatable
+@import '~@swimlane/ngx-datatable/themes/material';
+
+// Perfect scrollbar
+@import '~perfect-scrollbar/css/perfect-scrollbar';
+
+@import "../../../../dist/bpw-common/lib/scss/theming";
+
+@import "../../../../dist/bpw-common/lib/scss/wcm";
+@import "main/apps/academy/academy.theme";
+@import "main/apps/calendar/calendar.theme";
+@import "main/apps/chat/chat.theme";
+@import "main/apps/contacts/contacts.theme";
+@import "main/apps/dashboards/project/project.theme";
+@import "main/apps/e-commerce/orders/orders.theme";
+@import "main/apps/e-commerce/products/products.theme";
+@import "main/apps/file-manager/file-manager.theme";
+@import "main/apps/mail/mail.theme";
+@import "main/apps/mail-ngrx/mail.theme";
+@import "main/apps/scrumboard/scrumboard.theme";
+@import "main/apps/todo/todo.theme";
+
+// @import "main/pages/authentication/login/login.theme";
+@import "main/pages/authentication/login-2/login-2.theme";
+@import "main/pages/authentication/register/register.theme";
+@import "main/pages/authentication/register-2/register-2.theme";
+// @import "main/pages/authentication/reset-password/reset-password.theme";
+@import "main/pages/authentication/reset-password-2/reset-password-2.theme";
+// @import "main/pages/authentication/forgot-password/forgot-password.theme";
+@import "main/pages/authentication/forgot-password-2/forgot-password-2.theme";
+@import "main/pages/authentication/lock/lock.theme";
+// @import "main/pages/authentication/mail-confirm/mail-confirm.theme";
+@import "main/pages/coming-soon/coming-soon.theme";
+@import "main/pages/errors/404/error-404.theme";
+@import "main/pages/errors/500/error-500.theme";
+@import "main/pages/maintenance/maintenance.theme";
+@import "main/pages/pricing/style-1/style-1.theme";
+@import "main/pages/pricing/style-2/style-2.theme";
+@import "main/pages/pricing/style-3/style-3.theme";
+@import "main/pages/profile/tabs/about/about.theme";
+@import "main/pages/profile/tabs/photos-videos/photos-videos.theme";
+@import "main/pages/profile/tabs/timeline/timeline.theme";
+@import "main/pages/search/classic/search-classic.theme";
+@import "main/pages/search/modern/search-modern.theme";
+@import "main/pages/faq/faq.theme";
+@import "main/pages/knowledge-base/knowledge-base.theme";
+
+@import "main/ui/cards/cards.theme";
+
+@import "main/angular-material-elements/example-viewer/example-viewer.theme";
+
+
+@mixin wcm-core-theme($theme) {
+    
+    // Theming for Wcm core styles
+    @include colors-theme($theme);
+    @include cards-theme($theme);
+    @include material-theme($theme);
+    @include page-layouts-theme($theme);
+    @include typography-theme($theme);
+
+    // Theming for WCM components
+    @include countdown-theme($theme);
+    @include search-bar-theme($theme);
+    @include shortcuts-theme($theme);
+    @include sidebar-theme($theme);
+    @include theme-options-theme($theme);
+    @include material-color-picker-theme($theme);
+    @include widget-theme($theme);
+
+    // Theming for 3rd party components
+    @include ngx-datatable-theme($theme);
+}
+
+
+
+@include mat-core();
 // -----------------------------------------------------------------------------------------------------
 // @ Custom color maps for WCM
 // -----------------------------------------------------------------------------------------------------
@@ -72,70 +152,6 @@ $typography: mat-typography-config(
 
 // Setup the typography
 @include angular-material-typography($typography);
-
-// -----------------------------------------------------------------------------------------------------
-// @ Component theming
-// -----------------------------------------------------------------------------------------------------
-
-// Import app and page component themes here to enable theming for them
-
-// -----------------------------------------------------------------------------------------------------
-// @ Component theming
-// -----------------------------------------------------------------------------------------------------
-// Import app and page component themes here to enable theming for them
-@import "../../../dist/bpw-components/lib/layout/components/chat-panel/chat-panel.theme";
-@import "../../../dist/bpw-components/lib/layout/components/toolbar/toolbar.theme";
-
-@import "main/apps/academy/academy.theme";
-@import "main/apps/calendar/calendar.theme";
-@import "main/apps/chat/chat.theme";
-@import "main/apps/contacts/contacts.theme";
-@import "main/apps/dashboards/project/project.theme";
-@import "main/apps/e-commerce/orders/orders.theme";
-@import "main/apps/e-commerce/products/products.theme";
-@import "main/apps/file-manager/file-manager.theme";
-@import "main/apps/mail/mail.theme";
-@import "main/apps/mail-ngrx/mail.theme";
-@import "main/apps/scrumboard/scrumboard.theme";
-@import "main/apps/todo/todo.theme";
-
-@import "main/pages/authentication/login/login.theme";
-@import "main/pages/authentication/login-2/login-2.theme";
-@import "main/pages/authentication/register/register.theme";
-@import "main/pages/authentication/register-2/register-2.theme";
-@import "main/pages/authentication/reset-password/reset-password.theme";
-@import "main/pages/authentication/reset-password-2/reset-password-2.theme";
-@import "main/pages/authentication/forgot-password/forgot-password.theme";
-@import "main/pages/authentication/forgot-password-2/forgot-password-2.theme";
-@import "main/pages/authentication/lock/lock.theme";
-@import "main/pages/authentication/mail-confirm/mail-confirm.theme";
-@import "main/pages/coming-soon/coming-soon.theme";
-@import "main/pages/errors/404/error-404.theme";
-@import "main/pages/errors/500/error-500.theme";
-@import "main/pages/maintenance/maintenance.theme";
-@import "main/pages/pricing/style-1/style-1.theme";
-@import "main/pages/pricing/style-2/style-2.theme";
-@import "main/pages/pricing/style-3/style-3.theme";
-@import "main/pages/profile/tabs/about/about.theme";
-@import "main/pages/profile/tabs/photos-videos/photos-videos.theme";
-@import "main/pages/profile/tabs/timeline/timeline.theme";
-@import "main/pages/search/classic/search-classic.theme";
-@import "main/pages/search/modern/search-modern.theme";
-@import "main/pages/faq/faq.theme";
-@import "main/pages/knowledge-base/knowledge-base.theme";
-
-@import "main/ui/cards/cards.theme";
-
-@import "main/angular-material-elements/example-viewer/example-viewer.theme";
-
-// @import "../../../dist/bpw-components/lib/layout/components/toolbar/toolbar.theme";
-// @import "../../../dist/bpw-components/lib/auth/login/login.theme";
-// @import "../../../dist/bpw-components/lib/auth/signup/signup.theme";
-// @import "../../../dist/bpw-components/lib/auth/reset-password/reset-password.theme";
-// @import "../../../dist/bpw-components/lib/auth/forgot-password/forgot-password.theme";
-// @import "../../../dist/bpw-components/lib/auth/lock-screen/lock-screen.theme";
-// @import "../../../dist/bpw-components/lib/auth/mail-confirm/mail-confirm.theme";
-
 
 // Define a mixin for easier access
 @mixin components-theme($theme) {
@@ -225,6 +241,7 @@ body.theme-default {
 
     @include wcm-color-classes($palettes);
 }
+
 
 // -----------------------------------------------------------------------------------------------------
 // @ Define a yellow light theme

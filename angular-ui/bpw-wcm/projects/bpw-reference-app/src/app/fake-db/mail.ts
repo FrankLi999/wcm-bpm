@@ -149,14 +149,14 @@ export class MailFakeDb
         {
             'id'            : '1544e43dcdae6ebf876',
             'from'          : {
-                'name'  : 'Charles Kim',
-                'avatar': 'assets/images/avatars/garry.jpg',
-                'email' : 'charleskim@creapond.com'
+                'name'  : 'Frank Li',
+                'avatar': 'assets/images/avatars/profile.jpg',
+                'email' : 'frank.li@mail.com'
             },
             'to'            : [
                 {
                     'name' : 'me',
-                    'email': 'johndoe@creapond.com'
+                    'email': 'frank.li@mail.com'
                 }
             ],
             'subject'       : 'Commits that need to be pushed lorem ipsum dolor sit amet, consectetur adipiscing elit.',

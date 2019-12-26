@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 
-import { SharedUIModule, DemoModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, DemoModule, SidebarModule } from 'bpw-common';
 
 import { CardedFullWidth1Component } from './carded/full-width-1/full-width-1.component';
 import { CardedFullWidth2Component } from './carded/full-width-2/full-width-2.component';

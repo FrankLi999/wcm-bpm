@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
-import { UIConfigService, wcmAnimations } from 'bpw-components';
+import { UIConfigService, wcmAnimations } from 'bpw-common';
 
 @Component({
     selector     : 'maintenance',

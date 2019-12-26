@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { WcmConfigService } from 'bpw-wcm-service';
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 import { WcmConfigurableComponent } from '../../components/wcm-configurable.component';
 @Component({
   selector: 'site-explorer',

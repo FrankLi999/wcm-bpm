@@ -13,7 +13,7 @@ import { AgmCoreModule } from '@agm/core';
 import { ChartsModule } from 'ng2-charts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-import { SharedUIModule, WidgetModule } from 'bpw-components';
+import { SharedUIModule, WidgetModule } from 'bpw-common';
 
 import { AnalyticsDashboardComponent } from './analytics.component';
 import { AnalyticsDashboardService } from './analytics.service';

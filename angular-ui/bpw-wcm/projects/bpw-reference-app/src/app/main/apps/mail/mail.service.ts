@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { Utils } from 'bpw-components';
+import { Utils } from 'bpw-common';
 
 import { Mail } from './mail.model';
 

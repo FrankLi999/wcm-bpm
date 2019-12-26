@@ -7,7 +7,7 @@ import {
     SharedUIModule, 
     HighlightModule, 
     WidgetModule
-} from 'bpw-components';
+} from 'bpw-common';
 
 
 import { MaterialModule } from './material.module';

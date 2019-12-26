@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { wcmAnimations, SidebarService } from 'bpw-components';
+import { wcmAnimations, SidebarService } from 'bpw-common';
 
 import { FileManagerService } from './file-manager.service';
 

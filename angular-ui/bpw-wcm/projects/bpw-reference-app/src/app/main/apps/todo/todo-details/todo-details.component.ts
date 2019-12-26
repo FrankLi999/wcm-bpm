@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
-import { Utils, wcmAnimations } from 'bpw-components';
+import { Utils, wcmAnimations } from 'bpw-common';
 
 import { Todo } from '../todo.model';
 import { TodoService } from '../todo.service';

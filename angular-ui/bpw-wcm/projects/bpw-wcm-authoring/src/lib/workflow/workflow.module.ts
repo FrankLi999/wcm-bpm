@@ -22,7 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUIModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { WorkflowsComponent } from './workflows/workflows.component';
 import { WorkflowTreeComponent } from './workflow-tree/workflow-tree.component';

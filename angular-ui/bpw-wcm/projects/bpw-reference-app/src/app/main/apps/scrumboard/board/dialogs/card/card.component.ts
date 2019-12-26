@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Subject } from 'rxjs';
 
-import { ConfirmDialogComponent, Utils } from 'bpw-components';
+import { ConfirmDialogComponent, Utils } from 'bpw-common';
 
 import { ScrumboardService } from '../../../scrumboard.service';
 import { takeUntil } from 'rxjs/operators';

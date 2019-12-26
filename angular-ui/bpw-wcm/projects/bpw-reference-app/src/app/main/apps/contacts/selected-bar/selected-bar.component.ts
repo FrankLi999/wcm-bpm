@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { ConfirmDialogComponent } from 'bpw-components';
+import { ConfirmDialogComponent } from 'bpw-common';
 
 import { ContactsService } from '../contacts.service';
 

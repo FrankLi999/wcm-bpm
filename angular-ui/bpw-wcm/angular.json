@@ -462,46 +462,6 @@
         }
       }
     },
-    "bpw-components": {
-      "projectType": "library",
-      "root": "projects/bpw-components",
-      "sourceRoot": "projects/bpw-components/src",
-      "prefix": "bpw-components",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/bpw-components/tsconfig.lib.json",
-            "project": "projects/bpw-components/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/bpw-components/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/bpw-components/src/test.ts",
-            "tsConfig": "projects/bpw-components/tsconfig.spec.json",
-            "karmaConfig": "projects/bpw-components/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/bpw-components/tsconfig.lib.json",
-              "projects/bpw-components/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
     "bpw-rest-client": {
       "projectType": "library",
       "root": "projects/bpw-rest-client",
@@ -602,8 +562,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "6mb"
                 }
               ]
             },
@@ -749,8 +709,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "6mb"
                 }
               ]
             },
@@ -832,6 +792,193 @@
             "production": {
               "devServerTarget": "bpw-reference-app:serve:production"
             }
+          }
+        }
+      }
+    },
+    "bpw-skeleton-minimal": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/bpw-skeleton-minimal",
+      "sourceRoot": "projects/bpw-skeleton-minimal/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/bpw-skeleton-minimal",
+            "index": "projects/bpw-skeleton-minimal/src/index.html",
+            "main": "projects/bpw-skeleton-minimal/src/main.ts",
+            "polyfills": "projects/bpw-skeleton-minimal/src/polyfills.ts",
+            "tsConfig": "projects/bpw-skeleton-minimal/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/bpw-skeleton-minimal/src/favicon.ico",
+              "projects/bpw-skeleton-minimal/src/assets"
+            ],
+            "styles": [
+              "projects/bpw-skeleton-minimal/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/bpw-skeleton-minimal/src/environments/environment.ts",
+                  "with": "projects/bpw-skeleton-minimal/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "3mb",
+                  "maximumError": "6mb"
+                }
+              ]
+            },
+            "ec": {
+              "sourceMap": true,
+              "extractCss": true
+            },
+            "hmr": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/bpw-skeleton-minimal/src/environments/environment.ts",
+                  "with": "projects/bpw-skeleton-minimal/src/environments/environment.hmr.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "bpw-skeleton-minimal:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "bpw-skeleton-minimal:build:production"
+            },
+            "hmr": {
+              "hmr": true,
+              "browserTarget": "bpw-skeleton-minimal:build:hmr"
+            },
+            "ec": {
+              "browserTarget": "bpw-skeleton-minimal:build:ec"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "bpw-skeleton-minimal:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/bpw-skeleton-minimal/src/test.ts",
+            "polyfills": "projects/bpw-skeleton-minimal/src/polyfills.ts",
+            "tsConfig": "projects/bpw-skeleton-minimal/tsconfig.spec.json",
+            "karmaConfig": "projects/bpw-skeleton-minimal/karma.conf.js",
+            "assets": [
+              "projects/bpw-skeleton-minimal/src/favicon.ico",
+              "projects/bpw-skeleton-minimal/src/assets"
+            ],
+            "styles": [
+              "projects/bpw-skeleton-minimal/src/styles.scss"
+            ],
+            "scripts": [
+			  {
+                "input": "node_modules/document-register-element/build/document-register-element.js"
+              },
+              {
+                "bundleName": "polyfill-webcomp-es5",
+                "input": "node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+              },
+              {
+                "bundleName": "polyfill-webcomp",
+                "input": "node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js"
+              }
+			]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/bpw-skeleton-minimal/tsconfig.app.json",
+              "projects/bpw-skeleton-minimal/tsconfig.spec.json",
+              "projects/bpw-skeleton-minimal/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/bpw-skeleton-minimal/e2e/protractor.conf.js",
+            "devServerTarget": "bpw-skeleton-minimal:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "bpw-skeleton-minimal:serve:production"
+            }
+          }
+        }
+      }
+    },
+    "bpw-common": {
+      "projectType": "library",
+      "root": "projects/bpw-common",
+      "sourceRoot": "projects/bpw-common/src",
+      "prefix": "bpw-common",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/bpw-common/tsconfig.lib.json",
+            "project": "projects/bpw-common/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/bpw-common/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/bpw-common/src/test.ts",
+            "tsConfig": "projects/bpw-common/tsconfig.spec.json",
+            "karmaConfig": "projects/bpw-common/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/bpw-common/tsconfig.lib.json",
+              "projects/bpw-common/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }

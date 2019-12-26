@@ -29,7 +29,7 @@ import {
   LayoutModule,
   JsonSchemaFormModule,
   AuthGuard
-} from 'bpw-components';
+} from 'bpw-common';
 
 import { WcmAppStoreModule, ResolveGuard } from 'bpw-wcm-service';
 import { WcmRendererComponent } from './entry/wcm-renderer/wcm-renderer.component';

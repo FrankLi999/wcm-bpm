@@ -25,7 +25,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ValidationRuleComponent } from './validation-rule/validation-rule.component';
 import { ValidationRulesComponent } from './validation-rules/validation-rules.component';
 import { ValidationRuleTreeComponent } from './validation-rule-tree/validation-rule-tree.component';
-import { SharedUIModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 @NgModule({
   declarations: [ValidationRuleComponent, ValidationRulesComponent, ValidationRuleTreeComponent],
   imports: [

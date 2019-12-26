@@ -3,7 +3,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as shape from 'd3-shape';
 
-import { wcmAnimations, SidebarService } from 'bpw-components';
+import { wcmAnimations, SidebarService } from 'bpw-common';
 
 import { ProjectDashboardService } from './project.service';
 

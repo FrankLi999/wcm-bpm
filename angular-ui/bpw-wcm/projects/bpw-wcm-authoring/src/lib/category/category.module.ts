@@ -22,7 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUIModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 import { CategoryComponent } from './category/category.component';
 import { CategoryTreeComponent } from './category-tree/category-tree.component';
 

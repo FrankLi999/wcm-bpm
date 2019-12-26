@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CalendarEvent } from 'angular-calendar';
 
-import { MatColors } from 'bpw-components';
+import { MatColors } from 'bpw-common';
 
 import { CalendarEventModel } from '../event.model';
 

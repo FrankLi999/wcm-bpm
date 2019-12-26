@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { UIConfigService } from 'bpw-components';
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations, UIConfigService } from 'bpw-common';
 
 @Component({
     selector     : 'forgot-password-2',

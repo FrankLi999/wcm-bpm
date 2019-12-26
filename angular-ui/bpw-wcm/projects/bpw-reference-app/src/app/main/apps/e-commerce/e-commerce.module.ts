@@ -19,7 +19,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AgmCoreModule } from '@agm/core';
 
-import { SharedUIModule, WidgetModule } from 'bpw-components';
+import { SharedUIModule, WidgetModule } from 'bpw-common';
 
 import { EcommerceProductsComponent } from './products/products.component';
 import { EcommerceProductsService } from './products/products.service';

@@ -17,7 +17,7 @@ import {
   SharedUIModule,
   ConfirmDialogModule,
   SidebarModule 
-} from 'bpw-components';
+} from 'bpw-common';
 
 import { ContactsComponent } from './contacts.component';
 import { ContactsService } from './contacts.service';

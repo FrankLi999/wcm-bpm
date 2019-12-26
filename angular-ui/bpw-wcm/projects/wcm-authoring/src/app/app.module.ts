@@ -23,7 +23,7 @@ import {
   LayoutModule,
   AuthStoreModule,
   AuthHttpInterceptor
-} from 'bpw-components';
+} from 'bpw-common';
 import { RestClientConfigModule } from 'bpw-rest-client';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';

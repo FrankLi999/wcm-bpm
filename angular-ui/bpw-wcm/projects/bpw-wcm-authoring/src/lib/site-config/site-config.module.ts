@@ -22,7 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUIModule, SidebarModule } from 'bpw-components';
+import { SharedUIModule, SidebarModule } from 'bpw-common';
 import { SiteConfigComponent } from './site-config/site-config.component';
 import { SiteConfigsComponent } from './site-configs/site-configs.component';
 import { SiteConfigTreeComponent } from './site-config-tree/site-config-tree.component';

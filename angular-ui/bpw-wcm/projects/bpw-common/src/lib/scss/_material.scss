@@ -1,0 +1,353 @@
+// -----------------------------------------------------------------------------------------------------
+// @ Theming
+// -----------------------------------------------------------------------------------------------------
+@mixin material-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Avatar
+    // -----------------------------------------------------------------------------------------------------
+    .avatar {
+        color: map-get($foreground, text);
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Forms
+    // -----------------------------------------------------------------------------------------------------
+    .form-wrapper {
+        background-color: map-get($background, card);
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Navigation - Simple
+    // -----------------------------------------------------------------------------------------------------
+    .navigation-simple {
+
+        .item {
+
+            &.selected {
+                background-color: map-get($background, hover);
+            }
+        }
+
+        .subheader {
+            border-top: 1px solid map-get($foreground, divider);
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Pagination - Simple
+    // -----------------------------------------------------------------------------------------------------
+    .simple-pagination {
+        background: map-get($background, card);
+
+        .pagination-item {
+            color: map-get($foreground, secondary-text);
+
+            &:hover {
+                color: map-get($foreground, text);
+            }
+
+            &.disabled {
+                color: map-get($foreground, disabled-text);
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------------------------------
+    // @ Table - Simple
+    // -------------------------------------------------------------------------------------------------
+    .simple-table-container {
+        background: map-get($background, card);
+    }
+
+    table {
+
+        &.simple {
+
+            thead {
+
+                tr {
+
+                    th {
+                        color: map-get($foreground, secondary-text);
+                        border-bottom: 1px solid map-get($foreground, divider);
+                    }
+                }
+            }
+
+            tbody {
+
+                tr {
+
+                    td {
+                        border-bottom: 1px solid map-get($foreground, divider);
+                    }
+                }
+            }
+
+            &.clickable {
+
+                tbody {
+
+                    tr {
+
+                        &:hover {
+                            background-color: map-get($background, hover);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------------------------------
+// @ Avatar
+// -----------------------------------------------------------------------------------------------------
+.avatar {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+    margin: 0 8px 0 0;
+    border-radius: 50%;
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+
+    &.square {
+        border-radius: 0;
+    }
+
+    &.small {
+        width: 20px;
+        min-width: 20px;
+        height: 20px;
+        line-height: 20px;
+    }
+
+    &.big {
+        width: 72px;
+        min-width: 72px;
+        height: 72px;
+        line-height: 72px;
+    }
+
+    &.huge {
+        width: 96px;
+        min-width: 96px;
+        height: 96px;
+        line-height: 96px;
+    }
+}
+
+.avatar-wrapper {
+    position: relative;
+
+    .avatar {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    mat-icon.status {
+        position: absolute;
+        top: 28px;
+        left: 28px;
+    }
+}
+
+mat-icon.status {
+    border-radius: 50%;
+
+    &.online {
+        color: #4CAF50;
+
+        &:before {
+            content: "check_circle";
+        }
+    }
+
+    &.do-not-disturb {
+        color: #F44336;
+
+        &:before {
+            content: "remove_circle_outline";
+        }
+    }
+
+    &.away {
+        color: #FFC107;
+
+        &:before {
+            content: "access_time";
+        }
+    }
+
+    &.offline {
+        color: #646464;
+
+        &:before {
+            content: "not_interested";
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------------------------------
+// @ Forms
+// -----------------------------------------------------------------------------------------------------
+.form-wrapper {
+    padding: 16px;
+
+    .form-title {
+        font-size: 21px;
+        padding: 8px 0;
+    }
+}
+
+// -----------------------------------------------------------------------------------------------------
+// @ Navigation - Simple
+// -----------------------------------------------------------------------------------------------------
+.navigation-simple {
+
+    .item {
+        position: relative;
+        cursor: pointer;
+        text-align: left;
+        margin: 0;
+        padding: 0 24px;
+        text-transform: none;
+        line-height: 48px;
+        max-height: 48px;
+        height: 48px;
+
+        mat-icon {
+            margin: 0 16px 0 0;
+        }
+
+        .title {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1;
+        }
+    }
+
+    .subheader {
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 8px;
+    }
+
+    mat-divider {
+        margin: 8px 0;
+    }
+}
+
+// -----------------------------------------------------------------------------------------------------
+// @ Pagination - Simple
+// -----------------------------------------------------------------------------------------------------
+.simple-pagination {
+    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+    padding: 0 8px;
+    border-radius: 4px;
+    @include mat-elevation(1);
+
+    .pagination-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+        min-height: 56px;
+        line-height: 56px;
+        border-radius: 0;
+        margin: 0;
+        font-weight: normal;
+
+        &.active {
+            cursor: default;
+        }
+
+        &.disabled {
+            cursor: default;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------------------------------
+// @ Table - Simple
+// -----------------------------------------------------------------------------------------------------
+.simple-table-container {
+
+    .table-title {
+        font-size: 20px;
+        padding: 24px;
+    }
+}
+
+table {
+
+    &.simple {
+        width: 100%;
+        border: none;
+        border-spacing: 0;
+        text-align: left;
+
+        thead {
+
+            tr {
+
+                th {
+                    padding: 16px 8px;
+                    font-weight: 600;
+                    white-space: nowrap;
+
+                    &:first-child {
+                        padding-left: 24px;
+                    }
+
+                    &:last-child {
+                        padding-right: 24px;
+                    }
+                }
+            }
+        }
+
+        tbody {
+
+            tr {
+
+                td {
+                    padding: 16px 8px;
+
+                    &:first-child {
+                        padding-left: 24px;
+                    }
+
+                    &:last-child {
+                        padding-right: 24px;
+                    }
+                }
+
+                &:last-child {
+
+                    td {
+                        border-bottom: none;
+                    }
+                }
+            }
+        }
+
+        &.clickable {
+
+            tbody {
+
+                tr {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

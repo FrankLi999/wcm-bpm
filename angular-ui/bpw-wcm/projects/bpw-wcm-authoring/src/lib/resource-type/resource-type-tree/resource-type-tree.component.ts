@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 import { WcmOperation, JsonForm } from 'bpw-wcm-service';
 import * as fromStore from 'bpw-wcm-service';
 import { ModeshapeService } from 'bpw-wcm-service';

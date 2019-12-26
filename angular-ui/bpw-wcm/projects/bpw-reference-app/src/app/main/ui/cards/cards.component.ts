@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import * as shape from 'd3-shape';
 
-import { wcmAnimations } from 'bpw-components';
+import { wcmAnimations } from 'bpw-common';
 
 @Component({
     selector     : 'cards',

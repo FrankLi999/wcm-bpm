@@ -5,7 +5,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
-import { wcmAnimations, Utils } from 'bpw-components';
+import { wcmAnimations, Utils } from 'bpw-common';
 
 import { EcommerceOrdersService } from './orders.service';
 import { takeUntil } from 'rxjs/internal/operators';
