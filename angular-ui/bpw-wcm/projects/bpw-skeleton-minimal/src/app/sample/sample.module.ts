@@ -19,9 +19,7 @@ const routes = [
     ],
     imports     : [
         RouterModule.forChild(routes),
-
         TranslateModule,
-
         SharedUIModule
     ],
     exports     : [

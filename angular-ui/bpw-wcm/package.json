@@ -40,8 +40,8 @@
     "adjust-version": "npm-run-all adjust-version:*",
     "adjust-version:lib": "rjp projects/ng-simple-alert/package.json version $VERSION",
     "adjust-version:main": "rjp package.json version $VERSION",
-    "build-bpw-components": "ng build bpw-components && npm run build-bpw-components-styles && npm run bpw-components-scss-bundle && npm run cp-bpw-components-assets",
-    "copy-styles": "cpx \"./projects/bpw-common/src/lib/scss/**/*\" \"./dist/bpw-common/lib/scss\" && cpx \"./projects/bpw-common/src/lib/**/*.theme.scss\" \"./dist/bpw-common/lib\""
+    "copy-styles": "cpx \"./projects/bpw-common/src/lib/scss/**/*\" \"./dist/bpw-common/lib/scss\" && cpx \"./projects/bpw-common/src/lib/**/*.theme.scss\" \"./dist/bpw-common/lib\"",
+    "copy-wcm-styles": "cpx \"./projects/bpw-wcm-authoring/src/lib/scss/**/*\" \"./dist/bpw-wcm-authoring/lib/scss\" && cpx \"./projects/bpw-wcm-authoring/src/lib/**/*.theme.scss\" \"./dist/bpw-wcm-authoring/lib\""
   },
   "private": true,
   "dependencies": {

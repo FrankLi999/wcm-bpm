@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DynamicUiComponent } from './dynamic-ui.component';
+import { JsonFormComponent } from './json-form.component';
 
-describe('DynamicUiComponent', () => {
-  let component: DynamicUiComponent;
-  let fixture: ComponentFixture<DynamicUiComponent>;
+describe('JsonFormComponent', () => {
+  let component: JsonFormComponent;
+  let fixture: ComponentFixture<JsonFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DynamicUiComponent ]
+      declarations: [ JsonFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DynamicUiComponent);
+    fixture = TestBed.createComponent(JsonFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

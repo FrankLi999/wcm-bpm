@@ -8,9 +8,9 @@ import { Examples } from './example-schemas.model';
 import { JsonPointer } from 'bpw-common';
 
 @Component({
-  selector: 'app-dynamic-ui',
-  templateUrl: './dynamic-ui.component.html',
-  styleUrls: ['./dynamic-ui.component.scss'],
+  selector: 'json-form',
+  templateUrl: './json-form.component.html',
+  styleUrls: ['./json-form.component.scss'],
   animations: [
     trigger('expandSection', [
       state('in', style({ height: '*' })),
@@ -24,7 +24,7 @@ import { JsonPointer } from 'bpw-common';
     ]),
   ]
 })
-export class DynamicUiComponent implements OnInit {
+export class JsonFormComponent implements OnInit {
   examples: any = Examples;
   languageList: any = ['en', 'fr', 'zh'];
   languages: any = {
@@ -32,12 +32,13 @@ export class DynamicUiComponent implements OnInit {
     'fr': 'French',
     'zh': 'Chinese',
   };
-  frameworkList: any = ['material-design', 'bootstrap-3', 'bootstrap-4', 'no-framework'];
+  // frameworkList: any = ['material-design', 'bootstrap-3', 'bootstrap-4', 'no-framework'];
+  frameworkList: any = ['material-design'];
   frameworks: any = {
-    'material-design': 'Material Design',
-    'bootstrap-3': 'Bootstrap 3',
-    'bootstrap-4': 'Bootstrap 4',
-    'no-framework': 'None (plain HTML)',
+    'material-design': 'Material Design' // ,
+    // 'bootstrap-3': 'Bootstrap 3',
+    // 'bootstrap-4': 'Bootstrap 4',
+    // 'no-framework': 'None (plain HTML)',
   };
   selectedSet = 'ng-jsf';
   selectedSetName = '';
@@ -59,9 +60,9 @@ export class DynamicUiComponent implements OnInit {
   jsonFormObject: any;
   jsonFormOptions: any = {
     addSubmit: true, // Add a submit button if layout does not have one
-    debug: false, // Don't show inline debugging information
+    debug: true, // Don't show inline debugging information
     loadExternalAssets: true, // Load external css and JavaScript for frameworks
-    returnEmptyFields: false, // Don't return values for empty input fields
+    returnEmptyFields: true, // Don't return values for empty input fields
     setSchemaDefaults: true, // Always use schema defaults for empty fields
     defautWidgetOptions: { feedback: true }, // Show inline feedback icons
   };
@@ -170,7 +171,7 @@ export class DynamicUiComponent implements OnInit {
       this.selectedExample = selectedExample;
       this.selectedExampleName = selectedExampleName;
       this.router.navigateByUrl(
-        '/wcm-authoring/dynamic-ui?set=' + selectedSet +
+        '/forms/json-form?set=' + selectedSet +
         '&example=' + selectedExample +
         '&framework=' + this.selectedFramework +
         '&language=' + this.selectedLanguage
@@ -206,7 +207,6 @@ export class DynamicUiComponent implements OnInit {
     // but if an example schema includes a function,
     // it will be compiled it as Javascript instead
     try {
-
       // Parse entered content as JSON
       this.jsonFormObject = JSON.parse(newFormString);
       this.jsonFormValid = true;

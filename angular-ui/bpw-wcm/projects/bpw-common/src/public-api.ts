@@ -87,6 +87,7 @@ export * from './lib/common/directives/perfect-scrollbar/perfect-scrollbar.model
 
 export * from './lib/common/directives/mat-sidenav/mat-sidenav.directive';
 export * from './lib/common/directives/mat-sidenav/mat-sidenav.service';
+export * from './lib/common/directives//ace/ace-editor.directive';
 
 export * from './lib/common/components/confirm-dialog/confirm-dialog.module';
 export * from './lib/common/components/confirm-dialog/confirm-dialog.component';

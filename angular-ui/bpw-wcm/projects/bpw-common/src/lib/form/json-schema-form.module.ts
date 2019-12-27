@@ -9,11 +9,13 @@ import { fixAngularFlex } from './angular-flex-monkey-patch';
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule, ReactiveFormsModule,
-    WidgetLibraryModule, MaterialDesignFrameworkModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    WidgetLibraryModule,
+    MaterialDesignFrameworkModule
   ],
   declarations: [JsonSchemaFormComponent],
-  // exports: [JsonSchemaFormComponent, WidgetLibraryModule]
   exports: [JsonSchemaFormComponent]
 })
 export class JsonSchemaFormModule {

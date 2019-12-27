@@ -22,5 +22,27 @@ export const navigation: Navigation[] = [
                 }
             }
         ]
+    },
+    {
+        id       : 'forms',
+        title    : 'Forms',
+        translate: 'NAV.FORMS',
+        type     : 'group',
+        children : [
+            {
+                id       : 'jsonForm',
+                title    : 'Json Form',
+                translate: 'NAV.JSON_FORM',
+                type     : 'item',
+                icon     : 'email',
+                url      : '/forms/json-form',
+                badge    : {
+                    title    : '25',
+                    translate: 'NAV.JSON_FORM.BADGE',
+                    bg       : '#F44336',
+                    fg       : '#FFFFFF'
+                }
+            }
+        ]
     }
 ];

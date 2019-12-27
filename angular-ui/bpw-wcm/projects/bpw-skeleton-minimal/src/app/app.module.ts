@@ -32,6 +32,10 @@ import { SampleModule } from './sample/sample.module';
 
 const appRoutes: Routes = [
     {
+        path        : 'forms',
+        loadChildren: () => import('./forms/app-forms.module').then(m => m.AppFormsModule)
+    },
+    {
         path      : '**',
         redirectTo: 'sample'
     }

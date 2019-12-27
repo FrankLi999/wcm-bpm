@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
@@ -25,27 +26,29 @@ import { MatTreeModule } from '@angular/material/tree';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SharedUIModule, SidebarModule } from 'bpw-common';
-import { JcrExplorerComponent } from './jcr-explorer/jcr-explorer.component';
-import { JcrNodeComponent } from './jcr-node/jcr-node.component';
-import { RepositoryComponent } from './repository/repository.component';
-import { WorkspaceComponent } from './workspace/workspace.component';
+import { JsonFormComponent } from './json-form/json-form.component';
 import {
   JsonSchemaFormModule
-  // MaterialDesignFrameworkModule
 } from 'bpw-common';
+const routes = [
+  {
+      path     : 'json-form',
+      component: JsonFormComponent
+  },
+  {
+      path      : '**',
+      redirectTo: 'json-form'
+  }
+];
 
 @NgModule({
-  declarations: [
-    JcrExplorerComponent, 
-    JcrNodeComponent, 
-    RepositoryComponent, 
-    WorkspaceComponent
-  ],
+  declarations: [JsonFormComponent],
   imports: [
     CommonModule,
-    RouterModule,
+    RouterModule.forChild(routes),
     FormsModule, 
     ReactiveFormsModule,
+
     CdkTableModule,
     CdkTreeModule,
     MatButtonModule,
@@ -67,27 +70,10 @@ import {
     MatTreeModule,
    
     FlexLayoutModule,
-    // HttpClientModule,
     
-    // MaterialDesignFrameworkModule,
     JsonSchemaFormModule,
-    // JsonSchemaFormModule.forRoot(
-    //   // NoFrameworkModule,
-    //   // MaterialDesignFrameworkModule,
-    //   // Bootstrap3FrameworkModule,
-    //   // Bootstrap4FrameworkModule,
-    //   MaterialDesignFrameworkModule
-    // ),
     TranslateModule,
-
-    SharedUIModule,
-    SidebarModule
-  ],
-  exports: [
-    JcrExplorerComponent, 
-    JcrNodeComponent, 
-    RepositoryComponent, 
-    WorkspaceComponent
+    SharedUIModule
   ]
 })
-export class JcrExplorerModule { }
+export class AppFormsModule { }

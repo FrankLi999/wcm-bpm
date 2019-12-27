@@ -1,7 +1,5 @@
 import cloneDeep from 'lodash-es/cloneDeep';
-// import Ajv from 'ajv';
 import * as Ajv from 'ajv';
-//import * as _ from 'lodash-es';
 
 // import jsonDraft7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
@@ -10,7 +8,7 @@ import {
   buildFormGroupTemplate,
   formatFormData,
   getControl
-  } from './shared/form-group.functions';
+} from './shared/form-group.functions';
 import { buildLayout, getLayoutNode } from './shared/layout.functions';
 import { buildSchemaFromData, buildSchemaFromLayout, removeRecursiveReferences } from './shared/json-schema.functions';
 import { enValidationMessages } from './locale/en-validation-messages';
@@ -28,26 +26,30 @@ import {
   isDefined,
   isEmpty,
   isObject
-  } from './shared/validator.functions';
+} from './shared/validator.functions';
 import { Injectable } from '@angular/core';
 import { JsonPointer } from './shared/jsonpointer.functions';
 import { Subject } from 'rxjs';
 
-
-
 export interface TitleMapItem {
-  name?: string; value?: any; checked?: boolean; group?: string; items?: TitleMapItem[];
+  name?: string;
+  value?: any;
+  checked?: boolean;
+  group?: string;
+  items?: TitleMapItem[];
 }
 export interface ErrorMessages {
-  [control_name: string]: { message: string | Function | Object, code: string }[];
+  [control_name: string]: { 
+    message: string | Function | Object,
+    code: string
+  }[];
 }
-
 
 @Injectable()
 export class JsonSchemaFormService {
-  JsonFormCompatibility = false;
-  ReactJsonSchemaFormCompatibility = false;
-  AngularSchemaFormCompatibility = false;
+  // JsonFormCompatibility = false;
+  // ReactJsonSchemaFormCompatibility = false;
+  // AngularSchemaFormCompatibility = false;
   tpldata: any = {};
 
   ajvOptions: any = { allErrors: true, jsonPointers: true, unknownFormats: 'ignore' };
@@ -158,9 +160,9 @@ export class JsonSchemaFormService {
   getLayout() { return this.layout; }
 
   resetAllValues() {
-    this.JsonFormCompatibility = false;
-    this.ReactJsonSchemaFormCompatibility = false;
-    this.AngularSchemaFormCompatibility = false;
+    // this.JsonFormCompatibility = false;
+    // this.ReactJsonSchemaFormCompatibility = false;
+    // this.AngularSchemaFormCompatibility = false;
     this.tpldata = {};
     this.validateFormData = null;
     this.formValues = {};
