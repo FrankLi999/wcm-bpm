@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JsonSchemaFormComponent } from './json-schema-form.component';
 import { NgModule } from '@angular/core';
-import { MaterialDesignFrameworkModule } from './framework-library/material-design-framework/material-design-framework.module';
-import { WidgetLibraryModule } from './widget-library/widget-library.module';
+import { MaterialDesignFrameworkModule } from './frameworks/material/material-design-framework.module';
+import { SharedWidgetModule } from './frameworks/shared/shared-widget.module';
 import { fixAngularFlex } from './angular-flex-monkey-patch';
 
 
@@ -12,7 +12,7 @@ import { fixAngularFlex } from './angular-flex-monkey-patch';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    WidgetLibraryModule,
+    SharedWidgetModule,
     MaterialDesignFrameworkModule
   ],
   declarations: [JsonSchemaFormComponent],

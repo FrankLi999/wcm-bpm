@@ -3,7 +3,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Framework } from '../framework';
 import { FrameworkLibraryService } from '../framework-library.service';
-// import { JsonSchemaFormModule } from '../../json-schema-form.module';
 import { JsonSchemaFormService } from '../../json-schema-form.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,11 +23,11 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MATERIAL_FRAMEWORK_COMPONENTS } from './index';
+import { MATERIAL_FRAMEWORK_COMPONENTS } from './angular-material-components';
 import { MaterialDesignFramework } from './material-design.framework';
 import { NgModule } from '@angular/core';
-import { WidgetLibraryModule } from '../../widget-library/widget-library.module';
-import { WidgetLibraryService } from '../../widget-library/widget-library.service';
+import { WidgetLibraryService } from '../widget-library.service';
+import { SharedWidgetModule } from '../shared/shared-widget.module';
 /**
  * unused @angular/material modules:
  * MatDialogModule, MatGridListModule, MatListModule, MatMenuModule,
@@ -47,7 +46,7 @@ export const ANGULAR_MATERIAL_MODULES = [
 @NgModule({
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, FlexLayoutModule,
-    ...ANGULAR_MATERIAL_MODULES, WidgetLibraryModule
+    ...ANGULAR_MATERIAL_MODULES, SharedWidgetModule
   ],
   declarations: [...MATERIAL_FRAMEWORK_COMPONENTS],
   exports: [...MATERIAL_FRAMEWORK_COMPONENTS],

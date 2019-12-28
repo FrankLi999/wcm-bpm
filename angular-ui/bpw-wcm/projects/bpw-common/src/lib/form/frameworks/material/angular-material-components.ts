@@ -19,6 +19,12 @@ import { MaterialStepperComponent } from './material-stepper.component';
 import { MaterialTabsComponent } from './material-tabs.component';
 import { MaterialTextareaComponent } from './material-textarea.component';
 
+// import { NoneComponent } from './none.component';
+// import { SelectFrameworkComponent } from './select-framework.component';
+// import { SelectWidgetComponent } from './select-widget.component';
+// import { MessageComponent } from './message.component';
+// import { TemplateComponent } from './template.component';
+
 
 export const MATERIAL_FRAMEWORK_COMPONENTS = [
   FlexLayoutRootComponent, FlexLayoutSectionComponent,

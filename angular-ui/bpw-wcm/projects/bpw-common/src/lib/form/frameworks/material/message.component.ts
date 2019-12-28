@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { JsonSchemaFormService } from '../json-schema-form.service';
+import { JsonSchemaFormService } from '../../json-schema-form.service';
 
 
 @Component({

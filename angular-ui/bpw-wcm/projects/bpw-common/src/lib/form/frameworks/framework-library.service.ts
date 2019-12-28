@@ -1,7 +1,7 @@
 import { Framework } from './framework';
 import { hasOwn } from '../shared/utility.functions';
 import { Inject, Injectable } from '@angular/core';
-import { WidgetLibraryService } from '../widget-library/widget-library.service';
+import { WidgetLibraryService } from './widget-library.service';
 
 // Possible future frameworks:
 // - Foundation 6:
@@ -24,6 +24,7 @@ export class FrameworkLibraryService {
     @Inject(Framework) private frameworks: any[],
     @Inject(WidgetLibraryService) private widgetLibrary: WidgetLibraryService
   ) {
+    console.log( '>>>>>>>>>>>>>>> FrameworkLibraryService:', frameworks);
     this.frameworks.forEach(framework =>
       this.frameworkLibrary[framework.name] = framework
     );

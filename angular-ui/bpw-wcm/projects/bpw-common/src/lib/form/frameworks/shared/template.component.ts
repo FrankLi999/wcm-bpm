@@ -8,7 +8,7 @@ import {
   ViewChild,
   ViewContainerRef
   } from '@angular/core';
-import { JsonSchemaFormService } from '../json-schema-form.service';
+import { JsonSchemaFormService } from '../../json-schema-form.service';
 
 
 @Component({

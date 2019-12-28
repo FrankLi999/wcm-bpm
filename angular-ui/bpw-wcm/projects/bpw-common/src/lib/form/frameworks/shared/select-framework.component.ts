@@ -3,19 +3,21 @@ import {
   OnChanges, OnInit, ViewChild, ViewContainerRef
 } from '@angular/core';
 
-import { JsonSchemaFormService } from '../json-schema-form.service';
+import { JsonSchemaFormService } from '../../json-schema-form.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'select-widget-widget',
+  selector: 'select-framework-widget',
   template: `<div #widgetContainer></div>`,
 })
-export class SelectWidgetComponent implements OnChanges, OnInit {
+export class SelectFrameworkComponent implements OnChanges, OnInit {
   newComponent: ComponentRef<any> = null;
   @Input() layoutNode: any;
   @Input() layoutIndex: number[];
   @Input() dataIndex: number[];
-  @ViewChild('widgetContainer', { read: ViewContainerRef, static: true })
+  @ViewChild('widgetContainer', {
+      read: ViewContainerRef,
+      static: true })
     widgetContainer: ViewContainerRef;
 
   constructor(
@@ -32,9 +34,9 @@ export class SelectWidgetComponent implements OnChanges, OnInit {
   }
 
   updateComponent() {
-    if (this.widgetContainer && !this.newComponent && (this.layoutNode || {}).widget) {
+    if (this.widgetContainer && !this.newComponent && this.jsf.framework) {
       this.newComponent = this.widgetContainer.createComponent(
-        this.componentFactory.resolveComponentFactory(this.layoutNode.widget)
+        this.componentFactory.resolveComponentFactory(this.jsf.framework)
       );
     }
     if (this.newComponent) {

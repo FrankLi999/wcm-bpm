@@ -1,50 +1,51 @@
-import { AddReferenceComponent } from './add-reference.component';
-import { ButtonComponent } from './button.component';
-import { CheckboxComponent } from './checkbox.component';
-import { CheckboxesComponent } from './checkboxes.component';
-import { FileComponent } from './file.component';
-import { hasOwn } from '../shared/utility.functions';
-import { Injectable } from '@angular/core';
-import { InputComponent } from './input.component';
-import { MessageComponent } from './message.component';
-import { NoneComponent } from './none.component';
-import { NumberComponent } from './number.component';
-import { OneOfComponent } from './one-of.component';
-import { RadiosComponent } from './radios.component';
-import { RootComponent } from './root.component';
-import { SectionComponent } from './section.component';
-import { SelectComponent } from './select.component';
-import { SelectFrameworkComponent } from './select-framework.component';
-import { SelectWidgetComponent } from './select-widget.component';
-import { SubmitComponent } from './submit.component';
-import { TabsComponent } from './tabs.component';
-import { TemplateComponent } from './template.component';
-import { TextareaComponent } from './textarea.component';
 
+import { Injectable } from '@angular/core';
+import { hasOwn } from '../shared/utility.functions';
+
+import { NoneComponent } from './shared/none.component';
+import { SelectFrameworkComponent } from './shared//select-framework.component';
+import { SelectWidgetComponent } from './shared/select-widget.component';
+import { MessageComponent } from './shared/message.component';
+import { TemplateComponent } from './shared/template.component';
+import { RootComponent } from './shared/root.component';
+
+import { FlexLayoutSectionComponent } from './material/flex-layout-section.component';
+import { MaterialAddReferenceComponent } from './material/material-add-reference.component';
+import { MaterialButtonComponent } from './material/material-button.component';
+import { MaterialCheckboxComponent } from './material/material-checkbox.component';
+import { MaterialCheckboxesComponent } from './material/material-checkboxes.component';
+import { MaterialFileComponent } from './material/material-file.component';
+import { MaterialInputComponent } from './material/material-input.component';
+import { MaterialNumberComponent } from './material/material-number.component';
+import { MaterialOneOfComponent } from './material/material-one-of.component';
+import { MaterialRadiosComponent } from './material/material-radios.component';
+import { MaterialSelectComponent } from './material/material-select.component';
+import { MaterialTabsComponent } from './material/material-tabs.component';
+import { MaterialTextareaComponent } from './material/material-textarea.component';
 @Injectable()
 export class WidgetLibraryService {
 
   defaultWidget = 'text';
   widgetLibrary: any = {
 
-  // Angular JSON Schema Form administrative widgets
+    // Angular JSON Schema Form administrative widgets
     'none': NoneComponent, // Placeholder, for development - displays nothing
     'root': RootComponent, // Form root, renders a complete layout
     'select-framework': SelectFrameworkComponent, // Applies the selected framework to a specified widget
     'select-widget': SelectWidgetComponent, // Displays a specified widget
-    '$ref': AddReferenceComponent, // Button to add a new array item or $ref element
-
-  // Free-form text HTML 'input' form control widgets <input type="...">
+    '$ref': MaterialAddReferenceComponent, // Button to add a new array item or $ref element
+  
+    // Free-form text HTML 'input' form control widgets <input type="...">
     'email': 'text',
     'integer': 'number', // Note: 'integer' is not a recognized HTML input type
-    'number': NumberComponent,
+    'number': MaterialNumberComponent,
     'password': 'text',
     'search': 'text',
     'tel': 'text',
-    'text': InputComponent,
+    'text': MaterialInputComponent,
     'url': 'text',
-
-  // Controlled text HTML 'input' form control widgets <input type="...">
+  
+    // Controlled text HTML 'input' form control widgets <input type="...">
     'color': 'text',
     'date': 'text',
     'datetime': 'text',
@@ -53,54 +54,54 @@ export class WidgetLibraryService {
     'range': 'number',
     'time': 'text',
     'week': 'text',
-
-  // Non-text HTML 'input' form control widgets <input type="...">
+  
+    // Non-text HTML 'input' form control widgets <input type="...">
     // 'button': <input type="button"> not used, use <button> instead
-    'checkbox': CheckboxComponent, // TODO: Set ternary = true for 3-state ??
-    'file': FileComponent, // TODO: Finish 'file' widget
+    'checkbox': MaterialCheckboxComponent, // TODO: Set ternary = true for 3-state ??
+    'file': MaterialFileComponent, // TODO: Finish 'file' widget
     'hidden': 'text',
     'image': 'text', // TODO: Figure out how to handle these
     'radio': 'radios',
     'reset': 'submit', // TODO: Figure out how to handle these
-    'submit': SubmitComponent,
-
-  // Other (non-'input') HTML form control widgets
-    'button': ButtonComponent,
-    'select': SelectComponent,
+    'submit': 'button',
+  
+    // Other (non-'input') HTML form control widgets
+    'button': MaterialButtonComponent,
+    'select':  MaterialSelectComponent,
     // 'option': automatically generated by select widgets
     // 'optgroup': automatically generated by select widgets
-    'textarea': TextareaComponent,
-
-  // HTML form control widget sets
-    'checkboxes': CheckboxesComponent, // Grouped list of checkboxes
+    'textarea': MaterialTextareaComponent,
+  
+    // HTML form control widget sets
+    'checkboxes': MaterialCheckboxesComponent, // Grouped list of checkboxes
     'checkboxes-inline': 'checkboxes', // Checkboxes in one line
     'checkboxbuttons': 'checkboxes', // Checkboxes as html buttons
-    'radios': RadiosComponent, // Grouped list of radio buttons
+    'radios': MaterialRadiosComponent, // Grouped list of radio buttons
     'radios-inline': 'radios', // Radio controls in one line
     'radiobuttons': 'radios', // Radio controls as html buttons
-
-  // HTML Layout widgets
+  
+    // HTML Layout widgets
     // 'label': automatically added to data widgets
     // 'legend': automatically added to fieldsets
-    'section': SectionComponent, // Just a div <div>
+    'section': FlexLayoutSectionComponent, // Just a div <div>
     'div': 'section', // Still just a div <div>
     'fieldset': 'section', // A fieldset, with an optional legend <fieldset>
     'flex': 'section', // A flexbox container <div style="display: flex">
-
-  // Non-HTML layout widgets
-    'one-of': OneOfComponent, // A select box that changes another input
+  
+    // Non-HTML layout widgets
+    'one-of': MaterialOneOfComponent, // A select box that changes another input
                               // TODO: Finish 'one-of' widget
     'array': 'section', // A list you can add, remove and reorder <fieldset>
     'tabarray': 'tabs', // A tabbed version of array
     'tab': 'section', // A tab group, similar to a fieldset or section <fieldset>
-    'tabs': TabsComponent, // A tabbed set of panels with different controls
+    'tabs': MaterialTabsComponent, // A tabbed set of panels with different controls
     'message': MessageComponent, // Insert arbitrary html
     'help': 'message', // Insert arbitrary html
     'msg': 'message', // Insert arbitrary html
     'html': 'message', // Insert arbitrary html
     'template': TemplateComponent, // Insert a custom Angular component
-
-  // Widgets included for compatibility with JSON Form API
+  
+    // Widgets included for compatibility with JSON Form API
     'advancedfieldset': 'section', // Adds 'Advanced settings' title <fieldset>
     'authfieldset': 'section', // Adds 'Authentication settings' title <fieldset>
     'optionfieldset': 'one-of', // Option control, displays selected sub-item <fieldset>
@@ -109,20 +110,20 @@ export class WidgetLibraryService {
     'actions': 'section', // Horizontal button list, can only submit, uses buttons as items <div>
     'tagsinput': 'section', // For entering short text tags <div>
     // See: http://ulion.github.io/jsonform/playground/?example=fields-checkboxbuttons
-
-  // Widgets included for compatibility with React JSON Schema Form API
+  
+    // Widgets included for compatibility with React JSON Schema Form API
     'updown': 'number',
     'date-time': 'datetime-local',
     'alt-datetime': 'datetime-local',
     'alt-date': 'date',
-
-  // Widgets included for compatibility with Angular Schema Form API
-    'wizard': 'section', // TODO: Sequential panels with "Next" and "Previous" buttons
-
-  // Widgets included for compatibility with other libraries
+  
+    // Widgets included for compatibility with Angular Schema Form API
+      'wizard': 'section', // TODO: Sequential panels with "Next" and "Previous" buttons
+  
+    // Widgets included for compatibility with other libraries
     'textline': 'text',
-
-  // Recommended 3rd-party add-on widgets (TODO: create wrappers for these...)
+  
+    // Recommended 3rd-party add-on widgets (TODO: create wrappers for these...)
     // 'ng2-select': Select control replacement - http://valor-software.com/ng2-select/
     // 'flatpickr': Flatpickr date picker - https://github.com/chmln/flatpickr
     // 'pikaday': Pikaday date picker - https://github.com/dbushell/Pikaday

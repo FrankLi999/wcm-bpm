@@ -43,14 +43,10 @@ export * from './lib/auth/store/effects/auth.effects';
 
 export * from './lib/form/json-schema-form.service';
 export * from './lib/form/json-schema-form.component';
-export * from './lib/form/framework-library';
-export * from './lib/form/shared';
-
-// export * from './lib/form/widget-library';
-// export * from './lib/form/framework-library/material-design-framework/material-design-framework.module';
-// export * from './lib/form/framework-library/no-framework/no-framework.module';
-
+export * from './lib/form/frameworks/material/angular-material-components';
+export * from './lib/form/frameworks/shared/shared-widget';
 export * from './lib/form/json-schema-form.module';
+export * from './lib/form/shared';
 
 /*
  * Public API Surface of bpw-components

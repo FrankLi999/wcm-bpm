@@ -1,9 +1,9 @@
-import { BASIC_WIDGETS } from './index';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { JsonSchemaFormService } from '../json-schema-form.service';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { JsonSchemaFormService } from '../../json-schema-form.service';
 import { OrderableDirective } from './orderable.directive';
+import { BASIC_WIDGETS } from './shared-widget';
 
 @NgModule({
   imports:         [ CommonModule, FormsModule, ReactiveFormsModule ],
@@ -12,10 +12,10 @@ import { OrderableDirective } from './orderable.directive';
   entryComponents: [ ...BASIC_WIDGETS ],
   providers:       [ JsonSchemaFormService ]
 })
-export class WidgetLibraryModule {
+export class SharedWidgetModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: WidgetLibraryModule,
+      ngModule: SharedWidgetModule,
       providers: [ JsonSchemaFormService ]
     };
   }
