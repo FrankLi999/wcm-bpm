@@ -69,6 +69,9 @@ export function buildFormGroupTemplate(
   schemaPointer = '', dataPointer = '', templatePointer = ''
 ) {
   const schema = JsonPointer.get(jsf.schema, schemaPointer);
+  console.log('.................. buildFormGroupTemplate schema:', schema);
+  console.log('.................. buildFormGroupTemplate schemaPointer:', schemaPointer);
+  console.log('.................. buildFormGroupTemplate dataPointer:', dataPointer);
   if (setValues) {
     if (!isDefined(nodeValue) && (
       jsf.formOptions.setSchemaDefaults === true ||
@@ -107,8 +110,8 @@ export function buildFormGroupTemplate(
   }
   let controls: any;
   const validators = getControlValidators(schema);
+  console.log(">>>>>>>>>>>>>>>>>>>>>>> validators: ", validators);
   switch (controlType) {
-
     case 'FormGroup':
       controls = {};
       if (hasOwn(schema, 'ui:order') || hasOwn(schema, 'properties')) {

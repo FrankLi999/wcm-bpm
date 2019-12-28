@@ -788,5 +788,6 @@ export class JsonSchemaFormComponent implements ControlValueAccessor, OnChanges,
         this.validationErrors.emit(this.jsf.ajvErrors);
       }
     }
+    console.log(" activited form: ", this);
   }
 }

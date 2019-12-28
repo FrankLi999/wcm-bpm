@@ -41,12 +41,13 @@ export * from './lib/auth/store/effects/auth.effects';
  * Public API Surface of bpw-form
  */
 
-export * from './lib/form/json-schema-form.service';
+// export * from './lib/form/json-schema-form.service';
 export * from './lib/form/json-schema-form.component';
 export * from './lib/form/frameworks/material/angular-material-components';
-export * from './lib/form/frameworks/shared/shared-widget';
+// export * from './lib/form/frameworks/shared/shared-widget';
 export * from './lib/form/json-schema-form.module';
-export * from './lib/form/shared';
+// export * from './lib/form/shared';
+export * from './lib/form/shared/jsonpointer.functions';
 
 /*
  * Public API Surface of bpw-components
