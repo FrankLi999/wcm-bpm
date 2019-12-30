@@ -455,7 +455,7 @@
 + footer (bpw:footer)
 + sidePanel (bpw:sidePanel)
 
-[bpw:siteConfig] > mix:lastModified
+[bpw:siteConfig] > mix:lastModified, mix:lockable
 - bpw:name (STRING)
 - bpw:colorTheme (STRING)
 - bpw:customScrollbars (BOOLEAN)

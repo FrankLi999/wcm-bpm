@@ -104,7 +104,7 @@ export class WcmService extends RestClient {
   ): Observable<AuthoringTemplate> { return null; };
 
   @Get('/wcmSystem/{repository}/{workspace}/{library}/{siteConfig}')
-  @Timeout(2000) //In milliseconds
+  // @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
   public getWcmSystem(
     @Path('repository') repository: string, 

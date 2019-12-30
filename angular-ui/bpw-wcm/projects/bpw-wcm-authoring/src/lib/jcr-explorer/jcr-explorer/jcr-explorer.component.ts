@@ -31,7 +31,7 @@ import { NewFolderDialogComponent } from '../../dialog/new-folder-dialog/new-fol
 import { NewThemeDialogComponent } from '../../dialog/new-theme-dialog/new-theme-dialog.component';
 import { NewSiteConfigDialogComponent } from '../../dialog/new-site-config-dialog/new-site-config-dialog.component';
 import { NewContentDialogComponent } from '../../dialog/new-content-dialog/new-content-dialog.component';
-import { ContentWebSocketService } from './content-review-websocket.service';
+// import { ContentWebSocketService } from './content-review-websocket.service';
 /** Nested node */
 class JcrNode {
   childrenChange = new BehaviorSubject<JcrNode[]>([]);
@@ -82,7 +82,7 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
   @ViewChild('contextMenu', {static: true}) contextMenu: MatMenuTrigger;
   // Private
   private unsubscribeAll: Subject<any>;
-  private websocketService: ContentWebSocketService;
+  // private websocketService: ContentWebSocketService;
   private jcrMessage = 'n/a';
   constructor(
     private wcmConfigService: WcmConfigService,
@@ -96,7 +96,7 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
   }
 
   ngOnInit() {
-    this.websocketService = new ContentWebSocketService(this);
+    // this.websocketService = new ContentWebSocketService(this);
     this.functionMap['Upload.file'] = this.uploadZipFile;
     this.functionMap['Create.folder'] = this.createFolder;
     this.functionMap['Create.theme'] = this.createTheme;
@@ -176,7 +176,7 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
         console.log("getAuthoringTemplateAsJsonSchema observable is now completed.");
       }
     );
-    this.websocketService._connect();
+    // this.websocketService._connect();
   }
 
   /**
@@ -186,7 +186,7 @@ export class JcrExplorerComponent extends WcmConfigurableComponent implements On
     this.unsubscribeAll.next();
     this.unsubscribeAll.complete();
     this.loadError && this.store.dispatch(new WcmSystemClearError());
-    this.websocketService._disconnect();
+    // this.websocketService._disconnect();
   }
 
   ngAfterViewInit() {

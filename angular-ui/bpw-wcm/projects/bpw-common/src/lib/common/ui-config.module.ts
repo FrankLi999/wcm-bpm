@@ -11,7 +11,6 @@ export class UIConfigModule {
     }
 
     static forRoot(config): ModuleWithProviders<UIConfigModule> {
-        console.log(">>>>>>>>>>>>>>>>>... ui config:", config);
         return {
             ngModule : UIConfigModule,
             providers: [{

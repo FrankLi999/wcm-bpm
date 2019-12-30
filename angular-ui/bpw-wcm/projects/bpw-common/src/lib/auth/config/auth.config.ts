@@ -26,7 +26,7 @@ export const authLayoutConfig: UIConfig = {
             customBackgroundColor: false,
             background           : 'wcm-white-500',
             hidden               : true,
-            position             : 'below'
+            position             : 'above'
         },
         footer   : {
             customBackgroundColor: true,

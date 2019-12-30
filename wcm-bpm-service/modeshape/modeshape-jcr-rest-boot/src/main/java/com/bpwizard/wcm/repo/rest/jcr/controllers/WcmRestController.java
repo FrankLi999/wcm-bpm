@@ -511,8 +511,9 @@ public class WcmRestController {
 		
 		try {
 			String absPath = String.format("/bpwizard/library/%s/siteConfig/%s", library, siteConfigName);
-			Session session = this.repositoryManager.getSession(repository, workspace);
-			Node siteConfigNode = session.getNode(absPath);
+			RestNode siteConfigNode = (RestNode) this.itemHandler.item(request, repository, workspace, absPath, 2);
+//			Session session = this.repositoryManager.getSession(repository, workspace);
+//			Node siteConfigNode = session.getNode(absPath);
 			SiteConfig siteConfig = this.getSiteConfig(siteConfigNode);
 			siteConfig.setRepository(repository);
 			siteConfig.setWorkspace(workspace);
@@ -1756,9 +1757,9 @@ public class WcmRestController {
 
 	private ArrayNode toFormLayoutNode(AuthoringTemplate at) {
 		ArrayNode formNode = this.objectMapper.createArrayNode();
-
-		formNode.add(this.getRowNode(at, at.getPropertyRow(), "properties"));
-		
+		if (at.getPropertyRow() != null) {
+			formNode.add(this.getRowNode(at, at.getPropertyRow(), "properties"));
+		}
 		for (BaseFormGroup formGroup : at.getElementGroups()) {
 			if (formGroup instanceof FormRow) {
 				ObjectNode rowNode = this.getRowNode(at, (FormRow) formGroup, "elements");
@@ -2493,7 +2494,7 @@ public class WcmRestController {
 	}
 	
 	private boolean isPropertyGroupNode(RestNode node) {
-		return this.checkNodeType(node, "bpw:formRow") && "property-group".equals(node.getName());
+		return this.checkNodeType(node, "bpw:formRow") && "propertyGroup".equals(node.getName());
 	}
 	
 	private boolean isElementGroupNode(RestNode node) {
@@ -2847,53 +2848,95 @@ public class WcmRestController {
 		return group == null ? Optional.empty() : Optional.of(group);
 	}
 	
-	private SiteConfig getSiteConfig(Node siteConfigNode) throws RepositoryException {
+	private SiteConfig getSiteConfig(RestNode siteConfigNode) throws RepositoryException {
 		SiteConfig siteConfig = new SiteConfig();
-		siteConfig.setName(siteConfigNode.getProperty("bpw:name").getString());
-		siteConfig.setColorTheme(siteConfigNode.getProperty("bpw:colorTheme").getString());
-		siteConfig.setCustomScrollbars(siteConfigNode.getProperty("bpw:customScrollbars").getBoolean());
-		siteConfig.setRootSiteArea(siteConfigNode.getProperty("bpw:rootSiteArea").getString());
-		siteConfig.setLockOwner(siteConfigNode.getProperty("jcr:lockOwner").getString());
-		Node layoutNode = siteConfigNode.getNode("layout");
+		for (RestProperty property : siteConfigNode.getJcrProperties()) {
+			if ("bpw:name".equals(property.getName())) {
+				siteConfig.setName(property.getValues().get(0));
+			} else if ("bpw:colorTheme".equals(property.getName())) {
+				siteConfig.setColorTheme(property.getValues().get(0));
+			} else if ("bpw:customScrollbars".equals(property.getName())) {
+				siteConfig.setCustomScrollbars(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:rootSiteArea".equals(property.getName())) {
+				siteConfig.setRootSiteArea(property.getValues().get(0));
+			} else if ("jcr:lockOwner".equals(property.getName())) {
+				siteConfig.setLockOwner(property.getValues().get(0));
+			}
+		}
 		
-		PageLayout layout = new PageLayout();
-		siteConfig.setLayout(layout);
-		layout.setStyle(layoutNode.getProperty("bpw:style").getString());
-		layout.setWidth(layoutNode.getProperty("bpw:width").getString());
-
-		Node navbarNode = layoutNode.getNode("navbar");
-		NavBar navbar = new NavBar();
-		layout.setNavbar(navbar);
-		
-		navbar.setFolded(navbarNode.getProperty("folded").getBoolean());
-		navbar.setPrimaryBackground(navbarNode.getProperty("primaryBackground").getString());
-		navbar.setSecondaryBackground(navbarNode.getProperty("secondaryBackground").getString());
-		navbar.setVariant(navbarNode.getProperty("variant").getString());
-		navbar.setPosition(navbarNode.getProperty("position").getString());
-		navbar.setHidden(navbarNode.getProperty("hidden").getBoolean());
-		
-		
-		Node toolbarNode = layoutNode.getNode("toolbar");
-		Toolbar toolbar = new Toolbar();
-		layout.setToolbar(toolbar);
-		toolbar.setCustomBackgroundColor(toolbarNode.getProperty("customBackgroundColor").getBoolean());
-		toolbar.setBackground(toolbarNode.getProperty("background").getString());
-		toolbar.setHidden(toolbarNode.getProperty("hidden").getBoolean());
-		toolbar.setPosition(toolbarNode.getProperty("position").getString());
-		
-		Node footerNode = layoutNode.getNode("footer");
-		Footer footer = new Footer();
-		layout.setFooter(footer);
-		footer.setCustomBackgroundColor(footerNode.getProperty("customBackgroundColor").getBoolean());
-		footer.setBackground(footerNode.getProperty("background").getString());
-		footer.setHidden(footerNode.getProperty("hidden").getBoolean());
-		footer.setPosition(footerNode.getProperty("position").getString());
-		
-		Node sidePanelNode = layoutNode.getNode("sidePanel");
-		SidePanel sidePanel = new SidePanel();
-		layout.setSidePanel(sidePanel);
-		sidePanel.setHidden(sidePanelNode.getProperty("hidden").getBoolean());
-		sidePanel.setPosition(sidePanelNode.getProperty("position").getString());
+		for (RestNode layoutNode: siteConfigNode.getChildren()) {
+			if ("layout".equals(layoutNode.getName())) {
+				PageLayout layout = new PageLayout();
+				siteConfig.setLayout(layout);
+				for (RestProperty property : layoutNode.getJcrProperties()) {
+					if ("bpw:style".equals(property.getName())) {
+						layout.setStyle(property.getValues().get(0));
+					} else if ("bpw:width".equals(property.getName())) {
+						layout.setWidth(property.getValues().get(0));
+					} 
+				}
+				for (RestNode node: layoutNode.getChildren()) {
+					if ("navbar".equals(node.getName())) {
+						NavBar navbar = new NavBar();
+						layout.setNavbar(navbar);						
+						for (RestProperty property : node.getJcrProperties()) {
+							if ("folded".equals(property.getName())) {
+								navbar.setFolded(Boolean.getBoolean(property.getValues().get(0)));
+							} else if ("primaryBackground".equals(property.getName())) {
+								navbar.setPrimaryBackground(property.getValues().get(0));
+							} else if ("secondaryBackground".equals(property.getName())) {
+								navbar.setSecondaryBackground(property.getValues().get(0));
+							} else if ("variant".equals(property.getName())) {
+								navbar.setVariant(property.getValues().get(0));
+							} else if ("position".equals(property.getName())) {
+								navbar.setPosition(property.getValues().get(0));
+							} else if ("hidden".equals(property.getName())) {
+								navbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+							} 
+						}
+					} else if ("toolbar".equals(node.getName())) {
+						Toolbar toolbar = new Toolbar();
+						layout.setToolbar(toolbar);						
+						for (RestProperty property : node.getJcrProperties()) {
+							if ("customBackgroundColor".equals(property.getName())) {
+								toolbar.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
+							} else if ("background".equals(property.getName())) {
+								toolbar.setBackground(property.getValues().get(0));
+							} else if ("position".equals(property.getName())) {
+								toolbar.setPosition(property.getValues().get(0));
+							} else if ("hidden".equals(property.getName())) {
+								toolbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+							} 
+						}
+					} else if ("footer".equals(node.getName())) {
+						Footer footer = new Footer();
+						layout.setFooter(footer);				
+						for (RestProperty property : node.getJcrProperties()) {
+							if ("customBackgroundColor".equals(property.getName())) {
+								footer.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
+							} else if ("background".equals(property.getName())) {
+								footer.setBackground(property.getValues().get(0));
+							} else if ("position".equals(property.getName())) {
+								footer.setPosition(property.getValues().get(0));
+							} else if ("hidden".equals(property.getName())) {
+								footer.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+							} 
+						}
+					} else if ("sidePanel".equals(node.getName())) {
+						SidePanel sidePanel = new SidePanel();
+						layout.setSidePanel(sidePanel);				
+						for (RestProperty property : node.getJcrProperties()) {
+							if ("position".equals(property.getName())) {
+								sidePanel.setPosition(property.getValues().get(0));
+							} else if ("hidden".equals(property.getName())) {
+								sidePanel.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+							} 
+						}
+					}
+				}
+				break;
+			} 
+		}
 		return siteConfig;
 	}
 	

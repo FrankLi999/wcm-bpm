@@ -21,9 +21,9 @@ import {
   SidebarModule,
   ThemeOptionsModule,
   LayoutModule,
-  AuthStoreModule,
   AuthHttpInterceptor
 } from 'bpw-common';
+
 import { RestClientConfigModule } from 'bpw-rest-client';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -80,7 +80,6 @@ const appRoutes: Routes = [
         SidebarModule,
         ThemeOptionsModule,
         LayoutModule,
-        AuthStoreModule,
         AppStoreModule
     ],
     providers: [{

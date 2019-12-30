@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { SharedUIModule } from '../../../common/shared-ui.module';
 import { RestClientModule } from 'bpw-rest-client';
 import { LoginComponent } from './login/login.component';
+import { AuthStoreModule } from '../../store/auth-store.module';
 
 const routes = [
   {
@@ -36,7 +37,8 @@ const routes = [
     MatIconModule,
     MatInputModule,
     SharedUIModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    AuthStoreModule
   ],
   exports: [
     LoginComponent

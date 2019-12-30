@@ -27,7 +27,6 @@ export class UIConfigService {
         private _router: Router,
         @Inject(WCM_UI_CONFIG) private _config
     ) {
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>> _config:", _config);
         // Set the default config from the user provided config (from forRoot)
         this._defaultConfig = _config;
 

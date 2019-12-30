@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { of, Observable } from 'rxjs';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { switchMap, map, filter, catchError } from 'rxjs/operators';
 import { WcmSystemActionTypes, WcmSystemActions } from '../actions/wcm-system.actions';
 import { WcmService } from '../../service/wcm.service'; 
 import { WcmSystem } from '../../model/WcmSystem';
@@ -31,8 +31,13 @@ export class WcmSystemEffects {
           action.payload.library,
           action.payload.siteConfig)
         .pipe(
+            filter(wcmSystem => (wcmSystem != null)),
             map((wcmSystem: WcmSystem) => {
-              return new GetWcmSystemSuccess(wcmSystem);
+              if (Object.keys(wcmSystem.operations).length > 0) {
+                return new GetWcmSystemSuccess(wcmSystem);
+              } else {
+                return new GetWcmSystemFailed("Failed to load wcm system");
+              }
             }),
             catchError(err => of(new GetWcmSystemFailed(err)))
         );

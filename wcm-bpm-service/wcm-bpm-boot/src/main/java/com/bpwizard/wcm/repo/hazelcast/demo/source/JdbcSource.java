@@ -6,7 +6,7 @@ import com.hazelcast.jet.Util;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
-import org.h2.tools.DeleteDbFiles;
+// import org.h2.tools.DeleteDbFiles;
 
 import java.nio.file.Files;
 import java.sql.Connection;
@@ -14,7 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import com.bpwizard.wcm.repo.hazelcast.demo.model.JdbcUser;
+// import com.bpwizard.wcm.repo.hazelcast.demo.model.JdbcUser;
 
 /**
  * Demonstrates dumping values from a table in a relational database to an IMap
@@ -38,12 +38,12 @@ public class JdbcSource {
         // transaction isolation level in the target database. Refer to the documentation 
         // for the target database system.
         
-        p.drawFrom(Sources.jdbc(
-        		connectionUrl,
-                "SELECT * FROM " + TABLE_NAME,
-                resultSet -> new JdbcUser(resultSet.getInt(1), resultSet.getString(2))))
-         .map(user -> Util.entry(user.getId(), user))
-         .drainTo(Sinks.map(MAP_NAME));
+//        p.drawFrom(Sources.jdbc(
+//        		connectionUrl,
+//                "SELECT * FROM " + TABLE_NAME,
+//                resultSet -> new JdbcUser(resultSet.getInt(1), resultSet.getString(2))))
+//         .map(user -> Util.entry(user.getId(), user))
+//         .drainTo(Sinks.map(MAP_NAME));
         return p;
     }
 
@@ -74,7 +74,7 @@ public class JdbcSource {
 
     private void cleanup() {
         Jet.shutdownAll();
-        DeleteDbFiles.execute(dbDirectory, JdbcSource.class.getSimpleName(), true);
+        // DeleteDbFiles.execute(dbDirectory, JdbcSource.class.getSimpleName(), true);
     }
 
     private void createAndFillTable() throws SQLException {

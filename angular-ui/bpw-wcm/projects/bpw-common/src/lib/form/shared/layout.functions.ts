@@ -52,9 +52,6 @@ import { TitleMapItem } from '../json-schema-form.service';
 export function buildLayout(jsf, widgetLibrary) {
   let hasSubmitButton = !JsonPointer.get(jsf, '/formOptions/addSubmit');
   const formLayout = mapLayout(jsf.layout, (layoutItem, index, layoutPointer) => {
-    console.log('.................... maylayout param layoutItem:', layoutItem);
-    console.log('.................... maylayout param index:', index);
-    console.log('.................... maylayout param layoutPointer:', layoutPointer);
     const newNode: any = {
       _id: uniqueId(),
       options: {},
@@ -482,11 +479,6 @@ export function buildLayout(jsf, widgetLibrary) {
       widget: widgetLibrary.getWidget('submit'),
     });
   }
-  console.log("form layout: ")
-  console.log(formLayout)
-  
-  console.log("jsf: ")
-  console.log(jsf)
   return formLayout;
 }
 
@@ -857,8 +849,6 @@ export function mapLayout(layout, fn, layoutPointer = '', rootLayout = layout) {
   forEach(layout, (item, index) => {
     const realIndex = +index + indexPad;
     const newLayoutPointer = layoutPointer + '/' + realIndex;
-    console.log('>>>>>>>>>>>>>>>>> maplayout newLayoutPointer:', newLayoutPointer);
-    console.log('>>>>>>>>>>>>>>>>> maplayout realIndex:', realIndex);
     let newNode: any = copy(item);
     let itemsArray: any[] = [];
     if (isObject(item)) {

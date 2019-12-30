@@ -28,13 +28,13 @@ import { UIConfig } from 'bpw-common';
             customBackgroundColor: false,
             background           : 'wcm-white-500',
             hidden               : false,
-            position             : 'below'
+            position             : 'above'
         },
         footer   : {
             customBackgroundColor: true,
             background           : 'wcm-navy-900',
-            hidden               : false,
-            position             : 'above-static'
+            hidden               : true,
+            position             : 'below-static'
         },
         sidepanel: {
             hidden  : true,

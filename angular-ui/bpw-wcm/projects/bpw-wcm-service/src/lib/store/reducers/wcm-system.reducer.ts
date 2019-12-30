@@ -44,6 +44,7 @@ export function WcmSystemReducer(state = WcmSystemInitialState, action: WcmSyste
                 loadError: null
             };
         case WcmSystemActionTypes.GET_WCMSYSTEM_SUCCESS:
+            
             return {
                 wcmSystem: { ... action.payload},
                 loading: false,

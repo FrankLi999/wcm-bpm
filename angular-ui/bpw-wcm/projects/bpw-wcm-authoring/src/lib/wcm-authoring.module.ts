@@ -28,7 +28,8 @@ import {
   ThemeOptionsModule,
   LayoutModule,
   JsonSchemaFormModule,
-  AuthGuard
+  AuthGuard,
+  AuthStoreModule
 } from 'bpw-common';
 
 import { ResolveGuard, WcmAppStoreModule } from 'bpw-wcm-service'
@@ -308,6 +309,7 @@ const routes: Routes = [{
 
         LayoutModule,
  
+        AuthStoreModule,
         WcmAppStoreModule,
         ComponentModule,
         JcrExplorerModule,
