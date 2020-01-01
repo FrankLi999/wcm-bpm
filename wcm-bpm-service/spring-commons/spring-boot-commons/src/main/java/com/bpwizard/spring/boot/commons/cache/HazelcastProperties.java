@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 public class HazelcastProperties {
 	
 	public HazelcastProperties() {}
+	private boolean enabled;
 	private int port;
 	private int cpMemberCounts = 0;
 	private int cpGroupSize = 3;
@@ -32,6 +33,15 @@ public class HazelcastProperties {
 	
 	List<CacheConfig> caches = new ArrayList<>();
 	private ManagementCenter managementCenter = new ManagementCenter();
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	public int getPort() {
 		return port;
 	}
@@ -178,14 +188,17 @@ public class HazelcastProperties {
 
 	@Override
 	public String toString() {
-		return "HazelcastProperties [port=" + port + ", cpMemberCounts=" + cpMemberCounts + ", cpGroupSize="
-				+ cpGroupSize + ", members=" + members + ", groupName=" + groupName + ", instanceName=" + instanceName
-				+ ", keyStorePassword=" + keyStorePassword + ", enableSSL=" + enableSSL + ", keyStore=" + keyStore
-				+ ", keyManagerAlgorithm=" + keyManagerAlgorithm + ", trustManagerAlgorithm=" + trustManagerAlgorithm
-				+ ", enableEncryption=" + enableEncryption + ", encryptionAlgorithm=" + encryptionAlgorithm
-				+ ", encryptionPassword=" + encryptionPassword + ", encryptionSalt=" + encryptionSalt + ", loggingType="
-				+ loggingType + ", caches=" + caches + ", managementCenter=" + managementCenter + "]";
+		return "HazelcastProperties [enabled=" + enabled + ", port=" + port + ", cpMemberCounts=" + cpMemberCounts
+				+ ", cpGroupSize=" + cpGroupSize + ", members=" + members + ", groupName=" + groupName
+				+ ", instanceName=" + instanceName + ", keyStorePassword=" + keyStorePassword + ", enableSSL="
+				+ enableSSL + ", keyStore=" + keyStore + ", keyManagerAlgorithm=" + keyManagerAlgorithm
+				+ ", trustManagerAlgorithm=" + trustManagerAlgorithm + ", enableEncryption=" + enableEncryption
+				+ ", encryptionAlgorithm=" + encryptionAlgorithm + ", encryptionPassword=" + encryptionPassword
+				+ ", encryptionSalt=" + encryptionSalt + ", loggingType=" + loggingType + ", caches=" + caches
+				+ ", managementCenter=" + managementCenter + "]";
 	}
+
+
 
 	public static class ManagementCenter {
 		private String url = "";

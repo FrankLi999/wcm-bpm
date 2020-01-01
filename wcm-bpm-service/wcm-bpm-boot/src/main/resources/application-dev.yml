@@ -171,6 +171,8 @@ org:
           NEW_CONTENT_PRIMARY_TYPE_NAME: "nt:resource"
 camunda:
   bpm:
+    jpa: 
+      enabled: false
     authorization:
       enabled: true
     # database:
@@ -183,6 +185,7 @@ camunda:
     filter:
       create: All tasks
 hazelcast:
+  enabled: false
   loggingType: slf4j
   backupCount: 1
   port: 5701

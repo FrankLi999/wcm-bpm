@@ -1,7 +1,6 @@
 package com.bpwizard.wcm.repo.controllers;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Principal;
@@ -19,33 +18,15 @@ import javax.jcr.security.AccessControlList;
 import javax.jcr.security.AccessControlManager;
 import javax.jcr.security.AccessControlPolicyIterator;
 import javax.jcr.security.Privilege;
-import javax.mail.MessagingException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.bpwizard.wcm.repo.bpm.ExternalEditService;
-import com.bpwizard.wcm.repo.bpm.ExternalReviewService;
-import com.bpwizard.wcm.repo.bpm.WcmFlowService;
-import com.bpwizard.wcm.repo.bpm.model.CompleteEditRequest;
-import com.bpwizard.wcm.repo.bpm.model.CompleteReviewRequest;
-import com.bpwizard.wcm.repo.bpm.model.DeleteDraftRequest;
-import com.bpwizard.wcm.repo.bpm.model.EditContentItemRequest;
-import com.bpwizard.wcm.repo.bpm.model.ReviewContentItemRequest;
-import com.bpwizard.wcm.repo.bpm.model.ReviewTask;
-import com.bpwizard.wcm.repo.bpm.model.StartFlowRequest;
-import com.bpwizard.wcm.repo.mail.service.MailService;
 
 @RestController
 @RequestMapping(ModeshapeController.BASE_URI)
@@ -55,100 +36,100 @@ public class ModeshapeController {
 	@Autowired
 	private RepositoryManager repositoryManager;
 
-	@Autowired
-	private ExternalReviewService externalRevieService;
+//	@Autowired
+//	private ExternalReviewService externalRevieService;
+//	
+//	@Autowired
+//	private ExternalEditService externalEditService;
+//	
+//	@Autowired
+//	private WcmFlowService wcmFlowService;
+//
+//	@Autowired
+//    private SimpMessagingTemplate template;
 	
-	@Autowired
-	private ExternalEditService externalEditService;
-	
-	@Autowired
-	private WcmFlowService wcmFlowService;
-
-	@Autowired
-    private SimpMessagingTemplate template;
-	
-    @Autowired
-    private MailService mailService;
-	
-    @PostMapping(path="/create-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String startContentFlow(@RequestBody StartFlowRequest startFlowRequest) {
-		
-		String processInstanceId = wcmFlowService.startContentFlow(
-				startFlowRequest.getRepository(),
-				startFlowRequest.getWorkspace(),
-				startFlowRequest.getContentPath(),
-				startFlowRequest.getContentId(),
-				startFlowRequest.getWorkflow());
-//		this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
-//		try {
-//		    this.mailService.sendEmailWithAttachment(
-//            		"Testing from Spring Boot",
-//            		new String[] {"a@yahoo.com", "b@gmail.com"},
-//            		"<h1>Check attachment for image!</h1>",
-//            		"android.png");
-//        } catch (MessagingException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-		return processInstanceId;
-	}
-	
-	@GetMapping(path="/review-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ReviewTask[] getReviewTasks(@PathVariable("topic")  String topic) {
-		return this.externalRevieService.getReviewTasks(topic);
-	}
-	
-	@PostMapping(path="/review-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String reviewContentItem(@RequestBody ReviewContentItemRequest reviewContentItemRequest) {
-		return this.externalRevieService.claimTask( 
-				reviewContentItemRequest.getContentId(),
-				reviewContentItemRequest.getReviewTopic(), 
-				reviewContentItemRequest.getWorkerId());
-	}
-	
-	@PostMapping(path="/complete-review-task", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String completeReview(@RequestBody CompleteReviewRequest completeReviewRequest) {
-		return this.externalRevieService.completeReview(
-				completeReviewRequest.getReviewTaskId(),
-				completeReviewRequest.getReviewTopic(),
-				completeReviewRequest.getWorkerId(), 
-				completeReviewRequest.isApproved(), 
-				completeReviewRequest.getComment());
-	}
-	
-//	@GetMapping(path="/edit-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ReviewTask[] getEditTasks(@PathVariable("topic")  String topic) {
-//		return this.externalEditService.getEditTasks(topic);
+//    @Autowired
+//    private MailService mailService;
+//	
+//    @PostMapping(path="/create-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public String startContentFlow(@RequestBody StartFlowRequest startFlowRequest) {
+//		
+//		String processInstanceId = wcmFlowService.startContentFlow(
+//				startFlowRequest.getRepository(),
+//				startFlowRequest.getWorkspace(),
+//				startFlowRequest.getContentPath(),
+//				startFlowRequest.getContentId(),
+//				startFlowRequest.getWorkflow());
+////		this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
+////		try {
+////		    this.mailService.sendEmailWithAttachment(
+////            		"Testing from Spring Boot",
+////            		new String[] {"a@yahoo.com", "b@gmail.com"},
+////            		"<h1>Check attachment for image!</h1>",
+////            		"android.png");
+////        } catch (MessagingException e) {
+////            e.printStackTrace();
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
+//		return processInstanceId;
 //	}
 //	
-	@PostMapping(path="/edit-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String editContentItem(@RequestBody EditContentItemRequest editContentItemRequest) {
-		return this.externalEditService.claimTask(
-				editContentItemRequest.getContentId(),
-				editContentItemRequest.getEditTopic(), 
-				editContentItemRequest.getWorkerId());
-	}
-	
-	@PostMapping(path="/complete-edit-task", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String completeEdit(@RequestBody CompleteEditRequest completeEditRequest) {
-		return this.externalEditService.completeEdit(
-				completeEditRequest.getEditTaskId(),
-				completeEditRequest.getEditTopic(),
-				completeEditRequest.getWorkerId());
-	}
-	
-	@DeleteMapping(path="/delete-reviewing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String deleteRevieingDraft(@RequestBody DeleteDraftRequest deleteDraftRequest) {
-		this.wcmFlowService.deleteReviewingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
-		return "Deleted";
-	}
-	
-	@DeleteMapping(path="/delete-editing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String deleteEditingDraft(@RequestBody DeleteDraftRequest deleteDraftRequest) {
-		this.wcmFlowService.deleteEditingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
-		return "Deleted";
-	}
+//	@GetMapping(path="/review-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ReviewTask[] getReviewTasks(@PathVariable("topic")  String topic) {
+//		return this.externalRevieService.getReviewTasks(topic);
+//	}
+//	
+//	@PostMapping(path="/review-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public String reviewContentItem(@RequestBody ReviewContentItemRequest reviewContentItemRequest) {
+//		return this.externalRevieService.claimTask( 
+//				reviewContentItemRequest.getContentId(),
+//				reviewContentItemRequest.getReviewTopic(), 
+//				reviewContentItemRequest.getWorkerId());
+//	}
+//	
+//	@PostMapping(path="/complete-review-task", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public String completeReview(@RequestBody CompleteReviewRequest completeReviewRequest) {
+//		return this.externalRevieService.completeReview(
+//				completeReviewRequest.getReviewTaskId(),
+//				completeReviewRequest.getReviewTopic(),
+//				completeReviewRequest.getWorkerId(), 
+//				completeReviewRequest.isApproved(), 
+//				completeReviewRequest.getComment());
+//	}
+//	
+////	@GetMapping(path="/edit-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
+////	public ReviewTask[] getEditTasks(@PathVariable("topic")  String topic) {
+////		return this.externalEditService.getEditTasks(topic);
+////	}
+////	
+//	@PostMapping(path="/edit-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public String editContentItem(@RequestBody EditContentItemRequest editContentItemRequest) {
+//		return this.externalEditService.claimTask(
+//				editContentItemRequest.getContentId(),
+//				editContentItemRequest.getEditTopic(), 
+//				editContentItemRequest.getWorkerId());
+//	}
+//	
+//	@PostMapping(path="/complete-edit-task", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public String completeEdit(@RequestBody CompleteEditRequest completeEditRequest) {
+//		return this.externalEditService.completeEdit(
+//				completeEditRequest.getEditTaskId(),
+//				completeEditRequest.getEditTopic(),
+//				completeEditRequest.getWorkerId());
+//	}
+//	
+//	@DeleteMapping(path="/delete-reviewing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public String deleteRevieingDraft(@RequestBody DeleteDraftRequest deleteDraftRequest) {
+//		this.wcmFlowService.deleteReviewingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
+//		return "Deleted";
+//	}
+//	
+//	@DeleteMapping(path="/delete-editing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public String deleteEditingDraft(@RequestBody DeleteDraftRequest deleteDraftRequest) {
+//		this.wcmFlowService.deleteEditingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
+//		return "Deleted";
+//	}
 	
 	@GetMapping("/ping")
 	public String modeShape() {
