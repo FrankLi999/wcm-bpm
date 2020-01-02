@@ -56,7 +56,8 @@ public class CamundaConfig {
 		FilterRegistrationBean<StatelessUserAuthenticationFilter> filterRegistration = new FilterRegistrationBean<>();
 		filterRegistration.setFilter(new StatelessUserAuthenticationFilter(processEngine));
 		filterRegistration.setOrder(102); // make sure the filter is registered after the Spring Security Filter Chain
-		filterRegistration.addUrlPatterns("/camunda/api/engine/*");
+		// filterRegistration.addUrlPatterns("/camunda/api/engine/*");
+		filterRegistration.addUrlPatterns("/rest/*");
 		return filterRegistration;
 	}
 	

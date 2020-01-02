@@ -27,9 +27,9 @@ import com.bpwizard.spring.boot.commons.service.repo.domain.User;
         prePostEnabled = true
 )
 @AutoConfigureBefore({AutoConfiguration.class})
-public class ModeshapeSecurityConfig extends SpringJpaSecurityConfig {
+public class WcmBpmSecurityConfig extends SpringJpaSecurityConfig {
 	
-	private static final Logger logger = LogManager.getLogger(ModeshapeSecurityConfig.class);
+	private static final Logger logger = LogManager.getLogger(WcmBpmSecurityConfig.class);
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -78,7 +78,7 @@ public class ModeshapeSecurityConfig extends SpringJpaSecurityConfig {
                 .permitAll()
             .antMatchers("/tensorflow/**", "/jet/**", "/hello/**", "/webdav/**")
                 .permitAll()
-            .antMatchers("/modeshape/server/**", "/modeshape/api/**", "/wcm/api/**")
+            .antMatchers("/modeshape/server/**", "/content/server/**", "/modeshape/api/**", "/wcm/api/**")
                 .permitAll()
             .antMatchers("/camunda/api/**", "/camunda/rest/**") 
                 .permitAll()
@@ -91,5 +91,18 @@ public class ModeshapeSecurityConfig extends SpringJpaSecurityConfig {
                 .authenticated();
 		//super.authorizeRequests(http);
 		// .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		
+/////////////////////////////////////////////////////////////////
+// For Camunda spring security integration
+//////////////////////////////////////////////////////////////////
+		
+//		http
+//        .antMatcher("/rest/**")
+//        .authorizeRequests().anyRequest().authenticated()
+//        .and()
+//        .csrf().disable()
+//        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//        .and()
+//        .httpBasic(); // this is just an example, use any auth mechanism you like
 	}
 }

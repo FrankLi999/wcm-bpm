@@ -36,101 +36,6 @@ public class ModeshapeController {
 	@Autowired
 	private RepositoryManager repositoryManager;
 
-//	@Autowired
-//	private ExternalReviewService externalRevieService;
-//	
-//	@Autowired
-//	private ExternalEditService externalEditService;
-//	
-//	@Autowired
-//	private WcmFlowService wcmFlowService;
-//
-//	@Autowired
-//    private SimpMessagingTemplate template;
-	
-//    @Autowired
-//    private MailService mailService;
-//	
-//    @PostMapping(path="/create-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public String startContentFlow(@RequestBody StartFlowRequest startFlowRequest) {
-//		
-//		String processInstanceId = wcmFlowService.startContentFlow(
-//				startFlowRequest.getRepository(),
-//				startFlowRequest.getWorkspace(),
-//				startFlowRequest.getContentPath(),
-//				startFlowRequest.getContentId(),
-//				startFlowRequest.getWorkflow());
-////		this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
-////		try {
-////		    this.mailService.sendEmailWithAttachment(
-////            		"Testing from Spring Boot",
-////            		new String[] {"a@yahoo.com", "b@gmail.com"},
-////            		"<h1>Check attachment for image!</h1>",
-////            		"android.png");
-////        } catch (MessagingException e) {
-////            e.printStackTrace();
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-//		return processInstanceId;
-//	}
-//	
-//	@GetMapping(path="/review-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ReviewTask[] getReviewTasks(@PathVariable("topic")  String topic) {
-//		return this.externalRevieService.getReviewTasks(topic);
-//	}
-//	
-//	@PostMapping(path="/review-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public String reviewContentItem(@RequestBody ReviewContentItemRequest reviewContentItemRequest) {
-//		return this.externalRevieService.claimTask( 
-//				reviewContentItemRequest.getContentId(),
-//				reviewContentItemRequest.getReviewTopic(), 
-//				reviewContentItemRequest.getWorkerId());
-//	}
-//	
-//	@PostMapping(path="/complete-review-task", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public String completeReview(@RequestBody CompleteReviewRequest completeReviewRequest) {
-//		return this.externalRevieService.completeReview(
-//				completeReviewRequest.getReviewTaskId(),
-//				completeReviewRequest.getReviewTopic(),
-//				completeReviewRequest.getWorkerId(), 
-//				completeReviewRequest.isApproved(), 
-//				completeReviewRequest.getComment());
-//	}
-//	
-////	@GetMapping(path="/edit-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
-////	public ReviewTask[] getEditTasks(@PathVariable("topic")  String topic) {
-////		return this.externalEditService.getEditTasks(topic);
-////	}
-////	
-//	@PostMapping(path="/edit-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public String editContentItem(@RequestBody EditContentItemRequest editContentItemRequest) {
-//		return this.externalEditService.claimTask(
-//				editContentItemRequest.getContentId(),
-//				editContentItemRequest.getEditTopic(), 
-//				editContentItemRequest.getWorkerId());
-//	}
-//	
-//	@PostMapping(path="/complete-edit-task", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public String completeEdit(@RequestBody CompleteEditRequest completeEditRequest) {
-//		return this.externalEditService.completeEdit(
-//				completeEditRequest.getEditTaskId(),
-//				completeEditRequest.getEditTopic(),
-//				completeEditRequest.getWorkerId());
-//	}
-//	
-//	@DeleteMapping(path="/delete-reviewing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public String deleteRevieingDraft(@RequestBody DeleteDraftRequest deleteDraftRequest) {
-//		this.wcmFlowService.deleteReviewingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
-//		return "Deleted";
-//	}
-//	
-//	@DeleteMapping(path="/delete-editing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public String deleteEditingDraft(@RequestBody DeleteDraftRequest deleteDraftRequest) {
-//		this.wcmFlowService.deleteEditingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
-//		return "Deleted";
-//	}
-	
 	@GetMapping("/ping")
 	public String modeShape() {
 		Session session = null;
@@ -316,7 +221,8 @@ public class ModeshapeController {
 //				Privilege.JCR_MODIFY_ACCESS_CONTROL
 		};
 		Principal principal = new TestPrincipal();
-		Principal adminPrincipal = new TestPrincipal("admin@example.com");  
+		Principal adminPrincipal = new TestPrincipal("myadmin@example.com");
+		Principal demoPrincipal = new TestPrincipal("mydemo@example.com");  
 		Principal group = new TestGroup();
 		Principal wcmViewer = new TestGroup("wcm-viewer");
 		Session session = this.repositoryManager.getSession("bpwizard");
@@ -339,6 +245,7 @@ public class ModeshapeController {
 		
 		acl.addAccessControlEntry(principal, permissions);
 		acl.addAccessControlEntry(adminPrincipal, permissions);
+		acl.addAccessControlEntry(demoPrincipal, permissions);
 		acl.addAccessControlEntry(group, permissions);
 		acl.addAccessControlEntry(wcmViewer, permissions);
 //		 

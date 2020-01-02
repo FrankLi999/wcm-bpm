@@ -52,16 +52,17 @@ bpw:
 
   user:
     -
-      username: admin@example.com
-      email: admin@example.com
+      username: myadmin@example.com
+      email: myadmin@example.com
       password: admin!
       rolename: 
         - admin
     -
       username: demo
-      email: demo@example.com
+      email: mydemo@example.com
       password: demo
-      rolename: 
+      rolename:
+        - admin 
         - readonly
         - wcm-viewer
         - camunda-admin

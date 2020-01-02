@@ -1,0 +1,7 @@
+keycloak:
+  realm: wcm_bpm
+  resource: wcm_bpm
+  auth-server-url: "http://localhost:8180/auth"
+  ssl-required: external
+  public-client: true
+  principal-attribute: preferred_username
