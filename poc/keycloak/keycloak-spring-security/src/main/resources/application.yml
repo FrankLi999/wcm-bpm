@@ -1,6 +1,6 @@
 keycloak:
-  realm: wcm_bpm
-  resource: wcm_bpm
+  realm: public_library
+  resource: public_library
   auth-server-url: "http://localhost:8180/auth"
   ssl-required: external
   public-client: true

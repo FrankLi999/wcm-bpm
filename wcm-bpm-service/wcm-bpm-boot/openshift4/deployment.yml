@@ -7,8 +7,8 @@ spec:
     spec:
       containers:
         - env:
-          - name: JAVA_OPTIONS
-            value: "-Dspring.profiles.active=openshift -Djasypt.encryptor.password=password -DLOG_ROOT_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm-boot"
+           - name: JAVA_OPTIONS
+             value: "-Dspring.profiles.active=openshift"
           #- name: SPRING_PROFILES_ACTIVE
           #  value: openshift
           - name: DB_HOST_PORT
@@ -25,15 +25,15 @@ spec:
               secretKeyRef:
                 name: wcm-bpm-database-secret
                 key: password
-          # livenessProbe:
-          #   httpGet:
-          #     path: /actuator/health
-          #     port: 8080
-          #     scheme: HTTP
-          #   initialDelaySeconds: 180
-          # readinessProbe:
-          #   httpGet:
-          #     path: /actuator/health
-          #     port: 8080
-          #     scheme: HTTP
-          #   initialDelaySeconds: 20
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 180
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20

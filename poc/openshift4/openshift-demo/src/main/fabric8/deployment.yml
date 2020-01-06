@@ -1,0 +1,43 @@
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+          # - name: JAVA_OPTIONS
+          #   value: "-Dspring.profiles.active=openshift -Djasypt.encryptor.password=password -DLOG_ROOT_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm-boot"
+          - name: jasypt.encryptor.password
+            value: password
+          - name: LOG_ROOT_LEVEL
+            value: value
+          - name: APP_LOG_LEVEL
+            value: TRACE
+          - name: log.root.dir
+            value: "/var/logs/wcm-bpm-boot"
+          - name: spring.profiles.active
+            value: openshift
+          - name: DB_HOST_PORT
+            value: "mysql:3306"
+          - name: DB_DATABASE
+            value: wcm_bpm
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: wcm-bpm-database-secret
+                key: user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: wcm-bpm-database-secret
+                key: password
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 180
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20

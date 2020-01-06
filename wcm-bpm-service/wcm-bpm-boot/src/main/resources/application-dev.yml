@@ -17,6 +17,11 @@
 #spring.jpa.properties.hibernate.cache.use_minimal_puts=true
 #spring.jpa.properties.hibernate.cache.region.factory_class=com.hazelcast.hibernate.HazelcastCacheRegionFactory
 
+keycloak:
+  base-url: http://localhost:8080/auth
+  realm: wcm_bpm
+  realm-url: ${kc.base-url}/realms/${kc.realm}
+  
 spring:
   cache:
     type: hazelcast
@@ -94,7 +99,7 @@ spring:
       maximum-pool-size: 5
       minimum-idle: 5
       # connectionTimeout: 30000
-
+  
   security:
     oauth2:
       client:
@@ -115,12 +120,32 @@ spring:
               - public_profile
           github:
             clientId: d3e47fc2ddd966fa4352
-            clientSecret: 3bc0f6b8332f93076354c2a5bada2f5a05aea60d
+            clientSecret: bdaedae5-8aed-4d3c-a079-3077fc355bbe
             redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - user:email
               - read:user
-        # provider:
+          #keycloak:
+            #client-id: wcm_bpm
+            #client-name: wcm_bpm
+            #client-secret: bdaedae5-8aed-4d3c-a079-3077fc355bbe
+            #provider: keycloak
+            #authorization-grant-type: authorization_code
+            #scope: 
+            #  - openid
+            #  - profile
+            #redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+            ##redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+        #provider:
+          #keycloak:
+            #authorization-uri: ${keycloak.realm-url}/protocol/openid-connect/auth
+            #jwk-set-uri: ${keycloak.realm-url}/protocol/openid-connect/certs
+            #token-uri: ${keycloak.realm-url}/protocol/openid-connect/token
+            ## would be cool if there was a end-session-uri to propagate logouts 
+            ##  User info endpoint not needed since Keycloak uses self-contained value tokens
+            ##  user-info-uri: ${keycloak.realm-url}/protocol/openid-connect/userinfo
+            ##user-name-attribute: preferred_username
+            #user-name-attribute: user_name
           # facebook:
             # authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
             # tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
@@ -169,6 +194,8 @@ org:
           NEW_FOLDER_PRIMARY_TYPE_NAME: "nt:folder"
           NEW_RESOURCE_PRIMARY_TYPE_NAME: "nt:file"
           NEW_CONTENT_PRIMARY_TYPE_NAME: "nt:resource"
+management:
+  health:    camunda:      enabled: true
 camunda:
   bpm:
     jpa: 

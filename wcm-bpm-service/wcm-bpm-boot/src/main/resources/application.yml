@@ -34,7 +34,8 @@ server:
   contextPath: /
   # servlet.session.persistent: false
   # port: 19090
-  port: ${PORT:8080}
+  # port: ${PORT:8080}
+  port: 8080
 # Spring Commons related properties
 bpw:
 
@@ -48,18 +49,16 @@ bpw:
     - camunda-admin
     - UNVERIFIED
     - BLOCKED
-  
-
   user:
     -
-      username: myadmin@example.com
-      email: myadmin@example.com
+      username: admin@example.com
+      email: admin@example.com
       password: admin!
       rolename: 
         - admin
     -
       username: demo
-      email: mydemo@example.com
+      email: demo@example.com
       password: demo
       rolename:
         - admin 

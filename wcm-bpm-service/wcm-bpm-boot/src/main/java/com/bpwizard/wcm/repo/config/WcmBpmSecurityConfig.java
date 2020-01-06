@@ -78,14 +78,14 @@ public class WcmBpmSecurityConfig extends SpringJpaSecurityConfig {
                 .permitAll()
             .antMatchers("/tensorflow/**", "/jet/**", "/hello/**", "/webdav/**")
                 .permitAll()
-            .antMatchers("/modeshape/server/**", "/content/server/**", "/modeshape/api/**", "/wcm/api/**")
-                .permitAll()
-            .antMatchers("/camunda/api/**", "/camunda/rest/**") 
+            .antMatchers("/modeshape/server/**", "/modeshape/api/**", "/wcm/api/**")
                 .permitAll()
             .antMatchers("/drools/api/**") 
                 .permitAll()
             .antMatchers("/wcm-websocket/**", "/wcm-app/**") 
-                .permitAll()    
+                .permitAll()
+//            .antMatchers("/camunda/api/**", "/camunda/rest/**", "/content/server/**", "/rest/**")
+//            	.permitAll()
             .anyRequest()
             	//.permitAll();
                 .authenticated();

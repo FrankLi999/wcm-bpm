@@ -1,4 +1,36 @@
-Key-cloak
+## Openshift CodeReady
+crc start -n 8.8.8.8
+
+https://manage.openshift.com/account/index
+
+oc import-image openjdk18 --from=registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift --confirm
+oc create -f openshift4/credentials-secret.yml
+oc create rolebinding default-view --clusterrole=view --serviceaccount=wcm-bpm:default --namespace=wcm-bpm
+
+mvn clean install -Popenshift -DskipTests
+mvn fabric8:resource -Popenshift  -DskipTests
+
+oc create -f openshift4/wcm-bpm-boot-deploymentconfig.yml
+oc create -f openshift4/wcm-bpm-boot-service.yml
+oc create -f openshift4/wcm-bpm-boot-route.yml
+-- mvn fabric8:build -Popenshift  -DskipTest
+-- mvn clean fabric8:deploy -P openshift  -DskipTests
+oc get pods -w
+
+
+## MySQL Openshift
+ https://github.com/sclorg/mysql-container/blob/master/8.0/root/usr/share/container-scripts/mysql/README.md
+ https://docs.okd.io/latest/using_images/db_images/mysql.html
+ 
+oc port-forward mysql-1-p89pg 3306:3306
+
+oc new-app mysql:8.0~https://github.com/sclorg/mysql-container.git --name mysql --env MYSQL_SERVICE_HOST=mysql --env MYSQL_SERVICE_PORT=3306 --env MYSQL_DATABASE=wcm_bpm --env MYSQL_USER=wcmbpm --env MYSQL_PASSWORD=P@ssw0rd --env MYSQL_OPERATIONS_USER=mysql --env MYSQL_OPERATIONS_PASSWORD=P@ssw0rd --env MYSQL_ROOT_PASSWORD=P@ssw0rd --env MEMORY_LIMIT=1024mi
+
+oc expose svc/mysql
+
+GRANT ALL ON *.* TO 'wcmbpm'@'%';
+flush privileges;   
+## Key-cloak
 
 install:
 
@@ -50,16 +82,79 @@ Keycloak Authentication Flows, SSO Protocols and Client Configuration
          credentials with another service, caution here.    
          
       Client Configuration: Clients are entities that can request authentication of a user.
+         Client ID: public_library
+         Client protocol: OIDC
+         Root URL: http://localhost:8080
+         
+         
          Client ID: wcm_bpm
          Client protocol: OIDC
          Root URL: http://localhost:8080
+         
+          Access Type         : confidential
+			Valid Redirect URIs : http://localhost:8080
+			# Required for micro-service to micro-service secured calls
+			Service Accounts Enabled : On
+			Authorization Enabled : On
+         
+         Note: Access Type confidential supports getting access token using client credentials grant 
+         as well as authorization code grant. If a micro-service need to call another micro-service, 
+         caller will be ‘confidential’ and callee will be ‘bearer-only’.
          
          An Identity Token, which contains information about the logged user such as the username 
          and the email.
 		  An Access Token, digitally signed by the realm, which contains access data such as the 
 			roles assigned to the logged user.
+			
+			
+			Create a Mapper (To get user_name in access token)
+			Get Configuration From OpenID Configuration Endpoint
+				 http://localhost:8180/auth/realms/wcm_bpm/.well-known/openid-configuration
+				 
+				 Important URLS to be copied from response:
+					issuer : http://localhost:8180/auth/realms/wcm_bpm
+					authorization_endpoint: ${issuer}/protocol/openid-connect/auth
+					token_endpoint: ${issuer}/protocol/openid-connect/token
+					token_introspection_endpoint: ${issuer}/protocol/openid-connect/token/introspect
+					userinfo_endpoint: ${issuer}/protocol/openid-connect/userinfo
+					Response also contains grant types and scopes supported
+					grant_types_supported: ["client_credentials", …]
+					scopes_supported: ["openid", …]
+					
+					
+					
+					authorization_endpoint: "http://localhost:8180/auth/realms/wcm_bpm/protocol/openid-connect/auth",
+					token_endpoint: "http://localhost:8180/auth/realms/wcm_bpm/protocol/openid-connect/token",
+					token_introspection_endpoint: "http://localhost:8180/auth/realms/wcm_bpm/protocol/openid-connect/token/introspect",
+					userinfo_endpoint: "http://localhost:8180/auth/realms/wcm_bpm/protocol/openid-connect/userinfo",
+					end_session_endpoint: "http://localhost:8180/auth/realms/wcm_bpm/protocol/openid-connect/logout",
+					jwks_uri: "http://localhost:8180/auth/realms/wcm_bpm/protocol/openid-connect/certs",
+					check_session_iframe: "http://localhost:8180/auth/realms/wcm_bpm/protocol/openid-connect/login-status-iframe.html",
+					
+					grant_types_supported: [
+						"authorization_code",
+						"implicit",
+						"refresh_token",
+						"password",
+						"client_credentials"
+					]
+					scopes_supported: [
+						"openid",
+						"address",
+						"email",
+						"microprofile-jwt",
+						"offline_access",
+						"phone",
+						"profile",
+						"roles",
+						"web-origins"
+					],
+					
+		Use postman to get the token and decode it on https://jwt.io/
     https://www.thomasvitale.com/spring-boot-keycloak-security/
     https://www.thomasvitale.com/spring-security-keycloak/
+    https://ordina-jworks.github.io/security/2019/08/22/Securing-Web-Applications-With-Keycloak.html
+    https://medium.com/@bcarunmail/securing-rest-api-using-keycloak-and-spring-oauth2-6ddf3a1efcc2
 /////////////////////////////////////////////////////////////////////////////
 Spring boot/security with camunda
 

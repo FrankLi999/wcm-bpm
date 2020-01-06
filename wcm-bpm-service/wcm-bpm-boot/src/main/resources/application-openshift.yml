@@ -60,9 +60,9 @@ spring:
           # region:
             # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
   datasource:
-    url: jdbc:mysql://${DATABASE_SERVICE_NAME}:3306/${MYSQL_DATABASE}?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://${DB_HOST_PORT}/${DB_DATABASE}?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.jdbc.Driver
     
     

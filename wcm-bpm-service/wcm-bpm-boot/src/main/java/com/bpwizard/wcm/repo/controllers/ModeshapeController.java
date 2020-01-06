@@ -221,8 +221,8 @@ public class ModeshapeController {
 //				Privilege.JCR_MODIFY_ACCESS_CONTROL
 		};
 		Principal principal = new TestPrincipal();
-		Principal adminPrincipal = new TestPrincipal("myadmin@example.com");
-		Principal demoPrincipal = new TestPrincipal("mydemo@example.com");  
+		Principal adminPrincipal = new TestPrincipal("admin@example.com");
+		Principal demoPrincipal = new TestPrincipal("demo@example.com");  
 		Principal group = new TestGroup();
 		Principal wcmViewer = new TestGroup("wcm-viewer");
 		Session session = this.repositoryManager.getSession("bpwizard");

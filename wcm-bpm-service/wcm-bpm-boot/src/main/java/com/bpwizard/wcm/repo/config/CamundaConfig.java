@@ -58,6 +58,7 @@ public class CamundaConfig {
 		filterRegistration.setOrder(102); // make sure the filter is registered after the Spring Security Filter Chain
 		// filterRegistration.addUrlPatterns("/camunda/api/engine/*");
 		filterRegistration.addUrlPatterns("/rest/*");
+		filterRegistration.addUrlPatterns("/content/server/*");
 		return filterRegistration;
 	}
 	

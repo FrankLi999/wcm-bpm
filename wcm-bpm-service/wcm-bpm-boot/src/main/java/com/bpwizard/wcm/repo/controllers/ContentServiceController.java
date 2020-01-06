@@ -33,7 +33,6 @@ public class ContentServiceController {
 	private static final Logger logger = LogManager.getLogger(ContentServiceController.class);
 	public static final String BASE_URI = "/content/server";
 	
-
 	@Autowired
 	private ExternalReviewService externalRevieService;
 	
@@ -74,9 +73,10 @@ public class ContentServiceController {
 	}
 	
     @PostMapping(path="/create-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+    // @PreAuthorize("hasRole('ROLE_admin') or hasRole('admin') or hasRole('user')")
 	public String startContentFlow(@RequestBody StartFlowRequest startFlowRequest) {
-		
-		String processInstanceId = wcmFlowService.startContentFlow(
+    	logger.traceEntry();
+    	String processInstanceId = wcmFlowService.startContentFlow(
 				startFlowRequest.getRepository(),
 				startFlowRequest.getWorkspace(),
 				startFlowRequest.getContentPath(),
@@ -94,6 +94,7 @@ public class ContentServiceController {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+    	logger.traceExit();
 		return processInstanceId;
 	}
 	
