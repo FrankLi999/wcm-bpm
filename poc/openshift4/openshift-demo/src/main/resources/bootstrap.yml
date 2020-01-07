@@ -1,0 +1,13 @@
+# Startup configuration of Spring-cloud-kubernetes
+spring:
+  application:
+    name: openshift-demo
+  cloud:
+    kubernetes:
+      reload:
+        # Enable live reload on ConfigMap change (disabled for Secrets by default)
+        enabled: true
+        # refresh is the default, can also be restart_context, shutdown
+        # strategy: refresh
+      secrets:
+        paths: /etc/secrets/openshift-demo-config

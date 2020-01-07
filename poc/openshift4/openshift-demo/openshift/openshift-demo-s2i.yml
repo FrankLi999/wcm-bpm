@@ -1,0 +1,33 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: openshift-demo-s2i
+  namespace: wcm-bpm
+  selfLink: >-
+    /apis/build.openshift.io/v1/namespaces/wcm-bpm/buildconfigs/openshift-demo-s2i
+  uid: 7e67717b-30af-11ea-bcb5-0a580a800128
+  resourceVersion: '255492'
+  creationTimestamp: '2020-01-06T18:08:08Z'
+spec:
+  nodeSelector: {}
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'openshift-demo:latest'
+  resources: {}
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: DockerImage
+        name: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift
+  postCommit: {}
+  source:
+    type: Binary
+    binary: {}
+  triggers: []
+  runPolicy: Serial
+status:
+  lastVersion: 1

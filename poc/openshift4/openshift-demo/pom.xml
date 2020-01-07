@@ -29,6 +29,16 @@
 	</properties>
 
 	<dependencies>
+	    <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -61,6 +71,17 @@
 	      <groupId>org.springframework.cloud</groupId>
 	      <artifactId>spring-cloud-starter-kubernetes-config</artifactId>
 	    </dependency>
+	    <!-- Add Log4j2 Dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+		<!-- Needed for Async Logging with Log4j 2 -->
+		<dependency>
+			<groupId>com.lmax</groupId>
+			<artifactId>disruptor</artifactId>
+			<version>3.4.2</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -92,6 +113,32 @@
 	            <groupId>io.fabric8</groupId>
 	            <artifactId>fabric8-maven-plugin</artifactId>
 	            <version>${fabric8-maven-plugin.version}</version>
+	            <configuration>
+	                <namespace>wcm-bpm</namespace>
+	                <!-- <buildRecreate>is</buildRecreate> -->
+	                <mode>openshift</mode>
+	                <enricher>
+	                  <config>
+	                    ​<f8-healthcheck-spring-boot>
+			               ​<timeoutSeconds>5</timeoutSeconds>
+			               ​<readinessProbeInitialDelaySeconds>30</readinessProbeInitialDelaySeconds>
+			               <livenessProbeInitialDelaySeconds>30</livenessProbeInitialDelaySeconds>
+			               ​<failureThreshold>3</failureThreshold>
+			               ​<successThreshold>1</successThreshold>
+			             ​</f8-healthcheck-spring-boot>
+	                  </config>
+	                </enricher>
+	                <imagePullPolicy>IfNotPresent</imagePullPolicy>
+	                <!-- 
+	                <images>
+	                  <image>
+	                    <name>openshift-demo:0.1</name>
+	                    <alias>openshift-demo</alias>
+	                    <registry>image-registry.openshift-image-registry.svc:5000</registry>
+	                  </image>
+	                </images>
+	                 -->    				
+	            </configuration>
 	            <executions>
 	              <execution>
 	                <id>fmp</id>
