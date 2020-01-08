@@ -1,0 +1,23 @@
+> oc create rolebinding default-view --clusterrole=view --serviceaccount=wcm-bpm:default --namespace=wcm-bpm
+> oc create rolebinding openshift-demo-view --clusterrole=view --serviceaccount=wcm-bpm:openshift-demo --namespace=wcm-bpm
+
+
+
+oc policy add-role-to-user view system:serviceaccount:wcm-bpm:default -n jaegers
+oc policy add-role-to-user view system:serviceaccount:wcm-bpm:openshift-demo -n jaegers
+
+
+oc policy add-role-to-user view system:serviceaccount:prometheus:prometheus -n wcm-bpm
+
+
+  apiVersion: authorization.openshift.io/v1
+  kind: ClusterRoleBinding
+  metadata:
+    name: prometheus-cluster-reader
+  roleRef:
+    name: system:auth-delegator 
+  subjects:
+  - kind: ServiceAccount
+    name: prometheus
+    namespace: true
+

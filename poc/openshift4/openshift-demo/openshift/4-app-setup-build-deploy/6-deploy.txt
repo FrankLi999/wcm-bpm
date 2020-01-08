@@ -1,0 +1,5 @@
+> cd openshift/4-app-setup-build-deploy
+
+> oc create -f 7-openshift-demo-deploymentconfig.yml
+> oc create -f 8-openshift-demo-service.yml
+> oc create -f 9-openshift-demo-route.yml

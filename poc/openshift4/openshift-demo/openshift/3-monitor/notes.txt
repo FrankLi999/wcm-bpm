@@ -1,0 +1,12 @@
+1. propmetheus
+
+If you installed Prometheus without the role “system:auth-delegator” you need to 
+provide a name for the datasource such as “Promtheus-OCP”.
+ 
+
+
+2. We need to grant the Grafana service account view access to the project 
+“prometheus” with the following command, so that Grafana can display data 
+from Prometheus:
+
+oc policy add-role-to-user view system:serviceaccount:grafana:grafana-ocp -n prometheus

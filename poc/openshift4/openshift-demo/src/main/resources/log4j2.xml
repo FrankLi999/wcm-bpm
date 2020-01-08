@@ -15,27 +15,24 @@
         <Console name="CONSOLE" target="SYSTEM_OUT" follow="true">
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
-        <Console name="JSONCONSOLE" target="SYSTEM_OUT" follow="true">
-            <JSONLayout compact="false" complete="true"/>
-        </Console>
         <RollingFile name="MYAPP" fileName="${LOG_PATH}/${APP_NAME}.log"
                      filePattern="${LOG_PATH}/${APP_NAME}-%d{yyyy-MM-dd}-%i.log"
                      append="true">
-            <!-- 
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
-            -->
+            
             <DefaultRolloverStrategy max="10"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" />
                 <SizeBasedTriggeringPolicy size="10MB" />
             </Policies>
+            <!-- 
             <JSONLayout compact="false" complete="true"/>
+            -->
         </RollingFile>
 		<Async name="Async">
 		  <AppenderRef ref="MYAPP"/>
-		  <AppenderRef ref="JSONCONSOLE"/>
 	      <AppenderRef ref="CONSOLE"/>
 	    </Async>
     </Appenders>

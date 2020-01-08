@@ -1,0 +1,17 @@
+> mvn clean install -DskipTests
+
+others:
+> mvn fabric8:resource -DskipTests
+
+
+-- push the container imager to openshift container registry
+> mvn clean install -DskipTests
+
+-- There is an issue with fabric8:deploy and fabric8:resource-apply with image="" in the generated openshift-demo-deploymentconfig.yml, 
+-- for now manually add 'image:"image-registry.openshift-image-registry.svc:5000/wcm-bpm/openshift-demo:latest"' 
+-- to openshift-demo-deploymentconfig.yml and use 'oc create -f' instead
+-- mvn fabric8:build  -DskipTest
+-- mvn clean fabric8:deploy -DskipTests
+-- mvn clean fabric8:resource-apply -DskipTests
+oc get pods -w
+

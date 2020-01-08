@@ -1,0 +1,6 @@
+create a jaeger namespace
+
+
+by default things in one project can't create direct connections to services in other projects, 
+so to allow that, an admin needs to set up a pod network to allow applications in 
+different projects to connect to each other. See the oc adm pod-network command for the latter.

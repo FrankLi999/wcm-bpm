@@ -1,0 +1,5 @@
+> cd openshift/4-app-setup-build-deploy
+
+> oc create -f 1-configmap.yml
+> oc create -f 2-credentials-secret.yml
+> oc create -f 3-openshift-demo-serviceaccount.yml
