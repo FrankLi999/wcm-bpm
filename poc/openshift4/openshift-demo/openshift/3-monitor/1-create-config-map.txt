@@ -1,0 +1,9 @@
+1. Check whether the cluster-monitoring-config ConfigMap object exists:
+
+$ oc -n openshift-monitoring get configmap cluster-monitoring-config
+
+2. If it does not exist, create it:
+
+$ oc -n openshift-monitoring create configmap cluster-monitoring-config
+
+3. Start editing the cluster-monitoring-config ConfigMap:

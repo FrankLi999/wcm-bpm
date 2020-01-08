@@ -1,5 +1,29 @@
 test:
   property1: test_prop1_value
+#actutator /actuator/health, /actuator/metrics, /actuator/beans
+management:
+  endpoints:
+    #shutdown:
+    #  enabled: true
+    #health:
+    #  show-details: always
+    web:
+      exposure:
+        include: "*"
+  #endpoint:        
+    #metrics:
+      #enabled: true
+    #prometheus:
+      #enabled: true
+  #metrics:
+    #export:
+      #prometheus:
+        #enabled: true
+#management.endpoint.metrics.enabled=true
+#management.endpoints.web.exposure.include=*
+#management.endpoints.web.exposure.include=health,info,metrics,prometheus
+#management.endpoint.prometheus.enabled=true
+#management.metrics.export.prometheus.enabled=true              
 spring:
   jpa:
     show-sql: true
@@ -36,3 +60,23 @@ spring:
       maximum-pool-size: 5
       minimum-idle: 5
       # connectionTimeout: 30000  
+
+
+opentracing:
+  jaeger:
+    http-sender:
+      #url: "http://jaeger-all-in-one-inmemory-collector:14268/api/traces"
+      url: "http://jaeger-all-in-one-inmemory-collector-headless:14268/api/traces"
+      username: kubeadmin
+      password: "mhk2X-Y8ozE-9icYb-uLCdV"
+      #authtoken: token
+    log-spans: true
+    service-name: openshift-demo
+    enable-b3-propagation: true
+#---
+#spring:
+#  profiles: local
+#opentracing:
+#  jaeger:
+#    http-sender:
+#      url: http://jaeger-collector-dev.2886795293-80-kitek02.environments.katacoda.com/api/traces

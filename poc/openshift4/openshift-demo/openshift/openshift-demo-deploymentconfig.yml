@@ -45,7 +45,7 @@ spec:
       - env:
         - name: JAVA_OPTIONS
           value: -Dspring.profiles.active=openshift -Djasypt.encryptor.password=password
-            -DLOG_ROOT_LEVEL=WARN -DAPP_LOG_LEVEL=DEBUG -Dlog.root.dir=/var/spring-logs/openshift-demo-boot
+            -DROOT_LOG_LEVEL=WARN -DAPP_LOG_LEVEL=DEBUG -Dlog.root.dir=/var/spring-logs/openshift-demo-boot
         - name: DB_HOST_PORT
           value: mysql:3306
         - name: DB_DATABASE

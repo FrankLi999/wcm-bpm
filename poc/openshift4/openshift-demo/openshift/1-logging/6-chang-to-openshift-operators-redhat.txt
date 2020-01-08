@@ -1,0 +1,1 @@
+oc project openshift-operators-redhat

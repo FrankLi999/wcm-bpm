@@ -1,0 +1,5 @@
+Use the following command to get the channel value required for the next step.
+
+oc get packagemanifest elasticsearch-operator -n openshift-marketplace -o jsonpath='{.status.channels[].name}'
+
+'4.2'

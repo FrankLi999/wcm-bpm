@@ -1,0 +1,21 @@
+<hello name="{{ name }}"></hello>
+<p>
+  Start editing to see some magic happen :) 
+</p>
+<button (click)="changeDynamicComponent()">
+  Change Dynamic Component In the footer area
+</button>
+
+<app-child>
+  <div header>This should be rendered in header selection of ng-content</div>
+  <div body>This should be rendered in body selection of ng-content</div>
+  <div footer #footer [innerHTML]="footerContent | safe: 'html'"></div>
+</app-child>
+
+
+<wrapper>
+  <span>This is not a counter</span>
+  <counter></counter>
+  <counter></counter>
+  <counter></counter>
+</wrapper>

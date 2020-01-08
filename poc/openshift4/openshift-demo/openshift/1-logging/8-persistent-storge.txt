@@ -1,0 +1,12 @@
+update Persistent Volumes - pv002, pv003, pv004
+   storageclass: es
+   capacity: 20G
+   
+   
+   such as:
+   
+   
+  spec:
+    storageClassName: es 
+    capacity:
+      storage: 20Gi
