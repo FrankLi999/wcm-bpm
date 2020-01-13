@@ -9,10 +9,11 @@
 <app-child>
   <div header>This should be rendered in header selection of ng-content</div>
   <div body>This should be rendered in body selection of ng-content</div>
-  <div footer #footer [innerHTML]="footerContent | safe: 'html'"></div>
+  <!-- <div footer #footer [innerHTML]="footerContent | safe: 'html'">xxx</div> -->
+  
 </app-child>
 
-
+<div footer #footerView [innerHTML]="footerContent | safe: 'html'">xxx</div>
 <wrapper>
   <span>This is not a counter</span>
   <counter></counter>

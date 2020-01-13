@@ -1,7 +1,9 @@
 # ContentChild vs ViewChild
-Essentially ViewChild and ContentChild are used for component communication in Angular. Therefore, if a parent component wants access of child component then it uses ViewChild or ContentChild.
+Essentially ViewChild and ContentChild are used for component communication in Angular. Therefore, if 
+a parent component wants access of child component then it uses ViewChild or ContentChild.
 
-Any component, directive, or element which is part of a template is ViewChild and any component or element which is projected in the template is ContentChild.
+Any component, directive, or element which is part of a template is ViewChild and any 
+component or element which is projected in the template is ContentChild.
 
 
     @Component({
@@ -55,6 +57,8 @@ Any component, directive, or element which is part of a template is ViewChild an
         @Input() message: string;
     
     }
+
+    then, 
 ### Change the property value of child
     > By changing the ViewChild property in ngAfterContentInit life cycle hook. The only problem with this approach is when you work with more than one ViewChild also known as ViewChildren. Reference of ViewChildren is not available in ngAfterContnetInit life cycle hook.
 
@@ -154,9 +158,9 @@ Any component, directive, or element which is part of a template is ViewChild an
 
     export class MessageContainerComponent implements AfterContentInit {
         greetMessage = 'Ignite UI Rocks!';
-        @ContentChildren(MessageComponent) MessageComponnetContentChild: QueryList<MessageComponent>;
+        @ContentChildren(MessageComponent) messageComponnetContentChildren: QueryList<MessageComponent>;
         ngAfterContentInit() {
-            console.log(this.MessageComponnetContentChild);
+            console.log(this.messageComponnetContentChildren);
         }
     }
 
@@ -214,7 +218,7 @@ Any component, directive, or element which is part of a template is ViewChild an
             return this.input ? this.input.focus : false;
         }
 
-        get  classes() {
+        get classes() {
             const cssClasses = {
                 fa: true
             };
@@ -1044,11 +1048,11 @@ https://github.com/petehunt/react-howto/issues/12
 		
 		use 
 		@Injectable()
-			export class HeroArena {
-			  constructor(
-				private heroService: HeroService,
-				private http: HttpClient) {}
-			}
+        export class HeroArena {
+            constructor(
+            private heroService: HeroService,
+            private http: HttpClient) {}
+        }
 
 		instead of 
 		export class HeroArena {

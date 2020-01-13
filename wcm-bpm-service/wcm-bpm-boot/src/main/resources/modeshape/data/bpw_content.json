@@ -9,7 +9,7 @@
     },
     "bpwizard/library/system" : {
         "jcr:primaryType":"bpw:library",
-        "bpw:language": "en"
+        "jcr:language": "en"
     },
     "bpwizard/library/system/configuration" : {
         "jcr:primaryType":"bpw:configurationFolder",
@@ -514,7 +514,7 @@
     },
     "bpwizard/library/system/authoringTemplate/contentType" : {
         "jcr:primaryType":"bpw:authoringTemplate",
-        "bpw:workflow": "bpmn:wcm_content_flow"
+        "bpw:contentWorkflow": "bpmn:wcm_content_flow"
     },    
     "bpwizard/library/system/authoringTemplate/contentType/propertyGroup" : {
         "jcr:primaryType":"bpw:formRow"
@@ -2557,7 +2557,7 @@
     },
     "bpwizard/library/camunda" : {
         "jcr:primaryType":"bpw:library",
-        "bpw:language": "en"
+        "jcr:language": "en"
     },
     "bpwizard/library/camunda/asset" : {
         "jcr:primaryType":"bpw:assetFolder"
@@ -2728,7 +2728,7 @@
     },
     "bpwizard/library/apigateway" : {
         "jcr:primaryType":"bpw:library",
-        "bpw:language": "en"
+        "jcr:language": "en"
     },
     "bpwizard/library/apigateway/asset" : {
         "jcr:primaryType":"bpw:assetFolder"
@@ -2866,7 +2866,7 @@
     },
     "bpwizard/library/design" : {
         "jcr:primaryType":"bpw:library",
-        "bpw:language": "en"
+        "jcr:language": "en"
     },
     "bpwizard/library/design/asset" : {
         "jcr:primaryType":"bpw:assetFolder"
@@ -2908,7 +2908,7 @@
     "bpwizard/library/design/authoringTemplate/MySidePaneContent" : {
         "jcr:primaryType": "bpw:authoringTemplate",
         "bpw:baseResourceType": "contentType",
-        "bpw:workflow": "bpmn:wcm_content_flow"
+        "bpw:contentWorkflow": "bpmn:wcm_content_flow"
     },
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/propertyGroup" : {
         "jcr:primaryType":"bpw:formRow"
@@ -2996,7 +2996,7 @@
     "bpwizard/library/design/authoringTemplate/MyContent" : {
         "jcr:primaryType": "bpw:authoringTemplate",
         "bpw:baseResourceType": "contentType",
-        "bpw:workflow": "bpmn:wcm_content_flow"
+        "bpw:contentWorkflow": "bpmn:wcm_content_flow"
     },
     "bpwizard/library/design/authoringTemplate/MyContent/propertyGroup" : {
         "jcr:primaryType":"bpw:formRow"

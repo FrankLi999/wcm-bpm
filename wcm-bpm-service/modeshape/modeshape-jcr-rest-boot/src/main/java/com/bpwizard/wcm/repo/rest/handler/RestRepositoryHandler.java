@@ -89,10 +89,11 @@ public final class RestRepositoryHandler extends AbstractHandler {
      */
     public ResponseEntity<BackupResponse> backupRepository(HttpServletRequest request, 
                                       String repositoryName,
+                                      String workspace,
                                       BackupOptions options ) throws RepositoryException {
         final File backupLocation = resolveBackupLocation();
 
-        Session session = getSession(repositoryName, null);
+        Session session = getSession(repositoryName, workspace);
         String repositoryVersion = session.getRepository().getDescriptorValue(Repository.REP_VERSION_DESC).getString().replaceAll("\\.","");
         final String backupName = "modeshape_" + repositoryVersion + "_" + repositoryName + "_backup_" + DATE_FORMAT.format(new Date());
         final File backup = new File(backupLocation, backupName);
@@ -120,6 +121,7 @@ public final class RestRepositoryHandler extends AbstractHandler {
      */
     public ResponseEntity<?> restoreRepository(HttpServletRequest request, 
                                        String repositoryName,
+                                       String workspace,
                                        String backupName, 
                                        RestoreOptions options ) throws RepositoryException {
         if (StringUtil.isBlank(backupName)) {
@@ -127,7 +129,7 @@ public final class RestRepositoryHandler extends AbstractHandler {
         }
         File backup = resolveBackup(backupName);
         logger.debug("Restoring repository '{0}' from backup '{1}' using '{2}'", repositoryName, backup, options);
-        Session session = getSession(repositoryName, null);
+        Session session = getSession(repositoryName, workspace);
         RepositoryManager repositoryManager = ((org.modeshape.jcr.api.Workspace)session.getWorkspace()).getRepositoryManager();
         final Problems problems = repositoryManager.restoreRepository(backup, options);
         if (!problems.hasProblems()) {

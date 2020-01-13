@@ -146,13 +146,14 @@ public class ModeShapeRestController {
     		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<BackupResponse> backup(HttpServletRequest request,
                             @PathVariable("repositoryName") String repositoryName,
+                            @RequestParam(name="from", required = false) final String from,
                             @RequestParam(name="includeBinaries", defaultValue="true") final boolean includeBinaries,
                             @RequestParam(name="documentsPerFile", defaultValue="100000") final long documentsPerFile,
                             @RequestParam(name="compress", defaultValue="true") final boolean compress,
                             @RequestParam(name="batchSize", defaultValue="10000") final int batchSize) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	ResponseEntity<BackupResponse> response = this.repositoryHandler.backupRepository(request, repositoryName, new BackupOptions() {
+	    	ResponseEntity<BackupResponse> response = this.repositoryHandler.backupRepository(request, repositoryName, from, new BackupOptions() {
 	            @Override
 	            public boolean includeBinaries() {
 	                return includeBinaries;
@@ -180,6 +181,63 @@ public class ModeShapeRestController {
     	}
     }
     
+    @PostMapping(path="/{repositoryName}/" + RestHelper.COPY_METHOD_NAME, produces= MediaType.APPLICATION_JSON_VALUE) 
+	// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+	public ResponseEntity<BackupResponse> copyWorkspace(HttpServletRequest request,
+	                    @PathVariable("repositoryName") String repositoryName,
+	                    @RequestParam(name="from", defaultValue="default") final String from,
+	                    @RequestParam(name="ito", defaultValue="draft") final String to,
+	                    @RequestParam(name="includeBinaries", defaultValue="true") final boolean includeBinaries,
+	                    @RequestParam(name="documentsPerFile", defaultValue="100000") final long documentsPerFile,
+	                    @RequestParam(name="compress", defaultValue="true") final boolean compress,
+	                    @RequestParam(name="batchSize", defaultValue="10000") final int batchSize,
+	                    @RequestParam(name="reindexTargetWorkspaceContent", defaultValue="true") final boolean reindexContent) throws WcmRepositoryException {
+		logger.debug("Entering ...");
+		try {
+			ResponseEntity<BackupResponse> backupResponse = this.repositoryHandler.backupRepository(request, repositoryName, from, new BackupOptions() {
+		        @Override
+		        public boolean includeBinaries() {
+		            return includeBinaries;
+		        }
+		
+		        @Override
+		        public long documentsPerFile() {
+		            return documentsPerFile;
+		        }
+		
+		        @Override
+		        public boolean compress() {
+		            return compress;
+		        }
+		
+		        @Override
+		        public int batchSize() {
+		            return batchSize;
+		        }
+		    });
+			
+			ResponseEntity<?> restoreResponse = this.repositoryHandler.restoreRepository(request, repositoryName, to, backupResponse.getBody().getName(), new RestoreOptions() {
+	            @Override
+	            public boolean reindexContentOnFinish() {
+	                return reindexContent;
+	            }
+	
+	            @Override
+	            public boolean includeBinaries() {
+	                return includeBinaries;
+	            }
+	
+	            @Override
+	            public int batchSize() {
+	                return batchSize;
+	            }
+	        });
+			logger.debug("Exiting ...", restoreResponse);
+			return backupResponse;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}
+	}
     /**
      * Performs a repository restore on the server based on the name of a backup provided as argument. 
      * The root location where the backup will be searched is in order:
@@ -209,13 +267,14 @@ public class ModeShapeRestController {
     		// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> restore(HttpServletRequest request,
                             @PathVariable("repositoryName") String repositoryName,
+                            @RequestParam(name="to", required = false) final String to,
                             @RequestParam(name="name") final String backupName,
                             @RequestParam(name="includeBinaries", defaultValue="true") final boolean includeBinaries,
                             @RequestParam(name="reindexContent", defaultValue="true") final boolean reindexContent,
                             @RequestParam(name="batchSize", defaultValue="1000") final int batchSize) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	ResponseEntity<?> response = this.repositoryHandler.restoreRepository(request, repositoryName, backupName, new RestoreOptions() {
+	    	ResponseEntity<?> response = this.repositoryHandler.restoreRepository(request, repositoryName, to, backupName, new RestoreOptions() {
 	            @Override
 	            public boolean reindexContentOnFinish() {
 	                return reindexContent;

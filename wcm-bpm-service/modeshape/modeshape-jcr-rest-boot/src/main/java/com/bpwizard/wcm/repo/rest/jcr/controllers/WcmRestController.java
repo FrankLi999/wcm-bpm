@@ -1,5 +1,6 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +16,11 @@ import java.util.stream.Stream;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.security.AccessControlEntry;
+import javax.jcr.security.AccessControlList;
+import javax.jcr.security.AccessControlManager;
+import javax.jcr.security.AccessControlPolicyIterator;
+import javax.jcr.security.Privilege;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
@@ -61,6 +67,8 @@ import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
 import com.bpwizard.wcm.repo.rest.jcr.model.KeyValue;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutRow;
+import com.bpwizard.wcm.repo.rest.jcr.model.ModeshapeGroup;
+import com.bpwizard.wcm.repo.rest.jcr.model.ModeshapePrincipal;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavBar;
 import com.bpwizard.wcm.repo.rest.jcr.model.Navigation;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationBadge;
@@ -89,6 +97,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmOperation;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmRepository;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmSystem;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmWorkspace;
+import com.bpwizard.wcm.repo.rest.jcr.model.WorkflowNode;
 import com.bpwizard.wcm.repo.rest.jcr.model.keyValues;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestChildType;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
@@ -289,7 +298,6 @@ public class WcmRestController {
 		try {
 			atPath = atPath.startsWith("/") ? atPath : "/" + atPath;
 			String library = atPath.split("/", 4)[3];
-			System.out.println(">>>>>>>>>>>>>>>> getAuthoringTemplate:" + library);
 			RestNode atNode = (RestNode) this.itemHandler.item(request, repository, workspace,
 					atPath, 8);
 			
@@ -512,8 +520,6 @@ public class WcmRestController {
 		try {
 			String absPath = String.format("/bpwizard/library/%s/siteConfig/%s", library, siteConfigName);
 			RestNode siteConfigNode = (RestNode) this.itemHandler.item(request, repository, workspace, absPath, 2);
-//			Session session = this.repositoryManager.getSession(repository, workspace);
-//			Node siteConfigNode = session.getNode(absPath);
 			SiteConfig siteConfig = this.getSiteConfig(siteConfigNode);
 			siteConfig.setRepository(repository);
 			siteConfig.setWorkspace(workspace);
@@ -567,74 +573,94 @@ public class WcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			String repositoryName = at.getRepository();
-			String workspaceName = at.getWorkspace();
-	
-			Session session = repositoryManager.getSession(repositoryName, workspaceName);
-			Node atFolder = session.getNode(String.format("/bpwizard/library/%s/authoringTemplate", at.getLibrary()));
-			Node atNode = atFolder.addNode(at.getName(), "bpw:authoringTemplate");
-			if (StringUtils.hasText(at.getBaseResourceType())) {
-				atNode.setProperty("bpw:baseResourceType", at.getBaseResourceType());
-			}
-			if (StringUtils.hasText(at.getTitle())) {
-				atNode.setProperty("bpw:title", at.getTitle());
-			}
-			if (StringUtils.hasText(at.getDescription())) {
-				atNode.setProperty("bpw:description", at.getDescription());
-			}
-			
-			if (StringUtils.hasText(at.getWorkflow())) {
-				atNode.setProperty("bpw:workflow", at.getWorkflow());
-			}
-	
-			this.addRow(atNode, at.getPropertyRow(), "property-group");
-			
-			Node elementGroupNode = atNode.addNode("element-group", "bpw:formGroupFoler");
-			int groupCount = 0;
-			for (BaseFormGroup g : at.getElementGroups()) {
-				groupCount++;
-				String groupName = StringUtils.hasText(g.getGroupTitle()) ? g.getGroupTitle() : ("group" + groupCount);
-				String primaryFormGroupType = (g instanceof FormSteps) ? "bpw:formSteps"
-						: (g instanceof FormTabs) ? "bpw:formTabs"
-								: (g instanceof FormRows) ? "bpw:formRows" : "bpw:formRow";
-				Node groupNode = elementGroupNode.addNode(groupName, primaryFormGroupType);
-	
-				if (g instanceof FormSteps) {
-					this.addSteps(groupNode, ((FormSteps) g).getSteps());
-				} else if (g instanceof FormTabs) {
-					this.addTabs(groupNode, ((FormTabs) g).getTabs());
-				} else if (g instanceof FormRows) {
-					this.addRows(groupNode, ((FormRows) g).getRows());
-				}
-			}
-			Node elementFolder = atNode.addNode("elements", "bpw:elementFolder");
-			for (String controlName : at.getElements().keySet()) {
-				this.addControl(elementFolder, at.getElements().get(controlName));
-			}
-			Node propertiesFolder = atNode.addNode("properties", "bpw:propertyFolder");
-			for (String controlName : at.getProperties().keySet()) {
-				this.addControl(propertiesFolder, at.getElements().get(controlName));
-			}
-			session.save();
+			String path = String.format("/bpwizard/library/%s/authoringTemplate/%s", at.getLibrary(), at.getName());
+			this.itemHandler.addItem(request, at.getRepository(), at.getWorkspace(), path, at.toJson());
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
-	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
 			throw e;
-		} catch (Throwable t) {
+		} catch (RepositoryException re) { 
+			throw new WcmRepositoryException(re);
+	    } catch (Throwable t) {
 			throw new WcmRepositoryException(t);
 		}	
+//		try {
+//			String repositoryName = at.getRepository();
+//			String workspaceName = at.getWorkspace();
+//	
+//			Session session = repositoryManager.getSession(repositoryName, workspaceName);
+//			Node atFolder = session.getNode(String.format("/bpwizard/library/%s/authoringTemplate", at.getLibrary()));
+//			Node atNode = atFolder.addNode(at.getName(), "bpw:authoringTemplate");
+//			if (StringUtils.hasText(at.getBaseResourceType())) {
+//				atNode.setProperty("bpw:baseResourceType", at.getBaseResourceType());
+//			}
+//			if (StringUtils.hasText(at.getTitle())) {
+//				atNode.setProperty("bpw:title", at.getTitle());
+//			}
+//			if (StringUtils.hasText(at.getDescription())) {
+//				atNode.setProperty("bpw:description", at.getDescription());
+//			}
+//			
+//			if (StringUtils.hasText(at.getWorkflow())) {
+//				atNode.setProperty("bpw:workflow", at.getWorkflow());
+//			}
+//	
+//			this.addRow(atNode, at.getPropertyRow(), "property-group");
+//			
+//			Node elementGroupNode = atNode.addNode("element-group", "bpw:formGroupFoler");
+//			int groupCount = 0;
+//			for (BaseFormGroup g : at.getElementGroups()) {
+//				groupCount++;
+//				String groupName = StringUtils.hasText(g.getGroupTitle()) ? g.getGroupTitle() : ("group" + groupCount);
+//				String primaryFormGroupType = (g instanceof FormSteps) ? "bpw:formSteps"
+//						: (g instanceof FormTabs) ? "bpw:formTabs"
+//								: (g instanceof FormRows) ? "bpw:formRows" : "bpw:formRow";
+//				Node groupNode = elementGroupNode.addNode(groupName, primaryFormGroupType);
+//	
+//				if (g instanceof FormSteps) {
+//					this.addSteps(groupNode, ((FormSteps) g).getSteps());
+//				} else if (g instanceof FormTabs) {
+//					this.addTabs(groupNode, ((FormTabs) g).getTabs());
+//				} else if (g instanceof FormRows) {
+//					this.addRows(groupNode, ((FormRows) g).getRows());
+//				}
+//			}
+//			Node elementFolder = atNode.addNode("elements", "bpw:elementFolder");
+//			for (String controlName : at.getElements().keySet()) {
+//				this.addControl(elementFolder, at.getElements().get(controlName));
+//			}
+//			Node propertiesFolder = atNode.addNode("properties", "bpw:propertyFolder");
+//			for (String controlName : at.getProperties().keySet()) {
+//				this.addControl(propertiesFolder, at.getElements().get(controlName));
+//			}
+//			session.save();
+//			if (logger.isDebugEnabled()) {
+//				logger.traceExit();
+//			}
+//	
+//			return ResponseEntity.status(HttpStatus.CREATED).build();
+//		} catch (WcmRepositoryException e ) {
+//			throw e;
+//		} catch (Throwable t) {
+//			throw new WcmRepositoryException(t);
+//		}	
 	}
 
 	@PutMapping(path = "/at", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void saveAuthoringTemplate(
 			@RequestBody AuthoringTemplate at, HttpServletRequest request) 
 			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
 		try {
 			String path = String.format("/bpwizard/library/%s/authoringTemplate/%s", at.getLibrary(), at.getName());
 			this.itemHandler.updateItem(request, at.getRepository(), at.getWorkspace(), path, at.toJson());
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (RepositoryException re) { 
@@ -1273,75 +1299,195 @@ public class WcmRestController {
 			throw new WcmRepositoryException(t);
 		}
 	}
+	private Principal resolvePrincipal(String principalName) {
+		if (principalName == null || principalName.length() == 0) {return null;}
+		String names[] = principalName.split(":", 2);
+		return (names.length == 1) ? new ModeshapeGroup(names[0]) : "groups".equals(names[0]) ? new ModeshapeGroup(names[1]) : new ModeshapePrincipal(names[1]);
+	}
 	
-	@PostMapping(path = "/ContentItem", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createContentItem(
+	private void grantPermissions(ContentItem contentItem) throws RepositoryException {
+		String repositoryName = contentItem.getRepository();
+		String workspaceName = contentItem.getWorkspace();
+		Session session = this.repositoryManager.getSession(repositoryName, workspaceName);
+		AccessControlManager acm = session.getAccessControlManager();
+		
+		String path = contentItem.getNodePath();
+		
+		String[] readPrivileges = new String[] {
+		  Privilege.JCR_READ
+		};
+		
+		String[] editorPrivileges = new String[] {
+		  Privilege.JCR_READ,
+		  Privilege.JCR_WRITE,
+		  Privilege.JCR_REMOVE_NODE,
+		  Privilege.JCR_ADD_CHILD_NODES,
+		  Privilege.JCR_REMOVE_CHILD_NODES,
+		  Privilege.JCR_REMOVE_CHILD_NODES
+		};
+		
+		String[] adminPrivileges = new String[] {
+			Privilege.JCR_ALL 
+		};
+		
+		// Convert the privilege strings to Privilege instances ...
+		Privilege[] readPermissions = new Privilege[readPrivileges.length];
+		for (int i = 0; i < readPrivileges.length; i++) {
+			readPermissions[i] = acm.privilegeFromName(readPrivileges[i]);
+		}
+		 
+		Privilege[] editorPermissions = new Privilege[editorPrivileges.length];
+		for (int i = 0; i < editorPrivileges.length; i++) {
+			editorPermissions[i] = acm.privilegeFromName(editorPrivileges[i]);
+		}
+		
+		Privilege[] adminPermissions = new Privilege[adminPrivileges.length];
+		for (int i = 0; i < adminPrivileges.length; i++) {
+			adminPermissions[i] = acm.privilegeFromName(adminPrivileges[i]);
+		}
+		
+		AccessControlList acl = null;
+		AccessControlPolicyIterator it = acm.getApplicablePolicies(path);
+		
+		if (it.hasNext()) {
+		    acl = (AccessControlList)it.nextAccessControlPolicy();
+		} else {
+		    acl = (AccessControlList)acm.getPolicies(path)[0];
+		}
+		
+		AccessControlEntry aces[] = acl.getAccessControlEntries();
+		for (AccessControlEntry ace: aces) {
+			acl.removeAccessControlEntry(ace);
+		}
+		
+		if (contentItem.getAcl().getViewers() != null) {
+			for (String viewer: contentItem.getAcl().getViewers()) {
+				Principal p = this.resolvePrincipal(viewer);
+				if (p != null) {
+					acl.addAccessControlEntry(p, readPermissions);
+				}
+			}
+		}
+		
+		if (contentItem.getAcl().getReviewers() != null) {
+			for (String reviewer: contentItem.getAcl().getReviewers()) {
+				Principal p = this.resolvePrincipal(reviewer);
+				if (p != null) {
+					acl.addAccessControlEntry(p, readPermissions);
+				}
+			}
+		}
+		
+		if (contentItem.getAcl().getEditors() != null) {
+			for (String editor: contentItem.getAcl().getEditors()) {
+				Principal p = this.resolvePrincipal(editor);
+				if (p != null) {
+					acl.addAccessControlEntry(p, editorPermissions);
+				}
+			}
+		}
+		
+		if (contentItem.getAcl().getAdmins() != null) {
+			for (String admin: contentItem.getAcl().getAdmins()) {
+				Principal p = this.resolvePrincipal(admin);
+				if (p != null) {
+					acl.addAccessControlEntry(p, adminPermissions);
+				}
+			}
+		}
+		
+		acm.setPolicy(path, acl);
+		if (contentItem.getAcl().getReviewers() != null) {
+			String commentPath = String.format("%s/comments", path);
+			it = acm.getApplicablePolicies(commentPath);
+			if (it.hasNext()) {
+			    acl = (AccessControlList)it.nextAccessControlPolicy();
+			} else {
+			    acl = (AccessControlList)acm.getPolicies(path)[0];
+			}
+			
+			aces = acl.getAccessControlEntries();
+			for (AccessControlEntry ace: aces) {
+				acl.removeAccessControlEntry(ace);
+			}
+			
+			
+			for (String reviewer: contentItem.getAcl().getReviewers()) {
+				Principal p = this.resolvePrincipal(reviewer);
+				if (p != null) {
+					acl.addAccessControlEntry(p, editorPermissions);
+				}
+			}
+			acm.setPolicy(commentPath, acl);
+		}
+		session.save();
+	}
+	
+	@PostMapping(path = "/contentItem/save-drfat", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> saveDraft(
 			@RequestBody ContentItem contentItem, 
 			HttpServletRequest request)
 			throws WcmRepositoryException {
-
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
 		try {
-			String repositoryName = contentItem.getRepository();
-			String workspaceName = contentItem.getWorkspace();
-	
-			Session session = repositoryManager.getSession(repositoryName, workspaceName);
-			Node parentFolder = session.getNode("/" + contentItem.getNodePath());
-			
-			Map<String, String> properties = contentItem.getProperties();
-			String name = properties.get("name"); 
-			String title = properties.get("title");
-			String description = properties.get("description");
-			String workflow = properties.get("workflow"); 
-			
-			
-			Node contentNode = parentFolder.addNode(name, "bpw:content");
-	
-			//contentNode.setProperty("bpw:name", name);
-			contentNode.setProperty("bpw:authoringTemplate", contentItem.getAuthoringTemplate());
-			if (StringUtils.hasText(workflow)) {
-				contentNode.setProperty("bpw:workflow", workflow);
+			String path = contentItem.getNodePath();
+			path.replaceFirst("/library", "/draft");
+			this.itemHandler.addItem(request, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItem.toJson());
+			if (contentItem.getAcl() != null) {
+				this.grantPermissions(contentItem);
 			}
-			contentNode.setProperty("bpw:title", StringUtils.hasText(title) ? title : name);
-			if (StringUtils.hasText(description)) {
-				contentNode.setProperty("bpw:description", description);
-			}
-			
-			Node elementsNode = contentNode.addNode("contentElements", "bpw:contentElementFolder");
-			Map<String, String> contentElements = contentItem.getElements();
-			for (String key: contentElements.keySet()) {
-				Node contentElementNode = elementsNode.addNode(key, "bpw:contentElement");
-				contentElementNode.setProperty("bpw:multiple", false);
-				contentElementNode.setProperty("bpw:value", new String[] {contentElements.get(key)});
-			}
-			
-			Node propertiesNode = contentNode.addNode("contentProperties", "bpw:propertyElementFolder");
-			Map<String, String> propertyElements = contentItem.getElements();
-			for (String key: propertyElements.keySet()) {
-				Node contentElementNode = propertiesNode.addNode(key, "bpw:contentElement");
-				contentElementNode.setProperty("bpw:multiple", false);
-				contentElementNode.setProperty("bpw:value", contentElements.get(key));
-			}
-			session.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
-	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
 			throw e;
-		} catch (Throwable t) {
+		} catch (RepositoryException re) { 
+			throw new WcmRepositoryException(re);
+	    } catch (Throwable t) {
 			throw new WcmRepositoryException(t);
+		}	
+	}
+	
+	@PostMapping(path = "/contentItem/create-publish", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createAndPublishContentItem(
+			@RequestBody ContentItem contentItem, 
+			HttpServletRequest request)
+			throws WcmRepositoryException {
+		
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
 		}
+		try {
+			String path = contentItem.getNodePath();
+			this.itemHandler.addItem(request, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItem.toJson());
+			if (contentItem.getAcl() != null) {
+				this.grantPermissions(contentItem);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (RepositoryException re) { 
+			throw new WcmRepositoryException(re);
+	    } catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
 	}
 
-	@PutMapping(path = "/ContentItem/save", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void saveContentItem(@RequestBody ContentItem contentItem, HttpServletRequest request) { 
+	
+	@PutMapping(path = "/contentItem/update-published", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void updateContentItem(@RequestBody ContentItem contentItem, HttpServletRequest request) { 
 		try {
 			String path = contentItem.getNodePath();
 			this.itemHandler.updateItem(request, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItem.toJson());
+			if (contentItem.getAcl() != null) {
+				this.grantPermissions(contentItem);
+			}
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (RepositoryException re) { 
@@ -1373,19 +1519,16 @@ public class WcmRestController {
 			contentItem.setNodePath(contentItemPath);
 			Map<String, String> elements = new HashMap<>();
 			Map<String, String> properties = new HashMap<>();
-			properties.put("name", contentItemNode.getName());
 			contentItem.setElements(elements);
 			contentItem.setProperties(properties);
+			contentItem.setName(contentItemNode.getName());
+			this.resolveWorkflowNode(contentItem, contentItemNode);
 			for (RestProperty property: contentItemNode.getJcrProperties()) {
 				if ("bpw:authoringTemplate".equals(property.getName())) {
 					contentItem.setAuthoringTemplate(property.getValues().get(0));
-				} else if ("bpw:title".equals(property.getName())) {
-					properties.put("title", property.getValues().get(0));
-				} else if ("bpw:description".equals(property.getName())) {
-					properties.put("description", property.getValues().get(0));
-				} else if ("jcr:lockOwner".equals(property.getName())) {
-					contentItem.setLockOwner(property.getValues().get(0));
-				}
+				} else if ("bpw:categories".equals(property.getName())) {
+					contentItem.setCategories(property.getValues().toArray(new String[property.getValues().size()]));
+				} 
 			}
 			for (RestNode node: contentItemNode.getChildren()) {
 				if (this.checkNodeType(node, "bpw:contentElementFolder")) {
@@ -1915,6 +2058,12 @@ public class WcmRestController {
 			ObjectNode schemaNode = JsonNodeFactory.instance.objectNode();
 			jsonNode.set("schema", schemaNode);
 			schemaNode.put("type", "object");
+
+			//TODO: 
+			if (StringUtils.hasText(at.getName())) {
+				schemaNode.put("name", at.getName());
+			}
+			
 			if (StringUtils.hasText(at.getTitle())) {
 				schemaNode.put("title", at.getTitle());
 			}
@@ -2024,118 +2173,118 @@ public class WcmRestController {
 		}
 	}
 
-	private void addSteps(Node stepsNode, FormStep[] steps) throws RepositoryException {
-		for (FormStep step : steps) {
-			Node stepNode = stepsNode.addNode(step.getStepName(), "bpw:formStep");
-			String stepTitle = StringUtils.hasText(step.getStepTitle()) ? step.getStepTitle() : step.getStepName();
-			if (StringUtils.hasText(stepTitle)) {
-				stepNode.setProperty("bpw:stepName", stepTitle);
-			}
-			int rowCount = 0;
-			for (BaseFormGroup row : step.getFormGroups()) {
-				this.addRow(stepNode, (FormRow) row, "row" + rowCount++);
-			}
-		}
-	}
+//	private void addSteps(Node stepsNode, FormStep[] steps) throws RepositoryException {
+//		for (FormStep step : steps) {
+//			Node stepNode = stepsNode.addNode(step.getStepName(), "bpw:formStep");
+//			String stepTitle = StringUtils.hasText(step.getStepTitle()) ? step.getStepTitle() : step.getStepName();
+//			if (StringUtils.hasText(stepTitle)) {
+//				stepNode.setProperty("bpw:stepName", stepTitle);
+//			}
+//			int rowCount = 0;
+//			for (BaseFormGroup row : step.getFormGroups()) {
+//				this.addRow(stepNode, (FormRow) row, "row" + rowCount++);
+//			}
+//		}
+//	}
+//
+//	private void addTabs(Node tabsNode, FormTab[] tabs) throws RepositoryException {
+//		for (FormTab tab : tabs) {
+//			Node tabNode = tabsNode.addNode(tab.getTabName(), "bpw:formTab");
+//			String tabTitle = StringUtils.hasText(tab.getTabTitle()) ? tab.getTabTitle() : tab.getTabName();
+//			if (StringUtils.hasText(tabTitle)) {
+//				tabNode.setProperty("bpw:tabName", tabTitle);
+//			}
+//			int rowCount = 0;
+//			for (BaseFormGroup row : tab.getFormGroups()) {
+//				this.addRow(tabNode, (FormRow) row, "row" + rowCount++);
+//			}
+//		}
+//	}
+//
+//	private void addRows(Node rowsNode, FormRow[] rows) throws RepositoryException {
+//		int rowCount = 0;
+//		for (FormRow row : rows) {
+//			this.addRow(rowsNode, (FormRow) row, "row" + rowCount++);
+//		}
+//	}
 
-	private void addTabs(Node tabsNode, FormTab[] tabs) throws RepositoryException {
-		for (FormTab tab : tabs) {
-			Node tabNode = tabsNode.addNode(tab.getTabName(), "bpw:formTab");
-			String tabTitle = StringUtils.hasText(tab.getTabTitle()) ? tab.getTabTitle() : tab.getTabName();
-			if (StringUtils.hasText(tabTitle)) {
-				tabNode.setProperty("bpw:tabName", tabTitle);
-			}
-			int rowCount = 0;
-			for (BaseFormGroup row : tab.getFormGroups()) {
-				this.addRow(tabNode, (FormRow) row, "row" + rowCount++);
-			}
-		}
-	}
+//	private void addRow(Node groupNode, FormRow row, String rowName) throws RepositoryException {
+//		
+//		Node rowNode = groupNode.addNode(rowName, "bpw:formRow");
+//		String rowTitle = StringUtils.hasText(row.getRowTitle()) ? row.getRowTitle() : row.getRowName();
+//		if (StringUtils.hasText(rowTitle)) {
+//			rowNode.setProperty("bpw:rowName", rowTitle);
+//		}
+//		int colCount = 0;
+//		for (FormColumn col : row.getColumns()) {
+//			String columnName = StringUtils.hasText(col.getId()) ? col.getId() : "column" + colCount;
+//			this.addColumn(rowNode, col, columnName);
+//		}
+//	}
 
-	private void addRows(Node rowsNode, FormRow[] rows) throws RepositoryException {
-		int rowCount = 0;
-		for (FormRow row : rows) {
-			this.addRow(rowsNode, (FormRow) row, "row" + rowCount++);
-		}
-	}
-
-	private void addRow(Node groupNode, FormRow row, String rowName) throws RepositoryException {
-		
-		Node rowNode = groupNode.addNode(rowName, "bpw:formRow");
-		String rowTitle = StringUtils.hasText(row.getRowTitle()) ? row.getRowTitle() : row.getRowName();
-		if (StringUtils.hasText(rowTitle)) {
-			rowNode.setProperty("bpw:rowName", rowTitle);
-		}
-		int colCount = 0;
-		for (FormColumn col : row.getColumns()) {
-			String columnName = StringUtils.hasText(col.getId()) ? col.getId() : "column" + colCount;
-			this.addColumn(rowNode, col, columnName);
-		}
-	}
-
-	private void addColumn(Node rowNode, FormColumn column, String columnNameName) throws RepositoryException {
-		Node columnNode = rowNode.addNode(columnNameName, "bpw:formColumn");
-		columnNode.setProperty("bpw:fxFlex", column.getFxFlex());
-		columnNode.setProperty("bpw:id", columnNameName);
-		if (column.getFormControls() != null && column.getFormControls().length > 0) {
-			columnNode.setProperty("bpw:fieldNames", column.getFormControls());
-		}
-	}
-
-	private void addControl(Node elementFolder, FormControl control) throws RepositoryException {
-		// Node controlNode = elementFolder.addNode(control.getName(),
-		// "bpw:formControl");
-		Node controlNode = elementFolder.addNode(control.getName(), "bpw:formControl");
-		if (StringUtils.hasText(control.getTitle())) {
-			controlNode.setProperty("bpw:title", control.getTitle());
-		}
-
-		if (StringUtils.hasText(control.getFieldPath())) {
-			controlNode.setProperty("bpw:fieldPath", control.getFieldPath());
-		}
-		
-		if (StringUtils.hasText(control.getControlName())) {
-			controlNode.setProperty("bpw:controlName", control.getControlName());
-		}
-
-		if ((control.getValues() != null) && (control.getValues().length > 0)) {
-			controlNode.setProperty("bpw:value", control.getValues());
-		}
-
-		if ((control.getOptions() != null) && (control.getOptions().length > 0)) {
-			controlNode.setProperty("bpw:options", control.getOptions());
-		}
-
-		if (StringUtils.hasText(control.getDefaultValue())) {
-			controlNode.setProperty("bpw:defaultValue", control.getDefaultValue());
-		}
-
-		if (StringUtils.hasText(control.getHint())) {
-			controlNode.setProperty("bpw:hint", control.getHint());
-		}
-
-		if (StringUtils.hasText(control.getDataType())) {
-			controlNode.setProperty("bpw:dataType", control.getDataType());
-		}
-
-		if (StringUtils.hasText(control.getRelationshipType())) {
-			controlNode.setProperty("bpw:relationshipType", control.getRelationshipType());
-		}
-
-		if (StringUtils.hasText(control.getRelationshipCardinality())) {
-			controlNode.setProperty("bpw:relationshipCardinality", control.getRelationshipCardinality());
-		}
-
-		if (StringUtils.hasText(control.getValditionRegEx())) {
-			controlNode.setProperty("bpw:valditionRegEx", control.getValditionRegEx());
-		}
-
-		controlNode.setProperty("bpw:mandatory", control.isMandatory());
-		controlNode.setProperty("bpw:userSearchable", control.isUserSearchable());
-		controlNode.setProperty("bpw:systemIndexed", control.isSystemIndexed());
-		controlNode.setProperty("bpw:showInList", control.isShowInList());
-		controlNode.setProperty("bpw:unique", control.isUnique());
-	}
+//	private void addColumn(Node rowNode, FormColumn column, String columnNameName) throws RepositoryException {
+//		Node columnNode = rowNode.addNode(columnNameName, "bpw:formColumn");
+//		columnNode.setProperty("bpw:fxFlex", column.getFxFlex());
+//		columnNode.setProperty("bpw:id", columnNameName);
+//		if (column.getFormControls() != null && column.getFormControls().length > 0) {
+//			columnNode.setProperty("bpw:fieldNames", column.getFormControls());
+//		}
+//	}
+//
+//	private void addControl(Node elementFolder, FormControl control) throws RepositoryException {
+//		// Node controlNode = elementFolder.addNode(control.getName(),
+//		// "bpw:formControl");
+//		Node controlNode = elementFolder.addNode(control.getName(), "bpw:formControl");
+//		if (StringUtils.hasText(control.getTitle())) {
+//			controlNode.setProperty("bpw:title", control.getTitle());
+//		}
+//
+//		if (StringUtils.hasText(control.getFieldPath())) {
+//			controlNode.setProperty("bpw:fieldPath", control.getFieldPath());
+//		}
+//		
+//		if (StringUtils.hasText(control.getControlName())) {
+//			controlNode.setProperty("bpw:controlName", control.getControlName());
+//		}
+//
+//		if ((control.getValues() != null) && (control.getValues().length > 0)) {
+//			controlNode.setProperty("bpw:value", control.getValues());
+//		}
+//
+//		if ((control.getOptions() != null) && (control.getOptions().length > 0)) {
+//			controlNode.setProperty("bpw:options", control.getOptions());
+//		}
+//
+//		if (StringUtils.hasText(control.getDefaultValue())) {
+//			controlNode.setProperty("bpw:defaultValue", control.getDefaultValue());
+//		}
+//
+//		if (StringUtils.hasText(control.getHint())) {
+//			controlNode.setProperty("bpw:hint", control.getHint());
+//		}
+//
+//		if (StringUtils.hasText(control.getDataType())) {
+//			controlNode.setProperty("bpw:dataType", control.getDataType());
+//		}
+//
+//		if (StringUtils.hasText(control.getRelationshipType())) {
+//			controlNode.setProperty("bpw:relationshipType", control.getRelationshipType());
+//		}
+//
+//		if (StringUtils.hasText(control.getRelationshipCardinality())) {
+//			controlNode.setProperty("bpw:relationshipCardinality", control.getRelationshipCardinality());
+//		}
+//
+//		if (StringUtils.hasText(control.getValditionRegEx())) {
+//			controlNode.setProperty("bpw:valditionRegEx", control.getValditionRegEx());
+//		}
+//
+//		controlNode.setProperty("bpw:mandatory", control.isMandatory());
+//		controlNode.setProperty("bpw:userSearchable", control.isUserSearchable());
+//		controlNode.setProperty("bpw:systemIndexed", control.isSystemIndexed());
+//		controlNode.setProperty("bpw:showInList", control.isShowInList());
+//		controlNode.setProperty("bpw:unique", control.isUnique());
+//	}
 
 	private Theme toThemeWithLibrary(RestNode node, String repository, String workspace) {
 		Theme themeWithLibrary = new Theme();
@@ -2172,33 +2321,28 @@ public class WcmRestController {
 	}
 
 	private RenderTemplate toRenderTemplate(RestNode node, String repository, String workspace, String library) {
-		RenderTemplate result = new RenderTemplate();
-		result.setRepository(repository);
-		result.setWorkspace(workspace);
-		result.setLibrary(library);
-		result.setName(node.getName());
+		RenderTemplate rt = new RenderTemplate();
+		rt.setRepository(repository);
+		rt.setWorkspace(workspace);
+		rt.setLibrary(library);
+		rt.setName(node.getName());
+		this.resolveResourceNode(rt, node);
 		for (RestProperty property : node.getJcrProperties()) {
-			if ("bpw:title".equals(property.getName())) {
-				result.setTitle(property.getValues().get(0));
-			} else if ("bpw:description".equals(property.getName())) {
-				result.setDescription(property.getValues().get(0));
-			} else if ("bpw:code".equals(property.getName())) {
-				result.setCode(property.getValues().get(0));
+			if ("bpw:code".equals(property.getName())) {
+				rt.setCode(property.getValues().get(0));
 			} else if ("bpw:preloop".equals(property.getName())) {
-				result.setPreloop(property.getValues().get(0));
+				rt.setPreloop(property.getValues().get(0));
 			} else if ("bpw:postloop".equals(property.getName())) {
-				result.setPostloop(property.getValues().get(0));
+				rt.setPostloop(property.getValues().get(0));
 			} else if ("bpw:maxEntries".equals(property.getName())) {
-				result.setMaxEntries(Integer.parseInt(property.getValues().get(0)));
+				rt.setMaxEntries(Integer.parseInt(property.getValues().get(0)));
 			} else if ("bpw:note".equals(property.getName())) {
-				result.setNote(property.getValues().get(0));
+				rt.setNote(property.getValues().get(0));
 			} else if ("bpw:resourceName".equals(property.getName())) {
-				result.setResourceName(property.getValues().get(0));
+				rt.setResourceName(property.getValues().get(0));
 			} else if ("bpw:isQuery".equals(property.getName())) {
-				result.setQuery(Boolean.parseBoolean(property.getValues().get(0)));
-			} else if ("jcr:lockOwner".equals(property.getName())) {
-				result.setLockOwner(property.getValues().get(0));
-			}
+				rt.setQuery(Boolean.parseBoolean(property.getValues().get(0)));
+			} 
 		}
 		
 		List<RenderTemplateLayoutRow> rows = new ArrayList<>();
@@ -2235,30 +2379,23 @@ public class WcmRestController {
 		}
 		
 		if (rows.size() > 0) {
-			result.setRows(rows.toArray(new RenderTemplateLayoutRow[rows.size()]));
+			rt.setRows(rows.toArray(new RenderTemplateLayoutRow[rows.size()]));
 		}
-		return result;
+		return rt;
 	}
 
 	private ContentAreaLayout toContentAreaLayout(RestNode node, ContentAreaLayout layout) {
-		ContentAreaLayout result = new ContentAreaLayout();
-		result.setRepository(layout.getRepository());
-		result.setWorkspace(layout.getWorkspace());
-		result.setLibrary(layout.getLibrary());
-		result.setName(node.getName());
+		ContentAreaLayout contentAreaLayout = new ContentAreaLayout();
+		contentAreaLayout.setRepository(layout.getRepository());
+		contentAreaLayout.setWorkspace(layout.getWorkspace());
+		contentAreaLayout.setLibrary(layout.getLibrary());
+		contentAreaLayout.setName(node.getName());
+		this.resolveResourceNode(contentAreaLayout, node);
 		for (RestProperty property : node.getJcrProperties()) {
-//			if ("bpw:headerEnabled".equals(property.getName())) {
-//				result.setHeaderEnabled(Boolean.parseBoolean(property.getValues().get(0)));
-//			} else if ("bpw:footerEnabled".equals(property.getName())) {
-//				result.setFooterEnabled(Boolean.parseBoolean(property.getValues().get(0)));
-//			} else if ("bpw:theme".equals(property.getName())) {
-//				result.setTheme(property.getValues().get(0));
-//			} else 
 			if (" bpw:contentWidth".equals(property.getName())) {
-				result.setContentWidth(Integer.parseInt(property.getValues().get(0)));
-			} else if ("jcr:lockOwner".equals(property.getName())) {
-				result.setLockOwner(property.getValues().get(0));
-			}
+				contentAreaLayout.setContentWidth(Integer.parseInt(property.getValues().get(0)));
+				break;
+			} 
 		}
 
 		List<LayoutRow> rows = new ArrayList<>();
@@ -2274,14 +2411,14 @@ public class WcmRestController {
 					}
 				}
 				sidepane.setViewers(this.resolveResourceViewer(childNode));
-				result.setSidePane(sidepane);
+				contentAreaLayout.setSidePane(sidepane);
 			} else if (this.checkNodeType(childNode, "bpw:layoutRow")) {
 				LayoutRow row = this.resolveLayoutRow(childNode);
 				rows.add(row);
 			}
 		});
-		result.setRows(rows.toArray(new LayoutRow[rows.size()]));
-		return result;
+		contentAreaLayout.setRows(rows.toArray(new LayoutRow[rows.size()]));
+		return contentAreaLayout;
 	}
 
 	private LayoutRow resolveLayoutRow(RestNode restNode) {
@@ -2485,11 +2622,11 @@ public class WcmRestController {
 		return this.checkNodeType(node, "bpw:authoringTemplate");
 	}
 
-	private boolean isElementNode(RestNode node) {
+	private boolean isElementFolderNode(RestNode node) {
 		return this.checkNodeType(node, "bpw:elementFolder");
 	}
 
-	private boolean isPropertyNode(RestNode node) {
+	private boolean isPropertyFolderNode(RestNode node) {
 		return this.checkNodeType(node, "bpw:propertyFolder");
 	}
 	
@@ -2540,25 +2677,36 @@ public class WcmRestController {
 	}
 
 	private AuthoringTemplate toAuthoringTemplate(RestNode node, String repository, String workspace, String library) {
-		AuthoringTemplate result = new AuthoringTemplate();
-		result.setRepository(repository);
-		result.setWorkspace(workspace);
-		result.setLibrary(library);
-		result.setName(node.getName());
+		AuthoringTemplate at = new AuthoringTemplate();
+		at.setRepository(repository);
+		at.setWorkspace(workspace);
+		at.setLibrary(library);
+		at.setName(node.getName());
+		this.resolveResourceNode(at, node);
 		for (RestProperty property : node.getJcrProperties()) {
 			if ("bpw:baseResourceType".equals(property.getName())) {
-				result.setBaseResourceType(property.getValues().get(0));
-			} else if ("bpw:workflow".equals(property.getName())) {
-				result.setWorkflow(property.getValues().get(0));
-			} else if ("jcr:lockOwner".equals(property.getName())) {
-				result.setLockOwner(property.getValues().get(0));
-			}
+				at.setBaseResourceType(property.getValues().get(0));
+			} else if ("bpw:contentWorkflow".equals(property.getName())) {
+				at.setContentItemWorkflow(property.getValues().get(0));
+			} 
 		}
-		this.populateAuthoringTemplate(result, node);
-		return result;
+		this.populateAuthoringTemplate(at, node);
+		return at;
 	}
 
 	private void resolveResourceNode(ResourceNode resourceNode, RestNode restNode) {
+		for (RestProperty property : restNode.getJcrProperties()) {
+			if ("bpw:title".equals(property.getName())) {
+				resourceNode.setTitle(property.getValues().get(0));
+			} else if ("bpw:description".equals(property.getName())) {
+				resourceNode.setDescription(property.getValues().get(0));
+			} else if ("jcr:lockOwner".equals(property.getName())) {
+				resourceNode.setLockOwner(property.getValues().get(0));
+			}				
+		}
+	}
+	
+	private void resolveWorkflowNode(WorkflowNode resourceNode, RestNode restNode) {
 		for (RestProperty property : restNode.getJcrProperties()) {
 			if ("bpw:title".equals(property.getName())) {
 				resourceNode.setTitle(property.getValues().get(0));
@@ -2572,8 +2720,6 @@ public class WcmRestController {
 				resourceNode.setWorkflow(property.getValues().get(0));
 			} else if ("bpw:workflowStage".equals(property.getName())) {
 				resourceNode.setWorkflowStage(property.getValues().get(0));
-			} else if ("bpw:categories".equals(property.getName())) {
-				resourceNode.setCategories(property.getValues().toArray(new String[property.getValues().size()]));
 			} else if ("jcr:lockOwner".equals(property.getName())) {
 				resourceNode.setLockOwner(property.getValues().get(0));
 			}				
@@ -2812,12 +2958,11 @@ public class WcmRestController {
 	}
 
 	private void populateAuthoringTemplate(AuthoringTemplate at, RestNode restNode) {
-		this.resolveResourceNode(at, restNode);
 		List<BaseFormGroup> formGroups = new ArrayList<>();
 		restNode.getChildren().forEach(node -> {
-			if (this.isElementNode(node)) {
+			if (this.isElementFolderNode(node)) {
 				this.populateElementControls(at, node);
-			} else if (this.isPropertyNode(node)) {
+			} else if (this.isPropertyFolderNode(node)) {
 				this.populatePropertyControls(at, node);
 			} else if (this.isPropertyGroupNode(node)) {
 				at.setPropertyRow(this.populateFormRow(node));
@@ -2850,6 +2995,7 @@ public class WcmRestController {
 	
 	private SiteConfig getSiteConfig(RestNode siteConfigNode) throws RepositoryException {
 		SiteConfig siteConfig = new SiteConfig();
+		this.resolveResourceNode(siteConfig, siteConfigNode);
 		for (RestProperty property : siteConfigNode.getJcrProperties()) {
 			if ("bpw:name".equals(property.getName())) {
 				siteConfig.setName(property.getValues().get(0));
@@ -2859,9 +3005,7 @@ public class WcmRestController {
 				siteConfig.setCustomScrollbars(Boolean.parseBoolean(property.getValues().get(0)));
 			} else if ("bpw:rootSiteArea".equals(property.getName())) {
 				siteConfig.setRootSiteArea(property.getValues().get(0));
-			} else if ("jcr:lockOwner".equals(property.getName())) {
-				siteConfig.setLockOwner(property.getValues().get(0));
-			}
+			} 
 		}
 		
 		for (RestNode layoutNode: siteConfigNode.getChildren()) {
@@ -3255,4 +3399,65 @@ public class WcmRestController {
 			lm.unlock(absPath);
 		}
 	}
+	
+//	private void doCreateContentItem(ContentItem contentItem, 
+//			HttpServletRequest request)
+//			throws WcmRepositoryException {
+//		if (logger.isDebugEnabled()) {
+//			logger.traceEntry();
+//		}
+//		
+//		try {
+//			String repositoryName = contentItem.getRepository();
+//			String workspaceName = contentItem.getWorkspace();
+//	
+//			Session session = repositoryManager.getSession(repositoryName, workspaceName);
+//			Node parentFolder = session.getNode("/" + contentItem.getNodePath());
+//			
+//			Map<String, String> properties = contentItem.getProperties();
+//			String name = properties.get("name"); 
+//			String title = properties.get("title");
+//			String description = properties.get("description");
+//			String workflow = properties.get("workflow"); 
+//			
+//			
+//			Node contentNode = parentFolder.addNode(name, "bpw:content");
+//	
+//			//contentNode.setProperty("bpw:name", name);
+//			contentNode.setProperty("bpw:authoringTemplate", contentItem.getAuthoringTemplate());
+//			if (StringUtils.hasText(workflow)) {
+//				contentNode.setProperty("bpw:workflow", workflow);
+//			}
+//			contentNode.setProperty("bpw:title", StringUtils.hasText(title) ? title : name);
+//			if (StringUtils.hasText(description)) {
+//				contentNode.setProperty("bpw:description", description);
+//			}
+//			
+//			Node elementsNode = contentNode.addNode("contentElements", "bpw:contentElementFolder");
+//			Map<String, String> contentElements = contentItem.getElements();
+//			for (String key: contentElements.keySet()) {
+//				Node contentElementNode = elementsNode.addNode(key, "bpw:contentElement");
+//				contentElementNode.setProperty("bpw:multiple", false);
+//				contentElementNode.setProperty("bpw:value", new String[] {contentElements.get(key)});
+//			}
+//			
+//			Node propertiesNode = contentNode.addNode("contentProperties", "bpw:propertyElementFolder");
+//			Map<String, String> propertyElements = contentItem.getElements();
+//			for (String key: propertyElements.keySet()) {
+//				Node contentElementNode = propertiesNode.addNode(key, "bpw:contentElement");
+//				contentElementNode.setProperty("bpw:multiple", false);
+//				contentElementNode.setProperty("bpw:value", contentElements.get(key));
+//			}
+//			session.save();
+//			if (logger.isDebugEnabled()) {
+//				logger.traceExit();
+//			}
+//	
+//			
+//		} catch (WcmRepositoryException e ) {
+//			throw e;
+//		} catch (Throwable t) {
+//			throw new WcmRepositoryException(t);
+//		}
+//	}
 }

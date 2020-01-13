@@ -1,7 +1,8 @@
 import { HasName } from './HasName';
 import { LayoutRow } from './LayoutRow';
 import { SidePane} from './SidePane';
-export interface ContentAreaLayout extends HasName {
+import { ResourceNode } from './ResourceNode';
+export interface ContentAreaLayout extends ResourceNode, HasName {
   repository: string;
   workspace: string;
   library: string;

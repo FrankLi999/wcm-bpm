@@ -6,7 +6,7 @@ import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class SiteConfig {
+public class SiteConfig extends ResourceNode {
 	private String repository;
 	private String workspace;
 	private String library;

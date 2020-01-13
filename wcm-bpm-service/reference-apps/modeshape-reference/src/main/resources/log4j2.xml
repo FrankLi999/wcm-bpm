@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    
+    <Properties>
+        <Property name="ROOT_LOG_LEVEL">AUDIT</Property>
+        <Property name="APP_LOG_LEVEL">WARN</Property>
+        <Property name="LOG_PATH">${sys:log.root.dir}</Property>
+        <Property name="APP_NAME">modeshape-reference</Property>
+        <Property name="LOG_PATTERN">
+            logdate=(%d{ISO8601}) thread=(%thread)) level=(%level) correlationId=[%X{correlationId}] loggerclass=(%logger{36}) message=(%msg)%n
+        </Property>
+    </Properties>
+
+	<CustomLevels>
+	    <CustomLevel name="AUDIT" intLevel="351" />
+	</CustomLevels>
+  
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <!-- Rolling Application Log Appender -->
+        <!--
+            <DefaultRolloverStrategy>
+            	<Delete basePath=${LOG_PATH} maxDepth="1">
+            	  <ifFileName glob="${APP_NAME}-*.log">
+            	    <ifAny>
+            	      <ifAccumulatedFileCount exceeds="10" />
+            	    </ifAny
+            	  </ifFileName>
+            </DefaultRolloverStrategy> 
+        -->
+        <RollingFile name="APP" fileName="${LOG_PATH}/${APP_NAME}.log"
+                     filePattern="${LOG_PATH}/${APP_NAME}-%d{yyyy-MM-dd}-%i.log"
+                     append="true">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            
+            <Filters>
+             	<ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+             	<ThresholdFilter level="AUDIT" onMatch="DENY"  onMismatch="NEUTRAL"/>
+            </Filters>
+        </RollingFile>
+		<!-- Rolling Audit Log Appender -->
+        <RollingFile name="AUDIT" fileName="${LOG_PATH}/${APP_NAME}_AUDIT.log"
+                     filePattern="${LOG_PATH}/${APP_NAME}_AUDIT-%d{yyyy-MM-dd}-%i.log"
+                     append="true"
+                     immediateFlush="false">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            <Filters>             	
+             	<ThresholdFilter level="AUDIT" onMatch="NEUTRAL"  onMismatch="DENY"/>
+             	<ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </RollingFile>
+        <!-- SMTP Appender
+        <SMTP name="MailAppender"
+              subject="Log4j2 Demo [PROD]"
+              to="youremail@example.com"
+              from="log4j2-demo-alerts@example.com"
+              smtpHost="yourSMTPHost"
+              smtpPort="587"
+              smtpUsername="yourSMTPUsername"
+              smtpPassword="yourSMTPPassword"
+              bufferSize="1">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+        </SMTP>
+         -->
+         <Async name="ROOT-ASYNC" bufferSize="512" includeLocation="true">
+	        <AppenderRef ref="CONSOLE" />
+	        <AppenderRef ref="APP" />
+	    </Async>
+	    <Async name="APP-ASYNC" bufferSize="512" includeLocation="true">
+	        <AppenderRef ref="CONSOLE" />
+	        <AppenderRef ref="APP" />
+	        <AppenderRef ref="AUDIT" />
+	    </Async>
+    </Appenders>
+    
+    <Loggers>
+        <Logger name="org.bpwizard" level="${sys:APP_LOG_LEVEL}">
+            <AppenderRef ref="APP-ASYNC" />
+        </Logger>
+        
+        <Root level="${sys:ROOT_LOG_LEVEL}">
+            <AppenderRef ref="ROOT-ASYNC"/>
+        </Root>
+    </Loggers>
+</Configuration>

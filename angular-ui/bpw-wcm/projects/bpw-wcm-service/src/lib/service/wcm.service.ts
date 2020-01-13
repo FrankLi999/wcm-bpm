@@ -260,15 +260,15 @@ export class WcmService extends RestClient {
     @Query("path") contentItemPath: string
   ): Observable<SiteArea> { return null; };
 
-  @Post('/ContentItem')
+  @Post('/contentItem/create-publish')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public createContentItem(@Body contentItem: ContentItem): Observable<any> { return null; };
+  public createAndPublishContentItem(@Body contentItem: ContentItem): Observable<any> { return null; };
 
-  @Put('/ContentItem/save')
+  @Put('/contentItem/update-published')
   @Timeout(2000) //In milliseconds
   @Produces(MediaType.JSON)
-  public saveContentItem(@Body contentItem: ContentItem): Observable<any> { return null; };
+  public updateContentItem(@Body contentItem: ContentItem): Observable<any> { return null; };
 
   @Get('/contentItem/get/{repository}/{workspace}')
   @Timeout(2000) //In milliseconds

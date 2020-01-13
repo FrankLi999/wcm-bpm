@@ -19,12 +19,23 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 	private String library;
 	private String baseResourceType;
 	private FormRow propertyRow;
+	private AccessControlList contentItemAcl;
 	private BaseFormGroup[] elementGroups;
-	private String lockOwner;
-	
+	private String contentItemWorkflow;
 	private Map<String, FormControl> elements;
 	private Map<String, FormControl> properties;
 	
+	public AuthoringTemplate() {
+	}
+	
+	public String getContentItemWorkflow() {
+		return contentItemWorkflow;
+	}
+
+	public void setContentItemWorkflow(String contentItemWorkflow) {
+		this.contentItemWorkflow = contentItemWorkflow;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -74,17 +85,20 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 	public void setPropertyRow(FormRow propertyRow) {
 		this.propertyRow = propertyRow;
 	}
+
+	public AccessControlList getContentItemAcl() {
+		return contentItemAcl;
+	}
+
+	public void setContentItemAcl(AccessControlList contentItemAcl) {
+		this.contentItemAcl = contentItemAcl;
+	}
+
 	public BaseFormGroup[] getElementGroups() {
 		return elementGroups;
 	}
 	public void setElementGroups(BaseFormGroup[] elementGroups) {
 		this.elementGroups = elementGroups;
-	}
-	public String getLockOwner() {
-		return lockOwner;
-	}
-	public void setLockOwner(String lockOwner) {
-		this.lockOwner = lockOwner;
 	}
 	
 	public JsonNode toJson() {
@@ -99,17 +113,25 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 		if (StringUtils.hasText(this.getBaseResourceType())) {
 			properties.put("bpw:baseResourceType", this.getBaseResourceType());
 		}
-		if (StringUtils.hasText(this.getTitle())) {
-			properties.put("bpw:title", this.getTitle());
-		}
-		if (StringUtils.hasText(this.getDescription())) {
-			properties.put("bpw:description", this.getDescription());
-		}
+		super.toJson(properties, children);
 		
-		if (StringUtils.hasText(this.getWorkflow())) {
-			properties.put("bpw:workflow", this.getWorkflow());
+		if (StringUtils.hasText(this.getContentItemWorkflow())) {
+			properties.put("bpw:contentWorkflow", this.getContentItemWorkflow());
 		}
 
+		if (this.getContentItemAcl() != null) {
+			ObjectNode contentItemAclNode = JsonUtils.createObjectNode();
+			children.set("contentItemAcl", contentItemAclNode);
+			ObjectNode contentItemAclNodeProperties = JsonUtils.createObjectNode();
+			ObjectNode contentItemAclNodeChildren = JsonUtils.createObjectNode();
+			contentItemAclNode.set("properties", contentItemAclNodeProperties);
+			contentItemAclNode.set("children", contentItemAclNodeChildren);
+			contentItemAclNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentItemAcl");
+			
+			this.addAccessControlEntry(contentItemAclNodeChildren, "onSaveDraft", this.getContentItemAcl().getOnRejectDraftPermissions());
+			this.addAccessControlEntry(contentItemAclNodeChildren, "onRejectDraft", this.getContentItemAcl().getOnRejectDraftPermissions());
+			this.addAccessControlEntry(contentItemAclNodeChildren, "onPublish", this.getContentItemAcl().getOnPublishPermissions());
+		}
 		this.addRow(children, this.getPropertyRow(), "property-group");
 		
 		ObjectNode elementGroupNode = JsonUtils.createObjectNode();
@@ -334,12 +356,12 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			columnNodeProperties.set("bpw:fieldNames", controlArray);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "AuthoringTemplate [name=" + name + ", repository=" + repository + ", workspace=" + workspace
 				+ ", library=" + library + ", baseResourceType=" + baseResourceType + ", propertyRow=" + propertyRow
-				+ ", elementGroups=" + Arrays.toString(elementGroups) + ", lockOwner=" + lockOwner + ", elements="
-				+ elements + ", properties=" + properties + "]";
+				+ ", contentItemAcl=" + contentItemAcl + ", elementGroups=" + Arrays.toString(elementGroups)
+				+ ", elements=" + elements + ", properties=" + properties + "]";
 	}
 }

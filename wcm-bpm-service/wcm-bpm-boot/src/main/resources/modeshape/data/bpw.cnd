@@ -9,6 +9,28 @@
  * BPW  T Y P E S
  * ------------------------------------------------------------------------------
  */
+[bpw:AccessControlEntry] 
+- bpw:viewers (STRING) multiple
+- bpw:editors (STRING) multiple
+- bpw:admins (STRING) multiple
+- bpw:reviewers (STRING) multiple
+
+[bpw:folder]> nt:folder, mix:lastModified, mix:referenceable, mode:accessControllable
+
+[bpw:resourceNode] > nt:hierarchyNode, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable abstract
+- bpw:title (STRING) COPY
+- bpw:description (STRING) COPY
++ bpw:acl (bpw:AccessControlEntry)
+
+[bpw:resourceFolder] > nt:folder, bpw:resourceNode
+
+[bpw:workflowNode] > bpw:resourceNode abstract
+- bpw:publishDate (STRING) COPY
+- bpw:expireDate (STRING) COPY
+- bpw:workflow (STRING) multiple COPY
+- bpw:workflowStage (STRING) COPY
+- bpw:categories (STRING) multiple
+
 [bpw:lifecycle] mixin
 - bpw:lifecyclePolicy (STRING)
 - bpw:currentLifecycleState (STRING)
@@ -20,19 +42,14 @@
 [bpw:keyValues]
 + * (bpw:keyValue) 
 
-[bpw:workflowAction] > mix:lastModified
+[bpw:workflowAction]
 - name (String)
 
-[bpw:workflowStage] > mix:lastModified
+[bpw:workflowStage]
 + * (bpw:workflowAction)
 
-[bpw:workflow] > mix:lastModified
+[bpw:workflow] > nt:hierarchyNode, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable
 + * (bpw:workflowStage)
-
-[bpw:validationRule]
-- bpw:name (STRING) COPY
-- bpw:type (STRING) = 'regex' COPY
-- bpw:rule (STRING) COPY
 
 [bpw:pageSearchData]
 - description (STRING)
@@ -45,12 +62,6 @@
 - bpw:title  (STRING)
 - bpw:items (STRING)
 + * (bpw:fieldLayout)
-
-/*
-[bpw:customFieldLayout]
-- bpw:multiple (BOOLEAN)
-+ * (bpw:fieldLayout)
-*/
 
 /*
 'Decimal', 'Text', 'True/False', 'Whole Number'
@@ -78,7 +89,7 @@
 - bpw:readOnly (BOOLEAN) = 'false'
 - bpw:selectOptions (STRING) multiple
 
-[bpw:controlField]
+[bpw:controlField] > bpw:resourceNode
 - bpw:title (STRING)
 - bpw:icon (STRING)
 + * (bpw:controlFieldMetaData)
@@ -134,46 +145,46 @@
 - bpw:stepName (STRING)
 + * (bpw:formGroup)
 
-[bpw:category] > nt:hierarchyNode, mix:lastModified
+[bpw:validationRule] > bpw:resourceNode
+- bpw:name (STRING) COPY
+- bpw:type (STRING) = 'regex' COPY
+- bpw:rule (STRING) COPY
+
+[bpw:category] > bpw:resourceNode
 + * (bpw:category)
 
-[bpw:resourceNode] > nt:hierarchyNode, mix:lastModified, mix:versionable, mix:lockable abstract
+[bpw:baseType] > nt:hierarchyNode, mix:referenceable abstract
 - bpw:title (STRING) COPY
 - bpw:description (STRING) COPY
-- bpw:publishDate (STRING) COPY
-- bpw:expireDate (STRING) COPY
-- bpw:workflow (STRING) multiple COPY
-- bpw:workflowStage (STRING) COPY
-- bpw:categories (STRING) multiple
 
-[bpw:contentType] > bpw:resourceNode
+[bpw:contentType] > bpw:baseType
 - bpw:contentName (STRING) mandatory COPY
 - bpw:body (STRING) COPY
 
-[bpw:componentType] > bpw:resourceNode
+[bpw:componentType] > bpw:baseType
 - bpw:widgetName (STRING) mandatory COPY
 - bpw:componentTemplate (STRING) COPY
 
-[bpw:fileType] > nt:file, bpw:resourceNode
+[bpw:fileType] > nt:file, bpw:baseType
 - bpw:fileName (STRING) mandatory COPY
 - bpw:content (BINARY) COPY
 + bpw:metaData (bpw:keyValue)
 - bpw:showOnMenu (BOOLEAN) = 'false'
 - bpw:sortOrder (LONG) = 0
 
-[bpw:keyValueType] > bpw:resourceNode
+[bpw:keyValueType] > bpw:baseType
 - bpw:key (STRING) COPY
 - bpw:value (STRING) COPY
 
-[bpw:vanityURLType] > bpw:resourceNode
+[bpw:vanityURLType] > bpw:baseType
 - bpw:vanityURLName (STRING) mandatory COPY
 - bpw:uri (STRING)
 - bpw:forwardTo (STRING)
 
-[bpw:formType] > bpw:resourceNode
+[bpw:formType] > bpw:baseType
 - bpw:formName (STRING) mandatory COPY
 
-[bpw:personaType] > bpw:resourceNode
+[bpw:personaType] > bpw:baseType
 - bpw:name (STRING) mandatory COPY
 - bpw:phote (BINARY)
 
@@ -191,13 +202,19 @@
 [bpw:formGroupFoler] > nt:folder
 + * (bpw:formGroup)
 
+[bpw:contentItemAcl]
++ onSaveDraft (bpw:AccessControlEntry)
++ onRejectDraft (bpw:AccessControlEntry)
++ onPublish (bpw:AccessControlEntry)
+
 [bpw:authoringTemplate] > bpw:resourceNode
 - bpw:baseResourceType (String)
-- bpw:workflow (String)
+- bpw:contentWorkflow (String)
 + propertyGroup (bpw:formRow)
 + elementGroups (bpw:formGroupFoler)
 + elements (bpw:elementFolder)
 + properties (bpw:propertyFolder)
++ contentItemAcl (bpw:contentItemAcl)
 
 [bpw:themeType] > nt:folder, bpw:resourceNode
 - bpw:themeName (STRING)
@@ -208,13 +225,12 @@
 - bpw:bg (STRING)
 - bpw:fg (STRING)
 
-
 [bpw:siteAreaLayout]
 - bpw:contentWidth (LONG)
 + sidePane (bpw:contentAreaSidePanel)
 + * (bpw:layoutRow)
 
-[bpw:siteArea] > bpw:resourceNode
+[bpw:siteArea] > bpw:resourceFolder
 - bpw:name (STRING) mandatory COPY
 - bpw:title (STRING) mandatory COPY
 - bpw:url (STRING)
@@ -392,7 +408,7 @@
 [bpw:RenderTemplateLayoutRow]
 + * (bpw:RenderTemplateLayoutColumn)
 
-[bpw:renderTemplate] > mix:lastModified
+[bpw:renderTemplate] > bpw:resourceNode
 - bpw:name (STRING)
 - bpw:title (STRING)
 - bpw:description (STRING)
@@ -447,7 +463,7 @@
 - hidden (BOOLEAN)
 - position (STRING)
 
-[bpw:pageLayout] > mix:lastModified
+[bpw:pageLayout]
 - bpw:style (STRING)
 - bpw:width (STRING)
 + navbar (bpw:navbar)
@@ -455,45 +471,44 @@
 + footer (bpw:footer)
 + sidePanel (bpw:sidePanel)
 
-[bpw:siteConfig] > mix:lastModified, mix:lockable
+[bpw:siteConfig] > bpw:resourceNode
 - bpw:name (STRING)
 - bpw:colorTheme (STRING)
 - bpw:customScrollbars (BOOLEAN)
 - bpw:rootSiteArea (STRING)
 + layout (bpw:pageLayout)
 
-[bpw:contentAreaLayout] > nt:hierarchyNode, mix:lastModified
+[bpw:contentAreaLayout] > bpw:resourceNode
 - bpw:name (STRING)
 - bpw:contentWidth (LONG)
 + sidePane (bpw:contentAreaSidePanel)
 + * (bpw:layoutRow)
 
-[bpw:workflowFolder] > nt:folder
-[bpw:categoryFolder] > nt:folder
-[bpw:authoringTemplateFolder] > nt:folder
+[bpw:workflowFolder] > bpw:folder
+[bpw:categoryFolder] > bpw:folder
+[bpw:authoringTemplateFolder] > bpw:folder
 + * (bpw:authoringTemplate)
 
-[bpw:controlFieldFolder] > nt:folder
+[bpw:controlFieldFolder] > bpw:folder
 + * (bpw:controlField)
 
-[bpw:themesFolder] > nt:folder
+[bpw:themesFolder] > bpw:folder
 + * (bpw:themeType)
 
-[bpw:siteConfigFolder] > nt:folder
+[bpw:siteConfigFolder] > bpw:folder
 + * (bpw:siteConfig)
 
-[bpw:contentAreaLayoutFolder] > nt:folder
+[bpw:contentAreaLayoutFolder] > bpw:folder
 + * (bpw:contentAreaLayout)
 
-[bpw:renderTemplateFolder] > nt:folder
+[bpw:renderTemplateFolder] > bpw:folder
 + * (bpw:renderTemplate)
 
-[bpw:queryFolder] > nt:folder
+[bpw:queryFolder] > bpw:folder
 + * (bpw:query)
-[bpw:assetFolder] > nt:folder
+[bpw:assetFolder] > bpw:folder
 
-[bpw:library] > nt:folder, mix:lastModified, mode:accessControllable
-- bpw:language (STRING)
+[bpw:library] > bpw:folder, mix:language
 + rootSiteArea (bpw:siteArea)
 + authoringTemplate (bpw:authoringTemplateFolder)
 + theme (bpw:themesFolder)
@@ -521,14 +536,14 @@
 [bpw:opertionsFolder] > nt:folder
 + * [bpw:supportedOpertions]
 
-[bpw:configurationFolder] > nt:folder
+[bpw:configurationFolder] > bpw:folder
 + validationRule (bpw:validationRuleFolder)
 + operations (bpw:opertionsFolder)
 
-[bpw:libraryFolder] > nt:folder
+[bpw:libraryFolder] > bpw:folder
 + * (bpw:library)
 
-[bpw:root] > nt:folder, mix:lastModified
+[bpw:root] > bpw:folder
 + controlField (bpw:controlFieldFolder)
 + authoringTemplate (bpw:authoringTemplateFolder)
 + configuration (bpw:configurationFolder)
@@ -544,7 +559,14 @@
 [bpw:propertyElementFolder] > nt:folder
 + * (bpw:contentElement)
 
-[bpw:content] > bpw:resourceNode, bpw:lifecycle
+[bpw:commentFolder] > nt:folder
++ * (bpw:comment)
+
+[bpw:comment] > nt:hierarchyNode
+ - bpw:comment (STRING)
+
+[bpw:content] > bpw:workflowNode, bpw:lifecycle
 - bpw:authoringTemplate (STRING)
 + elements (bpw:contentElementFolder)
 + properties (bpw:propertyElementFolder)
++ comments (bpw:commentFolder)

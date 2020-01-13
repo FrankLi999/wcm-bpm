@@ -5,16 +5,16 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.wcm.repo.content.model.ReviewTask;
+import com.bpwizard.wcm.repo.content.model.ContentTask;
 
 @Component
-public class ReviewTaskRepo {
-	private Map<String, ReviewTask> tasks = new HashMap<>();
-	public ReviewTask[] getReviewTasksByTopic(String topic) {
-		return tasks.entrySet().stream().map(taskEntry -> taskEntry.getValue()).filter(task -> topic.equals(task.getTopic())).toArray(ReviewTask[]::new);
+public class ContentTaskRepo {
+	private Map<String, ContentTask> tasks = new HashMap<>();
+	public ContentTask[] getActiveTasksByTopic(String topic) {
+		return tasks.entrySet().stream().map(taskEntry -> taskEntry.getValue()).filter(task -> topic.equals(task.getTopic())).toArray(ContentTask[]::new);
 	}
 	
-	public void registerReviewTask(
+	public void registerContentTask(
 			String activityId, 
 			String topic, 
 			String repository, 
@@ -22,7 +22,7 @@ public class ReviewTaskRepo {
 			String contentPath, 
 			String contentId) {
 		
-		ReviewTask reviewTask = new ReviewTask();
+		ContentTask reviewTask = new ContentTask();
 		
 		reviewTask.setRepository(repository);
 		reviewTask.setActivityId(activityId);
@@ -33,11 +33,11 @@ public class ReviewTaskRepo {
 		this.tasks.put(activityId, reviewTask);
 	}
 	
-	public ReviewTask findReviewTask(String activityId) {
+	public ContentTask findContentTask(String activityId) {
 	    return this.tasks.get(activityId);
 	}
 	
-	public void removeReviewTask(String activityId) {
+	public void removeContentTask(String activityId) {
 		this.tasks.remove(activityId);
 	}
 }

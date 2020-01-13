@@ -213,27 +213,51 @@ public class ModeshapeController {
 	@GetMapping("/testACL")
 	public String testACL() throws Exception {
 		String path = "/bpwizard/library";
-		String[] privileges = new String[] {
-				Privilege.JCR_ALL 
-//				Privilege.JCR_READ, 
-//				Privilege.JCR_WRITE,
-//				Privilege.JCR_ADD_CHILD_NODES, 
-//				Privilege.JCR_MODIFY_ACCESS_CONTROL
+		String[] readPrivileges = new String[] {
+		  Privilege.JCR_READ
 		};
-		Principal principal = new TestPrincipal();
+		
+		String[] editorPrivileges = new String[] {
+		  Privilege.JCR_READ,
+		  Privilege.JCR_WRITE,
+		  Privilege.JCR_REMOVE_NODE,
+		  Privilege.JCR_ADD_CHILD_NODES,
+		  Privilege.JCR_REMOVE_CHILD_NODES,
+		  Privilege.JCR_REMOVE_CHILD_NODES
+		};
+		
+		String[] adminPrivileges = new String[] {
+			Privilege.JCR_ALL 
+		};
+		// Principal principal = new TestPrincipal();
+		
 		Principal adminPrincipal = new TestPrincipal("admin@example.com");
 		Principal demoPrincipal = new TestPrincipal("demo@example.com");  
-		Principal group = new TestGroup();
+		Principal anonymousPrincipal = new TestPrincipal("anonymouse"); 
+		// Principal group = new TestGroup();
 		Principal wcmViewer = new TestGroup("wcm-viewer");
+		Principal wcmReviewer = new TestGroup("wcm-reviewer");
+		Principal wcmEditor = new TestGroup("wcm-editor");
+		Principal wcmAdmin = new TestGroup("wcm-admin");
 		Session session = this.repositoryManager.getSession("bpwizard");
 		AccessControlManager acm = session.getAccessControlManager();
 		 
 		// Convert the privilege strings to Privilege instances ...
-		Privilege[] permissions = new Privilege[privileges.length];
-		for (int i = 0; i < privileges.length; i++) {
-		    permissions[i] = acm.privilegeFromName(privileges[i]);
+		Privilege[] readPermissions = new Privilege[readPrivileges.length];
+		for (int i = 0; i < readPrivileges.length; i++) {
+			readPermissions[i] = acm.privilegeFromName(readPrivileges[i]);
 		}
 		 
+		Privilege[] editorPermissions = new Privilege[editorPrivileges.length];
+		for (int i = 0; i < editorPrivileges.length; i++) {
+			editorPermissions[i] = acm.privilegeFromName(editorPrivileges[i]);
+		}
+		
+		Privilege[] adminPermissions = new Privilege[adminPrivileges.length];
+		for (int i = 0; i < adminPrivileges.length; i++) {
+			adminPermissions[i] = acm.privilegeFromName(adminPrivileges[i]);
+		}
+		
 		AccessControlList acl = null;
 		AccessControlPolicyIterator it = acm.getApplicablePolicies(path);
 		
@@ -242,12 +266,14 @@ public class ModeshapeController {
 		} else {
 		    acl = (AccessControlList)acm.getPolicies(path)[0];
 		}
-		
-		acl.addAccessControlEntry(principal, permissions);
-		acl.addAccessControlEntry(adminPrincipal, permissions);
-		acl.addAccessControlEntry(demoPrincipal, permissions);
-		acl.addAccessControlEntry(group, permissions);
-		acl.addAccessControlEntry(wcmViewer, permissions);
+
+		acl.addAccessControlEntry(anonymousPrincipal, readPermissions);
+		acl.addAccessControlEntry(adminPrincipal, adminPermissions);
+		acl.addAccessControlEntry(demoPrincipal, editorPermissions);
+		acl.addAccessControlEntry(wcmViewer, readPermissions);
+		acl.addAccessControlEntry(wcmReviewer, readPermissions);
+		acl.addAccessControlEntry(wcmEditor, editorPermissions);
+		acl.addAccessControlEntry(wcmAdmin, adminPermissions);
 //		 
 		acm.setPolicy(path, acl);
 		session.save();

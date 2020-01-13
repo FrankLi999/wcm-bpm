@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openshift-demo
+data:
+  #application.properties: |-
+    # test.property=
+  application.yaml: |-
+    test:
+      property: test_prop_value

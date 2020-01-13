@@ -10,8 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ContentAreaLayout implements HasName {
-	
+public class ContentAreaLayout extends ResourceNode implements HasName {
 	String name;
 	String repository;
 	String workspace;
@@ -73,6 +72,8 @@ public class ContentAreaLayout implements HasName {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode properties = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
+		
+		super.toJson(properties, children);
 		
 		jsonNode.set("children", children);
 		jsonNode.set("properties", properties);

@@ -11,19 +11,10 @@ import org.camunda.bpm.engine.variable.Variables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.wcm.repo.content.model.ReviewTask;
-
 @Component
 public class ExternalReviewService {
 	@Autowired
 	ProcessEngine processEngine;
-	
-	@Autowired
-	ReviewTaskRepo reviewTasks;
-	
-	public ReviewTask[] getReviewTasks(String topic) {
-		return this.reviewTasks.getReviewTasksByTopic(topic);
-	}
 	
 	public String claimTask(String contentId, String topic, String workerId) {
 		

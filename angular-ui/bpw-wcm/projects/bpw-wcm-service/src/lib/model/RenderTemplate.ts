@@ -1,13 +1,11 @@
 
 import { HasName } from './HasName';
 import { RenderTemplateLayoutRow } from './RenderTemplateLayoutRow';
-
-export interface RenderTemplate extends HasName {
+import { ResourceNode } from './ResourceNode';
+export interface RenderTemplate extends ResourceNode, HasName {
   repository: string;
   workspace: string;
   library: string;
-  title?: string;
-  description?: string;
   code?: string;
   preloop?: string;
   postloop?: string;

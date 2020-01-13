@@ -2,18 +2,17 @@
 <Configuration status="WARN" monitorInterval="30">
     
     <Properties>
-        <Property name="LOG_ROOT_LEVEL">METRIC</Property>
+        <Property name="ROOT_LOG_LEVEL">AUDIT</Property>
         <Property name="APP_LOG_LEVEL">WARN</Property>
         <Property name="LOG_PATH">${sys:log.root.dir}</Property>
         <Property name="APP_NAME">wcm-root</Property>
         <Property name="LOG_PATTERN">
-            %d{yyyy-MM-dd HH:mm:ss.SSS} %-5p ${hostName} --- [%15.15t] [%X{requestID}]  %-40.40c{1.} : %m%n%ex
+            logdate=(%d{ISO8601}) thread=(%thread)) level=(%level) correlationId=[%X{correlationId}] loggerclass=(%logger{36}) message=(%msg)%n
         </Property>
     </Properties>
 
 	<CustomLevels>
 	    <CustomLevel name="AUDIT" intLevel="351" />
-	    <CustomLevel name="METRIC" intLevel="352" />
 	</CustomLevels>
   
     <Appenders>
@@ -47,7 +46,6 @@
             <Filters>
              	<ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
              	<ThresholdFilter level="AUDIT" onMatch="DENY"  onMismatch="NEUTRAL"/>
-             	<ThresholdFilter level="METRIC" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
             </Filters>
         </RollingFile>
 		<!-- Rolling Audit Log Appender -->
@@ -67,24 +65,6 @@
              	<ThresholdFilter level="AUDIT" onMatch="NEUTRAL"  onMismatch="DENY"/>
              	<ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
             </Filters>
-        </RollingFile>
-        <!-- Rolling Metric log Appender -->
-        <RollingFile name="METRIC" fileName="${LOG_PATH}/${APP_NAME}_METRIC.log"
-                     filePattern="${LOG_PATH}/${APP_NAME}_METRIC-%d{yyyy-MM-dd}-%i.log"
-                     append="true"
-                     immediateFlush="false">
-            <PatternLayout>
-                <Pattern>${LOG_PATTERN}</Pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" />
-                <SizeBasedTriggeringPolicy size="10MB" />
-            </Policies>
-            <DefaultRolloverStrategy max="10"/>
-            <Filters>
-             	<ThresholdFilter level="METRIC" onMatch="NEUTRAL"  onMismatch="DENY"/>
-             	<ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
-             </Filters>
         </RollingFile>
         <!-- SMTP Appender
         <SMTP name="MailAppender"
@@ -110,7 +90,6 @@
 	        <AppenderRef ref="CONSOLE" />
 	        <AppenderRef ref="APP" />
 	        <AppenderRef ref="AUDIT" />
-		    <AppenderRef ref="METRIC" />
 	    </Async>
     </Appenders>
     
@@ -119,7 +98,7 @@
             <AppenderRef ref="APP-ASYNC" />
         </Logger>
         
-        <Root level="${sys:LOG_ROOT_LEVEL}">
+        <Root level="${sys:ROOT_LOG_LEVEL}">
             <AppenderRef ref="ROOT-ASYNC"/>
         </Root>
     </Loggers>

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ContentReviewTaskStartListener implements JavaDelegate {
 
 	@Autowired
-	ReviewTaskRepo reviewTasks;
+	ContentTaskRepo reviewTasks;
 	private static final String TOPIC = "wcm_review";
 	@Override
 	public void execute(DelegateExecution delegate) throws Exception {
@@ -19,7 +19,7 @@ public class ContentReviewTaskStartListener implements JavaDelegate {
 		String workspace = (String) delegate.getVariable("workspace");
 		String contentPath = (String) delegate.getVariable("contentPath");
 		String contentId = (String) delegate.getVariable("contentId");
-		this.reviewTasks.registerReviewTask(
+		this.reviewTasks.registerContentTask(
 				activityId,
 				TOPIC,
 				repository,

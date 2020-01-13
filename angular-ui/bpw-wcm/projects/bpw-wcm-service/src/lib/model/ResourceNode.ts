@@ -1,9 +1,7 @@
+import { AccessControlEntry } from './AccessControlEntry';
 export interface ResourceNode {
     title?: string;
 	description?: string;
-    workflow?: string;
-    workflowStage?: string;
-	categories?: string[];
-    publishDate?: Date;
-    expireDate?: Date;
+    lockOwner?: string;
+    acl?: AccessControlEntry;
 }

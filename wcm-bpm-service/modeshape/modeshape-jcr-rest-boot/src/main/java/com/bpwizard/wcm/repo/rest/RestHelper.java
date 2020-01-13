@@ -50,6 +50,7 @@ public final class RestHelper {
     public static final String UPLOAD_METHOD_NAME = "upload";
     public static final String DOWNLOAD_METHOD_NAME = "download";
     public static final String BACKUP_METHOD_NAME = "backup";
+    public static final String COPY_METHOD_NAME = "copy";
     public static final String RESTORE_METHOD_NAME = "restore";
     
     private static final List<String> ALL_METHODS = Arrays.asList(BINARY_METHOD_NAME,

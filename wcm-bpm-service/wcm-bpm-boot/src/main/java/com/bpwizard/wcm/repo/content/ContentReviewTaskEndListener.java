@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ContentReviewTaskEndListener implements JavaDelegate {
 
 	@Autowired
-	ReviewTaskRepo reviewTasks;
+	ContentTaskRepo reviewTasks;
 	@Override
 	public void execute(DelegateExecution delegate) throws Exception {
 		String activityId = delegate.getCurrentActivityId();

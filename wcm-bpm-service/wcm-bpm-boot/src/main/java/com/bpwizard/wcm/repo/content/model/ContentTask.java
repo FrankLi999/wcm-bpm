@@ -2,7 +2,7 @@ package com.bpwizard.wcm.repo.content.model;
 
 import java.io.Serializable;
 
-public class ReviewTask implements Serializable {
+public class ContentTask implements Serializable {
 	private static final long serialVersionUID = -2384105874826504993L;
 	private String activityId;
 	private String topic;

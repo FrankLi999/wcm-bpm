@@ -12,20 +12,6 @@ public class ExternalEditService {
 	@Autowired
 	ProcessEngine processEngine;
 
-	@Autowired
-	ReviewTaskRepo reviewTasks;
-	
-//	public ReviewTask[] getEditTasks(String topic) {
-//		ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
-//	    List<ExternalTask> externalTasks = externalTaskService.createExternalTaskQuery()
-//		    	.topicName(topic)
-//		    	.active()
-//		    	.notLocked()
-//		    	.listPage(0, 10);
-//	    return externalTasks.stream().map(externalTask -> reviewTasks.findReviewTask(externalTask.getId())).toArray(ReviewTask[]::new);
-//	}
-	
-	
 	public String claimTask(String contentId, String topic, String workerId) {
 		ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
 	    LockedExternalTask externalTask = externalTaskService.fetchAndLock(1, workerId).topic(topic, 24 * 60 * 1000).processInstanceVariableEquals("contentId", contentId).execute().get(0);

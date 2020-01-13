@@ -1,6 +1,6 @@
 import { HasName } from './HasName';
-export interface Theme extends HasName {
-  title: string;
+import { ResourceNode } from './ResourceNode';
+export interface Theme extends ResourceNode, HasName {
   library: string;
   repositoryName: string;
   workspace: string;

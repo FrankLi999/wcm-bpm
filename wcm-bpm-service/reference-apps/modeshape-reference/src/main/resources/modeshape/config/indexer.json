@@ -1,0 +1,57 @@
+"indexProviders" : {
+        "lucene" : {
+            "classname" : "lucene",
+            "directory" : "target/indexes"
+        }
+        // "local" : {
+		//    "classname" : "org.modeshape.jcr.index.EsIndexProvider",
+		//    "host" : "localhoty",
+		//    "port" : 9200
+		// }
+    },
+    "indexes" : {
+        "nodesByName" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "synchronous" : true,
+            "nodeType" : "bpw:contentElement",
+            "columns" : "bpw:value(STRING)"
+        },
+        "nodesByDepth" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "synchronous" : true,
+            "nodeType" : "nt:base",
+            "columns" : "mode:depth(LONG)"
+        },
+        "nodesByPath" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "synchronous" : true,
+            "nodeType" : "nt:base",
+            "columns" : "jcr:path(PATH)"
+        },
+       "indexWithDefaultNodeType" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "columns" : "bpw:title(STRING)"
+        },
+        "indexWithSingleColumn" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "nodeType" : "bpw:content",
+            "columns" : "bpw:title(STRING)"
+        },
+        "indexWithMultipleColumns" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "nodeType" : "bpw:content",
+            "columns" : "bpw:title(STRING), bpw:description(STRING)"
+        },
+        "nodeTypes" : {
+            "kind" : "nodeType",
+            "provider" : "lucene",
+            "nodeType" : "nt:base",
+            "columns" : "jcr:primaryType(STRING)"
+        }
+    },

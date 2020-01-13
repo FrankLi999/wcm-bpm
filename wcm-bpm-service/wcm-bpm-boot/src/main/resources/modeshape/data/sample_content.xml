@@ -46,7 +46,7 @@
 				sv:type="String">
 				<sv:value>&lt;anonymous&gt;</sv:value>
 			</sv:property>
-			<sv:property sv:name="bpw:language" sv:type="String">
+			<sv:property sv:name="jcr:language" sv:type="String">
 				<sv:value>en</sv:value>
 			</sv:property>
 			<sv:property sv:name="jcr:createdBy" sv:type="String">

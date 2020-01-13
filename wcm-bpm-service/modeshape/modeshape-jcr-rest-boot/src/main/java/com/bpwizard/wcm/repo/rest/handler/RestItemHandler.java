@@ -96,9 +96,17 @@ public final class RestItemHandler extends ItemHandler {
                              String workspaceName,
                              String path,
                              String requestBody ) throws IOException, RepositoryException {
-    	JsonNode requestBodyJSON = stringToJsonNode(requestBody);
+    	
+       JsonNode requestBodyJSON = stringToJsonNode(requestBody);
+       return this.addItem(request, repositoryName, workspaceName, path, requestBodyJSON);
+    }
 
-        String parentAbsPath = parentPath(path);
+    public ResponseEntity<RestItem> addItem( HttpServletRequest request,
+            String repositoryName,
+            String workspaceName,
+            String path,
+            JsonNode requestBodyJSON ) throws IOException, RepositoryException {
+    	String parentAbsPath = parentPath(path);
         String newNodeName = newNodeName(path);
 
         Session session = getSession(repositoryName, workspaceName);
@@ -109,7 +117,6 @@ public final class RestItemHandler extends ItemHandler {
         RestItem restNewNode = createRestItem(request, 0, session, newNode);
         return ResponseEntity.status(HttpStatus.CREATED).body(restNewNode);
     }
-
     @Override
     protected JsonNode getProperties( JsonNode jsonNode ) throws IOException {
     	ObjectNode properties = this.mapper.createObjectNode();

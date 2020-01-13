@@ -1,0 +1,273 @@
+## Development environment
+# flyway:
+  # url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
+  # url: jdbc:mysql://127.0.0.1:3306/wcm_bpm
+  # schemas: wcm_bpm
+  # user: wcmbpm
+  # password: P@ssw0rd
+  # password: ENC(hii16IIKWBHMYH9txsTLpvWOkNcDFy4D)
+  #locations:classpath:/db/migration,classpath:/dev/db/migration
+#spring.cache.type=hazelcast
+#spring.jpa.show-sql=true
+#spring.jpa.properties.hibernate.cache.use_second_level_cache=true
+#spring.jpa.properties.hibernate.cache.use_query_cache=true
+#spring.jpa.properties.hibernate.cache.use_minimal_puts=true
+#spring.jpa.properties.hibernate.cache.region.factory_class=com.hazelcast.hibernate.HazelcastCacheRegionFactory
+
+keycloak:
+  base-url: http://localhost:8080/auth
+  realm: wcm_bpm
+  realm-url: ${kc.base-url}/realms/${kc.realm}
+spring:
+  #cache:
+  #  type: hazelcast
+  mail:
+    host: localhost
+    port: 2525
+    username: username@gmail.com
+    password: password
+    # Other properties
+    # properties:
+      # mail:
+        # smtp:
+          # auth: true
+          # connectiontimeout: 5000
+          # timeout: 5000
+          # writetimeout: 5000
+# TLS , port 587
+          # starttls:
+            # enable: true
+# SSL, post 465
+          # socketFactory:
+            # port: 465
+  jpa:
+    show-sql: true
+    # generate-ddl=true
+    hibernate:
+      ddl-auto: update
+      # ddl-auto: update, create-drop, create, none
+      # ddl-auto: none
+      # use-new-id-generator-mappings: false
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        # dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        # jdbc.lob.non_contextual_creation: true        
+        # cache:
+          # use_second_level_cache: true
+          # use_query_cache: true
+          # use_minimal_puts: true
+          # region:
+            # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
+  datasource:
+    # url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    url: jdbc:mysql://127.0.0.1:3306/modeshape-reference?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    # url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
+    username: wcmbpm
+    password: P@ssw0rd
+    driver-class-name: com.mysql.jdbc.Driver
+    # driver-class-name: org.h2.Driver
+    # username: ${vaultConfiguration.dbUser}
+    # password: ${vaultConfiguration.dbPassword}
+    
+    # /secret/wcm-bpm/dev/vault.db_wcmbpm_password
+    # /secret/wcm-bpm/dev/vault.db_wcmbpm_user
+    # url: jdbc:postgresql://localhost:5432/bpwdb
+    # url: jdbc:h2:mem:modeshape;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    # username: bpw
+    # password: bpw
+    
+    testOnBorrow: true
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 1
+    max-active: 15
+    max-idle: 10
+    max-wait: 8000
+    hikari:
+      connection-test-query: select 1
+      # idle-timeout: 5000
+      idle-timeout: 600000
+      # max-lifetime: 120000
+      max-lifetime: 1800000
+      maximum-pool-size: 5
+      minimum-idle: 5
+      # connectionTimeout: 30000
+  
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 5014057553-8gm9um6vnli3cle5rgigcdjpdrid14m9.apps.googleusercontent.com
+            clientSecret: tWZKVLxaD_ARWsriiiUFYoIk
+            redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+          facebook:
+            clientId: 121189305185277
+            clientSecret: 42ffe5aa7379e8326387e0fe16f34132
+            redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - public_profile
+          github:
+            clientId: d3e47fc2ddd966fa4352
+            clientSecret: bdaedae5-8aed-4d3c-a079-3077fc355bbe
+            redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - user:email
+              - read:user
+          #keycloak:
+            #client-id: wcm_bpm
+            #client-name: wcm_bpm
+            #client-secret: bdaedae5-8aed-4d3c-a079-3077fc355bbe
+            #provider: keycloak
+            #authorization-grant-type: authorization_code
+            #scope: 
+            #  - openid
+            #  - profile
+            #redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+            ##redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+        #provider:
+          #keycloak:
+            #authorization-uri: ${keycloak.realm-url}/protocol/openid-connect/auth
+            #jwk-set-uri: ${keycloak.realm-url}/protocol/openid-connect/certs
+            #token-uri: ${keycloak.realm-url}/protocol/openid-connect/token
+            ## would be cool if there was a end-session-uri to propagate logouts 
+            ##  User info endpoint not needed since Keycloak uses self-contained value tokens
+            ##  user-info-uri: ${keycloak.realm-url}/protocol/openid-connect/userinfo
+            ##user-name-attribute: preferred_username
+            #user-name-attribute: user_name
+          # facebook:
+            # authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+            # tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+            # userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+bpw:
+  # auth:
+    # tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    # tokenExpirationMsec: 864000000
+  oauth2:
+    # After successfully authenticating with the OAuth2 Provider,
+    # we'll be generating an auth token for the user and sending the token to the
+    # redirectUri mentioned by the client in the /oauth2/authorize request.
+    # We're not using cookies because they won't work well in mobile clients.
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
+      - http://localhost:4000/oauth2/redirect
+      - myandroidapp://oauth2/redirect
+      - myiosapp://oauth2/redirect
+  # application-url: http://localhost:19090
+  # oauth2-authentication-success-url: http://localhost:19090/social-login-success?token=
+  # application-url: http://localhost:3000
+  # oauth2-authentication-success-url: http://localhost:3000/oauth2/redirect?token=
+  cors:
+    # Comma separated values of CORS allowedOrigins
+    # If this property is not given, CORS is not configured
+    allowed-origins: http://localhost:3000, http://localhost:4000
+    
+  recaptcha:
+    sitekey: 6LdwxRcUAAAAABkhOGWQXhl9FsR27D5YUJRuGzx0
+    secretkey: 6LdwxRcUAAAAADaG0Eo1qkYCco15cnngiBoBt2IO
+  
+  jwt:
+    # An aes-128-cbc key generated at https://asecuritysite.com/encryption/keygen (take the "key" field)
+    secret: 841D8A6C80CBA4FCAD32D5367C18C53B
+    # expiration-millis: 864000000 # 10 days
+    # short-lived-millis: 120000   # two minutes
+    short-lived-millis: 864000000 # 10 days
+org:
+  modeshape:
+    backupLocation: "c:/temp"
+    web:
+      jcr:
+        webdav:
+          CONTENT_PRIMARY_TYPE_NAMES: "nt:resource,mode:resource"
+          RESOURCE_PRIMARY_TYPES_NAMES: "nt:file"
+          NEW_FOLDER_PRIMARY_TYPE_NAME: "nt:folder"
+          NEW_RESOURCE_PRIMARY_TYPE_NAME: "nt:file"
+          NEW_CONTENT_PRIMARY_TYPE_NAME: "nt:resource"
+management:
+  health:    camunda:      enabled: true
+camunda:
+  bpm:
+    #jpa: 
+      #enabled: false
+    authorization:
+      enabled: true
+    # database:
+      # schema-update: true, false, create, create-drop, drop-create, default: true
+      # schema-update: create
+    admin-user:
+      id: demo
+      password: demo
+      firstName: Demo
+    filter:
+      create: All tasks
+hazelcast:
+  enabled: false
+  loggingType: slf4j
+  backupCount: 1
+  port: 5701
+  members: 127.0.0.1:5701
+  groupName: wcm_bpm
+  instanceName: wcm_bpm
+  managementCenter:
+    url: http://localhost:18080/hazelcast-mancenter
+    enabled: false
+  caches:
+    -
+      cacheName: wcm_bpm
+      timeToLiveSeconds: 2000
+      maxSize: 2000
+      maxSizePolicy: PER_NODE
+      evictionPolicy: LFU     
+    -
+      cacheName: fib
+      timeToLiveSeconds: 2000
+      maxSize: 2000
+      maxSizePolicy: PER_NODE
+      evictionPolicy: LFU
+      entryListeners:
+        -
+          includeValue: true
+          local: true
+          listener: "com.oner.demo.seajug.hazelcast.scalewithhazelcast.hz.MyMapListener"
+    -
+      cacheName: "spring:session:sessions"
+      timeToLiveSeconds: 2000
+      maxSize: 2000
+      maxSizePolicy: PER_NODE
+      evictionPolicy: LFU
+      attributes:
+        -
+          extractor: "org.springframework.session.hazelcast.PrincipalNameExtractor"
+          name: principalName
+      indexes:
+        -
+          attribute: principalName
+          ordered: false 
+                 
+#Use Jasypt to generate the encrypted password, download from http://www.jasypt.org/,
+# from jasypt\bin and use the encrypt.sh or encrypt.bat to encrypt your variables 
+#encrypt.bat input=MBcoder password=password
+#Password@1 encrypted with password
+  keyStorePassword: ENC(uTSqb9grs1+vUv3iN8lItC0kl65lMG+8)
+  # keyStorePassword: password
+  enableSSL: false
+  keyStore: keystore
+  keyManagerAlgorithm: SunX509
+  trustManagerAlgorithm: SunX509
+  enableEncryption: false
+  encryptionAlgorithm: PBEWithMD5AndDES
+##Password@2 encrypted with password
+  encryptionPassword: ENC(dQWokHUXXFe+OqXRZYWu22BpXoRZ0Drt)
+  #encryptionPassword: Password@2
+  encryptionSalt: salt
+  
+jasypt:
+  encryptor:
+    password: password

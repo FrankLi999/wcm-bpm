@@ -10,13 +10,11 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class RenderTemplate implements HasName {
+public class RenderTemplate extends ResourceNode implements HasName {
 	private String repository;
 	private String workspace;
 	private String library;
 	private String name;
-	private String title;
-	private String description;
 	private String code;
 	private String preloop;
 	private String postloop;
@@ -33,18 +31,6 @@ public class RenderTemplate implements HasName {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
 	}
 	public String getCode() {
 		return code;
@@ -126,7 +112,7 @@ public class RenderTemplate implements HasName {
 		jsonNode.set("children", children);
 		jsonNode.set("properties", properties);
 		properties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:renderTemplate");
-		
+		super.toJson(properties, children);
 		properties.put("bpw:name", this.getName());
 		properties.put("bpw:title", StringUtils.hasText(this.getTitle()) ? this.getTitle() : this.getName());
 		if (StringUtils.hasText(this.getDescription())) {
@@ -191,13 +177,12 @@ public class RenderTemplate implements HasName {
 		}
 		return jsonNode;
 	}
-	
 	@Override
 	public String toString() {
 		return "RenderTemplate [repository=" + repository + ", workspace=" + workspace + ", library=" + library
-				+ ", name=" + name + ", title=" + title + ", description=" + description + ", code=" + code
-				+ ", preloop=" + preloop + ", postloop=" + postloop + ", maxEntries=" + maxEntries + ", note=" + note
-				+ ", isQuery=" + isQuery + ", resourceName=" + resourceName + ", rows=" + Arrays.toString(rows)
-				+ ", lockOwner=" + lockOwner + "]";
+				+ ", name=" + name + ", code=" + code + ", preloop=" + preloop + ", postloop=" + postloop
+				+ ", maxEntries=" + maxEntries + ", note=" + note + ", isQuery=" + isQuery + ", resourceName="
+				+ resourceName + ", rows=" + Arrays.toString(rows) + ", lockOwner=" + lockOwner + ", toString()="
+				+ super.toString() + "]";
 	}
 }

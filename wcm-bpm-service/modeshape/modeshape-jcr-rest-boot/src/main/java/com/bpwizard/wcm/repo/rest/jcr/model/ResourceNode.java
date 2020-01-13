@@ -1,16 +1,17 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
-import java.util.Arrays;
+import org.modeshape.jcr.api.JcrConstants;
+import org.springframework.util.StringUtils;
+
+import com.bpwizard.wcm.repo.rest.JsonUtils;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ResourceNode {
 	private String title;
 	private String description;
-	private String workflow;
-	private String workflowStage;
-	private String[] categories;
-	private String publishDate;
-	private String expireDate;
 	private String lockOwner;
+	private AccessControlEntry acl;
 	public String getTitle() {
 		return title;
 	}
@@ -23,46 +24,84 @@ public class ResourceNode {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getWorkflow() {
-		return workflow;
-	}
-	public void setWorkflow(String workflow) {
-		this.workflow = workflow;
-	}
-	public String getWorkflowStage() {
-		return workflowStage;
-	}
-	public void setWorkflowStage(String workflowStage) {
-		this.workflowStage = workflowStage;
-	}
-	public String[] getCategories() {
-		return categories;
-	}
-	public void setCategories(String[] categories) {
-		this.categories = categories;
-	}
-	public String getPublishDate() {
-		return publishDate;
-	}
-	public void setPublishDate(String publishDate) {
-		this.publishDate = publishDate;
-	}
-	public String getExpireDate() {
-		return expireDate;
-	}
-	public void setExpireDate(String expireDate) {
-		this.expireDate = expireDate;
-	}
 	public String getLockOwner() {
 		return lockOwner;
 	}
 	public void setLockOwner(String lockOwner) {
 		this.lockOwner = lockOwner;
 	}
+	public AccessControlEntry getAcl() {
+		return acl;
+	}
+	public void setAcl(AccessControlEntry acl) {
+		this.acl = acl;
+	}
+	
+	protected void toJson(ObjectNode properties, ObjectNode children) {
+		
+		if (StringUtils.hasText(this.getTitle())) {
+			properties.put("bpw:title", this.getTitle());
+		}
+		
+		if (StringUtils.hasText(this.getDescription())) {
+			properties.put("bpw:description", this.getDescription());
+		}
+		
+		if (this.getAcl() != null) {
+			this.addAccessControlEntry(children, "bpw:acl", this.getAcl());
+		}
+	}
+	
+	protected void addAccessControlEntry(ObjectNode contentItemAclNodeChildren, String entryName, AccessControlEntry aclEntry) {
+		if (aclEntry == null) {
+			return;
+		}
+		ObjectNode aclEntryNode = JsonUtils.createObjectNode();
+		contentItemAclNodeChildren.set(entryName, aclEntryNode);
+		
+		
+		ObjectNode aclEntryNodeProperties = JsonUtils.createObjectNode();
+		// ObjectNode aclEntryNodeChildren = JsonUtils.createObjectNode();
+		aclEntryNode.set("properties", aclEntryNodeProperties);
+		//aclEntryNode.set("children", caclEntryNodeChildren);
+		aclEntryNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:AccessControlEntry");
+		
+		if (aclEntry.getViewers() != null && aclEntry.getViewers().length > 0) {
+			ArrayNode valueArray = JsonUtils.creatArrayNode();
+			for (String value : aclEntry.getViewers()) {
+				valueArray.add(value);
+			}
+			aclEntryNodeProperties.set("bpw:viewers", valueArray);
+		}
+		
+		if (aclEntry.getEditors() != null && aclEntry.getEditors().length > 0) {
+			ArrayNode valueArray = JsonUtils.creatArrayNode();
+			for (String value : aclEntry.getEditors()) {
+				valueArray.add(value);
+			}
+			aclEntryNodeProperties.set("bpw:editors", valueArray);
+		}
+		
+		if (aclEntry.getAdmins() != null && aclEntry.getAdmins().length > 0) {
+			ArrayNode valueArray = JsonUtils.creatArrayNode();
+			for (String value : aclEntry.getAdmins()) {
+				valueArray.add(value);
+			}
+			aclEntryNodeProperties.set("bpw:admins", valueArray);
+		}
+		
+		if (aclEntry.getReviewers() != null && aclEntry.getReviewers().length > 0) {
+			ArrayNode valueArray = JsonUtils.creatArrayNode();
+			for (String value : aclEntry.getReviewers()) {
+				valueArray.add(value);
+			}
+			aclEntryNodeProperties.set("bpw:reviewers", valueArray);
+		}		
+	}
+	
 	@Override
 	public String toString() {
-		return "ResourceNode [title=" + title + ", description=" + description + ", workflow=" + workflow
-				+ ", workflowStage=" + workflowStage + ", categories=" + Arrays.toString(categories) + ", publishDate="
-				+ publishDate + ", expireDate=" + expireDate + ", lockOwner=" + lockOwner + "]";
+		return "ResourceNode [title=" + title + ", description=" + description + ", lockOwner=" + lockOwner + ", acl="
+				+ acl + "]";
 	}
 }

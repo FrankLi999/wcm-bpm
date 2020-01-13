@@ -1,7 +1,10 @@
 package com.bpwizard.wcm.repo.controllers;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.mail.MessagingException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,15 +18,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bpwizard.wcm.repo.content.ContentTaskService;
 import com.bpwizard.wcm.repo.content.ExternalEditService;
 import com.bpwizard.wcm.repo.content.ExternalReviewService;
+import com.bpwizard.wcm.repo.content.MailService;
 import com.bpwizard.wcm.repo.content.WcmFlowService;
 import com.bpwizard.wcm.repo.content.model.CompleteEditRequest;
 import com.bpwizard.wcm.repo.content.model.CompleteReviewRequest;
+import com.bpwizard.wcm.repo.content.model.ContentTask;
 import com.bpwizard.wcm.repo.content.model.DeleteDraftRequest;
 import com.bpwizard.wcm.repo.content.model.EditContentItemRequest;
 import com.bpwizard.wcm.repo.content.model.ReviewContentItemRequest;
-import com.bpwizard.wcm.repo.content.model.ReviewTask;
 import com.bpwizard.wcm.repo.content.model.StartFlowRequest;
 
 
@@ -41,12 +46,22 @@ public class ContentServiceController {
 	
 	@Autowired
 	private WcmFlowService wcmFlowService;
-
-//	@Autowired
-//    private SimpMessagingTemplate template;
 	
-//    @Autowired
-//    private MailService mailService;
+	@Autowired
+	private ContentTaskService contentTaskService;
+	
+    @Autowired
+    private MailService mailService;
+	
+    @GetMapping(path="/content-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ContentTask[] getContentTasks(@PathVariable("topic")  String topic) {
+		return this.contentTaskService.getContentTasks(topic);
+	}
+	
+	@GetMapping(path="/active-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ContentTask[] getActiveTasks(@PathVariable("topic")  String topic) {
+		return this.contentTaskService.getActiveContentTasks(topic);
+	}
 	
 	@PostMapping(path="/create-draft-with-message", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String startContentFlowWithMessage(@RequestBody StartFlowRequest startFlowRequest) {
@@ -58,17 +73,17 @@ public class ContentServiceController {
 				startFlowRequest.getContentId(),
 				startFlowRequest.getWorkflow());
 		// this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
-//		try {
-//		    this.mailService.sendEmailWithAttachment(
-//            		"Testing from Spring Boot",
-//            		new String[] {"a@yahoo.com", "b@gmail.com"},
-//            		"<h1>Check attachment for image!</h1>",
-//            		"android.png");
-//        } catch (MessagingException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+		try {
+		    this.mailService.sendEmailWithAttachment(
+            		"create-draft-with-message",
+            		new String[] {"a@yahoo.com", "b@gmail.com"},
+            		"<h1>create-draft-with-message. Check attachment for image!</h1>",
+            		"android.png");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 		return processInstanceId;
 	}
 	
@@ -82,25 +97,19 @@ public class ContentServiceController {
 				startFlowRequest.getContentPath(),
 				startFlowRequest.getContentId(),
 				startFlowRequest.getWorkflow());
-		// this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
-//		try {
-//		    this.mailService.sendEmailWithAttachment(
-//            		"Testing from Spring Boot",
-//            		new String[] {"a@yahoo.com", "b@gmail.com"},
-//            		"<h1>Check attachment for image!</h1>",
-//            		"android.png");
-//        } catch (MessagingException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+		try {
+		    this.mailService.sendEmailWithAttachment(
+            		"create-draft",
+            		new String[] {"a@yahoo.com", "b@gmail.com"},
+            		"<h1>create-draft. Check attachment for image!</h1>",
+            		"android.png");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     	logger.traceExit();
 		return processInstanceId;
-	}
-	
-	@GetMapping(path="/review-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ReviewTask[] getReviewTasks(@PathVariable("topic")  String topic) {
-		return this.externalRevieService.getReviewTasks(topic);
 	}
 	
 	@PostMapping(path="/review-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -121,11 +130,6 @@ public class ContentServiceController {
 				completeReviewRequest.getComment());
 	}
 	
-//	@GetMapping(path="/edit-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ReviewTask[] getEditTasks(@PathVariable("topic")  String topic) {
-//		return this.externalEditService.getEditTasks(topic);
-//	}
-//	
 	@PostMapping(path="/edit-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String editContentItem(@RequestBody EditContentItemRequest editContentItemRequest) {
 		return this.externalEditService.claimTask(
@@ -148,7 +152,17 @@ public class ContentServiceController {
 		Map<String, Object> variables = new HashMap<>();
 		variables.put("contentId", deleteDraftRequest.getClass());
 		this.wcmFlowService.sendMessage("deleteReviewingDraftMessage", businessKey, variables);
-		//this.wcmFlowService.deleteReviewingDraft(deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
+		try {
+		    this.mailService.sendEmailWithAttachment(
+            		"delete-reviewing-draft",
+            		new String[] {"a@yahoo.com", "b@gmail.com"},
+            		"<h1>delete-reviewing-draft. Check attachment for image!</h1>",
+            		"android.png");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 		return "Deleted";
 	}
 	
@@ -159,6 +173,19 @@ public class ContentServiceController {
 		String signalName = String.format("deleteEditingDraftSignal-%s%s", 
 				deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
 		this.wcmFlowService.sendSignal(signalName, null);
+		
+		try {
+		    this.mailService.sendEmailWithAttachment(
+            		"delete-editing-draft",
+            		new String[] {"a@yahoo.com", "b@gmail.com"},
+            		"<h1>delete-editing-draft. Check attachment for image!</h1>",
+            		"android.png");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
 		return "Deleted";
 	}
 }

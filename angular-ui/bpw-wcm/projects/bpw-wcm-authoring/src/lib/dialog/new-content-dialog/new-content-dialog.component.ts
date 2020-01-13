@@ -39,7 +39,7 @@ export class NewContentDialogComponent extends BaseMewResourceDialog implements 
       authoringTemplate: 'bpwizard/default/design/MyContent',
       workflow: 'bpmn:wcm_content_flow'
     }
-    this.wcmService.saveContentItem(contentItem).subscribe((event: any) => {
+    this.wcmService.createAndPublishContentItem(contentItem).subscribe((event: any) => {
         console.log(event)
     });   
   }

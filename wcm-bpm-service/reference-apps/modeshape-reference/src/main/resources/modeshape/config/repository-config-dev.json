@@ -1,0 +1,114 @@
+{
+    "name" : "bpwizard",
+    "jndiName" : "",
+    "monitoring" : {
+        "enabled" : true
+    },
+    "storage" : {
+        "transactionManagerLookup" : {
+            "name" : "com.bpwizard.wcm.repo.jcr.ModeshapeTransactionManagerLookup"
+        },
+        "persistence" : {
+            "type" : "db",
+            "connectionUrl": "jdbc:mysql://127.0.0.1:3306/modeshape-reference?allowPublicKeyRetrieval=true&useSSL=false",
+            "driver": "com.mysql.jdbc.Driver",
+            "createOnStart" : true,
+            "dropOnExit" : false,
+            "username": "wcmbpm",
+            "password": "P@ssw0rd"
+        },
+        "binaryStorage" : {
+            "type"  : "database",
+            "driverClass" : "com.mysql.jdbc.Driver",
+            "url" : "jdbc:mysql://127.0.0.1:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
+            "username" : "wcmbpm",
+            "password" : "P@ssw0rd"
+        }
+    },
+    "sequencing" : {
+        "sequencers" : {
+            "Images sequencer" : {
+                "classname" : "ImageSequencer",
+                "pathExpression" : "default://imagesContainer[@image] => default:/sequenced/images"
+            }
+        }
+    },
+    "indexProviders" : {
+        "lucene" : {
+            "classname" : "lucene",
+            "directory" : "target/indexes"
+        }
+        // "local" : {
+		//    "classname" : "org.modeshape.jcr.index.EsIndexProvider",
+		//    "host" : "localhoty",
+		//    "port" : 9200
+		// }
+    },
+    "indexes" : {
+        "nodesByName" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "synchronous" : true,
+            "nodeType" : "bpw:contentElement",
+            "columns" : "bpw:value(STRING)"
+        },
+        "nodesByDepth" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "synchronous" : true,
+            "nodeType" : "nt:base",
+            "columns" : "mode:depth(LONG)"
+        },
+        "nodesByPath" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "synchronous" : true,
+            "nodeType" : "nt:base",
+            "columns" : "jcr:path(PATH)"
+        },
+       "indexWithDefaultNodeType" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "columns" : "bpw:title(STRING)"
+        },
+        "indexWithSingleColumn" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "nodeType" : "bpw:content",
+            "columns" : "bpw:title(STRING)"
+        },
+        "indexWithMultipleColumns" : {
+            "kind" : "value",
+            "provider" : "lucene",
+            "nodeType" : "bpw:content",
+            "columns" : "bpw:title(STRING), bpw:description(STRING)"
+        },
+        "nodeTypes" : {
+            "kind" : "nodeType",
+            "provider" : "lucene",
+            "nodeType" : "nt:base",
+            "columns" : "jcr:primaryType(STRING)"
+        }
+    },
+    "journaling" : {
+        "location" : "target/journal",
+        "enabled" : true
+	},
+    "workspaces" : {
+        "predefined" : ["draft", "expired"],
+        "default" : "default",
+        "allowCreation" : true
+    },
+    "security" : {
+        "anonymous" : {
+            "roles" : ["readonly","readwrite","admin"],
+            "useOnFailedLogin" : false
+        },
+        "providers" : [
+            {
+                "name" : "Spring Security",
+                "classname" : "com.bpwizard.wcm.repo.jcr.security.SpringSecurityProvider"
+            }
+        ]
+    }
+}

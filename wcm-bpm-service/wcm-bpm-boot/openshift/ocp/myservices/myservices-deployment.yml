@@ -1,0 +1,155 @@
+#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: myservices-app-template
+  namespace: wcm-bpm
+  annotations:
+    description: This template defines objects that are required to spin up an myservices service pod
+    tags: myservices, service
+    openshift.io/display-name: myservices-template
+    openshift.io/long-description: 'This template provides objects that are required to spin up a myservices service pod.'
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: myservices-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: myservices
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: myservices-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: '*** PLEASE DO NOT CHANGE THIS ***'
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: '*** PLEASE DO NOT CHANGE THIS ***'
+  - name: APP_PORT
+    value: '8081'
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+          pre:
+            failurePolicy: ignore
+            execNewPod:
+              command:
+                - '/bin/sh'
+                - '-c'
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 ${APPLICATION_NAME}-mysqldb 80)
+                    if [ $? -eq 0 ]; then
+                      echo "DB is UP"
+                      break
+                    fi
+                    echo "DB is not yet reachable;sleep for 10s before retry"
+                    sleep 10
+                  done
+              containerName: ${APPLICATION_NAME}
+        resources:
+      replicas: '1'
+      template:
+        metadata:
+          labels:
+            app: ${APPLICATION_NAME}
+        spec:
+          containers:
+            - name: ${APPLICATION_NAME}
+              image: wcm-bpm/myservices
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,swagger
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REG_SECRET_REF}
+                      key: registry-admin-password
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:mysql://${APPLICATION_NAME}-mysqldb/myservices?useUnicode=true&characterEncoding=utf8&useSSL=false
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SECRET_REF}
+                      key: database-password
+                - name: SPRING_DATA_JEST_URI
+                  value: http://${APPLICATION_NAME}-elasticsearch:9200
+                - name: SPRING_ELASTICSEARCH_REST_URIS
+                  value: http://${APPLICATION_NAME}-elasticsearch:9200
+                - name: JHIPSTER_METRICS_LOGS_ENABLED
+                  value: 'true'
+                - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
+                  value: 'true'
+                - name: JHIPSTER_LOGGING_LOGSTASH_HOST
+                  value: ${JHIPSTER_LOGSTASH}
+                - name: SPRING_ZIPKIN_ENABLED
+                  value: 'true'
+                - name: SPRING_ZIPKIN_BASE_URL
+                  value: ${JHIPSTER_ZIPKIN}
+              ports:
+                - name: http
+                  containerPort: '${APP_PORT}'
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          "name":"${APPLICATION_NAME}-mysqldb", "namespace": "", "kind": "Service"}]'
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}
+    spec:
+      selector:
+        app: ${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: '${APP_PORT}'
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: ${APPLICATION_NAME}
+        weight: '100'
+      port:
+        targetPort: 'http'
+      wildcardPolicy: None

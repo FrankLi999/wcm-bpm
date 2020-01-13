@@ -1,5 +1,16 @@
+# Startup configuration of Spring-cloud-kubernetes
 #spring:
-#  cloud:
+  #application:
+    #name: wcm-bpm
+  # cloud:
+    #kubernetes:
+      # reload:
+        # Enable live reload on ConfigMap change (disabled for Secrets by default)
+        # enabled: true
+        # refresh is the default, can also be restart_context, shutdown
+        # strategy: refresh
+      # secrets:
+        # paths: /etc/secrets/wcm-bpm-config
 #    vault:
 #      scheme: https
 #      port: 8200

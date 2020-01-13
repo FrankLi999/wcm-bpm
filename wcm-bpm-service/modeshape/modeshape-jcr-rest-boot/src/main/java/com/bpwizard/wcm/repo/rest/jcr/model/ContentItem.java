@@ -1,5 +1,6 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.modeshape.jcr.api.JcrConstants;
@@ -7,16 +8,20 @@ import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ContentItem {
+public class ContentItem extends WorkflowNode {
+	
 	private String id;
+	private String name;
+	private String[] categories;
 	private String repository;
 	private String workspace;
 	private String nodePath;
 	private String authoringTemplate;
 	private String lifeCycleStage;
-	private String lockOwner;
+
 	private Map<String, String> elements;
 	private Map<String, String> properties;
 	
@@ -28,12 +33,21 @@ public class ContentItem {
 		this.id = id;
 	}
 
-	public String getLockOwner() {
-		return lockOwner;
+	public String getName() {
+		return name;
 	}
-	public void setLockOwner(String lockOwner) {
-		this.lockOwner = lockOwner;
-	}	
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String[] getCategories() {
+		return categories;
+	}
+
+	public void setCategories(String[] categories) {
+		this.categories = categories;
+	}
 
 	public String getRepository() {
 		return repository;
@@ -92,6 +106,7 @@ public class ContentItem {
 		this.lifeCycleStage = lifeCycleStage;
 	}
 
+	//TODO: super.toJson()
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode properties = JsonUtils.createObjectNode();
@@ -103,19 +118,53 @@ public class ContentItem {
 		properties.put("bpw:authoringTemplate", this.getAuthoringTemplate());
 		
 		Map<String, String> contentProperties = this.getProperties();
-		String name = contentProperties.get("name"); 
+		
+		this.name = contentProperties.get("name"); 
+		if (StringUtils.hasText(name)) {
+			properties.put("bpw:name", name);
+			contentProperties.remove("name");			
+		}
 		String title = contentProperties.get("title");
-		String description = contentProperties.get("description");
-		String workflow = contentProperties.get("workflow"); 
-		
-		if (StringUtils.hasText(workflow)) {
-			properties.put("bpw:workflow", workflow);
+		title = StringUtils.hasText(title) ? title : name;
+		if (StringUtils.hasText(title)) {
+			this.setTitle(title);
+			contentProperties.remove("title");
+		}
+		if (StringUtils.hasText(contentProperties.get("description"))) {
+			this.setDescription(contentProperties.get("description"));
+			contentProperties.remove("description");
+		}
+		if (StringUtils.hasText(contentProperties.get("workflow"))) {
+			this.setWorkflow(contentProperties.get("workflow")); 
+			contentProperties.remove("workflow");
+		}
+		if (StringUtils.hasText(contentProperties.get("publishDate"))) {
+			this.setPublishDate(contentProperties.get("publishDate"));
+			contentProperties.remove("publishDate");
+		}
+		if (StringUtils.hasText(contentProperties.get("expireDate"))) {
+			this.setExpireDate(contentProperties.get("expireDate"));
+			contentProperties.remove("expireDate");
+		}
+		if (StringUtils.hasText(contentProperties.get("categories"))) {
+			String categories[] = contentProperties.get("categories").split(",");
+			if (categories != null && categories.length > 0) {
+				ArrayNode valueArray = JsonUtils.creatArrayNode();
+				for (String value : categories) {
+					valueArray.add(value);
+				}
+				properties.set("bpw:categories", valueArray);
+			}
+			contentProperties.remove("categories");
 		}
 		
-		properties.put("bpw:title", StringUtils.hasText(title) ? title : name);
-		if (StringUtils.hasText(description)) {
-			properties.put("bpw:description", description);
-		}
+		
+		ObjectNode comementFolderNode = JsonUtils.createObjectNode();
+		ObjectNode comementFolderNodeProperties = JsonUtils.createObjectNode();
+		comementFolderNode.set("children", comementFolderNode);
+		comementFolderNode.set("properties", comementFolderNodeProperties);
+		comementFolderNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:commentFolder");
+		children.set("comments", comementFolderNode);
 		
 		ObjectNode elementsNode = JsonUtils.createObjectNode();
 		ObjectNode elementsNodeChildren = JsonUtils.createObjectNode();
@@ -146,8 +195,6 @@ public class ContentItem {
 		
 		Map<String, String> propertyElements = this.getElements();
 		for (String key: propertyElements.keySet()) {
-		
-			
 			ObjectNode elementNode = JsonUtils.createObjectNode();
 			ObjectNode elementNodeProperties = JsonUtils.createObjectNode();
 			propertiesNodeChildren.set(key, elementNode);
@@ -159,12 +206,12 @@ public class ContentItem {
 		
 		return jsonNode;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "ContentItem [id=" + id + ", repository=" + repository + ", workspace=" + workspace + ", nodePath="
-				+ nodePath + ", authoringTemplate=" + authoringTemplate + ", lifeCycleStage=" + lifeCycleStage
-				+ ", locked=" + ", lockOwner=" + lockOwner + ", elements=" + elements + ", properties="
-				+ properties + "]";
+		return "ContentItem [id=" + id + ", name=" + name + ", categories=" + Arrays.toString(categories)
+				+ ", repository=" + repository + ", workspace=" + workspace + ", nodePath=" + nodePath
+				+ ", authoringTemplate=" + authoringTemplate + ", lifeCycleStage=" + lifeCycleStage + ", elements="
+				+ elements + ", properties=" + properties + ", toString()=" + super.toString() + "]";
 	}
 }

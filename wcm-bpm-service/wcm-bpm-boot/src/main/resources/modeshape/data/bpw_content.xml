@@ -23,7 +23,7 @@
 			<sv:property sv:name="jcr:primaryType" sv:type="Name">
 				<sv:value>bpw:library</sv:value>
 			</sv:property>
-			<sv:property sv:name="bpw:language" sv:type="String">
+			<sv:property sv:name="jcr:language" sv:type="String">
 				<sv:value>en</sv:value>
 			</sv:property>
 			<sv:node sv:name="customResourceType">

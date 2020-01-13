@@ -104,7 +104,7 @@ export class ContentItemComponent extends WcmConfigurableComponent implements On
       authoringTemplate: this.contentItem.authoringTemplate,
     }
     console.log(contentItem);
-    this.wcmService.saveContentItem(contentItem).subscribe((event: any) => {
+    this.wcmService.createAndPublishContentItem(contentItem).subscribe((event: any) => {
         console.log(event);
     });
   } 

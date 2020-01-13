@@ -1,0 +1,30 @@
+h2/
+target/
+transaction-logs/
+!.mvn/wrapper/maven-wrapper.jar
+
+*.txt
+*.log
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+/.apt_generated_tests/
+.sts4-cache/

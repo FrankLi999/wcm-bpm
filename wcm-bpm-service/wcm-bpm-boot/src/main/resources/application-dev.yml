@@ -7,10 +7,7 @@
   # password: P@ssw0rd
   # password: ENC(hii16IIKWBHMYH9txsTLpvWOkNcDFy4D)
   #locations:classpath:/db/migration,classpath:/dev/db/migration
-
-
 #spring.cache.type=hazelcast
-
 #spring.jpa.show-sql=true
 #spring.jpa.properties.hibernate.cache.use_second_level_cache=true
 #spring.jpa.properties.hibernate.cache.use_query_cache=true
@@ -21,10 +18,9 @@ keycloak:
   base-url: http://localhost:8080/auth
   realm: wcm_bpm
   realm-url: ${kc.base-url}/realms/${kc.realm}
-  
 spring:
-  cache:
-    type: hazelcast
+  #cache:
+  #  type: hazelcast
   mail:
     host: localhost
     port: 2525
@@ -198,8 +194,8 @@ management:
   health:    camunda:      enabled: true
 camunda:
   bpm:
-    jpa: 
-      enabled: false
+    #jpa: 
+      #enabled: false
     authorization:
       enabled: true
     # database:

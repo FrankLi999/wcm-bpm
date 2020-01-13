@@ -34,8 +34,9 @@
         }
     },
     "workspaces" : {
+        "predefined" : ["draft", "expired"],
         "default" : "default",
-        "allowCreation" : true    
+        "allowCreation" : true
     },
     "security" : {
         "anonymous" : {

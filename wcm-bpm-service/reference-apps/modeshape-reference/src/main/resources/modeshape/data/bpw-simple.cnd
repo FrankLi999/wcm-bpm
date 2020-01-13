@@ -1,0 +1,50 @@
+<jcr = 'http://www.jcp.org/jcr/1.0'>
+<nt = 'http://www.jcp.org/jcr/nt/1.0'>
+<mix = 'http://www.jcp.org/jcr/mix/1.0'>
+<mode = "http://www.modeshape.org/1.0">
+<bpw = 'http://www.bpwizard.com/bpw/1.0'>
+
+/*
+ * ------------------------------------------------------------------------------
+ * BPW  T Y P E S
+ * ------------------------------------------------------------------------------
+ */
+[bpw:AccessControlEntry] 
+- bpw:viewers (STRING) multiple
+- bpw:editors (STRING) multiple
+- bpw:admins (STRING) multiple
+- bpw:reviewers (STRING) multiple
+
+[bpw:folder]> nt:folder, mix:lastModified, mix:referenceable, mode:accessControllable
+  
+[bpw:resourceNode] > nt:hierarchyNode, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable abstract
+- bpw:title (STRING) COPY
+- bpw:description (STRING) COPY
++ bpw:acl (bpw:AccessControlEntry)
+
+[bpw:resourceFolder] > nt:folder, bpw:resourceNode
+
+[bpw:workflowNode] > bpw:resourceNode abstract
+- bpw:publishDate (STRING) COPY
+- bpw:expireDate (STRING) COPY
+- bpw:workflow (STRING) multiple COPY
+- bpw:workflowStage (STRING) COPY
+- bpw:categories (STRING) multiple
+
+[bpw:library] > bpw:folder, mix:language
++ rootSiteArea (bpw:siteArea)
++ renderTemplate (bpw:renderTemplateFolder)
+
+[bpw:siteArea] > bpw:resourceFolder
+- bpw:name (STRING) mandatory COPY
+- bpw:title (STRING) mandatory COPY
++ * (bpw:resourceNode)
+
+[bpw:renderTemplateFolder] > bpw:folder
++ * (bpw:renderTemplate)
+
+[bpw:renderTemplate] > bpw:resourceNode
+- bpw:name (STRING)
+- bpw:title (STRING)
+- bpw:description (STRING)
+
