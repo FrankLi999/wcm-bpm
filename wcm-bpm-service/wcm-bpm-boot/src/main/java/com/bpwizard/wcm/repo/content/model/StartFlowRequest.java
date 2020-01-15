@@ -3,8 +3,8 @@ package com.bpwizard.wcm.repo.content.model;
 public class StartFlowRequest {
 	String repository;
 	String workspace;
-	String contentPath;
 	String contentId;
+	String baseUrl;
 	String workflow;
 	
 	public String getRepository() {
@@ -19,11 +19,12 @@ public class StartFlowRequest {
 	public void setWorkspace(String workspace) {
 		this.workspace = workspace;
 	}
-	public String getContentPath() {
-		return contentPath;
+	
+	public String getBaseUrl() {
+		return baseUrl;
 	}
-	public void setContentPath(String contentPath) {
-		this.contentPath = contentPath;
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}
 	public String getContentId() {
 		return contentId;
@@ -39,7 +40,7 @@ public class StartFlowRequest {
 	}
 	@Override
 	public String toString() {
-		return "StartFlowRequest [repository=" + repository + ", workspace=" + workspace + ", contentPath="
-				+ contentPath + ", contentId=" + contentId + ", workflow=" + workflow + "]";
+		return "StartFlowRequest [repository=" + repository + ", workspace=" + workspace + ", contentId="
+				+ contentId + ", baseUrl=" + baseUrl + ", workflow=" + workflow + "]";
 	}
 }

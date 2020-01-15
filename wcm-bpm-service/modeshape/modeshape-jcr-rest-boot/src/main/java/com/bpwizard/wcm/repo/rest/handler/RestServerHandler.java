@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.jcr.Repository;
 import javax.jcr.Value;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
 
@@ -29,30 +28,17 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories;
 
 /**
  * An class which returns POJO-based rest model instances.
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 @Component
 public class RestServerHandler extends AbstractHandler {
 
-    /**
-     * Returns the list of JCR repositories available on this server
-     *
-     * @param request the servlet request; may not be null
-     * @return a list of available JCR repositories, as a {@link RestRepositories} instance.
-     */
-    public RestRepositories getRepositories( HttpServletRequest request ) {
-        RestRepositories repositories = new RestRepositories();
-        for (String repositoryName : this.repositoryManager.getJcrRepositoryNames()) {
-            addRepository(request, repositories, repositoryName);
-        }
-        return repositories;
-    }
-
-    private void addRepository( HttpServletRequest request,
+    public void addRepository( // HttpServletRequest request,
+    		String workspacesUrl,
+    		String backupUrl,
+    		String restoreUrl,
                                 RestRepositories repositories,
                                 String repositoryName ) {
-        RestRepositories.Repository repository = repositories.addRepository(repositoryName, request);
+        RestRepositories.Repository repository = repositories.addRepository(repositoryName, workspacesUrl, backupUrl, restoreUrl);
         try {
             Repository jcrRepository = this.repositoryManager.getRepository(repositoryName);
             repository.setActiveSessionsCount(((org.modeshape.jcr.api.Repository)jcrRepository).getActiveSessionsCount());

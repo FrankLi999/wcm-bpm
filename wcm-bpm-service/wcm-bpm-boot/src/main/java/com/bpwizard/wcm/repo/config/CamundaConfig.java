@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import com.bpwizard.wcm.repo.content.ContentReviewTaskEndListener;
 import com.bpwizard.wcm.repo.content.ContentReviewTaskStartListener;
 import com.bpwizard.wcm.repo.content.PublishContentItemDelegate;
-import com.bpwizard.wcm.repo.content.SaveDraftDelegate;
 
 @Configuration
 @EnableProcessApplication("wcm-boot")
@@ -65,11 +64,6 @@ public class CamundaConfig {
 	@Bean
 	public PublishContentItemDelegate publishContentItemDelegate() {
 		return new PublishContentItemDelegate();
-	}
-	
-	@Bean
-	public SaveDraftDelegate saveDraftDelegate() {
-		return new SaveDraftDelegate();
 	}
 	
 	@Bean

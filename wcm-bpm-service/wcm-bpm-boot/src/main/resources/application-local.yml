@@ -21,4 +21,8 @@ camunda.bpm:
   filter:
     create: All tasks
 server.port: 8080
+bpw:
+  modeshape:
+    authoring:
+      enabled: true
    

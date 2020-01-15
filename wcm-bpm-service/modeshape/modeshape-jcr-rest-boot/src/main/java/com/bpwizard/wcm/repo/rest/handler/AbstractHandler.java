@@ -31,7 +31,6 @@ import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
-import javax.servlet.http.HttpServletRequest;
 
 import org.modeshape.common.util.StringUtil;
 import org.modeshape.jcr.api.JcrConstants;
@@ -251,11 +250,12 @@ public abstract class AbstractHandler {
         return "/".equals(path) || "".equals(path);
     }
 
-    protected RestItem createRestItem( HttpServletRequest request,
+    protected RestItem createRestItem( // HttpServletRequest request,
+    		                           String baseUrl,
                                        int depth,
                                        Session session,
                                        Item item ) throws RepositoryException {
-        String baseUrl = RestHelper.repositoryUrl(request);
+        //String baseUrl = RestHelper.repositoryUrl(request);
         return item instanceof Node ? createRestNode(session, (Node)item, baseUrl, depth) : 
         	createRestProperty(session, (Property)item, baseUrl);
     }

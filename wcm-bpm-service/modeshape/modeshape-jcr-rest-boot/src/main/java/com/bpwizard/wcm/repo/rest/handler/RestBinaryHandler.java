@@ -27,7 +27,7 @@ import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.servlet.http.HttpServletRequest;
+// import javax.servlet.http.HttpServletRequest;
 
 import org.modeshape.common.util.CheckArg;
 import org.modeshape.common.util.StringUtil;
@@ -65,7 +65,7 @@ public final class RestBinaryHandler extends AbstractHandler {
      *         is thrown.
      * @throws RepositoryException if any JCR related operation fails, including the case when the path to the property isn't valid.
      */
-    public Property getBinaryProperty( HttpServletRequest request,
+    public Property getBinaryProperty( // HttpServletRequest request,
                                        String repositoryName,
                                        String workspaceName,
                                        String binaryAbsPath ) throws RepositoryException {
@@ -123,7 +123,8 @@ public final class RestBinaryHandler extends AbstractHandler {
      * @throws RepositoryException if any JCR related operations fail
      * @throws IllegalArgumentException if the given input stream is {@code null}
      */
-    public ResponseEntity<?> updateBinary( HttpServletRequest request,
+    public ResponseEntity<?> updateBinary( //HttpServletRequest request,
+    		String baseUrl,
                                   String repositoryName,
                                   String workspaceName,
                                   String binaryPropertyAbsPath,
@@ -154,7 +155,7 @@ public final class RestBinaryHandler extends AbstractHandler {
                 createdNewValue = true;
             }
             session.save();
-            RestProperty restItem = (RestProperty)createRestItem(request, 0, session, binaryProperty);
+            RestProperty restItem = (RestProperty)createRestItem(baseUrl, 0, session, binaryProperty);
             return createdNewValue ? ResponseEntity.status(HttpStatus.CREATED).body(restItem) :
                     ResponseEntity.ok().body(restItem);
         } finally {
@@ -177,7 +178,8 @@ public final class RestBinaryHandler extends AbstractHandler {
      * @return a {@link ResponseEntity} object, never {@code null}
      * @throws RepositoryException if anything unexpected fails.
      */
-    public ResponseEntity<?> uploadBinary( HttpServletRequest request,
+    public ResponseEntity<?> uploadBinary( //HttpServletRequest request,
+    		String baseUrl,
                                   String repositoryName,
                                   String workspaceName,
                                   String filePath,
@@ -234,7 +236,7 @@ public final class RestBinaryHandler extends AbstractHandler {
             Property binaryProperty = content.setProperty(JcrConstants.JCR_DATA, binary);
             session.save();
 
-            RestItem restItem = createRestItem(request, 0, session, binaryProperty);
+            RestItem restItem = createRestItem(baseUrl, 0, session, binaryProperty);
             return ResponseEntity.status(responseStatus).body(restItem);
         } finally {
             try {

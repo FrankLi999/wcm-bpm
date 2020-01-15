@@ -128,8 +128,8 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			contentItemAclNode.set("children", contentItemAclNodeChildren);
 			contentItemAclNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentItemAcl");
 			
-			this.addAccessControlEntry(contentItemAclNodeChildren, "onSaveDraft", this.getContentItemAcl().getOnRejectDraftPermissions());
-			this.addAccessControlEntry(contentItemAclNodeChildren, "onRejectDraft", this.getContentItemAcl().getOnRejectDraftPermissions());
+			this.addAccessControlEntry(contentItemAclNodeChildren, "onSaveDraft", this.getContentItemAcl().getOnSaveDraftPermissions());
+			this.addAccessControlEntry(contentItemAclNodeChildren, "onReivedDraft", this.getContentItemAcl().getOnReviewedDraftPermissions());
 			this.addAccessControlEntry(contentItemAclNodeChildren, "onPublish", this.getContentItemAcl().getOnPublishPermissions());
 		}
 		this.addRow(children, this.getPropertyRow(), "property-group");

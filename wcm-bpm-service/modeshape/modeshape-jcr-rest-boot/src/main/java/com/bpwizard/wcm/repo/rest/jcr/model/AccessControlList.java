@@ -4,7 +4,7 @@ public class AccessControlList {
 	public static final String ANONYMOUS_USER = "anonymous";
 	
 	private AccessControlEntry onSaveDraftPermissions;
-	private AccessControlEntry onRejectDraftPermissions;
+	private AccessControlEntry onReviewedDraftPermissions;
 	private AccessControlEntry onPublishPermissions;
 	
 	public AccessControlEntry getOnSaveDraftPermissions() {
@@ -13,11 +13,11 @@ public class AccessControlList {
 	public void setOnSaveDraftPermissions(AccessControlEntry onSaveDraftPermissions) {
 		this.onSaveDraftPermissions = onSaveDraftPermissions;
 	}
-	public AccessControlEntry getOnRejectDraftPermissions() {
-		return onRejectDraftPermissions;
+	public AccessControlEntry getOnReviewedDraftPermissions() {
+		return onReviewedDraftPermissions;
 	}
-	public void setOnRejectDraftPermissions(AccessControlEntry onRejectDraftPermissions) {
-		this.onRejectDraftPermissions = onRejectDraftPermissions;
+	public void setOnReviewedDraftPermissions(AccessControlEntry onReviewedDraftPermissions) {
+		this.onReviewedDraftPermissions = onReviewedDraftPermissions;
 	}
 	public AccessControlEntry getOnPublishPermissions() {
 		return onPublishPermissions;
@@ -29,6 +29,6 @@ public class AccessControlList {
 	@Override
 	public String toString() {
 		return "ContentItemACL [onSaveDraftPermissions=" + onSaveDraftPermissions + ", onRejectDraftPermissions="
-				+ onRejectDraftPermissions + ", onPublishPermissions=" + onPublishPermissions + "]";
+				+ onReviewedDraftPermissions + ", onReviewedPermissions=" + onPublishPermissions + "]";
 	}
 }

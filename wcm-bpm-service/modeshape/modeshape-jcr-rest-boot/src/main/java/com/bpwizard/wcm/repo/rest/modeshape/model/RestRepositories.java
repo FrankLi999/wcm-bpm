@@ -23,9 +23,8 @@ import java.util.TreeMap;
 //import org.codehaus.jettison.json.JSONArray;
 //import org.codehaus.jettison.json.JSONException;
 //import org.codehaus.jettison.json.JSONObject;
-import javax.servlet.http.HttpServletRequest;
-
-import com.bpwizard.wcm.repo.rest.RestHelper;
+//import javax.servlet.http.HttpServletRequest;
+//import com.bpwizard.wcm.repo.rest.RestHelper;
 
 /**
  * A REST representation of a collection of {@link Repository repositories}
@@ -57,8 +56,12 @@ public final class RestRepositories { //implements JSONAble {
      * @return a {@link Repository} instance.
      */
     public Repository addRepository( String name,
-                                     HttpServletRequest request ) {
-        Repository repository = new Repository(name, request);
+    		String workspacesUrl,
+    		String backupUrl,
+    		String restoreUrl
+                                     //HttpServletRequest request 
+                                   ) {
+        Repository repository = new Repository(name, workspacesUrl, backupUrl, restoreUrl);
         repositories.add(repository);
         return repository;
     }
@@ -83,12 +86,19 @@ public final class RestRepositories { //implements JSONAble {
         private final String restoreUrl;
         private int activeSessionsCount;
 
-        protected Repository( String name, 
-                              HttpServletRequest request) {
+        protected Repository( String name,
+        		String workspacesUrl,
+        		String backupUrl,
+        		String restoreUrl
+                              // HttpServletRequest request
+        ) {
             this.name = name;
-            this.workspacesUrl = RestHelper.urlFrom(request, name);
-            this.backupUrl = RestHelper.urlFrom(request, name, RestHelper.BACKUP_METHOD_NAME);
-            this.restoreUrl = RestHelper.urlFrom(request, name, RestHelper.RESTORE_METHOD_NAME);
+//            this.workspacesUrl = RestHelper.urlFrom(request, name);
+//            this.backupUrl = RestHelper.urlFrom(request, name, RestHelper.BACKUP_METHOD_NAME);
+//            this.restoreUrl = RestHelper.urlFrom(request, name, RestHelper.RESTORE_METHOD_NAME);
+            this.workspacesUrl = workspacesUrl;
+            this.backupUrl = backupUrl;
+            this.restoreUrl = restoreUrl;            
             this.metadata = new TreeMap<String, List<String>>();
         }
 

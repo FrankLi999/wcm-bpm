@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,6 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
-import javax.servlet.http.HttpServletRequest;
 
 import org.modeshape.common.util.StringUtil;
 import org.springframework.stereotype.Component;
@@ -75,7 +75,9 @@ public final class RestQueryHandler extends AbstractHandler {
      * @return a {@link RestQueryHandler} instance
      * @throws RepositoryException if any operation fails at the JCR level
      */
-    public RestQueryResult executeQuery( HttpServletRequest request,
+    public RestQueryResult executeQuery( // HttpServletRequest request,
+    		Set<Map.Entry<String, String[]>> bindings,
+    		String baseUrl,
                                          String repositoryName,
                                          String workspaceName,
                                          String language,
@@ -89,15 +91,13 @@ public final class RestQueryHandler extends AbstractHandler {
 
         Session session = getSession(repositoryName, workspaceName);
         Query query = createQuery(language, statement, session);
-        bindExtraVariables(request, session.getValueFactory(), query);
+        bindExtraVariables(bindings, session.getValueFactory(), query);
 
         QueryResult result = query.execute();
         RestQueryResult restQueryResult = new RestQueryResult();
 
         String[] columnNames = result.getColumnNames();
         setColumns(result, restQueryResult, columnNames);
-
-        String baseUrl = RestHelper.repositoryUrl(request);
 
         setRows(offset, limit, session, result, restQueryResult, columnNames, baseUrl);
 
@@ -121,7 +121,9 @@ public final class RestQueryHandler extends AbstractHandler {
      * @return a response containing the string representation of the query plan
      * @throws RepositoryException if any operation fails at the JCR level
      */
-    public RestQueryPlanResult planQuery( HttpServletRequest request,
+    public RestQueryPlanResult planQuery( 
+    		//HttpServletRequest request,
+    		Set<Map.Entry<String, String[]>> bindings,
                                           String repositoryName,
                                           String workspaceName,
                                           String language,
@@ -135,7 +137,7 @@ public final class RestQueryHandler extends AbstractHandler {
 
         Session session = getSession(repositoryName, workspaceName);
         org.modeshape.jcr.api.query.Query query = createQuery(language, statement, session);
-        bindExtraVariables(request, session.getValueFactory(), query);
+        bindExtraVariables(bindings, session.getValueFactory(), query);
 
         org.modeshape.jcr.api.query.QueryResult result = query.explain();
         String plan = result.getPlan();
@@ -317,11 +319,13 @@ public final class RestQueryHandler extends AbstractHandler {
         return (org.modeshape.jcr.api.query.Query)queryManager.createQuery(statement, language);
     }
 
-    private void bindExtraVariables( HttpServletRequest request,
+    private void bindExtraVariables( //HttpServletRequest request,
+    		Set<Map.Entry<String, String[]>> bindings,
     		                         ValueFactory valueFactory,
                                      Query query ) throws RepositoryException {
+    	
         // Extract the query parameters and bind as variables ...
-        for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
+        for (Map.Entry<String, String[]> entry : bindings) {
             String variableName = entry.getKey();
             String[] variableValues = entry.getValue();
             if (variableValues == null || variableValues.length == 0 || SKIP_QUERY_PARAMETERS.contains(variableName)) {

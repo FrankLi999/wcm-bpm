@@ -9,6 +9,10 @@
  * BPW  T Y P E S
  * ------------------------------------------------------------------------------
  */
+[bpw:rereference]
+- bpw:name (STRING)
+- bpw:reference (REFERENCE)
+ 
 [bpw:AccessControlEntry] 
 - bpw:viewers (STRING) multiple
 - bpw:editors (STRING) multiple
@@ -16,24 +20,24 @@
 - bpw:reviewers (STRING) multiple
 
 [bpw:folder]> nt:folder, mix:lastModified, mix:referenceable, mode:accessControllable
-
 [bpw:resourceNode] > nt:hierarchyNode, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable abstract
 - bpw:title (STRING) COPY
 - bpw:description (STRING) COPY
 + bpw:acl (bpw:AccessControlEntry)
+[bpw:baseControlType] > nt:hierarchyNode, mix:referenceable abstract
+- bpw:title (STRING) COPY
+- bpw:description (STRING) COPY
 
 [bpw:resourceFolder] > nt:folder, bpw:resourceNode
+[bpw:lifecycle] mixin
+- bpw:lifecyclePolicy (STRING)
+- bpw:currentLifecycleState (STRING)
 
-[bpw:workflowNode] > bpw:resourceNode abstract
+[bpw:workflowNode] > bpw:resourceNode, mix:shareable, bpw:lifecycle abstract
 - bpw:publishDate (STRING) COPY
 - bpw:expireDate (STRING) COPY
 - bpw:workflow (STRING) multiple COPY
 - bpw:workflowStage (STRING) COPY
-- bpw:categories (STRING) multiple
-
-[bpw:lifecycle] mixin
-- bpw:lifecyclePolicy (STRING)
-- bpw:currentLifecycleState (STRING)
 
 [bpw:keyValue] 
 - bpw:name (STRING) COPY
@@ -43,12 +47,18 @@
 + * (bpw:keyValue) 
 
 [bpw:workflowAction]
-- name (String)
+- name (STRING)
+- entry (BOOLEAN)
+- order (LONG)
+- referenceId (STRING)
 
 [bpw:workflowStage]
+- order (LONG)
+- bpw:name (STRING)
 + * (bpw:workflowAction)
 
-[bpw:workflow] > nt:hierarchyNode, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable
+[bpw:workflow] > bpw:resourceNode
+- bpw:name (STRING)
 + * (bpw:workflowStage)
 
 [bpw:pageSearchData]
@@ -89,7 +99,7 @@
 - bpw:readOnly (BOOLEAN) = 'false'
 - bpw:selectOptions (STRING) multiple
 
-[bpw:controlField] > bpw:resourceNode
+[bpw:controlField]
 - bpw:title (STRING)
 - bpw:icon (STRING)
 + * (bpw:controlFieldMetaData)
@@ -150,41 +160,38 @@
 - bpw:type (STRING) = 'regex' COPY
 - bpw:rule (STRING) COPY
 
-[bpw:category] > bpw:resourceNode
+[bpw:category] > nt:folder
+- bpw:name (String)
 + * (bpw:category)
 
-[bpw:baseType] > nt:hierarchyNode, mix:referenceable abstract
-- bpw:title (STRING) COPY
-- bpw:description (STRING) COPY
-
-[bpw:contentType] > bpw:baseType
+[bpw:contentType] > bpw:baseControlType
 - bpw:contentName (STRING) mandatory COPY
 - bpw:body (STRING) COPY
 
-[bpw:componentType] > bpw:baseType
+[bpw:componentType] > bpw:baseControlType
 - bpw:widgetName (STRING) mandatory COPY
 - bpw:componentTemplate (STRING) COPY
 
-[bpw:fileType] > nt:file, bpw:baseType
+[bpw:fileType] > nt:file, bpw:baseControlType
 - bpw:fileName (STRING) mandatory COPY
 - bpw:content (BINARY) COPY
 + bpw:metaData (bpw:keyValue)
 - bpw:showOnMenu (BOOLEAN) = 'false'
 - bpw:sortOrder (LONG) = 0
 
-[bpw:keyValueType] > bpw:baseType
+[bpw:keyValueType] > bpw:baseControlType
 - bpw:key (STRING) COPY
 - bpw:value (STRING) COPY
 
-[bpw:vanityURLType] > bpw:baseType
+[bpw:vanityURLType] > bpw:baseControlType
 - bpw:vanityURLName (STRING) mandatory COPY
 - bpw:uri (STRING)
 - bpw:forwardTo (STRING)
 
-[bpw:formType] > bpw:baseType
+[bpw:formType] > bpw:baseControlType
 - bpw:formName (STRING) mandatory COPY
 
-[bpw:personaType] > bpw:baseType
+[bpw:personaType] > bpw:baseControlType
 - bpw:name (STRING) mandatory COPY
 - bpw:phote (BINARY)
 
@@ -204,7 +211,7 @@
 
 [bpw:contentItemAcl]
 + onSaveDraft (bpw:AccessControlEntry)
-+ onRejectDraft (bpw:AccessControlEntry)
++ onReivedDraft (bpw:AccessControlEntry)
 + onPublish (bpw:AccessControlEntry)
 
 [bpw:authoringTemplate] > bpw:resourceNode
@@ -260,11 +267,13 @@
 + siteAreaLayout (bpw:siteAreaLayout)
 + * (bpw:resourceNode)
 
-[bpw:queryStatement] > bpw:resourceNode
+/*
+[bpw:queryStatement]
 - bpw:queryName (STRING)
 - bpw:contentType (STRING)
 - bpw:queryStatement (STRING)
 - bpw:columns (STRING) multiple
+*/
 
 [bpw:resourcePath]
 - bpw:path (String)
@@ -486,6 +495,7 @@
 
 [bpw:workflowFolder] > bpw:folder
 [bpw:categoryFolder] > bpw:folder
++ * (bpw:category)
 [bpw:authoringTemplateFolder] > bpw:folder
 + * (bpw:authoringTemplate)
 
@@ -506,6 +516,7 @@
 
 [bpw:queryFolder] > bpw:folder
 + * (bpw:query)
+
 [bpw:assetFolder] > bpw:folder
 
 [bpw:library] > bpw:folder, mix:language
@@ -524,13 +535,14 @@
   - bpw:resourceName (STRING)
   - bpw:operation (STRING)
   - bpw:defaultTitle (STRING)
+  - bpw:condition (STRING)
   - bpw:defaultIcon (STRING) = 'dialpad'
   
 [bpw:supportedOpertions]
   + * (bpw:supportedOpertion)
   - bpw:jcrType (STRING)
   
-[bpw:validationRuleFolder] > nt:folder
+[bpw:validationRuleFolder]
 + * [bpw:validationRule] 
 
 [bpw:opertionsFolder] > nt:folder
@@ -564,9 +576,10 @@
 
 [bpw:comment] > nt:hierarchyNode
  - bpw:comment (STRING)
-
-[bpw:content] > bpw:workflowNode, bpw:lifecycle
+ - bpw:reviewer (STRING)
+[bpw:content] > bpw:workflowNode
 - bpw:authoringTemplate (STRING)
+- bpw:categories (STRING) multiple
 + elements (bpw:contentElementFolder)
 + properties (bpw:propertyElementFolder)
 + comments (bpw:commentFolder)

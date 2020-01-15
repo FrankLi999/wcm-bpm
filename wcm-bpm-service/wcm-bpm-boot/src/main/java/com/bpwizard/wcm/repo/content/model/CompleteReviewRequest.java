@@ -2,8 +2,6 @@ package com.bpwizard.wcm.repo.content.model;
 
 public class CompleteReviewRequest {
 	private String reviewTaskId;
-	private String reviewTopic;
-	private String workerId;	
 	private boolean approved;
 	private String comment;
 	
@@ -13,22 +11,6 @@ public class CompleteReviewRequest {
 	
 	public void setReviewTaskId(String taskId) {
 		this.reviewTaskId = taskId;
-	}
-	
-	public String getReviewTopic() {
-		return reviewTopic;
-	}
-	
-	public void setReviewTopic(String topic) {
-		this.reviewTopic = topic;
-	}
-	
-	public String getWorkerId() {
-		return workerId;
-	}
-	
-	public void setWorkerId(String workerId) {
-		this.workerId = workerId;
 	}
 	
 	public boolean isApproved() {
@@ -42,5 +24,11 @@ public class CompleteReviewRequest {
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	@Override
+	public String toString() {
+		return "CompleteReviewRequest [reviewTaskId=" + reviewTaskId + ", approved=" + approved + ", comment=" + comment
+				+ "]";
 	}
 }

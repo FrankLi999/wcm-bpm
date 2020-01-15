@@ -1,9 +1,11 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class AccessControlEntry {
+public class AccessControlEntry implements Serializable {
 	
+	private static final long serialVersionUID = -3372806515417478914L;
 	private String viewers[];
 	private String editors[];
 	private String admins[];

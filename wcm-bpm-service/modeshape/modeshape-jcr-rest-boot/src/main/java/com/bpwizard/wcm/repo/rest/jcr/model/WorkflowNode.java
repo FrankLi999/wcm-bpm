@@ -5,10 +5,12 @@ import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class WorkflowNode extends ResourceNode {
+	private static final long serialVersionUID = -2123676751280039604L;
 	private String workflow;
 	private String workflowStage;
 	private String publishDate;
 	private String expireDate;
+	private String currentLifecycleState;
 	
 	public String getWorkflow() {
 		return workflow;
@@ -36,6 +38,13 @@ public class WorkflowNode extends ResourceNode {
 		this.expireDate = expireDate;
 	}
 	
+	
+	public String getCurrentLifecycleState() {
+		return currentLifecycleState;
+	}
+	public void setCurrentLifecycleState(String currentLifecycleState) {
+		this.currentLifecycleState = currentLifecycleState;
+	}
 	protected void toJson(ObjectNode properties, ObjectNode children) {
 		super.toJson(properties, children);
 
@@ -54,11 +63,15 @@ public class WorkflowNode extends ResourceNode {
 		if (StringUtils.hasText(expireDate)) {
 			properties.put("bpw:expireDate", expireDate);
 		}
+		
+		if (StringUtils.hasText(currentLifecycleState)) {
+			properties.put("bpw:currentLifecycleState", currentLifecycleState);
+		}
 	}
-	
 	@Override
 	public String toString() {
-		return "WorkflowNode [workflow=" + workflow + ", workflowStage=" + workflowStage + ", publishDate=" + publishDate + ", expireDate=" + expireDate
+		return "WorkflowNode [workflow=" + workflow + ", workflowStage=" + workflowStage + ", publishDate="
+				+ publishDate + ", expireDate=" + expireDate + ", currentLifecycleState=" + currentLifecycleState
 				+ ", toString()=" + super.toString() + "]";
 	}
 }

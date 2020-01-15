@@ -1,5 +1,7 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
+import java.io.Serializable;
+
 import org.modeshape.jcr.api.JcrConstants;
 import org.springframework.util.StringUtils;
 
@@ -7,7 +9,8 @@ import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ResourceNode {
+public class ResourceNode implements Serializable {
+	private static final long serialVersionUID = 1810430835299134939L;
 	private String title;
 	private String description;
 	private String lockOwner;

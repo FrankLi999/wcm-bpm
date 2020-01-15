@@ -1,26 +1,18 @@
 package com.bpwizard.wcm.repo.content.model;
 
 public class CompleteEditRequest {
-	private String editTaskId;
-	private String editTopic;
-	private String workerId;
-	
-	public String getEditTaskId() {
-		return editTaskId;
+	private String taskId;
+
+	public String getTaskId() {
+		return taskId;
 	}
-	public void setEditTaskId(String taskId) {
-		this.editTaskId = taskId;
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
-	public String getEditTopic() {
-		return editTopic;
-	}
-	public void setEditTopic(String topic) {
-		this.editTopic = topic;
-	}
-	public String getWorkerId() {
-		return workerId;
-	}
-	public void setWorkerId(String workerId) {
-		this.workerId = workerId;
+
+	@Override
+	public String toString() {
+		return "CompleteEditRequest [taskId=" + taskId + "]";
 	}
 }

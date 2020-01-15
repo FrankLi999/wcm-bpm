@@ -26,14 +26,12 @@ import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeIterator;
 import javax.jcr.nodetype.NodeTypeManager;
-import javax.servlet.http.HttpServletRequest;
 
 import org.modeshape.common.util.CheckArg;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNodeType;
 
 /**
@@ -54,14 +52,15 @@ public final class RestNodeTypeHandler extends AbstractHandler {
      * @return a {@link RestNodeType} instance.
      * @throws RepositoryException if any JCR related operation fails, including if the node type cannot be found.
      */
-    public RestNodeType getNodeType( HttpServletRequest request,
+    public RestNodeType getNodeType( // HttpServletRequest request,
+    		String baseUrl,
                                      String repositoryName,
                                      String workspaceName,
                                      String nodeTypeName ) throws RepositoryException {
         Session session = getSession(repositoryName, workspaceName);
         NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
         NodeType nodeType = nodeTypeManager.getNodeType(nodeTypeName);
-        return new RestNodeType(nodeType, RestHelper.repositoryUrl(request));
+        return new RestNodeType(nodeType, baseUrl);
     }
 
     /**
@@ -76,7 +75,8 @@ public final class RestNodeTypeHandler extends AbstractHandler {
      * @return a non-null {@link ResponseEntity} instance
      * @throws RepositoryException if any JCR related operation fails
      */
-    public ResponseEntity<?> importCND( HttpServletRequest request,
+    public ResponseEntity<?> importCND( // HttpServletRequest request,
+    		String baseUrl,
                                String repositoryName,
                                String workspaceName,
                                boolean allowUpdate,
@@ -90,7 +90,7 @@ public final class RestNodeTypeHandler extends AbstractHandler {
         }
         org.modeshape.jcr.api.nodetype.NodeTypeManager modeshapeTypeManager = (org.modeshape.jcr.api.nodetype.NodeTypeManager)nodeTypeManager;
         try {
-            List<RestNodeType> registeredTypes = registerCND(request, allowUpdate, cndInputStream, modeshapeTypeManager);
+            List<RestNodeType> registeredTypes = registerCND(baseUrl, allowUpdate, cndInputStream, modeshapeTypeManager);
             session.save();//TODO, added by Frank Li
             return createOkResponse(registeredTypes);
         } catch (IOException e) {
@@ -102,13 +102,13 @@ public final class RestNodeTypeHandler extends AbstractHandler {
         return ResponseEntity.ok().body(registeredTypes);
     }
 
-    private List<RestNodeType> registerCND( HttpServletRequest request,
+    private List<RestNodeType> registerCND( // HttpServletRequest request,
+    		String baseUrl,
                                             boolean allowUpdate,
                                             InputStream cndInputStream,
                                             org.modeshape.jcr.api.nodetype.NodeTypeManager modeshapeTypeManager ) throws IOException, RepositoryException {
         NodeTypeIterator nodeTypeIterator = modeshapeTypeManager.registerNodeTypes(cndInputStream, allowUpdate);
         List<RestNodeType> result = new ArrayList<RestNodeType>();
-        String baseUrl = RestHelper.repositoryUrl(request);
         while (nodeTypeIterator.hasNext()) {
             result.add(new RestNodeType(nodeTypeIterator.nextNodeType(), baseUrl));
         }

@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.servlet.http.HttpServletRequest;
 
 import org.modeshape.common.util.StringUtil;
 import org.modeshape.jcr.api.BackupOptions;
@@ -35,19 +34,16 @@ import org.modeshape.jcr.api.Repository;
 import org.modeshape.jcr.api.RepositoryManager;
 import org.modeshape.jcr.api.RestoreOptions;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.modeshape.model.BackupResponse;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestException;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 
 /**
  * An handler which returns POJO-based rest model instances.
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 @Component
 public final class RestRepositoryHandler extends AbstractHandler {
@@ -70,15 +66,15 @@ public final class RestRepositoryHandler extends AbstractHandler {
      *
      * @throws RepositoryException if there is any other error accessing the list of available workspaces for the repository
      */
-    public RestWorkspaces getWorkspaces( HttpServletRequest request,
+    public RestWorkspaces getWorkspaces( // HttpServletRequest request,
+    		String repositoryUrl,
                                          String repositoryName ) throws RepositoryException {
-        assert request != null;
+        // assert request != null;
         assert repositoryName != null;
 
         RestWorkspaces workspaces = new RestWorkspaces();
         Session session = getSession(repositoryName, null);
         for (String workspaceName : session.getWorkspace().getAccessibleWorkspaceNames()) {
-            String repositoryUrl = RestHelper.urlFrom(request);
             workspaces.addWorkspace(workspaceName, repositoryUrl);
         }
         return workspaces;
@@ -87,7 +83,8 @@ public final class RestRepositoryHandler extends AbstractHandler {
     /**
      * Performs a repository backup.
      */
-    public ResponseEntity<BackupResponse> backupRepository(HttpServletRequest request, 
+    // public ResponseEntity<BackupResponse> backupRepository(//HttpServletRequest request, 
+    public BackupResponse backupRepository(//HttpServletRequest request,
                                       String repositoryName,
                                       String workspace,
                                       BackupOptions options ) throws RepositoryException {
@@ -112,14 +109,14 @@ public final class RestRepositoryHandler extends AbstractHandler {
             //should never happen
             throw new RuntimeException(e);
         }
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(new BackupResponse(backupName, backupURL));
+        return new BackupResponse(backupName, backupURL);
     }
 
     /**
      * Restores a repository using an existing backup.
      */
-    public ResponseEntity<?> restoreRepository(HttpServletRequest request, 
+    //public ResponseEntity<?> restoreRepository(// HttpServletRequest request, 
+    public List<RestException> restoreRepository(// HttpServletRequest request,
                                        String repositoryName,
                                        String workspace,
                                        String backupName, 
@@ -133,7 +130,7 @@ public final class RestRepositoryHandler extends AbstractHandler {
         RepositoryManager repositoryManager = ((org.modeshape.jcr.api.Workspace)session.getWorkspace()).getRepositoryManager();
         final Problems problems = repositoryManager.restoreRepository(backup, options);
         if (!problems.hasProblems()) {
-            return ResponseEntity.ok().build();
+            return null;
         }
         List<RestException> response = new ArrayList<>(problems.size());
         for (Problem problem : problems) {
@@ -142,7 +139,7 @@ public final class RestRepositoryHandler extends AbstractHandler {
                                       new RestException(problem.getMessage());
             response.add(exception);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        return response;
     }
     
     private File resolveBackup(String backupName) {

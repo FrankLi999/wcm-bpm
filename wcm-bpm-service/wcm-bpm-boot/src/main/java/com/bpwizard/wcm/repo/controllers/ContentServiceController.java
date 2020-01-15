@@ -10,6 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.content.ContentTaskService;
-import com.bpwizard.wcm.repo.content.ExternalEditService;
-import com.bpwizard.wcm.repo.content.ExternalReviewService;
+import com.bpwizard.wcm.repo.content.EditTaskService;
 import com.bpwizard.wcm.repo.content.MailService;
+import com.bpwizard.wcm.repo.content.ReviewTaskService;
 import com.bpwizard.wcm.repo.content.WcmFlowService;
 import com.bpwizard.wcm.repo.content.model.CompleteEditRequest;
 import com.bpwizard.wcm.repo.content.model.CompleteReviewRequest;
@@ -39,10 +41,10 @@ public class ContentServiceController {
 	public static final String BASE_URI = "/content/server";
 	
 	@Autowired
-	private ExternalReviewService externalRevieService;
+	private ReviewTaskService externalRevieService;
 	
 	@Autowired
-	private ExternalEditService externalEditService;
+	private EditTaskService externalEditService;
 	
 	@Autowired
 	private WcmFlowService wcmFlowService;
@@ -69,8 +71,8 @@ public class ContentServiceController {
 		String processInstanceId = wcmFlowService.startContentFlowWithMessage(
 				startFlowRequest.getRepository(),
 				startFlowRequest.getWorkspace(),
-				startFlowRequest.getContentPath(),
 				startFlowRequest.getContentId(),
+				startFlowRequest.getBaseUrl(),
 				startFlowRequest.getWorkflow());
 		// this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
 		try {
@@ -91,11 +93,12 @@ public class ContentServiceController {
     // @PreAuthorize("hasRole('ROLE_admin') or hasRole('admin') or hasRole('user')")
 	public String startContentFlow(@RequestBody StartFlowRequest startFlowRequest) {
     	logger.traceEntry();
+		
     	String processInstanceId = wcmFlowService.startContentFlow(
 				startFlowRequest.getRepository(),
 				startFlowRequest.getWorkspace(),
-				startFlowRequest.getContentPath(),
 				startFlowRequest.getContentId(),
+				startFlowRequest.getBaseUrl(),
 				startFlowRequest.getWorkflow());
 		try {
 		    this.mailService.sendEmailWithAttachment(
@@ -114,36 +117,38 @@ public class ContentServiceController {
 	
 	@PostMapping(path="/review-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String reviewContentItem(@RequestBody ReviewContentItemRequest reviewContentItemRequest) {
-		return this.externalRevieService.claimTask( 
+		UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.getUsername();
+		
+		//@CurrentUser SpringPrincipal userPrincipal, 
+		return this.externalRevieService.claimTask(
 				reviewContentItemRequest.getContentId(),
-				reviewContentItemRequest.getReviewTopic(), 
-				reviewContentItemRequest.getWorkerId());
+				reviewContentItemRequest.getTaskName(), 
+				username);
 	}
 	
 	@PostMapping(path="/complete-review-task", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String completeReview(@RequestBody CompleteReviewRequest completeReviewRequest) {
 		return this.externalRevieService.completeReview(
 				completeReviewRequest.getReviewTaskId(),
-				completeReviewRequest.getReviewTopic(),
-				completeReviewRequest.getWorkerId(), 
 				completeReviewRequest.isApproved(), 
 				completeReviewRequest.getComment());
 	}
 	
 	@PostMapping(path="/edit-content-item", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String editContentItem(@RequestBody EditContentItemRequest editContentItemRequest) {
+		UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.getUsername();
 		return this.externalEditService.claimTask(
 				editContentItemRequest.getContentId(),
-				editContentItemRequest.getEditTopic(), 
-				editContentItemRequest.getWorkerId());
+				editContentItemRequest.getTaskName(), 
+				username);
 	}
 	
 	@PostMapping(path="/complete-edit-task", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String completeEdit(@RequestBody CompleteEditRequest completeEditRequest) {
 		return this.externalEditService.completeEdit(
-				completeEditRequest.getEditTaskId(),
-				completeEditRequest.getEditTopic(),
-				completeEditRequest.getWorkerId());
+				completeEditRequest.getTaskId());
 	}
 	
 	@DeleteMapping(path="/delete-reviewing-draft", consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -12,7 +12,7 @@
             "type" : "db",
             "connectionUrl": "jdbc:mysql://127.0.0.1:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
             "driver": "com.mysql.jdbc.Driver",
-            "createOnStart" : false,
+            "createOnStart" : true,
             "dropOnExit" : false,
             "username": "wcmbpm",
             "password": "P@ssw0rd"

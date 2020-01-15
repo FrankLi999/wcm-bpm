@@ -1,19 +1,16 @@
 {
     "bpwizard" : {
-        "jcr:primaryType": "bpw:root",
-        "jcr:mixinTypes": ["mix:lastModified"]
+        "jcr:primaryType": "bpw:root"
     },
     "bpwizard/library" : {
-        "jcr:primaryType":"bpw:libraryFolder",
-        "jcr:mixinTypes":["mix:lastModified"]
+        "jcr:primaryType":"bpw:libraryFolder"
     },
     "bpwizard/library/system" : {
         "jcr:primaryType":"bpw:library",
         "jcr:language": "en"
     },
     "bpwizard/library/system/configuration" : {
-        "jcr:primaryType":"bpw:configurationFolder",
-        "jcr:mixinTypes":["mix:lastModified"]
+        "jcr:primaryType":"bpw:configurationFolder"
     },
     "bpwizard/library/system/configuration/operations" : {
         "jcr:primaryType":"bpw:opertionsFolder"
@@ -226,7 +223,7 @@
         "bpw:defaultTitle": "New Content Item",
         "bpw:defaultIcon": "create"
     },
-     "bpwizard/library/system/configuration/operations/content" : {
+    "bpwizard/library/system/configuration/operations/content" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "bpw:content"
     },
@@ -244,14 +241,45 @@
         "bpw:defaultTitle": "Edit Content Item",
         "bpw:defaultIcon": "edit"
     },
-        "bpwizard/library/system/configuration/operations/content/save" : {
+    "bpwizard/library/system/configuration/operations/content/save" : {
         "jcr:primaryType":"bpw:supportedOpertion",
         "bpw:resourceName": "content",
         "bpw:operation": "Save",
         "bpw:defaultTitle": "Save Content Item",
         "bpw:defaultIcon": "save"
     },
-        "bpwizard/library/system/configuration/operations/content/unlock" : {
+    "bpwizard/library/system/configuration/operations/content/saveDraft" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "content",
+        "bpw:operation": "SaveDraft",
+        "bpw:defaultTitle": "Save Content Item as Draft",
+        "bpw:defaultIcon": "save"
+    },
+    "bpwizard/library/system/configuration/operations/content/reviewDraft" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "content",
+        "bpw:operation": "ReviewDraft",
+        "bpw:defaultTitle": "Review Content Item",
+        "bpw:condition": "Draft",
+        "bpw:defaultIcon": "save"
+    },
+    "bpwizard/library/system/configuration/operations/content/editAsDraft" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "content",
+        "bpw:operation": "EditAsDraft",
+        "bpw:defaultTitle": "Edit Content Item as Draft",
+        "bpw:condition": "Published",
+        "bpw:defaultIcon": "edit"
+    },
+    "bpwizard/library/system/configuration/operations/content/cancelDraft" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "content",
+        "bpw:operation": "CancelDraft",
+        "bpw:defaultTitle": "Edit Content Item as Draft",
+        "bpw:condition": "Draft",
+        "bpw:defaultIcon": "edit"
+    },
+    "bpwizard/library/system/configuration/operations/content/unlock" : {
         "jcr:primaryType":"bpw:supportedOpertion",
         "bpw:resourceName": "content",
         "bpw:operation": "Unlock",
@@ -509,8 +537,7 @@
         "bpw:rule":"[^(<[.]+>)]*"
     },
     "bpwizard/library/system/authoringTemplate" : {
-        "jcr:primaryType":"bpw:authoringTemplateFolder",
-        "jcr:mixinTypes":["mix:lastModified"]
+        "jcr:primaryType":"bpw:authoringTemplateFolder"
     },
     "bpwizard/library/system/authoringTemplate/contentType" : {
         "jcr:primaryType":"bpw:authoringTemplate",
@@ -1655,8 +1682,7 @@
         "bpw:mandatory": "true"
     },	
     "bpwizard/library/system/controlField" : {
-        "jcr:primaryType": "bpw:controlFieldFolder",
-        "jcr:mixinTypes":["mix:lastModified"]
+        "jcr:primaryType": "bpw:controlFieldFolder"
     },	
     "bpwizard/library/system/controlField/associations" : {
         "jcr:primaryType": "bpw:controlField",

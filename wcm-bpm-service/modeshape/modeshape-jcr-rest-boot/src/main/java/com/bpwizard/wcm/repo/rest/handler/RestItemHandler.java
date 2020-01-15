@@ -30,7 +30,6 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.servlet.http.HttpServletRequest;
 
 import org.modeshape.common.util.StringUtil;
 import org.springframework.http.HttpStatus;
@@ -64,14 +63,16 @@ public final class RestItemHandler extends ItemHandler {
      * @return a the rest representation of the item, as a {@link RestItem} instance.
      * @throws RepositoryException if any JCR operations fail.
      */
-    public RestItem item( HttpServletRequest request,
+    public RestItem item( 
+    		//HttpServletRequest request,
+    		String baseUrl,
                           String repositoryName,
                           String workspaceName,
                           String path,
                           int depth ) throws RepositoryException {
         Session session = getSession(repositoryName, workspaceName);
         Item item = itemAtPath(path, session);
-        return createRestItem(request, depth, session, item);
+        return createRestItem(baseUrl, depth, session, item);
     }
 
     /**
@@ -91,17 +92,21 @@ public final class RestItemHandler extends ItemHandler {
      * @throws org.codehaus.jettison.json.JSONException if the request body cannot be translated into json
      * @throws RepositoryException if any other error occurs while interacting with the repository
      */
-    public ResponseEntity<RestItem> addItem( HttpServletRequest request,
+    public ResponseEntity<RestItem> addItem( 
+    		//HttpServletRequest request,
+    		String baseUrl,
                              String repositoryName,
                              String workspaceName,
                              String path,
                              String requestBody ) throws IOException, RepositoryException {
     	
        JsonNode requestBodyJSON = stringToJsonNode(requestBody);
-       return this.addItem(request, repositoryName, workspaceName, path, requestBodyJSON);
+       return this.addItem(baseUrl, repositoryName, workspaceName, path, requestBodyJSON);
     }
 
-    public ResponseEntity<RestItem> addItem( HttpServletRequest request,
+    public ResponseEntity<RestItem> addItem( 
+    		//HttpServletRequest request,
+    		String baseUrl,
             String repositoryName,
             String workspaceName,
             String path,
@@ -114,7 +119,7 @@ public final class RestItemHandler extends ItemHandler {
         Node newNode = addNode(parentNode, newNodeName, requestBodyJSON);
 
         session.save();
-        RestItem restNewNode = createRestItem(request, 0, session, newNode);
+        RestItem restNewNode = createRestItem(baseUrl, 0, session, newNode);
         return ResponseEntity.status(HttpStatus.CREATED).body(restNewNode);
     }
     @Override
@@ -156,7 +161,9 @@ public final class RestItemHandler extends ItemHandler {
      * @throws JSONException if there is an error encoding the node
      * @throws RepositoryException if any error occurs at the repository level.
      */
-    public RestItem updateItem( HttpServletRequest request,
+    public RestItem updateItem( 
+    		//HttpServletRequest request,
+    		String baseUrl,
                                 String rawRepositoryName,
                                 String rawWorkspaceName,
                                 String path,
@@ -166,10 +173,12 @@ public final class RestItemHandler extends ItemHandler {
         item = updateItem(item, stringToJsonNode(requestContent));
         session.save();
 
-        return createRestItem(request, 0, session, item);
+        return createRestItem(baseUrl, 0, session, item);
     }
 
-    public RestItem updateItem( HttpServletRequest request,
+    public RestItem updateItem( 
+    		//HttpServletRequest request,
+    		String baseUrl,
             String rawRepositoryName,
             String rawWorkspaceName,
             String path,
@@ -179,7 +188,7 @@ public final class RestItemHandler extends ItemHandler {
 		item = updateItem(item, jsonItem);
 		session.save();
 		
-		return createRestItem(request, 0, session, item);
+		return createRestItem(baseUrl, 0, session, item);
 	}
     
     private JsonNode inputStreamToJsonNode( InputStream requestBody ) throws IOException {
@@ -207,12 +216,13 @@ public final class RestItemHandler extends ItemHandler {
      * @throws RepositoryException if any of the JCR operations fail
      * @see RestItemHandler#addItem(javax.servlet.http.HttpServletRequest, String, String, String, String)
      */
-    public ResponseEntity<?> addItems( HttpServletRequest request,
+    public ResponseEntity<?> addItems( //HttpServletRequest request,
+    		String baseUrl,
                               String repositoryName,
                               String workspaceName,
                               String requestContent ) throws IOException, RepositoryException {
     	JsonNode requestBody = this.stringToJsonNode(requestContent);
-    	return this.doAddItems(request, repositoryName, workspaceName, requestBody);
+    	return this.doAddItems(baseUrl, repositoryName, workspaceName, requestBody);
     }
 
     /**
@@ -228,12 +238,13 @@ public final class RestItemHandler extends ItemHandler {
      * @throws RepositoryException if any of the JCR operations fail
      * @see RestItemHandler#addItem(javax.servlet.http.HttpServletRequest, String, String, String, String)
      */
-    public ResponseEntity<?> addItems( HttpServletRequest request,
+    public ResponseEntity<?> addItems( //HttpServletRequest request,
+    		String baseUrl,
                               String repositoryName,
                               String workspaceName,
                               InputStream requestContent ) throws IOException, RepositoryException {
     	JsonNode requestBody = this.inputStreamToJsonNode(requestContent);
-        return this.doAddItems(request, repositoryName, workspaceName, requestBody);
+        return this.doAddItems(baseUrl, repositoryName, workspaceName, requestBody);
     }
     
     /**
@@ -249,7 +260,9 @@ public final class RestItemHandler extends ItemHandler {
      * @throws RepositoryException if any of the JCR operations fail
      * @see RestItemHandler#updateItem(javax.servlet.http.HttpServletRequest, String, String, String, String)
      */
-    public ResponseEntity<?> updateItems( HttpServletRequest request,
+    public ResponseEntity<?> updateItems( 
+    		//HttpServletRequest request,
+    		String baseUrl,
                                  String repositoryName,
                                  String workspaceName,
                                  String requestContent ) throws IOException, RepositoryException {
@@ -259,7 +272,7 @@ public final class RestItemHandler extends ItemHandler {
         }
         Session session = getSession(repositoryName, workspaceName);
         TreeMap<String, JsonNode> nodesByPath = createNodesByPathMap(requestBody);
-        List<RestItem> result = updateMultipleNodes(request, session, nodesByPath);
+        List<RestItem> result = updateMultipleNodes(baseUrl, session, nodesByPath);
         return createOkResponse(result);
     }
 
@@ -276,7 +289,7 @@ public final class RestItemHandler extends ItemHandler {
      * @throws RepositoryException if any of the JCR operations fail
      * @see RestItemHandler#deleteItem(javax.servlet.http.HttpServletRequest, String, String, String)
      */
-    public ResponseEntity<Void> deleteItems( HttpServletRequest request,
+    public ResponseEntity<Void> deleteItems( // HttpServletRequest request,
                                  String repositoryName,
                                  String workspaceName,
                                  String requestContent ) throws IOException, RepositoryException {
@@ -303,7 +316,8 @@ public final class RestItemHandler extends ItemHandler {
         return ResponseEntity.ok().build();
     }
 
-    private List<RestItem> updateMultipleNodes( HttpServletRequest request,
+    private List<RestItem> updateMultipleNodes( // HttpServletRequest request,
+    		String baseUrl,
                                                 Session session,
                                                 TreeMap<String, JsonNode> nodesByPath )
         throws RepositoryException, IOException {
@@ -311,7 +325,7 @@ public final class RestItemHandler extends ItemHandler {
         for (String nodePath : nodesByPath.keySet()) {
             Item item = session.getItem(nodePath);
             item = updateItem(item, nodesByPath.get(nodePath));
-            result.add(createRestItem(request, 0, session, item));
+            result.add(createRestItem(baseUrl, 0, session, item));
         }
         session.save();
         return result;
@@ -328,7 +342,9 @@ public final class RestItemHandler extends ItemHandler {
         return nodesByPath;
     }
 
-    private ResponseEntity<List<RestItem>> addMultipleNodes( HttpServletRequest request,
+    private ResponseEntity<List<RestItem>> addMultipleNodes( 
+    		//HttpServletRequest request,
+    		String baseUrl,
                                        TreeMap<String, JsonNode> nodesByPath,
                                        Session session ) throws RepositoryException, IOException {
         List<RestItem> result = new ArrayList<RestItem>();
@@ -339,7 +355,7 @@ public final class RestItemHandler extends ItemHandler {
 
             Node parentNode = (Node)session.getItem(parentAbsPath);
             Node newNode = addNode(parentNode, newNodeName, nodesByPath.get(nodePath));
-            RestItem restNewNode = createRestItem(request, 0, session, newNode);
+            RestItem restNewNode = createRestItem(baseUrl, 0, session, newNode);
             result.add(restNewNode);
         }
 
@@ -351,7 +367,9 @@ public final class RestItemHandler extends ItemHandler {
         return ResponseEntity.ok().body(result);
     }
     
-    private ResponseEntity<?> doAddItems(HttpServletRequest request,
+    private ResponseEntity<?> doAddItems(
+    		//HttpServletRequest request,
+    		String baseUrl,
             String repositoryName,
             String workspaceName,
             JsonNode requestBody) throws IOException, RepositoryException {
@@ -360,6 +378,6 @@ public final class RestItemHandler extends ItemHandler {
         }
         Session session = getSession(repositoryName, workspaceName);
         TreeMap<String, JsonNode> nodesByPath = createNodesByPathMap(requestBody);
-        return addMultipleNodes(request, nodesByPath, session);
+        return addMultipleNodes(baseUrl, nodesByPath, session);
     }
 }

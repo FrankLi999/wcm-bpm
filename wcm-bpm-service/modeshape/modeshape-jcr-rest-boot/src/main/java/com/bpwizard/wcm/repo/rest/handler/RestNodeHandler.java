@@ -22,7 +22,7 @@ import javax.jcr.Item;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.servlet.http.HttpServletRequest;
+// import javax.servlet.http.HttpServletRequest;
 
 import org.modeshape.common.util.StringUtil;
 import org.springframework.stereotype.Component;
@@ -52,14 +52,15 @@ public final class RestNodeHandler extends ItemHandler {
      * @return a the rest representation of the item, as a {@link RestItem} instance.
      * @throws RepositoryException if any JCR operations fail.
      */
-    public RestItem nodeWithId( HttpServletRequest request,
+    public RestItem nodeWithId( // HttpServletRequest request,
+    		String baseUrl,
                                 String repositoryName,
                                 String workspaceName,
                                 String id,
                                 int depth ) throws RepositoryException {
         Session session = getSession(repositoryName, workspaceName);
         Node node = nodeWithId(id, session);
-        return createRestItem(request, depth, session, node);
+        return createRestItem(baseUrl, depth, session, node);
     }
 
     /**
@@ -80,7 +81,8 @@ public final class RestNodeHandler extends ItemHandler {
      * @throws JSONException if there is an error encoding the node
      * @throws RepositoryException if any error occurs at the repository level.
      */
-    public RestItem updateNodeWithId( HttpServletRequest request,
+    public RestItem updateNodeWithId( //HttpServletRequest request,
+    		String baseUrl,
                                       String rawRepositoryName,
                                       String rawWorkspaceName,
                                       String id,
@@ -90,7 +92,7 @@ public final class RestNodeHandler extends ItemHandler {
         node = updateNode(node, stringToJSONObject(requestContent));
         session.save();
 
-        return createRestItem(request, 0, session, node);
+        return createRestItem(baseUrl, 0, session, node);
     }
 
     private JsonNode stringToJSONObject( String requestBody ) throws IOException {
@@ -108,7 +110,7 @@ public final class RestNodeHandler extends ItemHandler {
      * @throws javax.ws.rs.NotAuthorizedException if the user does not have the access required to delete the node with this id.
      * @throws RepositoryException if any other error occurs
      */
-    public void deleteNodeWithId( HttpServletRequest request,
+    public void deleteNodeWithId( // HttpServletRequest request,
                                   String rawRepositoryName,
                                   String rawWorkspaceName,
                                   String id ) throws RepositoryException {

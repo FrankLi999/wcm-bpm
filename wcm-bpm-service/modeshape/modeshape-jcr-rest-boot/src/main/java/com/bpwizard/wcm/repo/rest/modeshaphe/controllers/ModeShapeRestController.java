@@ -2,6 +2,7 @@ package com.bpwizard.wcm.repo.rest.modeshaphe.controllers;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.jcr.Binary;
 import javax.jcr.Property;
@@ -40,7 +41,6 @@ import com.bpwizard.wcm.repo.rest.handler.RestNodeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestQueryHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
-import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.modeshape.model.BackupResponse;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestException;
@@ -57,8 +57,8 @@ public class ModeShapeRestController {
 	private static final Logger logger = LogManager.getLogger(ModeShapeRestController.class);
 	public static final String BASE_URI = "/modeshape/api";
 	private static final String REQUEST_URI_PREFIX = "/modeshape/api/%s/%s/%s";
-	@Autowired
-    private RestServerHandler serverHandler;
+//	@Autowired
+//    private RestServerHandler serverHandler;
 	
 	@Autowired
 	private RestRepositoryHandler repositoryHandler;
@@ -88,7 +88,7 @@ public class ModeShapeRestController {
     		//produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
     public RestRepositories getRepositories(HttpServletRequest request ) {
     	logger.debug("Entering ...");
-    	RestRepositories repositories = this.serverHandler.getRepositories(request);
+    	RestRepositories repositories = this.getRepositories(request);
         logger.debug("Exiting ...");
         return repositories;
     }
@@ -108,7 +108,8 @@ public class ModeShapeRestController {
     		@PathVariable("repositoryName")String rawRepositoryName) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestWorkspaces workspacess = this.repositoryHandler.getWorkspaces(request, rawRepositoryName);
+            String repositoryUrl = RestHelper.urlFrom(request);
+	    	RestWorkspaces workspacess = this.repositoryHandler.getWorkspaces(repositoryUrl, rawRepositoryName);
 	        logger.debug("Exiting ...");
 	        return workspacess;
     	} catch (Throwable t) {
@@ -153,7 +154,7 @@ public class ModeShapeRestController {
                             @RequestParam(name="batchSize", defaultValue="10000") final int batchSize) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	ResponseEntity<BackupResponse> response = this.repositoryHandler.backupRepository(request, repositoryName, from, new BackupOptions() {
+	    	BackupResponse response = this.repositoryHandler.backupRepository(repositoryName, from, new BackupOptions() {
 	            @Override
 	            public boolean includeBinaries() {
 	                return includeBinaries;
@@ -175,7 +176,7 @@ public class ModeShapeRestController {
 	            }
 	        });
 	    	logger.debug("Exiting ...");
-	    	return response;
+	    	return ResponseEntity.status(HttpStatus.CREATED).body(response);
     	} catch (Throwable t) {
     		throw new WcmRepositoryException(t);
     	}
@@ -183,7 +184,7 @@ public class ModeShapeRestController {
     
     @PostMapping(path="/{repositoryName}/" + RestHelper.COPY_METHOD_NAME, produces= MediaType.APPLICATION_JSON_VALUE) 
 	// produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE})
-	public ResponseEntity<BackupResponse> copyWorkspace(HttpServletRequest request,
+	public ResponseEntity<?> copyWorkspace(HttpServletRequest request,
 	                    @PathVariable("repositoryName") String repositoryName,
 	                    @RequestParam(name="from", defaultValue="default") final String from,
 	                    @RequestParam(name="ito", defaultValue="draft") final String to,
@@ -194,7 +195,7 @@ public class ModeShapeRestController {
 	                    @RequestParam(name="reindexTargetWorkspaceContent", defaultValue="true") final boolean reindexContent) throws WcmRepositoryException {
 		logger.debug("Entering ...");
 		try {
-			ResponseEntity<BackupResponse> backupResponse = this.repositoryHandler.backupRepository(request, repositoryName, from, new BackupOptions() {
+			BackupResponse backupResponse = this.repositoryHandler.backupRepository(repositoryName, from, new BackupOptions() {
 		        @Override
 		        public boolean includeBinaries() {
 		            return includeBinaries;
@@ -216,7 +217,7 @@ public class ModeShapeRestController {
 		        }
 		    });
 			
-			ResponseEntity<?> restoreResponse = this.repositoryHandler.restoreRepository(request, repositoryName, to, backupResponse.getBody().getName(), new RestoreOptions() {
+			List<RestException> restoreResponse = this.repositoryHandler.restoreRepository(repositoryName, to, backupResponse.getName(), new RestoreOptions() {
 	            @Override
 	            public boolean reindexContentOnFinish() {
 	                return reindexContent;
@@ -233,7 +234,8 @@ public class ModeShapeRestController {
 	            }
 	        });
 			logger.debug("Exiting ...", restoreResponse);
-			return backupResponse;
+			return (restoreResponse!= null) ? ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restoreResponse) : 
+				ResponseEntity.status(HttpStatus.CREATED).body(backupResponse);
 		} catch (Throwable t) {
 			throw new WcmRepositoryException(t);
 		}
@@ -274,7 +276,7 @@ public class ModeShapeRestController {
                             @RequestParam(name="batchSize", defaultValue="1000") final int batchSize) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	ResponseEntity<?> response = this.repositoryHandler.restoreRepository(request, repositoryName, to, backupName, new RestoreOptions() {
+    		List<RestException> response = this.repositoryHandler.restoreRepository(repositoryName, to, backupName, new RestoreOptions() {
 	            @Override
 	            public boolean reindexContentOnFinish() {
 	                return reindexContent;
@@ -291,7 +293,7 @@ public class ModeShapeRestController {
 	            }
 	        });
 	    	logger.debug("Exiting ...");
-	    	return response;
+	    	return (response != null) ? ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response) :  ResponseEntity.ok().build();
     	} catch (Throwable t) {
     		throw new WcmRepositoryException(t);
     	}
@@ -360,7 +362,8 @@ public class ModeShapeRestController {
     		@PathVariable( "nodeTypeName" ) String nodeTypeName ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestNodeType restNodeType = nodeTypeHandler.getNodeType(request, repositoryName, workspaceName, nodeTypeName);
+    		String baseUrl = RestHelper.repositoryUrl(request);
+	    	RestNodeType restNodeType = nodeTypeHandler.getNodeType(baseUrl, repositoryName, workspaceName, nodeTypeName);
 	    	logger.debug("Exiting ...");
 	    	return restNodeType;
     	} catch (Throwable t) {
@@ -389,7 +392,8 @@ public class ModeShapeRestController {
             @RequestBody Resource requestBody ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-    		ResponseEntity<?> response = this.nodeTypeHandler.importCND(request, repositoryName, workspaceName, allowUpdate, requestBody.getInputStream());
+    		String baseUrl = RestHelper.repositoryUrl(request);
+    		ResponseEntity<?> response = this.nodeTypeHandler.importCND(baseUrl, repositoryName, workspaceName, allowUpdate, requestBody.getInputStream());
     		logger.debug("Exiting ...");
         	return response;
     	} catch (Throwable t) {
@@ -423,8 +427,9 @@ public class ModeShapeRestController {
             // @MultipartForm FileUploadForm form ) throws RepositoryException {
     	logger.debug("Entering ...");
     	try {
+    		String baseUrl = RestHelper.repositoryUrl(request);
 	    	// form.validate();
-	    	ResponseEntity<?> response = this.nodeTypeHandler.importCND(request, repositoryName, workspaceName, allowUpdate, file.getInputStream());
+	    	ResponseEntity<?> response = this.nodeTypeHandler.importCND(baseUrl, repositoryName, workspaceName, allowUpdate, file.getInputStream());
 	        logger.debug("Exiting ...");
 	    	return response;
     	} catch (Throwable t) {
@@ -460,8 +465,9 @@ public class ModeShapeRestController {
     		@RequestParam( name="depth", defaultValue="0" ) int depth ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
+    		String baseUrl = RestHelper.repositoryUrl(request);
 	    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, rawRepositoryName, rawWorkspaceName, RestHelper.ITEMS_METHOD_NAME), "");
-	    	RestItem item = this.itemHandler.item(request, rawRepositoryName, rawWorkspaceName, path, depth);
+	    	RestItem item = this.itemHandler.item(baseUrl, rawRepositoryName, rawWorkspaceName, path, depth);
 	    	logger.debug("Exiting ...");
 	    	return item;
     	} catch (Throwable t) {
@@ -499,8 +505,9 @@ public class ModeShapeRestController {
             @RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
+    		String baseUrl = RestHelper.repositoryUrl(request);
 	    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, rawRepositoryName, rawWorkspaceName, RestHelper.ITEMS_METHOD_NAME), "");
-	    	ResponseEntity<RestItem> response = this.itemHandler.addItem(request, rawRepositoryName, rawWorkspaceName, path, requestContent);
+	    	ResponseEntity<RestItem> response = this.itemHandler.addItem(baseUrl, rawRepositoryName, rawWorkspaceName, path, requestContent);
 	    	logger.debug("Exiting ...");
 	    	return response;
     	} catch (Throwable t) {
@@ -538,7 +545,8 @@ public class ModeShapeRestController {
             @RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	ResponseEntity<?> response = this.itemHandler.addItems(request, rawRepositoryName, rawWorkspaceName, requestContent);
+    		String baseUrl = RestHelper.repositoryUrl(request);
+	    	ResponseEntity<?> response = this.itemHandler.addItems(baseUrl, rawRepositoryName, rawWorkspaceName, requestContent);
 	    	logger.debug("Exiting ...");
 	    	return response;
     	} catch (Throwable t) {
@@ -576,7 +584,8 @@ public class ModeShapeRestController {
     		@RequestParam("file") MultipartFile file ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	ResponseEntity<?> response = this.itemHandler.addItems(request, rawRepositoryName, rawWorkspaceName, file.getInputStream());
+    		String baseUrl = RestHelper.repositoryUrl(request);
+	    	ResponseEntity<?> response = this.itemHandler.addItems(baseUrl, rawRepositoryName, rawWorkspaceName, file.getInputStream());
 	    	logger.debug("Exiting ...");
 	    	return response;
     	} catch (Throwable e) {
@@ -608,7 +617,7 @@ public class ModeShapeRestController {
     	logger.debug("Entering ...");
     	try {
 	    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, rawRepositoryName, rawWorkspaceName, RestHelper.ITEMS_METHOD_NAME), "");
-	    	this.itemHandler.deleteItem(request, rawRepositoryName, rawWorkspaceName, path);
+	    	this.itemHandler.deleteItem(rawRepositoryName, rawWorkspaceName, path);
 	        logger.debug("Exiting ...");
 	        return ResponseEntity.noContent().build();
     	} catch (Throwable t) {
@@ -642,7 +651,7 @@ public class ModeShapeRestController {
             @RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	ResponseEntity<Void> response = this.itemHandler.deleteItems(request, rawRepositoryName, rawWorkspaceName, requestContent);
+	    	ResponseEntity<Void> response = this.itemHandler.deleteItems(rawRepositoryName, rawWorkspaceName, requestContent);
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
@@ -683,8 +692,9 @@ public class ModeShapeRestController {
             @RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
+    		String baseUrl = RestHelper.repositoryUrl(request);
 	    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, rawRepositoryName, rawWorkspaceName, RestHelper.ITEMS_METHOD_NAME), "");
-	    	RestItem item = itemHandler.updateItem(request, rawRepositoryName, rawWorkspaceName, path, requestContent);
+	    	RestItem item = itemHandler.updateItem(baseUrl, rawRepositoryName, rawWorkspaceName, path, requestContent);
 	        logger.debug("Exiting ...");
 	        return item;
     	} catch (Throwable t) {
@@ -722,7 +732,8 @@ public class ModeShapeRestController {
             @RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	ResponseEntity<?> response = this.itemHandler.updateItems(request, rawRepositoryName, rawWorkspaceName, requestContent);
+    		String baseUrl = RestHelper.repositoryUrl(request);
+	    	ResponseEntity<?> response = this.itemHandler.updateItems(baseUrl, rawRepositoryName, rawWorkspaceName, requestContent);
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
@@ -756,8 +767,9 @@ public class ModeShapeRestController {
             @RequestBody Resource requestBodyInputStream ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
+    		String baseUrl = RestHelper.repositoryUrl(request);
 	    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.BINARY_METHOD_NAME), "");
-	    	ResponseEntity<?> response = this.binaryHandler.updateBinary(request, repositoryName, workspaceName, path, requestBodyInputStream.getInputStream(), true);
+	    	ResponseEntity<?> response = this.binaryHandler.updateBinary(baseUrl, repositoryName, workspaceName, path, requestBodyInputStream.getInputStream(), true);
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
@@ -792,8 +804,9 @@ public class ModeShapeRestController {
             @RequestBody Resource requestBodyInputStream ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
+    		String baseUrl = RestHelper.repositoryUrl(request);
 	    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.BINARY_METHOD_NAME), "");
-	    	ResponseEntity<?> response = this.binaryHandler.updateBinary(request, repositoryName, workspaceName, path, requestBodyInputStream.getInputStream(), false);
+	    	ResponseEntity<?> response = this.binaryHandler.updateBinary(baseUrl, repositoryName, workspaceName, path, requestBodyInputStream.getInputStream(), false);
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
@@ -829,8 +842,9 @@ public class ModeShapeRestController {
         // form.validate();
     	logger.debug("Entering ...");
     	try {
+    		String baseUrl = RestHelper.repositoryUrl(request);
 	    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.BINARY_METHOD_NAME), "");
-	    	ResponseEntity<?> response = this.binaryHandler.updateBinary(request, repositoryName, workspaceName, path, file.getInputStream(), true);
+	    	ResponseEntity<?> response = this.binaryHandler.updateBinary(baseUrl, repositoryName, workspaceName, path, file.getInputStream(), true);
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
@@ -916,8 +930,9 @@ public class ModeShapeRestController {
     	logger.debug("Entering ...");
     	try {
 	    	// form.validate();
+    		String baseUrl = RestHelper.repositoryUrl(request);
 	    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.UPLOAD_METHOD_NAME), "");
-	    	ResponseEntity<?> response = this.binaryHandler.uploadBinary(request, repositoryName, workspaceName, path, file.getInputStream());
+	    	ResponseEntity<?> response = this.binaryHandler.uploadBinary(baseUrl, repositoryName, workspaceName, path, file.getInputStream());
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
@@ -964,8 +979,9 @@ public class ModeShapeRestController {
     		@RequestBody Resource requestBodyInputStream ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
+    		String baseUrl = RestHelper.repositoryUrl(request);
 	    	String path = request.getRequestURI().replaceFirst(String.format(REQUEST_URI_PREFIX, repositoryName, workspaceName, RestHelper.UPLOAD_METHOD_NAME), "");
-	    	ResponseEntity<?> response = this.binaryHandler.uploadBinary(request, repositoryName, workspaceName, path, requestBodyInputStream.getInputStream());
+	    	ResponseEntity<?> response = this.binaryHandler.uploadBinary(baseUrl, repositoryName, workspaceName, path, requestBodyInputStream.getInputStream());
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
@@ -1003,7 +1019,8 @@ public class ModeShapeRestController {
     		@RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestQueryResult result = this.queryHandler.executeQuery(request, rawRepositoryName, rawWorkspaceName, Query.XPATH, requestContent, offset,
+    		String baseUrl = RestHelper.repositoryUrl(request);    		
+	    	RestQueryResult result = this.queryHandler.executeQuery(request.getParameterMap().entrySet(), baseUrl, rawRepositoryName, rawWorkspaceName, Query.XPATH, requestContent, offset,
 	                                         limit);
 	    	logger.debug("Exiting ...");
 	        return result;
@@ -1045,7 +1062,8 @@ public class ModeShapeRestController {
             @RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestQueryResult result = this.queryHandler.executeQuery(request, rawRepositoryName, rawWorkspaceName, Query.SQL, requestContent, offset, limit);
+    		String baseUrl = RestHelper.repositoryUrl(request);  
+	    	RestQueryResult result = this.queryHandler.executeQuery(request.getParameterMap().entrySet(), baseUrl, rawRepositoryName, rawWorkspaceName, Query.SQL, requestContent, offset, limit);
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
@@ -1085,7 +1103,8 @@ public class ModeShapeRestController {
     		@RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestQueryResult result = this.queryHandler.executeQuery(request, rawRepositoryName, rawWorkspaceName, Query.JCR_SQL2, requestContent, offset,
+    		String baseUrl = RestHelper.repositoryUrl(request);
+	    	RestQueryResult result = this.queryHandler.executeQuery(request.getParameterMap().entrySet(), baseUrl, rawRepositoryName, rawWorkspaceName, Query.JCR_SQL2, requestContent, offset,
 	                                         limit);
 	    	logger.debug("Exiting ...");
 	        return result;
@@ -1126,7 +1145,8 @@ public class ModeShapeRestController {
     		@RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestQueryResult result = this.queryHandler.executeQuery(request, rawRepositoryName, rawWorkspaceName,
+    		String baseUrl = RestHelper.repositoryUrl(request);
+	    	RestQueryResult result = this.queryHandler.executeQuery(request.getParameterMap().entrySet(), baseUrl, rawRepositoryName, rawWorkspaceName,
 	                                         org.modeshape.jcr.api.query.Query.FULL_TEXT_SEARCH, requestContent, offset, limit);
 	    	logger.debug("Exiting ...");
 	        return result;
@@ -1168,7 +1188,7 @@ public class ModeShapeRestController {
     		@RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestQueryPlanResult result = this.queryHandler.planQuery(request, rawRepositoryName, rawWorkspaceName, Query.XPATH, requestContent, offset, limit);
+	    	RestQueryPlanResult result = this.queryHandler.planQuery(request.getParameterMap().entrySet(), rawRepositoryName, rawWorkspaceName, Query.XPATH, requestContent, offset, limit);
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
@@ -1209,7 +1229,7 @@ public class ModeShapeRestController {
     		@RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestQueryPlanResult result = this.queryHandler.planQuery(request, rawRepositoryName, rawWorkspaceName, Query.SQL, requestContent, offset, limit);
+	    	RestQueryPlanResult result = this.queryHandler.planQuery(request.getParameterMap().entrySet(), rawRepositoryName, rawWorkspaceName, Query.SQL, requestContent, offset, limit);
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
@@ -1249,7 +1269,7 @@ public class ModeShapeRestController {
     		@RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestQueryPlanResult result = this.queryHandler.planQuery(request, rawRepositoryName, rawWorkspaceName, Query.JCR_SQL2, requestContent, offset,
+	    	RestQueryPlanResult result = this.queryHandler.planQuery(request.getParameterMap().entrySet(), rawRepositoryName, rawWorkspaceName, Query.JCR_SQL2, requestContent, offset,
 	                                      limit);
 	    	logger.debug("Exiting ...");
 	        return result;
@@ -1290,7 +1310,7 @@ public class ModeShapeRestController {
     		@RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestQueryPlanResult result = this.queryHandler.planQuery(request, rawRepositoryName, rawWorkspaceName,
+	    	RestQueryPlanResult result = this.queryHandler.planQuery(request.getParameterMap().entrySet(), rawRepositoryName, rawWorkspaceName,
 	                                      org.modeshape.jcr.api.query.Query.FULL_TEXT_SEARCH, requestContent, offset, limit);
 	    	logger.debug("Exiting ...");
 	        return result;
@@ -1324,7 +1344,8 @@ public class ModeShapeRestController {
     				throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestItem item = this.nodeHandler.nodeWithId(request, rawRepositoryName, rawWorkspaceName, id, depth);
+    		String baseUrl = RestHelper.repositoryUrl(request);
+	    	RestItem item = this.nodeHandler.nodeWithId(baseUrl, rawRepositoryName, rawWorkspaceName, id, depth);
 	    	logger.debug("Exiting ...");
 	    	return item;
     	} catch (Throwable t) {
@@ -1359,7 +1380,8 @@ public class ModeShapeRestController {
             @RequestBody String requestContent ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	    	RestItem item = this.nodeHandler.updateNodeWithId(request, rawRepositoryName, rawWorkspaceName, id, requestContent);
+    		String baseUrl = RestHelper.repositoryUrl(request);
+	    	RestItem item = this.nodeHandler.updateNodeWithId(baseUrl, rawRepositoryName, rawWorkspaceName, id, requestContent);
 	    	logger.debug("Exiting ...");
 	    	return item;
     	} catch (Throwable t) {
@@ -1384,7 +1406,7 @@ public class ModeShapeRestController {
     		@PathVariable( "id" ) String id ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-	        nodeHandler.deleteNodeWithId(request, rawRepositoryName, rawWorkspaceName, id);
+	        nodeHandler.deleteNodeWithId(rawRepositoryName, rawWorkspaceName, id);
 	        ResponseEntity<Void> response = ResponseEntity.noContent().build();
 	        logger.debug("Exiting ...");
 	    	return response;
@@ -1400,7 +1422,7 @@ public class ModeShapeRestController {
             String mimeType,
             String contentDisposition) throws RepositoryException {
     	
-    	Property binaryProperty = this.binaryHandler.getBinaryProperty(request, repositoryName, workspaceName, path);
+    	Property binaryProperty = this.binaryHandler.getBinaryProperty(repositoryName, workspaceName, path);
     	if (binaryProperty.getType() != PropertyType.BINARY) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                            .body(new RestException("The property " + binaryProperty.getPath() + " is not a binary"));

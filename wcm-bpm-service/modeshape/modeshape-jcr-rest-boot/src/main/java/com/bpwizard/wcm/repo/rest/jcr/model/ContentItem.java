@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ContentItem extends WorkflowNode {
 	
+	private static final long serialVersionUID = -6271150516003474875L;
 	private String id;
 	private String name;
 	private String[] categories;

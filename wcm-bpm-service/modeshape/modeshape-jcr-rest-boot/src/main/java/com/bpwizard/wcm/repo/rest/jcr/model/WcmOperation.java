@@ -5,6 +5,7 @@ public class WcmOperation {
 	private String resourceName;
 	private String operation;
 	private String defaultTitle;
+	private String condition;
 	private String defaultIcon;
 	
 	
@@ -48,9 +49,17 @@ public class WcmOperation {
 		this.jcrType = jcrType;
 	}
 
+	public String getCondition() {
+		return condition;
+	}
+
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+
 	@Override
 	public String toString() {
 		return "WcmOperation [jcrType=" + jcrType + ", resourceName=" + resourceName + ", operation=" + operation
-				+ ", defaultTitle=" + defaultTitle + ", defaultIcon=" + defaultIcon + "]";
+				+ ", defaultTitle=" + defaultTitle + ", condition=" + condition + ", defaultIcon=" + defaultIcon + "]";
 	}
 }

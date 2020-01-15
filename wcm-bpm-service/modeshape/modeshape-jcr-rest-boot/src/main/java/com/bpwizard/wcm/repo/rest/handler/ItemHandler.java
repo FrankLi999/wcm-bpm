@@ -40,7 +40,7 @@ import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.VersionManager;
-import javax.servlet.http.HttpServletRequest;
+// import javax.servlet.http.HttpServletRequest;
 import org.modeshape.common.annotation.Immutable;
 import org.modeshape.common.util.Base64;
 import org.modeshape.jcr.api.JcrConstants;
@@ -280,7 +280,7 @@ public abstract class ItemHandler extends AbstractHandler {
      * @throws NotAuthorizedException if the user does not have the access required to delete the item at this path
      * @throws RepositoryException if any other error occurs
      */
-    public void deleteItem( HttpServletRequest request,
+    public void deleteItem( //HttpServletRequest request,
                             String rawRepositoryName,
                             String rawWorkspaceName,
                             String path ) throws RepositoryException {
