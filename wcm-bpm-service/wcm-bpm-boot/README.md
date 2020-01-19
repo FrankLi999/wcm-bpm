@@ -19,6 +19,11 @@ http://localhost:19090/swagger-ui.html
 ## How to run
 mvn spring-boot:run -Dspring-boot.run.jvmArguments="-DROOT_LOG_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm-boot"
 
+wcm-bpm-boot-0.0.1-SNAPSHOT.jar
+
+java -Dspring.profiles.active=dev -Djasypt.encryptor.password=password -DROOT_LOG_LEVEL=WARN -DAPP_LOG_LEVEL=DEBUG -Dlog.root.dir=/var/spring-logs/wcm-bpm-boot -jar wcm-bpm-boot-0.0.1-SNAPSHOT.jar 
+mvn spring-boot:run -Dspring.profiles.active=dev -Dspring-boot.run.jvmArguments="-Djasypt.encryptor.password=password -DROOT_LOG_LEVEL=WARN -DAPP_LOG_LEVEL=DEBUG -Dlog.root.dir=/var/spring-logs/wcm-bpm-boot"
+
     $ mvn spring-boot:run -Djasypt.encryptor.password=password -Dspring-boot.run.jvmArguments="-DROOT_LOG_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm-boot"
 
     $ mvn spring-boot:run -Djasypt.encryptor.password=password -Dagentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -Dspring-boot.run.jvmArguments="-DROOT_LOG_LEVEL=INFO -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/logs/wcm-bpm-boot"

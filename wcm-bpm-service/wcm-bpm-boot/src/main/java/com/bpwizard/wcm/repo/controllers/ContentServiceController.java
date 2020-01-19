@@ -52,8 +52,8 @@ public class ContentServiceController {
 	@Autowired
 	private ContentTaskService contentTaskService;
 	
-    @Autowired
-    private MailService mailService;
+//    @Autowired
+//    private MailService mailService;
 	
     @GetMapping(path="/content-tasks/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ContentTask[] getContentTasks(@PathVariable("topic")  String topic) {
@@ -75,17 +75,17 @@ public class ContentServiceController {
 				startFlowRequest.getBaseUrl(),
 				startFlowRequest.getWorkflow());
 		// this.template.convertAndSend("/wcm-topic/review", new Greeting(startFlowRequest.getContentId()));
-		try {
-		    this.mailService.sendEmailWithAttachment(
-            		"create-draft-with-message",
-            		new String[] {"a@yahoo.com", "b@gmail.com"},
-            		"<h1>create-draft-with-message. Check attachment for image!</h1>",
-            		"android.png");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//		try {
+//		    this.mailService.sendEmailWithAttachment(
+//            		"create-draft-with-message",
+//            		new String[] {"a@yahoo.com", "b@gmail.com"},
+//            		"<h1>create-draft-with-message. Check attachment for image!</h1>",
+//            		"android.png");
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 		return processInstanceId;
 	}
 	
@@ -100,17 +100,17 @@ public class ContentServiceController {
 				startFlowRequest.getContentId(),
 				startFlowRequest.getBaseUrl(),
 				startFlowRequest.getWorkflow());
-		try {
-		    this.mailService.sendEmailWithAttachment(
-            		"create-draft",
-            		new String[] {"a@yahoo.com", "b@gmail.com"},
-            		"<h1>create-draft. Check attachment for image!</h1>",
-            		"android.png");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//		try {
+//		    this.mailService.sendEmailWithAttachment(
+//            		"create-draft",
+//            		new String[] {"a@yahoo.com", "b@gmail.com"},
+//            		"<h1>create-draft. Check attachment for image!</h1>",
+//            		"android.png");
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     	logger.traceExit();
 		return processInstanceId;
 	}
@@ -157,17 +157,17 @@ public class ContentServiceController {
 		Map<String, Object> variables = new HashMap<>();
 		variables.put("contentId", deleteDraftRequest.getClass());
 		this.wcmFlowService.sendMessage("deleteReviewingDraftMessage", businessKey, variables);
-		try {
-		    this.mailService.sendEmailWithAttachment(
-            		"delete-reviewing-draft",
-            		new String[] {"a@yahoo.com", "b@gmail.com"},
-            		"<h1>delete-reviewing-draft. Check attachment for image!</h1>",
-            		"android.png");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//		try {
+//		    this.mailService.sendEmailWithAttachment(
+//            		"delete-reviewing-draft",
+//            		new String[] {"a@yahoo.com", "b@gmail.com"},
+//            		"<h1>delete-reviewing-draft. Check attachment for image!</h1>",
+//            		"android.png");
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 		return "Deleted";
 	}
 	
@@ -179,17 +179,17 @@ public class ContentServiceController {
 				deleteDraftRequest.getWorkflow(), deleteDraftRequest.getContentId());
 		this.wcmFlowService.sendSignal(signalName, null);
 		
-		try {
-		    this.mailService.sendEmailWithAttachment(
-            		"delete-editing-draft",
-            		new String[] {"a@yahoo.com", "b@gmail.com"},
-            		"<h1>delete-editing-draft. Check attachment for image!</h1>",
-            		"android.png");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//		try {
+//		    this.mailService.sendEmailWithAttachment(
+//            		"delete-editing-draft",
+//            		new String[] {"a@yahoo.com", "b@gmail.com"},
+//            		"<h1>delete-editing-draft. Check attachment for image!</h1>",
+//            		"android.png");
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 		
 		return "Deleted";
 	}

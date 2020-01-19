@@ -104,6 +104,25 @@ oc expose svc/mysql
 GRANT ALL ON *.* TO 'wcmbpm'@'%';
 flush privileges;  
 
+
+or 
+update mysql service:
+
+spec:
+  type: NodePort
+  ports:
+    - name: mysql
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+      nodePort: 32306
+      
+      > crc ip
+      192.168.223.158
+      
+      acces mysql via: 192.168.223.158:32306
+      
+      
 ## Loging on openshift
 
 	https://docs.openshift.com/container-platform/4.2/logging/cluster-logging.html

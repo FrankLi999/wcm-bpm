@@ -25,8 +25,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
-			<!-- <artifactId>camunda-bpm-spring-boot-starter</artifactId> -->
-			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId> 
+			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
+			<!-- <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId> --> 
 			<!-- <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId> -->
 			<version>${camunda.spring-boot.version}</version>
 		</dependency>
@@ -267,20 +267,14 @@
             <artifactId>commons-cli</artifactId>
             <version>${commons-cli.version}</version>
         </dependency>
-        <dependency>
-          <groupId>com.h2database</groupId>
-          <artifactId>h2</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-		    <groupId>mysql</groupId>
-		    <artifactId>mysql-connector-java</artifactId>
-		</dependency>
+        
 		<!-- Spring cloud kubernets/openshift starter -->
+		<!-- 
 	    <dependency>
 	      <groupId>org.springframework.cloud</groupId>
 	      <artifactId>spring-cloud-starter-kubernetes-config</artifactId>
 	    </dependency>
+	     -->
 		<!-- Jaegers opentracing -->
 		<!-- 
 		     Turned off Jaegers for now. It messed up javax.transaction.TransactionManager that is used by modeshape 
@@ -441,11 +435,24 @@
 	</build>
 	<profiles>
 	    <profile>
+	      <id>aws</id>
+	      <activation>
+	        <activeByDefault>false</activeByDefault>
+	      </activation>
+	 
+	      <dependencies>
+	        <dependency>
+	          <groupId>com.h2database</groupId>
+	          <artifactId>h2</artifactId>
+	        </dependency>
+	      </dependencies>
+	    </profile>
+	    <profile>
 	      <id>dev</id>
 	      <activation>
-	        <activeByDefault>true</activeByDefault>
+	        <activeByDefault>false</activeByDefault>
 	      </activation>
-	      <!-- 
+	 
 	      <dependencies>
 	        <dependency>
 	          <groupId>com.h2database</groupId>
@@ -456,8 +463,7 @@
 			    <groupId>mysql</groupId>
 			    <artifactId>mysql-connector-java</artifactId>
 			</dependency>
-	      </dependencies>
-	       -->
+	      </dependencies>	      
 	    </profile>
 		<profile>
 	      <id>openshift</id>
@@ -481,7 +487,7 @@
 		    </fabric8.generator.from>
 		    			    
           </properties>
-	      <!-- 
+	      
 	      <dependencies>	        
 	        <dependency>
 	          <groupId>com.h2database</groupId>
@@ -497,8 +503,7 @@
 		      <artifactId>spring-cloud-starter-kubernetes-config</artifactId>
 		    </dependency>
           </dependencies>
-          -->
-	      <build>
+          <build>
 	        <plugins>
 	          <plugin>
 	            <groupId>io.fabric8</groupId>

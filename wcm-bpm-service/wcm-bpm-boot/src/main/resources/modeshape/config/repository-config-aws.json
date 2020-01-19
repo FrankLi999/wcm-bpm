@@ -10,7 +10,7 @@
         },
         "persistence" : {
             "type" : "db",
-            "connectionUrl": "jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE",
+            "connectionUrl": "jdbc:h2:file:./h2/wcm_bpm_aws/data;DB_CLOSE_ON_EXIT=FALSE",
             "driver": "org.h2.Driver",
             "createOnStart" : false,
             "dropOnExit" : false,
@@ -20,7 +20,7 @@
         "binaryStorage" : {
             "type"  : "database",
             "driverClass" : "org.h2.Driver",
-            "url" : "jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE",
+            "url" : "jdbc:h2:file:./h2/wcm_bpm_aws/data;DB_CLOSE_ON_EXIT=FALSE",
             "username" : "wcmbpm",
             "password" : "P@ssw0rd"
         }
@@ -39,6 +39,10 @@
         "allowCreation" : true    
     },
     "security" : {
+        "anonymous" : {
+            "roles" : ["readonly","readwrite","admin"],
+            "useOnFailedLogin" : false
+        },
         "providers" : [
             {
                 "name" : "Spring Security",

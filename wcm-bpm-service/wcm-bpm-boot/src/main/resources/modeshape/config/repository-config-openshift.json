@@ -40,6 +40,7 @@
         "locking" : "db"
     },
     "workspaces" : {
+        "predefined" : ["draft", "expired"],
         "default" : "default",
         "allowCreation" : true    
     },

@@ -57,6 +57,19 @@ public class ModeshapeConfig {
 	
 	@Bean("webRepositoryManager")
 	@DependsOn({"transactionManager", "transactionManagerLookup"})
+	@Profile("aws")
+	public RepositoryManager repositoryManagerAws() throws IOException {
+		logger.debug("Entering ...");
+		Map<String, Object> factoryParams = new HashMap<>();
+		factoryParams.put(RepositoriesContainer.REPOSITORY_NAME, "bpwizard");
+		factoryParams.put(RepositoriesContainer.URL, new ClassPathResource("modeshape/config/repository-config-aws.json").getURL().toExternalForm());
+		RepositoryManager repositoryManager = new RepositoryManager(factoryParams);
+		logger.debug("Exiting ...");
+		return repositoryManager;
+	}
+	
+	@Bean("webRepositoryManager")
+	@DependsOn({"transactionManager", "transactionManagerLookup"})
 	@Profile("openshift")
 	public RepositoryManager repositoryManagerOpenshift() throws IOException {
 		logger.debug("Entering ...");
