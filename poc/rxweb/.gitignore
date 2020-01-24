@@ -1,0 +1,74 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+# dependencies
+/node_modules
+/rxwebio/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+/.vs/*
+/.vs/slnx.sqlite-journal
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+/rxweb.io/.vscode
+*.sqlite
+/packages/reactive-form-validators/.ng_build
+/packages/reactive-form-validators/package-lock.json
+/node_modules.rar
+/package-lock.json
+/rxweb.io
+
+/packages/reactive-form-validators/const/locale/alphabets-locale.regex.ts
+/packages/reactive-form-validators/const/locale
+/rxweb.io.rar
+/rxwebio/.vscode
+/node_modules_old.rar
+/test-config
+/node_modules_New
+*.rar
+/node_modules_old
+/Web.config
+/node_modules_delete
+/node_modules_final
+/rxweb.csproj
+/rxweb.csproj.user
+/node_modules_release
+/rxwebio/package-lock.json
+/rxwebio/rxwebio.csproj
+*.csproj
+/src/app
+
+/rxwebio/.vs/config
+*.user
+/node_modules_build
+/packages/reactive-dynamic-forms/package-lock.json
+/packages/reactive-dynamic-forms/.ng_build

@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec",
+    "module": "commonjs",
+    "types": [
+      "jasmine",
+      "node"
+    ]
+  },
+  "paths": {
+    "@rxweb/reactive-form-validators": [ "packages/reactive-form-validators" ]
+  },
+  "files": [
+    "test.ts",
+    "polyfills.ts"
+  ],
+  "include": [
+    "test/**/*.spec.ts",
+    "test/**/*.d.ts"
+  ]
+}

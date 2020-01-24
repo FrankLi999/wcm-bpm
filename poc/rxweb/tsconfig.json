@@ -1,0 +1,33 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "downlevelIteration": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "paths": {
+      "@rxweb/reactive-form-validators": [ "packages/reactive-form-validators" ],
+      "@rxweb/reactive-dynamic-forms": [ "packages/reactive-dynamic-forms" ],
+      "@rxweb/sanitizers": [ "packages/sanitizers" ],
+      "@rxweb/generics": [ "packages/generics" ],
+      "@rxweb/http": [ "packages/http" ],
+      "@rxweb/core": [ "packages/core" ],
+      "@rxweb/grid": [ "packages/grid" ],
+      "@rxweb/dom": [ "packages/dom" ],
+      "@rxweb/framework": [ "packages/framework" ],
+      "@rxweb/js": [ "packages/js" ]
+    },
+    "lib": [
+      "es2017",
+      "dom"
+    ]
+  }
+}
