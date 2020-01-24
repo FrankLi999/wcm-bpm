@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configure Rolling File Logger for your Application, You need rolling file logger not to fill up your EC2’s instances local disk. -->
+<!-- Another option would be to log to stdout and glue AWS logging to stdout (using stdout is actually one of the best practices in cloud logging). -->
+<Configuration status="WARN" monitorInterval="30">
+    
+    <Properties>
+        <Property name="ROOT_LOG_LEVEL">INFO</Property>
+        <Property name="APP_LOG_LEVEL">INFO</Property>
+        <Property name="APP_NAME">wcm-bpm</Property>
+        <Property name="LOG_PATTERN">
+            logdate=(%d{ISO8601}) thread=(%thread)) level=(%level) loggerclass=(%logger{36}) message=(%msg)%n
+        </Property>
+    </Properties>
+    <Filter level="trace" type="ThresholdFilter"/>
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <!--
+        <RollingFile name="MYAPP" fileName="${LOG_PATH}/${APP_NAME}.log"
+                     filePattern="${LOG_PATH}/${APP_NAME}-%d{yyyy-MM-dd}-%i.log"
+                     append="true">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            
+            <DefaultRolloverStrategy max="10"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+        </RollingFile>
+        -->
+		<Async name="Async">
+		  <!-- <AppenderRef ref="MYAPP"/> -->
+	      <AppenderRef ref="CONSOLE"/>
+	    </Async>
+    </Appenders>
+     <Loggers>
+	    <Logger additivity="false" level="${sys:APP_LOG_LEVEL}" name="com.bpwizard">
+	      <AppenderRef ref="Async"/>
+	    </Logger>
+	    <Root level="${sys:ROOT_LOG_LEVEL}">
+            <AppenderRef ref="Async"/>
+        </Root>
+	</Loggers>
+    
+</Configuration>

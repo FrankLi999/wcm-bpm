@@ -23,6 +23,11 @@
         <opentracing-spring-jaeger-cloud.version>2.0.3</opentracing-spring-jaeger-cloud.version>
     </properties>
 	<dependencies>
+	    <dependency>
+            <groupId>com.bpwizard.wcm-bpm</groupId>
+            <artifactId>modeshape-spring</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
@@ -175,11 +180,12 @@
 			<version>3.4.2</version>
 		</dependency>
 		<!-- camunda-rest is jersey base and has Tomcat dependency -->
+		<!--
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!--
+		-->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-web</artifactId>
@@ -190,7 +196,7 @@
 		        </exclusion>
 		    </exclusions>
 		</dependency>
-		-->
+		
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-undertow</artifactId>
@@ -294,6 +300,16 @@
 		<dependency>
 		    <groupId>io.micrometer</groupId>
 		    <artifactId>micrometer-core</artifactId>
+		</dependency>
+		
+		<dependency>
+          <groupId>com.h2database</groupId>
+          <artifactId>h2</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -434,18 +450,35 @@
 		</plugins>
 	</build>
 	<profiles>
+	    <!-- profile for cloudformation -->
 	    <profile>
-	      <id>aws</id>
+	      <id>cloudformation</id>
 	      <activation>
 	        <activeByDefault>false</activeByDefault>
 	      </activation>
-	 
+	      <!-- 
 	      <dependencies>
 	        <dependency>
 	          <groupId>com.h2database</groupId>
 	          <artifactId>h2</artifactId>
 	        </dependency>
 	      </dependencies>
+	       -->
+	    </profile>
+	    <!-- profile for aws beanstalk -->
+	    <profile>
+	      <id>beanstalk</id>
+	      <activation>
+	        <activeByDefault>false</activeByDefault>
+	      </activation>
+	      <!-- 
+	      <dependencies>
+	        <dependency>
+	          <groupId>com.h2database</groupId>
+	          <artifactId>h2</artifactId>
+	        </dependency>
+	      </dependencies>
+	       -->
 	    </profile>
 	    <profile>
 	      <id>dev</id>
@@ -453,6 +486,7 @@
 	        <activeByDefault>false</activeByDefault>
 	      </activation>
 	 
+	      <!-- 
 	      <dependencies>
 	        <dependency>
 	          <groupId>com.h2database</groupId>
@@ -463,7 +497,8 @@
 			    <groupId>mysql</groupId>
 			    <artifactId>mysql-connector-java</artifactId>
 			</dependency>
-	      </dependencies>	      
+	      </dependencies>
+	      -->     
 	    </profile>
 		<profile>
 	      <id>openshift</id>
@@ -488,7 +523,8 @@
 		    			    
           </properties>
 	      
-	      <dependencies>	        
+	      <dependencies>	
+	        <!--         
 	        <dependency>
 	          <groupId>com.h2database</groupId>
 	          <artifactId>h2</artifactId>
@@ -498,6 +534,7 @@
 			    <groupId>mysql</groupId>
 			    <artifactId>mysql-connector-java</artifactId>
 			</dependency>
+			 -->
 			<dependency>
 		      <groupId>org.springframework.cloud</groupId>
 		      <artifactId>spring-cloud-starter-kubernetes-config</artifactId>

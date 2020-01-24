@@ -236,7 +236,7 @@ There are multiple ways to prevent this:
 
 # Test
 
-   http://localhost:3000
+   http://wcm-ui:3009
    login with: admin@example.com/admin!
 3. 
    npm install ../bpw-rest-client/dist/bpw-rest-client/bpw-rest-client-0.0.1.tgz	

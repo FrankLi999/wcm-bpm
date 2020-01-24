@@ -11,7 +11,7 @@
 
 	<parent>
 	    <groupId>com.bpwizard.wcm-bpm</groupId>
-	    <artifactId>camunda</artifactId>
+	    <artifactId>modeshape</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
@@ -40,10 +40,6 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>

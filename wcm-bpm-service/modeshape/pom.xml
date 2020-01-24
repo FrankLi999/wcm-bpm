@@ -15,14 +15,12 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	
 	<modules>
+	    <module>modeshape-spring</module>
 	    <module>modeshape-jcr-boot</module>
 	    <module>modeshape-commons-boot</module>
             <module>modeshape-jcr-rest-boot</module>
 	    <module>modeshape-jcr-webdav-boot</module>
-	    <module>modeshape-webdav-boot</module>	
-            					
+	    <module>modeshape-webdav-boot</module>
 	</modules>
-    
 </project>	

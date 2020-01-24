@@ -338,12 +338,12 @@
               "projects/bpm-ui/src/assets"
             ],
             "styles": [
-			  "node_modules/bpmn-js/dist/assets/diagram-js.css",
+              "node_modules/bpmn-js/dist/assets/diagram-js.css",
               "node_modules/bpmn-js/dist/assets/bpmn-font/css/bpmn.css",
               "projects/bpm-ui/src/styles.scss"
             ],
             "scripts": [
-			  {
+              {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
               },
               {
@@ -354,7 +354,7 @@
                 "bundleName": "polyfill-webcomp",
                 "input": "node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js"
               }
-			]
+            ]
           },
           "configurations": {
             "production": {
@@ -387,7 +387,7 @@
             "hmr": {
               "fileReplacements": [
                 {
-				  "replace": "projects/bpm-ui/src/environments/environment.ts",
+                  "replace": "projects/bpm-ui/src/environments/environment.ts",
                   "with": "projects/bpm-ui/src/environments/environment.hmr.ts"
                 }
               ]
@@ -902,7 +902,7 @@
               "projects/bpw-skeleton-minimal/src/styles.scss"
             ],
             "scripts": [
-			  {
+              {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
               },
               {
@@ -913,7 +913,7 @@
                 "bundleName": "polyfill-webcomp",
                 "input": "node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js"
               }
-			]
+            ]
           }
         },
         "lint": {
@@ -984,5 +984,8 @@
       }
     }
   },
-  "defaultProject": "wcm-authoring"
+  "defaultProject": "wcm-authoring",
+  "cli": {
+    "analytics": "328a5d78-af92-4471-8cd0-dc5e198cb042"
+  }
 }

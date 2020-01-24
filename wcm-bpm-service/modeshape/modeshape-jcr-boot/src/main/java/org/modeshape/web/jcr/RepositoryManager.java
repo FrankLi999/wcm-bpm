@@ -49,8 +49,7 @@ import com.bpwizard.wcm.repo.jcr.security.SpringSecurityCredentials;
 public class RepositoryManager {
 	private static final Logger logger = LogManager.getLogger(RepositoryManager.class);
     //private static final Logger LOGGER = WebLogger.getLogger(RepositoryManager.class);
-    private Map<String, Object> factoryParams = new HashMap<String, Object>();
-
+    private Map<String, Object> factoryParams = new HashMap<>();
     private RepositoriesContainer repositoriesContainer;
 
     public RepositoryManager(Map<String, Object> factoryParams) {

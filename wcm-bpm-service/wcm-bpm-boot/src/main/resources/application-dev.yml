@@ -15,7 +15,7 @@
 #spring.jpa.properties.hibernate.cache.region.factory_class=com.hazelcast.hibernate.HazelcastCacheRegionFactory
 
 keycloak:
-  base-url: http://localhost:8080/auth
+  base-url: http://mysql:8080/auth
   realm: wcm_bpm
   realm-url: ${kc.base-url}/realms/${kc.realm}
 spring:
@@ -62,7 +62,7 @@ spring:
             # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
   datasource:
     # url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-    url: jdbc:mysql://127.0.0.1:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     # url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
     username: wcmbpm
     password: P@ssw0rd
@@ -170,7 +170,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://localhost:3000, http://localhost:4000
+    allowed-origins: http://wcm-ui:3009, http://bpm-ui:4009
     
   recaptcha:
     sitekey: 6LdwxRcUAAAAABkhOGWQXhl9FsR27D5YUJRuGzx0

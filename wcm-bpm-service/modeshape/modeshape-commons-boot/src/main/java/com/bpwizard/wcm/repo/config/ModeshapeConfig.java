@@ -31,9 +31,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 
+import com.bpwizard.wcm.repo.context.SpringContext;
 import com.bpwizard.wcm.repo.jcr.ModeshapeTransactionManagerLookup;
 
 @Configuration
@@ -42,64 +43,34 @@ public class ModeshapeConfig {
 	@Autowired 
 	private TransactionManager transactionManager;
 	
+	@Autowired
+	private Environment env;
+	
+	@Bean
+	@DependsOn({"modeshapeDataSource"})
+    public SpringContext sprinContext() {
+    	SpringContext springContext = new SpringContext();
+    	return springContext;
+    }
+	
 	@Bean("webRepositoryManager")
-	@DependsOn({"transactionManager", "transactionManagerLookup"})
-	@Profile("dev")
+	@DependsOn({"transactionManager", "transactionManagerLookup", "sprinContext"})
 	public RepositoryManager repositoryManagerDev() throws IOException {
 		logger.debug("Entering ...");
+		String activeProfile = env.getActiveProfiles()[0];
+		
 		Map<String, Object> factoryParams = new HashMap<>();
+		
 		factoryParams.put(RepositoriesContainer.REPOSITORY_NAME, "bpwizard");
-		factoryParams.put(RepositoriesContainer.URL, new ClassPathResource("modeshape/config/repository-config-dev.json").getURL().toExternalForm());
+		factoryParams.put(RepositoriesContainer.URL, new ClassPathResource(String.format("modeshape/config/repository-config-%s.json", activeProfile)).getURL().toExternalForm());
 		RepositoryManager repositoryManager = new RepositoryManager(factoryParams);
 		logger.debug("Exiting ...");
 		return repositoryManager;
 	}
 	
-	@Bean("webRepositoryManager")
-	@DependsOn({"transactionManager", "transactionManagerLookup"})
-	@Profile("aws")
-	public RepositoryManager repositoryManagerAws() throws IOException {
-		logger.debug("Entering ...");
-		Map<String, Object> factoryParams = new HashMap<>();
-		factoryParams.put(RepositoriesContainer.REPOSITORY_NAME, "bpwizard");
-		factoryParams.put(RepositoriesContainer.URL, new ClassPathResource("modeshape/config/repository-config-aws.json").getURL().toExternalForm());
-		RepositoryManager repositoryManager = new RepositoryManager(factoryParams);
-		logger.debug("Exiting ...");
-		return repositoryManager;
-	}
-	
-	@Bean("webRepositoryManager")
-	@DependsOn({"transactionManager", "transactionManagerLookup"})
-	@Profile("openshift")
-	public RepositoryManager repositoryManagerOpenshift() throws IOException {
-		logger.debug("Entering ...");
-		Map<String, Object> factoryParams = new HashMap<>();
-		factoryParams.put(RepositoriesContainer.REPOSITORY_NAME, "bpwizard");
-		factoryParams.put(RepositoriesContainer.URL, new ClassPathResource("modeshape/config/repository-config-openshift.json").getURL().toExternalForm());
-		RepositoryManager repositoryManager = new RepositoryManager(factoryParams);
-		logger.debug("Exiting ...");
-		return repositoryManager;
-	}
-	
-//	@Bean
-//	@DependsOn({"transactionManager", "transactionManagerLookup"})
-//    public ModeShapeRepositoryFactory repositoryFactory() {
-//		ModeShapeRepositoryFactory factory = new ModeShapeRepositoryFactory();
-//        factory.setConfiguration(new ClassPathResource("repository-config.json"));
-//        log.debug("Created repositoryFactory");
-//        return factory;
-//    }
-//	
-//	@Bean
-//	public ModeShapeSessionFactory sessionRepository() throws Exception {
-//		ModeShapeSessionFactory sessionFactory = new ModeShapeSessionFactory(repositoryFactory().getObject());
-//		return sessionFactory;
-//	}
-	
-    @Bean
+	@Bean
     public TransactionManagerLookup transactionManagerLookup(TransactionManager transactionManager) {
     	ModeshapeTransactionManagerLookup transactionManagerLookup = new ModeshapeTransactionManagerLookup();
-    	//transactionManagerLookup.setTransactionManager(this.atomikosTransactionManager());
     	transactionManagerLookup.setTransactionManager(this.transactionManager);
     	return transactionManagerLookup;
     }
