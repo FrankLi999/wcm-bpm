@@ -1,5 +1,0 @@
-{
-    "factory" : "io.apiman.gateway.test.junit.vertx3.Vertx3GatewayFileRegistryFactory",
-    "config" : "vertx3/conf-file.json",
-    "configPushEmulator" : "vertx3/conf-api-to-file.json"
-}

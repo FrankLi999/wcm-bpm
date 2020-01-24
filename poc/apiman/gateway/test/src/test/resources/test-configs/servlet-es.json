@@ -1,7 +1,0 @@
-{
-    "factory" : "io.apiman.gateway.test.junit.servlet.ServletGatewayTestServerFactory",
-    "es" : true,
-    "config-files" : [
-      "servlet-es.properties"
-    ]
-}

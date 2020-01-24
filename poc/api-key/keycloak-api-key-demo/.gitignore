@@ -1,7 +1,0 @@
-target/
-node_modules/
-*.iml
-*.idea
-.settings/
-.project
-.classpath

@@ -1,8 +1,0 @@
-{
-    "port": 3000,
-    "files": ["../../dist/wcm-authoring/*.{html,htm,css,js}"],
-    "server": { "baseDir": "../../dist/wcm-authoring" },
-    "ui": {
-      "port": 3001
-    }
-  }

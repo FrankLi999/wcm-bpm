@@ -1,9 +1,0 @@
-{
-	"bpwizard/library/system/configuration/operations/siteArea/previewSiteArea" : {
-        "jcr:primaryType":"bpw:supportedOpertion",
-        "bpw:resourceName": "siteArea",
-        "bpw:operation": "Preview",
-        "bpw:defaultTitle": "Preview SiteArea",
-        "bpw:defaultIcon": "pageview"
-    }
-}

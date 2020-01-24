@@ -1,7 +1,0 @@
-keycloak:
-  realm: public_library
-  resource: public_library
-  auth-server-url: "http://localhost:8180/auth"
-  ssl-required: external
-  public-client: true
-  principal-attribute: preferred_username

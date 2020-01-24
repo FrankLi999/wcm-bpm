@@ -1,6 +1,0 @@
-GET /organizations/GatewayApiTest/clients/test-client/versions admin/admin
-----
-200
-Content-Type: application/json
-
-["1.0"]

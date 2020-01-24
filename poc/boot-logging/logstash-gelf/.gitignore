@@ -1,8 +1,0 @@
-.idea/
-*.iml
-target
-work/
-pom.xml.releaseBackup
-release.properties
-atlassian-ide-plugin.xml
-coverage-error.log
