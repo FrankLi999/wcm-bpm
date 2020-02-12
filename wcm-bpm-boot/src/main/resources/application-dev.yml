@@ -150,6 +150,11 @@ bpw:
   modeshape:
     authoring:
       enabled: true
+    datasource:
+      url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+      driver-class-name: com.mysql.jdbc.Driver
+      username: wcmbpm
+      password: P@ssw0rd
   # auth:
     # tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
     # tokenExpirationMsec: 864000000
@@ -194,7 +199,9 @@ org:
           NEW_RESOURCE_PRIMARY_TYPE_NAME: "nt:file"
           NEW_CONTENT_PRIMARY_TYPE_NAME: "nt:resource"
 management:
-  health:    camunda:      enabled: true
+  health:
+    camunda:
+      enabled: true
 camunda:
   bpm:
     #jpa: 

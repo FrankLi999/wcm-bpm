@@ -30,8 +30,8 @@
         </dependency>
 		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
-			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
-			<!-- <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId> --> 
+			<!-- <artifactId>camunda-bpm-spring-boot-starter</artifactId> -->
+			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId> 
 			<!-- <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId> -->
 			<version>${camunda.spring-boot.version}</version>
 		</dependency>
@@ -59,18 +59,30 @@
 		    <groupId>org.camunda.bpm</groupId>
 		    <artifactId>camunda-engine-plugin-spin</artifactId>
 		</dependency>
-		
 		<dependency>
 	        <groupId>org.camunda.bpm.dmn</groupId>
 	        <artifactId>camunda-engine-dmn</artifactId>
 	    </dependency>
-		<!-- 
+	    <dependency>
+		    <groupId>org.camunda.bpm.model</groupId>
+  			<artifactId>camunda-dmn-model</artifactId>
+	    </dependency>
+  		<dependency>
+		    <groupId>org.camunda.bpm.dmn</groupId>
+  			<artifactId>camunda-engine-feel-api</artifactId>
+	    </dependency>
+	    <dependency>
+		    <groupId>org.camunda.bpm.dmn</groupId>
+  			<artifactId>camunda-engine-feel-juel</artifactId>
+	    </dependency>
+		
+	     <!-- 
 		<dependency>
 			<groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>camunda-rest-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		-->
+		 -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

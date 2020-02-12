@@ -1,3 +1,5 @@
+## Local Docker
+ docker run --detach --env MYSQL_ROOT_PASSWORD=P@ssw0rd --env MYSQL_USER=wcmbpm --env MYSQL_PASSWORD=P@ssw0rd --env MYSQL_DATABASE=wcm_bpm --name mysql --publish 3306:3306 mysql:8.0.16
 ## Openshift CodeReady
 crc start -n 8.8.8.8
 
