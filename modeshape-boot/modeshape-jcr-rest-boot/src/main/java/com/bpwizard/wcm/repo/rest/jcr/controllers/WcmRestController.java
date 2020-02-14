@@ -1578,7 +1578,7 @@ public class WcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			contentItemPath = contentItemPath.startsWith("/") ? contentItemPath : "/" + contentItemPath;
 			RestNode contentItemNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					contentItemPath, 3);
+					contentItemPath, 4);
 			
 			ContentItem contentItem = new ContentItem(); 
 			contentItem.setRepository(repository);
@@ -1587,14 +1587,16 @@ public class WcmRestController {
 			Map<String, String> elements = new HashMap<>();
 			Map<String, String> properties = new HashMap<>();
 			contentItem.setElements(elements);
+			elements.put("name", contentItemNode.getName());
 			contentItem.setProperties(properties);
 			contentItem.setName(contentItemNode.getName());
-			this.resolveWorkflowNode(contentItem, contentItemNode);
+			this.resolveWorkflowNode(contentItem, contentItemNode, properties);
 			for (RestProperty property: contentItemNode.getJcrProperties()) {
 				if ("bpw:authoringTemplate".equals(property.getName())) {
 					contentItem.setAuthoringTemplate(property.getValues().get(0));
 				} else if ("bpw:categories".equals(property.getName())) {
 					contentItem.setCategories(property.getValues().toArray(new String[property.getValues().size()]));
+					properties.put("categories", String.join(",", property.getValues()));
 				} 
 			}
 			for (RestNode node: contentItemNode.getChildren()) {
@@ -1603,7 +1605,7 @@ public class WcmRestController {
 						if (this.wcmUtils.checkNodeType(enode, "bpw:contentElement")) {
 							for (RestProperty property: enode.getJcrProperties()) {
 								if ("bpw:value".equals(property.getName())) {
-									properties.put(enode.getName(), property.getValues().get(0));
+									elements.put(enode.getName(), property.getValues().get(0));
 									break;
 								} 
 							}
@@ -2123,8 +2125,7 @@ public class WcmRestController {
 		return String.format("%s.%s", placeHolder, key);
 	}
 	
-	private ObjectNode getColumnNode(AuthoringTemplate at, FormColumn formColumn, String placeHolder) {
-		
+	private ObjectNode getColumnNode(AuthoringTemplate at, FormColumn formColumn) {
 		ObjectNode columnNode = this.objectMapper.createObjectNode();
 		columnNode.put("type", "div");
 		columnNode.put("displayFlex", true);
@@ -2132,7 +2133,10 @@ public class WcmRestController {
 		columnNode.put("fxFlex", formColumn.getFxFlex());
 
 		ArrayNode fieldNodes = this.objectMapper.createArrayNode();
-		for (String name : formColumn.getFormControls()) {			
+		for (String fieldName : formColumn.getFormControls()) {
+			String names[] = fieldName.split("\\.", 2);
+			String name = names[1];
+			String placeHolder = names[0];
 			FormControl formControl = at.getElements().get(name);
 			formControl = (formControl == null) ? at.getProperties().get(name) : formControl;
 			Optional<FieldLayout> customeFileLayout = this.getCustomeFileLayout(
@@ -2201,13 +2205,13 @@ public class WcmRestController {
 		return columnNode;
 	}
 
-	private ObjectNode getRowNode(AuthoringTemplate at, FormRow formRow, String placeHolder) {
+	private ObjectNode getRowNode(AuthoringTemplate at, FormRow formRow) {
 		ObjectNode rowNode = this.objectMapper.createObjectNode();
 		rowNode.put("type", "flex");
 		rowNode.put("flex-flow", "row wrap");
 		ArrayNode columnNodes = this.objectMapper.createArrayNode();
 		for (FormColumn column : formRow.getColumns()) {
-			ObjectNode columnNode = this.getColumnNode(at, column, placeHolder);
+			ObjectNode columnNode = this.getColumnNode(at, column);
 			columnNodes.add(columnNode);
 		}
 		// { , , "items": [ "first_name", "last_name" ] },
@@ -2218,17 +2222,17 @@ public class WcmRestController {
 	private ArrayNode toFormLayoutNode(AuthoringTemplate at) {
 		ArrayNode formNode = this.objectMapper.createArrayNode();
 		if (at.getPropertyRow() != null) {
-			formNode.add(this.getRowNode(at, at.getPropertyRow(), "properties"));
+			formNode.add(this.getRowNode(at, at.getPropertyRow()));
 		}
 		for (BaseFormGroup formGroup : at.getElementGroups()) {
 			if (formGroup instanceof FormRow) {
-				ObjectNode rowNode = this.getRowNode(at, (FormRow) formGroup, "elements");
+				ObjectNode rowNode = this.getRowNode(at, (FormRow) formGroup);
 				formNode.add(rowNode);
 			}
 
 			if (formGroup instanceof FormRows) {
 				for (FormRow formRow : ((FormRows) formGroup).getRows()) {
-					ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow, "elements");
+					ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
 					formNode.add(rowNode);
 				}
 			}
@@ -2242,7 +2246,7 @@ public class WcmRestController {
 					tabNode.put("title", formTab.getTabTitle());
 					ArrayNode tabItemNodes = this.objectMapper.createArrayNode();
 					for (BaseFormGroup formRow : formTab.getFormGroups()) {
-						ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow, "elements");
+						ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
 						tabItemNodes.add(rowNode);
 					}
 					tabNode.set("items", tabItemNodes);
@@ -2261,7 +2265,7 @@ public class WcmRestController {
 					stepNode.put("title", formStep.getStepTitle());
 					ArrayNode stepItemNodes = this.objectMapper.createArrayNode();
 					for (BaseFormGroup formRow : formStep.getFormGroups()) {
-						ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow, "elements");
+						ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
 						stepItemNodes.add(rowNode);
 					}
 					stepNode.set("items", stepItemNodes);
@@ -2425,11 +2429,11 @@ public class WcmRestController {
 			schemaNode.set("properties", properties);
 			schemaNode.set("definitions", definitions);
 			String requiredElements[] = at.getElements().entrySet().stream().map(entry -> entry.getValue())
-					.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
+					.filter(formControl -> formControl.isMandatory()).map(formControl -> String.format("elements.%s", formControl.getName()))
 					.toArray(String[]::new);
 	
 			String requiredProperties[] = at.getProperties().entrySet().stream().map(entry -> entry.getValue())
-					.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
+					.filter(formControl -> formControl.isMandatory()).map(formControl -> String.format("properties.%s", formControl.getName()))
 					.toArray(String[]::new);
 			String required[] = Stream.concat(Arrays.stream(requiredElements), Arrays.stream(requiredProperties))
 					.toArray(String[]::new);
@@ -2976,18 +2980,21 @@ public class WcmRestController {
 		return authoringTemplateWithLibrary;
 	}
 
-	private void resolveWorkflowNode(WorkflowNode workflowNode, RestNode restNode) {
+	private void resolveWorkflowNode(WorkflowNode workflowNode, RestNode restNode, Map<String, String> properties) {
 		for (RestProperty property : restNode.getJcrProperties()) {
 			if ("bpw:title".equals(property.getName())) {
 				workflowNode.setTitle(property.getValues().get(0));
+				properties.put("title", property.getValues().get(0));
 			} else if ("bpw:description".equals(property.getName())) {
 				workflowNode.setDescription(property.getValues().get(0));
+				properties.put("description", property.getValues().get(0));
 			} else if ("bpw:publishDate".equals(property.getName())) {
 				workflowNode.setPublishDate(property.getValues().get(0));
 			} else if ("bpw:expireDate".equals(property.getName())) {
 				workflowNode.setExpireDate(property.getValues().get(0));
 			} else if ("bpw:workflow".equals(property.getName())) {
 				workflowNode.setWorkflow(property.getValues().get(0));
+				properties.put("workflow", property.getValues().get(0));
 			} else if ("bpw:workflowStage".equals(property.getName())) {
 				workflowNode.setWorkflowStage(property.getValues().get(0));
 			} else if ("jcr:lockOwner".equals(property.getName())) {

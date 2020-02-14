@@ -75,7 +75,7 @@
 		    <groupId>org.camunda.bpm.dmn</groupId>
   			<artifactId>camunda-engine-feel-juel</artifactId>
 	    </dependency>
-		
+
 	     <!-- 
 		<dependency>
 			<groupId>com.bpwizard.wcm-bpm</groupId>

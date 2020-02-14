@@ -1,5 +1,61 @@
+## Glowroot path
+
+https://glowroot.org/
+
+~/tools/glowroot-0.13.5/glowroot.jar
+
+add -javaagent:~/tools/glowroot-0.13.5/glowroot.jar to your application's JVM args
+
+http://localhost:4000
+
+
+linux:
+-Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=dev -Djasypt.encryptor.password=password -DROOT_LOG_LEVEL=WARN -DAPP_LOG_LEVEL=DEBUG -Dlog.root.dir=/var/spring-logs/wcm-bpm-boot -javaagent:/home/frank/tools/glowroot-0.13.5/glowroot.jar
+
+windows:
+-Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=dev -Djasypt.encryptor.password=password -DROOT_LOG_LEVEL=WARN -DAPP_LOG_LEVEL=DEBUG -Dlog.root.dir=c:/var/spring-logs/wcm-bpm-boot -javaagent:c:/tools/glowroot-0.13.5/glowroot.jar
+
+
 ## Local Docker
+
  docker run --detach --env MYSQL_ROOT_PASSWORD=P@ssw0rd --env MYSQL_USER=wcmbpm --env MYSQL_PASSWORD=P@ssw0rd --env MYSQL_DATABASE=wcm_bpm --name mysql --publish 3306:3306 mysql:8.0.16
+
+ apiman local:
+ 
+ docker pull apiman/on-wildfly11 size 1.18G
+ docker run -it -p 8080:8080 -p 8443:8443 --name apiman apiman/on-wildfly11:latest
+ 
+ http://192.168.0.168:8080/apimanui
+    admin/admin123!
+ 	
+ gravitee local:
+ graviteeio/gateway
+ graviteeio/management-api
+ graviteeio/management-ui
+ docker run --publish 82:8082  --name gateway  --detach  graviteeio/gateway:latest
+ docker run --publish 81:8083 --name management-api --detach graviteeio/management-api:latest
+ docker run --publish 80:80 --env MGMT_API_URL=http://localhost:81/management/ --name management-ui --detach graviteeio/management-ui:latest
+ 
+ docker compose with API Management + MongoDB + Elasticsearch
+ 
+ 
+ graviteeio/gateway: http://localhost:8000
+ graviteeio/management-api: http://localhost:8005/management/
+ graviteeio/management-ui: http://localhost:8002
+
+  admin /adminadmin
+  
+ # Download compose files
+ $ curl -L https://raw.githubusercontent.com/gravitee-io/gravitee-docker/master/environments/demo/common.yml -o "common.yml"
+ $ curl -L https://raw.githubusercontent.com/gravitee-io/gravitee-docker/master/environments/demo/docker-compose-local.yml -o "docker-compose-local.yml"
+
+ # (Optional step: pull to ensure that you are running latest images)
+ $ docker-compose -f docker-compose-local.yml pull
+
+ # And run...
+ $ docker-compose -f docker-compose-local.yml up
+
+ 
 ## Openshift CodeReady
 crc start -n 8.8.8.8
 

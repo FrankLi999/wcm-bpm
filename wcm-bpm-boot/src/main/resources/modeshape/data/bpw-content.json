@@ -510,7 +510,7 @@
     },
     "bpwizard/library/system/authoringTemplate/contentType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name", "title", "siteArea", "categories", "workflow"]
+        "bpw:fieldNames": ["elements.name", "properties.title", "properties.siteArea", "properties.categories", "properties.workflow"]
     },    
     "bpwizard/library/system/authoringTemplate/contentType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -523,7 +523,7 @@
     },
     "bpwizard/library/system/authoringTemplate/contentType/elementGroups/firstRows/firstRow/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["body"]
+        "bpw:fieldNames": ["elements.body"]
     },
     "bpwizard/library/system/authoringTemplate/contentType/elements" : {
         "jcr:primaryType": "bpw:elementFolder"
@@ -590,7 +590,7 @@
     },
     "bpwizard/library/system/authoringTemplate/componentType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name", "title"]
+        "bpw:fieldNames": ["elements.name", "properties.title"]
     },
     "bpwizard/library/system/authoringTemplate/componentType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -603,7 +603,7 @@
     },
     "bpwizard/library/system/authoringTemplate/componentType/elementGroups/firstRows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["componentTemplate"]
+        "bpw:fieldNames": ["elements.componentTemplate"]
     },
     "bpwizard/library/system/authoringTemplate/componentType/elements" : {
         "jcr:primaryType": "bpw:elementFolder"
@@ -647,7 +647,7 @@
     },
     "bpwizard/library/system/authoringTemplate/fileType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name", "title", "description"]
+        "bpw:fieldNames": ["elements.name", "properties.title", "properties.description"]
     },
     "bpwizard/library/system/authoringTemplate/fileType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -670,7 +670,7 @@
     },
     "bpwizard/library/system/authoringTemplate/fileType/elementGroups/tabs/contentTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["siteArea", "content"]
+        "bpw:fieldNames": ["elements.siteArea", "elements.content"]
     },
     "bpwizard/library/system/authoringTemplate/fileType/elementGroups/tabs/metadataTab" : {
         "jcr:primaryType": "bpw:formTab",
@@ -681,7 +681,7 @@
     },
     "bpwizard/library/system/authoringTemplate/fileType/elementGroups/tabs/metadataTab/firstRow/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["metadata", "showOnMenu", "sorderOrder"]
+        "bpw:fieldNames": ["elements.metadata", "elements.showOnMenu", "elements.sorderOrder"]
     },
     "bpwizard/library/system/authoringTemplate/fileType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
@@ -755,7 +755,7 @@
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name"]
+        "bpw:fieldNames": ["elements.name"]
     },    
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -771,7 +771,7 @@
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["rootSiteArea", "colorTheme", "customScrollbars"]
+        "bpw:fieldNames": ["elements.rootSiteArea", "elements.colorTheme", "elements.customScrollbars"]
     },
     
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/secondRow" : {
@@ -779,11 +779,11 @@
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/secondRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["layout_style"]
+        "bpw:fieldNames": ["elements.layout_style"]
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/secondRow/secondColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["layout_width"]
+        "bpw:fieldNames": ["elements.layout_width"]
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/secondRow/firstColumn/layout_style" : {
         "jcr:primaryType":"bpw:fieldLayout",
@@ -800,11 +800,11 @@
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["layout_navbar_primaryBackground", "layout_navbar_secondaryBackground", "layout_navbar_hidden"]
+        "bpw:fieldNames": ["elements.layout_navbar_primaryBackground", "elements.layout_navbar_secondaryBackground", "elements.layout_navbar_hidden"]
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/secondColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["layout_navbar_folded", "layout_navbar_position", "layout_navbar_variant"]
+        "bpw:fieldNames": ["elements.layout_navbar_folded", "elements.layout_navbar_position", "elements.layout_navbar_variant"]
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/firstColumn/layout_navbar_primaryBackground" : {
         "jcr:primaryType":"bpw:fieldLayout",
@@ -841,11 +841,11 @@
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/fourthRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["layout_toolbar_customBackgroundColor", "layout_toolbar_background"]
+        "bpw:fieldNames": ["elements.layout_toolbar_customBackgroundColor", "elements.layout_toolbar_background"]
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/fourthRow/secondColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["layout_toolbar_hidden", "layout_toolbar_position"]
+        "bpw:fieldNames": ["elements.layout_toolbar_hidden", "elements.layout_toolbar_position"]
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/fourthRow/firstColumn/layout_toolbar_customBackgroundColor" : {
         "jcr:primaryType":"bpw:fieldLayout",
@@ -872,11 +872,11 @@
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/fifthRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["layout_footer_customBackgroundColor", "layout_footer_background"]
+        "bpw:fieldNames": ["elements.layout_footer_customBackgroundColor", "elements.layout_footer_background"]
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/fifthRow/secondColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["layout_footer_hidden", "layout_footer_position"]
+        "bpw:fieldNames": ["elements.layout_footer_hidden", "elements.layout_footer_position"]
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/fifthRow/firstColumn/layout_footer_customBackgroundColor" : {
         "jcr:primaryType":"bpw:fieldLayout",
@@ -903,11 +903,11 @@
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/sixthRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["layout_sidePanel_hidden"]
+        "bpw:fieldNames": ["elements.layout_sidePanel_hidden"]
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/sixthRow/secondColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["layout_sidePanel_position"]
+        "bpw:fieldNames": ["elements.layout_sidePanel_position"]
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups/sixthRow/firstColumn/layout_sidePanel_hidden" : {
         "jcr:primaryType":"bpw:fieldLayout",
@@ -975,7 +975,7 @@
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name", "title", "description"]
+        "bpw:fieldNames": ["elements.name", "properties.title", "properties.description"]
     },    
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -998,7 +998,7 @@
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/contentTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["url", "cacheTTL", "securePage", "sorderOrder", "defaultContent"]
+        "bpw:fieldNames": ["elements.url", "elements.cacheTTL", "elements.securePage", "elements.sorderOrder", "elements.defaultContent"]
     },
     
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab" : {
@@ -1010,7 +1010,7 @@
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["contentAreaLayout", "siteConfig", "friendlyURL", "showOnMenu", "allowedArtifactTypes", "allowedFileExtension", "metadata", "searchData"]
+        "bpw:fieldNames": ["elements.contentAreaLayout", "elements.siteConfig", "elements.friendlyURL", "elements.showOnMenu", "elements.allowedArtifactTypes", "elements.allowedFileExtension", "elements.metadata", "elements.searchData"]
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow/firstColumn/searchData" : {
         "jcr:primaryType":"bpw:fieldLayout"
@@ -1051,7 +1051,7 @@
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["navigationId", "navigationType", "function", "translate", "icon", "classes", "exactMatch", "externalUrl", "openInNewTab", "badge"]
+        "bpw:fieldNames": ["elements.navigationId", "elements.navigationType", "elements.function", "elements.translate", "elements.icon", "elements.classes", "elements.exactMatch", "elements.externalUrl", "elements.openInNewTab", "elements.badge"]
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/firstRow/firstColumn/badge" : {
         "jcr:primaryType":"bpw:fieldLayout"
@@ -1303,7 +1303,7 @@
     },
     "bpwizard/library/system/authoringTemplate/keyValueType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name"]
+        "bpw:fieldNames": ["elements.name"]
     },    
     "bpwizard/library/system/authoringTemplate/keyValueType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1322,7 +1322,7 @@
     },
     "bpwizard/library/system/authoringTemplate/keyValueType/elementGroups/firstRows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["key", "value"]
+        "bpw:fieldNames": ["elements.key", "elements.value"]
     },
     "bpwizard/library/system/authoringTemplate/keyValueType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
@@ -1362,7 +1362,7 @@
     },
     "bpwizard/library/system/authoringTemplate/themeType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name", "title"]
+        "bpw:fieldNames": ["elements.name", "properties.title"]
     },    
     "bpwizard/library/system/authoringTemplate/themeType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1381,7 +1381,7 @@
     },
     "bpwizard/library/system/authoringTemplate/themeType/elementGroups/rows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["note"]
+        "bpw:fieldNames": ["elements.note"]
     },
     "bpwizard/library/system/authoringTemplate/themeType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
@@ -1424,7 +1424,7 @@
     },
     "bpwizard/library/system/authoringTemplate/folderType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name"]
+        "bpw:fieldNames": ["elements.name"]
     },    
     "bpwizard/library/system/authoringTemplate/folderType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1443,7 +1443,7 @@
     },
     "bpwizard/library/system/authoringTemplate/folderType/elementGroups/rows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["note"]
+        "bpw:fieldNames": ["elements.note"]
     },
     "bpwizard/library/system/authoringTemplate/folderType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
@@ -1475,7 +1475,7 @@
     },
     "bpwizard/library/system/authoringTemplate/vanityURLType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name", "title"]
+        "bpw:fieldNames": ["elements.name", "properties.title"]
     },    
     "bpwizard/library/system/authoringTemplate/vanityURLType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1494,7 +1494,7 @@
     },
     "bpwizard/library/system/authoringTemplate/vanityURLType/elementGroups/firstRows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["url", "forwardTo"]
+        "bpw:fieldNames": ["elements.url", "elements.forwardTo"]
     },
     "bpwizard/library/system/authoringTemplate/vanityURLType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
@@ -1544,7 +1544,7 @@
     },
     "bpwizard/library/system/authoringTemplate/personaType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name", "title"]
+        "bpw:fieldNames": ["elements.name", "properties.title"]
     },    
     "bpwizard/library/system/authoringTemplate/personaType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1563,7 +1563,7 @@
     },
     "bpwizard/library/system/authoringTemplate/personaType/elementGroups/firstRows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["photo"]
+        "bpw:fieldNames": ["elements.photo"]
     },
     "bpwizard/library/system/authoringTemplate/personaType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
@@ -1598,7 +1598,7 @@
     },
     "bpwizard/library/system/authoringTemplate/formType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name", "description"]
+        "bpw:fieldNames": ["elements.name", "properties.description"]
     },    
     "bpwizard/library/system/authoringTemplate/formType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1617,7 +1617,7 @@
     },
     "bpwizard/library/system/authoringTemplate/formType/elementGroups/firstRows/firstRow/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["siteArea"]
+        "bpw:fieldNames": ["elements.siteArea"]
     },
     "bpwizard/library/system/authoringTemplate/formType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
@@ -2903,7 +2903,7 @@
     },
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name", "title", "description", "categories", "workflow"]
+        "bpw:fieldNames": ["elements.name", "properties.title", "properties.description", "properties.categories", "properties.workflow"]
     },    
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -2916,7 +2916,7 @@
     },
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["sidebody"]
+        "bpw:fieldNames": ["elements.sidebody"]
     },
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/elements" : {
         "jcr:primaryType": "bpw:elementFolder"
@@ -2991,7 +2991,7 @@
     },
     "bpwizard/library/design/authoringTemplate/MyContent/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["name", "title", "description", "categories", "workflow"]
+        "bpw:fieldNames": ["elements.name", "properties.title", "properties.description", "properties.categories", "properties.workflow"]
     },    
     "bpwizard/library/design/authoringTemplate/MyContent/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -3010,7 +3010,7 @@
     },
     "bpwizard/library/design/authoringTemplate/MyContent/elementGroups/rows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["body"]
+        "bpw:fieldNames": ["elements.body"]
     },
     "bpwizard/library/design/authoringTemplate/MyContent/elements/name" : {
         "jcr:primaryType": "bpw:formControl",

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class AuthoringTemplate extends ResourceNode implements HasName {
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String repository;
 	private String workspace;

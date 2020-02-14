@@ -74,7 +74,6 @@ public class AuthController {
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", loginRequest.getEmail()));
         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> session id:" + sessionId);
         return ResponseEntity.ok(AuthResponse.fromUserAndToken(user, shortLivedAuthToken, sessionId));
     }
 
