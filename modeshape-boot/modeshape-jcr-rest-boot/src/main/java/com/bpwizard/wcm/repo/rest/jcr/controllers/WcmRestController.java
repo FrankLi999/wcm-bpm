@@ -2429,22 +2429,28 @@ public class WcmRestController {
 			schemaNode.set("properties", properties);
 			schemaNode.set("definitions", definitions);
 			String requiredElements[] = at.getElements().entrySet().stream().map(entry -> entry.getValue())
-					.filter(formControl -> formControl.isMandatory()).map(formControl -> String.format("elements.%s", formControl.getName()))
+					.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
 					.toArray(String[]::new);
 	
-			String requiredProperties[] = at.getProperties().entrySet().stream().map(entry -> entry.getValue())
-					.filter(formControl -> formControl.isMandatory()).map(formControl -> String.format("properties.%s", formControl.getName()))
-					.toArray(String[]::new);
-			String required[] = Stream.concat(Arrays.stream(requiredElements), Arrays.stream(requiredProperties))
-					.toArray(String[]::new);
-			if (required != null && required.length > 0) {
+			if (requiredElements != null && requiredElements.length > 0) {
 				ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
-				for (String name : required) {
+				for (String name : requiredElements) {
 					reqiuriedNode.add(name);
 				}
-				schemaNode.set("required", reqiuriedNode);
+				elementPropertiesNode.set("required", reqiuriedNode);
 			}
-	
+			
+			String requiredProperties[] = at.getProperties().entrySet().stream().map(entry -> entry.getValue())
+					.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
+					.toArray(String[]::new);
+			
+			if (requiredProperties != null && requiredProperties.length > 0) {
+				ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
+				for (String name : requiredProperties) {
+					reqiuriedNode.add(name);
+				}
+				propertyPropertiesNode.set("required", reqiuriedNode);
+			}
 			jsonNode.set("layout", this.toFormLayoutNode(at));
 			// "params" node
 			// "validate": false
