@@ -510,7 +510,7 @@
     },
     "bpwizard/library/system/authoringTemplate/contentType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name", "properties.title", "properties.siteArea", "properties.categories", "properties.workflow"]
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.siteArea", "properties.categories", "properties.workflow"]
     },    
     "bpwizard/library/system/authoringTemplate/contentType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -590,7 +590,7 @@
     },
     "bpwizard/library/system/authoringTemplate/componentType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name", "properties.title"]
+        "bpw:fieldNames": ["properties.name", "properties.title"]
     },
     "bpwizard/library/system/authoringTemplate/componentType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -647,7 +647,7 @@
     },
     "bpwizard/library/system/authoringTemplate/fileType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name", "properties.title", "properties.description"]
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description"]
     },
     "bpwizard/library/system/authoringTemplate/fileType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -728,7 +728,7 @@
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Metadata",
         "bpw:controlName": "keyValue",
-        "bpw:mandatory": "true",
+        "bpw:mandatory": "false",
         "bpw:userSearchable": "true"
     },
     "bpwizard/library/system/authoringTemplate/fileType/elements/showOnMenu" : {
@@ -755,7 +755,7 @@
     },
     "bpwizard/library/system/authoringTemplate/siteConfigType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name"]
+        "bpw:fieldNames": ["properties.name"]
     },    
     "bpwizard/library/system/authoringTemplate/siteConfigType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -975,7 +975,7 @@
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name", "properties.title", "properties.description"]
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description"]
     },    
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -998,9 +998,15 @@
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/contentTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.url", "elements.cacheTTL", "elements.securePage", "elements.sorderOrder", "elements.defaultContent"]
+        "bpw:fieldNames": ["properties.url", "properties.cacheTTL", "properties.securePage", "properties.sorderOrder", "properties.defaultContent"]
     },
-    
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/contentTab/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/contentTab/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.body"]
+    },
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab" : {
         "jcr:primaryType":"bpw:formTab",
         "bpw:tabName": "Properties"
@@ -1010,38 +1016,66 @@
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.contentAreaLayout", "elements.siteConfig", "elements.friendlyURL", "elements.showOnMenu", "elements.allowedArtifactTypes", "elements.allowedFileExtension", "elements.metadata", "elements.searchData"]
+        "bpw:fieldNames": ["properties.contentAreaLayout", "properties.siteConfig", "properties.friendlyURL"]
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow/firstColumn/searchData" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.showOnMenu", "properties.allowedArtifactTypes", "properties.allowedFileExtension"]
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab" : {
+        "jcr:primaryType":"bpw:formTab",
+        "bpw:tabName": "Search Data"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["searchData"]
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab/firstRow/firstColumn/searchData" : {
         "jcr:primaryType":"bpw:fieldLayout"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow/firstColumn/searchData/description" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab/firstRow/firstColumn/searchData/description" : {
         "jcr:primaryType":"bpw:fieldLayout",
         "bpw:name": "searchData.description",
         "bpw:title": "Description"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow/firstColumn/searchData/keywords" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab/firstRow/firstColumn/searchData/keywords" : {
         "jcr:primaryType":"bpw:fieldLayout",
         "bpw:name": "searchData.keywords",
         "bpw:items": "searchData.keywords[]",
         "bpw:title": "Keywords",
         "bpw:multiple": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow/firstColumn/metadata" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab" : {
+        "jcr:primaryType":"bpw:formTab",
+        "bpw:tabName": "Meta Data"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["metadata"]
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab/firstRow/firstColumn/metadata" : {
         "jcr:primaryType":"bpw:fieldLayout",
         "bpw:multiple": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow/firstColumn/metadata/name" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab/firstRow/firstColumn/metadata/name" : {
         "jcr:primaryType":"bpw:fieldLayout",
         "bpw:name": "metadata.keyValues[].name",
         "bpw:title": "Name"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow/firstColumn/metadata/value" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab/firstRow/firstColumn/metadata/value" : {
         "jcr:primaryType":"bpw:fieldLayout",
         "bpw:name": "metadata.keyValues[].value",
         "bpw:title": "Value"
-    },
-    
+    },    
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab" : {
         "jcr:primaryType":"bpw:formTab",
         "bpw:tabName": "Navigation"
@@ -1051,32 +1085,63 @@
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.navigationId", "elements.navigationType", "elements.function", "elements.translate", "elements.icon", "elements.classes", "elements.exactMatch", "elements.externalUrl", "elements.openInNewTab", "elements.badge"]
+        "bpw:fieldNames": ["properties.navigationId", "properties.navigationType", "properties.function"]
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/firstRow/firstColumn/badge" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.translate", "properties.icon", "properties.classes"]
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/thirdRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/thirdRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.exactMatch", "properties.externalUrl", "properties.openInNewTab"]
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab" : {
+        "jcr:primaryType":"bpw:formTab",
+        "bpw:tabName": "Badge"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["badge"]
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab/firstRow/firstColumn/badge" : {
         "jcr:primaryType":"bpw:fieldLayout"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/firstRow/firstColumn/badge/title" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab/firstRow/firstColumn/badge/title" : {
         "jcr:primaryType":"bpw:fieldLayout",
         "bpw:name": "badge.title",
         "bpw:title": "Badge Title"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/firstRow/firstColumn/badge/translate" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab/firstRow/firstColumn/badge/translate" : {
         "jcr:primaryType":"bpw:fieldLayout",
         "bpw:name": "badge.translate",
         "bpw:title": "Badge Translate"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/firstRow/firstColumn/badge/fb" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab/firstRow/firstColumn/badge/fb" : {
         "jcr:primaryType":"bpw:fieldLayout",
         "bpw:name": "badge.fg",
         "bpw:title": "Badge FG"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/firstRow/firstColumn/badge/bg" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab/firstRow/firstColumn/badge/bg" : {
         "jcr:primaryType":"bpw:fieldLayout",
         "bpw:name": "badge.bg",
         "bpw:title": "Badge BG"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/friendlyURL" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/body" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Body",
+        "bpw:controlName": "richText",
+        "bpw:mandatory": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/friendlyURL" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Friendly URL",
         "bpw:controlName": "text",
@@ -1085,7 +1150,7 @@
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/showOnMenu" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/showOnMenu" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Show On Menu",
         "bpw:controlName": "checkbox",
@@ -1093,7 +1158,7 @@
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/sorderOrder" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/sorderOrder" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Sort Order",
         "bpw:controlName": "text",
@@ -1101,7 +1166,7 @@
         "bpw:defaultValue": "0",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/allowedFileExtension" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/allowedFileExtension" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Allowed FileExtension",
         "bpw:controlName": "text",
@@ -1109,14 +1174,14 @@
 		"bpw:userSearchable": "true",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/allowedArtifactTypes" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/allowedArtifactTypes" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Allowed ArtifactTypes",
         "bpw:controlName": "text",
         "bpw:dataType": "Text",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/defaultContent" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/defaultContent" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Default Content",
         "bpw:controlName": "text",
@@ -1155,7 +1220,7 @@
         "bpw:userSearchable": "true",
         "bpw:showInList": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/url" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/url" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "URL",
         "bpw:controlName": "text",
@@ -1164,21 +1229,21 @@
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/siteConfig" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/siteConfig" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Site Config",
         "bpw:controlName": "select",
         "bpw:options": "jcr://siteConfig",
         "bpw:mandatory": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/contentAreaLayout" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/contentAreaLayout" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Content Area Layout",
         "bpw:controlName": "select",
         "bpw:options": "jcr://contentAreaLayout",
         "bpw:mandatory": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/cacheTTL" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/cacheTTL" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Cache TTL",
         "bpw:controlName": "text",
@@ -1186,7 +1251,7 @@
         "bpw:defaultValue": "15",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/securePage" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/securePage" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Secure Page",
         "bpw:controlName": "checkbox",
@@ -1194,14 +1259,14 @@
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/metadata" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/metadata" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Metadata",
         "bpw:controlName": "keyValue",
-		"bpw:mandatory": "true",
+		"bpw:mandatory": "false",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/searchData" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/searchData" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "SEO Description",
         "bpw:controlName": "customField",
@@ -1209,7 +1274,7 @@
 		"bpw:userSearchable": "true",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/navigationId" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/navigationId" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Navigation ID",
         "bpw:controlName": "text",
@@ -1218,7 +1283,7 @@
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/navigationType" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/navigationType" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Navigation Type",
         "bpw:controlName": "text",
@@ -1227,7 +1292,7 @@
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/classes" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/classes" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Classes",
         "bpw:controlName": "text",
@@ -1236,7 +1301,7 @@
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/function" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/function" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Function",
         "bpw:controlName": "text",
@@ -1245,7 +1310,7 @@
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/translate" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/translate" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Translate",
         "bpw:controlName": "text",
@@ -1254,7 +1319,7 @@
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/icon" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/icon" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Icon",
         "bpw:controlName": "text",
@@ -1263,7 +1328,7 @@
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/exactMatch" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/exactMatch" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Exact Match",
         "bpw:controlName": "checkbox",
@@ -1271,7 +1336,7 @@
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/externalUrl" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/externalUrl" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "External Url",
         "bpw:controlName": "checkbox",
@@ -1279,7 +1344,7 @@
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/openInNewTab" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/openInNewTab" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Open In New Tab",
         "bpw:controlName": "checkbox",
@@ -1287,7 +1352,7 @@
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
     },
-    "bpwizard/library/system/authoringTemplate/siteAreaType/elements/badge" : {
+    "bpwizard/library/system/authoringTemplate/siteAreaType/properties/badge" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Badge",
         "bpw:controlName": "customField",
@@ -1303,7 +1368,7 @@
     },
     "bpwizard/library/system/authoringTemplate/keyValueType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name"]
+        "bpw:fieldNames": ["properties.name"]
     },    
     "bpwizard/library/system/authoringTemplate/keyValueType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1362,7 +1427,7 @@
     },
     "bpwizard/library/system/authoringTemplate/themeType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name", "properties.title"]
+        "bpw:fieldNames": ["properties.name", "properties.title"]
     },    
     "bpwizard/library/system/authoringTemplate/themeType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1424,7 +1489,7 @@
     },
     "bpwizard/library/system/authoringTemplate/folderType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name"]
+        "bpw:fieldNames": ["properties.name"]
     },    
     "bpwizard/library/system/authoringTemplate/folderType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1475,7 +1540,7 @@
     },
     "bpwizard/library/system/authoringTemplate/vanityURLType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name", "properties.title"]
+        "bpw:fieldNames": ["properties.name", "properties.title"]
     },    
     "bpwizard/library/system/authoringTemplate/vanityURLType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1544,7 +1609,7 @@
     },
     "bpwizard/library/system/authoringTemplate/personaType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name", "properties.title"]
+        "bpw:fieldNames": ["properties.name", "properties.title"]
     },    
     "bpwizard/library/system/authoringTemplate/personaType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1598,7 +1663,7 @@
     },
     "bpwizard/library/system/authoringTemplate/formType/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name", "properties.description"]
+        "bpw:fieldNames": ["properties.name", "properties.description"]
     },    
     "bpwizard/library/system/authoringTemplate/formType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -2903,7 +2968,7 @@
     },
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name", "properties.title", "properties.description", "properties.categories", "properties.workflow"]
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description", "properties.categories", "properties.workflow"]
     },    
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -2991,7 +3056,7 @@
     },
     "bpwizard/library/design/authoringTemplate/MyContent/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["elements.name", "properties.title", "properties.description", "properties.categories", "properties.workflow"]
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description", "properties.categories", "properties.workflow"]
     },    
     "bpwizard/library/design/authoringTemplate/MyContent/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -3012,7 +3077,7 @@
         "jcr:primaryType":"bpw:formColumn",
         "bpw:fieldNames": ["elements.body"]
     },
-    "bpwizard/library/design/authoringTemplate/MyContent/elements/name" : {
+    "bpwizard/library/design/authoringTemplate/MyContent/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
         "bpw:controlName": "text",

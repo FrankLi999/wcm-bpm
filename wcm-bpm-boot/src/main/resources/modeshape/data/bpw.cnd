@@ -261,6 +261,7 @@
 - bpw:exactMatch (BOOLEAN)
 - bpw:externalUrl (BOOLEAN)
 - bpw:openInNewTab (BOOLEAN)
+- bpw:body (STRING)
 + bpw:badge (bpw:navigationBadge)
 + bpw:metaData (bpw:keyValues)
 + bpw:searchData (bpw:pageSearchData)

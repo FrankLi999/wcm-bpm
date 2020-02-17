@@ -148,7 +148,7 @@ public class ContentItem extends WorkflowNode {
 			contentProperties.remove("expireDate");
 		}
 		if (StringUtils.hasText(contentProperties.get("categories"))) {
-			String categories[] = contentProperties.get("categories").split(",");
+			String categories[] = (contentProperties.get("categories")).split(",");
 			if (categories != null && categories.length > 0) {
 				ArrayNode valueArray = JsonUtils.creatArrayNode();
 				for (String value : categories) {

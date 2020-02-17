@@ -1220,133 +1220,7 @@ public class WcmRestController {
 			sa.setWorkspace(workspace);
 			sa.setNodePath(saPath);
 			sa.setName(saNode.getName());
-			
-			for (RestProperty property: saNode.getJcrProperties()) {
-				if ("bpw:name".equals(property.getName())) {
-					sa.setName(property.getValues().get(0));
-				} else if ("bpw:title".equals(property.getName())) {
-					sa.setTitle(property.getValues().get(0));
-				} else if ("bpw:description".equals(property.getName())) {
-					sa.setDescription(property.getValues().get(0));
-				} else if ("bpw:url".equals(property.getName())) {
-					sa.setUrl(property.getValues().get(0));
-				} else if ("bpw:friendlyURL".equals(property.getName())) {
-					sa.setFriendlyURL(property.getValues().get(0));
-				} else if ("bpw:sorderOrder".equals(property.getName())) {
-					sa.setSorderOrder(Integer.parseInt(property.getValues().get(0)));
-				} else if ("bpw:showOnMenu".equals(property.getName())) {
-					sa.setShowOnMenu(Boolean.parseBoolean(property.getValues().get(0)));
-				} else if ("bpw:defaultContent".equals(property.getName())) {
-					sa.setDefaultContent(property.getValues().get(0));
-				} else if ("bpw:allowedFileExtension".equals(property.getName())) {
-					sa.setAllowedArtifactTypes(property.getValues().get(0));
-				} else if ("bpw:allowedFileExtension".equals(property.getName())) {
-					sa.setAllowedFileExtension(property.getValues().get(0));
-				} else if ("bpw:contentAreaLayout".equals(property.getName())) {
-					sa.setContentAreaLayout(property.getValues().get(0));
-				} else if ("bpw:siteConfig".equals(property.getName())) {
-					sa.setSiteConfig(property.getValues().get(0));
-				} else if ("bpw:securePage".equals(property.getName())) {
-					sa.setSecurePage(Boolean.parseBoolean(property.getValues().get(0)));
-				} else if ("bpw:cacheTTL".equals(property.getName())) {
-					sa.setCacheTTL(Integer.parseInt(property.getValues().get(0)));
-				} else if ("bpw:navigationId".equals(property.getName())) {
-					sa.setNavigationId(property.getValues().get(0));
-				} else if ("bpw:navigationType".equals(property.getName())) {
-					sa.setNavigationType(property.getValues().get(0));
-				} else if ("bpw:translate".equals(property.getName())) {
-					sa.setTranslate(property.getValues().get(0));
-				} else if ("bpw:function".equals(property.getName())) {
-					sa.setFunction(property.getValues().get(0));
-				} else if ("bpw:icon".equals(property.getName())) {
-					sa.setIcon(property.getValues().get(0));
-				} else if ("bpw:classes".equals(property.getName())) {
-					sa.setClasses(property.getValues().get(0));
-				} else if ("bpw:exactMatch".equals(property.getName())) {
-					sa.setExactMatch(Boolean.parseBoolean(property.getValues().get(0)));
-				} else if ("bpw:externalUrl".equals(property.getName())) {
-					sa.setExternalUrl(Boolean.parseBoolean(property.getValues().get(0)));
-				} else if ("bpw:openInNewTab".equals(property.getName())) {
-					sa.setOpenInNewTab(Boolean.parseBoolean(property.getValues().get(0)));
-				} else if ("jcr:lockOwner".equals(property.getName())) {
-					sa.setLockOwner(property.getValues().get(0));
-				}
-			}
-
-			
-			for (RestNode node: saNode.getChildren()) {
-			   if (this.wcmUtils.checkNodeType(node, "bpw:keyValues") && ("bpw:metaData".equals(node.getName()))) {
-				   keyValues metadata = new keyValues();
-				   List<KeyValue> kvList = new ArrayList<>();
-				   for (RestNode kvNode: node.getChildren()) {
-					   if (this.wcmUtils.checkNodeType(kvNode, "bpw:keyValue")) {
-						   KeyValue kv = new KeyValue();
-						   for (RestProperty property: kvNode.getJcrProperties()) {
-							   if ("bpw:name".equals(property.getName())) {
-								   kv.setName(property.getValues().get(0));
-							   } else if ("bpw:value".equals(property.getName())) {
-								   kv.setValue(property.getValues().get(0));
-							   }
-						   }
-						   kvList.add(kv);
-					   }
-				   }
-				   metadata.setKeyValue(kvList.toArray(new KeyValue[kvList.size()]));
-				   sa.setMetadata(metadata);
-			   } else if (this.wcmUtils.checkNodeType(node, "bpw:pageSearchData") && ("bpw:searchData".equals(node.getName()))) {
-				   SearchData searchData = new SearchData();
-				   for (RestProperty property: node.getJcrProperties()) {
-					   if ("description".equals(property.getName())) {
-						   searchData.setDescription(property.getValues().get(0));
-					   } else if ("keywords".equals(property.getName())) {
-						   searchData.setKeywords(property.getValues().toArray(new String[property.getValues().size()]));
-					   }
-				   }
-				   sa.setSearchData(searchData);
-			   } else if (this.wcmUtils.checkNodeType(node, "bpw:navigationBadge") && ("bpw:badge".equals(node.getName()))) {
-				   NavigationBadge badge = new NavigationBadge();
-				   for (RestProperty property: node.getJcrProperties()) {
-					   if ("bpw:title".equals(property.getName())) {
-						   badge.setTitle(property.getValues().get(0));
-					   } else if ("bpw:translate".equals(property.getName())) {
-						   badge.setTranslate(property.getValues().get(0));
-					   } else if ("bpw:bg".equals(property.getName())) {
-						   badge.setBg(property.getValues().get(0));
-					   } else if ("bpw:fg".equals(property.getName())) {
-						   badge.setFg(property.getValues().get(0));
-					   }
-				   }
-				   sa.setBadge(badge);
-			   } else if (this.wcmUtils.checkNodeType(node, "bpw:siteAreaLayout") && ("siteAreaLayout".equals(node.getName()))) {
-				   SiteAreaLayout siteAreaLayout = new SiteAreaLayout();
-				   List<LayoutRow> rows = new ArrayList<>();
-				   for (RestProperty property : node.getJcrProperties()) {
-						if ("bpw:contentWidth".equals(property.getName())) {
-							siteAreaLayout.setContentWidth(Integer.parseInt(property.getValues().get(0)));
-							break;
-						} 
-				   }
-				   for (RestNode childNode: node.getChildren()) {
-					   if (this.wcmUtils.checkNodeType(childNode, "bpw:contentAreaSidePanel") && "sidePane".equals(childNode.getName())) {
-						   SidePane sidePane = new SidePane();
-						   for (RestProperty property : childNode.getJcrProperties()) {
-								if ("bpw:isLeft".equals(property.getName())) {
-									sidePane.setLeft(Boolean.parseBoolean(property.getValues().get(0)));
-								} else if ("bpw:width".equals(property.getName())) {
-									sidePane.setWidth(Integer.parseInt(property.getValues().get(0)));
-								}
-							}
-						   sidePane.setViewers(this.resolveResourceViewer(childNode));
-						   siteAreaLayout.setSidePane(sidePane);
-					   } else if (this.wcmUtils.checkNodeType(childNode, "bpw:layoutRow")) {
-							LayoutRow row = this.resolveLayoutRow(childNode);
-							rows.add(row);
-					   }
-				   }
-				   siteAreaLayout.setRows(rows.toArray(new LayoutRow[rows.size()]));
-				   sa.setSiteAreaLayout(siteAreaLayout);
-			   }
-			}
+			this.loadSiteArea(saNode, sa);
 			
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -1587,7 +1461,7 @@ public class WcmRestController {
 			Map<String, String> elements = new HashMap<>();
 			Map<String, String> properties = new HashMap<>();
 			contentItem.setElements(elements);
-			elements.put("name", contentItemNode.getName());
+			properties.put("name", contentItemNode.getName());
 			contentItem.setProperties(properties);
 			contentItem.setName(contentItemNode.getName());
 			this.resolveWorkflowNode(contentItem, contentItemNode, properties);
@@ -2121,10 +1995,17 @@ public class WcmRestController {
 		return customFieldLayout == null ? Optional.empty() : Optional.of(customFieldLayout);
 	}
 
-	private String getLayoutFieldKey(String key, String placeHolder) {
-		return String.format("%s.%s", placeHolder, key);
+	private String getLayoutFieldKey(String key, String prefix) {
+		return (prefix.length() > 0) ? String.format("%s.%s", prefix, key) : key;
 	}
 	
+	private String[] getNameAndPrefix(String fieldName) {
+		String names[] = fieldName.split("\\.", 2);
+		if (names.length == 1) {
+			names = new String[] { "", names[0]};
+		}
+		return names;
+	}
 	private ObjectNode getColumnNode(AuthoringTemplate at, FormColumn formColumn) {
 		ObjectNode columnNode = this.objectMapper.createObjectNode();
 		columnNode.put("type", "div");
@@ -2134,9 +2015,9 @@ public class WcmRestController {
 
 		ArrayNode fieldNodes = this.objectMapper.createArrayNode();
 		for (String fieldName : formColumn.getFormControls()) {
-			String names[] = fieldName.split("\\.", 2);
+			String names[] = this.getNameAndPrefix(fieldName);
 			String name = names[1];
-			String placeHolder = names[0];
+			String prefix = names[0];
 			FormControl formControl = at.getElements().get(name);
 			formControl = (formControl == null) ? at.getProperties().get(name) : formControl;
 			Optional<FieldLayout> customeFileLayout = this.getCustomeFileLayout(
@@ -2162,7 +2043,7 @@ public class WcmRestController {
 					} else {
 						fieldNode.put("notitle", "true");
 					}
-					fieldNode.put("key", this.getLayoutFieldKey(fieldLayout.getKey(), placeHolder));
+					fieldNode.put("key", this.getLayoutFieldKey(fieldLayout.getKey(), prefix));
 					if (fieldLayout.isMultiple()) {
 						fieldNode.put("type", "array");
 						ArrayNode itemsNode = this.objectMapper.createArrayNode();
@@ -2178,7 +2059,7 @@ public class WcmRestController {
 						} else {
 							fieldNode.put("notitle", "true");
 						}
-						fieldNode.put("key", this.getLayoutFieldKey(fieldLayout.getName(), placeHolder));
+						fieldNode.put("key", this.getLayoutFieldKey(fieldLayout.getName(), prefix));
 						if (fieldLayout.isMultiple()) {
 							fieldNode.put("type", "array");
 							ArrayNode itemsNode = this.objectMapper.createArrayNode();
@@ -2191,7 +2072,7 @@ public class WcmRestController {
 			} else {
 				ObjectNode fieldNode = this.objectMapper.createObjectNode();
 				fieldNodes.add(fieldNode);
-				fieldNode.put("key", this.getLayoutFieldKey(formControl.getName(), placeHolder));
+				fieldNode.put("key", this.getLayoutFieldKey(formControl.getName(), prefix));
 				// fieldNode.put("type", formControl.getDataType());
 				if (StringUtils.hasText(formControl.getTitle())) {
 					fieldNode.put("title", formControl.getTitle());
@@ -2348,6 +2229,7 @@ public class WcmRestController {
 			String repository, 
 			String workspace,
 			ObjectNode properties,
+			ObjectNode simpleProperties,
 			ObjectNode definitions,
 			Map<String, FormControl> formControls) throws RepositoryException {
 		
@@ -2356,14 +2238,19 @@ public class WcmRestController {
 			if ("keyValue".equals(formControl.getControlName())) {
 				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, "bpw:keyValues", false);
 				definitions.set("keyValues", definition);
+				ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
+				properties.set(key, objectNode);
 			} else if ("customField".equals(formControl.getControlName())) {
 				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, formControl.getDataType(),
 						false);
 				String fieldName = this.fieldNameFromNodeTypeName(formControl.getDataType());
 				definitions.set(fieldName, definition);
+				ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
+				properties.set(key, objectNode);
+			} else {
+			  ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
+			  simpleProperties.set(key, objectNode);
 			}
-			ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
-			properties.set(key, objectNode);
 		}
 	}
 	
@@ -2413,6 +2300,7 @@ public class WcmRestController {
 					request, 
 					repository, 
 					workspace,
+					properties,
 					propertyProperties,
 					definitions,
 					at.getProperties());
@@ -2421,6 +2309,7 @@ public class WcmRestController {
 					request, 
 					repository, 
 					workspace,
+					properties,
 					elementProperties,
 					definitions,
 					at.getElements());
@@ -2969,7 +2858,7 @@ public class WcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
-					"/bpwizard/library/" + at.getLibrary() + "/authoringTemplate", 7);
+					"/bpwizard/library/" + at.getLibrary() + "/authoringTemplate", 8);
 			return atNode.getChildren().stream().filter(this::isAuthortingTemplate)
 					.map(node -> this.wcmUtils.toAuthoringTemplate(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
 		} catch (RepositoryException e) {
@@ -3135,146 +3024,300 @@ public class WcmRestController {
 		return navigation;
 	}
 	
-	private SiteArea toSiteArea(RestNode saNode, Map<String, SiteArea> siteAreas) {
-		SiteArea sa = new SiteArea();
-		for (RestProperty property : saNode.getJcrProperties()) {
-			if ("bpw:navigationId".equals(property.getName())) {
-				sa.setNavigationId(property.getValues().get(0));
-			} else if ("bpw:navigationType".equals(property.getName())) {
-				sa.setNavigationType(property.getValues().get(0));
-			} else if ("bpw:title".equals(property.getName())) {
-				sa.setTitle(property.getValues().get(0));
-			} else if ("bpw:translate".equals(property.getName())) {
-				sa.setTranslate(property.getValues().get(0));
-			} else if ("bpw:icon".equals(property.getName())) {
-				sa.setIcon(property.getValues().get(0));
-			} else if ("bpw:url".equals(property.getName())) {
-				sa.setUrl(property.getValues().get(0));
-			} else if ("bpw:name".equals(property.getName())) {
-				sa.setName(property.getValues().get(0));
-			} else if ("bpw:friendlyURL".equals(property.getName())) {
-				sa.setFriendlyURL(property.getValues().get(0));
-			} else if ("bpw:sorderOrder".equals(property.getName())) {
-				sa.setSorderOrder(Integer.parseInt(property.getValues().get(0)));
-			} else if ("bpw:sorderOrder".equals(property.getName())) {
-				sa.setShowOnMenu(Boolean.parseBoolean(property.getValues().get(0)));
-			} else if ("bpw:allowedFileExtension".equals(property.getName())) {
-				sa.setAllowedFileExtension(property.getValues().get(0));
-			} else if ("bpw:allowedArtifactTypes".equals(property.getName())) {
-				sa.setAllowedArtifactTypes(property.getValues().get(0));
-			} else if ("bpw:description".equals(property.getName())) {
-				sa.setDescription(property.getValues().get(0));
-			} else if ("bpw:defaultContent".equals(property.getName())) {
-				sa.setDefaultContent(property.getValues().get(0));
-			} else if ("bpw:contentAreaLayout".equals(property.getName())) {
-				sa.setContentAreaLayout(property.getValues().get(0));
-			} else if ("bpw:siteConfig".equals(property.getName())) {
-				sa.setSiteConfig(property.getValues().get(0));
-			} else if ("bpw:cacheTTL".equals(property.getName())) {
-				sa.setCacheTTL(Integer.parseInt(property.getValues().get(0)));
-			} else if ("bpw:securePage".equals(property.getName())) {
-				sa.setSecurePage(Boolean.parseBoolean(property.getValues().get(0)));
-			} else if ("bpw:function".equals(property.getName())) {
-				sa.setFunction(property.getValues().get(0));
-			} else if ("bpw:translate".equals(property.getName())) {
-				sa.setTranslate(property.getValues().get(0));
-			} else if ("bpw:icon".equals(property.getName())) {
-				sa.setIcon(property.getValues().get(0));
-			} else if ("bpw:classes".equals(property.getName())) {
-				sa.setClasses(property.getValues().get(0));
-			} else if ("bpw:exactMatch".equals(property.getName())) {
-				sa.setExactMatch(Boolean.parseBoolean(property.getValues().get(0)));
-			} else if ("bpw:externalUrl".equals(property.getName())) {
-				sa.setExternalUrl(Boolean.parseBoolean(property.getValues().get(0)));
-			} else if ("bpw:openInNewTab".equals(property.getName())) {
-				sa.setOpenInNewTab(Boolean.parseBoolean(property.getValues().get(0)));
-			} else if ("jcr:lockOwner".equals(property.getName())) {
-				sa.setLockOwner(property.getValues().get(0));
-			}    
-			/*
-			+ bpw:metaData (bpw:keyValues)
-			+ bpw:searchData (bpw:pageSearchData)	
-			*/		
+	private String getSiteAreaPropertyName(String propertyName) {
+		return propertyName.split(":", 2)[1];
+	}
+	private void loadSiteArea(RestNode saNode, SiteArea sa) {
+		Map<String, String> elements = new HashMap<>();
+		Map<String, String> properties = new HashMap<>();
+		sa.setProperties(properties);
+		sa.setElements(elements);
+		for (RestProperty property: saNode.getJcrProperties()) {
+			if ("bpw:body".equals(property.getName())) {
+				elements.put("body", property.getValues().get(0));
+			} else if (property.getName().startsWith("bpw:")){
+				properties.put(this.getSiteAreaPropertyName(property.getName()), property.getValues().get(0));
+//			} else if ("bpw:name".equals(property.getName())) {
+//			
+//				properties.put("name", property.getValues().get(0));
+//			} else if ("bpw:title".equals(property.getName())) {
+//				properties.put("title", property.getValues().get(0));
+//			} else if ("bpw:description".equals(property.getName())) {
+//				properties.put("description", property.getValues().get(0));
+//			} else if ("bpw:url".equals(property.getName())) {
+//				properties.put("name", property.getValues().get(0));
+//			} else if ("bpw:friendlyURL".equals(property.getName())) {
+//				properties.put("friendlyURL", property.getValues().get(0));
+//			} else if ("bpw:sorderOrder".equals(property.getName())) {
+//				// properties.put("sorderOrder", Integer.parseInt(property.getValues().get(0)));
+//				properties.put("sorderOrder", property.getValues().get(0));
+//			} else if ("bpw:showOnMenu".equals(property.getName())) {
+//				// properties.put("showOnMenu", Boolean.parseBoolean(property.getValues().get(0)));
+//				properties.put("showOnMenu", property.getValues().get(0));
+//			} else if ("bpw:defaultContent".equals(property.getName())) {
+//				properties.put("defaultContent", property.getValues().get(0));
+//			} else if ("bpw:allowedFileExtension".equals(property.getName())) {
+//				properties.put("name", property.getValues().get(0));
+//			} else if ("bpw:allowedFileExtension".equals(property.getName())) {
+//				properties.put("allowedFileExtension", property.getValues().get(0));
+//			} else if ("bpw:contentAreaLayout".equals(property.getName())) {
+//				properties.put("contentAreaLayout", property.getValues().get(0));
+//			} else if ("bpw:siteConfig".equals(property.getName())) {
+//				properties.put("siteConfig", property.getValues().get(0));
+//			} else if ("bpw:securePage".equals(property.getName())) {
+//				// properties.put("securePage", Boolean.parseBoolean(property.getValues().get(0)));
+//				properties.put("securePage", property.getValues().get(0));
+//			} else if ("bpw:cacheTTL".equals(property.getName())) {
+//				// properties.put("cacheTTL", Integer.parseInt(property.getValues().get(0)));
+//				properties.put("cacheTTL", property.getValues().get(0));
+//			} else if ("bpw:navigationId".equals(property.getName())) {
+//				properties.put("navigationId", property.getValues().get(0));
+//			} else if ("bpw:navigationType".equals(property.getName())) {
+//				properties.put("navigationType", property.getValues().get(0));
+//			} else if ("bpw:translate".equals(property.getName())) {
+//				properties.put("translate", property.getValues().get(0));
+//			} else if ("bpw:function".equals(property.getName())) {
+//				properties.put("function", property.getValues().get(0));
+//			} else if ("bpw:icon".equals(property.getName())) {
+//				properties.put("icon", property.getValues().get(0));
+//			} else if ("bpw:classes".equals(property.getName())) {
+//				properties.put("classes", property.getValues().get(0));
+//			} else if ("bpw:exactMatch".equals(property.getName())) {
+//				// properties.put("exactMatch", Boolean.parseBoolean(property.getValues().get(0)));
+//				properties.put("exactMatch", property.getValues().get(0));
+//			} else if ("bpw:externalUrl".equals(property.getName())) {
+//				// properties.put("externalUrl", Boolean.parseBoolean(property.getValues().get(0)));
+//				properties.put("externalUrl", property.getValues().get(0));
+//			} else if ("bpw:openInNewTab".equals(property.getName())) {
+//				//properties.put("openInNewTab", Boolean.parseBoolean(property.getValues().get(0)));
+//				properties.put("openInNewTab", property.getValues().get(0));
+//			} else if ("jcr:lockOwner".equals(property.getName())) {
+//				sa.setLockOwner(property.getValues().get(0));
+			}
 		}
 		
-		siteAreas.put(sa.getUrl().replace("/", "~"), sa);
-		for (RestNode node :saNode.getChildren()) {
-			if (this.wcmUtils.checkNodeType(node, "bpw:navigationBadge")) {
-				NavigationBadge badge = new NavigationBadge();
-				for (RestProperty property : node.getJcrProperties()) {
-					if ("bpw:title".equals(property.getName())) {
-						badge.setTitle(property.getValues().get(0));
-					} else if ("bpw:translate".equals(property.getName())) {
-						badge.setTranslate(property.getValues().get(0));
-					} else if ("bpw:bg".equals(property.getName())) {
-						badge.setBg(property.getValues().get(0));
-					} else if ("bpw:fg".equals(property.getName())) {
-						badge.setFg(property.getValues().get(0));
-					} 
-				}
-				sa.setBadge(badge);	
-			} else if (this.wcmUtils.checkNodeType(node, "bpw:keyValues")) {
-				keyValues metadata = new keyValues();
-				KeyValue[] keyValues = node.getChildren().stream().filter(n -> this.wcmUtils.checkNodeType(n, "bpw:keyValue"))
-						.map(n -> this.toKeyValue(n)).toArray(KeyValue[]::new);
-				metadata.setKeyValue(keyValues);
-				sa.setMetadata(metadata);
-			} else if (this.wcmUtils.checkNodeType(node, "bpw:pageSearchData")) {
-				SearchData searchData = new SearchData();
-				for (RestProperty property : node.getJcrProperties()) {
-					if ("description".equals(property.getName())) {
-						searchData.setDescription(property.getValues().get(0));
-					} else if ("keywords".equals(property.getName())) {
-						searchData.setKeywords(property.getValues().toArray(new String[property.getValues().size()]));
-					}
-				}
-				sa.setSearchData(searchData);
-			} else if (this.wcmUtils.checkNodeType(node, "bpw:siteAreaLayout")) {
-				SiteAreaLayout siteAreaLayout = new SiteAreaLayout();
-				List<LayoutRow> rows = new ArrayList<>();
-				for (RestProperty property : node.getJcrProperties()) {
+		for (RestNode node: saNode.getChildren()) {
+		   if (this.wcmUtils.checkNodeType(node, "bpw:keyValues") && ("bpw:metaData".equals(node.getName()))) {
+			   keyValues metadata = new keyValues();
+			   List<KeyValue> kvList = new ArrayList<>();
+			   for (RestNode kvNode: node.getChildren()) {
+				   if (this.wcmUtils.checkNodeType(kvNode, "bpw:keyValue")) {
+					   KeyValue kv = new KeyValue();
+					   for (RestProperty property: kvNode.getJcrProperties()) {
+						   if ("bpw:name".equals(property.getName())) {
+							   kv.setName(property.getValues().get(0));
+						   } else if ("bpw:value".equals(property.getName())) {
+							   kv.setValue(property.getValues().get(0));
+						   }
+					   }
+					   kvList.add(kv);
+				   }
+			   }
+			   metadata.setKeyValue(kvList.toArray(new KeyValue[kvList.size()]));
+			   sa.setMetadata(metadata);
+		   } else if (this.wcmUtils.checkNodeType(node, "bpw:pageSearchData") && ("bpw:searchData".equals(node.getName()))) {
+			   SearchData searchData = new SearchData();
+			   for (RestProperty property: node.getJcrProperties()) {
+				   if ("description".equals(property.getName())) {
+					   searchData.setDescription(property.getValues().get(0));
+				   } else if ("keywords".equals(property.getName())) {
+					   searchData.setKeywords(property.getValues().toArray(new String[property.getValues().size()]));
+				   }
+			   }
+			   sa.setSearchData(searchData);
+		   } else if (this.wcmUtils.checkNodeType(node, "bpw:navigationBadge") && ("bpw:badge".equals(node.getName()))) {
+			   NavigationBadge badge = new NavigationBadge();
+			   for (RestProperty property: node.getJcrProperties()) {
+				   if ("bpw:title".equals(property.getName())) {
+					   badge.setTitle(property.getValues().get(0));
+				   } else if ("bpw:translate".equals(property.getName())) {
+					   badge.setTranslate(property.getValues().get(0));
+				   } else if ("bpw:bg".equals(property.getName())) {
+					   badge.setBg(property.getValues().get(0));
+				   } else if ("bpw:fg".equals(property.getName())) {
+					   badge.setFg(property.getValues().get(0));
+				   }
+			   }
+			   sa.setBadge(badge);
+		   } else if (this.wcmUtils.checkNodeType(node, "bpw:siteAreaLayout") && ("siteAreaLayout".equals(node.getName()))) {
+			   SiteAreaLayout siteAreaLayout = new SiteAreaLayout();
+			   List<LayoutRow> rows = new ArrayList<>();
+			   for (RestProperty property : node.getJcrProperties()) {
 					if ("bpw:contentWidth".equals(property.getName())) {
 						siteAreaLayout.setContentWidth(Integer.parseInt(property.getValues().get(0)));
 						break;
 					} 
-				}
-				node.getChildren().forEach(childNode -> {
-					if (this.wcmUtils.checkNodeType(childNode, "bpw:contentAreaSidePanel")) {
-						SidePane sidepane = new SidePane();
-						for (RestProperty property : childNode.getJcrProperties()) {
+			   }
+			   for (RestNode childNode: node.getChildren()) {
+				   if (this.wcmUtils.checkNodeType(childNode, "bpw:contentAreaSidePanel") && "sidePane".equals(childNode.getName())) {
+					   SidePane sidePane = new SidePane();
+					   for (RestProperty property : childNode.getJcrProperties()) {
 							if ("bpw:isLeft".equals(property.getName())) {
-								sidepane.setLeft(Boolean.parseBoolean(property.getValues().get(0)));
+								sidePane.setLeft(Boolean.parseBoolean(property.getValues().get(0)));
 							} else if ("bpw:width".equals(property.getName())) {
-								sidepane.setWidth(Integer.parseInt(property.getValues().get(0)));
+								sidePane.setWidth(Integer.parseInt(property.getValues().get(0)));
 							}
 						}
-						sidepane.setViewers(this.resolveResourceViewer(childNode));
-						siteAreaLayout.setSidePane(sidepane);
-					} else if (this.wcmUtils.checkNodeType(childNode, "bpw:layoutRow")) {
+					   sidePane.setViewers(this.resolveResourceViewer(childNode));
+					   siteAreaLayout.setSidePane(sidePane);
+				   } else if (this.wcmUtils.checkNodeType(childNode, "bpw:layoutRow")) {
 						LayoutRow row = this.resolveLayoutRow(childNode);
 						rows.add(row);
-					}
-				});
-				siteAreaLayout.setRows(rows.toArray(new LayoutRow[rows.size()]));
-				sa.setSiteAreaLayout(siteAreaLayout);
-			} else if (this.isSiteArea(node)) {
+				   }
+			   }
+			   siteAreaLayout.setRows(rows.toArray(new LayoutRow[rows.size()]));
+			   sa.setSiteAreaLayout(siteAreaLayout);
+		   }
+		}
+	}
+	private SiteArea toSiteArea(RestNode saNode, Map<String, SiteArea> siteAreas) {
+		SiteArea sa = new SiteArea();
+		this.loadSiteArea(saNode, sa);
+//		for (RestProperty property : saNode.getJcrProperties()) {
+//			if ("bpw:navigationId".equals(property.getName())) {
+//				sa.setNavigationId(property.getValues().get(0));
+//			} else if ("bpw:navigationType".equals(property.getName())) {
+//				sa.setNavigationType(property.getValues().get(0));
+//			} else if ("bpw:title".equals(property.getName())) {
+//				sa.setTitle(property.getValues().get(0));
+//			} else if ("bpw:translate".equals(property.getName())) {
+//				sa.setTranslate(property.getValues().get(0));
+//			} else if ("bpw:icon".equals(property.getName())) {
+//				sa.setIcon(property.getValues().get(0));
+//			} else if ("bpw:url".equals(property.getName())) {
+//				sa.setUrl(property.getValues().get(0));
+//			} else if ("bpw:name".equals(property.getName())) {
+//				sa.setName(property.getValues().get(0));
+//			} else if ("bpw:friendlyURL".equals(property.getName())) {
+//				sa.setFriendlyURL(property.getValues().get(0));
+//			} else if ("bpw:sorderOrder".equals(property.getName())) {
+//				sa.setSorderOrder(Integer.parseInt(property.getValues().get(0)));
+//			} else if ("bpw:sorderOrder".equals(property.getName())) {
+//				sa.setShowOnMenu(Boolean.parseBoolean(property.getValues().get(0)));
+//			} else if ("bpw:allowedFileExtension".equals(property.getName())) {
+//				sa.setAllowedFileExtension(property.getValues().get(0));
+//			} else if ("bpw:allowedArtifactTypes".equals(property.getName())) {
+//				sa.setAllowedArtifactTypes(property.getValues().get(0));
+//			} else if ("bpw:description".equals(property.getName())) {
+//				sa.setDescription(property.getValues().get(0));
+//			} else if ("bpw:defaultContent".equals(property.getName())) {
+//				sa.setDefaultContent(property.getValues().get(0));
+//			} else if ("bpw:contentAreaLayout".equals(property.getName())) {
+//				sa.setContentAreaLayout(property.getValues().get(0));
+//			} else if ("bpw:siteConfig".equals(property.getName())) {
+//				sa.setSiteConfig(property.getValues().get(0));
+//			} else if ("bpw:cacheTTL".equals(property.getName())) {
+//				sa.setCacheTTL(Integer.parseInt(property.getValues().get(0)));
+//			} else if ("bpw:securePage".equals(property.getName())) {
+//				sa.setSecurePage(Boolean.parseBoolean(property.getValues().get(0)));
+//			} else if ("bpw:function".equals(property.getName())) {
+//				sa.setFunction(property.getValues().get(0));
+//			} else if ("bpw:translate".equals(property.getName())) {
+//				sa.setTranslate(property.getValues().get(0));
+//			} else if ("bpw:icon".equals(property.getName())) {
+//				sa.setIcon(property.getValues().get(0));
+//			} else if ("bpw:classes".equals(property.getName())) {
+//				sa.setClasses(property.getValues().get(0));
+//			} else if ("bpw:exactMatch".equals(property.getName())) {
+//				sa.setExactMatch(Boolean.parseBoolean(property.getValues().get(0)));
+//			} else if ("bpw:externalUrl".equals(property.getName())) {
+//				sa.setExternalUrl(Boolean.parseBoolean(property.getValues().get(0)));
+//			} else if ("bpw:openInNewTab".equals(property.getName())) {
+//				sa.setOpenInNewTab(Boolean.parseBoolean(property.getValues().get(0)));
+//			} else if ("jcr:lockOwner".equals(property.getName())) {
+//				sa.setLockOwner(property.getValues().get(0));
+//			}    
+//			/*
+//			+ bpw:metaData (bpw:keyValues)
+//			+ bpw:searchData (bpw:pageSearchData)	
+//			*/		
+//		}
+//		
+//		
+//		for (RestNode node :saNode.getChildren()) {
+//			if (this.wcmUtils.checkNodeType(node, "bpw:navigationBadge")) {
+//				NavigationBadge badge = new NavigationBadge();
+//				for (RestProperty property : node.getJcrProperties()) {
+//					if ("bpw:title".equals(property.getName())) {
+//						badge.setTitle(property.getValues().get(0));
+//					} else if ("bpw:translate".equals(property.getName())) {
+//						badge.setTranslate(property.getValues().get(0));
+//					} else if ("bpw:bg".equals(property.getName())) {
+//						badge.setBg(property.getValues().get(0));
+//					} else if ("bpw:fg".equals(property.getName())) {
+//						badge.setFg(property.getValues().get(0));
+//					} 
+//				}
+//				sa.setBadge(badge);	
+//			} else if (this.wcmUtils.checkNodeType(node, "bpw:keyValues")) {
+//				keyValues metadata = new keyValues();
+//				KeyValue[] keyValues = node.getChildren().stream().filter(n -> this.wcmUtils.checkNodeType(n, "bpw:keyValue"))
+//						.map(n -> this.toKeyValue(n)).toArray(KeyValue[]::new);
+//				metadata.setKeyValue(keyValues);
+//				sa.setMetadata(metadata);
+//			} else if (this.wcmUtils.checkNodeType(node, "bpw:pageSearchData")) {
+//				SearchData searchData = new SearchData();
+//				for (RestProperty property : node.getJcrProperties()) {
+//					if ("description".equals(property.getName())) {
+//						searchData.setDescription(property.getValues().get(0));
+//					} else if ("keywords".equals(property.getName())) {
+//						searchData.setKeywords(property.getValues().toArray(new String[property.getValues().size()]));
+//					}
+//				}
+//				sa.setSearchData(searchData);
+//			} else if (this.wcmUtils.checkNodeType(node, "bpw:siteAreaLayout")) {
+//				SiteAreaLayout siteAreaLayout = new SiteAreaLayout();
+//				List<LayoutRow> rows = new ArrayList<>();
+//				for (RestProperty property : node.getJcrProperties()) {
+//					if ("bpw:contentWidth".equals(property.getName())) {
+//						siteAreaLayout.setContentWidth(Integer.parseInt(property.getValues().get(0)));
+//						break;
+//					} 
+//				}
+//				node.getChildren().forEach(childNode -> {
+//					if (this.wcmUtils.checkNodeType(childNode, "bpw:contentAreaSidePanel")) {
+//						SidePane sidepane = new SidePane();
+//						for (RestProperty property : childNode.getJcrProperties()) {
+//							if ("bpw:isLeft".equals(property.getName())) {
+//								sidepane.setLeft(Boolean.parseBoolean(property.getValues().get(0)));
+//							} else if ("bpw:width".equals(property.getName())) {
+//								sidepane.setWidth(Integer.parseInt(property.getValues().get(0)));
+//							}
+//						}
+//						sidepane.setViewers(this.resolveResourceViewer(childNode));
+//						siteAreaLayout.setSidePane(sidepane);
+//					} else if (this.wcmUtils.checkNodeType(childNode, "bpw:layoutRow")) {
+//						LayoutRow row = this.resolveLayoutRow(childNode);
+//						rows.add(row);
+//					}
+//				});
+//				siteAreaLayout.setRows(rows.toArray(new LayoutRow[rows.size()]));
+//				sa.setSiteAreaLayout(siteAreaLayout);
+//			} else if (this.isSiteArea(node)) {
+//				this.toSiteArea(node, siteAreas);
+//			}
+//		}
+		for (RestNode node :saNode.getChildren()) {
+			if (this.isSiteArea(node)) {
 				this.toSiteArea(node, siteAreas);
 			}
 		}
+		String url = sa.getProperties().get("url");
+		siteAreas.put(url.replace("/", "~"), sa);
 		return sa;
 	}
 	
-	private KeyValue toKeyValue(RestNode node) {
-		KeyValue keyValue = new KeyValue();
-		for (RestProperty property : node.getJcrProperties()) {
-			if ("bpw:name".equals(property.getName())) {
-				keyValue.setName(property.getValues().get(0));
-			} else if ("bpw:value".equals(property.getName())) {
-				keyValue.setValue(property.getValues().get(0));
-			}
-		}
-		return keyValue;
-	}
+//	private KeyValue toKeyValue(RestNode node) {
+//		KeyValue keyValue = new KeyValue();
+//		for (RestProperty property : node.getJcrProperties()) {
+//			if ("bpw:name".equals(property.getName())) {
+//				keyValue.setName(property.getValues().get(0));
+//			} else if ("bpw:value".equals(property.getName())) {
+//				keyValue.setValue(property.getValues().get(0));
+//			}
+//		}
+//		return keyValue;
+//	}
 	
 	private NavigationItem toNavigation(RestNode siteArea) {
 		Navigation navigation = new Navigation();
