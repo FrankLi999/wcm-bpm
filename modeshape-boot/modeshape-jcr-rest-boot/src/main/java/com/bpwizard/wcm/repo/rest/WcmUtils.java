@@ -52,7 +52,7 @@ public class WcmUtils {
 		}
 		try {
 			atPath = atPath.startsWith("/") ? atPath : "/" + atPath;
-			String library = atPath.split("/", 4)[3];
+			String library = atPath.split("/", 5)[3];
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
 					atPath, 8);
 			

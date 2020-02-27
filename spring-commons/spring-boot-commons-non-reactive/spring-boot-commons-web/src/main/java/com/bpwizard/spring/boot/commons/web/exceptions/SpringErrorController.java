@@ -54,7 +54,7 @@ public class SpringErrorController extends BasicErrorController {
 			body.remove(SpringErrorAttributes.HTTP_STATUS_KEY); // clean the status from the map
 		}
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
 		return new ResponseEntity<Map<String, Object>>(body, headers, status);
 	}

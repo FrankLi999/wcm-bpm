@@ -239,7 +239,8 @@ public class ModeshapeController {
 		Principal wcmReviewer = new TestGroup("wcm-reviewer");
 		Principal wcmEditor = new TestGroup("wcm-editor");
 		Principal wcmAdmin = new TestGroup("wcm-admin");
-		Session session = this.repositoryManager.getSession("bpwizard");
+		
+		Session session = this.repositoryManager.getSession("bpwizard", "default");
 		AccessControlManager acm = session.getAccessControlManager();
 		 
 		// Convert the privilege strings to Privilege instances ...
@@ -277,6 +278,86 @@ public class ModeshapeController {
 //		 
 		acm.setPolicy(path, acl);
 		session.save();
+
+		Session draftSession = this.repositoryManager.getSession("bpwizard", "draft");
+		AccessControlManager darftAcm = draftSession.getAccessControlManager();
+		
+		// Convert the privilege strings to Privilege instances ...
+		Privilege[] draftReadPermissions = new Privilege[readPrivileges.length];
+		for (int i = 0; i < readPrivileges.length; i++) {
+			draftReadPermissions[i] = darftAcm.privilegeFromName(readPrivileges[i]);
+		}
+		 
+		Privilege[] draftEditorPermissions = new Privilege[editorPrivileges.length];
+		for (int i = 0; i < editorPrivileges.length; i++) {
+			draftEditorPermissions[i] = darftAcm.privilegeFromName(editorPrivileges[i]);
+		}
+		
+		Privilege[] draftAdminPermissions = new Privilege[adminPrivileges.length];
+		for (int i = 0; i < adminPrivileges.length; i++) {
+			draftAdminPermissions[i] = darftAcm.privilegeFromName(adminPrivileges[i]);
+		}
+		
+		AccessControlList draftAcl = null;
+		AccessControlPolicyIterator draftIt = darftAcm.getApplicablePolicies(path);
+		
+		if (draftIt.hasNext()) {
+			 draftAcl = (AccessControlList)draftIt.nextAccessControlPolicy();
+		} else {
+			 draftAcl = (AccessControlList)darftAcm.getPolicies(path)[0];
+		}
+
+		 draftAcl.addAccessControlEntry(anonymousPrincipal, draftReadPermissions);
+		 draftAcl.addAccessControlEntry(adminPrincipal, draftAdminPermissions);
+		 draftAcl.addAccessControlEntry(demoPrincipal, draftEditorPermissions);
+		 draftAcl.addAccessControlEntry(wcmViewer, draftReadPermissions);
+		 draftAcl.addAccessControlEntry(wcmReviewer, draftReadPermissions);
+		 draftAcl.addAccessControlEntry(wcmEditor, draftEditorPermissions);
+		 draftAcl.addAccessControlEntry(wcmAdmin, draftAdminPermissions);
+		
+		darftAcm.setPolicy(path,  draftAcl);
+		draftSession.save();
+
+		//
+		
+		Session expiredSession = this.repositoryManager.getSession("bpwizard", "expired");
+		AccessControlManager expiredAcm = draftSession.getAccessControlManager();
+		
+		// Convert the privilege strings to Privilege instances ...
+		Privilege[] expiredReadPermissions = new Privilege[readPrivileges.length];
+		for (int i = 0; i < readPrivileges.length; i++) {
+			expiredReadPermissions[i] = darftAcm.privilegeFromName(readPrivileges[i]);
+		}
+		 
+		Privilege[] expiredEditorPermissions = new Privilege[editorPrivileges.length];
+		for (int i = 0; i < editorPrivileges.length; i++) {
+			expiredEditorPermissions[i] = darftAcm.privilegeFromName(editorPrivileges[i]);
+		}
+		
+		Privilege[] expiredAdminPermissions = new Privilege[adminPrivileges.length];
+		for (int i = 0; i < adminPrivileges.length; i++) {
+			expiredAdminPermissions[i] = darftAcm.privilegeFromName(adminPrivileges[i]);
+		}
+		
+		AccessControlList expiredAcl = null;
+		AccessControlPolicyIterator expiredIt = darftAcm.getApplicablePolicies(path);
+		
+		if (expiredIt.hasNext()) {
+			expiredAcl = (AccessControlList)expiredIt.nextAccessControlPolicy();
+		} else {
+			expiredAcl = (AccessControlList)expiredAcm.getPolicies(path)[0];
+		}
+
+		expiredAcl.addAccessControlEntry(anonymousPrincipal, expiredReadPermissions);
+		expiredAcl.addAccessControlEntry(adminPrincipal, expiredAdminPermissions);
+		expiredAcl.addAccessControlEntry(demoPrincipal, expiredEditorPermissions);
+		expiredAcl.addAccessControlEntry(wcmViewer, expiredReadPermissions);
+		expiredAcl.addAccessControlEntry(wcmReviewer, expiredReadPermissions);
+		expiredAcl.addAccessControlEntry(wcmEditor, expiredEditorPermissions);
+		expiredAcl.addAccessControlEntry(wcmAdmin, expiredAdminPermissions);
+		
+		expiredAcm.setPolicy(path,  expiredAcl);
+		expiredSession.save();
 		return "done";
 	}
 }

@@ -195,10 +195,10 @@
 - bpw:name (STRING) mandatory COPY
 - bpw:phote (BINARY)
 
-[bpw:elementFolder] > nt:folder
+[bpw:elementFolder] > nt:folder orderable
 + * (bpw:formControl)
 
-[bpw:propertyFolder] > nt:folder
+[bpw:propertyFolder] > nt:folder  orderable
 + name (bpw:formControl)
 + title (bpw:formControl)
 + description (bpw:formControl)
@@ -433,7 +433,7 @@
 
 [bpw:resourceViewer]
 - bpw:title (STRING)
-- bpw:renderTemplayeName (STRING)
+- bpw:renderTemplateName (STRING)
 - bpw:contentPath (STRING) multiple
 + bpw:parameterValues (bpw:keyValues)
    
@@ -521,6 +521,8 @@
 [bpw:assetFolder] > bpw:folder
 
 [bpw:library] > bpw:folder, mix:language
+- bpw:title (STRING)
+- bpw:description (STRING)
 + rootSiteArea (bpw:siteArea)
 + authoringTemplate (bpw:authoringTemplateFolder)
 + theme (bpw:themesFolder)

@@ -104,44 +104,38 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 	
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
-		ObjectNode properties = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
 		
 		jsonNode.set("children", children);
-		jsonNode.set("properties", properties);
-		properties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:authoringTemplate");
+		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:authoringTemplate");
 		
 		if (StringUtils.hasText(this.getBaseResourceType())) {
-			properties.put("bpw:baseResourceType", this.getBaseResourceType());
+			jsonNode.put("bpw:baseResourceType", this.getBaseResourceType());
 		}
-		super.toJson(properties, children);
+		super.toJson(jsonNode, children);
 		
 		if (StringUtils.hasText(this.getContentItemWorkflow())) {
-			properties.put("bpw:contentWorkflow", this.getContentItemWorkflow());
+			jsonNode.put("bpw:contentWorkflow", this.getContentItemWorkflow());
 		}
 
 		if (this.getContentItemAcl() != null) {
 			ObjectNode contentItemAclNode = JsonUtils.createObjectNode();
 			children.set("contentItemAcl", contentItemAclNode);
-			ObjectNode contentItemAclNodeProperties = JsonUtils.createObjectNode();
 			ObjectNode contentItemAclNodeChildren = JsonUtils.createObjectNode();
-			contentItemAclNode.set("properties", contentItemAclNodeProperties);
 			contentItemAclNode.set("children", contentItemAclNodeChildren);
-			contentItemAclNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentItemAcl");
+			contentItemAclNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentItemAcl");
 			
 			this.addAccessControlEntry(contentItemAclNodeChildren, "onSaveDraft", this.getContentItemAcl().getOnSaveDraftPermissions());
 			this.addAccessControlEntry(contentItemAclNodeChildren, "onReivedDraft", this.getContentItemAcl().getOnReviewedDraftPermissions());
 			this.addAccessControlEntry(contentItemAclNodeChildren, "onPublish", this.getContentItemAcl().getOnPublishPermissions());
 		}
-		this.addRow(children, this.getPropertyRow(), "property-group");
+		this.addRow(children, this.getPropertyRow(), "propertyGroup");
 		
 		ObjectNode elementGroupNode = JsonUtils.createObjectNode();
-		ObjectNode elementGroupNodeProperties = JsonUtils.createObjectNode();
 		ObjectNode elementGroupNodeChildren = JsonUtils.createObjectNode();
-		children.set("element-group", elementGroupNodeProperties);
-		elementGroupNode.set("properties", elementGroupNodeProperties);
+		children.set("elementGroups", elementGroupNode);
 		elementGroupNode.set("children", elementGroupNodeChildren);
-		elementGroupNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formGroupFoler");
+		elementGroupNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formGroupFoler");
 		
 		int groupCount = 0;
 		for (BaseFormGroup g : this.getElementGroups()) {
@@ -153,14 +147,12 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 							: (g instanceof FormRows) ? "bpw:formRows" : "bpw:formRow";
 			
 			ObjectNode formGroupNode = JsonUtils.createObjectNode();
-			ObjectNode formGroupNodeProperties = JsonUtils.createObjectNode();
 			ObjectNode formGroupNodeChildren = JsonUtils.createObjectNode();
 	
-			formGroupNode.set("properties", formGroupNodeProperties);
 			formGroupNode.set("children", formGroupNodeChildren);
 			
-			formGroupNodeChildren.set(groupName, formGroupNode);
-			formGroupNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, primaryFormGroupType);
+			elementGroupNodeChildren.set(groupName, formGroupNode);
+			formGroupNode.put(JcrConstants.JCR_PRIMARY_TYPE, primaryFormGroupType);
 
 			if (g instanceof FormSteps) {
 				this.addSteps(formGroupNodeChildren, ((FormSteps) g).getSteps());
@@ -172,28 +164,24 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 		}
 		
 		ObjectNode elementFolderNode = JsonUtils.createObjectNode();
-		ObjectNode elementFolderNodeProperties = JsonUtils.createObjectNode();
 		ObjectNode elementFolderNodeChildren = JsonUtils.createObjectNode();
 
-		elementFolderNode.set("properties", elementFolderNodeProperties);
 		elementFolderNode.set("children", elementFolderNodeChildren);
 		children.set("elements", elementFolderNode);
-		elementFolderNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:elementFolder");
+		elementFolderNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:elementFolder");
 		for (String controlName : this.getElements().keySet()) {
 			this.addControl(elementFolderNodeChildren, this.getElements().get(controlName));
 		}
 		
 		
 		ObjectNode propertiesFolder = JsonUtils.createObjectNode();
-		ObjectNode propertiesFolderProperties = JsonUtils.createObjectNode();
 		ObjectNode propertiesFolderChildren = JsonUtils.createObjectNode();
 
-		propertiesFolder.set("properties", propertiesFolderProperties);
 		propertiesFolder.set("children", propertiesFolderChildren);
 		children.set("properties", propertiesFolder);
-		propertiesFolderProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:propertyFolder");
+		propertiesFolder.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:propertyFolder");
 		for (String controlName : this.getProperties().keySet()) {
-			this.addControl(propertiesFolderChildren, this.getElements().get(controlName));
+			this.addControl(propertiesFolderChildren, this.getProperties().get(controlName));
 		}
 		
 		return jsonNode;
@@ -202,23 +190,21 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 	private void addControl(ObjectNode elementFolder, FormControl control) {
 		
 		ObjectNode controlNode = JsonUtils.createObjectNode();
-		ObjectNode controlNodeProperties = JsonUtils.createObjectNode();
+		elementFolder.set(control.getName(), controlNode);
 
-
-		controlNode.set("properties", controlNodeProperties);
-		controlNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formControl");
+		controlNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formControl");
 		
 
 		if (StringUtils.hasText(control.getTitle())) {
-			controlNodeProperties.put("bpw:title", control.getTitle());
+			controlNode.put("bpw:title", control.getTitle());
 		}
 
 		if (StringUtils.hasText(control.getFieldPath())) {
-			controlNodeProperties.put("bpw:fieldPath", control.getFieldPath());
+			controlNode.put("bpw:fieldPath", control.getFieldPath());
 		}
 		
 		if (StringUtils.hasText(control.getControlName())) {
-			controlNodeProperties.put("bpw:controlName", control.getControlName());
+			controlNode.put("bpw:controlName", control.getControlName());
 		}
 
 		if ((control.getValues() != null) && (control.getValues().length > 0)) {
@@ -226,7 +212,7 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			for (String value : control.getValues()) {
 				valueArray.add(value);
 			}
-			controlNodeProperties.set("bpw:value", valueArray);
+			controlNode.set("bpw:value", valueArray);
 		}
 
 		if ((control.getOptions() != null) && (control.getOptions().length > 0)) {
@@ -234,53 +220,51 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			for (String option : control.getOptions()) {
 				optionArray.add( option);
 			}
-			controlNodeProperties.set("bpw:options", optionArray);
+			controlNode.set("bpw:options", optionArray);
 		}
 
 		if (StringUtils.hasText(control.getDefaultValue())) {
-			controlNodeProperties.put("bpw:defaultValue", control.getDefaultValue());
+			controlNode.put("bpw:defaultValue", control.getDefaultValue());
 		}
 
 		if (StringUtils.hasText(control.getHint())) {
-			controlNodeProperties.put("bpw:hint", control.getHint());
+			controlNode.put("bpw:hint", control.getHint());
 		}
 
 		if (StringUtils.hasText(control.getDataType())) {
-			controlNodeProperties.put("bpw:dataType", control.getDataType());
+			controlNode.put("bpw:dataType", control.getDataType());
 		}
 
 		if (StringUtils.hasText(control.getRelationshipType())) {
-			controlNodeProperties.put("bpw:relationshipType", control.getRelationshipType());
+			controlNode.put("bpw:relationshipType", control.getRelationshipType());
 		}
 
 		if (StringUtils.hasText(control.getRelationshipCardinality())) {
-			controlNodeProperties.put("bpw:relationshipCardinality", control.getRelationshipCardinality());
+			controlNode.put("bpw:relationshipCardinality", control.getRelationshipCardinality());
 		}
 
 		if (StringUtils.hasText(control.getValditionRegEx())) {
-			controlNodeProperties.put("bpw:valditionRegEx", control.getValditionRegEx());
+			controlNode.put("bpw:valditionRegEx", control.getValditionRegEx());
 		}
 
-		controlNodeProperties.put("bpw:mandatory", control.isMandatory());
-		controlNodeProperties.put("bpw:userSearchable", control.isUserSearchable());
-		controlNodeProperties.put("bpw:systemIndexed", control.isSystemIndexed());
-		controlNodeProperties.put("bpw:showInList", control.isShowInList());
-		controlNodeProperties.put("bpw:unique", control.isUnique());
+		controlNode.put("bpw:mandatory", control.isMandatory());
+		controlNode.put("bpw:userSearchable", control.isUserSearchable());
+		controlNode.put("bpw:systemIndexed", control.isSystemIndexed());
+		controlNode.put("bpw:showInList", control.isShowInList());
+		controlNode.put("bpw:unique", control.isUnique());
 	}
 	
 	private void addSteps(ObjectNode stepsNode, FormStep[] steps) {
 		for (FormStep step : steps) {			
 			ObjectNode stepNode = JsonUtils.createObjectNode();
-			ObjectNode stepNodeProperties = JsonUtils.createObjectNode();
 			ObjectNode stepNodeChildren = JsonUtils.createObjectNode();
 			stepsNode.set(step.getStepName(), stepNode);
-			stepNode.set("properties", stepNodeProperties);
 			stepNode.set("children", stepNodeChildren);
-			stepNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formStep");
+			stepNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formStep");
 
 			String stepTitle = StringUtils.hasText(step.getStepTitle()) ? step.getStepTitle() : step.getStepName();
 			if (StringUtils.hasText(stepTitle)) {
-				stepNodeProperties.put("bpw:stepName", stepTitle);
+				stepNode.put("bpw:stepName", stepTitle);
 			}
 			int rowCount = 0;
 			for (BaseFormGroup row : step.getFormGroups()) {
@@ -292,16 +276,14 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 	private void addTabs(ObjectNode tabsNode, FormTab[] tabs) {
 		for (FormTab tab : tabs) {
 			ObjectNode tabNode = JsonUtils.createObjectNode();
-			ObjectNode tabNodeProperties = JsonUtils.createObjectNode();
 			ObjectNode tabNodeChildren = JsonUtils.createObjectNode();
 			tabsNode.set(tab.getTabName(), tabNode);
-			tabNode.set("properties", tabNodeProperties);
 			tabNode.set("children", tabNodeChildren);
-			tabNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formTab");
+			tabNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formTab");
 
 			String tabTitle = StringUtils.hasText(tab.getTabTitle()) ? tab.getTabTitle() : tab.getTabName();
 			if (StringUtils.hasText(tabTitle)) {
-				tabNodeProperties.put("bpw:tabName", tabTitle);
+				tabNode.put("bpw:tabName", tabTitle);
 			}
 			int rowCount = 0;
 			for (BaseFormGroup row : tab.getFormGroups()) {
@@ -319,16 +301,14 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 	
 	private void addRow(ObjectNode groupNode, FormRow row, String rowName) {
 		ObjectNode rowNode = JsonUtils.createObjectNode();
-		ObjectNode rowNodeProperties = JsonUtils.createObjectNode();
 		ObjectNode rowNodeChildren = JsonUtils.createObjectNode();
 		groupNode.set(rowName, rowNode);
-		rowNode.set("properties", rowNodeProperties);
 		rowNode.set("children", rowNodeChildren);
-		rowNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formRow");
+		rowNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formRow");
 		
 		String rowTitle = StringUtils.hasText(row.getRowTitle()) ? row.getRowTitle() : row.getRowName();
 		if (StringUtils.hasText(rowTitle)) {
-			rowNodeProperties.put("bpw:rowName", rowTitle);
+			rowNode.put("bpw:rowName", rowTitle);
 		}
 		int colCount = 0;
 		for (FormColumn col : row.getColumns()) {
@@ -340,21 +320,18 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 	private void addColumn(ObjectNode rowNode, FormColumn column, String columnNameName) {
 		
 		ObjectNode columnNode = JsonUtils.createObjectNode();
-		ObjectNode columnNodeProperties = JsonUtils.createObjectNode();
-		//ObjectNode rowNodeChildren = JsonUtils.createObjectNode();
 		rowNode.set(columnNameName, columnNode);
-		columnNode.set("properties", columnNodeProperties);
-		columnNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formColumn");
+		columnNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formColumn");
 		
-		columnNodeProperties.put("bpw:fxFlex", column.getFxFlex());
-		columnNodeProperties.put("bpw:id", columnNameName);
+		columnNode.put("bpw:fxFlex", column.getFxFlex());
+		columnNode.put("bpw:id", columnNameName);
 		
 		if (column.getFormControls() != null && column.getFormControls().length > 0) {
 			ArrayNode controlArray = JsonUtils.creatArrayNode();
 			for (String cn : column.getFormControls()) {
 				controlArray.add(cn);
 			}
-			columnNodeProperties.set("bpw:fieldNames", controlArray);
+			columnNode.set("bpw:fieldNames", controlArray);
 		}
 	}
 

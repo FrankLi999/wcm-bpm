@@ -45,27 +45,27 @@ public class WorkflowNode extends ResourceNode {
 	public void setCurrentLifecycleState(String currentLifecycleState) {
 		this.currentLifecycleState = currentLifecycleState;
 	}
-	protected void toJson(ObjectNode properties, ObjectNode children) {
-		super.toJson(properties, children);
+	protected void toJson(ObjectNode jsonNode, ObjectNode children) {
+		super.toJson(jsonNode, children);
 
 		if (StringUtils.hasText(workflow)) {
-			properties.put("bpw:workflow", workflow);
+			jsonNode.put("bpw:workflow", workflow);
 		}
 
 		if (StringUtils.hasText(workflowStage)) {
-			properties.put("bpw:workflowStage", workflowStage);
+			jsonNode.put("bpw:workflowStage", workflowStage);
 		}
 		
 		if (StringUtils.hasText(publishDate)) {
-			properties.put("bpw:publishDate", publishDate);
+			jsonNode.put("bpw:publishDate", publishDate);
 		}
 		
 		if (StringUtils.hasText(expireDate)) {
-			properties.put("bpw:expireDate", expireDate);
+			jsonNode.put("bpw:expireDate", expireDate);
 		}
 		
 		if (StringUtils.hasText(currentLifecycleState)) {
-			properties.put("bpw:currentLifecycleState", currentLifecycleState);
+			jsonNode.put("bpw:currentLifecycleState", currentLifecycleState);
 		}
 	}
 	@Override

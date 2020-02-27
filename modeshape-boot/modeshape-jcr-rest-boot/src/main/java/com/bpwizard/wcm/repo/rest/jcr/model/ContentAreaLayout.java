@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ContentAreaLayout extends ResourceNode implements HasName {
+
+	private static final long serialVersionUID = 1L;
 	String name;
 	String repository;
 	String workspace;
@@ -70,45 +72,37 @@ public class ContentAreaLayout extends ResourceNode implements HasName {
 	}	
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
-		ObjectNode properties = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
 		
-		super.toJson(properties, children);
-		
+		super.toJson(jsonNode, children);
 		jsonNode.set("children", children);
-		jsonNode.set("properties", properties);
-		properties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentAreaLayout");
-		properties.put("bpw:name", this.name);
-		properties.put("bpw:contentWidth", 80);
+
+		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentAreaLayout");
+		jsonNode.put("bpw:name", this.name);
+		jsonNode.put("bpw:contentWidth", 80);
 		
 		ObjectNode sidePaneNode = JsonUtils.createObjectNode();
 		children.set("sidePane", sidePaneNode);
 		
-		ObjectNode sidePaneNodeProperties = JsonUtils.createObjectNode();
-		sidePaneNode.set("properties", sidePaneNodeProperties);
-		sidePaneNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentAreaSidePanel");
-		sidePaneNodeProperties.put("bpw:isLeft", this.sidePane.isLeft());
-		sidePaneNodeProperties.put("bpw:width", this.sidePane.getWidth());
+		sidePaneNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentAreaSidePanel");
+		sidePaneNode.put("bpw:isLeft", this.sidePane.isLeft());
+		sidePaneNode.put("bpw:width", this.sidePane.getWidth());
 		this.addResourceViewers(this.sidePane.getViewers(), sidePaneNode);
 		
 		int rowCount = 0;
 		for (LayoutRow row : rows) {
 			ObjectNode rowNode = JsonUtils.createObjectNode();
 			children.set("row" + rowCount++, rowNode);
-			ObjectNode rowNodeProperties = JsonUtils.createObjectNode();
 			ObjectNode rowNodeChildren = JsonUtils.createObjectNode();
-			rowNode.set("properties", rowNodeProperties);
 			rowNode.set("children", rowNodeChildren);
-			rowNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:layoutRow");
+			rowNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:layoutRow");
 			int columnCount = 0;
 			
 			for (LayoutColumn column : row.getColumns()) {
 				ObjectNode columnNode = JsonUtils.createObjectNode();
 				rowNodeChildren.set("column" + columnCount++, columnNode);
-				ObjectNode columnNodeProperties = JsonUtils.createObjectNode();
-				columnNode.set("properties", columnNodeProperties);
-				columnNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:layoutColumn");
-				columnNodeProperties.put("bpw:width", column.getWidth());
+				columnNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:layoutColumn");
+				columnNode.put("bpw:width", column.getWidth());
 				this.addResourceViewers(column.getViewers(), columnNode);
 			}
 		}
@@ -125,17 +119,15 @@ public class ContentAreaLayout extends ResourceNode implements HasName {
 				ObjectNode viewerNode = JsonUtils.createObjectNode();
 				sidePaneChildren.set("viewer" + viewerCount++, viewerNode);
 				
-				ObjectNode viewerNodeProperties = JsonUtils.createObjectNode();
-				viewerNode.set("properties", viewerNodeProperties);
-				viewerNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:resourceViewer");
-				viewerNodeProperties.put("bpw:renderTemplayeName", viewer.getRenderTemplate());
-				viewerNodeProperties.put("bpw:title", viewer.getTitle());
+				viewerNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:resourceViewer");
+				viewerNode.put("bpw:renderTemplateName", viewer.getRenderTemplate());
+				viewerNode.put("bpw:title", viewer.getTitle());
 				if (viewer.getContentPath() != null && viewer.getContentPath().length > 0) {
 					ArrayNode contentArray = JsonUtils.creatArrayNode();
 					for (String cp : viewer.getContentPath()) {
 						contentArray.add(cp);
 					}
-					viewerNodeProperties.set("bpw:contentPath", contentArray);
+					viewerNode.set("bpw:contentPath", contentArray);
 				}
 			}
 		}

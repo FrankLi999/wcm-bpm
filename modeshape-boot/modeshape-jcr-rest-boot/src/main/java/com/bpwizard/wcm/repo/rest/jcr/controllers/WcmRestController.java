@@ -12,6 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.jcr.Item;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
@@ -67,6 +68,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
 import com.bpwizard.wcm.repo.rest.jcr.model.KeyValue;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutRow;
+import com.bpwizard.wcm.repo.rest.jcr.model.Library;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavBar;
 import com.bpwizard.wcm.repo.rest.jcr.model.Navigation;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationBadge;
@@ -105,6 +107,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories.Repository;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces.Workspace;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -279,7 +282,7 @@ public class WcmRestController {
 			Map<String, AuthoringTemplate> authoringTemplates = this.getAuthoringTemplateLibraries(repository, workspace, baseUrl)
 					.flatMap(at -> this.getAuthoringTemplates(at, baseUrl))
 					.collect(Collectors.toMap(
-							at -> String.format("%s/%s/%s/%s", repository, workspace, at.getLibrary(), at.getName()), 
+							at -> String.format("/bpwizard/library/%s/authoringTemplate/%s", at.getLibrary(), at.getName()), 
 							Function.identity()));
 	
 			if (logger.isDebugEnabled()) {
@@ -350,7 +353,7 @@ public class WcmRestController {
 			Map<String, JsonForm> jsonForms = this.getAuthoringTemplateLibraries(repository, workspace, baseUrl)
 					.flatMap(at -> this.getAuthoringTemplates(at, baseUrl))
 					.map(at -> this.toJsonForm(request, repository, workspace, at)).collect(Collectors.toMap(
-							jsonForm -> String.format("%s/%s/%s/%s", repository, workspace, jsonForm.getLibrary(), jsonForm.getResourceType()), 
+							jsonForm -> String.format("/bpwizard/library/%s/authoringTemplate/%s", jsonForm.getLibrary(), jsonForm.getResourceType()), 
 							Function.identity()));
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -433,47 +436,6 @@ public class WcmRestController {
 			logger.traceEntry();
 		}
 		try {
-//			String repositoryName = siteConfig.getRepository();
-//	
-//			Session session = repositoryManager.getSession(repositoryName, "default");
-//			Node siteConfigFolder = session.getNode(String.format("/bpwizard/library/%s/siteConfig", siteConfig.getLibrary()));
-//			Node siteConfigNode = siteConfigFolder.addNode(siteConfig.getName(), "bpw:siteConfig");
-//			
-//			siteConfigNode.setProperty("bpw:name", siteConfig.getName());
-//			siteConfigNode.setProperty("bpw:colorTheme", siteConfig.getColorTheme());
-//			siteConfigNode.setProperty("bpw:rootSiteArea", siteConfig.getRootSiteArea());
-//			siteConfigNode.setProperty("bpw:customScrollbars", siteConfig.isCustomScrollbars());
-//			
-//			PageLayout layout = siteConfig.getLayout();
-//			Node layoutNode = siteConfigNode.addNode("layout", "bpw:pageLayout");
-//			layoutNode.setProperty("bpw:style", layout.getStyle());
-//			layoutNode.setProperty("bpw:width", layout.getWidth());
-//			
-//			Node navbarNode = layoutNode.addNode("navbar", "bpw:navbar");
-//			navbarNode.setProperty("primaryBackground", layout.getNavbar().getPrimaryBackground());
-//			navbarNode.setProperty("secondaryBackground", layout.getNavbar().getSecondaryBackground());
-//			navbarNode.setProperty("hidden", layout.getNavbar().isHidden());
-//			navbarNode.setProperty("folded", layout.getNavbar().isFolded());
-//			navbarNode.setProperty("position", layout.getNavbar().getPosition());
-//			navbarNode.setProperty("variant", layout.getNavbar().getVariant());
-//	
-//			
-//			Node toolbarNode = layoutNode.addNode("toolbar", "bpw:toolbar");
-//			toolbarNode.setProperty("customBackgroundColor", layout.getToolbar().isCustomBackgroundColor());
-//			toolbarNode.setProperty("background", layout.getToolbar().getBackground());
-//			toolbarNode.setProperty("hidden", layout.getToolbar().isHidden());
-//			toolbarNode.setProperty("position", layout.getToolbar().getPosition());
-//			
-//			Node footerNode = layoutNode.addNode("footer", "bpw:footer");
-//			footerNode.setProperty("customBackgroundColor", layout.getFooter().isCustomBackgroundColor());
-//			footerNode.setProperty("background", layout.getFooter().getBackground());
-//			footerNode.setProperty("hidden", layout.getFooter().isHidden());
-//			footerNode.setProperty("position", layout.getFooter().getPosition());
-//	
-//			Node sidePanelNode = layoutNode.addNode("sidePanel", "bpw:sidePanel");
-//			sidePanelNode.setProperty("hidden", layout.getSidePanel().isHidden());
-//			sidePanelNode.setProperty("position", layout.getSidePanel().getPosition());
-//			session.save();
 			String repositoryName = siteConfig.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format("/bpwizard/library/%s/siteConfig/%s", siteConfig.getLibrary(), siteConfig.getName());
@@ -484,14 +446,74 @@ public class WcmRestController {
 					path, 
 					siteConfig.toJson());
 			if (this.authoringEnabled) {
-				Session session = repositoryManager.getSession(repositoryName, "default");
-				session.getWorkspace().clone("darft", path, path, true);
+				Session session = repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, "path", true);
+				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}
+	
+	@PostMapping(path = "/library", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createLibrary(
+			@RequestBody Library library, 
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String repositoryName = library.getRepository();
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format("/bpwizard/library/%s", library.getName());
+			this.itemHandler.addItem(
+					baseUrl, 
+					repositoryName,
+					library.getWorkspace(),
+					path, 
+					library.toJson());
+			if (this.authoringEnabled) {
+				Session session = repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+	
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}	
+	
+	@DeleteMapping(path = "/library/{repository}/{workspace}/{library}")
+	public ResponseEntity<?> deleteLibrary(
+			@PathVariable("repository") String repository,
+			@PathVariable("workspace") String workspace,
+			@PathVariable("library") String library, 
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			this.itemHandler.deleteItem(repository, workspace, String.format("/bpwizard/library/%s", library));
+			this.deleteDraftItem(repository, String.format("/bpwizard/library/%s", library));
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (Throwable t) {
@@ -514,8 +536,9 @@ public class WcmRestController {
 					path, 
 					siteConfig.toJson());
 			if (this.authoringEnabled) {
-				Session session = repositoryManager.getSession(repositoryName, "default");
-				session.getWorkspace().clone("darft", path, path, true);
+				Session session = repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
 			}
 		} catch (WcmRepositoryException e ) {
 			throw e;
@@ -596,8 +619,9 @@ public class WcmRestController {
 			String repositoryName = at.getRepository();
 			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, at.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "default");
-				session.getWorkspace().clone("draft", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -610,66 +634,6 @@ public class WcmRestController {
 	    } catch (Throwable t) {
 			throw new WcmRepositoryException(t);
 		}	
-//		try {
-//			String repositoryName = at.getRepository();
-//			String workspaceName = at.getWorkspace();
-//	
-//			Session session = repositoryManager.getSession(repositoryName, workspaceName);
-//			Node atFolder = session.getNode(String.format("/bpwizard/library/%s/authoringTemplate", at.getLibrary()));
-//			Node atNode = atFolder.addNode(at.getName(), "bpw:authoringTemplate");
-//			if (StringUtils.hasText(at.getBaseResourceType())) {
-//				atNode.setProperty("bpw:baseResourceType", at.getBaseResourceType());
-//			}
-//			if (StringUtils.hasText(at.getTitle())) {
-//				atNode.setProperty("bpw:title", at.getTitle());
-//			}
-//			if (StringUtils.hasText(at.getDescription())) {
-//				atNode.setProperty("bpw:description", at.getDescription());
-//			}
-//			
-//			if (StringUtils.hasText(at.getWorkflow())) {
-//				atNode.setProperty("bpw:workflow", at.getWorkflow());
-//			}
-//	
-//			this.addRow(atNode, at.getPropertyRow(), "property-group");
-//			
-//			Node elementGroupNode = atNode.addNode("element-group", "bpw:formGroupFoler");
-//			int groupCount = 0;
-//			for (BaseFormGroup g : at.getElementGroups()) {
-//				groupCount++;
-//				String groupName = StringUtils.hasText(g.getGroupTitle()) ? g.getGroupTitle() : ("group" + groupCount);
-//				String primaryFormGroupType = (g instanceof FormSteps) ? "bpw:formSteps"
-//						: (g instanceof FormTabs) ? "bpw:formTabs"
-//								: (g instanceof FormRows) ? "bpw:formRows" : "bpw:formRow";
-//				Node groupNode = elementGroupNode.addNode(groupName, primaryFormGroupType);
-//	
-//				if (g instanceof FormSteps) {
-//					this.addSteps(groupNode, ((FormSteps) g).getSteps());
-//				} else if (g instanceof FormTabs) {
-//					this.addTabs(groupNode, ((FormTabs) g).getTabs());
-//				} else if (g instanceof FormRows) {
-//					this.addRows(groupNode, ((FormRows) g).getRows());
-//				}
-//			}
-//			Node elementFolder = atNode.addNode("elements", "bpw:elementFolder");
-//			for (String controlName : at.getElements().keySet()) {
-//				this.addControl(elementFolder, at.getElements().get(controlName));
-//			}
-//			Node propertiesFolder = atNode.addNode("properties", "bpw:propertyFolder");
-//			for (String controlName : at.getProperties().keySet()) {
-//				this.addControl(propertiesFolder, at.getElements().get(controlName));
-//			}
-//			session.save();
-//			if (logger.isDebugEnabled()) {
-//				logger.traceExit();
-//			}
-//	
-//			return ResponseEntity.status(HttpStatus.CREATED).build();
-//		} catch (WcmRepositoryException e ) {
-//			throw e;
-//		} catch (Throwable t) {
-//			throw new WcmRepositoryException(t);
-//		}	
 	}
 
 	@PutMapping(path = "/at", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -683,10 +647,13 @@ public class WcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format("/bpwizard/library/%s/authoringTemplate/%s", at.getLibrary(), at.getName());
 			String repositoryName = at.getRepository();
-			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, at.toJson());
+			JsonNode atJson = at.toJson();
+			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, atJson);
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "default");
-				session.getWorkspace().clone("draft", path, path, true);
+				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, atJson);
+//				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+//				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -710,7 +677,7 @@ public class WcmRestController {
 		try {
 			Map<String, RenderTemplate> renderTemplates = this.getRenderTemplateLibraries(repository, workspace, request)
 					.flatMap(rt -> this.getRenderTemplates(rt, request)).collect(Collectors.toMap(
-							rt -> String.format("%s/%s/%s/%s", repository, workspace, rt.getLibrary(), rt.getName()), 
+							rt -> String.format("/bpwizard/library/%s/renderTemplate/%s", rt.getLibrary(), rt.getName()), 
 							Function.identity()));
 	
 			if (logger.isDebugEnabled()) {
@@ -789,64 +756,14 @@ public class WcmRestController {
 			logger.traceEntry();
 		}
 		try {
-//			String repositoryName = rt.getRepository();
-//			String workspaceName = rt.getWorkspace();
-//	
-//			Session session = repositoryManager.getSession(repositoryName, workspaceName);
-//			Node rtFolder = session.getNode(String.format("/bpwizard/library/%s/renderTemplate", rt.getLibrary()));
-//			Node rtNode = rtFolder.addNode(rt.getName(), "bpw:renderTemplate");
-//			rtNode.setProperty("bpw:name", rt.getName());
-//			rtNode.setProperty("bpw:title", StringUtils.hasText(rt.getTitle()) ? rt.getTitle() : rt.getName());
-//			if (StringUtils.hasText(rt.getDescription())) {
-//				rtNode.setProperty("bpw:description", rt.getDescription());
-//			}
-//			if (StringUtils.hasText(rt.getCode())) {
-//				rtNode.setProperty("bpw:code", rt.getCode());
-//			}
-//			if (StringUtils.hasText(rt.getPreloop())) {
-//				rtNode.setProperty("bpw:preloop", rt.getPreloop());
-//			}
-//			if (StringUtils.hasText(rt.getPostloop())) {
-//				rtNode.setProperty("bpw:postloop", rt.getPostloop());
-//			}
-//			rtNode.setProperty("bpw:maxEntries", rt.getMaxEntries());
-//			if (StringUtils.hasText(rt.getNote())) {
-//				rtNode.setProperty("bpw:note", rt.getNote());
-//			}
-//			if (StringUtils.hasText(rt.getResourceName())) {
-//				rtNode.setProperty("bpw:resourceName", rt.getResourceName());
-//			}
-//			rtNode.setProperty("bpw:isQuery", rt.isQuery());
-//			
-//			if (rt.getRows() != null && rt.getRows().length > 0) {
-//				int rowCount = 1;
-//				for(RenderTemplateLayoutRow row: rt.getRows()) {
-//					Node rowNode = rtNode.addNode("row" + rowCount++, "bpw:RenderTemplateLayoutRow");
-//					int columnCount = 1;
-//					for (RenderTemplateLayoutColumn column: row.getColumns()) {
-//						Node columnNode = rowNode.addNode("column" + columnCount++, "bpw:RenderTemplateLayoutColumn");
-//						if (StringUtils.hasText(column.getId())) {
-//							columnNode.setProperty("bpw:id", column.getId());
-//						}
-//						if (column.getWidth() > 0) {
-//							columnNode.setProperty("bpw:width", column.getWidth());
-//						}
-//						for (ResourceElementRender element: column.getElements()) {
-//							Node elementNode = columnNode.addNode(element.getName(), "bpw:ResourceElementRender");
-//							elementNode.setProperty("bpw:name", element.getName());
-//						}
-//					    
-//					}
-//				}
-//			}
-//			session.save();
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format("/bpwizard/library/%s/renderTemplate", rt.getLibrary(), rt.getName());
 			this.itemHandler.addItem(baseUrl, repositoryName, "default", path, rt.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "default");
-				session.getWorkspace().clone("draft", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -871,8 +788,9 @@ public class WcmRestController {
 			String path = String.format("/bpwizard/library/%s/renderTemplate", rt.getLibrary(), rt.getName());
 			this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), path, rt.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "default");
-				session.getWorkspace().clone("draft", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
 			}
 		} catch (WcmRepositoryException e ) {
 			throw e;
@@ -897,7 +815,7 @@ public class WcmRestController {
 			Map<String, ContentAreaLayout> contentAreaLayouts = this.getContentAreaLayoutLibraries(repository, workspace, baseUrl)
 					.flatMap(layout -> this.getContentArealayouts(layout, baseUrl))
 					.collect(Collectors.toMap(
-							layout -> String.format("%s/%s/%s/%s", repository, workspace, layout.getLibrary(), layout.getName()), 
+							layout -> String.format("/bpwizard/library/%s/contentAreaLayout/%s", layout.getLibrary(), layout.getName()), 
 							Function.identity()));
 	
 			if (logger.isDebugEnabled()) {
@@ -928,7 +846,6 @@ public class WcmRestController {
 			layout.setRepository(repository);
 			layout.setWorkspace(workspace);
 			String library = absPath.split("/")[2];
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> getContentAreaLayout: " + library);
 			layout.setLibrary(library);
 			this.toContentAreaLayout(contentAreaLayoutNode, layout);
 			return layout;
@@ -973,28 +890,15 @@ public class WcmRestController {
 			logger.traceEntry();
 		}
 		try {
-//			String repositoryName = pageLayout.getRepository();
-//			String workspaceName = pageLayout.getWorkspace();
-//	
-//			Session session = repositoryManager.getSession(repositoryName, workspaceName);
-//			Node contentAreaLayoutFolder = session
-//					.getNode(String.format("/bpwizard/library/%s/contentAreaLayout", pageLayout.getLibrary()));
-//			Node contentAreaLayoutNode = contentAreaLayoutFolder.addNode(pageLayout.getName(), "bpw:contentAreaLayout");
-//			contentAreaLayoutNode.setProperty("bpw:name", pageLayout.getName());
-//			contentAreaLayoutNode.setProperty("bpw:contentWidth", 80);
-//	
-//			Node sidePaneNode = contentAreaLayoutNode.addNode("sidePane", "bpw:contentAreaSidePanel");
-//			this.addSidePaneNode(sidePaneNode, pageLayout.getSidePane());
-//			this.addPageLayoutNodes(contentAreaLayoutNode, pageLayout.getRows());
-//			session.save();
-			
+
 			String repositoryName = pageLayout.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format("/bpwizard/library/%s/contentAreaLayout/%s", pageLayout.getLibrary(), pageLayout.getName());
 			this.itemHandler.addItem(baseUrl, repositoryName, pageLayout.getWorkspace(), path, pageLayout.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "default");
-				session.getWorkspace().clone("draft", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
 			}
 			
 			if (logger.isDebugEnabled()) {
@@ -1021,10 +925,14 @@ public class WcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format("/bpwizard/library/%s/contentAreaLayout/%s", pageLayout.getLibrary(), pageLayout.getName());
 			String repositoryName = pageLayout.getRepository();
-			this.itemHandler.updateItem(baseUrl, repositoryName, pageLayout.getWorkspace(), path, pageLayout.toJson());
+			JsonNode layoutJson = pageLayout.toJson();
+			this.itemHandler.updateItem(baseUrl, repositoryName, pageLayout.getWorkspace(), path, layoutJson);
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "default");
-				session.getWorkspace().clone("draft", path, path, true);
+				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, layoutJson);
+//				
+//				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+//				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -1038,7 +946,8 @@ public class WcmRestController {
 		}	
 	}
 
-	@PostMapping(path = "/sitearea/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+	// @PostMapping(path = "/sitearea/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/sitearea", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createSiteArea(
 			@RequestBody SiteArea sa, 
 			HttpServletRequest request)
@@ -1048,121 +957,14 @@ public class WcmRestController {
 			logger.traceEntry();
 		}
 		try {
-//			String repositoryName = sa.getRepository();
-//			String workspaceName = sa.getWorkspace();
-//	
-//			Session session = repositoryManager.getSession(repositoryName, workspaceName);
-//			Node parentFolder = session.getNode("/" + sa.getNodePath());
-//			Node saNode = parentFolder.addNode(sa.getName(), "bpw:siteArea");
-//	
-//			saNode.setProperty("bpw:name", sa.getName());
-//			saNode.setProperty("bpw:title", StringUtils.hasText(sa.getTitle()) ? sa.getTitle() : sa.getName());
-//			if (StringUtils.hasText(sa.getDescription())) {
-//				saNode.setProperty("bpw:description", sa.getDescription());
-//			}
-//			saNode.setProperty("bpw:url", StringUtils.hasText(sa.getUrl()) ? sa.getUrl() : sa.getName());
-//			if (StringUtils.hasText(sa.getFriendlyURL())) {
-//				saNode.setProperty("bpw:friendlyURL", sa.getFriendlyURL());
-//			}
-//			saNode.setProperty("bpw:sorderOrder", sa.getSorderOrder());
-//			saNode.setProperty("bpw:showOnMenu", sa.isShowOnMenu());
-//	
-//			if (StringUtils.hasText(sa.getDefaultContent())) {
-//				saNode.setProperty("bpw:defaultContent", sa.getDefaultContent());
-//			}
-//			if (StringUtils.hasText(sa.getAllowedArtifactTypes())) {
-//				saNode.setProperty("bpw:allowedFileExtension", sa.getAllowedArtifactTypes().split(","));
-//			}
-//	
-//			if (StringUtils.hasText(sa.getAllowedFileExtension())) {
-//				saNode.setProperty("bpw:allowedFileExtension", sa.getAllowedFileExtension().split(","));
-//			}
-//	
-//			saNode.setProperty("bpw:contentAreaLayout", sa.getContentAreaLayout());
-//			saNode.setProperty("bpw:siteConfig", sa.getSiteConfig());
-//			saNode.setProperty("bpw:securePage", sa.isSecurePage());
-//			saNode.setProperty("bpw:cacheTTL", sa.getCacheTTL());
-//	
-//			if (StringUtils.hasText(sa.getNavigationId())) {
-//				saNode.setProperty("bpw:navigationId", sa.getNavigationId());
-//			}
-//			
-//			if (StringUtils.hasText(sa.getNavigationType())) {
-//				saNode.setProperty("bpw:navigationType", sa.getNavigationType());
-//			}
-//			
-//			if (StringUtils.hasText(sa.getTranslate())) {
-//				saNode.setProperty("bpw:translate", sa.getTranslate());
-//			}
-//			
-//			if (StringUtils.hasText( sa.getIcon())) {
-//				saNode.setProperty("bpw:function", sa.getFunction());
-//			}
-//			
-//			if (StringUtils.hasText(sa.getIcon())) {
-//				saNode.setProperty("bpw:icon", sa.getIcon());
-//			}
-//			
-//			if (StringUtils.hasText(sa.getClasses())) {
-//				saNode.setProperty("bpw:classes", sa.getClasses());
-//			}
-//	
-//			saNode.setProperty("bpw:exactMatch", sa.isExactMatch());
-//			saNode.setProperty("bpw:externalUrl", sa.isExternalUrl());
-//			saNode.setProperty("bpw:openInNewTab", sa.isOpenInNewTab());
-//			
-//			if (sa.getMetadata() != null && sa.getMetadata().getKeyValues() != null) {
-//				Node metaDataNode = saNode.addNode("bpw:metaData", "bpw:keyValues");
-//				int count = 0;
-//				for (KeyValue keyValue: sa.getMetadata().getKeyValues()) {
-//					Node kvNode = metaDataNode.addNode("kv" + count++, "bpw:keyValue");
-//					kvNode.setProperty("bpw:name", keyValue.getName());
-//					kvNode.setProperty("bpw:value", keyValue.getValue());
-//				}
-//			}
-//			
-//			if (sa.getSearchData() != null) {
-//				Node searchDataDataNode = saNode.addNode("bpw:searchData", "bpw:pageSearchData");
-//				if (StringUtils.hasText(sa.getSearchData().getDescription())) {
-//					searchDataDataNode.setProperty("description", sa.getSearchData().getDescription());
-//				}
-//				if (sa.getSearchData().getKeywords() != null) {
-//					searchDataDataNode.setProperty("keywords", sa.getSearchData().getKeywords());
-//				}
-//			}
-//			
-//			if (sa.getBadge() != null) {
-//				Node badgeNode = saNode.addNode("bpw:badge", "bpw:navigationBadge");
-//				if (StringUtils.hasText(sa.getBadge().getTitle())) {
-//					badgeNode.setProperty("bpw:title", sa.getBadge().getTitle());
-//				}
-//				if (StringUtils.hasText(sa.getBadge().getTranslate())) {
-//					badgeNode.setProperty("bpw:translate", sa.getBadge().getTranslate());
-//				}
-//				if (StringUtils.hasText(sa.getBadge().getBg())) {
-//					badgeNode.setProperty("bpw:bg", sa.getBadge().getBg());
-//				}
-//				if (StringUtils.hasText(sa.getBadge().getFg())) {
-//					badgeNode.setProperty("bpw:fg", sa.getBadge().getFg());
-//				}
-//			}
-//	
-//			Node siteAreaLayoutNode = saNode.addNode("siteAreaLayout", "bpw:siteAreaLayout");
-//			if (sa.getSiteAreaLayout() != null) {
-//				Node sidePaneNode = siteAreaLayoutNode.addNode("sidePane", "bpw:contentAreaSidePanel");
-//				sidePaneNode.setProperty("bpw:contentWidth", sa.getSiteAreaLayout().getContentWidth());
-//				this.addSidePaneNode(sidePaneNode, sa.getSiteAreaLayout().getSidePane());
-//				this.addPageLayoutNodes(siteAreaLayoutNode, sa.getSiteAreaLayout().getRows());
-//			}
-//			session.save();
-			
-			String path = sa.getNodePath();
+			String path = String.format("%s/%s", sa.getNodePath(), sa.getName());
 			String repositoryName = sa.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			this.itemHandler.addItem(baseUrl, repositoryName, sa.getWorkspace(), path, sa.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "default");
-				session.getWorkspace().clone("draft", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -1176,7 +978,7 @@ public class WcmRestController {
 		}
 	}
 	
-	@PutMapping(path = "/siteArea/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(path = "/sitearea", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void saveSiteArea(
 			@RequestBody SiteArea sa, 
 			HttpServletRequest request)
@@ -1185,10 +987,14 @@ public class WcmRestController {
 			String path = sa.getNodePath();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String repositoryName = sa.getRepository();
-			this.itemHandler.updateItem(baseUrl, repositoryName, sa.getWorkspace(), path, sa.toJson());
+			JsonNode saJson = sa.toJson();
+			this.itemHandler.updateItem(baseUrl, repositoryName, sa.getWorkspace(), path, saJson);
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "default");
-				session.getWorkspace().clone("draft", path, path, true);
+				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, saJson);
+				
+//				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+//				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
 			}
 		} catch (WcmRepositoryException e ) {
 			throw e;
@@ -1219,7 +1025,6 @@ public class WcmRestController {
 			sa.setRepository(repository);
 			sa.setWorkspace(workspace);
 			sa.setNodePath(saPath);
-			sa.setName(saNode.getName());
 			this.loadSiteArea(saNode, sa);
 			
 			if (logger.isDebugEnabled()) {
@@ -1309,8 +1114,10 @@ public class WcmRestController {
 			contentItem.setCurrentLifecycleState("Published"); //TODO
 			AuthoringTemplate at = this.getAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
 					contentItem.getAuthoringTemplate(), request);
-			contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
-			String path = contentItem.getNodePath();
+			if (at.getContentItemAcl() != null) {
+			    contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
+			}
+			String path = String.format("%s/%s", contentItem.getNodePath(), contentItem.getName());
 			String baseUrl = RestHelper.repositoryUrl(request);
 			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), "default", path, contentItem.toJson());
 			Session session = this.repositoryManager.getSession(contentItem.getRepository(), "default");
@@ -1318,7 +1125,9 @@ public class WcmRestController {
 				ModeshapeUtils.grantPermissions(session, contentItem.getNodePath(), contentItem.getAcl());
 			}
 			if (authoringEnabled) {
-				session.getWorkspace().clone("draft", contentItem.getNodePath(), contentItem.getNodePath(), true);
+				Session draftSession = this.repositoryManager.getSession(contentItem.getRepository(), "draft");
+				draftSession.getWorkspace().clone("default", path, path, true);
+				// draftSession.save();
 			}
 			
 			if (logger.isDebugEnabled()) {
@@ -1396,7 +1205,8 @@ public class WcmRestController {
 		}
 		try {
 			Session session = this.repositoryManager.getSession(repository, "default");
-			session.getWorkspace().clone("darft", contentItemPath, contentItemPath, true);
+			session.getWorkspace().clone("draft", contentItemPath, contentItemPath, true);
+			// session.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -1418,15 +1228,21 @@ public class WcmRestController {
 			AuthoringTemplate at = this.getAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
 					contentItem.getAuthoringTemplate(), request);
 			String baseUrl = RestHelper.repositoryUrl(request);
-			contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
-			this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItem.toJson());
+			if (at.getContentItemAcl() != null) {
+			    contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
+			}
+			JsonNode contentItemJson = contentItem.toJson();
+			this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItemJson);
 			Session session = this.repositoryManager.getSession(contentItem.getRepository(), "default");
 			if (contentItem.getAcl() != null) {
 				ModeshapeUtils.grantPermissions(session, contentItem.getNodePath(), contentItem.getAcl());
 			}
 			this.wcmUtils.unlock(contentItem.getRepository(), contentItem.getWorkspace(), path);
 			if (this.authoringEnabled) {
-				session.getWorkspace().clone("draft", contentItem.getNodePath(), contentItem.getNodePath(), true);
+				this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), "draft", path, contentItemJson);
+//				Session draftSession = this.repositoryManager.getSession(contentItem.getRepository(), );
+//				draftSession.getWorkspace().clone("default", contentItem.getNodePath(), contentItem.getNodePath(), true);
+				// draftSession.save();
 			}
 		} catch (WcmRepositoryException e ) {
 			throw e;
@@ -1463,7 +1279,7 @@ public class WcmRestController {
 			contentItem.setElements(elements);
 			properties.put("name", contentItemNode.getName());
 			contentItem.setProperties(properties);
-			contentItem.setName(contentItemNode.getName());
+	
 			this.resolveWorkflowNode(contentItem, contentItemNode, properties);
 			for (RestProperty property: contentItemNode.getJcrProperties()) {
 				if ("bpw:authoringTemplate".equals(property.getName())) {
@@ -1675,8 +1491,10 @@ public class WcmRestController {
 			ModeshapeUtils.grantPermissions(session, contentItemPath, at.getContentItemAcl().getOnPublishPermissions());
 			this.wcmUtils.unlock(repository, workspace, contentItemPath);
 	        session.save();
-	        session.getWorkspace().clone("default", contentItemPath, contentItemPath, true);
-	        if (logger.isDebugEnabled()) {
+	        Session defaultSession = this.repositoryManager.getSession(repository, "default");
+	        defaultSession.getWorkspace().clone("draft", contentItemPath, contentItemPath, true);
+	        // defaultSession.save();
+			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -1797,8 +1615,8 @@ public class WcmRestController {
 		}
   	};
   	
-  	@DeleteMapping("/contentItem/purge/{repository}/{workspace}")
-  	public void purgeContentItem(
+  	@DeleteMapping("/WcmItem/purge/{repository}/{workspace}")
+  	public void purgeWcmItem(
   			@PathVariable("repository") String repository,
 		    @PathVariable("workspace") String workspace,
   			@RequestParam("path") String absPath) { 
@@ -1807,17 +1625,34 @@ public class WcmRestController {
 		}
   		try {
   			if (this.authoringEnabled) {
-	  			Session session = this.repositoryManager.getSession(repository, "draft");
-	  			Node node = session.getNode(absPath);
-	  			String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
-	            if ("Expired".equals(workflowState)) {
-	            	node.remove();
-	            	session.save();
-	            }
+  				try {
+		  			Session draftSession = this.repositoryManager.getSession(repository, "draft");
+		  			Node draftNode = draftSession.getNode(absPath);
+		  			// String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
+		            // if ("Expired".equals(workflowState)) {
+		  			    draftNode.remove();
+		            	draftSession.save();
+		            // }
+  				} catch (Exception e) {
+  					//TODO: 
+  					e.printStackTrace();
+  				}
+  				try {
+	            	Session expiredSession = this.repositoryManager.getSession(repository, "expired");
+		  			Node expiredNode = expiredSession.getNode(absPath);
+		  			// String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
+		            // if ("Expired".equals(workflowState)) {
+		  			expiredNode.remove();
+		  			expiredSession.save();
+		            // }
+  				} catch (Exception e) {
+  					//TODO: 
+  					e.printStackTrace();
+  				}
   			}
   			
-  			Session session = this.repositoryManager.getSession(repository, "default");
   			try {
+  				Session session = this.repositoryManager.getSession(repository, "default");
 	  			Node node = session.getNode(absPath);
 	            node.remove();
 	            session.save();
@@ -2358,150 +2193,6 @@ public class WcmRestController {
 		}
 	}
 
-//	private void addSidePaneNode(Node sidenavNode, SidePane sidenav) throws RepositoryException {
-//		sidenavNode.setProperty("bpw:isLeft", sidenav.isLeft());
-//		sidenavNode.setProperty("bpw:width", sidenav.getWidth());
-//		this.addResourceViewers(sidenavNode, sidenav.getViewers());
-//	}
-
-//	private void addPageLayoutNodes(Node pageLayoutNode, LayoutRow[] rows) throws RepositoryException {
-//		int rowCount = 0;
-//		for (LayoutRow row : rows) {
-//			Node rowNode = pageLayoutNode.addNode("row" + rowCount++, "bpw:layoutRow");
-//			int columnCount = 0;
-//			for (LayoutColumn column : row.getColumns()) {
-//				Node columnNode = rowNode.addNode("column" + columnCount++, "bpw:layoutColumn");
-//				columnNode.setProperty("bpw:width", column.getWidth());
-//				this.addResourceViewers(columnNode, column.getViewers());
-//			}
-//		}
-//	}
-
-//	private void addResourceViewers(Node restNode, ResourceViewer viewers[]) throws RepositoryException {
-//		int viewerCount = 0;
-//		for (ResourceViewer viewer : viewers) {
-//			Node viewerNode = restNode.addNode("viewer" + viewerCount++, "bpw:resourceViewer");
-//			viewerNode.setProperty("bpw:renderTemplayeName", viewer.getRenderTemplate());
-//			viewerNode.setProperty("bpw:title", viewer.getTitle());
-//			if (viewer.getContentPath() != null && viewer.getContentPath().length > 0) {
-//				viewerNode.setProperty("bpw:contentPath", viewer.getContentPath());
-//			}
-//		}
-//	}
-
-//	private void addSteps(Node stepsNode, FormStep[] steps) throws RepositoryException {
-//		for (FormStep step : steps) {
-//			Node stepNode = stepsNode.addNode(step.getStepName(), "bpw:formStep");
-//			String stepTitle = StringUtils.hasText(step.getStepTitle()) ? step.getStepTitle() : step.getStepName();
-//			if (StringUtils.hasText(stepTitle)) {
-//				stepNode.setProperty("bpw:stepName", stepTitle);
-//			}
-//			int rowCount = 0;
-//			for (BaseFormGroup row : step.getFormGroups()) {
-//				this.addRow(stepNode, (FormRow) row, "row" + rowCount++);
-//			}
-//		}
-//	}
-//
-//	private void addTabs(Node tabsNode, FormTab[] tabs) throws RepositoryException {
-//		for (FormTab tab : tabs) {
-//			Node tabNode = tabsNode.addNode(tab.getTabName(), "bpw:formTab");
-//			String tabTitle = StringUtils.hasText(tab.getTabTitle()) ? tab.getTabTitle() : tab.getTabName();
-//			if (StringUtils.hasText(tabTitle)) {
-//				tabNode.setProperty("bpw:tabName", tabTitle);
-//			}
-//			int rowCount = 0;
-//			for (BaseFormGroup row : tab.getFormGroups()) {
-//				this.addRow(tabNode, (FormRow) row, "row" + rowCount++);
-//			}
-//		}
-//	}
-//
-//	private void addRows(Node rowsNode, FormRow[] rows) throws RepositoryException {
-//		int rowCount = 0;
-//		for (FormRow row : rows) {
-//			this.addRow(rowsNode, (FormRow) row, "row" + rowCount++);
-//		}
-//	}
-
-//	private void addRow(Node groupNode, FormRow row, String rowName) throws RepositoryException {
-//		
-//		Node rowNode = groupNode.addNode(rowName, "bpw:formRow");
-//		String rowTitle = StringUtils.hasText(row.getRowTitle()) ? row.getRowTitle() : row.getRowName();
-//		if (StringUtils.hasText(rowTitle)) {
-//			rowNode.setProperty("bpw:rowName", rowTitle);
-//		}
-//		int colCount = 0;
-//		for (FormColumn col : row.getColumns()) {
-//			String columnName = StringUtils.hasText(col.getId()) ? col.getId() : "column" + colCount;
-//			this.addColumn(rowNode, col, columnName);
-//		}
-//	}
-
-//	private void addColumn(Node rowNode, FormColumn column, String columnNameName) throws RepositoryException {
-//		Node columnNode = rowNode.addNode(columnNameName, "bpw:formColumn");
-//		columnNode.setProperty("bpw:fxFlex", column.getFxFlex());
-//		columnNode.setProperty("bpw:id", columnNameName);
-//		if (column.getFormControls() != null && column.getFormControls().length > 0) {
-//			columnNode.setProperty("bpw:fieldNames", column.getFormControls());
-//		}
-//	}
-//
-//	private void addControl(Node elementFolder, FormControl control) throws RepositoryException {
-//		// Node controlNode = elementFolder.addNode(control.getName(),
-//		// "bpw:formControl");
-//		Node controlNode = elementFolder.addNode(control.getName(), "bpw:formControl");
-//		if (StringUtils.hasText(control.getTitle())) {
-//			controlNode.setProperty("bpw:title", control.getTitle());
-//		}
-//
-//		if (StringUtils.hasText(control.getFieldPath())) {
-//			controlNode.setProperty("bpw:fieldPath", control.getFieldPath());
-//		}
-//		
-//		if (StringUtils.hasText(control.getControlName())) {
-//			controlNode.setProperty("bpw:controlName", control.getControlName());
-//		}
-//
-//		if ((control.getValues() != null) && (control.getValues().length > 0)) {
-//			controlNode.setProperty("bpw:value", control.getValues());
-//		}
-//
-//		if ((control.getOptions() != null) && (control.getOptions().length > 0)) {
-//			controlNode.setProperty("bpw:options", control.getOptions());
-//		}
-//
-//		if (StringUtils.hasText(control.getDefaultValue())) {
-//			controlNode.setProperty("bpw:defaultValue", control.getDefaultValue());
-//		}
-//
-//		if (StringUtils.hasText(control.getHint())) {
-//			controlNode.setProperty("bpw:hint", control.getHint());
-//		}
-//
-//		if (StringUtils.hasText(control.getDataType())) {
-//			controlNode.setProperty("bpw:dataType", control.getDataType());
-//		}
-//
-//		if (StringUtils.hasText(control.getRelationshipType())) {
-//			controlNode.setProperty("bpw:relationshipType", control.getRelationshipType());
-//		}
-//
-//		if (StringUtils.hasText(control.getRelationshipCardinality())) {
-//			controlNode.setProperty("bpw:relationshipCardinality", control.getRelationshipCardinality());
-//		}
-//
-//		if (StringUtils.hasText(control.getValditionRegEx())) {
-//			controlNode.setProperty("bpw:valditionRegEx", control.getValditionRegEx());
-//		}
-//
-//		controlNode.setProperty("bpw:mandatory", control.isMandatory());
-//		controlNode.setProperty("bpw:userSearchable", control.isUserSearchable());
-//		controlNode.setProperty("bpw:systemIndexed", control.isSystemIndexed());
-//		controlNode.setProperty("bpw:showInList", control.isShowInList());
-//		controlNode.setProperty("bpw:unique", control.isUnique());
-//	}
-
 	private Theme toThemeWithLibrary(RestNode node, String repository, String workspace) {
 		Theme themeWithLibrary = new Theme();
 		themeWithLibrary.setRepositoryName(repository);
@@ -2666,7 +2357,7 @@ public class WcmRestController {
 				for (RestProperty property : viewerNode.getJcrProperties()) {
 					if ("bpw:title".equals(property.getName())) {
 						viewer.setTitle(property.getValues().get(0));
-					} else if ("bpw:renderTemplayeName".equals(property.getName())) {
+					} else if ("bpw:renderTemplateName".equals(property.getName())) {
 						viewer.setRenderTemplate(property.getValues().get(0));
 					} else if ("bpw:contentPath".equals(property.getName())) {
 						viewer.setContentPath(property.getValues().toArray(new String[property.getValues().size()]));
@@ -3037,62 +2728,6 @@ public class WcmRestController {
 				elements.put("body", property.getValues().get(0));
 			} else if (property.getName().startsWith("bpw:")){
 				properties.put(this.getSiteAreaPropertyName(property.getName()), property.getValues().get(0));
-//			} else if ("bpw:name".equals(property.getName())) {
-//			
-//				properties.put("name", property.getValues().get(0));
-//			} else if ("bpw:title".equals(property.getName())) {
-//				properties.put("title", property.getValues().get(0));
-//			} else if ("bpw:description".equals(property.getName())) {
-//				properties.put("description", property.getValues().get(0));
-//			} else if ("bpw:url".equals(property.getName())) {
-//				properties.put("name", property.getValues().get(0));
-//			} else if ("bpw:friendlyURL".equals(property.getName())) {
-//				properties.put("friendlyURL", property.getValues().get(0));
-//			} else if ("bpw:sorderOrder".equals(property.getName())) {
-//				// properties.put("sorderOrder", Integer.parseInt(property.getValues().get(0)));
-//				properties.put("sorderOrder", property.getValues().get(0));
-//			} else if ("bpw:showOnMenu".equals(property.getName())) {
-//				// properties.put("showOnMenu", Boolean.parseBoolean(property.getValues().get(0)));
-//				properties.put("showOnMenu", property.getValues().get(0));
-//			} else if ("bpw:defaultContent".equals(property.getName())) {
-//				properties.put("defaultContent", property.getValues().get(0));
-//			} else if ("bpw:allowedFileExtension".equals(property.getName())) {
-//				properties.put("name", property.getValues().get(0));
-//			} else if ("bpw:allowedFileExtension".equals(property.getName())) {
-//				properties.put("allowedFileExtension", property.getValues().get(0));
-//			} else if ("bpw:contentAreaLayout".equals(property.getName())) {
-//				properties.put("contentAreaLayout", property.getValues().get(0));
-//			} else if ("bpw:siteConfig".equals(property.getName())) {
-//				properties.put("siteConfig", property.getValues().get(0));
-//			} else if ("bpw:securePage".equals(property.getName())) {
-//				// properties.put("securePage", Boolean.parseBoolean(property.getValues().get(0)));
-//				properties.put("securePage", property.getValues().get(0));
-//			} else if ("bpw:cacheTTL".equals(property.getName())) {
-//				// properties.put("cacheTTL", Integer.parseInt(property.getValues().get(0)));
-//				properties.put("cacheTTL", property.getValues().get(0));
-//			} else if ("bpw:navigationId".equals(property.getName())) {
-//				properties.put("navigationId", property.getValues().get(0));
-//			} else if ("bpw:navigationType".equals(property.getName())) {
-//				properties.put("navigationType", property.getValues().get(0));
-//			} else if ("bpw:translate".equals(property.getName())) {
-//				properties.put("translate", property.getValues().get(0));
-//			} else if ("bpw:function".equals(property.getName())) {
-//				properties.put("function", property.getValues().get(0));
-//			} else if ("bpw:icon".equals(property.getName())) {
-//				properties.put("icon", property.getValues().get(0));
-//			} else if ("bpw:classes".equals(property.getName())) {
-//				properties.put("classes", property.getValues().get(0));
-//			} else if ("bpw:exactMatch".equals(property.getName())) {
-//				// properties.put("exactMatch", Boolean.parseBoolean(property.getValues().get(0)));
-//				properties.put("exactMatch", property.getValues().get(0));
-//			} else if ("bpw:externalUrl".equals(property.getName())) {
-//				// properties.put("externalUrl", Boolean.parseBoolean(property.getValues().get(0)));
-//				properties.put("externalUrl", property.getValues().get(0));
-//			} else if ("bpw:openInNewTab".equals(property.getName())) {
-//				//properties.put("openInNewTab", Boolean.parseBoolean(property.getValues().get(0)));
-//				properties.put("openInNewTab", property.getValues().get(0));
-//			} else if ("jcr:lockOwner".equals(property.getName())) {
-//				sa.setLockOwner(property.getValues().get(0));
 			}
 		}
 		
@@ -3173,130 +2808,7 @@ public class WcmRestController {
 	private SiteArea toSiteArea(RestNode saNode, Map<String, SiteArea> siteAreas) {
 		SiteArea sa = new SiteArea();
 		this.loadSiteArea(saNode, sa);
-//		for (RestProperty property : saNode.getJcrProperties()) {
-//			if ("bpw:navigationId".equals(property.getName())) {
-//				sa.setNavigationId(property.getValues().get(0));
-//			} else if ("bpw:navigationType".equals(property.getName())) {
-//				sa.setNavigationType(property.getValues().get(0));
-//			} else if ("bpw:title".equals(property.getName())) {
-//				sa.setTitle(property.getValues().get(0));
-//			} else if ("bpw:translate".equals(property.getName())) {
-//				sa.setTranslate(property.getValues().get(0));
-//			} else if ("bpw:icon".equals(property.getName())) {
-//				sa.setIcon(property.getValues().get(0));
-//			} else if ("bpw:url".equals(property.getName())) {
-//				sa.setUrl(property.getValues().get(0));
-//			} else if ("bpw:name".equals(property.getName())) {
-//				sa.setName(property.getValues().get(0));
-//			} else if ("bpw:friendlyURL".equals(property.getName())) {
-//				sa.setFriendlyURL(property.getValues().get(0));
-//			} else if ("bpw:sorderOrder".equals(property.getName())) {
-//				sa.setSorderOrder(Integer.parseInt(property.getValues().get(0)));
-//			} else if ("bpw:sorderOrder".equals(property.getName())) {
-//				sa.setShowOnMenu(Boolean.parseBoolean(property.getValues().get(0)));
-//			} else if ("bpw:allowedFileExtension".equals(property.getName())) {
-//				sa.setAllowedFileExtension(property.getValues().get(0));
-//			} else if ("bpw:allowedArtifactTypes".equals(property.getName())) {
-//				sa.setAllowedArtifactTypes(property.getValues().get(0));
-//			} else if ("bpw:description".equals(property.getName())) {
-//				sa.setDescription(property.getValues().get(0));
-//			} else if ("bpw:defaultContent".equals(property.getName())) {
-//				sa.setDefaultContent(property.getValues().get(0));
-//			} else if ("bpw:contentAreaLayout".equals(property.getName())) {
-//				sa.setContentAreaLayout(property.getValues().get(0));
-//			} else if ("bpw:siteConfig".equals(property.getName())) {
-//				sa.setSiteConfig(property.getValues().get(0));
-//			} else if ("bpw:cacheTTL".equals(property.getName())) {
-//				sa.setCacheTTL(Integer.parseInt(property.getValues().get(0)));
-//			} else if ("bpw:securePage".equals(property.getName())) {
-//				sa.setSecurePage(Boolean.parseBoolean(property.getValues().get(0)));
-//			} else if ("bpw:function".equals(property.getName())) {
-//				sa.setFunction(property.getValues().get(0));
-//			} else if ("bpw:translate".equals(property.getName())) {
-//				sa.setTranslate(property.getValues().get(0));
-//			} else if ("bpw:icon".equals(property.getName())) {
-//				sa.setIcon(property.getValues().get(0));
-//			} else if ("bpw:classes".equals(property.getName())) {
-//				sa.setClasses(property.getValues().get(0));
-//			} else if ("bpw:exactMatch".equals(property.getName())) {
-//				sa.setExactMatch(Boolean.parseBoolean(property.getValues().get(0)));
-//			} else if ("bpw:externalUrl".equals(property.getName())) {
-//				sa.setExternalUrl(Boolean.parseBoolean(property.getValues().get(0)));
-//			} else if ("bpw:openInNewTab".equals(property.getName())) {
-//				sa.setOpenInNewTab(Boolean.parseBoolean(property.getValues().get(0)));
-//			} else if ("jcr:lockOwner".equals(property.getName())) {
-//				sa.setLockOwner(property.getValues().get(0));
-//			}    
-//			/*
-//			+ bpw:metaData (bpw:keyValues)
-//			+ bpw:searchData (bpw:pageSearchData)	
-//			*/		
-//		}
-//		
-//		
-//		for (RestNode node :saNode.getChildren()) {
-//			if (this.wcmUtils.checkNodeType(node, "bpw:navigationBadge")) {
-//				NavigationBadge badge = new NavigationBadge();
-//				for (RestProperty property : node.getJcrProperties()) {
-//					if ("bpw:title".equals(property.getName())) {
-//						badge.setTitle(property.getValues().get(0));
-//					} else if ("bpw:translate".equals(property.getName())) {
-//						badge.setTranslate(property.getValues().get(0));
-//					} else if ("bpw:bg".equals(property.getName())) {
-//						badge.setBg(property.getValues().get(0));
-//					} else if ("bpw:fg".equals(property.getName())) {
-//						badge.setFg(property.getValues().get(0));
-//					} 
-//				}
-//				sa.setBadge(badge);	
-//			} else if (this.wcmUtils.checkNodeType(node, "bpw:keyValues")) {
-//				keyValues metadata = new keyValues();
-//				KeyValue[] keyValues = node.getChildren().stream().filter(n -> this.wcmUtils.checkNodeType(n, "bpw:keyValue"))
-//						.map(n -> this.toKeyValue(n)).toArray(KeyValue[]::new);
-//				metadata.setKeyValue(keyValues);
-//				sa.setMetadata(metadata);
-//			} else if (this.wcmUtils.checkNodeType(node, "bpw:pageSearchData")) {
-//				SearchData searchData = new SearchData();
-//				for (RestProperty property : node.getJcrProperties()) {
-//					if ("description".equals(property.getName())) {
-//						searchData.setDescription(property.getValues().get(0));
-//					} else if ("keywords".equals(property.getName())) {
-//						searchData.setKeywords(property.getValues().toArray(new String[property.getValues().size()]));
-//					}
-//				}
-//				sa.setSearchData(searchData);
-//			} else if (this.wcmUtils.checkNodeType(node, "bpw:siteAreaLayout")) {
-//				SiteAreaLayout siteAreaLayout = new SiteAreaLayout();
-//				List<LayoutRow> rows = new ArrayList<>();
-//				for (RestProperty property : node.getJcrProperties()) {
-//					if ("bpw:contentWidth".equals(property.getName())) {
-//						siteAreaLayout.setContentWidth(Integer.parseInt(property.getValues().get(0)));
-//						break;
-//					} 
-//				}
-//				node.getChildren().forEach(childNode -> {
-//					if (this.wcmUtils.checkNodeType(childNode, "bpw:contentAreaSidePanel")) {
-//						SidePane sidepane = new SidePane();
-//						for (RestProperty property : childNode.getJcrProperties()) {
-//							if ("bpw:isLeft".equals(property.getName())) {
-//								sidepane.setLeft(Boolean.parseBoolean(property.getValues().get(0)));
-//							} else if ("bpw:width".equals(property.getName())) {
-//								sidepane.setWidth(Integer.parseInt(property.getValues().get(0)));
-//							}
-//						}
-//						sidepane.setViewers(this.resolveResourceViewer(childNode));
-//						siteAreaLayout.setSidePane(sidepane);
-//					} else if (this.wcmUtils.checkNodeType(childNode, "bpw:layoutRow")) {
-//						LayoutRow row = this.resolveLayoutRow(childNode);
-//						rows.add(row);
-//					}
-//				});
-//				siteAreaLayout.setRows(rows.toArray(new LayoutRow[rows.size()]));
-//				sa.setSiteAreaLayout(siteAreaLayout);
-//			} else if (this.isSiteArea(node)) {
-//				this.toSiteArea(node, siteAreas);
-//			}
-//		}
+
 		for (RestNode node :saNode.getChildren()) {
 			if (this.isSiteArea(node)) {
 				this.toSiteArea(node, siteAreas);
@@ -3306,18 +2818,6 @@ public class WcmRestController {
 		siteAreas.put(url.replace("/", "~"), sa);
 		return sa;
 	}
-	
-//	private KeyValue toKeyValue(RestNode node) {
-//		KeyValue keyValue = new KeyValue();
-//		for (RestProperty property : node.getJcrProperties()) {
-//			if ("bpw:name".equals(property.getName())) {
-//				keyValue.setName(property.getValues().get(0));
-//			} else if ("bpw:value".equals(property.getName())) {
-//				keyValue.setValue(property.getValues().get(0));
-//			}
-//		}
-//		return keyValue;
-//	}
 	
 	private NavigationItem toNavigation(RestNode siteArea) {
 		Navigation navigation = new Navigation();
@@ -3470,64 +2970,10 @@ public class WcmRestController {
         return repositories;
     }
     
-//	private void doCreateContentItem(ContentItem contentItem, 
-//			HttpServletRequest request)
-//			throws WcmRepositoryException {
-//		if (logger.isDebugEnabled()) {
-//			logger.traceEntry();
-//		}
-//		
-//		try {
-//			String repositoryName = contentItem.getRepository();
-//			String workspaceName = contentItem.getWorkspace();
-//	
-//			Session session = repositoryManager.getSession(repositoryName, workspaceName);
-//			Node parentFolder = session.getNode("/" + contentItem.getNodePath());
-//			
-//			Map<String, String> properties = contentItem.getProperties();
-//			String name = properties.get("name"); 
-//			String title = properties.get("title");
-//			String description = properties.get("description");
-//			String workflow = properties.get("workflow"); 
-//			
-//			
-//			Node contentNode = parentFolder.addNode(name, "bpw:content");
-//	
-//			//contentNode.setProperty("bpw:name", name);
-//			contentNode.setProperty("bpw:authoringTemplate", contentItem.getAuthoringTemplate());
-//			if (StringUtils.hasText(workflow)) {
-//				contentNode.setProperty("bpw:workflow", workflow);
-//			}
-//			contentNode.setProperty("bpw:title", StringUtils.hasText(title) ? title : name);
-//			if (StringUtils.hasText(description)) {
-//				contentNode.setProperty("bpw:description", description);
-//			}
-//			
-//			Node elementsNode = contentNode.addNode("contentElements", "bpw:contentElementFolder");
-//			Map<String, String> contentElements = contentItem.getElements();
-//			for (String key: contentElements.keySet()) {
-//				Node contentElementNode = elementsNode.addNode(key, "bpw:contentElement");
-//				contentElementNode.setProperty("bpw:multiple", false);
-//				contentElementNode.setProperty("bpw:value", new String[] {contentElements.get(key)});
-//			}
-//			
-//			Node propertiesNode = contentNode.addNode("contentProperties", "bpw:propertyElementFolder");
-//			Map<String, String> propertyElements = contentItem.getElements();
-//			for (String key: propertyElements.keySet()) {
-//				Node contentElementNode = propertiesNode.addNode(key, "bpw:contentElement");
-//				contentElementNode.setProperty("bpw:multiple", false);
-//				contentElementNode.setProperty("bpw:value", contentElements.get(key));
-//			}
-//			session.save();
-//			if (logger.isDebugEnabled()) {
-//				logger.traceExit();
-//			}
-//	
-//			
-//		} catch (WcmRepositoryException e ) {
-//			throw e;
-//		} catch (Throwable t) {
-//			throw new WcmRepositoryException(t);
-//		}
-//	}
+    protected void deleteDraftItem(String repository, String path) throws RepositoryException {
+		Session draftSession = this.repositoryManager.getSession(repository, "draft");
+		Item item = draftSession.getItem(path);
+        item.remove();
+        draftSession.save();
+	}
 }

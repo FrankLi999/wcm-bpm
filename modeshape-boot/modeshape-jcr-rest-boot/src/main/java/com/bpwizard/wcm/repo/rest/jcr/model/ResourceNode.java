@@ -40,14 +40,14 @@ public class ResourceNode implements Serializable {
 		this.acl = acl;
 	}
 	
-	protected void toJson(ObjectNode properties, ObjectNode children) {
+	protected void toJson(ObjectNode jsonNode, ObjectNode children) {
 		
 		if (StringUtils.hasText(this.getTitle())) {
-			properties.put("bpw:title", this.getTitle());
+			jsonNode.put("bpw:title", this.getTitle());
 		}
 		
 		if (StringUtils.hasText(this.getDescription())) {
-			properties.put("bpw:description", this.getDescription());
+			jsonNode.put("bpw:description", this.getDescription());
 		}
 		
 		if (this.getAcl() != null) {
@@ -63,18 +63,14 @@ public class ResourceNode implements Serializable {
 		contentItemAclNodeChildren.set(entryName, aclEntryNode);
 		
 		
-		ObjectNode aclEntryNodeProperties = JsonUtils.createObjectNode();
-		// ObjectNode aclEntryNodeChildren = JsonUtils.createObjectNode();
-		aclEntryNode.set("properties", aclEntryNodeProperties);
-		//aclEntryNode.set("children", caclEntryNodeChildren);
-		aclEntryNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:AccessControlEntry");
+		aclEntryNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:AccessControlEntry");
 		
 		if (aclEntry.getViewers() != null && aclEntry.getViewers().length > 0) {
 			ArrayNode valueArray = JsonUtils.creatArrayNode();
 			for (String value : aclEntry.getViewers()) {
 				valueArray.add(value);
 			}
-			aclEntryNodeProperties.set("bpw:viewers", valueArray);
+			aclEntryNode.set("bpw:viewers", valueArray);
 		}
 		
 		if (aclEntry.getEditors() != null && aclEntry.getEditors().length > 0) {
@@ -82,7 +78,7 @@ public class ResourceNode implements Serializable {
 			for (String value : aclEntry.getEditors()) {
 				valueArray.add(value);
 			}
-			aclEntryNodeProperties.set("bpw:editors", valueArray);
+			aclEntryNode.set("bpw:editors", valueArray);
 		}
 		
 		if (aclEntry.getAdmins() != null && aclEntry.getAdmins().length > 0) {
@@ -90,7 +86,7 @@ public class ResourceNode implements Serializable {
 			for (String value : aclEntry.getAdmins()) {
 				valueArray.add(value);
 			}
-			aclEntryNodeProperties.set("bpw:admins", valueArray);
+			aclEntryNode.set("bpw:admins", valueArray);
 		}
 		
 		if (aclEntry.getReviewers() != null && aclEntry.getReviewers().length > 0) {
@@ -98,7 +94,7 @@ public class ResourceNode implements Serializable {
 			for (String value : aclEntry.getReviewers()) {
 				valueArray.add(value);
 			}
-			aclEntryNodeProperties.set("bpw:reviewers", valueArray);
+			aclEntryNode.set("bpw:reviewers", valueArray);
 		}		
 	}
 	

@@ -26,6 +26,13 @@
         "bpw:defaultTitle": "New Library",
         "bpw:defaultIcon": "create_new_folder"
     },
+    "bpwizard/library/system/configuration/operations/library/deleteLibrary" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "library",
+        "bpw:operation": "Delete",
+        "bpw:defaultTitle": "Delete Library",
+        "bpw:defaultIcon": "remove"
+    },
     "bpwizard/library/system/configuration/operations/jcrFile" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "nt:file"
@@ -1139,14 +1146,14 @@
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Body",
         "bpw:controlName": "richText",
-        "bpw:mandatory": "true"
+        "bpw:mandatory": "false"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/friendlyURL" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Friendly URL",
         "bpw:controlName": "text",
         "bpw:dataType": "Text",
-        "bpw:mandatory": "true",
+        "bpw:mandatory": "false",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
@@ -1225,7 +1232,7 @@
         "bpw:title": "URL",
         "bpw:controlName": "text",
         "bpw:dataType": "Text",
-        "bpw:mandatory": "true",
+        "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true"
     },
@@ -1234,14 +1241,14 @@
         "bpw:title": "Site Config",
         "bpw:controlName": "select",
         "bpw:options": "jcr://siteConfig",
-        "bpw:mandatory": "true"
+        "bpw:mandatory": "false"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/contentAreaLayout" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Content Area Layout",
         "bpw:controlName": "select",
         "bpw:options": "jcr://contentAreaLayout",
-        "bpw:mandatory": "true"
+        "bpw:mandatory": "false"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/cacheTTL" : {
         "jcr:primaryType": "bpw:formControl",
@@ -1297,7 +1304,7 @@
         "bpw:title": "Classes",
         "bpw:controlName": "text",
         "bpw:dataType": "Text",
-        "bpw:mandatory": "true",
+        "bpw:mandatory": "false",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
@@ -1306,7 +1313,7 @@
         "bpw:title": "Function",
         "bpw:controlName": "text",
         "bpw:dataType": "Text",
-        "bpw:mandatory": "true",
+        "bpw:mandatory": "false",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
@@ -1315,7 +1322,7 @@
         "bpw:title": "Translate",
         "bpw:controlName": "text",
         "bpw:dataType": "Text",
-        "bpw:mandatory": "true",
+        "bpw:mandatory": "false",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
@@ -1324,7 +1331,7 @@
         "bpw:title": "Icon",
         "bpw:controlName": "text",
         "bpw:dataType": "Text",
-        "bpw:mandatory": "true",
+        "bpw:mandatory": "false",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
     },
@@ -1481,6 +1488,88 @@
         "bpw:userSearchable": "true",
         "bpw:showInList": "true"
     },
+    
+    "bpwizard/library/system/authoringTemplate/libraryType" : {
+        "jcr:primaryType": "bpw:authoringTemplate"
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/propertyGroup" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/propertyGroup/firstColumn" : {
+        "jcr:primaryType": "bpw:formColumn",
+        "bpw:fieldNames": ["properties.name"]
+    },  
+    "bpwizard/library/system/authoringTemplate/libraryType/propertyGroup/secondColumn" : {
+        "jcr:primaryType": "bpw:formColumn",
+        "bpw:fieldNames": ["properties.title"]
+    },    
+    "bpwizard/library/system/authoringTemplate/libraryType/elementGroups" : {
+        "jcr:primaryType":"bpw:formGroupFoler"
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/properties" : {
+        "jcr:primaryType": "bpw:propertyFolder"
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/elementGroups/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/elementGroups/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/elementGroups/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.description"]
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/elementGroups/rows/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/elementGroups/rows/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.language"]
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/properties/name": {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/properties/title" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/libraryType/properties/description" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "text",
+        "bpw:systemIndexed": "true"
+    }, 
+    "bpwizard/library/system/authoringTemplate/libraryType/elements/language" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Language",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    
     "bpwizard/library/system/authoringTemplate/folderType" : {
         "jcr:primaryType": "bpw:authoringTemplate"
     },
@@ -2648,7 +2737,7 @@
         "bpw:siteConfig": "bpm",        
         "bpw:url": "/bpm",
         "bpw:translate": "NAV.BPM.APPLICATIONS",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     },
     "bpwizard/library/camunda/rootSiteArea/home" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2659,7 +2748,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/home",
         "bpw:translate": "NAV.BPM.HOME.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     },
     "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout" : {
         "jcr:primaryType":"bpw:siteAreaLayout",
@@ -2673,8 +2762,8 @@
     "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/sidePane/viewer_s0" : {
         "jcr:primaryType":"bpw:resourceViewer",
         "bpw:title": "MySidePaneRenderTemplate",
-        "bpw:renderTemplayeName": "bpwizard/default/design/MySidePaneRenderTemplate",
-        "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1"
+        "bpw:renderTemplateName": "/bpwizard/library/design/renderTemplate/MySidePaneRenderTemplate",
+        "bpw:contentPath": "/bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1"
     },
     "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row0" : {
         "jcr:primaryType":"bpw:layoutRow"
@@ -2686,8 +2775,8 @@
     "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row0/column0/viewer_c0_0_0" : {
         "jcr:primaryType":"bpw:resourceViewer",
         "bpw:title": "MyRenderTemplate",
-       "bpw:renderTemplayeName": "bpwizard/default/design/MyRenderTemplate",
-       "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MyContent"
+       "bpw:renderTemplateName": "/bpwizard/library/design/renderTemplate/MyRenderTemplate",
+       "bpw:contentPath": "/bpwizard/library/camunda/rootSiteArea/home/MyContent"
     },
     "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row1" : {
         "jcr:primaryType":"bpw:layoutRow"
@@ -2699,8 +2788,8 @@
     "bpwizard/library/camunda/rootSiteArea/home/siteAreaLayout/row1/column0/viewer_c1_0_0" : {
         "jcr:primaryType":"bpw:resourceViewer",
         "bpw:title": "MyRenderTemplate",
-        "bpw:renderTemplayeName": "bpwizard/default/design/MyContentRenderLayout",
-        "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MyContent"
+        "bpw:renderTemplateName": "/bpwizard/library/design/renderTemplate/MyContentRenderLayout",
+        "bpw:contentPath": "/bpwizard/library/camunda/rootSiteArea/home/MyContent"
     },
     "bpwizard/library/camunda/rootSiteArea/tasklist" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2711,7 +2800,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/tasklist",
         "bpw:translate": "NAV.BPM.TASKLIST.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     },
     "bpwizard/library/camunda/rootSiteArea/tasklist/taskinstance" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2722,7 +2811,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/tasklist/taskinstance",
         "bpw:translate": "NAV.BPM.TASKLIST.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     },
     "bpwizard/library/camunda/rootSiteArea/tasklist/processinstance" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2733,7 +2822,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/tasklist/processinstance",
         "bpw:translate": "NAV.BPM.TASKLIST.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     },
     "bpwizard/library/camunda/rootSiteArea/tasklist/processinstance/processoperation" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2744,7 +2833,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/tasklist/processinstance/operation",
         "bpw:translate": "NAV.BPM.TASKLIST.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     },
     "bpwizard/library/camunda/rootSiteArea/modeler" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2755,7 +2844,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/modeler",
         "bpw:translate": "NAV.BPM.MODELER.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     } ,
     "bpwizard/library/camunda/rootSiteArea/dashboard" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2766,7 +2855,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/dashboard",
         "bpw:translate": "NAV.BPM.DASHBOARD.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     } ,
     "bpwizard/library/camunda/rootSiteArea/monitor" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2777,7 +2866,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/monitor",
         "bpw:translate": "NAV.BPM.MONITOR.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     },
     "bpwizard/library/apigateway" : {
         "jcr:primaryType":"bpw:library",
@@ -2820,7 +2909,7 @@
         "bpw:siteConfig": "apigateway", 
         "bpw:url": "/api_gateway",
         "bpw:translate": "NAV.API.APPLICATIONS",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     },
     "bpwizard/library/apigateway/rootSiteArea/home" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2831,7 +2920,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/home",
         "bpw:translate": "NAV.API.HOME.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     },
     "bpwizard/library/apigateway/rootSiteArea/tasklist" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2842,7 +2931,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/tasklist",
         "bpw:translate": "NAV.API.TASKLIST.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     } ,
     "bpwizard/library/apigateway/rootSiteArea/modeler" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2853,7 +2942,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/modeler",
         "bpw:translate": "NAV.API.MODELER.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     } ,
     "bpwizard/library/apigateway/rootSiteArea/dashboard" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2864,7 +2953,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/dashboard",
         "bpw:translate": "NAV.API.DASHBOARD.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     } ,
     "bpwizard/library/apigateway/rootSiteArea/monitor" : {
         "jcr:primaryType":"bpw:siteArea",
@@ -2875,7 +2964,7 @@
         "bpw:icon": "archive",
         "bpw:url": "/bpm/monitor",
         "bpw:translate": "NAV.API.MONITOR.TITLE",
-        "bpw:contentAreaLayout": "bpwizard/default/design/MyLayout"
+        "bpw:contentAreaLayout": "/bpwizard/library/design/contentAreaLayout/MyLayout"
     },
     "bpwizard/library/apigateway/siteConfig/apigateway" : {
         "jcr:primaryType":"bpw:siteConfig",
@@ -3145,7 +3234,7 @@
 		
 		"bpw:maxEntries": "10",
 		"bpw:note": "MySidePaneRenderTemplate note",
-		"bpw:resourceName": "bpwizard/default/design/MySidePaneContent",
+		"bpw:resourceName": "/bpwizard/library/design/authoringTemplate/MySidePaneContent",
 		"bpw:isQuery": "false"
 	},
 	"bpwizard/library/design/renderTemplate/MyRenderTemplate": {
@@ -3159,7 +3248,7 @@
 		
 		"bpw:maxEntries": "10",
 		"bpw:note": "MyRenderTemplate note",
-		"bpw:resourceName": "bpwizard/default/design/MyContent",
+		"bpw:resourceName": "/bpwizard/library/design/MyContent",
 		"bpw:isQuery": "false"
 	},
 	"bpwizard/library/design/renderTemplate/MyContentRenderLayout": {
@@ -3172,7 +3261,7 @@
 		
 		"bpw:maxEntries": "10",
 		"bpw:note": "MyContentRenderLayout note",
-		"bpw:resourceName": "bpwizard/default/design/MyContent",
+		"bpw:resourceName": "/bpwizard/library/design/authoringTemplate/MyContent",
 		"bpw:isQuery": "false"
 	},
 	"bpwizard/library/design/renderTemplate/MyContentRenderLayout/row1": {
@@ -3233,8 +3322,8 @@
     "bpwizard/library/design/contentAreaLayout/MyLayout/sidePane/viewer_s0" : {
         "jcr:primaryType":"bpw:resourceViewer",
         "bpw:title": "MySidePaneRenderTemplate",
-        "bpw:renderTemplayeName": "bpwizard/default/design/MySidePaneRenderTemplate",
-        "bpw:contentPath": "bpwizard/default/bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent"
+        "bpw:renderTemplateName": "/bpwizard/library/design/renderTemplate/MySidePaneRenderTemplate",
+        "bpw:contentPath": "/bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent"
     },
     "bpwizard/library/design/contentAreaLayout/MyLayout/row0" : {
         "jcr:primaryType":"bpw:layoutRow"
@@ -3246,8 +3335,8 @@
     "bpwizard/library/design/contentAreaLayout/MyLayout/row0/column0/viewer_c0_0_0" : {
         "jcr:primaryType":"bpw:resourceViewer",
         "bpw:title": "MyRenderTemplate",
-        "bpw:renderTemplayeName": "bpwizard/default/design/MyRenderTemplate",
-        "bpw:contentPath": "bpwizard/library/camunda/rootSiteArea/home/MyContent"
+        "bpw:renderTemplateName": "/bpwizard/library/design/renderTemplate/MyRenderTemplate",
+        "bpw:contentPath": "/bpwizard/library/camunda/rootSiteArea/home/MyContent"
     },
     "bpwizard/library/design/contentAreaLayout/MyLayout/row1" : {
         "jcr:primaryType":"bpw:layoutRow"
@@ -3259,8 +3348,8 @@
     "bpwizard/library/design/contentAreaLayout/MyLayout/row1/column0/viewer_c1_0_0" : {
         "jcr:primaryType":"bpw:resourceViewer",
         "bpw:title": "MyRenderTemplate",
-        "bpw:renderTemplayeName": "bpwizard/default/design/MyContentRenderLayout",
-        "bpw:contentPath": "bpwizard/library/camunda/rootSiteArea/home/MyContent"
+        "bpw:renderTemplateName": "/bpwizard/library/design/renderTemplate/MyContentRenderLayout",
+        "bpw:contentPath": "/bpwizard/library/camunda/rootSiteArea/home/MyContent"
     },
     "bpwizard/library/camunda/siteConfig/bpm" : {
         "jcr:primaryType":"bpw:siteConfig",
@@ -3305,7 +3394,7 @@
     "bpwizard/library/camunda/rootSiteArea/home/MyContent" : {
         "jcr:primaryType":"bpw:content",
         "bpw:description":"MyContent",
-        "bpw:authoringTemplate":"bpwizard/default/design/MyContent",
+        "bpw:authoringTemplate":"/bpwizard/library/design/authoringTemplate/MyContent",
         "bpw:title":"MyContent"
     },
     "bpwizard/library/camunda/rootSiteArea/home/MyContent/elements" : {
@@ -3327,7 +3416,7 @@
     "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent" : {
         "jcr:primaryType":"bpw:content",
         "bpw:description":"MySidePaneContent",
-        "bpw:authoringTemplate":"bpwizard/default/design/MySidePaneContent",
+        "bpw:authoringTemplate":"/bpwizard/library/design/authoringTemplate/MySidePaneContent",
         "bpw:title":"MySidePaneContent"
     },
     "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent/elements" : {
@@ -3349,7 +3438,7 @@
     "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1" : {
         "jcr:primaryType":"bpw:content",
         "bpw:description":"MySidePaneContent1",
-        "bpw:authoringTemplate":"bpwizard/default/design/MySidePaneContent",
+        "bpw:authoringTemplate":"/bpwizard/library/design/authoringTemplate/MySidePaneContent",
         "bpw:title":"MySidePaneContent1"
     },
     "bpwizard/library/camunda/rootSiteArea/home/MySidePaneContent1/elements" : {

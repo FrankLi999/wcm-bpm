@@ -99,7 +99,7 @@ public class RepositoryManager {
         	session = repository.login(new SpringSecurityCredentials(authentication), workspaceName);
         }
         
-        ModeshapeRequestContext.set(session);
+        ModeshapeRequestContext.set(workspaceName, session);
         return session;
     }
     
@@ -125,7 +125,7 @@ public class RepositoryManager {
         } else {
         	session = repository.login(new ServletCredentials(request), workspaceName);
         }
-        ModeshapeRequestContext.set(session);
+        ModeshapeRequestContext.set(workspaceName, session);
         return session;
     }
 
@@ -158,7 +158,7 @@ public class RepositoryManager {
         } else {
         	session = this.getRepository(repositoryName).login(new SpringSecurityCredentials(authentication));
         }
-    	ModeshapeRequestContext.set(session);
+    	ModeshapeRequestContext.set("default", session);
     	return session;
     }
     

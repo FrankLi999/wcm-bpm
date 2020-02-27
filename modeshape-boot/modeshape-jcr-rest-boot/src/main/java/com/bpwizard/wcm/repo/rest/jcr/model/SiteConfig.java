@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class SiteConfig extends ResourceNode {
+	private static final long serialVersionUID = 1L;
 	private String repository;
 	private String workspace;
 	private String library;
@@ -77,69 +78,57 @@ public class SiteConfig extends ResourceNode {
 	}
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
-		ObjectNode properties = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
 		
 		jsonNode.set("children", children);
-		jsonNode.set("properties", properties);
 		
-		properties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:siteConfig");
-		properties.put("bpw:name", this.getName());
-		properties.put("bpw:colorTheme", this.getColorTheme());
-		properties.put("bpw:rootSiteArea", this.getRootSiteArea());
-		properties.put("bpw:customScrollbars", this.isCustomScrollbars());
+		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:siteConfig");
+		jsonNode.put("bpw:name", this.getName());
+		jsonNode.put("bpw:colorTheme", this.getColorTheme());
+		jsonNode.put("bpw:rootSiteArea", this.getRootSiteArea());
+		jsonNode.put("bpw:customScrollbars", this.isCustomScrollbars());
 		
 
 		ObjectNode layout = JsonUtils.createObjectNode();
 		children.set("layout", layout);
-		ObjectNode layoutProperties = JsonUtils.createObjectNode();
 		ObjectNode layoutChildren = JsonUtils.createObjectNode();
 		layout.set("children", layoutChildren);
-		layout.set("properties", layoutChildren);
 		
-		layoutProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:pageLayout");
-		layoutProperties.put("bpw:style", this.layout.getStyle());
-		layoutProperties.put("bpw:width", this.layout.getWidth());
+		layout.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:pageLayout");
+		layout.put("bpw:style", this.layout.getStyle());
+		layout.put("bpw:width", this.layout.getWidth());
 		
 		ObjectNode navbarNode = JsonUtils.createObjectNode();
-		ObjectNode navbarNodeProperties = JsonUtils.createObjectNode();
 		layoutChildren.set("navbar", navbarNode);
-		navbarNode.set("properties", navbarNodeProperties);
-		navbarNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:navbar");
-		navbarNodeProperties.put("primaryBackground", this.layout.getNavbar().getPrimaryBackground());
-		navbarNodeProperties.put("secondaryBackground", this.layout.getNavbar().getSecondaryBackground());
-		navbarNodeProperties.put("hidden", this.layout.getNavbar().isHidden());
-		navbarNodeProperties.put("folded", this.layout.getNavbar().isFolded());
-		navbarNodeProperties.put("position", this.layout.getNavbar().getPosition());
-		navbarNodeProperties.put("variant", this.layout.getNavbar().getVariant());
+		navbarNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:navbar");
+		navbarNode.put("primaryBackground", this.layout.getNavbar().getPrimaryBackground());
+		navbarNode.put("secondaryBackground", this.layout.getNavbar().getSecondaryBackground());
+		navbarNode.put("hidden", this.layout.getNavbar().isHidden());
+		navbarNode.put("folded", this.layout.getNavbar().isFolded());
+		navbarNode.put("position", this.layout.getNavbar().getPosition());
+		navbarNode.put("variant", this.layout.getNavbar().getVariant());
 		
 		ObjectNode toolbarNode = JsonUtils.createObjectNode();
 		layoutChildren.set("toolbar", toolbarNode);
-		ObjectNode toolbarNodeProperties = JsonUtils.createObjectNode();
-		toolbarNode.set("properties", toolbarNodeProperties);
-		toolbarNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:toolbar");
-		toolbarNodeProperties.put("customBackgroundColor", this.layout.getToolbar().isCustomBackgroundColor());
-		toolbarNodeProperties.put("background", this.layout.getToolbar().getBackground());
-		toolbarNodeProperties.put("hidden", this.layout.getToolbar().isHidden());
-		toolbarNodeProperties.put("position", this.layout.getToolbar().getPosition());
+		toolbarNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:toolbar");
+		toolbarNode.put("customBackgroundColor", this.layout.getToolbar().isCustomBackgroundColor());
+		toolbarNode.put("background", this.layout.getToolbar().getBackground());
+		toolbarNode.put("hidden", this.layout.getToolbar().isHidden());
+		toolbarNode.put("position", this.layout.getToolbar().getPosition());
 		
 		ObjectNode footerNode = JsonUtils.createObjectNode();
 		layoutChildren.set("footer", footerNode);
-		ObjectNode footerNodeProperties = JsonUtils.createObjectNode();
-		footerNode.set("properties", footerNodeProperties);
-		footerNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:footer");
-		footerNodeProperties.put("customBackgroundColor", this.layout.getFooter().isCustomBackgroundColor());
-		footerNodeProperties.put("background", this.layout.getFooter().getBackground());
-		footerNodeProperties.put("hidden", this.layout.getFooter().isHidden());
-		footerNodeProperties.put("position", this.layout.getFooter().getPosition());
+		footerNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:footer");
+		footerNode.put("customBackgroundColor", this.layout.getFooter().isCustomBackgroundColor());
+		footerNode.put("background", this.layout.getFooter().getBackground());
+		footerNode.put("hidden", this.layout.getFooter().isHidden());
+		footerNode.put("position", this.layout.getFooter().getPosition());
 
 		ObjectNode sidePanelNode = JsonUtils.createObjectNode();
 		layoutChildren.set("sidePanel", sidePanelNode);
-		ObjectNode sidePanelNodeProperties = JsonUtils.createObjectNode();
-		sidePanelNode.set("properties", sidePanelNodeProperties);
-		sidePanelNodeProperties.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:sidePanel");
-		sidePanelNodeProperties.put("hidden", this.layout.getSidePanel().isHidden());
-		sidePanelNodeProperties.put("position", this.layout.getSidePanel().getPosition());
+		sidePanelNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:sidePanel");
+		sidePanelNode.put("hidden", this.layout.getSidePanel().isHidden());
+		sidePanelNode.put("position", this.layout.getSidePanel().getPosition());
 
 		return jsonNode;
 	}

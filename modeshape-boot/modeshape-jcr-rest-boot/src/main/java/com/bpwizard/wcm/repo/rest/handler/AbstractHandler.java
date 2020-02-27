@@ -86,11 +86,11 @@ public abstract class AbstractHandler {
      */
     protected Session getSession( String rawRepositoryName,
                                   String rawWorkspaceName ) throws RepositoryException {
-        if (ModeshapeRequestContext.get() == null) {
+        if (ModeshapeRequestContext.get(rawWorkspaceName) == null) {
             this.repositoryManager.getSession(repositoryNameFor(rawRepositoryName), workspaceNameFor(
                     rawWorkspaceName));
         }
-        return ModeshapeRequestContext.get();
+        return ModeshapeRequestContext.get(rawWorkspaceName);
     }
     
 

@@ -3,6 +3,7 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 import java.util.Arrays;
 
 public class Workflow extends ResourceNode {
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String businessKey;
 	private WorkflowStage workflowStages[];
