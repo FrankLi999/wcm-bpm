@@ -162,6 +162,7 @@
 
 [bpw:category] > nt:folder
 - bpw:name (String)
+- bpw:parent (String)
 + * (bpw:category)
 
 [bpw:contentType] > bpw:baseControlType

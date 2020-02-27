@@ -50,6 +50,7 @@ import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.BaseFormGroup;
+import com.bpwizard.wcm.repo.rest.jcr.model.Category;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.ControlField;
@@ -462,6 +463,71 @@ public class WcmRestController {
 		}	
 	}
 	
+	@PostMapping(path = "/category", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createCategory(
+			@RequestBody Category category, 
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String repositoryName = category.getRepository();
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = (StringUtils.hasText(category.getParent())) ? 
+					String.format("/bpwizard/library/%s/category/%s/%s", category.getLibrary(), category.getParent(), category.getName()) :
+					String.format("/bpwizard/library/%s/category/%s", category.getLibrary(), category.getName());
+			this.itemHandler.addItem(
+					baseUrl, 
+					repositoryName,
+					category.getWorkspace(),
+					path, 
+					category.toJson());
+			if (this.authoringEnabled) {
+				Session session = repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+				// session.save();
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+	
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}	
+	
+	@PutMapping(path = "/category", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> updateCategory(
+			@RequestBody Category category, 
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String repositoryName = category.getRepository();
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format("/bpwizard/library/%s/category%s", category.getLibrary(), category.getName());
+			JsonNode categoryJson = category.toJson();
+			this.itemHandler.updateItem(baseUrl, repositoryName, category.getWorkspace(), path, categoryJson);
+			if (this.authoringEnabled) {
+				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, categoryJson);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}	
+	
 	@PostMapping(path = "/library", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createLibrary(
 			@RequestBody Library library, 
@@ -496,30 +562,6 @@ public class WcmRestController {
 			throw new WcmRepositoryException(t);
 		}	
 	}	
-	
-	@DeleteMapping(path = "/library/{repository}/{workspace}/{library}")
-	public ResponseEntity<?> deleteLibrary(
-			@PathVariable("repository") String repository,
-			@PathVariable("workspace") String workspace,
-			@PathVariable("library") String library, 
-			HttpServletRequest request) 
-			throws WcmRepositoryException {
-		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
-		}
-		try {
-			this.itemHandler.deleteItem(repository, workspace, String.format("/bpwizard/library/%s", library));
-			this.deleteDraftItem(repository, String.format("/bpwizard/library/%s", library));
-			if (logger.isDebugEnabled()) {
-				logger.traceExit();
-			}
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		} catch (WcmRepositoryException e ) {
-			throw e;
-		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
-		}	
-	}
 	
 	@PutMapping(path = "/siteConfig", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void saveSiteConfig(
@@ -758,7 +800,7 @@ public class WcmRestController {
 		try {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/renderTemplate", rt.getLibrary(), rt.getName());
+			String path = String.format("/bpwizard/library/%s/renderTemplate/%s", rt.getLibrary(), rt.getName());
 			this.itemHandler.addItem(baseUrl, repositoryName, "default", path, rt.toJson());
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, "draft");
@@ -785,12 +827,11 @@ public class WcmRestController {
 		try {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/renderTemplate", rt.getLibrary(), rt.getName());
-			this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), path, rt.toJson());
+			String path = String.format("/bpwizard/library/%s/renderTemplate/%s", rt.getLibrary(), rt.getName());
+			JsonNode rtJson = rt.toJson();
+			this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), path, rtJson);
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
-				// session.save();
+				this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), path, rtJson);
 			}
 		} catch (WcmRepositoryException e ) {
 			throw e;
@@ -1623,6 +1664,7 @@ public class WcmRestController {
   		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+  		absPath = (absPath.startsWith("/")) ? absPath : String.format("/%s", absPath);
   		try {
   			if (this.authoringEnabled) {
   				try {
@@ -1853,7 +1895,10 @@ public class WcmRestController {
 			String names[] = this.getNameAndPrefix(fieldName);
 			String name = names[1];
 			String prefix = names[0];
-			FormControl formControl = at.getElements().get(name);
+			FormControl formControl = null;
+			if (at.getElements() != null && at.getElements().size() > 0) {
+				formControl = at.getElements().get(name);
+			}
 			formControl = (formControl == null) ? at.getProperties().get(name) : formControl;
 			Optional<FieldLayout> customeFileLayout = this.getCustomeFileLayout(
 					formColumn,
@@ -1937,62 +1982,64 @@ public class WcmRestController {
 
 	private ArrayNode toFormLayoutNode(AuthoringTemplate at) {
 		ArrayNode formNode = this.objectMapper.createArrayNode();
-		if (at.getPropertyRow() != null) {
+		if (at.getPropertyRow() != null && at.getPropertyRow().getColumns().length > 0) {
 			formNode.add(this.getRowNode(at, at.getPropertyRow()));
 		}
-		for (BaseFormGroup formGroup : at.getElementGroups()) {
-			if (formGroup instanceof FormRow) {
-				ObjectNode rowNode = this.getRowNode(at, (FormRow) formGroup);
-				formNode.add(rowNode);
-			}
-
-			if (formGroup instanceof FormRows) {
-				for (FormRow formRow : ((FormRows) formGroup).getRows()) {
-					ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
+		if (at.getElementGroups() != null && at.getElementGroups().length > 0) {
+			for (BaseFormGroup formGroup : at.getElementGroups()) {
+				if (formGroup instanceof FormRow) {
+					ObjectNode rowNode = this.getRowNode(at, (FormRow) formGroup);
 					formNode.add(rowNode);
 				}
-			}
-
-			if (formGroup instanceof FormTabs) {
-				ObjectNode tabsNode = this.objectMapper.createObjectNode();
-				tabsNode.put("type", "tabs");
-				ArrayNode tabArrayNode = this.objectMapper.createArrayNode();
-				for (FormTab formTab : ((FormTabs) formGroup).getTabs()) {
-					ObjectNode tabNode = this.objectMapper.createObjectNode();
-					tabNode.put("title", formTab.getTabTitle());
-					ArrayNode tabItemNodes = this.objectMapper.createArrayNode();
-					for (BaseFormGroup formRow : formTab.getFormGroups()) {
+	
+				if (formGroup instanceof FormRows) {
+					for (FormRow formRow : ((FormRows) formGroup).getRows()) {
 						ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
-						tabItemNodes.add(rowNode);
+						formNode.add(rowNode);
 					}
-					tabNode.set("items", tabItemNodes);
-					tabArrayNode.add(tabNode);
 				}
-				tabsNode.set("tabs", tabArrayNode);
-				formNode.add(tabsNode);
-			}
-
-			if (formGroup instanceof FormSteps) {
-				ObjectNode stepsNode = this.objectMapper.createObjectNode();
-				stepsNode.put("type", "stepper");
-				ArrayNode stepArrayNode = this.objectMapper.createArrayNode();
-				for (FormStep formStep : ((FormSteps) formGroup).getSteps()) {
-					ObjectNode stepNode = this.objectMapper.createObjectNode();
-					stepNode.put("title", formStep.getStepTitle());
-					ArrayNode stepItemNodes = this.objectMapper.createArrayNode();
-					for (BaseFormGroup formRow : formStep.getFormGroups()) {
-						ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
-						stepItemNodes.add(rowNode);
+	
+				if (formGroup instanceof FormTabs) {
+					ObjectNode tabsNode = this.objectMapper.createObjectNode();
+					tabsNode.put("type", "tabs");
+					ArrayNode tabArrayNode = this.objectMapper.createArrayNode();
+					for (FormTab formTab : ((FormTabs) formGroup).getTabs()) {
+						ObjectNode tabNode = this.objectMapper.createObjectNode();
+						tabNode.put("title", formTab.getTabTitle());
+						ArrayNode tabItemNodes = this.objectMapper.createArrayNode();
+						for (BaseFormGroup formRow : formTab.getFormGroups()) {
+							ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
+							tabItemNodes.add(rowNode);
+						}
+						tabNode.set("items", tabItemNodes);
+						tabArrayNode.add(tabNode);
 					}
-					stepNode.set("items", stepItemNodes);
-					stepArrayNode.add(stepNode);
+					tabsNode.set("tabs", tabArrayNode);
+					formNode.add(tabsNode);
 				}
-				stepsNode.set("steps", stepArrayNode);
-				formNode.add(stepsNode);
+	
+				if (formGroup instanceof FormSteps) {
+					ObjectNode stepsNode = this.objectMapper.createObjectNode();
+					stepsNode.put("type", "stepper");
+					ArrayNode stepArrayNode = this.objectMapper.createArrayNode();
+					for (FormStep formStep : ((FormSteps) formGroup).getSteps()) {
+						ObjectNode stepNode = this.objectMapper.createObjectNode();
+						stepNode.put("title", formStep.getStepTitle());
+						ArrayNode stepItemNodes = this.objectMapper.createArrayNode();
+						for (BaseFormGroup formRow : formStep.getFormGroups()) {
+							ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
+							stepItemNodes.add(rowNode);
+						}
+						stepNode.set("items", stepItemNodes);
+						stepArrayNode.add(stepNode);
+					}
+					stepsNode.set("steps", stepArrayNode);
+					formNode.add(stepsNode);
+				}
+				// at.getFormControls()
+				// type ace, enum
+	
 			}
-			// at.getFormControls()
-			// type ace, enum
-
 		}
 		return formNode;
 	}
@@ -2114,67 +2161,66 @@ public class WcmRestController {
 			if (StringUtils.hasText(at.getDescription())) {
 				schemaNode.put("description", at.getDescription());
 			}
-	
-			ObjectNode properties = this.objectMapper.createObjectNode();
+			
+			ObjectNode properties = this.objectMapper.createObjectNode();	
 			ObjectNode definitions = this.objectMapper.createObjectNode();
-	
-			ObjectNode propertyPropertiesNode = this.objectMapper.createObjectNode();
-			ObjectNode elementPropertiesNode = this.objectMapper.createObjectNode();
-			propertyPropertiesNode.put("type", "object");
-			elementPropertiesNode.put("type", "object");
-			
-			ObjectNode propertyProperties = this.objectMapper.createObjectNode();
-			propertyPropertiesNode.set("properties", propertyProperties);
-			ObjectNode elementProperties = this.objectMapper.createObjectNode();
-			elementPropertiesNode.set("properties", elementProperties);
-			
-			properties.set("properties", propertyPropertiesNode);
-			properties.set("elements", elementPropertiesNode);
-			
-			this.popluateFormControls(
-					request, 
-					repository, 
-					workspace,
-					properties,
-					propertyProperties,
-					definitions,
-					at.getProperties());
-			
-			this.popluateFormControls(
-					request, 
-					repository, 
-					workspace,
-					properties,
-					elementProperties,
-					definitions,
-					at.getElements());
+			if (at.getProperties() != null && at.getProperties().size() > 0) {
+				ObjectNode propertyPropertiesNode = this.objectMapper.createObjectNode();
+				propertyPropertiesNode.put("type", "object");
+				ObjectNode propertyProperties = this.objectMapper.createObjectNode();
+				propertyPropertiesNode.set("properties", propertyProperties);
+				properties.set("properties", propertyPropertiesNode);
+				this.popluateFormControls(
+						request, 
+						repository, 
+						workspace,
+						properties,
+						propertyProperties,
+						definitions,
+						at.getProperties());
+				String requiredProperties[] = at.getProperties().entrySet().stream().map(entry -> entry.getValue())
+						.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
+						.toArray(String[]::new);				
+				if (requiredProperties != null && requiredProperties.length > 0) {
+					ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
+					for (String name : requiredProperties) {
+						reqiuriedNode.add(name);
+					}
+					propertyPropertiesNode.set("required", reqiuriedNode);
+				}
+			}
+						
+			if (at.getElements() != null && at.getElements().size() > 0) {
+				ObjectNode elementPropertiesNode = this.objectMapper.createObjectNode();
+				elementPropertiesNode.put("type", "object");
+				ObjectNode elementProperties = this.objectMapper.createObjectNode();
+				elementPropertiesNode.set("properties", elementProperties);
+				properties.set("elements", elementPropertiesNode);
+				this.popluateFormControls(
+						request, 
+						repository, 
+						workspace,
+						properties,
+						elementProperties,
+						definitions,
+						at.getElements());
+				String requiredElements[] = at.getElements().entrySet().stream().map(entry -> entry.getValue())
+						.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
+						.toArray(String[]::new);		
+				if (requiredElements != null && requiredElements.length > 0) {
+					ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
+					for (String name : requiredElements) {
+						reqiuriedNode.add(name);
+					}
+					elementPropertiesNode.set("required", reqiuriedNode);
+				}		
+			}
 			
 			// properties.addAll(propertyNodes);
 			schemaNode.set("properties", properties);
+			//TODO: add definitions node only when needed
 			schemaNode.set("definitions", definitions);
-			String requiredElements[] = at.getElements().entrySet().stream().map(entry -> entry.getValue())
-					.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
-					.toArray(String[]::new);
-	
-			if (requiredElements != null && requiredElements.length > 0) {
-				ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
-				for (String name : requiredElements) {
-					reqiuriedNode.add(name);
-				}
-				elementPropertiesNode.set("required", reqiuriedNode);
-			}
-			
-			String requiredProperties[] = at.getProperties().entrySet().stream().map(entry -> entry.getValue())
-					.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
-					.toArray(String[]::new);
-			
-			if (requiredProperties != null && requiredProperties.length > 0) {
-				ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
-				for (String name : requiredProperties) {
-					reqiuriedNode.add(name);
-				}
-				propertyPropertiesNode.set("required", reqiuriedNode);
-			}
+					
 			jsonNode.set("layout", this.toFormLayoutNode(at));
 			// "params" node
 			// "validate": false

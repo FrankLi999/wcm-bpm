@@ -53,6 +53,7 @@ public class Library implements Serializable {
 	public void setLanguage(String language) {
 		this.language = language;
 	}
+	
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
@@ -113,6 +114,7 @@ public class Library implements Serializable {
 		rootSiteAreaNode.put("bpw:contentAreaLayout", "bpwizard/default/design/MyLayout");
         return jsonNode;
 	}
+	
 	@Override
 	public String toString() {
 		return "Library [repository=" + repository + ", workspace=" + workspace + ", name=" + name + ", title=" + title

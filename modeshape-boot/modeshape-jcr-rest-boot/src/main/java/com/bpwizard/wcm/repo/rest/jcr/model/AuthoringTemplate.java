@@ -129,61 +129,67 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			this.addAccessControlEntry(contentItemAclNodeChildren, "onReivedDraft", this.getContentItemAcl().getOnReviewedDraftPermissions());
 			this.addAccessControlEntry(contentItemAclNodeChildren, "onPublish", this.getContentItemAcl().getOnPublishPermissions());
 		}
-		this.addRow(children, this.getPropertyRow(), "propertyGroup");
+		if (this.propertyRow != null && this.propertyRow.getColumns().length > 0) {
+			this.addRow(children, this.getPropertyRow(), "propertyGroup");
+		}
 		
-		ObjectNode elementGroupNode = JsonUtils.createObjectNode();
-		ObjectNode elementGroupNodeChildren = JsonUtils.createObjectNode();
-		children.set("elementGroups", elementGroupNode);
-		elementGroupNode.set("children", elementGroupNodeChildren);
-		elementGroupNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formGroupFoler");
-		
-		int groupCount = 0;
-		for (BaseFormGroup g : this.getElementGroups()) {
-			groupCount++;
-			String groupName = StringUtils.hasText(g.getGroupTitle()) ? g.getGroupTitle() : 
-				("group" + groupCount);
-			String primaryFormGroupType = (g instanceof FormSteps) ? "bpw:formSteps"
-					: (g instanceof FormTabs) ? "bpw:formTabs"
-							: (g instanceof FormRows) ? "bpw:formRows" : "bpw:formRow";
+		if (this.elementGroups != null && this.elementGroups.length > 0) {
+			ObjectNode elementGroupNode = JsonUtils.createObjectNode();
+			ObjectNode elementGroupNodeChildren = JsonUtils.createObjectNode();
+			children.set("elementGroups", elementGroupNode);
+			elementGroupNode.set("children", elementGroupNodeChildren);
+			elementGroupNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formGroupFoler");
 			
-			ObjectNode formGroupNode = JsonUtils.createObjectNode();
-			ObjectNode formGroupNodeChildren = JsonUtils.createObjectNode();
+			int groupCount = 0;
+			for (BaseFormGroup g : this.getElementGroups()) {
+				groupCount++;
+				String groupName = StringUtils.hasText(g.getGroupTitle()) ? g.getGroupTitle() : 
+					("group" + groupCount);
+				String primaryFormGroupType = (g instanceof FormSteps) ? "bpw:formSteps"
+						: (g instanceof FormTabs) ? "bpw:formTabs"
+								: (g instanceof FormRows) ? "bpw:formRows" : "bpw:formRow";
+				
+				ObjectNode formGroupNode = JsonUtils.createObjectNode();
+				ObjectNode formGroupNodeChildren = JsonUtils.createObjectNode();
+		
+				formGroupNode.set("children", formGroupNodeChildren);
+				
+				elementGroupNodeChildren.set(groupName, formGroupNode);
+				formGroupNode.put(JcrConstants.JCR_PRIMARY_TYPE, primaryFormGroupType);
 	
-			formGroupNode.set("children", formGroupNodeChildren);
-			
-			elementGroupNodeChildren.set(groupName, formGroupNode);
-			formGroupNode.put(JcrConstants.JCR_PRIMARY_TYPE, primaryFormGroupType);
-
-			if (g instanceof FormSteps) {
-				this.addSteps(formGroupNodeChildren, ((FormSteps) g).getSteps());
-			} else if (g instanceof FormTabs) {
-				this.addTabs(formGroupNodeChildren, ((FormTabs) g).getTabs());
-			} else if (g instanceof FormRows) {
-				this.addRows(formGroupNodeChildren, ((FormRows) g).getRows());
+				if (g instanceof FormSteps) {
+					this.addSteps(formGroupNodeChildren, ((FormSteps) g).getSteps());
+				} else if (g instanceof FormTabs) {
+					this.addTabs(formGroupNodeChildren, ((FormTabs) g).getTabs());
+				} else if (g instanceof FormRows) {
+					this.addRows(formGroupNodeChildren, ((FormRows) g).getRows());
+				}
 			}
 		}
 		
-		ObjectNode elementFolderNode = JsonUtils.createObjectNode();
-		ObjectNode elementFolderNodeChildren = JsonUtils.createObjectNode();
-
-		elementFolderNode.set("children", elementFolderNodeChildren);
-		children.set("elements", elementFolderNode);
-		elementFolderNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:elementFolder");
-		for (String controlName : this.getElements().keySet()) {
-			this.addControl(elementFolderNodeChildren, this.getElements().get(controlName));
+		if (this.elements != null && this.elements.size() > 0 ) {
+			ObjectNode elementFolderNode = JsonUtils.createObjectNode();
+			ObjectNode elementFolderNodeChildren = JsonUtils.createObjectNode();
+	
+			elementFolderNode.set("children", elementFolderNodeChildren);
+			children.set("elements", elementFolderNode);
+			elementFolderNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:elementFolder");
+			for (String controlName : this.getElements().keySet()) {
+				this.addControl(elementFolderNodeChildren, this.getElements().get(controlName));
+			}		
 		}
 		
-		
-		ObjectNode propertiesFolder = JsonUtils.createObjectNode();
-		ObjectNode propertiesFolderChildren = JsonUtils.createObjectNode();
-
-		propertiesFolder.set("children", propertiesFolderChildren);
-		children.set("properties", propertiesFolder);
-		propertiesFolder.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:propertyFolder");
-		for (String controlName : this.getProperties().keySet()) {
-			this.addControl(propertiesFolderChildren, this.getProperties().get(controlName));
+		if (this.properties != null && this.properties.size() > 0 ) {
+			ObjectNode propertiesFolder = JsonUtils.createObjectNode();
+			ObjectNode propertiesFolderChildren = JsonUtils.createObjectNode();
+	
+			propertiesFolder.set("children", propertiesFolderChildren);
+			children.set("properties", propertiesFolder);
+			propertiesFolder.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:propertyFolder");
+			for (String controlName : this.getProperties().keySet()) {
+				this.addControl(propertiesFolderChildren, this.getProperties().get(controlName));
+			}
 		}
-		
 		return jsonNode;
 	}
 	

@@ -26,11 +26,11 @@
         "bpw:defaultTitle": "New Library",
         "bpw:defaultIcon": "create_new_folder"
     },
-    "bpwizard/library/system/configuration/operations/library/deleteLibrary" : {
+    "bpwizard/library/system/configuration/operations/library/purgeLibrary" : {
         "jcr:primaryType":"bpw:supportedOpertion",
         "bpw:resourceName": "library",
-        "bpw:operation": "Delete",
-        "bpw:defaultTitle": "Delete Library",
+        "bpw:operation": "Purge",
+        "bpw:defaultTitle": "Purge Library",
         "bpw:defaultIcon": "remove"
     },
     "bpwizard/library/system/configuration/operations/jcrFile" : {
@@ -419,6 +419,36 @@
         "bpw:defaultTitle": "Purge Authoring Template",
         "bpw:defaultIcon": "delete_forever"
     },
+    "bpwizard/library/system/configuration/operations/categoryFolder" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:categoryFolder"
+    },
+    "bpwizard/library/system/configuration/operations/categoryFolder/createCategory" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "category",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Category",
+        "bpw:defaultIcon": "create"
+    },    
+    "bpwizard/library/system/configuration/operations/category" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:category"
+    },
+    "bpwizard/library/system/configuration/operations/category/createCategory" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "category",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Category",
+        "bpw:defaultIcon": "create"
+    },    
+    "bpwizard/library/system/configuration/operations/category/purgeCategory" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "category",
+        "bpw:operation": "Purge",
+        "bpw:defaultTitle": "Purge Category",
+        "bpw:defaultIcon": "delete"
+    },
+    
     "bpwizard/library/system/configuration/operations/themeFolder" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "bpw:themesFolder"
@@ -1488,7 +1518,41 @@
         "bpw:userSearchable": "true",
         "bpw:showInList": "true"
     },
-    
+    "bpwizard/library/system/authoringTemplate/categoryType" : {
+        "jcr:primaryType": "bpw:authoringTemplate"
+    },
+    "bpwizard/library/system/authoringTemplate/categoryType/propertyGroup" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/categoryType/propertyGroup/firstColumn" : {
+        "jcr:primaryType": "bpw:formColumn",
+        "bpw:fieldNames": ["properties.name", "properties.parent"]
+    },    
+    "bpwizard/library/system/authoringTemplate/categoryType/properties" : {
+        "jcr:primaryType": "bpw:propertyFolder"
+    },
+    "bpwizard/library/system/authoringTemplate/categoryType/properties/name": {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/categoryType/properties/parent": {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Parent",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "false",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
     "bpwizard/library/system/authoringTemplate/libraryType" : {
         "jcr:primaryType": "bpw:authoringTemplate"
     },
