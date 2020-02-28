@@ -20,10 +20,12 @@
 - bpw:reviewers (STRING) multiple
 
 [bpw:folder]> nt:folder, mix:lastModified, mix:referenceable, mode:accessControllable
+
 [bpw:resourceNode] > nt:hierarchyNode, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable abstract
 - bpw:title (STRING) COPY
 - bpw:description (STRING) COPY
 + bpw:acl (bpw:AccessControlEntry)
+
 [bpw:baseControlType] > nt:hierarchyNode, mix:referenceable abstract
 - bpw:title (STRING) COPY
 - bpw:description (STRING) COPY
@@ -59,7 +61,12 @@
 
 [bpw:workflow] > bpw:resourceNode
 - bpw:name (STRING)
+- bpw:bpmn (STRING)
 + * (bpw:workflowStage)
+
+[bpw:bpmnWorkflow] > bpw:resourceNode
+- bpw:name (STRING)
+- bpw:bpmn (STRING)
 
 [bpw:pageSearchData]
 - description (STRING)
@@ -155,9 +162,11 @@
 - bpw:stepName (STRING)
 + * (bpw:formGroup)
 
-[bpw:validationRule] > bpw:resourceNode
+[bpw:validationRule]> nt:hierarchyNode
 - bpw:name (STRING) COPY
-- bpw:type (STRING) = 'regex' COPY
+- bpw:title (STRING) COPY
+- bpw:description (STRING) COPY
+- bpw:type (STRING) COPY
 - bpw:rule (STRING) COPY
 
 [bpw:category] > nt:folder
@@ -269,13 +278,12 @@
 + siteAreaLayout (bpw:siteAreaLayout)
 + * (bpw:resourceNode)
 
-/*
-[bpw:queryStatement]
-- bpw:queryName (STRING)
-- bpw:contentType (STRING)
-- bpw:queryStatement (STRING)
-- bpw:columns (STRING) multiple
-*/
+
+[bpw:queryStatement] > nt:hierarchyNode 
+- bpw:name (STRING)
+- bpw:title (STRING)
+- bpw:query (STRING)
+
 
 [bpw:resourcePath]
 - bpw:path (String)
@@ -495,7 +503,9 @@
 + sidePane (bpw:contentAreaSidePanel)
 + * (bpw:layoutRow)
 
-[bpw:workflowFolder] > bpw:folder
+[bpw:workflowFolder] > bpw:resourceFolder
++ * (bpw:bpmnWorkflow)
+
 [bpw:categoryFolder] > bpw:folder
 + * (bpw:category)
 [bpw:authoringTemplateFolder] > bpw:folder
@@ -517,7 +527,7 @@
 + * (bpw:renderTemplate)
 
 [bpw:queryFolder] > bpw:folder
-+ * (bpw:query)
++ * (bpw:queryStatement)
 
 [bpw:assetFolder] > bpw:folder
 
@@ -534,6 +544,7 @@
 + workflow (bpw:workflowFolder)
 + category (bpw:categoryFolder)
 + asset (bpw:assetFolder)
++ validationRule (bpw:validationRuleFolder)
 
 [bpw:supportedOpertion]
   - bpw:resourceName (STRING)
@@ -546,7 +557,7 @@
   + * (bpw:supportedOpertion)
   - bpw:jcrType (STRING)
   
-[bpw:validationRuleFolder]
+[bpw:validationRuleFolder] > bpw:folder
 + * [bpw:validationRule] 
 
 [bpw:opertionsFolder] > nt:folder

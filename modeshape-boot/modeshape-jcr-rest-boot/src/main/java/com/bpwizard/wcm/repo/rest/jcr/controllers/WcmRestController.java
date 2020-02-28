@@ -50,6 +50,7 @@ import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.BaseFormGroup;
+import com.bpwizard.wcm.repo.rest.jcr.model.BpmnWorkflow;
 import com.bpwizard.wcm.repo.rest.jcr.model.Category;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
@@ -77,6 +78,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.NavigationItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationType;
 import com.bpwizard.wcm.repo.rest.jcr.model.PageConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.PageLayout;
+import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplateLayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplateLayoutRow;
@@ -90,6 +92,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.SiteAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.Theme;
 import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
+import com.bpwizard.wcm.repo.rest.jcr.model.ValidationRule;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmLibrary;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmNavigatorFilter;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmNode;
@@ -528,6 +531,7 @@ public class WcmRestController {
 		}	
 	}	
 	
+	
 	@PostMapping(path = "/library", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createLibrary(
 			@RequestBody Library library, 
@@ -645,6 +649,268 @@ public class WcmRestController {
 	    } catch (Throwable t) {
 			throw new WcmRepositoryException(t);
 		}	 
+	}
+	
+	@GetMapping(path = "/validationRule/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ValidationRule getValidationRule(
+			@PathVariable("repository") String repository,
+		    @PathVariable("workspace") String workspace,
+		    @RequestParam("path") String nodePath, 
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			RestNode validationRuleNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+					nodePath, 2);
+			ValidationRule validationRule = this.toValidationRule(validationRuleNode);
+			validationRule.setRepository(repository);
+			validationRule.setWorkspace(workspace);
+			validationRule.setLibrary(nodePath.split("/", 5)[3]);
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return validationRule;
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}		
+	}
+	
+	@PostMapping(path = "/validationRule", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createValidationRule(
+			@RequestBody ValidationRule validationRule, HttpServletRequest request) 
+			throws WcmRepositoryException {
+
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format("/bpwizard/library/%s/validationRule/%s", validationRule.getLibrary(), validationRule.getName());
+			String repositoryName = validationRule.getRepository();
+			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, validationRule.toJson());
+			if (this.authoringEnabled) {
+				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (RepositoryException re) { 
+			throw new WcmRepositoryException(re);
+	    } catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}
+
+	@PutMapping(path = "/validationRule", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void saveValidationRule(
+			@RequestBody ValidationRule validationRule, HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format("/bpwizard/library/%s/validationRule/%s", validationRule.getLibrary(), validationRule.getName());
+			String repositoryName = validationRule.getRepository();
+			JsonNode atJson = validationRule.toJson();
+			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, atJson);
+			if (this.authoringEnabled) {
+				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, atJson);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (RepositoryException re) { 
+			throw new WcmRepositoryException(re);
+	    } catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}
+	
+	@GetMapping(path = "/bpmnWorkflow/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public BpmnWorkflow getBpmnWorkflow(
+			@PathVariable("repository") String repository,
+		    @PathVariable("workspace") String workspace,
+		    @RequestParam("path") String nodePath, 
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			RestNode workflowNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+					nodePath, 2);
+			BpmnWorkflow bpmnWorkflow = this.toBpmnWorkflow(workflowNode);
+			bpmnWorkflow.setRepository(repository);
+			bpmnWorkflow.setWorkspace(workspace);
+			bpmnWorkflow.setLibrary(nodePath.split("/", 5)[3]);
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return bpmnWorkflow;
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}		
+	}
+	
+	@PostMapping(path = "/bpmnWorkflow", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createBpmnWorkflow(
+			@RequestBody BpmnWorkflow bpmnWorkflow, HttpServletRequest request) 
+			throws WcmRepositoryException {
+
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format("/bpwizard/library/%s/workflow/%s", bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
+			String repositoryName = bpmnWorkflow.getRepository();
+			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, bpmnWorkflow.toJson());
+			if (this.authoringEnabled) {
+				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (RepositoryException re) { 
+			throw new WcmRepositoryException(re);
+	    } catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}
+	
+	@PutMapping(path = "/bpmnWorkflow", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void saveBpmnWorkflow(@RequestBody BpmnWorkflow bpmnWorkflow, HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format("/bpwizard/library/%s/workflow/%s", bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
+			String repositoryName = bpmnWorkflow.getRepository();
+			JsonNode atJson = bpmnWorkflow.toJson();
+			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, atJson);
+			if (this.authoringEnabled) {
+				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, atJson);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (RepositoryException re) { 
+			throw new WcmRepositoryException(re);
+	    } catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}
+	
+	@GetMapping(path = "/queryStatement/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public QueryStatement getQueryStatement(
+			@PathVariable("repository") String repository,
+		    @PathVariable("workspace") String workspace,
+		    @RequestParam("path") String nodePath, 
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			RestNode queryNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+					nodePath, 2);
+			QueryStatement queryStatement = this.toQueryStatement(queryNode);
+			queryStatement.setRepository(repository);
+			queryStatement.setWorkspace(workspace);
+			queryStatement.setLibrary(nodePath.split("/", 5)[3]);
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return queryStatement;
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}		
+	}
+
+	@PostMapping(path = "/queryStatement", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createQueryStatement(
+			@RequestBody QueryStatement query, HttpServletRequest request) 
+			throws WcmRepositoryException {
+
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format("/bpwizard/library/%s/query/%s", query.getLibrary(), query.getName());
+			String repositoryName = query.getRepository();
+			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, query.toJson());
+			if (this.authoringEnabled) {
+				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+				session.getWorkspace().clone("default", path, path, true);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (RepositoryException re) { 
+			throw new WcmRepositoryException(re);
+	    } catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}
+
+	@PutMapping(path = "/queryStatement", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void saveQuery(@RequestBody QueryStatement query, HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format("/bpwizard/library/%s/query/%s", query.getLibrary(), query.getName());
+			String repositoryName = query.getRepository();
+			JsonNode atJson = query.toJson();
+			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, atJson);
+			if (this.authoringEnabled) {
+				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, atJson);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (RepositoryException re) { 
+			throw new WcmRepositoryException(re);
+	    } catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
 	}
 	
 	@PostMapping(path = "/at", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -2413,6 +2679,51 @@ public class WcmRestController {
 			}
 		});
 		return viewers.toArray(new ResourceViewer[viewers.size()]);
+	}
+	
+	private QueryStatement toQueryStatement(RestNode node) {
+		QueryStatement queryStatement = new QueryStatement();
+		queryStatement.setName(node.getName());
+		for (RestProperty restProperty : node.getJcrProperties()) {
+			if ("bpw:title".equals(restProperty.getName())) {
+				queryStatement.setTitle(restProperty.getValues().get(0));
+			} else if ("bpw:query".equals(restProperty.getName())) {
+				queryStatement.setQuery(restProperty.getValues().get(0));
+			} 
+		}
+		return queryStatement;
+	}
+	
+	private BpmnWorkflow toBpmnWorkflow(RestNode node) {
+		BpmnWorkflow bpmnWorkflow = new BpmnWorkflow();
+		bpmnWorkflow.setName(node.getName());
+		for (RestProperty restProperty : node.getJcrProperties()) {
+			if ("bpw:title".equals(restProperty.getName())) {
+				bpmnWorkflow.setTitle(restProperty.getValues().get(0));
+			} else if ("bpw:description".equals(restProperty.getName())) {
+				bpmnWorkflow.setDescription(restProperty.getValues().get(0));
+			} else if ("bpw:bpmn".equals(restProperty.getName())) {
+				bpmnWorkflow.setBpmn(restProperty.getValues().get(0));
+			} 
+		}
+		return bpmnWorkflow;
+	}
+	
+	private ValidationRule toValidationRule(RestNode node) {
+		ValidationRule validationRule = new ValidationRule();
+		validationRule.setName(node.getName());
+		for (RestProperty restProperty : node.getJcrProperties()) {
+			if ("bpw:title".equals(restProperty.getName())) {
+				validationRule.setTitle(restProperty.getValues().get(0));
+			} else if ("bpw:description".equals(restProperty.getName())) {
+				validationRule.setDescription(restProperty.getValues().get(0));
+			} else if ("bpw:rule".equals(restProperty.getName())) {
+				validationRule.setRule(restProperty.getValues().get(0));
+			} else if ("bpw:type".equals(restProperty.getName())) {
+				validationRule.setType(restProperty.getValues().get(0));
+			}
+		}
+		return validationRule;
 	}
 
 	private ControlFieldMetadata toControlFieldMetaData(RestNode node) {

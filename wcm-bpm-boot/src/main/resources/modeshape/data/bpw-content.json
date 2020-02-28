@@ -448,7 +448,93 @@
         "bpw:defaultTitle": "Purge Category",
         "bpw:defaultIcon": "delete"
     },
-    
+    "bpwizard/library/system/configuration/operations/validationRuleFolder" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:validationRuleFolder"
+    },
+    "bpwizard/library/system/configuration/operations/validationRuleFolder/createValidationRule" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "validationRule",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Validation Rule",
+        "bpw:defaultIcon": "create"
+    },    
+    "bpwizard/library/system/configuration/operations/validationRule" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:validationRule"
+    },
+    "bpwizard/library/system/configuration/operations/validationRule/editValidationRule" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "validationRule",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Validation Rule",
+        "bpw:defaultIcon": "edit"
+    },    
+    "bpwizard/library/system/configuration/operations/validationRule/purgeValidationRule" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "validationRule",
+        "bpw:operation": "Purge",
+        "bpw:defaultTitle": "Purge Validation Rule",
+        "bpw:defaultIcon": "delete"
+    },
+    "bpwizard/library/system/configuration/operations/workflowFolder" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:workflowFolder"
+    },
+    "bpwizard/library/system/configuration/operations/workflowFolder/createWorkflow" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "bpmnWorkflow",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Workflow",
+        "bpw:defaultIcon": "create"
+    },    
+    "bpwizard/library/system/configuration/operations/bpmnWorkflow" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:bpmnWorkflow"
+    },
+    "bpwizard/library/system/configuration/operations/bpmnWorkflow/editWorkflow" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "bpmnWorkflow",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Workflow",
+        "bpw:defaultIcon": "edit"
+    },    
+    "bpwizard/library/system/configuration/operations/bpmnWorkflow/purgeWorkflow" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "bpmnWorkflow",
+        "bpw:operation": "Purge",
+        "bpw:defaultTitle": "Purge Workflow",
+        "bpw:defaultIcon": "delete"
+    },
+    "bpwizard/library/system/configuration/operations/queryFolder" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:queryFolder"
+    },
+    "bpwizard/library/system/configuration/operations/queryFolder/createQuery" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "queryStatement",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Query",
+        "bpw:defaultIcon": "create"
+    },    
+    "bpwizard/library/system/configuration/operations/queryStatement" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:queryStatement"
+    },
+    "bpwizard/library/system/configuration/operations/queryStatement/editQuery" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "queryStatement",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Query",
+        "bpw:defaultIcon": "edit"
+    },    
+    "bpwizard/library/system/configuration/operations/queryStatement/purgeQuery" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "queryStatement",
+        "bpw:operation": "Purge",
+        "bpw:defaultTitle": "Purge Query",
+        "bpw:defaultIcon": "delete"
+    },
     "bpwizard/library/system/configuration/operations/themeFolder" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "bpw:themesFolder"
@@ -1549,6 +1635,244 @@
         "bpw:dataType": "Text",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "false",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType" : {
+        "jcr:primaryType": "bpw:authoringTemplate"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/propertyGroup" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/propertyGroup/firstColumn" : {
+        "jcr:primaryType": "bpw:formColumn",
+        "bpw:fieldNames": ["properties.name", "properties.title"]
+    },    
+    "bpwizard/library/system/authoringTemplate/validationRuleType/properties" : {
+        "jcr:primaryType": "bpw:propertyFolder"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/properties/name": {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/properties/title" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "false",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/properties/description" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "false",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elementGroups" : {
+        "jcr:primaryType":"bpw:formGroupFoler"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elementGroups/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elementGroups/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elementGroups/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.description"]
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elementGroups/rows/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elementGroups/rows/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.type"]
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elementGroups/rows/thirdRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elementGroups/rows/thirdRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.rule"]
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elements/type": {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Type",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/validationRuleType/elements/rule" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Rule",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType" : {
+        "jcr:primaryType": "bpw:authoringTemplate"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/propertyGroup" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/propertyGroup/firstColumn" : {
+        "jcr:primaryType": "bpw:formColumn",
+        "bpw:fieldNames": ["properties.name", "properties.title"]
+    },    
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/properties" : {
+        "jcr:primaryType": "bpw:propertyFolder"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/properties/name": {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/properties/title" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "false",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/properties/description" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Description",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:mandatory": "false",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/elementGroups" : {
+        "jcr:primaryType":"bpw:formGroupFoler"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/elementGroups/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/elementGroups/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/elementGroups/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.description"]
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/elementGroups/rows/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/elementGroups/rows/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.bpmn"]
+    },
+    "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/elements/bpmn" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Rule",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType" : {
+        "jcr:primaryType": "bpw:authoringTemplate"
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType/propertyGroup" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType/propertyGroup/firstColumn" : {
+        "jcr:primaryType": "bpw:formColumn",
+        "bpw:fieldNames": ["properties.name", "properties.title"]
+    },    
+    "bpwizard/library/system/authoringTemplate/queryStatementType/properties" : {
+        "jcr:primaryType": "bpw:propertyFolder"
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType/properties/name": {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Name",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType/properties/title" : {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Title",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "false",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType/elementGroups" : {
+        "jcr:primaryType":"bpw:formGroupFoler"
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType/elementGroups/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType/elementGroups/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType/elementGroups/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.query"]
+    },
+    "bpwizard/library/system/authoringTemplate/queryStatementType/elements/query": {
+        "jcr:primaryType": "bpw:formControl",
+        "bpw:title": "Query",
+        "bpw:controlName": "text",
+        "bpw:dataType": "Text",
+        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
         "bpw:showInList": "true"
@@ -2792,6 +3116,9 @@
     "bpwizard/library/camunda/authoringTemplate" : {
         "jcr:primaryType":"bpw:authoringTemplateFolder"
     },
+    "bpwizard/library/camunda/validationRule" : {
+        "jcr:primaryType":"bpw:validationRuleFolder"
+    },
     "bpwizard/library/camunda/rootSiteArea" : {
         "jcr:primaryType":"bpw:siteArea",
         "bpw:name":"site",
@@ -2961,6 +3288,9 @@
 	"bpwizard/library/apigateway/category" : {
         "jcr:primaryType":"bpw:categoryFolder"
     },
+    "bpwizard/library/apigateway/validationRule" : {
+        "jcr:primaryType":"bpw:validationRuleFolder"
+    },
     "bpwizard/library/apigateway/authoringTemplate" : {
         "jcr:primaryType":"bpw:authoringTemplateFolder"
     },
@@ -3107,6 +3437,9 @@
     },					
 	"bpwizard/library/design/category" : {
         "jcr:primaryType":"bpw:categoryFolder"
+    },
+    "bpwizard/library/design/validationRule" : {
+        "jcr:primaryType":"bpw:validationRuleFolder"
     },
     "bpwizard/library/design/authoringTemplate" : {
         "jcr:primaryType":"bpw:authoringTemplateFolder"

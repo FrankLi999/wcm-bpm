@@ -100,6 +100,10 @@ public class Library implements Serializable {
 		children.set("authoringTemplate", authoringTemplateNode);
 		authoringTemplateNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:authoringTemplateFolder");
 		
+		ObjectNode validationRuleNode = JsonUtils.createObjectNode();
+		children.set("validationRule", validationRuleNode);
+		validationRuleNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:validationRuleFolder");
+		
 		ObjectNode rootSiteAreaNode = JsonUtils.createObjectNode();
 		children.set("rootSiteArea", rootSiteAreaNode);
 		rootSiteAreaNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:siteArea");
