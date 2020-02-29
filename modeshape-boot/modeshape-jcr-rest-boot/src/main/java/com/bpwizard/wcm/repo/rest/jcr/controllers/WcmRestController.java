@@ -17,10 +17,15 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
+import javax.jcr.query.Row;
+import javax.jcr.query.RowIterator;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modeshape.jcr.api.query.Query;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +45,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
@@ -865,10 +871,41 @@ public class WcmRestController {
 			logger.traceEntry();
 		}
 		try {
+			String repositoryName = query.getRepository();
+			ObjectNode qJson = (ObjectNode) query.toJson();
+			try {
+				QueryManager qrm = this.repositoryManager.getSession(repositoryName, "default").getWorkspace().getQueryManager();
+				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
+				QueryResult jcrResult = jcrQuery.execute();
+				String columnNames[] = jcrResult.getColumnNames();
+				if (columnNames != null && columnNames.length > 0) {
+					ArrayNode valueArray = JsonUtils.creatArrayNode();
+					for (String value : columnNames) {
+						valueArray.add(value);
+					}
+					qJson.set("bpw:columns", valueArray);	
+				}
+				RowIterator iterator = jcrResult.getRows();
+				while (iterator.hasNext()) {
+					Row row = iterator.nextRow();
+					System.out.println("==================================================");
+					System.out.println("element.jcr:path" + row.getValue("element.jcr:path"));
+					System.out.println("element.jcr:name" + row.getValue("element.jcr:name"));
+					System.out.println("element.bpw:value" + row.getValue("element.bpw:value"));
+					System.out.println("content.jcr:name" + row.getValue("content.jcr:name"));
+					System.out.println("content.jcr:path" + row.getValue("content.jcr:path"));
+					System.out.println("content.jcr:score" + row.getValue("content.jcr:score"));
+					System.out.println("element.jcr:score" + row.getValue("element.jcr:score"));
+					System.out.println("==================================================");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// javax.jcr.query.qom.QueryObjectModel qom = null
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format("/bpwizard/library/%s/query/%s", query.getLibrary(), query.getName());
-			String repositoryName = query.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, query.toJson());
+			
+			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, qJson);
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, "draft");
 				session.getWorkspace().clone("default", path, path, true);
@@ -896,10 +933,38 @@ public class WcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format("/bpwizard/library/%s/query/%s", query.getLibrary(), query.getName());
 			String repositoryName = query.getRepository();
-			JsonNode atJson = query.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, atJson);
+			ObjectNode qJson = (ObjectNode) query.toJson();
+			try {
+				QueryManager qrm = this.repositoryManager.getSession(repositoryName, "default").getWorkspace().getQueryManager();
+				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
+				QueryResult jcrResult = jcrQuery.execute();
+				String columnNames[] = jcrResult.getColumnNames();
+				if (columnNames != null && columnNames.length > 0) {
+					ArrayNode valueArray = JsonUtils.creatArrayNode();
+					for (String value : columnNames) {
+						valueArray.add(value);
+					}
+					qJson.set("bpw:columns", valueArray);	
+				}
+				RowIterator iterator = jcrResult.getRows();
+				while (iterator.hasNext()) {
+					Row row = iterator.nextRow();
+					System.out.println("==================================================");
+					System.out.println("element.jcr:path" + row.getValue("element.jcr:path"));
+					System.out.println("element.jcr:name" + row.getValue("element.jcr:name"));
+					System.out.println("element.bpw:value" + row.getValue("element.bpw:value"));
+					System.out.println("content.jcr:name" + row.getValue("content.jcr:name"));
+					System.out.println("content.jcr:path" + row.getValue("content.jcr:path"));
+					System.out.println("content.jcr:score" + row.getValue("content.jcr:score"));
+					System.out.println("element.jcr:score" + row.getValue("element.jcr:score"));
+					System.out.println("==================================================");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, qJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, atJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, qJson);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
