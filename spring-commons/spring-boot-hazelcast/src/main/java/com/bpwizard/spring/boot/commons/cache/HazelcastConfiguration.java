@@ -1,4 +1,4 @@
-package com.bpwizard.spring.boot.commons;
+package com.bpwizard.spring.boot.commons.cache;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,8 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
-import com.bpwizard.spring.boot.commons.cache.CacheConfig;
-import com.bpwizard.spring.boot.commons.cache.HazelcastProperties;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.EntryListenerConfig;
 import com.hazelcast.config.EvictionPolicy;

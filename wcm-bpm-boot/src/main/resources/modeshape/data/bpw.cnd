@@ -283,6 +283,7 @@
 - bpw:name (STRING)
 - bpw:title (STRING)
 - bpw:query (STRING)
+- bpw:columns (STRING) multiple
 
 
 [bpw:resourcePath]
