@@ -117,14 +117,16 @@
 
 
 [bpw:formControl] > nt:hierarchyNode
-- bpw:title (String)
-- bpw:fieldPath (String)
-- bpw:controlName (String)
+- bpw:title (STRING)
+- bpw:fieldPath (STRING)
+- bpw:controlType (STRING)
+- bpw:rows (LONG)
 - bpw:value (STRING) multiple COPY
-- bpw:options (STRING) multiple COPY
+- bpw:enum (STRING) multiple COPY
 - bpw:defaultValue (STRING) COPY
 - bpw:hint (STRING) COPY
 - bpw:dataType (STRING) = 'text' COPY
+- bpw:jcrDataType (STRING) = 'STRING' COPY
 - bpw:multiple (BOOLEAN) = 'false' COPY
 - bpw:relationshipType (STRING) COPY
 - bpw:relationshipCardinality (STRING) COPY
@@ -134,6 +136,11 @@
 - bpw:systemIndexed (BOOLEAN) = 'false' COPY
 - bpw:showInList (BOOLEAN) = 'false' COPY
 - bpw:unique (BOOLEAN) = 'false' COPY
+- bpw:editable (BOOLEAN) = 'true' COPY
+- bpw:expandable (BOOLEAN) = 'false' COPY
+- bpw:richText (BOOLEAN) = 'false' COPY
+- bpw:flex (STRING)
+- bpw:placeholder (STRING)
 
 [bpw:formColumn]
 - bpw:id (STRING)

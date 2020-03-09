@@ -6,12 +6,13 @@ public class FormControl implements HasName {
 	private String name;
 	private String title;
 	private String fieldPath;
-	private String controlName;
+	private String controlType;
 	private String[] values;
-	private String[] options;
+	private String[] enumeration;
 	private String defaultValue;
 	private String hint;
 	private String dataType = "text";
+	private String jcrDataType = "STRING";
 	private boolean multiple;
 	private String relationshipType;
 	private String relationshipCardinality;
@@ -21,6 +22,31 @@ public class FormControl implements HasName {
 	private boolean systemIndexed = false;
 	private boolean showInList = false;
 	private boolean unique = false;
+	private boolean editable = false;
+	private boolean expandable = false;
+	private boolean richText = false;
+	private int rows = 3;
+	private String flex;
+	private String placeholder;
+	
+	public String[] getEnumeration() {
+		return enumeration;
+	}
+	public void setEnumeration(String[] enumeration) {
+		this.enumeration = enumeration;
+	}
+	public boolean isEditable() {
+		return editable;
+	}
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+	public boolean isExpandable() {
+		return expandable;
+	}
+	public void setExpandable(boolean expandable) {
+		this.expandable = expandable;
+	}
 	public String getName() {
 		return name;
 	}
@@ -33,11 +59,11 @@ public class FormControl implements HasName {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getControlName() {
-		return controlName;
+	public String getControlType() {
+		return controlType;
 	}
-	public void setControlName(String controlName) {
-		this.controlName = controlName;
+	public void setControlType(String controlName) {
+		this.controlType = controlName;
 	}
 	public String[] getValues() {
 		return values;
@@ -45,12 +71,7 @@ public class FormControl implements HasName {
 	public void setValues(String[] values) {
 		this.values = values;
 	}
-	public String[] getOptions() {
-		return options;
-	}
-	public void setOptions(String[] options) {
-		this.options = options;
-	}
+
 	public String getDefaultValue() {
 		return defaultValue;
 	}
@@ -130,15 +151,51 @@ public class FormControl implements HasName {
 	public void setFieldPath(String fieldPath) {
 		this.fieldPath = fieldPath;
 	}
-	@Override
-	public String toString() {
-		return "FormControl [name=" + name + ", title=" + title + ", fieldPath=" + fieldPath + ", controlName="
-				+ controlName + ", values=" + Arrays.toString(values) + ", options=" + Arrays.toString(options)
-				+ ", defaultValue=" + defaultValue + ", hint=" + hint + ", dataType=" + dataType + ", multiple="
-				+ multiple + ", relationshipType=" + relationshipType + ", relationshipCardinality="
-				+ relationshipCardinality + ", valditionRegEx=" + valditionRegEx + ", mandatory=" + mandatory
-				+ ", userSearchable=" + userSearchable + ", systemIndexed=" + systemIndexed + ", showInList="
-				+ showInList + ", unique=" + unique + "]";
+	
+	public String getJcrDataType() {
+		return jcrDataType;
+	}
+	public void setJcrDataType(String jcrDataType) {
+		this.jcrDataType = jcrDataType;
 	}
 	
+	public boolean isRichText() {
+		return richText;
+	}
+	public void setRichText(boolean richText) {
+		this.richText = richText;
+	}
+	
+	public int getRows() {
+		return rows;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+	public String getFlex() {
+		return flex;
+	}
+	public void setFlex(String flex) {
+		this.flex = flex;
+	}
+	public String getPlaceholder() {
+		return placeholder;
+	}
+	
+	public void setPlaceholder(String placeholder) {
+		this.placeholder = placeholder;
+	}
+	
+	@Override
+	public String toString() {
+		return "FormControl [name=" + name + ", title=" + title + ", fieldPath=" + fieldPath + ", controlType="
+				+ controlType + ", values=" + Arrays.toString(values) + ", enumeration=" + Arrays.toString(enumeration)
+				+ ", defaultValue=" + defaultValue + ", hint=" + hint + ", dataType=" + dataType + ", jcrDataType="
+				+ jcrDataType + ", multiple=" + multiple + ", relationshipType=" + relationshipType
+				+ ", relationshipCardinality=" + relationshipCardinality + ", valditionRegEx=" + valditionRegEx
+				+ ", mandatory=" + mandatory + ", userSearchable=" + userSearchable + ", systemIndexed=" + systemIndexed
+				+ ", showInList=" + showInList + ", unique=" + unique + ", editable=" + editable + ", expandable="
+				+ expandable + ", richText=" + richText + ", rows=" + rows + ", flex=" + flex + ", placeholder="
+				+ placeholder + "]";
+	}
 }

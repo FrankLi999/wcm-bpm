@@ -4,6 +4,7 @@
     "monitoring" : {
         "enabled" : true
     },
+    "node-types": ["modeshape/data/bpw.cnd"],
     "storage" : {
         "transactionManagerLookup" : {
             "name" : "com.bpwizard.wcm.repo.jcr.ModeshapeTransactionManagerLookup"

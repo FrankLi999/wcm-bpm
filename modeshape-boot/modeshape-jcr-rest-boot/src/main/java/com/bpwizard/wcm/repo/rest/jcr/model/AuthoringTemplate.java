@@ -209,8 +209,8 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			controlNode.put("bpw:fieldPath", control.getFieldPath());
 		}
 		
-		if (StringUtils.hasText(control.getControlName())) {
-			controlNode.put("bpw:controlName", control.getControlName());
+		if (StringUtils.hasText(control.getControlType())) {
+			controlNode.put("bpw:controlType", control.getControlType());
 		}
 
 		if ((control.getValues() != null) && (control.getValues().length > 0)) {
@@ -221,12 +221,12 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			controlNode.set("bpw:value", valueArray);
 		}
 
-		if ((control.getOptions() != null) && (control.getOptions().length > 0)) {
+		if ((control.getEnumeration() != null) && (control.getEnumeration().length > 0)) {
 			ArrayNode optionArray = JsonUtils.creatArrayNode();
-			for (String option : control.getOptions()) {
-				optionArray.add( option);
+			for (String option : control.getEnumeration()) {
+				optionArray.add(option);
 			}
-			controlNode.set("bpw:options", optionArray);
+			controlNode.set("bpw:enum", optionArray);
 		}
 
 		if (StringUtils.hasText(control.getDefaultValue())) {
@@ -258,6 +258,8 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 		controlNode.put("bpw:systemIndexed", control.isSystemIndexed());
 		controlNode.put("bpw:showInList", control.isShowInList());
 		controlNode.put("bpw:unique", control.isUnique());
+		controlNode.put("bpw:editable", control.isEditable());
+		controlNode.put("bpw:expandable", control.isEditable());
 	}
 	
 	private void addSteps(ObjectNode stepsNode, FormStep[] steps) {

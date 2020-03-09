@@ -33,6 +33,13 @@
         "bpw:defaultTitle": "Purge Library",
         "bpw:defaultIcon": "remove"
     },
+    "bpwizard/library/system/configuration/operations/library/editLibrary" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "library",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Library",
+        "bpw:defaultIcon": "edit"
+    },
     "bpwizard/library/system/configuration/operations/jcrFile" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "nt:file"
@@ -657,8 +664,8 @@
     "bpwizard/library/system/authoringTemplate/contentType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -668,8 +675,8 @@
     "bpwizard/library/system/authoringTemplate/contentType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -679,26 +686,33 @@
     "bpwizard/library/system/authoringTemplate/contentType/properties/siteArea" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Site Area",
-        "bpw:controlName": "siteArea",
+        "bpw:controlType": "text",
+        "bpw:jcrDataType": "bpw:siteArea",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true"
     },
     "bpwizard/library/system/authoringTemplate/contentType/properties/categories" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Category",
-        "bpw:controlName": "category",
+        "bpw:controlType": "text",
+        "bpw:jcrDataType": "bpw:category",
+        "bpw:dataType": "string",
         "bpw:userSearchable": "true"
     },
     "bpwizard/library/system/authoringTemplate/contentType/elements/body" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Body",
-        "bpw:controlName": "richText",
+        "bpw:controlType": "textarea",
+        "bpw:rows": "5",
+        "bpw:richText": "true",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true"
     },
     "bpwizard/library/system/authoringTemplate/contentType/properties/workflow" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Workflow",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -737,8 +751,8 @@
     "bpwizard/library/system/authoringTemplate/componentType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -748,8 +762,8 @@
     "bpwizard/library/system/authoringTemplate/componentType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -759,7 +773,8 @@
     "bpwizard/library/system/authoringTemplate/componentType/elements/componentTemplate" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Component Template",
-        "bpw:controlName": "textArea",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true"
     },  
     "bpwizard/library/system/authoringTemplate/fileType" : {
@@ -809,8 +824,8 @@
     "bpwizard/library/system/authoringTemplate/fileType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -820,8 +835,8 @@
     "bpwizard/library/system/authoringTemplate/fileType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -831,33 +846,41 @@
     "bpwizard/library/system/authoringTemplate/fileType/properties/description" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Description",
-        "bpw:controlName": "text",
-        "bpw:dataType": "text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:systemIndexed": "true"
     }, 
     "bpwizard/library/system/authoringTemplate/fileType/elements/siteArea" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Site Area",
-        "bpw:controlName": "siteArea",
+        "bpw:controlType": "text",
+        "bpw:jcrDataType": "bpw:siteArea",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true"
     },
     "bpwizard/library/system/authoringTemplate/fileType/elements/content" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Content",
-        "bpw:controlName": "binary",
+        "bpw:controlType": "text",
+        "bpw:jcrDataType": "binary",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true"
     },
     "bpwizard/library/system/authoringTemplate/fileType/elements/metadata" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Metadata",
-        "bpw:controlName": "keyValue",
+        "bpw:controlType": "customField",
+        "bpw:dataType": "object",
+        "bpw:jcrDataType": "bpw:keyValue",
         "bpw:mandatory": "false",
         "bpw:userSearchable": "true"
     },
     "bpwizard/library/system/authoringTemplate/fileType/elements/showOnMenu" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Show On Menu",
-        "bpw:controlName": "checkbox",
+        "bpw:controlType": "checkbox",
+        "bpw:dataType": "boolean",
+        "bpw:jcrDataType": "BOOLEAN",
         "bpw:value": "|true",
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
@@ -865,8 +888,8 @@
     "bpwizard/library/system/authoringTemplate/fileType/elements/sorderOrder" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Sort Order",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Whole Number",
+        "bpw:controlType": "text",
+        "bpw:dataType": "integer",
         "bpw:defaultValue": "0",
         "bpw:systemIndexed": "true"
     },    
@@ -1045,8 +1068,8 @@
     "bpwizard/library/system/authoringTemplate/siteConfigType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1056,8 +1079,8 @@
     "bpwizard/library/system/authoringTemplate/siteConfigType/elements/rootSiteArea" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Root Site Area",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1067,8 +1090,8 @@
     "bpwizard/library/system/authoringTemplate/siteConfigType/elements/colorTheme" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Color Theme",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
@@ -1076,7 +1099,9 @@
     "bpwizard/library/system/authoringTemplate/siteConfigType/elements/customScrollbars" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Custom Scrollbars",
-        "bpw:controlName": "checkbox",
+        "bpw:controlType": "checkbox",
+        "bpw:dataType": "boolean",
+        "bpw:jcrDataType": "BOOLEAN",
         "bpw:value": "|true",
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
@@ -1085,8 +1110,9 @@
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Page Layout",
         "bpw:fieldPath": "layout",
-        "bpw:controlName": "customField",
-        "bpw:dataType": "bpw:pageLayout",
+        "bpw:controlType": "customField",
+        "bpw:jcrDataType": "bpw:pageLayout",
+        "bpw:dataType": "object",
 		"bpw:userSearchable": "true",
         "bpw:systemIndexed": "true"
     },
@@ -1261,14 +1287,17 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/elements/body" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Body",
-        "bpw:controlName": "richText",
+        "bpw:controlType": "textarea",
+        "bpw:rows": "5",
+        "bpw:richText": "true",
+        "bpw:dataType": "string",
         "bpw:mandatory": "false"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/friendlyURL" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Friendly URL",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "false",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
@@ -1276,7 +1305,9 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/showOnMenu" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Show On Menu",
-        "bpw:controlName": "checkbox",
+        "bpw:controlType": "checkbox",
+        "bpw:dataType": "boolean",
+        "bpw:jcrDataType": "BOOLEAN",
         "bpw:value": "|true",
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
@@ -1284,38 +1315,39 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/sorderOrder" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Sort Order",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Whole Number",
+        "bpw:controlType": "text",
+        "bpw:dataType": "number",
+        "bpw:jcrDataType": "LONG",
         "bpw:defaultValue": "0",
         "bpw:systemIndexed": "true"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/allowedFileExtension" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Allowed FileExtension",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
 		"bpw:userSearchable": "true",
         "bpw:systemIndexed": "true"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/allowedArtifactTypes" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Allowed ArtifactTypes",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:systemIndexed": "true"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/defaultContent" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Default Content",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:systemIndexed": "true"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1325,8 +1357,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1336,8 +1368,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/description" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Description",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -1346,8 +1378,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/url" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "URL",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true"
@@ -1355,29 +1387,34 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/siteConfig" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Site Config",
-        "bpw:controlName": "select",
-        "bpw:options": "jcr://siteConfig",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:jcrDataType": "bpw:siteConfig",
         "bpw:mandatory": "false"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/contentAreaLayout" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Content Area Layout",
-        "bpw:controlName": "select",
-        "bpw:options": "jcr://contentAreaLayout",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:jcrDataType": "bpw:contentAreaLayout",
         "bpw:mandatory": "false"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/cacheTTL" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Cache TTL",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Whole Number",
+        "bpw:controlType": "text",
+        "bpw:dataType": "number",
+        "bpw:jcrDataType": "LONG",
         "bpw:defaultValue": "15",
         "bpw:systemIndexed": "true"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/securePage" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Secure Page",
-        "bpw:controlName": "checkbox",
+        "bpw:controlType": "checkbox",
+        "bpw:dataType": "boolean",
+        "bpw:jcrDataType": "BOOLEAN",
         "bpw:value": "|true",
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
@@ -1385,23 +1422,26 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/metadata" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Metadata",
-        "bpw:controlName": "keyValue",
+        "bpw:controlType": "keyValue",
+        "bpw:dataType": "object",
+        "bpw:jcrDataType": "bpw:keyValue",
 		"bpw:mandatory": "false",
         "bpw:systemIndexed": "true"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/searchData" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "SEO Description",
-        "bpw:controlName": "customField",
-        "bpw:dataType": "bpw:pageSearchData",
+        "bpw:controlType": "customField",
+        "bpw:jcrDataType": "bpw:pageSearchData",
+        "bpw:dataType": "object",
 		"bpw:userSearchable": "true",
         "bpw:systemIndexed": "true"
     },
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/navigationId" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Navigation ID",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
@@ -1409,8 +1449,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/navigationType" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Navigation Type",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
@@ -1418,8 +1458,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/classes" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Classes",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "false",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
@@ -1427,8 +1467,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/function" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Function",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "false",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
@@ -1436,8 +1476,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/translate" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Translate",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "false",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
@@ -1445,8 +1485,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/icon" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Icon",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "false",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": true
@@ -1454,7 +1494,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/exactMatch" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Exact Match",
-        "bpw:controlName": "checkbox",
+        "bpw:controlType": "checkbox",
+        "bpw:dataType": "boolean",
         "bpw:value": "|true",
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
@@ -1462,7 +1503,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/externalUrl" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "External Url",
-        "bpw:controlName": "checkbox",
+        "bpw:controlType": "checkbox",
+        "bpw:dataType": "boolean",
         "bpw:value": "|true",
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
@@ -1470,7 +1512,8 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/openInNewTab" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Open In New Tab",
-        "bpw:controlName": "checkbox",
+        "bpw:controlType": "checkbox",
+        "bpw:dataType": "boolean",
         "bpw:value": "|true",
         "bpw:defaultValue": "false",
         "bpw:systemIndexed": "true"
@@ -1478,8 +1521,9 @@
     "bpwizard/library/system/authoringTemplate/siteAreaType/properties/badge" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Badge",
-        "bpw:controlName": "customField",
-        "bpw:dataType": "bpw:navigationBadge",
+        "bpw:controlType": "customField",
+        "bpw:jcrDataType": "bpw:navigationBadge",
+        "bpw:dataType": "object",
 		"bpw:userSearchable": "true",
         "bpw:systemIndexed": "true"
     },
@@ -1515,8 +1559,8 @@
     "bpwizard/library/system/authoringTemplate/keyValueType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1526,8 +1570,8 @@
     "bpwizard/library/system/authoringTemplate/keyValueType/elements/key" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Key",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -1537,7 +1581,8 @@
     "bpwizard/library/system/authoringTemplate/keyValueType/elements/value" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Value",
-        "bpw:controlName": "textArea",
+        "bpw:controlType": "textArea",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": "true"
@@ -1574,8 +1619,8 @@
     "bpwizard/library/system/authoringTemplate/themeType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1585,8 +1630,8 @@
     "bpwizard/library/system/authoringTemplate/themeType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1596,8 +1641,8 @@
     "bpwizard/library/system/authoringTemplate/themeType/elements/note" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Note",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1620,8 +1665,8 @@
     "bpwizard/library/system/authoringTemplate/categoryType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1631,8 +1676,8 @@
     "bpwizard/library/system/authoringTemplate/categoryType/properties/parent": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Parent",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
@@ -1655,8 +1700,8 @@
     "bpwizard/library/system/authoringTemplate/validationRuleType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1666,8 +1711,8 @@
     "bpwizard/library/system/authoringTemplate/validationRuleType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
@@ -1677,8 +1722,8 @@
     "bpwizard/library/system/authoringTemplate/validationRuleType/properties/description" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Description",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -1717,8 +1762,8 @@
     "bpwizard/library/system/authoringTemplate/validationRuleType/elements/type": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Type",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1728,8 +1773,8 @@
     "bpwizard/library/system/authoringTemplate/validationRuleType/elements/rule" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Rule",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1752,8 +1797,8 @@
     "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1763,8 +1808,8 @@
     "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
@@ -1774,8 +1819,8 @@
     "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/properties/description" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Description",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -1807,8 +1852,8 @@
     "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/elements/bpmn" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Rule",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1831,8 +1876,8 @@
     "bpwizard/library/system/authoringTemplate/queryStatementType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1842,8 +1887,8 @@
     "bpwizard/library/system/authoringTemplate/queryStatementType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
@@ -1869,8 +1914,8 @@
     "bpwizard/library/system/authoringTemplate/queryStatementType/elements/query": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Query",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -1920,44 +1965,51 @@
     "bpwizard/library/system/authoringTemplate/libraryType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
-        "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:valditionRegEx": "[a-zA-z]+([ '-][a-zA-Z]+)*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
-        "bpw:showInList": "true"
+        "bpw:showInList": "true",
+        "bpw:editable": "false",
+        "bpw:placeholder": "Library Name"
     },
     "bpwizard/library/system/authoringTemplate/libraryType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
-        "bpw:showInList": "true"
+        "bpw:showInList": "true",
+        "bpw:placeholder": "Library Title"
     },
     "bpwizard/library/system/authoringTemplate/libraryType/properties/description" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Description",
-        "bpw:controlName": "text",
-        "bpw:dataType": "text",
-        "bpw:systemIndexed": "true"
+        "bpw:controlType": "textarea",
+        "bpw:dataType": "string",
+        "bpw:systemIndexed": "true",
+        "bpw:rows": "3",
+        "bpw:expandable": "true"
     }, 
     "bpwizard/library/system/authoringTemplate/libraryType/elements/language" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Language",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
+        "bpw:flex": "1 1 50px",
         "bpw:userSearchable": "true",
-        "bpw:showInList": "true"
-    },
-    
+        "bpw:showInList": "true",
+        "bpw:editable": "false",
+        "bpw:enum": ["en","fr","zh"]
+    },    
     "bpwizard/library/system/authoringTemplate/folderType" : {
         "jcr:primaryType": "bpw:authoringTemplate"
     },
@@ -1990,8 +2042,8 @@
     "bpwizard/library/system/authoringTemplate/folderType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -2001,8 +2053,8 @@
     "bpwizard/library/system/authoringTemplate/folderType/elements/note": {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Note",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -2041,8 +2093,8 @@
     "bpwizard/library/system/authoringTemplate/vanityURLType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -2051,8 +2103,8 @@
     "bpwizard/library/system/authoringTemplate/vanityURLType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -2061,8 +2113,8 @@
     "bpwizard/library/system/authoringTemplate/vanityURLType/elements/url" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "URL",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": "true",
@@ -2071,8 +2123,8 @@
 	"bpwizard/library/system/authoringTemplate/vanityURLType/elements/forwardTo" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Forward To",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:userSearchable": "true",
         "bpw:systemIndexed": "true",
@@ -2110,8 +2162,8 @@
     "bpwizard/library/system/authoringTemplate/personaType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -2120,8 +2172,8 @@
     "bpwizard/library/system/authoringTemplate/personaType/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -2130,7 +2182,9 @@
     "bpwizard/library/system/authoringTemplate/personaType/elements/photo" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Photo",
-        "bpw:controlName": "binary"
+        "bpw:controlType": "text",
+        "bpw:jcrDataType": "binary",
+        "bpw:dataType": "string"
     },	
     "bpwizard/library/system/authoringTemplate/formType" : {
         "jcr:primaryType": "bpw:authoringTemplate"
@@ -2164,8 +2218,8 @@
     "bpwizard/library/system/authoringTemplate/formType/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -2174,15 +2228,17 @@
     "bpwizard/library/system/authoringTemplate/formType/properties/description" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Description",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true"
     },
     "bpwizard/library/system/authoringTemplate/formType/elements/siteArea" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Site Area",
-        "bpw:controlName": "iteArea",
+        "bpw:controlType": "text",
+        "bpw:jcrDataType": "bpw:siteArea",
+        "bpw:dataType": "string",
         "bpw:mandatory": "true"
     },	
     "bpwizard/library/system/controlField" : {
@@ -3478,8 +3534,8 @@
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -3489,8 +3545,8 @@
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -3500,21 +3556,23 @@
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/properties/description" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Description",
-        "bpw:controlName": "text",
-        "bpw:dataType": "text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:systemIndexed": "true"
     },
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/properties/categories" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Category",
-        "bpw:controlName": "category",
+        "bpw:controlType": "text",
+        "bpw:jcrDataType": "bpw:category",
+        "bpw:dataType": "string",
         "bpw:userSearchable": "true"
     },
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/properties/workflow" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Workflow",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -3524,8 +3582,8 @@
     "bpwizard/library/design/authoringTemplate/MySidePaneContent/elements/sidebody" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Body",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -3566,8 +3624,8 @@
     "bpwizard/library/design/authoringTemplate/MyContent/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Name",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -3577,8 +3635,8 @@
     "bpwizard/library/design/authoringTemplate/MyContent/properties/title" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Title",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -3588,21 +3646,23 @@
     "bpwizard/library/design/authoringTemplate/MyContent/properties/description" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Description",
-        "bpw:controlName": "text",
-        "bpw:dataType": "text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:systemIndexed": "true"
     },
     "bpwizard/library/design/authoringTemplate/MyContent/properties/categories" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Category",
-        "bpw:controlName": "category",
+        "bpw:controlType": "text",
+        "bpw:jcrDataType": "bpw:category",
+        "bpw:dataType": "string",
         "bpw:userSearchable": "true"
     },
     "bpwizard/library/design/authoringTemplate/MyContent/elements/body" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Body",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -3612,8 +3672,8 @@
     "bpwizard/library/design/authoringTemplate/MyContent/properties/workflow" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Workflow",
-        "bpw:controlName": "text",
-        "bpw:dataType": "Text",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
         "bpw:valditionRegEx": "[^(<[.\n]+>)]*",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",

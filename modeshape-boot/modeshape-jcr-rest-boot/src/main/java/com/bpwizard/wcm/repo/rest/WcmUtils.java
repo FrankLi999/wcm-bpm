@@ -198,12 +198,12 @@ public class WcmUtils {
 				formControl.setTitle(property.getValues().get(0));
 			} else if ("bpw:fieldPath".equals(property.getName())) {
 				formControl.setFieldPath(property.getValues().get(0));
-			} else if ("bpw:controlName".equals(property.getName())) {
-				formControl.setControlName(property.getValues().get(0));
+			} else if ("bpw:controlType".equals(property.getName())) {
+				formControl.setControlType(property.getValues().get(0));
 			} else if ("bpw:value".equals(property.getName())) {
 				formControl.setValues(property.getValues().toArray(new String[property.getValues().size()]));
-			} else if ("bpw:options".equals(property.getName())) {
-				formControl.setOptions(property.getValues().toArray(new String[property.getValues().size()]));
+			} else if ("bpw:enum".equals(property.getName())) {
+				formControl.setEnumeration(property.getValues().toArray(new String[property.getValues().size()]));
 			} else if ("bpw:defaultValue".equals(property.getName())) {
 				formControl.setDefaultValue(property.getValues().get(0));
 			} else if ("bpw:hint".equals(property.getName())) {
@@ -228,8 +228,21 @@ public class WcmUtils {
 				formControl.setUnique(Boolean.parseBoolean(property.getValues().get(0)));
 			} else if ("bpw:multiple".equals(property.getName())) {
 				formControl.setMultiple(Boolean.parseBoolean(property.getValues().get(0)));
-			}
-
+			} else if ("bpw:jcrDataType".equals(property.getName())) {
+				formControl.setJcrDataType(property.getValues().get(0));
+			} else if ("bpw:editable".equals(property.getName())) {
+				formControl.setEditable(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:expandable".equals(property.getName())) {
+				formControl.setExpandable(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:richText".equals(property.getName())) {
+				formControl.setRichText(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:rows".equals(property.getName())) {
+				formControl.setRows(Integer.parseInt(property.getValues().get(0)));
+			} else if ("bpw:flex".equals(property.getName())) {
+				formControl.setFlex(property.getValues().get(0));
+			} else if ("bpw:placeholder".equals(property.getName())) {
+				formControl.setPlaceholder(property.getValues().get(0));
+			} 
 		}
 		return formControl;
 	}

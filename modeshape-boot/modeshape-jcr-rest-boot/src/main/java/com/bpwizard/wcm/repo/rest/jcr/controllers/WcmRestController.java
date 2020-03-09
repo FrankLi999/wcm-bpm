@@ -2,6 +2,7 @@ package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -129,7 +130,7 @@ public class WcmRestController {
 	private static final Logger logger = LogManager.getLogger(WcmRestController.class);
 	public static final String BASE_URI = "/wcm/api";
 
-	 @Value("${bpw.modeshape.authoring.enabled:true}")
+	@Value("${bpw.modeshape.authoring.enabled:true}")
 	private boolean authoringEnabled = true;
 	
 	@Autowired
@@ -204,6 +205,49 @@ public class WcmRestController {
 		}		
 	}
 
+	@GetMapping(path = "/library/{repository}/{workspace}", 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public Library[] getLibraries(			
+			@PathVariable("repository") String repository,
+			@PathVariable("workspace") String workspace,
+			@RequestParam(name="filter", defaultValue = "") String filter,
+		    @RequestParam(name="sort", defaultValue = "asc") String sortDirection,
+		    @RequestParam(name="pageIndex", defaultValue = "0") int pageIndex,
+		    @RequestParam(name="pageSize", defaultValue = "3") int pageSize,
+			HttpServletRequest request) 
+					throws WcmRepositoryException {
+		
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			RestNode libraryParentNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+					"/bpwizard/library", 2);
+			Library[] libraries = libraryParentNode.getChildren().stream()
+					.filter(this::isLibrary)
+					.filter(this::notSystemLibrary)
+					.map(node -> toLibrary(node, repository, workspace))
+					.filter(library -> this.filterLibrary(library, filter))
+					.toArray(Library[]::new);
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			if ("asc".equals(sortDirection)) {
+				Arrays.sort(libraries);
+			} else {
+				Arrays.sort(libraries, Collections.reverseOrder());
+			}
+			return libraries;
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e);
+		}
+	}
+	
+	private boolean filterLibrary(Library library, String filter) {
+		return StringUtils.hasText(filter) ? library.getName().startsWith(filter) : true;
+	}
+	
 	@GetMapping(path = "/wcmRepository/{repository}/{workspace}", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public WcmRepository[] getWcmRepositories(HttpServletRequest request) 
@@ -573,6 +617,63 @@ public class WcmRestController {
 		}	
 	}	
 	
+	@PutMapping(path = "/library", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> saveLibrary(
+			@RequestBody Library library, 
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String repositoryName = library.getRepository();
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format("/bpwizard/library/%s", library.getName());
+			JsonNode jsonItem = library.toJson();
+			this.itemHandler.updateItem(
+					baseUrl, 
+					repositoryName,
+					library.getWorkspace(),
+					path, 
+					jsonItem);
+			if (this.authoringEnabled) {
+				this.itemHandler.updateItem(
+						baseUrl, 
+						repositoryName,
+						library.getWorkspace(),
+						path, 
+						jsonItem);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+	
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (WcmRepositoryException e ) {
+			throw e;
+		} catch (Throwable t) {
+			throw new WcmRepositoryException(t);
+		}	
+	}
+	
+	@DeleteMapping(path = "/library")
+	public void deleteLibrary(
+			@RequestBody Library library, 
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		this.purgeWcmItem(
+				library.getRepository(), 
+				library.getWorkspace(), 
+				String.format("/bpwizard/library/%s", library.getName()));
+		
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
+	}
+	
 	@PutMapping(path = "/siteConfig", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void saveSiteConfig(
 			@RequestBody SiteConfig siteConfig, HttpServletRequest request) 
@@ -581,16 +682,20 @@ public class WcmRestController {
 			String path = String.format("/bpwizard/library/%s/siteConfig/%s", siteConfig.getLibrary(), siteConfig.getName());
 			String repositoryName = siteConfig.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
+			JsonNode jsonItem = siteConfig.toJson();
 			this.itemHandler.updateItem(
 					baseUrl, 
 					repositoryName, 
 					"default", 
 					path, 
-					siteConfig.toJson());
+					jsonItem);
 			if (this.authoringEnabled) {
-				Session session = repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
-				// session.save();
+				this.itemHandler.updateItem(
+						baseUrl, 
+						repositoryName, 
+						"draft", 
+						path, 
+						jsonItem);
 			}
 		} catch (WcmRepositoryException e ) {
 			throw e;
@@ -2166,13 +2271,18 @@ public class WcmRestController {
 		ObjectNode propertyNode = JsonNodeFactory.instance.objectNode();
 		// propertyNode.put("name", formControl.getName());
 		// propertyNode.put("type", formControl.getDataType());
-		if ("keyValue".equals(formControl.getControlName())) {
-			propertyNode.put("$ref", "#/definitions/keyValues");
-		} else if ("customField".equals(formControl.getControlName())) {
+//		if ("keyValue".equals(formControl.getControlName())) {
+//			propertyNode.put("$ref", "#/definitions/keyValues");
+//		} else 
+		if ("customField".equals(formControl.getControlType())) {
 			propertyNode.put("$ref",
-					String.format("#/definitions/%s", this.fieldNameFromNodeTypeName(formControl.getDataType())));
+					String.format("#/definitions/%s", this.fieldNameFromNodeTypeName(formControl.getJcrDataType())));
 		} else {
-			propertyNode.put("type", "string");
+			propertyNode.put("type", formControl.getDataType());
+		}
+		
+		if (formControl.getEnumeration() != null && formControl.getEnumeration().length > 0) {
+			propertyNode.set("enum", this.toArrayNode(formControl.getEnumeration()));
 		}
 		// type boolean, number
 		// range: integer:
@@ -2284,11 +2394,19 @@ public class WcmRestController {
 				ObjectNode fieldNode = this.objectMapper.createObjectNode();
 				fieldNodes.add(fieldNode);
 				fieldNode.put("key", this.getLayoutFieldKey(formControl.getName(), prefix));
-				// fieldNode.put("type", formControl.getDataType());
+				if (!"text".equals(formControl.getControlType())) {
+					fieldNode.put("type", formControl.getControlType());
+				}
 				if (StringUtils.hasText(formControl.getTitle())) {
 					fieldNode.put("title", formControl.getTitle());
 				} else {
 					fieldNode.put("notitle", true);
+				}
+				if (StringUtils.hasText(formControl.getFlex())) {
+					fieldNode.put("flex", formControl.getFlex());
+				}
+				if (StringUtils.hasText(formControl.getPlaceholder())) {
+					fieldNode.put("placeholder", formControl.getPlaceholder());
 				}
 				// TODO: others
 			}
@@ -2399,9 +2517,9 @@ public class WcmRestController {
 	}
 
 	private ObjectNode toTypeDefinition(HttpServletRequest request, String repository, String workspace,
-			String dataType, boolean multiple) throws RepositoryException {
+			String jcrDataType, boolean multiple) throws RepositoryException {
 		String baseUrl = RestHelper.repositoryUrl(request);
-		RestNodeType restNodeType = nodeTypeHandler.getNodeType(baseUrl, repository, workspace, dataType);
+		RestNodeType restNodeType = nodeTypeHandler.getNodeType(baseUrl, repository, workspace, jcrDataType);
 
 		ObjectNode definition = this.objectMapper.createObjectNode();
 		ObjectNode itemsNode;
@@ -2448,15 +2566,16 @@ public class WcmRestController {
 		
 		for (String key : formControls.keySet()) {
 			FormControl formControl = formControls.get(key);
-			if ("keyValue".equals(formControl.getControlName())) {
-				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, "bpw:keyValues", false);
-				definitions.set("keyValues", definition);
-				ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
-				properties.set(key, objectNode);
-			} else if ("customField".equals(formControl.getControlName())) {
-				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, formControl.getDataType(),
+//			if ("keyValue".equals(formControl.getControlType())) {
+//				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, "bpw:keyValues", false);
+//				definitions.set("keyValues", definition);
+//				ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
+//				properties.set(key, objectNode);
+//			} else 
+			if ("customField".equals(formControl.getControlType())) {
+				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, formControl.getJcrDataType(),
 						false);
-				String fieldName = this.fieldNameFromNodeTypeName(formControl.getDataType());
+				String fieldName = this.fieldNameFromNodeTypeName(formControl.getJcrDataType());
 				definitions.set(fieldName, definition);
 				ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
 				properties.set(key, objectNode);
@@ -2570,6 +2689,24 @@ public class WcmRestController {
 		}
 	}
 
+	private Library toLibrary(RestNode node, String repository, String workspace) {
+		Library library = new Library();
+		library.setRepository(repository);
+		library.setWorkspace(workspace);
+		library.setName(node.getName());
+		
+		for (RestProperty property: node.getJcrProperties()) {
+			if ("jcr:language".equals(property.getName())) {
+				library.setLanguage(property.getValues().get(0));
+			} else if ("bpw:title".equals(property.getName())) {
+				library.setTitle(property.getValues().get(0));
+			} else if ("bpw:description".equals(property.getName())) {
+				library.setDescription(property.getValues().get(0));
+			} 
+		}
+		return library;
+	}
+	
 	private Theme toThemeWithLibrary(RestNode node, String repository, String workspace) {
 		Theme themeWithLibrary = new Theme();
 		themeWithLibrary.setRepositoryName(repository);
@@ -3398,4 +3535,13 @@ public class WcmRestController {
         item.remove();
         draftSession.save();
 	}
+    
+    private ArrayNode toArrayNode(String values[]) {
+    	
+		ArrayNode valueArray = JsonUtils.creatArrayNode();
+		for (String value : values) {
+			valueArray.add(value);
+		}
+		return valueArray;
+    }
 }

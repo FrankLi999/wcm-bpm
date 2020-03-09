@@ -8,7 +8,7 @@ import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class Library implements Serializable {
+public class Library implements Serializable, Comparable<Library> {
 	private static final long serialVersionUID = 1L;
 	private String repository;
 	private String workspace;
@@ -123,5 +123,14 @@ public class Library implements Serializable {
 	public String toString() {
 		return "Library [repository=" + repository + ", workspace=" + workspace + ", name=" + name + ", title=" + title
 				+ ", description=" + description + ", language=" + language + "]";
+	}
+	
+	@Override
+	public int compareTo(Library o) {
+		int result = 1;
+		if (o != null) {
+		    result = this.getName().compareTo(o.getName());
+		}
+		return result;
 	}
 }
