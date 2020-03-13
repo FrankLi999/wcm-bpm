@@ -2,10 +2,13 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.util.Arrays;
 
+import javax.validation.Valid;
+
 import org.modeshape.jcr.api.JcrConstants;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
+import com.drew.lang.annotations.NotNull;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -19,6 +22,8 @@ public class ContentAreaLayout extends ResourceNode implements HasName {
 	String library;
 	int contentWidth;
 	SidePane sidePane;
+	@Valid
+	@NotNull
 	LayoutRow rows[];
 	private String lockOwner;
 	

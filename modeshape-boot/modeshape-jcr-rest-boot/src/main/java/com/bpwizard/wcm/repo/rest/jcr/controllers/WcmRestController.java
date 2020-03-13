@@ -2,7 +2,6 @@ package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.stream.Stream;
 
 import javax.jcr.Item;
 import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.QueryManager;
@@ -23,20 +21,22 @@ import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modeshape.jcr.api.query.Query;
-import org.modeshape.web.jcr.RepositoryManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,16 +44,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
-import com.bpwizard.wcm.repo.rest.WcmUtils;
-import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
-import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
-import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
-import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.BaseFormGroup;
@@ -77,7 +73,6 @@ import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
 import com.bpwizard.wcm.repo.rest.jcr.model.KeyValue;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutRow;
-import com.bpwizard.wcm.repo.rest.jcr.model.Library;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavBar;
 import com.bpwizard.wcm.repo.rest.jcr.model.Navigation;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationBadge;
@@ -119,39 +114,50 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories.Repository;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces.Workspace;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @RestController
 @RequestMapping(WcmRestController.BASE_URI)
-public class WcmRestController {
+@Validated
+public class WcmRestController extends BaseWcmRestController {
 	private static final Logger logger = LogManager.getLogger(WcmRestController.class);
+	
 	public static final String BASE_URI = "/wcm/api";
-
-	@Value("${bpw.modeshape.authoring.enabled:true}")
-	private boolean authoringEnabled = true;
+	// TODO:
+	// private MessageSource messageSource;
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+	    Map<String, String> errors = new HashMap<>();
+	    ex.getBindingResult().getAllErrors().forEach((error) -> {
+	        String fieldName = ((FieldError) error).getField();
+	        String errorMessage = error.getDefaultMessage();
+	        errors.put(fieldName, errorMessage);
+	    });
+	    return errors;
+	}
 	
-	@Autowired
-	private RestItemHandler itemHandler;
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(ConstraintViolationException.class)
+	public Map<String, String> handleConstraintDefinitionException(ConstraintViolationException ex) {
+		Map<String, String> errors = new HashMap<>();
+		ex.getConstraintViolations().forEach(error -> {
+			// if it is ElementType.PARAMETER
+			String[] field = error.getPropertyPath().toString().split("\\.", 2);
+			String message = error.getMessage();
+			errors.put(field.length == 1 ? field[0] : field[1], message);
+		});
 
-	@Autowired
-	protected RepositoryManager repositoryManager;
+		return errors;
+	}
 	
-	@Autowired
-	private RestRepositoryHandler repositoryHandler;
-
-	@Autowired
-	private RestNodeTypeHandler nodeTypeHandler;
-	
-	@Autowired
-    private RestServerHandler serverHandler;
-
-	@Autowired
-    private WcmUtils wcmUtils;
-	
-	private ObjectMapper objectMapper = new ObjectMapper();
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(javax.jcr.nodetype.ConstraintViolationException.class)
+	public String handleJcrConstraintViolationException(javax.jcr.nodetype.ConstraintViolationException ex) {
+		return ex.getMessage();
+	}
 	
     //http://localhost:8080/wcm/api/wcmSystem/bpwizard/default/camunda/bpm
 	@GetMapping(path = "/wcmSystem/{repository}/{workspace}/{library}/{siteConfig}", 
@@ -205,49 +211,6 @@ public class WcmRestController {
 		}		
 	}
 
-	@GetMapping(path = "/library/{repository}/{workspace}", 
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Library[] getLibraries(			
-			@PathVariable("repository") String repository,
-			@PathVariable("workspace") String workspace,
-			@RequestParam(name="filter", defaultValue = "") String filter,
-		    @RequestParam(name="sort", defaultValue = "asc") String sortDirection,
-		    @RequestParam(name="pageIndex", defaultValue = "0") int pageIndex,
-		    @RequestParam(name="pageSize", defaultValue = "3") int pageSize,
-			HttpServletRequest request) 
-					throws WcmRepositoryException {
-		
-		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
-		}
-		try {
-			String baseUrl = RestHelper.repositoryUrl(request);
-			RestNode libraryParentNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					"/bpwizard/library", 2);
-			Library[] libraries = libraryParentNode.getChildren().stream()
-					.filter(this::isLibrary)
-					.filter(this::notSystemLibrary)
-					.map(node -> toLibrary(node, repository, workspace))
-					.filter(library -> this.filterLibrary(library, filter))
-					.toArray(Library[]::new);
-			if (logger.isDebugEnabled()) {
-				logger.traceExit();
-			}
-			if ("asc".equals(sortDirection)) {
-				Arrays.sort(libraries);
-			} else {
-				Arrays.sort(libraries, Collections.reverseOrder());
-			}
-			return libraries;
-		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
-		}
-	}
-	
-	private boolean filterLibrary(Library library, String filter) {
-		return StringUtils.hasText(filter) ? library.getName().startsWith(filter) : true;
-	}
-	
 	@GetMapping(path = "/wcmRepository/{repository}/{workspace}", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public WcmRepository[] getWcmRepositories(HttpServletRequest request) 
@@ -286,7 +249,7 @@ public class WcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode operationsNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					"/bpwizard/library/system/configuration/operations", 2);
+					String.format(WCM_ROOT_PATH_PATTERN, "system/configuration/operations"), 2);
 			Map<String, WcmOperation[]> wcmOperationMap = operationsNode.getChildren().stream().filter(node -> this.wcmUtils.checkNodeType(node, "bpw:supportedOpertions"))
 			    .map(this::supportedOpertionsToWcmOperation)
 			    .collect(Collectors.toMap(
@@ -336,7 +299,7 @@ public class WcmRestController {
 			Map<String, AuthoringTemplate> authoringTemplates = this.getAuthoringTemplateLibraries(repository, workspace, baseUrl)
 					.flatMap(at -> this.getAuthoringTemplates(at, baseUrl))
 					.collect(Collectors.toMap(
-							at -> String.format("/bpwizard/library/%s/authoringTemplate/%s", at.getLibrary(), at.getName()), 
+							at -> String.format(WCM_AT_PATH_PATTERN, at.getLibrary(), at.getName()), 
 							Function.identity()));
 	
 			if (logger.isDebugEnabled()) {
@@ -407,7 +370,7 @@ public class WcmRestController {
 			Map<String, JsonForm> jsonForms = this.getAuthoringTemplateLibraries(repository, workspace, baseUrl)
 					.flatMap(at -> this.getAuthoringTemplates(at, baseUrl))
 					.map(at -> this.toJsonForm(request, repository, workspace, at)).collect(Collectors.toMap(
-							jsonForm -> String.format("/bpwizard/library/%s/authoringTemplate/%s", jsonForm.getLibrary(), jsonForm.getResourceType()), 
+							jsonForm -> String.format(WCM_AT_PATH_PATTERN, jsonForm.getLibrary(), jsonForm.getResourceType()), 
 							Function.identity()));
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -430,7 +393,7 @@ public class WcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode controlFieldFolder = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					"/bpwizard/library/system/controlField", 2);
+					String.format(WCM_ROOT_PATH_PATTERN, "system/controlField"), 2);
 			ControlField[] ControlFileds = controlFieldFolder.getChildren().stream().filter(this::isControlField)
 					.map(this::toControlField).toArray(ControlField[]::new);
 	
@@ -492,16 +455,16 @@ public class WcmRestController {
 		try {
 			String repositoryName = siteConfig.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/siteConfig/%s", siteConfig.getLibrary(), siteConfig.getName());
+			String path = String.format(WCM_SITECONFIG_PATH_PATTERN, siteConfig.getLibrary(), siteConfig.getName());
 			this.itemHandler.addItem(
 					baseUrl, 
 					repositoryName, 
-					"default", 
+					DEFAULT_WS, 
 					path, 
 					siteConfig.toJson());
 			if (this.authoringEnabled) {
-				Session session = repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, "path", true);
+				Session session = repositoryManager.getSession(repositoryName, DRAFT_WS);
+				session.getWorkspace().clone(DEFAULT_WS, path, "path", true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -528,8 +491,8 @@ public class WcmRestController {
 			String repositoryName = category.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = (StringUtils.hasText(category.getParent())) ? 
-					String.format("/bpwizard/library/%s/category/%s/%s", category.getLibrary(), category.getParent(), category.getName()) :
-					String.format("/bpwizard/library/%s/category/%s", category.getLibrary(), category.getName());
+					String.format(WCM_CATEGORY_PATH_PATTERN + "/%s", category.getLibrary(), category.getParent(), category.getName()) :
+					String.format(WCM_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
 			this.itemHandler.addItem(
 					baseUrl, 
 					repositoryName,
@@ -537,8 +500,8 @@ public class WcmRestController {
 					path, 
 					category.toJson());
 			if (this.authoringEnabled) {
-				Session session = repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
+				Session session = repositoryManager.getSession(repositoryName, DRAFT_WS);
+				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -564,11 +527,11 @@ public class WcmRestController {
 		try {
 			String repositoryName = category.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/category%s", category.getLibrary(), category.getName());
+			String path = String.format(WCM_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
 			JsonNode categoryJson = category.toJson();
 			this.itemHandler.updateItem(baseUrl, repositoryName, category.getWorkspace(), path, categoryJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, categoryJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, categoryJson);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -582,118 +545,27 @@ public class WcmRestController {
 	}	
 	
 	
-	@PostMapping(path = "/library", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createLibrary(
-			@RequestBody Library library, 
-			HttpServletRequest request) 
-			throws WcmRepositoryException {
-		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
-		}
-		try {
-			String repositoryName = library.getRepository();
-			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s", library.getName());
-			this.itemHandler.addItem(
-					baseUrl, 
-					repositoryName,
-					library.getWorkspace(),
-					path, 
-					library.toJson());
-			if (this.authoringEnabled) {
-				Session session = repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
-				// session.save();
-			}
-			if (logger.isDebugEnabled()) {
-				logger.traceExit();
-			}
-	
-			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (WcmRepositoryException e ) {
-			throw e;
-		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
-		}	
-	}	
-	
-	@PutMapping(path = "/library", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> saveLibrary(
-			@RequestBody Library library, 
-			HttpServletRequest request) 
-			throws WcmRepositoryException {
-		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
-		}
-		try {
-			String repositoryName = library.getRepository();
-			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s", library.getName());
-			JsonNode jsonItem = library.toJson();
-			this.itemHandler.updateItem(
-					baseUrl, 
-					repositoryName,
-					library.getWorkspace(),
-					path, 
-					jsonItem);
-			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(
-						baseUrl, 
-						repositoryName,
-						library.getWorkspace(),
-						path, 
-						jsonItem);
-			}
-			if (logger.isDebugEnabled()) {
-				logger.traceExit();
-			}
-	
-			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (WcmRepositoryException e ) {
-			throw e;
-		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
-		}	
-	}
-	
-	@DeleteMapping(path = "/library")
-	public void deleteLibrary(
-			@RequestBody Library library, 
-			HttpServletRequest request) 
-			throws WcmRepositoryException {
-		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
-		}
-		this.purgeWcmItem(
-				library.getRepository(), 
-				library.getWorkspace(), 
-				String.format("/bpwizard/library/%s", library.getName()));
-		
-		if (logger.isDebugEnabled()) {
-			logger.traceExit();
-		}
-	}
 	
 	@PutMapping(path = "/siteConfig", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void saveSiteConfig(
 			@RequestBody SiteConfig siteConfig, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		try {
-			String path = String.format("/bpwizard/library/%s/siteConfig/%s", siteConfig.getLibrary(), siteConfig.getName());
+			String path = String.format(WCM_SITECONFIG_PATH_PATTERN, siteConfig.getLibrary(), siteConfig.getName());
 			String repositoryName = siteConfig.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			JsonNode jsonItem = siteConfig.toJson();
 			this.itemHandler.updateItem(
 					baseUrl, 
 					repositoryName, 
-					"default", 
+					DEFAULT_WS, 
 					path, 
 					jsonItem);
 			if (this.authoringEnabled) {
 				this.itemHandler.updateItem(
 						baseUrl, 
 						repositoryName, 
-						"draft", 
+						DRAFT_WS, 
 						path, 
 						jsonItem);
 			}
@@ -716,7 +588,7 @@ public class WcmRestController {
 		
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String absPath = String.format("/bpwizard/library/%s/siteConfig/%s", library, siteConfigName);
+			String absPath = String.format(WCM_SITECONFIG_PATH_PATTERN, library, siteConfigName);
 			RestNode siteConfigNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, 2);
 			SiteConfig siteConfig = this.getSiteConfig(siteConfigNode);
 			siteConfig.setRepository(repository);
@@ -746,7 +618,7 @@ public class WcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			String absPath = String.format("/bpwizard/library/%s/siteConfig/%s", library, siteConfigName);
+			String absPath = String.format(WCM_SITECONFIG_PATH_PATTERN, library, siteConfigName);
 			this.doLock(repository, workspace, absPath);
 			SiteConfig siteConfig = this.getSiteConfig(request, repository, workspace, library, siteConfigName);
 			if (logger.isDebugEnabled()) {
@@ -802,12 +674,12 @@ public class WcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/validationRule/%s", validationRule.getLibrary(), validationRule.getName());
+			String path = String.format(WCM_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
 			String repositoryName = validationRule.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, validationRule.toJson());
+			this.itemHandler.addItem(baseUrl,  repositoryName, DEFAULT_WS, path, validationRule.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
+				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -831,12 +703,12 @@ public class WcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/validationRule/%s", validationRule.getLibrary(), validationRule.getName());
+			String path = String.format(WCM_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
 			String repositoryName = validationRule.getRepository();
 			JsonNode atJson = validationRule.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, atJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, DEFAULT_WS, path, atJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, atJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, atJson);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -890,12 +762,12 @@ public class WcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/workflow/%s", bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
+			String path = String.format(WCM_WORKFLOW_PATH_PATTERN, bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
 			String repositoryName = bpmnWorkflow.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, bpmnWorkflow.toJson());
+			this.itemHandler.addItem(baseUrl,  repositoryName, DEFAULT_WS, path, bpmnWorkflow.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
+				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -918,12 +790,12 @@ public class WcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/workflow/%s", bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
+			String path = String.format(WCM_WORKFLOW_PATH_PATTERN, bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
 			String repositoryName = bpmnWorkflow.getRepository();
 			JsonNode atJson = bpmnWorkflow.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, atJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, DEFAULT_WS, path, atJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, atJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, atJson);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -979,7 +851,7 @@ public class WcmRestController {
 			String repositoryName = query.getRepository();
 			ObjectNode qJson = (ObjectNode) query.toJson();
 			try {
-				QueryManager qrm = this.repositoryManager.getSession(repositoryName, "default").getWorkspace().getQueryManager();
+				QueryManager qrm = this.repositoryManager.getSession(repositoryName, DEFAULT_WS).getWorkspace().getQueryManager();
 				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
 				QueryResult jcrResult = jcrQuery.execute();
 				String columnNames[] = jcrResult.getColumnNames();
@@ -1008,12 +880,12 @@ public class WcmRestController {
 			}
 			// javax.jcr.query.qom.QueryObjectModel qom = null
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/query/%s", query.getLibrary(), query.getName());
+			String path = String.format(WCM_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
-			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, qJson);
+			this.itemHandler.addItem(baseUrl,  repositoryName, DEFAULT_WS, path, qJson);
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
+				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -1036,11 +908,11 @@ public class WcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/query/%s", query.getLibrary(), query.getName());
+			String path = String.format(WCM_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			String repositoryName = query.getRepository();
 			ObjectNode qJson = (ObjectNode) query.toJson();
 			try {
-				QueryManager qrm = this.repositoryManager.getSession(repositoryName, "default").getWorkspace().getQueryManager();
+				QueryManager qrm = this.repositoryManager.getSession(repositoryName, DEFAULT_WS).getWorkspace().getQueryManager();
 				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
 				QueryResult jcrResult = jcrQuery.execute();
 				String columnNames[] = jcrResult.getColumnNames();
@@ -1067,9 +939,9 @@ public class WcmRestController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, qJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, DEFAULT_WS, path, qJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, qJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, qJson);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -1093,12 +965,12 @@ public class WcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/authoringTemplate/%s", at.getLibrary(), at.getName());
+			String path = String.format(WCM_AT_PATH_PATTERN, at.getLibrary(), at.getName());
 			String repositoryName = at.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, at.toJson());
+			this.itemHandler.addItem(baseUrl,  repositoryName, DEFAULT_WS, path, at.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
+				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -1123,14 +995,14 @@ public class WcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/authoringTemplate/%s", at.getLibrary(), at.getName());
+			String path = String.format(WCM_AT_PATH_PATTERN, at.getLibrary(), at.getName());
 			String repositoryName = at.getRepository();
 			JsonNode atJson = at.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, "default", path, atJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, DEFAULT_WS, path, atJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, atJson);
-//				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-//				session.getWorkspace().clone("default", path, path, true);
+				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, atJson);
+//				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
+//				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -1155,7 +1027,7 @@ public class WcmRestController {
 		try {
 			Map<String, RenderTemplate> renderTemplates = this.getRenderTemplateLibraries(repository, workspace, request)
 					.flatMap(rt -> this.getRenderTemplates(rt, request)).collect(Collectors.toMap(
-							rt -> String.format("/bpwizard/library/%s/renderTemplate/%s", rt.getLibrary(), rt.getName()), 
+							rt -> String.format(WCM_RT_PATH_PATTERN, rt.getLibrary(), rt.getName()), 
 							Function.identity()));
 	
 			if (logger.isDebugEnabled()) {
@@ -1236,11 +1108,11 @@ public class WcmRestController {
 		try {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/renderTemplate/%s", rt.getLibrary(), rt.getName());
-			this.itemHandler.addItem(baseUrl, repositoryName, "default", path, rt.toJson());
+			String path = String.format(WCM_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
+			this.itemHandler.addItem(baseUrl, repositoryName, DEFAULT_WS, path, rt.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
+				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -1263,7 +1135,7 @@ public class WcmRestController {
 		try {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/renderTemplate/%s", rt.getLibrary(), rt.getName());
+			String path = String.format(WCM_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
 			JsonNode rtJson = rt.toJson();
 			this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), path, rtJson);
 			if (this.authoringEnabled) {
@@ -1292,7 +1164,7 @@ public class WcmRestController {
 			Map<String, ContentAreaLayout> contentAreaLayouts = this.getContentAreaLayoutLibraries(repository, workspace, baseUrl)
 					.flatMap(layout -> this.getContentArealayouts(layout, baseUrl))
 					.collect(Collectors.toMap(
-							layout -> String.format("/bpwizard/library/%s/contentAreaLayout/%s", layout.getLibrary(), layout.getName()), 
+							layout -> String.format( WCM_CONTENT_LAYOUT_PATH_PATTERN, layout.getLibrary(), layout.getName()), 
 							Function.identity()));
 	
 			if (logger.isDebugEnabled()) {
@@ -1370,11 +1242,11 @@ public class WcmRestController {
 
 			String repositoryName = pageLayout.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/contentAreaLayout/%s", pageLayout.getLibrary(), pageLayout.getName());
+			String path = String.format( WCM_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
 			this.itemHandler.addItem(baseUrl, repositoryName, pageLayout.getWorkspace(), path, pageLayout.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
+				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			
@@ -1400,15 +1272,15 @@ public class WcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/contentAreaLayout/%s", pageLayout.getLibrary(), pageLayout.getName());
+			String path = String.format( WCM_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
 			String repositoryName = pageLayout.getRepository();
 			JsonNode layoutJson = pageLayout.toJson();
 			this.itemHandler.updateItem(baseUrl, repositoryName, pageLayout.getWorkspace(), path, layoutJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, layoutJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, layoutJson);
 //				
-//				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-//				session.getWorkspace().clone("default", path, path, true);
+//				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
+//				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -1439,8 +1311,8 @@ public class WcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			this.itemHandler.addItem(baseUrl, repositoryName, sa.getWorkspace(), path, sa.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
+				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -1467,10 +1339,10 @@ public class WcmRestController {
 			JsonNode saJson = sa.toJson();
 			this.itemHandler.updateItem(baseUrl, repositoryName, sa.getWorkspace(), path, saJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, "draft", path, saJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, saJson);
 				
-//				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-//				session.getWorkspace().clone("default", path, path, true);
+//				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
+//				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 		} catch (WcmRepositoryException e ) {
@@ -1558,7 +1430,7 @@ public class WcmRestController {
 		try {
 			String path = contentItem.getNodePath();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), "draft", path, contentItem.toJson());
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), DRAFT_WS, path, contentItem.toJson());
 			if (contentItem.getAcl() != null) {
 				String repositoryName = contentItem.getRepository();
 				String workspaceName = contentItem.getWorkspace();
@@ -1596,14 +1468,14 @@ public class WcmRestController {
 			}
 			String path = String.format("%s/%s", contentItem.getNodePath(), contentItem.getName());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), "default", path, contentItem.toJson());
-			Session session = this.repositoryManager.getSession(contentItem.getRepository(), "default");
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), DEFAULT_WS, path, contentItem.toJson());
+			Session session = this.repositoryManager.getSession(contentItem.getRepository(), DEFAULT_WS);
 			if (contentItem.getAcl() != null) {
 				ModeshapeUtils.grantPermissions(session, contentItem.getNodePath(), contentItem.getAcl());
 			}
 			if (authoringEnabled) {
-				Session draftSession = this.repositoryManager.getSession(contentItem.getRepository(), "draft");
-				draftSession.getWorkspace().clone("default", path, path, true);
+				Session draftSession = this.repositoryManager.getSession(contentItem.getRepository(), DRAFT_WS);
+				draftSession.getWorkspace().clone(DEFAULT_WS, path, path, true);
 				// draftSession.save();
 			}
 			
@@ -1681,8 +1553,8 @@ public class WcmRestController {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		try {
-			Session session = this.repositoryManager.getSession(repository, "default");
-			session.getWorkspace().clone("draft", contentItemPath, contentItemPath, true);
+			Session session = this.repositoryManager.getSession(repository, DEFAULT_WS);
+			session.getWorkspace().clone(DRAFT_WS, contentItemPath, contentItemPath, true);
 			// session.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -1710,15 +1582,15 @@ public class WcmRestController {
 			}
 			JsonNode contentItemJson = contentItem.toJson();
 			this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItemJson);
-			Session session = this.repositoryManager.getSession(contentItem.getRepository(), "default");
+			Session session = this.repositoryManager.getSession(contentItem.getRepository(), DEFAULT_WS);
 			if (contentItem.getAcl() != null) {
 				ModeshapeUtils.grantPermissions(session, contentItem.getNodePath(), contentItem.getAcl());
 			}
 			this.wcmUtils.unlock(contentItem.getRepository(), contentItem.getWorkspace(), path);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), "draft", path, contentItemJson);
+				this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), DRAFT_WS, path, contentItemJson);
 //				Session draftSession = this.repositoryManager.getSession(contentItem.getRepository(), );
-//				draftSession.getWorkspace().clone("default", contentItem.getNodePath(), contentItem.getNodePath(), true);
+//				draftSession.getWorkspace().clone(DEFAULT_WS, contentItem.getNodePath(), contentItem.getNodePath(), true);
 				// draftSession.save();
 			}
 		} catch (WcmRepositoryException e ) {
@@ -1818,18 +1690,18 @@ public class WcmRestController {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		try {
-			contentItem.setCurrentLifecycleState("Draft"); //TODO
+			contentItem.setCurrentLifecycleState(DRAFT_WS); //TODO
 			String path = contentItem.getNodePath();
-			AuthoringTemplate at = this.getAuthoringTemplate(contentItem.getRepository(), "draft", 
+			AuthoringTemplate at = this.getAuthoringTemplate(contentItem.getRepository(), DRAFT_WS, 
 					contentItem.getAuthoringTemplate(), request);
 			contentItem.setAcl(at.getContentItemAcl().getOnSaveDraftPermissions());
 			
 			// this.itemHandler.addItem(request, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItem.toJson());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), "Draft", path, contentItem.toJson());
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), DRAFT_WS, path, contentItem.toJson());
 			if (contentItem.getAcl() != null) {
 				String repositoryName = contentItem.getRepository();
-				Session session = this.repositoryManager.getSession(repositoryName, "draft");
+				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
 				ModeshapeUtils.grantPermissions(session, contentItem.getNodePath(), at.getContentItemAcl().getOnSaveDraftPermissions());
 			}
 			if (logger.isDebugEnabled()) {
@@ -1867,7 +1739,7 @@ public class WcmRestController {
 			
 			UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	        String username = principal.getUsername();
-	        Session session = this.repositoryManager.getSession(repository, "draft"); 
+	        Session session = this.repositoryManager.getSession(repository, DRAFT_WS); 
 	        Node contentNode = session.getNode(contentItemPath);
 	        Node commentsNode = contentNode.getNode("comments");
 	        Node commentNode = commentsNode.addNode("comment-"+ username + "-reject-" + System.currentTimeMillis(), "bpw:comment");
@@ -1914,7 +1786,7 @@ public class WcmRestController {
 		try {			
 			UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	        String username = principal.getUsername();
-	        Session session = this.repositoryManager.getSession(repository, "draft"); 
+	        Session session = this.repositoryManager.getSession(repository, DRAFT_WS); 
 	        Node contentNode = session.getNode(contentItemPath);
 	        Node commentsNode = contentNode.getNode("comments");
 	        Node commentNode = commentsNode.addNode("comment-"+ username + "-approval-" + System.currentTimeMillis(), "bpw:comment");
@@ -1959,7 +1831,7 @@ public class WcmRestController {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		try {
-	        Session session = this.repositoryManager.getSession(repository, "draft"); 
+	        Session session = this.repositoryManager.getSession(repository, DRAFT_WS); 
 	        Node contentNode = session.getNode(contentItemPath);
 	        contentNode.setProperty("bpw:currentLifecycleState", "Published");
 	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
@@ -1968,8 +1840,8 @@ public class WcmRestController {
 			ModeshapeUtils.grantPermissions(session, contentItemPath, at.getContentItemAcl().getOnPublishPermissions());
 			this.wcmUtils.unlock(repository, workspace, contentItemPath);
 	        session.save();
-	        Session defaultSession = this.repositoryManager.getSession(repository, "default");
-	        defaultSession.getWorkspace().clone("draft", contentItemPath, contentItemPath, true);
+	        Session defaultSession = this.repositoryManager.getSession(repository, DEFAULT_WS);
+	        defaultSession.getWorkspace().clone(DRAFT_WS, contentItemPath, contentItemPath, true);
 	        // defaultSession.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -2067,16 +1939,16 @@ public class WcmRestController {
 			logger.traceEntry();
 		}
   		try {
-  			Session session = this.repositoryManager.getSession(repository, "default");
+  			Session session = this.repositoryManager.getSession(repository, DEFAULT_WS);
   			Node node = session.getNode(absPath);
   			String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
             if ("Published".equals(workflowState)) {
             	node.remove();
             	session.save();
             	if (this.authoringEnabled) {
-	        		session = this.repositoryManager.getSession(repository, "draft");
+	        		session = this.repositoryManager.getSession(repository, DRAFT_WS);
 	      			node = session.getNode(absPath);
-	            	node.setProperty("bpw:currentLifecycleState", "Expired");
+	            	node.setProperty("bpw:currentLifecycleState", EXPIRED_WS);
 	            	session.save();
             	}
             }
@@ -2102,45 +1974,11 @@ public class WcmRestController {
 		}
   		absPath = (absPath.startsWith("/")) ? absPath : String.format("/%s", absPath);
   		try {
-  			if (this.authoringEnabled) {
-  				try {
-		  			Session draftSession = this.repositoryManager.getSession(repository, "draft");
-		  			Node draftNode = draftSession.getNode(absPath);
-		  			// String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
-		            // if ("Expired".equals(workflowState)) {
-		  			    draftNode.remove();
-		            	draftSession.save();
-		            // }
-  				} catch (Exception e) {
-  					//TODO: 
-  					e.printStackTrace();
-  				}
-  				try {
-	            	Session expiredSession = this.repositoryManager.getSession(repository, "expired");
-		  			Node expiredNode = expiredSession.getNode(absPath);
-		  			// String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
-		            // if ("Expired".equals(workflowState)) {
-		  			expiredNode.remove();
-		  			expiredSession.save();
-		            // }
-  				} catch (Exception e) {
-  					//TODO: 
-  					e.printStackTrace();
-  				}
-  			}
-  			
-  			try {
-  				Session session = this.repositoryManager.getSession(repository, "default");
-	  			Node node = session.getNode(absPath);
-	            node.remove();
-	            session.save();
-  			} catch (PathNotFoundException ex) {
-  				logger.warn(String.format("Content item %s does not exist", absPath));
-  			}
+  			this.doPurgeWcmItem(repository, workspace, absPath);
 		} catch (WcmRepositoryException e ) {
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+//		} catch (RepositoryException re) { 
+//			throw new WcmRepositoryException(re);
 	    } catch (Throwable t) {
 			throw new WcmRepositoryException(t);
 		}
@@ -2155,12 +1993,12 @@ public class WcmRestController {
 		    @PathVariable("workspace") String workspace,
   			@RequestParam("path") String absPath) { 
   		try {
-  			Session session = this.repositoryManager.getSession(repository, "default");
+  			Session session = this.repositoryManager.getSession(repository, DEFAULT_WS);
   			Node node = session.getNode(absPath);
   			node.remove();
             session.save();
             if (this.authoringEnabled) {
-	            session = this.repositoryManager.getSession(repository, "draft");
+	            session = this.repositoryManager.getSession(repository, DRAFT_WS);
 	  			node = session.getNode(absPath);
 	  			node.remove();
 	            session.save();
@@ -2297,7 +2135,7 @@ public class WcmRestController {
 			propertyNode.put("description", formControl.getHint());
 		}
 		if (StringUtils.hasText(formControl.getDefaultValue())) {
-			propertyNode.put("default", formControl.getDefaultValue());
+			propertyNode.put(DEFAULT_WS, formControl.getDefaultValue());
 		}
 		return propertyNode;
 	}
@@ -2689,23 +2527,7 @@ public class WcmRestController {
 		}
 	}
 
-	private Library toLibrary(RestNode node, String repository, String workspace) {
-		Library library = new Library();
-		library.setRepository(repository);
-		library.setWorkspace(workspace);
-		library.setName(node.getName());
-		
-		for (RestProperty property: node.getJcrProperties()) {
-			if ("jcr:language".equals(property.getName())) {
-				library.setLanguage(property.getValues().get(0));
-			} else if ("bpw:title".equals(property.getName())) {
-				library.setTitle(property.getValues().get(0));
-			} else if ("bpw:description".equals(property.getName())) {
-				library.setDescription(property.getValues().get(0));
-			} 
-		}
-		return library;
-	}
+	
 	
 	private Theme toThemeWithLibrary(RestNode node, String repository, String workspace) {
 		Theme themeWithLibrary = new Theme();
@@ -3054,41 +2876,7 @@ public class WcmRestController {
 		}
 	}
 
-	private boolean isControlField(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:controlField");
-	}
-
-	private boolean isSiteArea(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:siteArea");
-	}
 	
-	private boolean isControlFieldMetaData(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:controlFieldMetaData");
-	}
-
-	private boolean isLibrary(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:library");
-	}
-
-	private boolean notSystemLibrary(RestNode node) {
-		return !"system".equalsIgnoreCase(node.getName());
-	}
-	
-	private boolean isTheme(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:themeType");
-	}
-
-	private boolean isRenderTemplate(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:renderTemplate");
-	}
-
-	private boolean isContentAreaLayout(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:contentAreaLayout");
-	}
-
-	private boolean isAuthortingTemplate(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:authoringTemplate");
-	}
 
 	
 	
@@ -3530,7 +3318,7 @@ public class WcmRestController {
     }
     
     protected void deleteDraftItem(String repository, String path) throws RepositoryException {
-		Session draftSession = this.repositoryManager.getSession(repository, "draft");
+		Session draftSession = this.repositoryManager.getSession(repository, DRAFT_WS);
 		Item item = draftSession.getItem(path);
         item.remove();
         draftSession.save();
@@ -3544,4 +3332,5 @@ public class WcmRestController {
 		}
 		return valueArray;
     }
+    
 }

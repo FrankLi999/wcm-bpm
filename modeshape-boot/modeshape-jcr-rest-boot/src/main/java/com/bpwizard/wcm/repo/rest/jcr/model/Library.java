@@ -2,19 +2,36 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+
 import org.modeshape.jcr.api.JcrConstants;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
+import com.bpwizard.wcm.repo.validation.LibraryName;
+import com.bpwizard.wcm.repo.validation.RepositoryName;
+import com.bpwizard.wcm.repo.validation.ValidateString;
+import com.bpwizard.wcm.repo.validation.WorkspaceName;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+@LibraryName(propertyNames= {"name"})
 public class Library implements Serializable, Comparable<Library> {
 	private static final long serialVersionUID = 1L;
+	
+	@RepositoryName()
 	private String repository;
+	
+	@WorkspaceName()
 	private String workspace;
+	
+	@NotBlank(message = "Library Name is mandatory")
+	
 	private String name;
 	private String title;
+
 	private String description;
+	@NotBlank(message = "Library Lanaguage is mandatory")
+	@ValidateString(acceptedValues={"en", "fr", "zh"}, message="Language must be en, fr or zh")
 	private String language;
 	
 	public String getRepository() {

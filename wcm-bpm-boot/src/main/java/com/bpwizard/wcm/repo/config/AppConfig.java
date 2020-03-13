@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 import com.bpwizard.wcm.repo.rest.filter.CleanupFilter;
 import com.bpwizard.wcm.repo.rest.filter.LoggingFilter;
@@ -42,5 +43,11 @@ public class AppConfig {
      registrationBean.addUrlPatterns("/modeshape/api/*");
      // registrationBean.setOrder(1); //set precedence
      return registrationBean;
+    }
+	
+	@Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
+		//required to enable parameter validation
+        return new MethodValidationPostProcessor();
     }
 }

@@ -110,5 +110,14 @@
 			<artifactId>spring-boot-commons-exceptions</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.hibernate.validator</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>com.bpwizard.spring</groupId>
+		    <artifactId>spring-boot-commons-service</artifactId>
+		    <version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

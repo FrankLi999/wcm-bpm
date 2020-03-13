@@ -24,6 +24,7 @@ public class SiteArea implements HasName {
 	private Map<String, String> properties;
 	
 	private keyValues metadata;
+
 	private SearchData searchData;
 	private NavigationBadge badge;
 
