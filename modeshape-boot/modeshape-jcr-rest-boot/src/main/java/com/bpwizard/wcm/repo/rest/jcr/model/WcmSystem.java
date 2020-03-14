@@ -9,7 +9,7 @@ public class WcmSystem {
 	private Map<String, WcmOperation[]> operations;
 	
 	private Theme jcrThemes[];
-	private Map<String, JsonForm> jsonForms;
+	private Map<String, JsonForm[]> jsonForms;
 	private Map<String, RenderTemplate> renderTemplates;
 	private Map<String, ContentAreaLayout> contentAreaLayouts;
 	private Map<String, AuthoringTemplate> authoringTemplates;
@@ -39,10 +39,10 @@ public class WcmSystem {
 	public void setOperations(Map<String, WcmOperation[]> operations) {
 		this.operations = operations;
 	}
-	public Map<String, JsonForm> getJsonForms() {
+	public Map<String, JsonForm[]> getJsonForms() {
 		return jsonForms;
 	}
-	public void setJsonForms(Map<String, JsonForm> jsonForms) {
+	public void setJsonForms(Map<String, JsonForm[]> jsonForms) {
 		this.jsonForms = jsonForms;
 	}
 	public Map<String, RenderTemplate> getRenderTemplates() {

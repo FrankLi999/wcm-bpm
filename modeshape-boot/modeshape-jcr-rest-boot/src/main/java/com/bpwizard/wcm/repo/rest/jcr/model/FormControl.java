@@ -22,7 +22,7 @@ public class FormControl implements HasName {
 	private boolean systemIndexed = false;
 	private boolean showInList = false;
 	private boolean unique = false;
-	private boolean editable = false;
+	private boolean editable = true;
 	private boolean expandable = false;
 	private boolean richText = false;
 	private int rows = 3;
