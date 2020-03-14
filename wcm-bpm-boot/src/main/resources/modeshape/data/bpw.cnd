@@ -514,9 +514,9 @@
 [bpw:workflowFolder] > bpw:resourceFolder
 + * (bpw:bpmnWorkflow)
 
-[bpw:categoryFolder] > bpw:folder
+[bpw:categoryFolder] > bpw:folder, mix:versionable
 + * (bpw:category)
-[bpw:authoringTemplateFolder] > bpw:folder
+[bpw:authoringTemplateFolder] > bpw:folder, mix:versionable
 + * (bpw:authoringTemplate)
 
 [bpw:controlFieldFolder] > bpw:folder
@@ -528,10 +528,10 @@
 [bpw:siteConfigFolder] > bpw:folder
 + * (bpw:siteConfig)
 
-[bpw:contentAreaLayoutFolder] > bpw:folder
+[bpw:contentAreaLayoutFolder] > bpw:folder, mix:versionable
 + * (bpw:contentAreaLayout)
 
-[bpw:renderTemplateFolder] > bpw:folder
+[bpw:renderTemplateFolder] > bpw:folder, mix:versionable
 + * (bpw:renderTemplate)
 
 [bpw:queryFolder] > bpw:folder
@@ -539,7 +539,7 @@
 
 [bpw:assetFolder] > bpw:folder
 
-[bpw:library] > bpw:folder, mix:language
+[bpw:library] > bpw:folder, mix:language, mix:versionable
 - bpw:title (STRING)
 - bpw:description (STRING)
 + rootSiteArea (bpw:siteArea)
