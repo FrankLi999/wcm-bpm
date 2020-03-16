@@ -43,7 +43,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.FormSteps;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormTab;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormTabs;
 import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
-import com.bpwizard.wcm.repo.rest.jcr.model.KeyValue;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperty;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutRow;
 import com.bpwizard.wcm.repo.rest.jcr.model.Library;
@@ -65,7 +65,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
-import com.bpwizard.wcm.repo.rest.jcr.model.keyValues;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperties;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestChildType;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNodeType;
@@ -386,13 +386,13 @@ public abstract class BaseWcmRestController {
 		
 		for (String key : formControls.keySet()) {
 			FormControl formControl = formControls.get(key);
-//			if ("keyValue".equals(formControl.getControlType())) {
-//				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, "bpw:keyValues", false);
-//				definitions.set("keyValues", definition);
+//			if ("properties".equals(formControl.getControlType())) {
+//				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, "bpw:properties", false);
+//				definitions.set("properties", definition);
 //				ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
 //				properties.set(key, objectNode);
 //			} else 
-			if ("customField".equals(formControl.getControlType())) {
+			if ("association".equals(formControl.getControlType())) {
 				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, formControl.getJcrDataType(),
 						false);
 				String fieldName = this.fieldNameFromNodeTypeName(formControl.getJcrDataType());
@@ -550,10 +550,10 @@ public abstract class BaseWcmRestController {
 		ObjectNode propertyNode = JsonNodeFactory.instance.objectNode();
 		// propertyNode.put("name", formControl.getName());
 		// propertyNode.put("type", formControl.getDataType());
-//		if ("keyValue".equals(formControl.getControlName())) {
-//			propertyNode.put("$ref", "#/definitions/keyValues");
+//		if ("properties".equals(formControl.getControlName())) {
+//			propertyNode.put("$ref", "#/definitions/properties");
 //		} else 
-		if ("customField".equals(formControl.getControlType())) {
+		if ("association".equals(formControl.getControlType())) {
 			propertyNode.put("$ref",
 					String.format("#/definitions/%s", this.fieldNameFromNodeTypeName(formControl.getJcrDataType())));
 		} else {
@@ -612,12 +612,12 @@ public abstract class BaseWcmRestController {
 				formControl = at.getElements().get(name);
 			}
 			formControl = (formControl == null) ? at.getProperties().get(name) : formControl;
-			Optional<FieldLayout> customeFileLayout = this.getCustomeFileLayout(
+			Optional<FieldLayout> associationLayout = this.getAssociationLayout(
 					formColumn,
 					name);
-			if (customeFileLayout.isPresent()) {
+			if (associationLayout.isPresent()) {
 				ArrayNode layoutNodes = null;
-				if (customeFileLayout.get().isMultiple()) {
+				if (associationLayout.get().isMultiple()) {
 					ObjectNode fieldNode = this.objectMapper.createObjectNode();
 					fieldNode.put("type", "array");
 					fieldNode.put("title", name);
@@ -627,8 +627,8 @@ public abstract class BaseWcmRestController {
 				} else {
 					layoutNodes = fieldNodes;
 				}
-				if (customeFileLayout.get().getFieldLayouts() == null || customeFileLayout.get().getFieldLayouts().length == 0) {
-					FieldLayout fieldLayout = customeFileLayout.get();
+				if (associationLayout.get().getFieldLayouts() == null || associationLayout.get().getFieldLayouts().length == 0) {
+					FieldLayout fieldLayout = associationLayout.get();
 					ObjectNode fieldNode = this.objectMapper.createObjectNode();
 					if (StringUtils.hasText(fieldLayout.getTitle())) {
 						fieldNode.put("title", fieldLayout.getTitle());
@@ -644,7 +644,7 @@ public abstract class BaseWcmRestController {
 					} 
 					fieldNodes.add(fieldNode);
 				} else {
-					for (FieldLayout fieldLayout: customeFileLayout.get().getFieldLayouts()) {
+					for (FieldLayout fieldLayout: associationLayout.get().getFieldLayouts()) {
 						ObjectNode fieldNode = this.objectMapper.createObjectNode();
 						if (StringUtils.hasText(fieldLayout.getTitle())) {
 							fieldNode.put("title", fieldLayout.getTitle());
@@ -694,15 +694,15 @@ public abstract class BaseWcmRestController {
 		return names;
 	}
 	
-	protected Optional<FieldLayout> getCustomeFileLayout(FormColumn formColumn, String controlName) {
-		FieldLayout customFieldLayout = null;
+	protected Optional<FieldLayout> getAssociationLayout(FormColumn formColumn, String controlName) {
+		FieldLayout associationLayout = null;
 		for (FieldLayout layout : formColumn.getFieldLayouts()) {
 			if (controlName.equals(layout.getName())) {
-				customFieldLayout = layout;
+				associationLayout = layout;
 				break;
 			}
 		}
-		return customFieldLayout == null ? Optional.empty() : Optional.of(customFieldLayout);
+		return associationLayout == null ? Optional.empty() : Optional.of(associationLayout);
 	}
 
 	protected String getLayoutFieldKey(String key, String prefix) {
@@ -1138,23 +1138,23 @@ public abstract class BaseWcmRestController {
 		}
 		
 		for (RestNode node: saNode.getChildren()) {
-		   if (this.wcmUtils.checkNodeType(node, "bpw:keyValues") && ("bpw:metaData".equals(node.getName()))) {
-			   keyValues metadata = new keyValues();
-			   List<KeyValue> kvList = new ArrayList<>();
+		   if (this.wcmUtils.checkNodeType(node, "bpw:properties") && ("bpw:metaData".equals(node.getName()))) {
+			   WcmProperties metadata = new WcmProperties();
+			   List<WcmProperty> propertyList = new ArrayList<>();
 			   for (RestNode kvNode: node.getChildren()) {
-				   if (this.wcmUtils.checkNodeType(kvNode, "bpw:keyValue")) {
-					   KeyValue kv = new KeyValue();
+				   if (this.wcmUtils.checkNodeType(kvNode, "bpw:property")) {
+					   WcmProperty wcmProperty = new WcmProperty();
 					   for (RestProperty property: kvNode.getJcrProperties()) {
 						   if ("bpw:name".equals(property.getName())) {
-							   kv.setName(property.getValues().get(0));
+							   wcmProperty.setName(property.getValues().get(0));
 						   } else if ("bpw:value".equals(property.getName())) {
-							   kv.setValue(property.getValues().get(0));
+							   wcmProperty.setValue(property.getValues().get(0));
 						   }
 					   }
-					   kvList.add(kv);
+					   propertyList.add(wcmProperty);
 				   }
 			   }
-			   metadata.setKeyValue(kvList.toArray(new KeyValue[kvList.size()]));
+			   metadata.setProperties(propertyList.toArray(new WcmProperty[propertyList.size()]));
 			   sa.setMetadata(metadata);
 		   } else if (this.wcmUtils.checkNodeType(node, "bpw:pageSearchData") && ("bpw:searchData".equals(node.getName()))) {
 			   SearchData searchData = new SearchData();
@@ -1273,11 +1273,14 @@ public abstract class BaseWcmRestController {
 				controlField.setTitle(restProperty.getValues().get(0));
 			} else if ("bpw:icon".equals(restProperty.getName())) {
 				controlField.setIcon(restProperty.getValues().get(0));
-			}
+			} else if ("bpw:hint".equals(restProperty.getName())) {
+				controlField.setHint(restProperty.getValues().get(0));
+			} 
+			
 		}
-		ControlFieldMetadata[] controlFieldMetadata = node.getChildren().stream().filter(this::isControlFieldMetaData)
-				.map(this::toControlFieldMetaData).toArray(ControlFieldMetadata[]::new);
-		controlField.setControlFieldMetaData(controlFieldMetadata);
+//		ControlFieldMetadata[] controlFieldMetadata = node.getChildren().stream().filter(this::isControlFieldMetaData)
+//				.map(this::toControlFieldMetaData).toArray(ControlFieldMetadata[]::new);
+//		controlField.setControlFieldMetaData(controlFieldMetadata);
 		return controlField;
 	}
 	

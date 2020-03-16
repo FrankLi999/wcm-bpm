@@ -41,12 +41,12 @@
 - bpw:workflow (STRING) multiple COPY
 - bpw:workflowStage (STRING) COPY
 
-[bpw:keyValue] 
+[bpw:property] 
 - bpw:name (STRING) COPY
 - bpw:value (STRING) COPY
 
-[bpw:keyValues]
-+ * (bpw:keyValue) 
+[bpw:properties]
++ * (bpw:property) 
 
 [bpw:workflowAction]
 - name (STRING)
@@ -97,7 +97,7 @@
 */
 [bpw:relationshipTypeOptions]
 - options (STRING) multiple
-
+/*
 [bpw:controlFieldMetaData]
 - bpw:title (STRING)
 - bpw:controlType (STRING)
@@ -105,12 +105,14 @@
 - bpw:required (BOOLEAN)
 - bpw:readOnly (BOOLEAN) = 'false'
 - bpw:selectOptions (STRING) multiple
-
+*/
 [bpw:controlField]
 - bpw:title (STRING)
 - bpw:icon (STRING)
+- bpw:hint (STRING)
+/*
 + * (bpw:controlFieldMetaData)
-
+*/
 [bpw:formGroup] abstract
 - bpw:groupName (STRING)
 - bpw:groupTitle (STRING)
@@ -118,19 +120,19 @@
 
 [bpw:formControl] > nt:hierarchyNode
 - bpw:title (STRING)
-- bpw:fieldPath (STRING)
+- bpw:jsonPath (STRING)
 - bpw:controlType (STRING)
 - bpw:rows (LONG)
-- bpw:value (STRING) multiple COPY
 - bpw:enum (STRING) multiple COPY
 - bpw:defaultValue (STRING) COPY
 - bpw:hint (STRING) COPY
+- bpw:format (STRING) COPY
 - bpw:dataType (STRING) = 'text' COPY
 - bpw:jcrDataType (STRING) = 'STRING' COPY
 - bpw:multiple (BOOLEAN) = 'false' COPY
 - bpw:relationshipType (STRING) COPY
 - bpw:relationshipCardinality (STRING) COPY
-- bpw:valditionRegEx (STRING) COPY
+- bpw:valdition (STRING) COPY
 - bpw:mandatory (BOOLEAN) = 'false' COPY
 - bpw:userSearchable (BOOLEAN) = 'false' COPY
 - bpw:systemIndexed (BOOLEAN) = 'false' COPY
@@ -192,11 +194,11 @@
 [bpw:fileType] > nt:file, bpw:baseControlType
 - bpw:fileName (STRING) mandatory COPY
 - bpw:content (BINARY) COPY
-+ bpw:metaData (bpw:keyValue)
++ bpw:metaData (bpw:properties)
 - bpw:showOnMenu (BOOLEAN) = 'false'
 - bpw:sortOrder (LONG) = 0
 
-[bpw:keyValueType] > bpw:baseControlType
+[bpw:propertyType] > bpw:baseControlType
 - bpw:key (STRING) COPY
 - bpw:value (STRING) COPY
 
@@ -280,7 +282,7 @@
 - bpw:openInNewTab (BOOLEAN)
 - bpw:body (STRING)
 + bpw:badge (bpw:navigationBadge)
-+ bpw:metaData (bpw:keyValues)
++ bpw:metaData (bpw:properties)
 + bpw:searchData (bpw:pageSearchData)
 + siteAreaLayout (bpw:siteAreaLayout)
 + * (bpw:resourceNode)
@@ -452,7 +454,7 @@
 - bpw:title (STRING)
 - bpw:renderTemplateName (STRING)
 - bpw:contentPath (STRING) multiple
-+ bpw:parameterValues (bpw:keyValues)
++ bpw:parameterValues (bpw:properties)
    
 [bpw:layoutColumn]
 - bpw:width (LONG)

@@ -5,18 +5,18 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 public class FormControl implements HasName {
 	private String name;
 	private String title;
-	private String fieldPath;
+	private String jsonPath;
+	private String format;
 	private String controlType;
-	private String[] values;
 	private String[] enumeration;
 	private String defaultValue;
 	private String hint;
 	private String dataType = "text";
 	private String jcrDataType = "STRING";
-	private boolean multiple;
+	private boolean multiple = false;
 	private String relationshipType;
 	private String relationshipCardinality;
-	private String valditionRegEx;
+	private String valdition;
 	private boolean mandatory = false;
 	private boolean userSearchable = false;
 	private boolean systemIndexed = false;
@@ -28,25 +28,6 @@ public class FormControl implements HasName {
 	private int rows = 3;
 	private String flex;
 	private String placeholder;
-	
-	public String[] getEnumeration() {
-		return enumeration;
-	}
-	public void setEnumeration(String[] enumeration) {
-		this.enumeration = enumeration;
-	}
-	public boolean isEditable() {
-		return editable;
-	}
-	public void setEditable(boolean editable) {
-		this.editable = editable;
-	}
-	public boolean isExpandable() {
-		return expandable;
-	}
-	public void setExpandable(boolean expandable) {
-		this.expandable = expandable;
-	}
 	public String getName() {
 		return name;
 	}
@@ -59,19 +40,30 @@ public class FormControl implements HasName {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	public String getJsonPath() {
+		return jsonPath;
+	}
+	public void setJsonPath(String jsonPath) {
+		this.jsonPath = jsonPath;
+	}
+	public String getFormat() {
+		return format;
+	}
+	public void setFormat(String format) {
+		this.format = format;
+	}
 	public String getControlType() {
 		return controlType;
 	}
-	public void setControlType(String controlName) {
-		this.controlType = controlName;
+	public void setControlType(String controlType) {
+		this.controlType = controlType;
 	}
-	public String[] getValues() {
-		return values;
+	public String[] getEnumeration() {
+		return enumeration;
 	}
-	public void setValues(String[] values) {
-		this.values = values;
+	public void setEnumeration(String[] enumeration) {
+		this.enumeration = enumeration;
 	}
-
 	public String getDefaultValue() {
 		return defaultValue;
 	}
@@ -89,6 +81,12 @@ public class FormControl implements HasName {
 	}
 	public void setDataType(String dataType) {
 		this.dataType = dataType;
+	}
+	public String getJcrDataType() {
+		return jcrDataType;
+	}
+	public void setJcrDataType(String jcrDataType) {
+		this.jcrDataType = jcrDataType;
 	}
 	public boolean isMultiple() {
 		return multiple;
@@ -108,11 +106,11 @@ public class FormControl implements HasName {
 	public void setRelationshipCardinality(String relationshipCardinality) {
 		this.relationshipCardinality = relationshipCardinality;
 	}
-	public String getValditionRegEx() {
-		return valditionRegEx;
+	public String getValdition() {
+		return valdition;
 	}
-	public void setValditionRegEx(String valditionRegEx) {
-		this.valditionRegEx = valditionRegEx;
+	public void setValdition(String valdition) {
+		this.valdition = valdition;
 	}
 	public boolean isMandatory() {
 		return mandatory;
@@ -144,28 +142,24 @@ public class FormControl implements HasName {
 	public void setUnique(boolean unique) {
 		this.unique = unique;
 	}
-	
-	public String getFieldPath() {
-		return fieldPath;
+	public boolean isEditable() {
+		return editable;
 	}
-	public void setFieldPath(String fieldPath) {
-		this.fieldPath = fieldPath;
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
-	
-	public String getJcrDataType() {
-		return jcrDataType;
+	public boolean isExpandable() {
+		return expandable;
 	}
-	public void setJcrDataType(String jcrDataType) {
-		this.jcrDataType = jcrDataType;
+	public void setExpandable(boolean expandable) {
+		this.expandable = expandable;
 	}
-	
 	public boolean isRichText() {
 		return richText;
 	}
 	public void setRichText(boolean richText) {
 		this.richText = richText;
 	}
-	
 	public int getRows() {
 		return rows;
 	}
@@ -181,21 +175,19 @@ public class FormControl implements HasName {
 	public String getPlaceholder() {
 		return placeholder;
 	}
-	
 	public void setPlaceholder(String placeholder) {
 		this.placeholder = placeholder;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "FormControl [name=" + name + ", title=" + title + ", fieldPath=" + fieldPath + ", controlType="
-				+ controlType + ", values=" + Arrays.toString(values) + ", enumeration=" + Arrays.toString(enumeration)
-				+ ", defaultValue=" + defaultValue + ", hint=" + hint + ", dataType=" + dataType + ", jcrDataType="
-				+ jcrDataType + ", multiple=" + multiple + ", relationshipType=" + relationshipType
-				+ ", relationshipCardinality=" + relationshipCardinality + ", valditionRegEx=" + valditionRegEx
-				+ ", mandatory=" + mandatory + ", userSearchable=" + userSearchable + ", systemIndexed=" + systemIndexed
-				+ ", showInList=" + showInList + ", unique=" + unique + ", editable=" + editable + ", expandable="
-				+ expandable + ", richText=" + richText + ", rows=" + rows + ", flex=" + flex + ", placeholder="
-				+ placeholder + "]";
+		return "FormControl [name=" + name + ", title=" + title + ", jsonPath=" + jsonPath + ", format=" + format
+				+ ", controlType=" + controlType + ", enumeration=" + Arrays.toString(enumeration) + ", defaultValue="
+				+ defaultValue + ", hint=" + hint + ", dataType=" + dataType + ", jcrDataType=" + jcrDataType
+				+ ", multiple=" + multiple + ", relationshipType=" + relationshipType + ", relationshipCardinality="
+				+ relationshipCardinality + ", valdition=" + valdition + ", mandatory=" + mandatory
+				+ ", userSearchable=" + userSearchable + ", systemIndexed=" + systemIndexed + ", showInList="
+				+ showInList + ", unique=" + unique + ", editable=" + editable + ", expandable=" + expandable
+				+ ", richText=" + richText + ", rows=" + rows + ", flex=" + flex + ", placeholder=" + placeholder + "]";
 	}
 }

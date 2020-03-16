@@ -1,6 +1,6 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
-public class KeyValue {
+public class WcmProperty {
 	private String name;
 	private String value;
 	public String getName() {
@@ -17,6 +17,6 @@ public class KeyValue {
 	}
 	@Override
 	public String toString() {
-		return "KeyValue [name=" + name + ", value=" + value + "]";
+		return "WcmProperty [name=" + name + ", value=" + value + "]";
 	}
 }

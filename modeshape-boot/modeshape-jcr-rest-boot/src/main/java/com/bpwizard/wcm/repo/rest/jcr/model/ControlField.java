@@ -1,14 +1,13 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
-import java.util.Arrays;
-
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 
 public class ControlField implements HasName {
 	private String name;
 	private String icon;
 	private String title;
-	private ControlFieldMetadata controlFieldMetaData[];
+	private String hint;
+	// private ControlFieldMetadata controlFieldMetaData[];
 	
 	public String getName() {
 		return name;
@@ -34,17 +33,16 @@ public class ControlField implements HasName {
 		this.title = title;
 	}
 
-	public ControlFieldMetadata[] getControlFieldMetaData() {
-		return controlFieldMetaData;
+	public String getHint() {
+		return hint;
 	}
 
-	public void setControlFieldMetaData(ControlFieldMetadata[] controlFieldMetaData) {
-		this.controlFieldMetaData = controlFieldMetaData;
+	public void setHint(String hint) {
+		this.hint = hint;
 	}
 
 	@Override
 	public String toString() {
-		return "ControlField [name=" + name + ", icon=" + icon + ", title=" + title + ", controlFieldMetaData="
-				+ Arrays.toString(controlFieldMetaData) + "]";
+		return "ControlField [name=" + name + ", icon=" + icon + ", title=" + title + ", hint=" + hint + "]";
 	}
 }

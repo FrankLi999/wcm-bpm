@@ -23,7 +23,7 @@ public class SiteArea implements HasName {
 	private Map<String, String> elements;
 	private Map<String, String> properties;
 	
-	private keyValues metadata;
+	private WcmProperties metadata;
 
 	private SearchData searchData;
 	private NavigationBadge badge;
@@ -84,10 +84,10 @@ public class SiteArea implements HasName {
 		this.properties = properties;
 	}
 
-	public keyValues getMetadata() {
+	public WcmProperties getMetadata() {
 		return metadata;
 	}
-	public void setMetadata(keyValues metadata) {
+	public void setMetadata(WcmProperties metadata) {
 		this.metadata = metadata;
 	}
 	public SearchData getSearchData() {
@@ -175,18 +175,18 @@ public class SiteArea implements HasName {
 			ObjectNode metaDataNodeChildren = JsonUtils.createObjectNode();
 			children.set("bpw:metaData", metaDataNode);
 			metaDataNode.set("children", metaDataNodeChildren);
-			metaDataNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:keyValues");
+			metaDataNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:properties");
 			int count = 0;
-			keyValues metadata = (keyValues)this.getMetadata();
-			for (KeyValue keyValue: metadata.getKeyValues()) {
+			WcmProperties metadata = (WcmProperties)this.getMetadata();
+			for (WcmProperty property: metadata.getProperties()) {
 				
 				ObjectNode kvNode = JsonUtils.createObjectNode();
 				ObjectNode kvNodeChildren = JsonUtils.createObjectNode();
 				metaDataNodeChildren.set("kv" + count++, kvNode);
 				kvNode.set("children", kvNodeChildren);
-				kvNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:keyValue");
-				kvNode.put("bpw:name", keyValue.getName());
-				kvNode.put("bpw:value", keyValue.getValue());
+				kvNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:property");
+				kvNode.put("bpw:name", property.getName());
+				kvNode.put("bpw:value", property.getValue());
 			}
 		} 
 		if (this.getSearchData() != null) {	

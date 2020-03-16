@@ -196,12 +196,12 @@ public class WcmUtils {
 		for (RestProperty property : node.getJcrProperties()) {
 			if ("bpw:title".equals(property.getName())) {
 				formControl.setTitle(property.getValues().get(0));
-			} else if ("bpw:fieldPath".equals(property.getName())) {
-				formControl.setFieldPath(property.getValues().get(0));
+			} else if ("bpw:jsonPath".equals(property.getName())) {
+				formControl.setJsonPath(property.getValues().get(0));
 			} else if ("bpw:controlType".equals(property.getName())) {
 				formControl.setControlType(property.getValues().get(0));
-			} else if ("bpw:value".equals(property.getName())) {
-				formControl.setValues(property.getValues().toArray(new String[property.getValues().size()]));
+			} else if ("bpw:format".equals(property.getName())) {
+				formControl.setFormat(property.getValues().get(0));
 			} else if ("bpw:enum".equals(property.getName())) {
 				formControl.setEnumeration(property.getValues().toArray(new String[property.getValues().size()]));
 			} else if ("bpw:defaultValue".equals(property.getName())) {
@@ -214,8 +214,8 @@ public class WcmUtils {
 				formControl.setRelationshipType(property.getValues().get(0));
 			} else if ("bpw:relationshipCardinality".equals(property.getName())) {
 				formControl.setRelationshipCardinality(property.getValues().get(0));
-			} else if ("bpw:valditionRegEx".equals(property.getName())) {
-				formControl.setValditionRegEx(property.getValues().get(0));
+			} else if ("bpw:valdition".equals(property.getName())) {
+				formControl.setValdition(property.getValues().get(0));
 			} else if ("bpw:mandatory".equals(property.getName())) {
 				formControl.setMandatory(Boolean.parseBoolean(property.getValues().get(0)));
 			} else if ("bpw:systemIndexed".equals(property.getName())) {
@@ -355,7 +355,7 @@ public class WcmUtils {
 
 		if (node.getChildren() != null) {
 			FieldLayout[] customeFieldLayouts = node.getChildren().stream().filter(this::isCustomeFieldLayout)
-					.map(this::toCustomeFieldLayout).toArray(FieldLayout[]::new);
+					.map(this::toAssociationLayout).toArray(FieldLayout[]::new);
 
 			column.setFieldLayouts(customeFieldLayouts);
 		}
@@ -363,32 +363,32 @@ public class WcmUtils {
 		return column;
 	}
 	
-	private FieldLayout toCustomeFieldLayout(RestNode node) {
-		FieldLayout customFieldLayout = new FieldLayout();
-		customFieldLayout.setName(node.getName());
+	private FieldLayout toAssociationLayout(RestNode node) {
+		FieldLayout associationLayout = new FieldLayout();
+		associationLayout.setName(node.getName());
 		for (RestProperty property : node.getJcrProperties()) {
 			if ("bpw:multiple".equals(property.getName())) {
-				customFieldLayout.setMultiple(Boolean.parseBoolean(property.getValues().get(0)));
+				associationLayout.setMultiple(Boolean.parseBoolean(property.getValues().get(0)));
 			} else if ("bpw:key".equals(property.getName())) {
-				customFieldLayout.setKey(property.getValues().get(0));
+				associationLayout.setKey(property.getValues().get(0));
 			} else if ("bpw:name".equals(property.getName())) {
-				customFieldLayout.setName(property.getValues().get(0));
+				associationLayout.setName(property.getValues().get(0));
 			} else if ("bpw:title".equals(property.getName())) {
-				customFieldLayout.setTitle(property.getValues().get(0));
+				associationLayout.setTitle(property.getValues().get(0));
 			} else if ("bpw:items".equals(property.getName())) {
-				customFieldLayout.setItems(property.getValues().get(0));
+				associationLayout.setItems(property.getValues().get(0));
 			} 
 		}
-		if (StringUtils.isEmpty(customFieldLayout.getKey())) {
-			customFieldLayout.setKey(customFieldLayout.getName());
+		if (StringUtils.isEmpty(associationLayout.getKey())) {
+			associationLayout.setKey(associationLayout.getName());
 		}
 
 		FieldLayout[] fieldLayouts = node.getChildren().stream().filter(this::isFieldLayout).map(this::toFieldLayout)
 				.toArray(FieldLayout[]::new);
 
-		customFieldLayout.setFieldLayouts(fieldLayouts);
+		associationLayout.setFieldLayouts(fieldLayouts);
 
-		return customFieldLayout;
+		return associationLayout;
 	}
 	
 	private FieldLayout toFieldLayout(RestNode node) {

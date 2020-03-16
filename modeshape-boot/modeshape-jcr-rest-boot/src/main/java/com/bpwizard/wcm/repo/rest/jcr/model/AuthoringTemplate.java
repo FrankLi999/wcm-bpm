@@ -205,22 +205,18 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			controlNode.put("bpw:title", control.getTitle());
 		}
 
-		if (StringUtils.hasText(control.getFieldPath())) {
-			controlNode.put("bpw:fieldPath", control.getFieldPath());
+		if (StringUtils.hasText(control.getJsonPath())) {
+			controlNode.put("bpw:jsonPath", control.getJsonPath());
 		}
 		
 		if (StringUtils.hasText(control.getControlType())) {
 			controlNode.put("bpw:controlType", control.getControlType());
 		}
 
-		if ((control.getValues() != null) && (control.getValues().length > 0)) {
-			ArrayNode valueArray = JsonUtils.creatArrayNode();
-			for (String value : control.getValues()) {
-				valueArray.add(value);
-			}
-			controlNode.set("bpw:value", valueArray);
+		if (StringUtils.hasText(control.getFormat())) {
+			controlNode.put("bpw:format", control.getFormat());
 		}
-
+		
 		if ((control.getEnumeration() != null) && (control.getEnumeration().length > 0)) {
 			ArrayNode optionArray = JsonUtils.creatArrayNode();
 			for (String option : control.getEnumeration()) {
@@ -249,8 +245,8 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			controlNode.put("bpw:relationshipCardinality", control.getRelationshipCardinality());
 		}
 
-		if (StringUtils.hasText(control.getValditionRegEx())) {
-			controlNode.put("bpw:valditionRegEx", control.getValditionRegEx());
+		if (StringUtils.hasText(control.getValdition())) {
+			controlNode.put("bpw:valdition", control.getValdition());
 		}
 
 		controlNode.put("bpw:mandatory", control.isMandatory());
