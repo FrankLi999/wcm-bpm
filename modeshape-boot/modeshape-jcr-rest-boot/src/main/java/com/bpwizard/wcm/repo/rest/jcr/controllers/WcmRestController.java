@@ -754,7 +754,7 @@ public class WcmRestController extends BaseWcmRestController {
 	}
 
 	@PutMapping(path = "/at", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void saveAuthoringTemplate(
+	public ResponseEntity<?> saveAuthoringTemplate(
 			@RequestBody AuthoringTemplate at, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
@@ -775,6 +775,7 @@ public class WcmRestController extends BaseWcmRestController {
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
+			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (RepositoryException re) { 
@@ -1723,7 +1724,7 @@ public class WcmRestController extends BaseWcmRestController {
   	};
   	
   	@DeleteMapping("/WcmItem/purge/{repository}/{workspace}")
-  	public void purgeWcmItem(
+  	public ResponseEntity<?> purgeWcmItem(
   			@PathVariable("repository") String repository,
 		    @PathVariable("workspace") String workspace,
   			@RequestParam("path") String absPath) { 
@@ -1733,6 +1734,10 @@ public class WcmRestController extends BaseWcmRestController {
   		absPath = (absPath.startsWith("/")) ? absPath : String.format("/%s", absPath);
   		try {
   			this.doPurgeWcmItem(repository, workspace, absPath);
+  	  		if (logger.isDebugEnabled()) {
+  				logger.traceExit();
+  			}
+  			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (WcmRepositoryException e ) {
 			throw e;
 //		} catch (RepositoryException re) { 
@@ -1740,9 +1745,7 @@ public class WcmRestController extends BaseWcmRestController {
 	    } catch (Throwable t) {
 			throw new WcmRepositoryException(t);
 		}
-  		if (logger.isDebugEnabled()) {
-			logger.traceExit();
-		}
+
   	};
 
   	@DeleteMapping("/wcmItem/delete/{repository}/{workspace}")

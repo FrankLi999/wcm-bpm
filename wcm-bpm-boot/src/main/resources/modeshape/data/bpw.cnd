@@ -127,7 +127,7 @@
 - bpw:defaultValue (STRING) COPY
 - bpw:hint (STRING) COPY
 - bpw:format (STRING) COPY
-- bpw:dataType (STRING) = 'text' COPY
+- bpw:dataType (STRING) = 'string' COPY
 - bpw:jcrDataType (STRING) = 'STRING' COPY
 - bpw:multiple (BOOLEAN) = 'false' COPY
 - bpw:relationshipType (STRING) COPY
