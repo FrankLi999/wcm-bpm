@@ -1838,8 +1838,8 @@ public class WcmRestController extends BaseWcmRestController {
 	}
 	
 	private boolean propertyMatch(RestNode node, WcmNavigatorFilter filter, String nodeType) {
-		if (filter.getFilters() == null || filter.getFilters().get(nodeType) == null) { return true; } 
-		Map<String, String> nameValues = filter.getFilters().get(nodeType);
+		if (filter.getConditions() == null || filter.getConditions().get(nodeType) == null) { return true; } 
+		Map<String, String> nameValues = filter.getConditions().get(nodeType);
 		Set<String> properties = new HashSet<>();
 		properties.addAll(nameValues.keySet());
 		for (RestProperty property: node.getJcrProperties()) {
