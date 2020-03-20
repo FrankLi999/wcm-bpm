@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
+import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
@@ -31,7 +32,6 @@ import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.BaseFormGroup;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.ControlField;
-import com.bpwizard.wcm.repo.rest.jcr.model.ControlFieldMetadata;
 import com.bpwizard.wcm.repo.rest.jcr.model.FieldLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.Footer;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormColumn;
@@ -43,7 +43,6 @@ import com.bpwizard.wcm.repo.rest.jcr.model.FormSteps;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormTab;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormTabs;
 import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperty;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutRow;
 import com.bpwizard.wcm.repo.rest.jcr.model.Library;
@@ -66,6 +65,8 @@ import com.bpwizard.wcm.repo.rest.jcr.model.SiteAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperties;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperty;
+import com.bpwizard.wcm.repo.rest.jcr.model.WorkflowNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestChildType;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNodeType;
@@ -87,6 +88,7 @@ public abstract class BaseWcmRestController {
 	protected static final String WCM_SITECONFIG_PATH_PATTERN = "/bpwizard/library/%s/siteConfig/%s";
 	protected static final String WCM_CATEGORY_PATH_PATTERN = "/bpwizard/library/%s/category%s";
 	protected static final String WCM_VALIDATTOR_PATH_PATTERN = "/bpwizard/library/%s/validationRule/%s";
+	protected static final String WCM_WORKFLOW_ROOT_PATH_PATTERN = "/bpwizard/library/%s/workflow";
 	protected static final String WCM_WORKFLOW_PATH_PATTERN = "/bpwizard/library/%s/workflow/%s";
 	protected static final String WCM_QUERY_PATH_PATTERN = "/bpwizard/library/%s/query/%s";
 	protected static final String DEFAULT_WS = "default";
@@ -115,6 +117,27 @@ public abstract class BaseWcmRestController {
 	protected WcmUtils wcmUtils;
 	
 	protected ObjectMapper objectMapper = new ObjectMapper();
+	protected AuthoringTemplate doGetAuthoringTemplate(
+			String repository,
+			String workspace, 
+			String atPath,
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+		String baseUrl = RestHelper.repositoryUrl(request);
+		AuthoringTemplate at = this.wcmUtils.getAuthoringTemplate(repository, workspace, atPath, baseUrl);
+		return at;
+	}
+	
+	protected void doLock(
+			String repository,
+			String workspace, 
+			String absPath) throws RepositoryException {
+		
+		javax.jcr.lock.LockManager lm = this.repositoryManager.getSession(repository, workspace).getWorkspace().getLockManager();
+		if (!lm.isLocked(absPath)) {
+			lm.lock(absPath, true, false, Long.MAX_VALUE, ModeshapeUtils.getUserName());
+		}
+	}
 	
 	protected boolean isControlField(RestNode node) {
 		return this.wcmUtils.checkNodeType(node, "bpw:controlField");
@@ -133,7 +156,7 @@ public abstract class BaseWcmRestController {
 	}
 
 	protected boolean notSystemLibrary(RestNode node) {
-		return !"system".equalsIgnoreCase(node.getName());
+		return this.wcmUtils.checkNodeType(node, "bpw:library") && (!"system".equalsIgnoreCase(node.getName()));
 	}
 	
 	protected boolean isTheme(RestNode node) {
@@ -150,6 +173,10 @@ public abstract class BaseWcmRestController {
 
 	protected boolean isAuthortingTemplate(RestNode node) {
 		return this.wcmUtils.checkNodeType(node, "bpw:authoringTemplate");
+	}
+	
+	protected boolean isWorkflow(RestNode node) {
+		return this.wcmUtils.checkNodeType(node, "bpw:workflow");
 	}
 	
   	protected void doPurgeWcmItem(
@@ -258,6 +285,31 @@ public abstract class BaseWcmRestController {
 		authoringTemplateWithLibrary.setWorkspace(workspace);
 		authoringTemplateWithLibrary.setLibrary(node.getName());
 		return authoringTemplateWithLibrary;
+	}
+	
+	protected void resolveWorkflowNode(WorkflowNode workflowNode, RestNode restNode, Map<String, String> properties) {
+		for (RestProperty property : restNode.getJcrProperties()) {
+			if ("bpw:title".equals(property.getName())) {
+				workflowNode.setTitle(property.getValues().get(0));
+				properties.put("title", property.getValues().get(0));
+			} else if ("bpw:description".equals(property.getName())) {
+				workflowNode.setDescription(property.getValues().get(0));
+				properties.put("description", property.getValues().get(0));
+			} else if ("bpw:publishDate".equals(property.getName())) {
+				workflowNode.setPublishDate(property.getValues().get(0));
+			} else if ("bpw:expireDate".equals(property.getName())) {
+				workflowNode.setExpireDate(property.getValues().get(0));
+			} else if ("bpw:workflow".equals(property.getName())) {
+				workflowNode.setWorkflow(property.getValues().get(0));
+				properties.put("workflow", property.getValues().get(0));
+			} else if ("bpw:workflowStage".equals(property.getName())) {
+				workflowNode.setWorkflowStage(property.getValues().get(0));
+			} else if ("jcr:lockOwner".equals(property.getName())) {
+				workflowNode.setLockOwner(property.getValues().get(0));
+			} else if ("bpw:currentLifecycleState".equals(property.getName())) {
+				workflowNode.setCurrentLifecycleState(property.getValues().get(0));
+			}				
+		}
 	}
 	
 	protected  JsonForm[] toJsonForms(HttpServletRequest request, AuthoringTemplate at) throws WcmRepositoryException {
@@ -1243,27 +1295,27 @@ public abstract class BaseWcmRestController {
 			return ControlFileds;
 	}
 	
-	private ControlFieldMetadata toControlFieldMetaData(RestNode node) {
-		ControlFieldMetadata metadata = new ControlFieldMetadata();
-		metadata.setName(node.getName());
-		for (RestProperty restProperty : node.getJcrProperties()) {
-			if ("bpw:title".equals(restProperty.getName())) {
-				metadata.setTitle(restProperty.getValues().get(0));
-			} else if ("bpw:controlType".equals(restProperty.getName())) {
-				metadata.setControlType(restProperty.getValues().get(0));
-			} else if ("bpw:hintText".equals(restProperty.getName())) {
-				metadata.setHintText(restProperty.getValues().get(0));
-			} else if ("bpw:required".equals(restProperty.getName())) {
-				metadata.setRequired(Boolean.parseBoolean(restProperty.getValues().get(0)));
-			} else if ("bpw:readOnly".equals(restProperty.getName())) {
-				metadata.setReadonly(Boolean.parseBoolean(restProperty.getValues().get(0)));
-			} else if ("bpw:selectOptions".equals(restProperty.getName())) {
-				metadata.setSelectOptions(
-						restProperty.getValues().toArray(new String[restProperty.getValues().size()]));
-			}
-		}
-		return metadata;
-	}
+//	private ControlFieldMetadata toControlFieldMetaData(RestNode node) {
+//		ControlFieldMetadata metadata = new ControlFieldMetadata();
+//		metadata.setName(node.getName());
+//		for (RestProperty restProperty : node.getJcrProperties()) {
+//			if ("bpw:title".equals(restProperty.getName())) {
+//				metadata.setTitle(restProperty.getValues().get(0));
+//			} else if ("bpw:controlType".equals(restProperty.getName())) {
+//				metadata.setControlType(restProperty.getValues().get(0));
+//			} else if ("bpw:hintText".equals(restProperty.getName())) {
+//				metadata.setHintText(restProperty.getValues().get(0));
+//			} else if ("bpw:required".equals(restProperty.getName())) {
+//				metadata.setRequired(Boolean.parseBoolean(restProperty.getValues().get(0)));
+//			} else if ("bpw:readOnly".equals(restProperty.getName())) {
+//				metadata.setReadonly(Boolean.parseBoolean(restProperty.getValues().get(0)));
+//			} else if ("bpw:selectOptions".equals(restProperty.getName())) {
+//				metadata.setSelectOptions(
+//						restProperty.getValues().toArray(new String[restProperty.getValues().size()]));
+//			}
+//		}
+//		return metadata;
+//	}
 
 	private ControlField toControlField(RestNode node) {
 		ControlField controlField = new ControlField();

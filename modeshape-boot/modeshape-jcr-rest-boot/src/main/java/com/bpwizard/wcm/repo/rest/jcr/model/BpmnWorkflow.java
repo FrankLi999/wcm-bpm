@@ -7,7 +7,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class BpmnWorkflow extends ResourceNode implements HasName {
+public class BpmnWorkflow extends ResourceNode implements HasName, Comparable<BpmnWorkflow> {
 	private static final long serialVersionUID = 1L;
 	private String repository;
 	private String workspace;
@@ -75,5 +75,18 @@ public class BpmnWorkflow extends ResourceNode implements HasName {
 	@Override
 	public String toString() {
 		return "BpmnWorkflow [name=" + name + ", bpmn=" + bpmn + ", toString()=" + super.toString() + "]";
+	}
+
+	@Override
+	public int compareTo(BpmnWorkflow o) {
+		int result = 1;
+		if (o != null) {
+		    result = this.id().compareTo(o.id());
+		}
+		return result;
+	}
+	
+	protected String id() {
+		return String.format("%s_%s", this.library, this.name);
 	}
 }

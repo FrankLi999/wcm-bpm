@@ -3,6 +3,7 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 
 public class Theme extends ResourceNode implements HasName {
+	private static final long serialVersionUID = 4129668983360076043L;
 	private String name;
 	private String library;
 	private String repositoryName;

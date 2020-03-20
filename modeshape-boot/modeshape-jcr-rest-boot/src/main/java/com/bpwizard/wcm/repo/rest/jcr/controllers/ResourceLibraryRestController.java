@@ -46,7 +46,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 	
 	@GetMapping(path = "/{repository}/{workspace}", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Library[] getLibraries(			
+	public ResponseEntity<Library[]> getLibraries(			
 			@PathVariable("repository") @RepositoryName() String repository,
 			@PathVariable("workspace") @WorkspaceName() String workspace,
 			@RequestParam(name="filter", defaultValue = "") String filter,
@@ -71,15 +71,15 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 					.map(node -> toLibrary(node, repository, workspace))
 					.filter(library -> this.filterLibrary(library, filter))
 					.toArray(Library[]::new);
+			if ("asc".equals(sortDirection)) {
+				Arrays.sort(libraries);
+			} else if ("desc".equals(sortDirection)) {
+				Arrays.sort(libraries, Collections.reverseOrder());
+			}			
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
-			if ("asc".equals(sortDirection)) {
-				Arrays.sort(libraries);
-			} else {
-				Arrays.sort(libraries, Collections.reverseOrder());
-			}
-			return libraries;
+			return ResponseEntity.status(HttpStatus.OK).body(libraries);
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
