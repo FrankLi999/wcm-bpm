@@ -136,11 +136,12 @@ public class WcmRestController extends BaseWcmRestController {
   	public ResponseEntity<?> purgeWcmItem(
   			@PathVariable("repository") String repository,
 		    @PathVariable("workspace") String workspace,
-  			@RequestParam("path") String absPath) { 
+  			@RequestParam("path") String wcmPath) { 
   		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-  		absPath = (absPath.startsWith("/")) ? absPath : String.format("/%s", absPath);
+  		wcmPath = (wcmPath.startsWith("/")) ? wcmPath.substring(1) : wcmPath;
+  		String absPath = (wcmPath.startsWith(WCM_ROOT_PATH)) ? wcmPath : String.format(WCM_ROOT_PATH_PATTERN, wcmPath);
   		try {
   			this.doPurgeWcmItem(repository, workspace, absPath);
   	  		if (logger.isDebugEnabled()) {
@@ -161,8 +162,9 @@ public class WcmRestController extends BaseWcmRestController {
   	public void deleteWcmItem(
   			@PathVariable("repository") String repository,
 		    @PathVariable("workspace") String workspace,
-  			@RequestParam("path") String absPath) { 
+  			@RequestParam("path") String wcmPath) { 
   		try {
+  			String absPath = (wcmPath.startsWith(WCM_ROOT_PATH)) ? wcmPath : String.format(WCM_ROOT_PATH_PATTERN, wcmPath);
   			Session session = this.repositoryManager.getSession(repository, DEFAULT_WS);
   			Node node = session.getNode(absPath);
   			node.remove();
@@ -193,12 +195,12 @@ public class WcmRestController extends BaseWcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			final String siteAreaPath = filter.getNodePath().startsWith("/") ? filter.getNodePath() : "/" + filter.getNodePath();
-			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					siteAreaPath, 2);
+			String wcmPath = filter.getWcmPath().startsWith("/") ? filter.getWcmPath().substring(1) : filter.getWcmPath();
+			final String absPath = String.format(WCM_ROOT_PATH_PATTERN, wcmPath);
+			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, 2);
 			WcmNode[] wcmNodes = saNode.getChildren().stream()
 			    .filter(node -> this.applyFilter(node, filter))
-			    .map(node -> this.toWcmNode(node, siteAreaPath))
+			    .map(node -> this.toWcmNode(node, repository, workspace, wcmPath))
 			    .toArray(WcmNode[]::new);
 
 			if (logger.isDebugEnabled()) {
@@ -242,8 +244,10 @@ public class WcmRestController extends BaseWcmRestController {
 		return properties.size() == 0;
 	}
 	
-	private WcmNode toWcmNode(RestNode node, String siteAreaPath) {
+	private WcmNode toWcmNode(RestNode node, String repository, String workspace,  String wcmPath) {
 		WcmNode wcmNode = new WcmNode();
+		wcmNode.setRepository(repository);
+		wcmNode.setWorkspace(workspace);
 		wcmNode.setName(node.getName());
 		for (RestProperty property: node.getJcrProperties()) {
 			if ("jcr:primaryType".equals(property.getName())) {
@@ -251,7 +255,7 @@ public class WcmRestController extends BaseWcmRestController {
 				break;
 			} 
 		}
-		wcmNode.setWcmPath(String.format("%s/%s", siteAreaPath, node.getName()));
+		wcmNode.setWcmPath(String.format("%s/%s", wcmPath, node.getName()));
 		return wcmNode;
 	}
 	

@@ -10,7 +10,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class QueryStatement implements HasName, Serializable {
+public class QueryStatement implements HasName, Serializable, Comparable<QueryStatement> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -90,5 +90,17 @@ public class QueryStatement implements HasName, Serializable {
 	public String toString() {
 		return "QueryStatement [repository=" + repository + ", workspace=" + workspace + ", library=" + library
 				+ ", name=" + name + ", title=" + title + ", query=" + query + "]";
+	}
+
+	@Override
+	public int compareTo(QueryStatement o) {
+		int result = 1;
+		if (o != null) {
+		    result = this.name.compareTo(o.getName());
+		    if (result == 0) {
+		    	result = this.library.compareTo(o.getLibrary());
+		    }
+		}
+		return result;
 	}
 }

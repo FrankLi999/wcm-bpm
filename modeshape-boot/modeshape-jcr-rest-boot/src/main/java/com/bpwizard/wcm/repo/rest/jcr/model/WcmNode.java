@@ -1,6 +1,8 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 public class WcmNode {
+	private String repository;
+	private String workspace;
     private String wcmPath;
     private String name;
     private String title;
@@ -9,6 +11,22 @@ public class WcmNode {
     private String owner;
     private String status;
     
+	public String getRepository() {
+		return repository;
+	}
+
+	public void setRepository(String repository) {
+		this.repository = repository;
+	}
+
+	public String getWorkspace() {
+		return workspace;
+	}
+
+	public void setWorkspace(String workspace) {
+		this.workspace = workspace;
+	}
+
 	public String getWcmPath() {
 		return wcmPath;
 	}
@@ -67,7 +85,8 @@ public class WcmNode {
 
 	@Override
 	public String toString() {
-		return "WcmNode [wcmPath=" + wcmPath + ", name=" + name + ", title=" + title + ", nodeType=" + nodeType
-				+ ", lastModified=" + lastModified + ", owner=" + owner + ", status=" + status + "]";
+		return "WcmNode [repository=" + repository + ", workspace=" + workspace + ", wcmPath=" + wcmPath + ", name="
+				+ name + ", title=" + title + ", nodeType=" + nodeType + ", lastModified=" + lastModified + ", owner="
+				+ owner + ", status=" + status + "]";
 	}
 }

@@ -40,7 +40,7 @@ public class CategoryRestController extends BaseWcmRestController {
 			String repositoryName = category.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = (StringUtils.hasText(category.getParent())) ? 
-					String.format(WCM_CATEGORY_PATH_PATTERN + "/%s", category.getLibrary(), category.getParent(), category.getName()) :
+					String.format(WCM_CATEGORY_SUB_PATH_PATTERN, category.getLibrary(), category.getParent(), category.getName()) :
 					String.format(WCM_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
 			this.itemHandler.addItem(
 					baseUrl, 
@@ -76,7 +76,9 @@ public class CategoryRestController extends BaseWcmRestController {
 		try {
 			String repositoryName = category.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
+			String path = (StringUtils.hasText(category.getParent())) ? 
+					String.format(WCM_CATEGORY_SUB_PATH_PATTERN, category.getLibrary(), category.getParent(), category.getName()) :
+					String.format(WCM_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
 			JsonNode categoryJson = category.toJson();
 			this.itemHandler.updateItem(baseUrl, repositoryName, category.getWorkspace(), path, categoryJson);
 			if (this.authoringEnabled) {

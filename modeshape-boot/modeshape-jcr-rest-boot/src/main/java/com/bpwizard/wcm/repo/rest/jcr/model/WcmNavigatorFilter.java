@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class WcmNavigatorFilter {
-	private String nodePath;
+	private String wcmPath;
 	private String[] nodeTypes;
 	private Map<String, Map<String, String>> conditions;
 	
@@ -13,12 +13,12 @@ public class WcmNavigatorFilter {
 	private int pageIndex = 0;
 	private int pageSize;
 	
-	public String getNodePath() {
-		return nodePath;
+	public String getWcmPath() {
+		return wcmPath;
 	}
 
-	public void setNodePath(String nodePath) {
-		this.nodePath = nodePath;
+	public void setWcmPath(String wcmPath) {
+		this.wcmPath = wcmPath;
 	}
 
 	public String[] getNodeTypes() {
@@ -71,7 +71,7 @@ public class WcmNavigatorFilter {
 
 	@Override
 	public String toString() {
-		return "WcmNavigatorFilter [nodePath=" + nodePath + ", nodeTypes=" + Arrays.toString(nodeTypes)
+		return "WcmNavigatorFilter [wcmPath=" + wcmPath + ", nodeTypes=" + Arrays.toString(nodeTypes)
 				+ ", conditions=" + conditions + ", filter=" + filter + ", sortDirection=" + sortDirection
 				+ ", pageIndex=" + pageIndex + ", pageSize=" + pageSize + "]";
 	}

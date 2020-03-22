@@ -86,11 +86,14 @@ public abstract class BaseWcmRestController {
 	protected static final String WCM_RT_PATH_PATTERN = "/bpwizard/library/%s/renderTemplate/%s";
 	protected static final String WCM_CONTENT_LAYOUT_PATH_PATTERN = "/bpwizard/library/%s/contentAreaLayout/%s";
 	protected static final String WCM_SITECONFIG_PATH_PATTERN = "/bpwizard/library/%s/siteConfig/%s";
-	protected static final String WCM_CATEGORY_PATH_PATTERN = "/bpwizard/library/%s/category%s";
+	protected static final String WCM_CATEGORY_PATH_PATTERN = "/bpwizard/library/%s/category/%s";
+	protected static final String WCM_CATEGORY_SUB_PATH_PATTERN = "/bpwizard/library/%s/category/%s/%s";
 	protected static final String WCM_VALIDATTOR_PATH_PATTERN = "/bpwizard/library/%s/validationRule/%s";
 	protected static final String WCM_WORKFLOW_ROOT_PATH_PATTERN = "/bpwizard/library/%s/workflow";
 	protected static final String WCM_WORKFLOW_PATH_PATTERN = "/bpwizard/library/%s/workflow/%s";
 	protected static final String WCM_QUERY_PATH_PATTERN = "/bpwizard/library/%s/query/%s";
+	protected static final String WCM_VALIDATION_RULE_ROOT_PATH_PATTERN = "/bpwizard/library/%s/validationRule";
+	protected static final String WCM_QUERY_ROOT_PATH_PATTERN = "/bpwizard/library/%s/query";
 	protected static final String DEFAULT_WS = "default";
 	protected static final String DRAFT_WS = "draft";
 	protected static final String EXPIRED_WS = "expired";

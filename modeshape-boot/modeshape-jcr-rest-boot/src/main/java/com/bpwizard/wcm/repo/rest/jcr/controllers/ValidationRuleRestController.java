@@ -1,8 +1,14 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Stream;
+
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +30,7 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ValidationRule;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
+import com.bpwizard.wcm.repo.validation.ValidateString;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -34,34 +41,67 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/validationRule";
 	private static final Logger logger = LogManager.getLogger(ValidationRuleRestController.class);
 	
+//	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ValidationRule getValidationRule(
+//			@PathVariable("repository") String repository,
+//		    @PathVariable("workspace") String workspace,
+//		    @RequestParam("path") String nodePath, 
+//			HttpServletRequest request) 
+//			throws WcmRepositoryException {
+//
+//		if (logger.isDebugEnabled()) {
+//			logger.traceEntry();
+//		}
+//		try {
+//			String baseUrl = RestHelper.repositoryUrl(request);
+//			RestNode validationRuleNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+//					nodePath, 2);
+//			ValidationRule validationRule = this.toValidationRule(validationRuleNode);
+//			validationRule.setRepository(repository);
+//			validationRule.setWorkspace(workspace);
+//			validationRule.setLibrary(nodePath.split("/", 5)[3]);
+//			if (logger.isDebugEnabled()) {
+//				logger.traceExit();
+//			}
+//			return validationRule;
+//		} catch (WcmRepositoryException e ) {
+//			throw e;
+//		} catch (Throwable t) {
+//			throw new WcmRepositoryException(t);
+//		}		
+//	}
+	
 	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ValidationRule getValidationRule(
-			@PathVariable("repository") String repository,
-		    @PathVariable("workspace") String workspace,
-		    @RequestParam("path") String nodePath, 
-			HttpServletRequest request) 
+	public ResponseEntity<ValidationRule[]> loadValidationRules(
+		@PathVariable("repository") String repository,
+		@PathVariable("workspace") String workspace,
+		@RequestParam(name="filter", defaultValue = "") String filter,
+	    @RequestParam(name="sort", defaultValue = "asc") 
+		@ValidateString(acceptedValues={"asc", "desc"}, message="Sort order can only be asc or desc")
+		String sortDirection,
+	    @RequestParam(name="pageIndex", defaultValue = "0") int pageIndex,
+	    @RequestParam(name="pageSize", defaultValue = "3") @Min(3) @Max(10) int pageSize,
+		HttpServletRequest request) 
 			throws WcmRepositoryException {
-
+		
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-		try {
-			String baseUrl = RestHelper.repositoryUrl(request);
-			RestNode validationRuleNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					nodePath, 2);
-			ValidationRule validationRule = this.toValidationRule(validationRuleNode);
-			validationRule.setRepository(repository);
-			validationRule.setWorkspace(workspace);
-			validationRule.setLibrary(nodePath.split("/", 5)[3]);
-			if (logger.isDebugEnabled()) {
-				logger.traceExit();
-			}
-			return validationRule;
-		} catch (WcmRepositoryException e ) {
-			throw e;
-		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
-		}		
+
+		String baseUrl = RestHelper.repositoryUrl(request);
+		
+		ValidationRule[] validationRules = this.getValidationRuleLibraries(repository, workspace, baseUrl)
+				.flatMap(library -> this.doGetBpmnWorkflows(library, baseUrl))
+				.toArray(ValidationRule[]::new);
+		if ("asc".equals(sortDirection)) {
+			Arrays.sort(validationRules);
+		} else if ("desc".equals(sortDirection)) {
+			Arrays.sort(validationRules, Collections.reverseOrder());
+		}
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(validationRules);
 	}
 	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -121,9 +161,50 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			throw new WcmRepositoryException(t);
 		}	
 	}
+	
+	protected Stream<ValidationRule> doGetBpmnWorkflows(ValidationRule rule, String baseUrl)
+			throws WcmRepositoryException {
+		try {
+			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, rule.getRepository(), rule.getWorkspace(),
+					String.format(WCM_VALIDATION_RULE_ROOT_PATH_PATTERN, rule.getLibrary()), 3);
+			
+			return atNode.getChildren().stream().filter(this::isWorkflow)
+					.map(node -> this.toValidationRule(node, rule.getRepository(), rule.getWorkspace(), rule.getLibrary()));
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+			throw new WcmRepositoryException(e);
+		}
+	}
+	
+	protected Stream<ValidationRule> getValidationRuleLibraries(String repository, String workspace,
+			String baseUrl) throws WcmRepositoryException {
+		try {
+			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+					WCM_ROOT_PATH, 1);
+			return bpwizardNode.getChildren().stream()
+					.filter(this::notSystemLibrary)
+					.map(node -> toValidationRuleWithLibrary(node, repository, workspace));
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e);
+		}
+	}
+	
+	protected ValidationRule toValidationRuleWithLibrary(RestNode node, String repository, String workspace) {
+		ValidationRule validationRuleWithLibrary = new ValidationRule();
+		validationRuleWithLibrary.setRepository(repository);
+		validationRuleWithLibrary.setWorkspace(workspace);
+		validationRuleWithLibrary.setLibrary(node.getName());
+		return validationRuleWithLibrary;
+	}
+	
 
-	private ValidationRule toValidationRule(RestNode node) {
+	private ValidationRule toValidationRule(RestNode node, String repository, String workspace, String library) {
 		ValidationRule validationRule = new ValidationRule();
+		
+		validationRule.setRepository(repository);
+		validationRule.setWorkspace(workspace);
+		validationRule.setLibrary(library);
+		
 		validationRule.setName(node.getName());
 		for (RestProperty restProperty : node.getJcrProperties()) {
 			if ("bpw:title".equals(restProperty.getName())) {

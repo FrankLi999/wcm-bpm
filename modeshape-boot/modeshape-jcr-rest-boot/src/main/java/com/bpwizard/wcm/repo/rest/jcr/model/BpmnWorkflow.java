@@ -81,12 +81,11 @@ public class BpmnWorkflow extends ResourceNode implements HasName, Comparable<Bp
 	public int compareTo(BpmnWorkflow o) {
 		int result = 1;
 		if (o != null) {
-		    result = this.id().compareTo(o.id());
+		    result = this.name.compareTo(o.getName());
+		    if (result == 0) {
+		    	result = this.library.compareTo(o.getLibrary());
+		    }
 		}
 		return result;
-	}
-	
-	protected String id() {
-		return String.format("%s_%s", this.library, this.name);
 	}
 }

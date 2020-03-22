@@ -87,25 +87,22 @@ public class WorkflowRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-		// try {
-			String baseUrl = RestHelper.repositoryUrl(request);
-			
-			BpmnWorkflow[] bpmnWorkflows = this.getBpmnWorkflowLibraries(repository, workspace, baseUrl)
-					.flatMap(library -> this.doGetBpmnWorkflows(library, baseUrl))
-					.toArray(BpmnWorkflow[]::new);
-			if ("asc".equals(sortDirection)) {
-				Arrays.sort(bpmnWorkflows);
-			} else if ("desc".equals(sortDirection)) {
-				Arrays.sort(bpmnWorkflows, Collections.reverseOrder());
-			}
-			if (logger.isDebugEnabled()) {
-				logger.traceExit();
-			}
-			return ResponseEntity.status(HttpStatus.OK).body(bpmnWorkflows);
-//		} catch (WcmRepositoryException e) {
-//			throw e;// new WcmRepositoryException(e);
-//		}
-	  }
+
+		String baseUrl = RestHelper.repositoryUrl(request);
+		
+		BpmnWorkflow[] bpmnWorkflows = this.getBpmnWorkflowLibraries(repository, workspace, baseUrl)
+				.flatMap(library -> this.doGetBpmnWorkflows(library, baseUrl))
+				.toArray(BpmnWorkflow[]::new);
+		if ("asc".equals(sortDirection)) {
+			Arrays.sort(bpmnWorkflows);
+		} else if ("desc".equals(sortDirection)) {
+			Arrays.sort(bpmnWorkflows, Collections.reverseOrder());
+		}
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(bpmnWorkflows);
+	}
 	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createBpmnWorkflow(

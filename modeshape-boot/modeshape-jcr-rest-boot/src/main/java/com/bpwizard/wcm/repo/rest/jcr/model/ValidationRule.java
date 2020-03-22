@@ -10,7 +10,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ValidationRule implements HasName, Serializable {
+public class ValidationRule implements HasName, Serializable, Comparable<ValidationRule> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -114,5 +114,17 @@ public class ValidationRule implements HasName, Serializable {
 		return "ValidationRule [repository=" + repository + ", workspace=" + workspace + ", library=" + library
 				+ ", name=" + name + ", title=" + title + ", description=" + description + ", type=" + type + ", rule="
 				+ rule + "]";
+	}
+	
+	@Override
+	public int compareTo(ValidationRule o) {
+		int result = 1;
+		if (o != null) {
+		    result = this.name.compareTo(o.getName());
+		    if (result == 0) {
+		    	result = this.library.compareTo(o.getLibrary());
+		    }
+		}
+		return result;
 	}
 }
