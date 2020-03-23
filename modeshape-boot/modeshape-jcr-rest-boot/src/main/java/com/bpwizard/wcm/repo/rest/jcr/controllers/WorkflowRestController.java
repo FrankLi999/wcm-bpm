@@ -167,7 +167,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
 					String.format(WCM_WORKFLOW_ROOT_PATH_PATTERN, at.getLibrary()), 3);
 			
-			return atNode.getChildren().stream().filter(this::isWorkflow)
+			return atNode.getChildren().stream().filter(this::isBpmnWorkflow)
 					.map(node -> this.toBpmnWorkflow(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
 		} catch (RepositoryException e) {
 			e.printStackTrace();
@@ -199,6 +199,10 @@ public class WorkflowRestController extends BaseWcmRestController {
 	protected BpmnWorkflow toBpmnWorkflow(RestNode node, String repository, String workspace, String library) {
 		BpmnWorkflow bpmnWorkflow = new BpmnWorkflow();
 		bpmnWorkflow.setName(node.getName());
+		
+		bpmnWorkflow.setRepository(repository);
+		bpmnWorkflow.setWorkspace(workspace);
+		bpmnWorkflow.setLibrary(library);
 		for (RestProperty restProperty : node.getJcrProperties()) {
 			if ("bpw:title".equals(restProperty.getName())) {
 				bpmnWorkflow.setTitle(restProperty.getValues().get(0));

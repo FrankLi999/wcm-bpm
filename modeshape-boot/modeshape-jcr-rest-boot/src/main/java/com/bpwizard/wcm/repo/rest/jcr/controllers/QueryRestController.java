@@ -254,7 +254,7 @@ public class QueryRestController extends BaseWcmRestController {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
 					String.format(WCM_QUERY_ROOT_PATH_PATTERN, query.getLibrary()), 3);
 			
-			return atNode.getChildren().stream().filter(this::isWorkflow)
+			return atNode.getChildren().stream().filter(this::isQueryStatement)
 					.map(node -> this.toQueryStatement(node, query.getRepository(), query.getWorkspace(), query.getLibrary()));
 		} catch (RepositoryException e) {
 			e.printStackTrace();

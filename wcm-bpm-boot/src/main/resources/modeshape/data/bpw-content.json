@@ -1825,7 +1825,7 @@
     },
     "bpwizard/library/system/authoringTemplate/bpmnWorkflowType/elements/bpmn" : {
         "jcr:primaryType": "bpw:formControl",
-        "bpw:title": "Rule",
+        "bpw:title": "Bpmn",
         "bpw:controlType": "text",
         "bpw:dataType": "string",
         "bpw:valdition": "{\"regex\": \"[^(<[.\n]+>)]*\"}",

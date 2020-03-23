@@ -168,7 +168,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, rule.getRepository(), rule.getWorkspace(),
 					String.format(WCM_VALIDATION_RULE_ROOT_PATH_PATTERN, rule.getLibrary()), 3);
 			
-			return atNode.getChildren().stream().filter(this::isWorkflow)
+			return atNode.getChildren().stream().filter(this::isValidationRule)
 					.map(node -> this.toValidationRule(node, rule.getRepository(), rule.getWorkspace(), rule.getLibrary()));
 		} catch (RepositoryException e) {
 			e.printStackTrace();

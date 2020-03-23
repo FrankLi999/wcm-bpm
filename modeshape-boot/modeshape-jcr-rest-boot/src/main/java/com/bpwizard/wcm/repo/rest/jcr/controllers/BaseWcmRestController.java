@@ -181,6 +181,18 @@ public abstract class BaseWcmRestController {
 	protected boolean isWorkflow(RestNode node) {
 		return this.wcmUtils.checkNodeType(node, "bpw:workflow");
 	}
+
+	protected boolean isBpmnWorkflow(RestNode node) {
+		return this.wcmUtils.checkNodeType(node, "bpw:bpmnWorkflow");
+	}
+	
+	protected boolean isQueryStatement(RestNode node) {
+		return this.wcmUtils.checkNodeType(node, "bpw:queryStatement");
+	}
+	
+	protected boolean isValidationRule(RestNode node) {
+		return this.wcmUtils.checkNodeType(node, "bpw:validationRule");
+	}
 	
   	protected void doPurgeWcmItem(
   			String repository,
