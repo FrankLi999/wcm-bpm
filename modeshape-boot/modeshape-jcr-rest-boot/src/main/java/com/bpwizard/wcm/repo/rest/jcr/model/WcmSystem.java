@@ -10,6 +10,7 @@ public class WcmSystem {
 	
 	private Theme jcrThemes[];
 	private Map<String, JsonForm[]> jsonForms;
+	private QueryStatement[] queryStatements;
 	private Map<String, RenderTemplate> renderTemplates;
 	private Map<String, ContentAreaLayout> contentAreaLayouts;
 	private Map<String, AuthoringTemplate> authoringTemplates;
@@ -99,13 +100,20 @@ public class WcmSystem {
 	public void setLocales(Locale[] locales) {
 		this.locales = locales;
 	}
+	public QueryStatement[] getQueryStatements() {
+		return queryStatements;
+	}
+	public void setQueryStatements(QueryStatement[] queryStatements) {
+		this.queryStatements = queryStatements;
+	}
 	@Override
 	public String toString() {
 		return "WcmSystem [wcmRepositories=" + Arrays.toString(wcmRepositories) + ", operations=" + operations
-				+ ", jcrThemes=" + Arrays.toString(jcrThemes) + ", jsonForms=" + jsonForms + ", renderTemplates="
-				+ renderTemplates + ", contentAreaLayouts=" + contentAreaLayouts + ", authoringTemplates="
-				+ authoringTemplates + ", siteConfig=" + siteConfig + ", navigations=" + Arrays.toString(navigations)
-				+ ", siteAreas=" + siteAreas + ", controlFiels=" + Arrays.toString(controlFiels) + ", langs="
-				+ Arrays.toString(langs) + ", locales=" + Arrays.toString(locales) + "]";
+				+ ", jcrThemes=" + Arrays.toString(jcrThemes) + ", jsonForms=" + jsonForms + ", queryStatements="
+				+ Arrays.toString(queryStatements) + ", renderTemplates=" + renderTemplates + ", contentAreaLayouts="
+				+ contentAreaLayouts + ", authoringTemplates=" + authoringTemplates + ", siteConfig=" + siteConfig
+				+ ", navigations=" + Arrays.toString(navigations) + ", siteAreas=" + siteAreas + ", controlFiels="
+				+ Arrays.toString(controlFiels) + ", langs=" + Arrays.toString(langs) + ", locales="
+				+ Arrays.toString(locales) + ", toString()=" + super.toString() + "]";
 	}
 }

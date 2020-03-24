@@ -21,6 +21,7 @@ public class QueryStatement implements HasName, Serializable, Comparable<QuerySt
 	private String name;
 	private String title;
 	private String query;
+	private String[] columns;
 	
 	public String getRepository() {
 		return repository;
@@ -68,6 +69,14 @@ public class QueryStatement implements HasName, Serializable, Comparable<QuerySt
 
 	public void setQuery(String query) {
 		this.query = query;
+	}
+
+	public String[] getColumns() {
+		return columns;
+	}
+
+	public void setColumns(String[] columns) {
+		this.columns = columns;
 	}
 
 	public JsonNode toJson() {

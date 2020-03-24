@@ -52,6 +52,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.NavigationBadge;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationType;
 import com.bpwizard.wcm.repo.rest.jcr.model.PageLayout;
+import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplateLayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplateLayoutRow;
@@ -848,6 +849,12 @@ public abstract class BaseWcmRestController {
 								ResourceElementRender element = new ResourceElementRender();
 								elements.add(element);
 								element.setName(elementNode.getName());
+								for (RestProperty property : elementNode.getJcrProperties()) {
+									if ("bpw:source".equals(property.getName())) {
+										element.setSource(property.getValues().get(0));
+										break;
+									} 
+								}
 							}
 						}
 						column.setElements(elements.toArray(new ResourceElementRender[elements.size()]));
@@ -1415,5 +1422,75 @@ public abstract class BaseWcmRestController {
 			navigation.setChildren(navigationItems);
 		}
 		return navigation;
+	}
+	
+	protected QueryStatement[] doLoadQueryStatements(
+		String repository,
+		String workspace,
+		HttpServletRequest request) 
+			throws WcmRepositoryException {
+		
+		String baseUrl = RestHelper.repositoryUrl(request);
+		
+		QueryStatement[] queryStatements = this.getQueryLibraries(repository, workspace, baseUrl)
+				.flatMap(library -> this.doGetQueryStatements(library, baseUrl))
+				.toArray(QueryStatement[]::new);
+		
+		return queryStatements;
+	}
+	
+	protected Stream<QueryStatement> getQueryLibraries(String repository, String workspace,
+			String baseUrl) throws WcmRepositoryException {
+		try {
+			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+					WCM_ROOT_PATH, 1);
+			return bpwizardNode.getChildren().stream()
+					.filter(this::notSystemLibrary)
+					.map(node -> toQueryStatementWithLibrary(node, repository, workspace));
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e);
+		}
+	}
+	
+	protected QueryStatement toQueryStatementWithLibrary(RestNode node, String repository, String workspace) {
+		QueryStatement queryStatementWithLibrary = new QueryStatement();
+		queryStatementWithLibrary.setRepository(repository);
+		queryStatementWithLibrary.setWorkspace(workspace);
+		queryStatementWithLibrary.setLibrary(node.getName());
+		return queryStatementWithLibrary;
+	}
+	
+	protected Stream<QueryStatement> doGetQueryStatements(QueryStatement query, String baseUrl)
+			throws WcmRepositoryException {
+		try {
+			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
+					String.format(WCM_QUERY_ROOT_PATH_PATTERN, query.getLibrary()), 3);
+			
+			return atNode.getChildren().stream().filter(this::isQueryStatement)
+					.map(node -> this.toQueryStatement(node, query.getRepository(), query.getWorkspace(), query.getLibrary()));
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+			throw new WcmRepositoryException(e);
+		}
+	}
+	
+	protected QueryStatement toQueryStatement(RestNode node, String repository, String workspace, String library) {
+		QueryStatement queryStatement = new QueryStatement();
+		
+		queryStatement.setRepository(repository);
+		queryStatement.setWorkspace(workspace);
+		queryStatement.setLibrary(library);
+		
+		queryStatement.setName(node.getName());
+		for (RestProperty restProperty : node.getJcrProperties()) {
+			if ("bpw:title".equals(restProperty.getName())) {
+				queryStatement.setTitle(restProperty.getValues().get(0));
+			} else if ("bpw:query".equals(restProperty.getName())) {
+				queryStatement.setQuery(restProperty.getValues().get(0));
+			} else if ("bpw:columns".equals(restProperty.getName())) {
+				queryStatement.setColumns(restProperty.getValues().toArray(new String[restProperty.getValues().size()]));
+			}  
+		}
+		return queryStatement;
 	}
 }

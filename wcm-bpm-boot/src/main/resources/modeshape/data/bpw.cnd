@@ -428,6 +428,7 @@
 
 [bpw:ResourceElementRender]
 - bpw:name (STRING)
+- bpw:source (STRING)
 
 [bpw:RenderTemplateLayoutColumn]
 - bpw:id (STRING)

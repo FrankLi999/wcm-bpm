@@ -22,7 +22,7 @@ public class RenderTemplate extends ResourceNode implements HasName {
 	private String postloop;
 	private int maxEntries;
 	private String note;
-	private boolean isQuery;
+	private boolean query;
 	private String resourceName;
 	private RenderTemplateLayoutRow rows[];
 	
@@ -65,10 +65,10 @@ public class RenderTemplate extends ResourceNode implements HasName {
 		this.note = note;
 	}
 	public boolean isQuery() {
-		return isQuery;
+		return query;
 	}
-	public void setQuery(boolean isQuery) {
-		this.isQuery = isQuery;
+	public void setQuery(boolean query) {
+		this.query = query;
 	}
 	public String getResourceName() {
 		return resourceName;
@@ -165,6 +165,7 @@ public class RenderTemplate extends ResourceNode implements HasName {
 						columnNodeChildren.set(element.getName(), elementNode);
 						elementNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ResourceElementRender");
 						elementNode.put("bpw:name", element.getName());
+						elementNode.put("bpw:source", element.getSource());
 					}				    
 				}
 			}
@@ -175,7 +176,7 @@ public class RenderTemplate extends ResourceNode implements HasName {
 	public String toString() {
 		return "RenderTemplate [repository=" + repository + ", workspace=" + workspace + ", library=" + library
 				+ ", name=" + name + ", code=" + code + ", preloop=" + preloop + ", postloop=" + postloop
-				+ ", maxEntries=" + maxEntries + ", note=" + note + ", isQuery=" + isQuery + ", resourceName="
+				+ ", maxEntries=" + maxEntries + ", note=" + note + ", query=" + query + ", resourceName="
 				+ resourceName + ", rows=" + Arrays.toString(rows) + ", lockOwner=" + lockOwner + ", toString()="
 				+ super.toString() + "]";
 	}

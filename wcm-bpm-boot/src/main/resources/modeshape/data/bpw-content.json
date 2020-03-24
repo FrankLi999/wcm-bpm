@@ -1618,7 +1618,7 @@
         "bpw:controlType": "text",
         "bpw:dataType": "string",
         "bpw:valdition": "{\"regex\": \"[^(<[.\n]+>)]*\"}",
-        "bpw:mandatory": "true",
+        "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
         "bpw:showInList": "true"

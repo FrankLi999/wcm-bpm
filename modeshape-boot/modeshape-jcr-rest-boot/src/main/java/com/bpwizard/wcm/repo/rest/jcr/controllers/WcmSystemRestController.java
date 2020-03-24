@@ -22,6 +22,7 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
 import com.bpwizard.wcm.repo.rest.jcr.model.Navigation;
+import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
@@ -34,8 +35,8 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmWorkspace;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories;
-import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories.Repository;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces.Workspace;
 
 @RestController
@@ -69,6 +70,9 @@ public class WcmSystemRestController extends BaseWcmRestController {
 
 				Map<String, JsonForm[]> jsonForms = this.doGetAuthoringTemplateAsJsonForm(repository, workspace, request);
 				wcmSystem.setJsonForms(jsonForms);
+				
+				QueryStatement[] queryStatements = this.doLoadQueryStatements(repository, workspace, request);
+				wcmSystem.setQueryStatements(queryStatements);
 			} else {
 				Map<String, JsonForm[]> jsonForms = this.doGetApplicationJsonForm(repository, workspace, library, request);
 				wcmSystem.setJsonForms(jsonForms);
