@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ControlField;
 import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
@@ -35,6 +36,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmNavigatorFilter;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 
 @RestController
 @RequestMapping(WcmRestController.BASE_URI)
@@ -140,8 +142,7 @@ public class WcmRestController extends BaseWcmRestController {
   		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-  		wcmPath = (wcmPath.startsWith("/")) ? wcmPath.substring(1) : wcmPath;
-  		String absPath = (wcmPath.startsWith(WCM_ROOT_PATH)) ? wcmPath : String.format(WCM_ROOT_PATH_PATTERN, wcmPath);
+  		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
   			this.doPurgeWcmItem(repository, workspace, absPath);
   	  		if (logger.isDebugEnabled()) {
@@ -164,13 +165,13 @@ public class WcmRestController extends BaseWcmRestController {
 		    @PathVariable("workspace") String workspace,
   			@RequestParam("path") String wcmPath) { 
   		try {
-  			String absPath = (wcmPath.startsWith(WCM_ROOT_PATH)) ? wcmPath : String.format(WCM_ROOT_PATH_PATTERN, wcmPath);
-  			Session session = this.repositoryManager.getSession(repository, DEFAULT_WS);
+  			String absPath = (wcmPath.startsWith(WcmConstants.NODE_ROOT_PATH)) ? wcmPath : String.format(WcmConstants.NODE_ROOT_PATH_PATTERN, wcmPath);
+  			Session session = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
   			Node node = session.getNode(absPath);
   			node.remove();
             session.save();
             if (this.authoringEnabled) {
-	            session = this.repositoryManager.getSession(repository, DRAFT_WS);
+	            session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS);
 	  			node = session.getNode(absPath);
 	  			node.remove();
 	            session.save();
@@ -195,12 +196,12 @@ public class WcmRestController extends BaseWcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String wcmPath = filter.getWcmPath().startsWith("/") ? filter.getWcmPath().substring(1) : filter.getWcmPath();
-			final String absPath = String.format(WCM_ROOT_PATH_PATTERN, wcmPath);
+			String absPath = WcmUtils.nodePath(filter.getWcmPath());
 			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, 2);
+			
 			WcmNode[] wcmNodes = saNode.getChildren().stream()
 			    .filter(node -> this.applyFilter(node, filter))
-			    .map(node -> this.toWcmNode(node, repository, workspace, wcmPath))
+			    .map(node -> this.toWcmNode(node, repository, workspace, filter.getWcmPath()))
 			    .toArray(WcmNode[]::new);
 
 			if (logger.isDebugEnabled()) {
@@ -244,7 +245,7 @@ public class WcmRestController extends BaseWcmRestController {
 		return properties.size() == 0;
 	}
 	
-	private WcmNode toWcmNode(RestNode node, String repository, String workspace,  String wcmPath) {
+	private WcmNode toWcmNode(RestNode node, String repository, String workspace, String wcmPath) {
 		WcmNode wcmNode = new WcmNode();
 		wcmNode.setRepository(repository);
 		wcmNode.setWorkspace(workspace);
@@ -255,12 +256,13 @@ public class WcmRestController extends BaseWcmRestController {
 				break;
 			} 
 		}
-		wcmNode.setWcmPath(String.format("%s/%s", wcmPath, node.getName()));
+	
+		wcmNode.setWcmPath(String.format(wcmPath.startsWith("/")? WcmConstants.WCM_REL_PATH_PATTERN : WcmConstants.WCM_PATH_PATTERN, wcmPath, node.getName()));
 		return wcmNode;
 	}
 	
 	protected void deleteDraftItem(String repository, String path) throws RepositoryException {
-		Session draftSession = this.repositoryManager.getSession(repository, DRAFT_WS);
+		Session draftSession = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS);
 		Item item = draftSession.getItem(path);
         item.remove();
         draftSession.save();

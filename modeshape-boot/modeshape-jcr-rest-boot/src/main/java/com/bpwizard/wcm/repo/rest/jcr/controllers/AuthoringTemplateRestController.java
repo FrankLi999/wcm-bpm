@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -109,12 +110,12 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_AT_PATH_PATTERN, at.getLibrary(), at.getName());
+			String path = String.format(WcmConstants.NODE_AT_PATH_PATTERN, at.getLibrary(), at.getName());
 			String repositoryName = at.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, DEFAULT_WS, path, at.toJson());
+			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, at.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
-				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -139,12 +140,12 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_AT_PATH_PATTERN, at.getLibrary(), at.getName());
+			String path = String.format(WcmConstants.NODE_AT_PATH_PATTERN, at.getLibrary(), at.getName());
 			String repositoryName = at.getRepository();
 			JsonNode atJson = at.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, DEFAULT_WS, path, atJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, atJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, atJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, atJson);
 //				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
 //				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
 				// session.save();

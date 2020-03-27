@@ -18,7 +18,7 @@ public class ContentItem extends WorkflowNode {
 	private String[] categories;
 	private String repository;
 	private String workspace;
-	private String nodePath;
+	private String wcmPath;
 	private String authoringTemplate;
 	private String lifeCycleStage;
 
@@ -61,12 +61,12 @@ public class ContentItem extends WorkflowNode {
 		this.workspace = workspace;
 	}
 
-	public String getNodePath() {
-		return nodePath;
+	public String getWcmPath() {
+		return wcmPath;
 	}
 
-	public void setNodePath(String nodePath) {
-		this.nodePath = nodePath;
+	public void setWcmPath(String wcmPath) {
+		this.wcmPath = wcmPath;
 	}
 
 	public String getAuthoringTemplate() {
@@ -193,7 +193,7 @@ public class ContentItem extends WorkflowNode {
 	@Override
 	public String toString() {
 		return "ContentItem [id=" + id + ", name=" + this.getName() + ", categories=" + Arrays.toString(categories)
-				+ ", repository=" + repository + ", workspace=" + workspace + ", nodePath=" + nodePath
+				+ ", repository=" + repository + ", workspace=" + workspace + ", wcmPath=" + wcmPath
 				+ ", authoringTemplate=" + authoringTemplate + ", lifeCycleStage=" + lifeCycleStage + ", elements="
 				+ elements + ", properties=" + properties + ", toString()=" + super.toString() + "]";
 	}

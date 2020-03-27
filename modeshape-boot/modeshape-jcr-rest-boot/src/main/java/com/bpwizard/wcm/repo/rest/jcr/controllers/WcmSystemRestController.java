@@ -38,6 +38,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories.Repository;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces.Workspace;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 
 @RestController
 @RequestMapping(WcmSystemRestController.BASE_URI)
@@ -141,7 +142,7 @@ public class WcmSystemRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode operationsNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					String.format(WCM_ROOT_PATH_PATTERN, "system/configuration/operations"), 2);
+					String.format(WcmConstants.NODE_ROOT_REL_PATH_PATTERN, WcmConstants.OPERATION_REL_PATH), 2);
 			Map<String, WcmOperation[]> wcmOperationMap = operationsNode.getChildren().stream()
 					.filter(node -> this.wcmUtils.checkNodeType(node, "bpw:supportedOpertions"))
 					.map(this::supportedOpertionsToWcmOperation)
@@ -179,7 +180,7 @@ public class WcmSystemRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					"/bpwizard/library", 1);
+					WcmConstants.NODE_ROOT_PATH, 1);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toThemeWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
@@ -189,8 +190,8 @@ public class WcmSystemRestController extends BaseWcmRestController {
 
 	private Stream<Theme> getThemes(Theme theme, String baseUrl) throws WcmRepositoryException {
 		try {
-			RestNode themeNode = (RestNode) this.itemHandler.item(baseUrl, theme.getRepositoryName(),
-					theme.getWorkspace(), "/bpwizard/library/" + theme.getLibrary() + "/theme", 1);
+			RestNode themeNode = (RestNode) this.itemHandler.item(baseUrl, theme.getRepositoryName(), theme.getWorkspace(),
+					String.format(WcmConstants.NODE_THEME_ROOT_PATH_PATTERN, theme.getLibrary()), 1);
 			return themeNode.getChildren().stream().filter(this::isTheme).map(node -> this.toTheme(node, theme));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
@@ -282,7 +283,7 @@ public class WcmSystemRestController extends BaseWcmRestController {
 			String baseUrl) throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					"/bpwizard/library", 1);
+					WcmConstants.NODE_ROOT_PATH, 1);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> {
 						 WcmLibrary  wcmLibrary = new  WcmLibrary();

@@ -45,6 +45,7 @@ import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -150,7 +151,7 @@ public class ModeshapeController {
 			
 			// javax.jcr.query.qom.QueryObjectModel qom = null
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/query/%s", query.getLibrary(), query.getName());
+			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
 			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, qJson);
 //			if (this.authoringEnabled) {
@@ -184,7 +185,7 @@ public class ModeshapeController {
 			
 			// javax.jcr.query.qom.QueryObjectModel qom = null
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format("/bpwizard/library/%s/query/%s", query.getLibrary(), query.getName());
+			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
 			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, qJson);
 
@@ -378,7 +379,7 @@ public class ModeshapeController {
 	}
 	@GetMapping("/testACL")
 	public String testACL() throws Exception {
-		String path = "/bpwizard/library";
+		String path = WcmConstants.NODE_ROOT_PATH;
 		String[] readPrivileges = new String[] {
 		  Privilege.JCR_READ
 		};

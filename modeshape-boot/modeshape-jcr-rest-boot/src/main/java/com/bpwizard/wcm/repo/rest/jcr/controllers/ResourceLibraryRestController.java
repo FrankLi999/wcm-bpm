@@ -31,6 +31,7 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Library;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.validation.RepositoryName;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 import com.bpwizard.wcm.repo.validation.WorkspaceName;
@@ -64,7 +65,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode libraryParentNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WCM_ROOT_PATH, 2);
+					WcmConstants.NODE_ROOT_PATH, 2);
 			Library[] libraries = libraryParentNode.getChildren().stream()
 					.filter(this::isLibrary)
 					.filter(this::notSystemLibrary)
@@ -96,7 +97,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		try {
 			String repositoryName = library.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_ROOT_PATH_PATTERN, library.getName());
+			String path = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName());
 			this.itemHandler.addItem(
 					baseUrl, 
 					repositoryName,
@@ -131,7 +132,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		try {
 			String repositoryName = library.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_ROOT_PATH_PATTERN, library.getName());
+			String path = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName());
 			JsonNode jsonItem = library.toJson();
 			this.itemHandler.updateItem(
 					baseUrl, 
@@ -170,7 +171,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		this.doPurgeWcmItem(
 				library.getRepository(), 
 				library.getWorkspace(), 
-				String.format(WCM_ROOT_PATH_PATTERN, library.getName()));
+				String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName()));
 		
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();

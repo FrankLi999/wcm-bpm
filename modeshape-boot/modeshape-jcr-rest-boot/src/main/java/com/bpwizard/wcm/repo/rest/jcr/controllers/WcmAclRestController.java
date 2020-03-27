@@ -45,6 +45,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.Grant;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmGroup;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmPermission;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmPrincipal;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 
 @RestController
@@ -229,8 +230,7 @@ public class WcmAclRestController extends BaseWcmRestController {
 		try {
 			Session session = this.repositoryManager.getSession(repository, workspace);
 			AccessControlManager acm = session.getAccessControlManager();
-			String wcmPath = grant.getWcmPath().startsWith("/") ? grant.getWcmPath().substring(1) : grant.getWcmPath();
-			String absPath = String.format(WCM_ROOT_PATH_PATTERN, wcmPath);
+			String absPath = String.format(grant.getWcmPath().startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, grant.getWcmPath());
 			AccessControlList acl = null;
 			AccessControlPolicyIterator it = acm.getApplicablePolicies(absPath);
 			if (it.hasNext()) {
@@ -280,8 +280,7 @@ public class WcmAclRestController extends BaseWcmRestController {
 	}
 	
 	private Grant doGetAcl(Session session, AccessControlManager acm, String wcmPath ) throws RepositoryException {
-		wcmPath = wcmPath.startsWith("/") ? wcmPath.substring(1) : wcmPath;
-		String absPath = String.format(WCM_ROOT_PATH_PATTERN, wcmPath);
+		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
 		AccessControlList acl = null;
 		AccessControlPolicyIterator it = acm.getApplicablePolicies(absPath);
 		if (it.hasNext()) {

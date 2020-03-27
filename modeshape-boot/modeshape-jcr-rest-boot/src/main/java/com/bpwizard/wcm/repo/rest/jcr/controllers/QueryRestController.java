@@ -7,8 +7,6 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import javax.jcr.query.Row;
-import javax.jcr.query.RowIterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -33,6 +31,7 @@ import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -87,7 +86,7 @@ public class QueryRestController extends BaseWcmRestController {
 			String repositoryName = query.getRepository();
 			ObjectNode qJson = (ObjectNode) query.toJson();
 			try {
-				QueryManager qrm = this.repositoryManager.getSession(repositoryName, DEFAULT_WS).getWorkspace().getQueryManager();
+				QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
 				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
 				QueryResult jcrResult = jcrQuery.execute();
 				String columnNames[] = jcrResult.getColumnNames();
@@ -103,12 +102,12 @@ public class QueryRestController extends BaseWcmRestController {
 			}
 			// javax.jcr.query.qom.QueryObjectModel qom = null
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
+			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
-			this.itemHandler.addItem(baseUrl,  repositoryName, DEFAULT_WS, path, qJson);
+			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
-				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -131,11 +130,11 @@ public class QueryRestController extends BaseWcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
+			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			String repositoryName = query.getRepository();
 			ObjectNode qJson = (ObjectNode) query.toJson();
 			try {
-				QueryManager qrm = this.repositoryManager.getSession(repositoryName, DEFAULT_WS).getWorkspace().getQueryManager();
+				QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
 				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
 				QueryResult jcrResult = jcrQuery.execute();
 				String columnNames[] = jcrResult.getColumnNames();
@@ -149,9 +148,9 @@ public class QueryRestController extends BaseWcmRestController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			this.itemHandler.updateItem(baseUrl, repositoryName, DEFAULT_WS, path, qJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, qJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, qJson);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();

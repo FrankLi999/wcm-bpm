@@ -25,6 +25,7 @@ import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -123,11 +124,11 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 		try {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
-			this.itemHandler.addItem(baseUrl, repositoryName, DEFAULT_WS, path, rt.toJson());
+			String path = String.format(WcmConstants.NODE_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
+			this.itemHandler.addItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, rt.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
-				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -150,7 +151,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 		try {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
+			String path = String.format(WcmConstants.NODE_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
 			JsonNode rtJson = rt.toJson();
 			this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), path, rtJson);
 			if (this.authoringEnabled) {

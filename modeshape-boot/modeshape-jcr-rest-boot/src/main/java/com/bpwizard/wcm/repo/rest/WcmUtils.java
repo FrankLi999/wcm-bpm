@@ -32,6 +32,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.FormTabs;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 
 @Component
 public class WcmUtils {
@@ -44,17 +45,17 @@ public class WcmUtils {
 	public AuthoringTemplate getAuthoringTemplate(
 			String repository,
 			String workspace, 
-			String atPath,
+			String wcmAtPath,
 			String baseUrl) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
 		try {
-			atPath = atPath.startsWith("/") ? atPath : "/" + atPath;
-			String library = atPath.split("/", 5)[3];
+			String library = WcmUtils.library(wcmAtPath);
+			String absPath = WcmUtils.nodePath(wcmAtPath);
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					atPath, 8);
+					absPath, 8);
 			
 			AuthoringTemplate at = this.toAuthoringTemplate(atNode, repository, workspace, library);
 			if (logger.isDebugEnabled()) {
@@ -410,5 +411,19 @@ public class WcmUtils {
 			fieldLayout.setKey(fieldLayout.getName());
 		}
 		return fieldLayout;
+	}
+	
+	public static String nodePath(String wcmPath) {
+		return String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, 
+				wcmPath);
+	}
+	
+	public static String nodePath(String wcmPath, String name) {
+		return String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_PATH_PATTERN : WcmConstants.NODE_REL_PATH_PATTERN, 
+				wcmPath, name);
+	}
+
+	public static String library(String wcmPath) {
+		return wcmPath.startsWith("/") ? wcmPath.split("/", 3)[1] : wcmPath.split("/", 2)[0];	
 	}
 }

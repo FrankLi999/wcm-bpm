@@ -101,34 +101,52 @@ public class SiteConfig extends ResourceNode {
 		ObjectNode navbarNode = JsonUtils.createObjectNode();
 		layoutChildren.set("navbar", navbarNode);
 		navbarNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:navbar");
-		navbarNode.put("primaryBackground", this.layout.getNavbar().getPrimaryBackground());
-		navbarNode.put("secondaryBackground", this.layout.getNavbar().getSecondaryBackground());
+		if (this.layout.getNavbar().getPrimaryBackground() != null) {
+			navbarNode.put("primaryBackground", this.layout.getNavbar().getPrimaryBackground());	
+		}
+		if (this.layout.getNavbar().getSecondaryBackground() != null) {
+			navbarNode.put("secondaryBackground", this.layout.getNavbar().getSecondaryBackground());
+		}
 		navbarNode.put("hidden", this.layout.getNavbar().isHidden());
 		navbarNode.put("folded", this.layout.getNavbar().isFolded());
-		navbarNode.put("position", this.layout.getNavbar().getPosition());
-		navbarNode.put("variant", this.layout.getNavbar().getVariant());
+		if (this.layout.getNavbar().getPosition() != null) {
+			navbarNode.put("position", this.layout.getNavbar().getPosition());
+		}
+		if (this.layout.getNavbar().getVariant() != null) {
+			navbarNode.put("variant", this.layout.getNavbar().getVariant());
+		}
 		
 		ObjectNode toolbarNode = JsonUtils.createObjectNode();
 		layoutChildren.set("toolbar", toolbarNode);
 		toolbarNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:toolbar");
 		toolbarNode.put("customBackgroundColor", this.layout.getToolbar().isCustomBackgroundColor());
-		toolbarNode.put("background", this.layout.getToolbar().getBackground());
+		if (this.layout.getToolbar().getBackground() != null) {
+			toolbarNode.put("background", this.layout.getToolbar().getBackground());
+		}
 		toolbarNode.put("hidden", this.layout.getToolbar().isHidden());
-		toolbarNode.put("position", this.layout.getToolbar().getPosition());
+		if (this.layout.getToolbar().getPosition() != null) {
+			toolbarNode.put("position", this.layout.getToolbar().getPosition());
+		}
 		
 		ObjectNode footerNode = JsonUtils.createObjectNode();
 		layoutChildren.set("footer", footerNode);
 		footerNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:footer");
 		footerNode.put("customBackgroundColor", this.layout.getFooter().isCustomBackgroundColor());
-		footerNode.put("background", this.layout.getFooter().getBackground());
+		if (this.layout.getFooter().getBackground() != null) {
+			footerNode.put("background", this.layout.getFooter().getBackground());
+		}
 		footerNode.put("hidden", this.layout.getFooter().isHidden());
-		footerNode.put("position", this.layout.getFooter().getPosition());
+		if (this.layout.getFooter().getPosition() != null) {
+			footerNode.put("position", this.layout.getFooter().getPosition());
+		}
 
 		ObjectNode sidePanelNode = JsonUtils.createObjectNode();
 		layoutChildren.set("sidePanel", sidePanelNode);
 		sidePanelNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:sidePanel");
 		sidePanelNode.put("hidden", this.layout.getSidePanel().isHidden());
-		sidePanelNode.put("position", this.layout.getSidePanel().getPosition());
+		if (this.layout.getSidePanel().getPosition() != null) {
+			sidePanelNode.put("position", this.layout.getSidePanel().getPosition());
+		}
 
 		return jsonNode;
 	}

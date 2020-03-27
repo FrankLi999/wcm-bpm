@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Category;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -40,8 +41,8 @@ public class CategoryRestController extends BaseWcmRestController {
 			String repositoryName = category.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = (StringUtils.hasText(category.getParent())) ? 
-					String.format(WCM_CATEGORY_SUB_PATH_PATTERN, category.getLibrary(), category.getParent(), category.getName()) :
-					String.format(WCM_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
+					String.format(WcmConstants.NODE_CATEGORY_SUB_PATH_PATTERN, category.getLibrary(), category.getParent(), category.getName()) :
+					String.format(WcmConstants.NODE_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
 			this.itemHandler.addItem(
 					baseUrl, 
 					repositoryName,
@@ -49,8 +50,8 @@ public class CategoryRestController extends BaseWcmRestController {
 					path, 
 					category.toJson());
 			if (this.authoringEnabled) {
-				Session session = repositoryManager.getSession(repositoryName, DRAFT_WS);
-				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
+				Session session = repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -77,12 +78,12 @@ public class CategoryRestController extends BaseWcmRestController {
 			String repositoryName = category.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = (StringUtils.hasText(category.getParent())) ? 
-					String.format(WCM_CATEGORY_SUB_PATH_PATTERN, category.getLibrary(), category.getParent(), category.getName()) :
-					String.format(WCM_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
+					String.format(WcmConstants.NODE_CATEGORY_SUB_PATH_PATTERN, category.getLibrary(), category.getParent(), category.getName()) :
+					String.format(WcmConstants.NODE_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
 			JsonNode categoryJson = category.toJson();
 			this.itemHandler.updateItem(baseUrl, repositoryName, category.getWorkspace(), path, categoryJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, categoryJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, categoryJson);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();

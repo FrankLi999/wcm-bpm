@@ -30,6 +30,7 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ValidationRule;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -114,12 +115,12 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
+			String path = String.format(WcmConstants.NODE_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
 			String repositoryName = validationRule.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, DEFAULT_WS, path, validationRule.toJson());
+			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, validationRule.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
-				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -143,12 +144,12 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WCM_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
+			String path = String.format(WcmConstants.NODE_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
 			String repositoryName = validationRule.getRepository();
 			JsonNode atJson = validationRule.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, DEFAULT_WS, path, atJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, atJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, atJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, atJson);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -166,7 +167,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, rule.getRepository(), rule.getWorkspace(),
-					String.format(WCM_VALIDATION_RULE_ROOT_PATH_PATTERN, rule.getLibrary()), 3);
+					String.format(WcmConstants.NODE_VALIDATION_RULE_ROOT_PATH_PATTERN, rule.getLibrary()), 3);
 			
 			return atNode.getChildren().stream().filter(this::isValidationRule)
 					.map(node -> this.toValidationRule(node, rule.getRepository(), rule.getWorkspace(), rule.getLibrary()));
@@ -180,7 +181,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			String baseUrl) throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WCM_ROOT_PATH, 1);
+					WcmConstants.NODE_ROOT_PATH, 1);
 			return bpwizardNode.getChildren().stream()
 					.filter(this::notSystemLibrary)
 					.map(node -> toValidationRuleWithLibrary(node, repository, workspace));

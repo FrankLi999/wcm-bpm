@@ -25,6 +25,7 @@ import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -67,7 +68,6 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 		
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			// "/bpwizard/library/" + contentAreaLayout.getLibrary() + "/contentAreaLayout
 			RestNode contentAreaLayoutNode = (RestNode) this.itemHandler.item(baseUrl, repository,
 					workspace, absPath, 4);
 			ContentAreaLayout layout = new ContentAreaLayout();
@@ -121,11 +121,11 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 
 			String repositoryName = pageLayout.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format( WCM_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
+			String path = String.format( WcmConstants.NODE_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
 			this.itemHandler.addItem(baseUrl, repositoryName, pageLayout.getWorkspace(), path, pageLayout.toJson());
 			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
-				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
+				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			
@@ -151,12 +151,12 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format( WCM_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
+			String path = String.format( WcmConstants.NODE_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
 			String repositoryName = pageLayout.getRepository();
 			JsonNode layoutJson = pageLayout.toJson();
 			this.itemHandler.updateItem(baseUrl, repositoryName, pageLayout.getWorkspace(), path, layoutJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, DRAFT_WS, path, layoutJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, layoutJson);
 //				
 //				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
 //				session.getWorkspace().clone(DEFAULT_WS, path, path, true);

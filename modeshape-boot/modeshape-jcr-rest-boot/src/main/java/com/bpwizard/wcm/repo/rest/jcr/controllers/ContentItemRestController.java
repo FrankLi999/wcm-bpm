@@ -27,11 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -57,14 +59,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		try {
-			String path = contentItem.getNodePath();
+			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), DRAFT_WS, path, contentItem.toJson());
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson());
 			if (contentItem.getAcl() != null) {
 				String repositoryName = contentItem.getRepository();
 				String workspaceName = contentItem.getWorkspace();
 				Session session = this.repositoryManager.getSession(repositoryName, workspaceName);
-				ModeshapeUtils.grantPermissions(session, contentItem.getNodePath(), contentItem.getAcl());
+				ModeshapeUtils.grantPermissions(session, absPath, contentItem.getAcl());
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -95,16 +97,16 @@ public class ContentItemRestController extends BaseWcmRestController {
 			if (at.getContentItemAcl() != null) {
 			    contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
 			}
-			String path = String.format("%s/%s", contentItem.getNodePath(), contentItem.getName());
+			String absPath = WcmUtils.nodePath(contentItem.getWcmPath(), contentItem.getName());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), DEFAULT_WS, path, contentItem.toJson());
-			Session session = this.repositoryManager.getSession(contentItem.getRepository(), DEFAULT_WS);
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DEFAULT_WS, absPath, contentItem.toJson());
+			Session session = this.repositoryManager.getSession(contentItem.getRepository(), WcmConstants.DEFAULT_WS);
 			if (contentItem.getAcl() != null) {
-				ModeshapeUtils.grantPermissions(session, contentItem.getNodePath(), contentItem.getAcl());
+				ModeshapeUtils.grantPermissions(session, absPath, contentItem.getAcl());
 			}
 			if (authoringEnabled) {
-				Session draftSession = this.repositoryManager.getSession(contentItem.getRepository(), DRAFT_WS);
-				draftSession.getWorkspace().clone(DEFAULT_WS, path, path, true);
+				Session draftSession = this.repositoryManager.getSession(contentItem.getRepository(), WcmConstants.DRAFT_WS);
+				draftSession.getWorkspace().clone(WcmConstants.DEFAULT_WS, absPath, absPath, true);
 				// draftSession.save();
 			}
 			
@@ -142,15 +144,15 @@ public class ContentItemRestController extends BaseWcmRestController {
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
 					contentItem.getAuthoringTemplate(), request);
 			contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
-			String path = contentItem.getNodePath();
+			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItem.toJson());
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), absPath, contentItem.toJson());
 
 			if (contentItem.getAcl() != null) {
 				String repositoryName = contentItem.getRepository();
 				String workspaceName = contentItem.getWorkspace();
 				Session session = this.repositoryManager.getSession(repositoryName, workspaceName);
-				ModeshapeUtils.grantPermissions(session, contentItem.getNodePath(), contentItem.getAcl());
+				ModeshapeUtils.grantPermissions(session, absPath, contentItem.getAcl());
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -182,8 +184,8 @@ public class ContentItemRestController extends BaseWcmRestController {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		try {
-			Session session = this.repositoryManager.getSession(repository, DEFAULT_WS);
-			session.getWorkspace().clone(DRAFT_WS, contentItemPath, contentItemPath, true);
+			Session session = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
+			session.getWorkspace().clone(WcmConstants.DRAFT_WS, contentItemPath, contentItemPath, true);
 			// session.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -202,7 +204,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 	public void updateContentItem(@RequestBody ContentItem contentItem, HttpServletRequest request) { 
 		try {
 			contentItem.setCurrentLifecycleState("Published"); //TODO
-			String path = contentItem.getNodePath();
+			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
 					contentItem.getAuthoringTemplate(), request);
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -210,14 +212,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 			    contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
 			}
 			JsonNode contentItemJson = contentItem.toJson();
-			this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItemJson);
-			Session session = this.repositoryManager.getSession(contentItem.getRepository(), DEFAULT_WS);
+			this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), absPath, contentItemJson);
+			Session session = this.repositoryManager.getSession(contentItem.getRepository(), WcmConstants.DEFAULT_WS);
 			if (contentItem.getAcl() != null) {
-				ModeshapeUtils.grantPermissions(session, contentItem.getNodePath(), contentItem.getAcl());
+				ModeshapeUtils.grantPermissions(session, absPath, contentItem.getAcl());
 			}
-			this.wcmUtils.unlock(contentItem.getRepository(), contentItem.getWorkspace(), path);
+			this.wcmUtils.unlock(contentItem.getRepository(), contentItem.getWorkspace(), absPath);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), DRAFT_WS, path, contentItemJson);
+				this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItemJson);
 //				Session draftSession = this.repositoryManager.getSession(contentItem.getRepository(), );
 //				draftSession.getWorkspace().clone(DEFAULT_WS, contentItem.getNodePath(), contentItem.getNodePath(), true);
 				// draftSession.save();
@@ -235,7 +237,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 	public ContentItem getContentItem(
 		    @PathVariable("repository") String repository,
 		    @PathVariable("workspace") String workspace,
-		    @RequestParam("path") String contentItemPath,
+		    @RequestParam("path") String wcmPath,
 		    HttpServletRequest request) 
 		    throws WcmRepositoryException {
 		
@@ -244,14 +246,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			contentItemPath = contentItemPath.startsWith("/") ? contentItemPath : "/" + contentItemPath;
+			String absPath = WcmUtils.nodePath(wcmPath);
 			RestNode contentItemNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					contentItemPath, 4);
+					absPath, 4);
 			
 			ContentItem contentItem = new ContentItem(); 
 			contentItem.setRepository(repository);
 			contentItem.setWorkspace(workspace);
-			contentItem.setNodePath(contentItemPath);
+			contentItem.setWcmPath(wcmPath.startsWith("/") ? wcmPath : "/" + wcmPath);
 			Map<String, String> elements = new HashMap<>();
 			Map<String, String> properties = new HashMap<>();
 			contentItem.setElements(elements);
@@ -319,19 +321,19 @@ public class ContentItemRestController extends BaseWcmRestController {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		try {
-			contentItem.setCurrentLifecycleState(DRAFT_WS); //TODO
-			String path = contentItem.getNodePath();
-			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), DRAFT_WS, 
+			contentItem.setCurrentLifecycleState(WcmConstants.DRAFT_WS); //TODO
+			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
+			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), WcmConstants.DRAFT_WS, 
 					contentItem.getAuthoringTemplate(), request);
 			contentItem.setAcl(at.getContentItemAcl().getOnSaveDraftPermissions());
 			
 			// this.itemHandler.addItem(request, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItem.toJson());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), DRAFT_WS, path, contentItem.toJson());
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson());
 			if (contentItem.getAcl() != null) {
 				String repositoryName = contentItem.getRepository();
-				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
-				ModeshapeUtils.grantPermissions(session, contentItem.getNodePath(), at.getContentItemAcl().getOnSaveDraftPermissions());
+				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+				ModeshapeUtils.grantPermissions(session, absPath, at.getContentItemAcl().getOnSaveDraftPermissions());
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -368,7 +370,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 			
 			UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	        String username = principal.getUsername();
-	        Session session = this.repositoryManager.getSession(repository, DRAFT_WS); 
+	        Session session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS); 
 	        Node contentNode = session.getNode(contentItemPath);
 	        Node commentsNode = contentNode.getNode("comments");
 	        Node commentNode = commentsNode.addNode("comment-"+ username + "-reject-" + System.currentTimeMillis(), "bpw:comment");
@@ -415,7 +417,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 		try {			
 			UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	        String username = principal.getUsername();
-	        Session session = this.repositoryManager.getSession(repository, DRAFT_WS); 
+	        Session session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS); 
 	        Node contentNode = session.getNode(contentItemPath);
 	        Node commentsNode = contentNode.getNode("comments");
 	        Node commentNode = commentsNode.addNode("comment-"+ username + "-approval-" + System.currentTimeMillis(), "bpw:comment");
@@ -460,7 +462,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		try {
-	        Session session = this.repositoryManager.getSession(repository, DRAFT_WS); 
+	        Session session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS); 
 	        Node contentNode = session.getNode(contentItemPath);
 	        contentNode.setProperty("bpw:currentLifecycleState", "Published");
 	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
@@ -469,8 +471,8 @@ public class ContentItemRestController extends BaseWcmRestController {
 			ModeshapeUtils.grantPermissions(session, contentItemPath, at.getContentItemAcl().getOnPublishPermissions());
 			this.wcmUtils.unlock(repository, workspace, contentItemPath);
 	        session.save();
-	        Session defaultSession = this.repositoryManager.getSession(repository, DEFAULT_WS);
-	        defaultSession.getWorkspace().clone(DRAFT_WS, contentItemPath, contentItemPath, true);
+	        Session defaultSession = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
+	        defaultSession.getWorkspace().clone(WcmConstants.DRAFT_WS, contentItemPath, contentItemPath, true);
 	        // defaultSession.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -520,16 +522,16 @@ public class ContentItemRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
   		try {
-  			Session session = this.repositoryManager.getSession(repository, DEFAULT_WS);
+  			Session session = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
   			Node node = session.getNode(absPath);
   			String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
             if ("Published".equals(workflowState)) {
             	node.remove();
             	session.save();
             	if (this.authoringEnabled) {
-	        		session = this.repositoryManager.getSession(repository, DRAFT_WS);
+	        		session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS);
 	      			node = session.getNode(absPath);
-	            	node.setProperty("bpw:currentLifecycleState", EXPIRED_WS);
+	            	node.setProperty("bpw:currentLifecycleState", WcmConstants.EXPIRED_WS);
 	            	session.save();
             	}
             }

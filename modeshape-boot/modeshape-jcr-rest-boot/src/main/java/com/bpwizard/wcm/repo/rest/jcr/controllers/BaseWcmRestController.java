@@ -73,31 +73,13 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNodeType;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestPropertyType;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class BaseWcmRestController {
-	
-	protected static final String WCM_ROOT_PATH = "/bpwizard/library";
-	protected static final String WCM_ROOT_PATH_PATTERN = "/bpwizard/library/%s";
-	protected static final String WCM_AT_PATH_PATTERN = "/bpwizard/library/%s/authoringTemplate/%s";
-	protected static final String WCM_AT_ROOT_PATH_PATTERN = "/bpwizard/library/%s/authoringTemplate";
-	protected static final String WCM_RT_PATH_PATTERN = "/bpwizard/library/%s/renderTemplate/%s";
-	protected static final String WCM_CONTENT_LAYOUT_PATH_PATTERN = "/bpwizard/library/%s/contentAreaLayout/%s";
-	protected static final String WCM_SITECONFIG_PATH_PATTERN = "/bpwizard/library/%s/siteConfig/%s";
-	protected static final String WCM_CATEGORY_PATH_PATTERN = "/bpwizard/library/%s/category/%s";
-	protected static final String WCM_CATEGORY_SUB_PATH_PATTERN = "/bpwizard/library/%s/category/%s/%s";
-	protected static final String WCM_VALIDATTOR_PATH_PATTERN = "/bpwizard/library/%s/validationRule/%s";
-	protected static final String WCM_WORKFLOW_ROOT_PATH_PATTERN = "/bpwizard/library/%s/workflow";
-	protected static final String WCM_WORKFLOW_PATH_PATTERN = "/bpwizard/library/%s/workflow/%s";
-	protected static final String WCM_QUERY_PATH_PATTERN = "/bpwizard/library/%s/query/%s";
-	protected static final String WCM_VALIDATION_RULE_ROOT_PATH_PATTERN = "/bpwizard/library/%s/validationRule";
-	protected static final String WCM_QUERY_ROOT_PATH_PATTERN = "/bpwizard/library/%s/query";
-	protected static final String DEFAULT_WS = "default";
-	protected static final String DRAFT_WS = "draft";
-	protected static final String EXPIRED_WS = "expired";
 	
 	@Value("${bpw.modeshape.authoring.enabled:true}")
 	protected boolean authoringEnabled = true;
@@ -149,6 +131,10 @@ public abstract class BaseWcmRestController {
 
 	protected boolean isSiteArea(RestNode node) {
 		return this.wcmUtils.checkNodeType(node, "bpw:siteArea");
+	}
+	
+	protected boolean isSiteConfig(RestNode node) {
+		return this.wcmUtils.checkNodeType(node, "bpw:siteConfig");
 	}
 	
 	protected boolean isControlFieldMetaData(RestNode node) {
@@ -258,7 +244,7 @@ public abstract class BaseWcmRestController {
 		Map<String, JsonForm[]> jsonForms =  this.getAuthoringTemplateLibraries(repository, workspace, baseUrl)
 				.flatMap(at -> this.getAuthoringTemplates(at, baseUrl))
 				.map(at -> this.toJsonForms(request, at)).collect(Collectors.toMap(
-						jfs -> String.format(WCM_AT_PATH_PATTERN, jfs[0].getLibrary(), jfs[0].getResourceType()), 
+						jfs -> String.format(WcmConstants.WCM_AT_PATH_PATTERN, jfs[0].getLibrary(), jfs[0].getResourceType()), 
 						Function.identity()));
 
 		
@@ -277,7 +263,7 @@ public abstract class BaseWcmRestController {
 		Map<String, JsonForm[]> jsonForms = this.getAuthoringTemplates(libraryAt, baseUrl)
 				.map(at -> this.toJsonForms(request, at))
 				.collect(Collectors.toMap(
-					jfs -> String.format(WCM_AT_PATH_PATTERN, jfs[0].getLibrary(), jfs[0].getResourceType()), 
+					jfs -> String.format(WcmConstants.WCM_AT_PATH_PATTERN, jfs[0].getLibrary(), jfs[0].getResourceType()), 
 					Function.identity()));
 
 		return jsonForms;
@@ -287,7 +273,7 @@ public abstract class BaseWcmRestController {
 			String baseUrl) throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WCM_ROOT_PATH, 1);
+					WcmConstants.NODE_ROOT_PATH, 1);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
 					.map(node -> toAuthoringTemplateWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
@@ -337,8 +323,6 @@ public abstract class BaseWcmRestController {
 	
 	protected  JsonForm toJsonForm(HttpServletRequest request, AuthoringTemplate at, boolean editMode) throws WcmRepositoryException {
 		try {
-			//JsonForm jsonFormCreate = new JsonForm();
-			//JsonForm jsonFormEdit = new JsonForm();
 			JsonForm jsonForm = new JsonForm();
 			jsonForm.setRepository(at.getRepository());
 			jsonForm.setWorkspace(at.getWorkspace());
@@ -374,7 +358,6 @@ public abstract class BaseWcmRestController {
 						request, 
 						at.getRepository(), 
 						at.getWorkspace(),
-						properties,
 						propertyProperties,
 						definitions,
 						at.getProperties(),
@@ -401,7 +384,6 @@ public abstract class BaseWcmRestController {
 						request, 
 						at.getRepository(), 
 						at.getWorkspace(),
-						properties,
 						elementProperties,
 						definitions,
 						at.getElements(),
@@ -446,7 +428,6 @@ public abstract class BaseWcmRestController {
 			HttpServletRequest request, 
 			String repository, 
 			String workspace,
-			ObjectNode properties,
 			ObjectNode simpleProperties,
 			ObjectNode definitions,
 			Map<String, FormControl> formControls,
@@ -454,19 +435,13 @@ public abstract class BaseWcmRestController {
 		
 		for (String key : formControls.keySet()) {
 			FormControl formControl = formControls.get(key);
-//			if ("properties".equals(formControl.getControlType())) {
-//				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, "bpw:properties", false);
-//				definitions.set("properties", definition);
-//				ObjectNode objectNode = this.toPropertyNode(formControl, definitions);
-//				properties.set(key, objectNode);
-//			} else 
 			if ("association".equals(formControl.getControlType())) {
 				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, formControl.getJcrDataType(),
 						false);
 				String fieldName = this.fieldNameFromNodeTypeName(formControl.getJcrDataType());
 				definitions.set(fieldName, definition);
 				ObjectNode objectNode = this.toPropertyNode(formControl, definitions, editMode);
-				properties.set(key, objectNode);
+				simpleProperties.set(key, objectNode);
 			} else {
 			  ObjectNode objectNode = this.toPropertyNode(formControl, definitions, editMode);
 			  simpleProperties.set(key, objectNode);
@@ -479,12 +454,26 @@ public abstract class BaseWcmRestController {
 		if (restProperty.isMultiple()) {
 			objectNode.put("type", "array");
 			ObjectNode itemNode = this.objectMapper.createObjectNode();
-			itemNode.put("type", "string");//restProperty.getRequiredType());
+			itemNode.put("type", this.schemaType(restProperty.getRequiredType()));
 			objectNode.set("items", itemNode);
 		} else {
-			objectNode.put("type", "string");//restProperty.getRequiredType());
+			objectNode.put("type", this.schemaType(restProperty.getRequiredType()));//restProperty.getRequiredType());
 		}
 		return objectNode;
+	}
+	
+	static Map<String, String> schemaTypeMap = new HashMap<>();
+	static {
+		schemaTypeMap.put("STRING", "string");
+		schemaTypeMap.put("BOOLEAN", "boolean");
+	}
+	
+	protected String schemaType(String jcrType) {
+		String schemaType = "string";
+		if (StringUtils.hasText(jcrType)) {
+			schemaType = schemaTypeMap.get(jcrType.toUpperCase());
+		}
+		return schemaType = (schemaType == null) ? "string" : schemaType;
 	}
 	
 	protected ArrayNode toFormLayoutNode(AuthoringTemplate at) {
@@ -649,7 +638,7 @@ public abstract class BaseWcmRestController {
 		}
 		
 		if (StringUtils.hasText(formControl.getDefaultValue())) {
-			propertyNode.put(DEFAULT_WS, formControl.getDefaultValue());
+			propertyNode.put(WcmConstants.DEFAULT_WS, formControl.getDefaultValue());
 		}
 		return propertyNode;
 	}
@@ -793,7 +782,7 @@ public abstract class BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode themeNode = (RestNode) this.itemHandler.item(baseUrl, rt.getRepository(), rt.getWorkspace(),
-					"/bpwizard/library/" + rt.getLibrary() + "/renderTemplate", 5);
+					"/library/" + rt.getLibrary() + "/renderTemplate", 5);
 			return themeNode.getChildren().stream().filter(this::isRenderTemplate)
 					.map(node -> this.toRenderTemplate(node, rt.getRepository(), rt.getWorkspace(), rt.getLibrary()));
 		} catch (RepositoryException e) {
@@ -884,7 +873,7 @@ public abstract class BaseWcmRestController {
 			throws WcmRepositoryException {
 		Map<String, RenderTemplate> renderTemplates = this.getRenderTemplateLibraries(repository, workspace, request)
 				.flatMap(rt -> this.getRenderTemplates(rt, request)).collect(Collectors.toMap(
-						rt -> String.format(WCM_RT_PATH_PATTERN, rt.getLibrary(), rt.getName()), 
+						rt -> String.format(WcmConstants.WCM_RT_PATH_PATTERN, rt.getLibrary(), rt.getName()), 
 						Function.identity()));
 
 		return renderTemplates;
@@ -896,7 +885,7 @@ public abstract class BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					"/bpwizard/library", 1);
+					"/library", 1);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toRenderTemplateWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
@@ -913,7 +902,7 @@ public abstract class BaseWcmRestController {
 		Map<String, ContentAreaLayout> contentAreaLayouts = this.getContentAreaLayoutLibraries(repository, workspace, baseUrl)
 				.flatMap(layout -> this.getContentArealayouts(layout, baseUrl))
 				.collect(Collectors.toMap(
-						layout -> String.format( WCM_CONTENT_LAYOUT_PATH_PATTERN, layout.getLibrary(), layout.getName()), 
+						layout -> String.format( WcmConstants.WCM_CONTENT_LAYOUT_PATH_PATTERN, layout.getLibrary(), layout.getName()), 
 						Function.identity()));
 
 		return contentAreaLayouts;
@@ -923,7 +912,7 @@ public abstract class BaseWcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					"/bpwizard/library", 1);
+					"/library", 1);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toContentAreaLayoutWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
@@ -935,7 +924,7 @@ public abstract class BaseWcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode contentAreaLayoutNode = (RestNode) this.itemHandler.item(baseUrl, contentAreaLayout.getRepository(),
-					contentAreaLayout.getWorkspace(), "/bpwizard/library/" + contentAreaLayout.getLibrary() + "/contentAreaLayout", 4);
+					contentAreaLayout.getWorkspace(), "/library/" + contentAreaLayout.getLibrary() + "/contentAreaLayout", 4);
 			return contentAreaLayoutNode.getChildren().stream().filter(this::isContentAreaLayout)
 					.map(node -> this.toContentAreaLayout(node, contentAreaLayout));
 		} catch (RepositoryException e) {
@@ -1036,7 +1025,7 @@ public abstract class BaseWcmRestController {
 		Map<String, AuthoringTemplate> authoringTemplates = this.getAuthoringTemplateLibraries(repository, workspace, baseUrl)
 				.flatMap(at -> this.getAuthoringTemplates(at, baseUrl))
 				.collect(Collectors.toMap(
-						at -> String.format(WCM_AT_PATH_PATTERN, at.getLibrary(), at.getName()), 
+						at -> String.format(WcmConstants.WCM_AT_PATH_PATTERN, at.getLibrary(), at.getName()), 
 						Function.identity()));
 
 		return authoringTemplates;
@@ -1046,7 +1035,7 @@ public abstract class BaseWcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
-					String.format(WCM_AT_ROOT_PATH_PATTERN, at.getLibrary()), 8);
+					String.format(WcmConstants.NODE_AT_ROOT_PATH_PATTERN, at.getLibrary()), 8);
 			
 			return atNode.getChildren().stream().filter(this::isAuthortingTemplate)
 					.map(node -> this.wcmUtils.toAuthoringTemplate(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
@@ -1061,109 +1050,125 @@ public abstract class BaseWcmRestController {
 			String repository,
 			String workspace,
 			String library, 
-			String siteConfigName) throws RepositoryException {
+			String siteConfigName) throws WcmRepositoryException {
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH_PATTERN, library, siteConfigName);
+			RestNode siteConfigNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, 2);
+			SiteConfig siteConfig = this.toSiteConfig(repository, workspace, library, siteConfigNode);
+			siteConfig.setRepository(repository);
+			siteConfig.setWorkspace(workspace);
+			siteConfig.setLibrary(library);
 		
-		String baseUrl = RestHelper.repositoryUrl(request);
-		String absPath = String.format(WCM_SITECONFIG_PATH_PATTERN, library, siteConfigName);
-		RestNode siteConfigNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, 2);
-		SiteConfig siteConfig = this.getSiteConfig(siteConfigNode);
-		siteConfig.setRepository(repository);
-		siteConfig.setWorkspace(workspace);
-		siteConfig.setLibrary(library);
-	
-		return siteConfig;
-			
+			return siteConfig;
+		} catch (RepositoryException re) {
+			throw new WcmRepositoryException(re);
+		}			
 	}
 	
-	protected SiteConfig getSiteConfig(RestNode siteConfigNode) throws RepositoryException {
-		SiteConfig siteConfig = new SiteConfig();
-		this.wcmUtils.resolveResourceNode(siteConfig, siteConfigNode);
-		for (RestProperty property : siteConfigNode.getJcrProperties()) {
-			if ("bpw:name".equals(property.getName())) {
-				siteConfig.setName(property.getValues().get(0));
-			} else if ("bpw:colorTheme".equals(property.getName())) {
-				siteConfig.setColorTheme(property.getValues().get(0));
-			} else if ("bpw:customScrollbars".equals(property.getName())) {
-				siteConfig.setCustomScrollbars(Boolean.parseBoolean(property.getValues().get(0)));
-			} else if ("bpw:rootSiteArea".equals(property.getName())) {
-				siteConfig.setRootSiteArea(property.getValues().get(0));
-			} 
-		}
+	protected SiteConfig toSiteConfig(
+			String repository,
+			String workspace,
+			String library, 
+			RestNode siteConfigNode) {
 		
-		for (RestNode layoutNode: siteConfigNode.getChildren()) {
-			if ("layout".equals(layoutNode.getName())) {
-				PageLayout layout = new PageLayout();
-				siteConfig.setLayout(layout);
-				for (RestProperty property : layoutNode.getJcrProperties()) {
-					if ("bpw:style".equals(property.getName())) {
-						layout.setStyle(property.getValues().get(0));
-					} else if ("bpw:width".equals(property.getName())) {
-						layout.setWidth(property.getValues().get(0));
-					} 
-				}
-				for (RestNode node: layoutNode.getChildren()) {
-					if ("navbar".equals(node.getName())) {
-						NavBar navbar = new NavBar();
-						layout.setNavbar(navbar);						
-						for (RestProperty property : node.getJcrProperties()) {
-							if ("folded".equals(property.getName())) {
-								navbar.setFolded(Boolean.getBoolean(property.getValues().get(0)));
-							} else if ("primaryBackground".equals(property.getName())) {
-								navbar.setPrimaryBackground(property.getValues().get(0));
-							} else if ("secondaryBackground".equals(property.getName())) {
-								navbar.setSecondaryBackground(property.getValues().get(0));
-							} else if ("variant".equals(property.getName())) {
-								navbar.setVariant(property.getValues().get(0));
-							} else if ("position".equals(property.getName())) {
-								navbar.setPosition(property.getValues().get(0));
-							} else if ("hidden".equals(property.getName())) {
-								navbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
-							} 
-						}
-					} else if ("toolbar".equals(node.getName())) {
-						Toolbar toolbar = new Toolbar();
-						layout.setToolbar(toolbar);						
-						for (RestProperty property : node.getJcrProperties()) {
-							if ("customBackgroundColor".equals(property.getName())) {
-								toolbar.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
-							} else if ("background".equals(property.getName())) {
-								toolbar.setBackground(property.getValues().get(0));
-							} else if ("position".equals(property.getName())) {
-								toolbar.setPosition(property.getValues().get(0));
-							} else if ("hidden".equals(property.getName())) {
-								toolbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
-							} 
-						}
-					} else if ("footer".equals(node.getName())) {
-						Footer footer = new Footer();
-						layout.setFooter(footer);				
-						for (RestProperty property : node.getJcrProperties()) {
-							if ("customBackgroundColor".equals(property.getName())) {
-								footer.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
-							} else if ("background".equals(property.getName())) {
-								footer.setBackground(property.getValues().get(0));
-							} else if ("position".equals(property.getName())) {
-								footer.setPosition(property.getValues().get(0));
-							} else if ("hidden".equals(property.getName())) {
-								footer.setHidden(Boolean.getBoolean(property.getValues().get(0)));
-							} 
-						}
-					} else if ("sidePanel".equals(node.getName())) {
-						SidePanel sidePanel = new SidePanel();
-						layout.setSidePanel(sidePanel);				
-						for (RestProperty property : node.getJcrProperties()) {
-							if ("position".equals(property.getName())) {
-								sidePanel.setPosition(property.getValues().get(0));
-							} else if ("hidden".equals(property.getName())) {
-								sidePanel.setHidden(Boolean.getBoolean(property.getValues().get(0)));
-							} 
+		// try {
+			SiteConfig siteConfig = new SiteConfig();
+			
+			siteConfig.setRepository(repository);
+			siteConfig.setWorkspace(workspace);
+			siteConfig.setLibrary(library);
+			
+			this.wcmUtils.resolveResourceNode(siteConfig, siteConfigNode);
+			for (RestProperty property : siteConfigNode.getJcrProperties()) {
+				if ("bpw:name".equals(property.getName())) {
+					siteConfig.setName(property.getValues().get(0));
+				} else if ("bpw:colorTheme".equals(property.getName())) {
+					siteConfig.setColorTheme(property.getValues().get(0));
+				} else if ("bpw:customScrollbars".equals(property.getName())) {
+					siteConfig.setCustomScrollbars(Boolean.parseBoolean(property.getValues().get(0)));
+				} else if ("bpw:rootSiteArea".equals(property.getName())) {
+					siteConfig.setRootSiteArea(property.getValues().get(0));
+				} 
+			}
+			
+			for (RestNode layoutNode: siteConfigNode.getChildren()) {
+				if ("layout".equals(layoutNode.getName())) {
+					PageLayout layout = new PageLayout();
+					siteConfig.setLayout(layout);
+					for (RestProperty property : layoutNode.getJcrProperties()) {
+						if ("bpw:style".equals(property.getName())) {
+							layout.setStyle(property.getValues().get(0));
+						} else if ("bpw:width".equals(property.getName())) {
+							layout.setWidth(property.getValues().get(0));
+						} 
+					}
+					for (RestNode node: layoutNode.getChildren()) {
+						if ("navbar".equals(node.getName())) {
+							NavBar navbar = new NavBar();
+							layout.setNavbar(navbar);						
+							for (RestProperty property : node.getJcrProperties()) {
+								if ("folded".equals(property.getName())) {
+									navbar.setFolded(Boolean.getBoolean(property.getValues().get(0)));
+								} else if ("primaryBackground".equals(property.getName())) {
+									navbar.setPrimaryBackground(property.getValues().get(0));
+								} else if ("secondaryBackground".equals(property.getName())) {
+									navbar.setSecondaryBackground(property.getValues().get(0));
+								} else if ("variant".equals(property.getName())) {
+									navbar.setVariant(property.getValues().get(0));
+								} else if ("position".equals(property.getName())) {
+									navbar.setPosition(property.getValues().get(0));
+								} else if ("hidden".equals(property.getName())) {
+									navbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+								} 
+							}
+						} else if ("toolbar".equals(node.getName())) {
+							Toolbar toolbar = new Toolbar();
+							layout.setToolbar(toolbar);						
+							for (RestProperty property : node.getJcrProperties()) {
+								if ("customBackgroundColor".equals(property.getName())) {
+									toolbar.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
+								} else if ("background".equals(property.getName())) {
+									toolbar.setBackground(property.getValues().get(0));
+								} else if ("position".equals(property.getName())) {
+									toolbar.setPosition(property.getValues().get(0));
+								} else if ("hidden".equals(property.getName())) {
+									toolbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+								} 
+							}
+						} else if ("footer".equals(node.getName())) {
+							Footer footer = new Footer();
+							layout.setFooter(footer);				
+							for (RestProperty property : node.getJcrProperties()) {
+								if ("customBackgroundColor".equals(property.getName())) {
+									footer.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
+								} else if ("background".equals(property.getName())) {
+									footer.setBackground(property.getValues().get(0));
+								} else if ("position".equals(property.getName())) {
+									footer.setPosition(property.getValues().get(0));
+								} else if ("hidden".equals(property.getName())) {
+									footer.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+								} 
+							}
+						} else if ("sidePanel".equals(node.getName())) {
+							SidePanel sidePanel = new SidePanel();
+							layout.setSidePanel(sidePanel);				
+							for (RestProperty property : node.getJcrProperties()) {
+								if ("position".equals(property.getName())) {
+									sidePanel.setPosition(property.getValues().get(0));
+								} else if ("hidden".equals(property.getName())) {
+									sidePanel.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+								} 
+							}
 						}
 					}
-				}
-				break;
-			} 
-		}
-		return siteConfig;
+					break;
+				} 
+			}
+			return siteConfig;
+//		} catch (RepositoryException re) {
+//			throw new WcmRepositoryException(re);
+//		}
 	}
 	
 	protected Map<String, SiteArea> getSiteAreas(
@@ -1174,7 +1179,7 @@ public abstract class BaseWcmRestController {
 			String baseUrl
 			) throws RepositoryException {
 		RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-				String.format("/bpwizard/library/%s/%s", library, rootSiteArea), 5);
+				String.format(WcmConstants.NODE_REL_PATH_PATTERN, library, rootSiteArea), 5);
 		Map<String, SiteArea> siteAreas = new HashMap<>();
 		for (RestNode node :saNode.getChildren()) {
 			if (this.isSiteArea(node)) {
@@ -1298,7 +1303,7 @@ public abstract class BaseWcmRestController {
 			String rootSiteArea
 			) throws RepositoryException {
 		RestNode siteArea = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-				String.format("/bpwizard/library/%s/%s", library, rootSiteArea), 3);
+				String.format(WcmConstants.NODE_REL_PATH_PATTERN, library, rootSiteArea), 3);
 		
 		Navigation[] navigation = siteArea.getChildren().stream().filter(this::isSiteArea)
 				.map(node -> this.toNavigation(node)).toArray(Navigation[]::new);
@@ -1310,35 +1315,13 @@ public abstract class BaseWcmRestController {
 			throws RepositoryException {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode controlFieldFolder = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					String.format(WCM_ROOT_PATH_PATTERN, "system/controlField"), 2);
+					WcmConstants.NODE_CONTROL_FIELD_ROOT, 2);
 			ControlField[] ControlFileds = controlFieldFolder.getChildren().stream().filter(this::isControlField)
 					.map(this::toControlField).toArray(ControlField[]::new);
 	
 			return ControlFileds;
 	}
 	
-//	private ControlFieldMetadata toControlFieldMetaData(RestNode node) {
-//		ControlFieldMetadata metadata = new ControlFieldMetadata();
-//		metadata.setName(node.getName());
-//		for (RestProperty restProperty : node.getJcrProperties()) {
-//			if ("bpw:title".equals(restProperty.getName())) {
-//				metadata.setTitle(restProperty.getValues().get(0));
-//			} else if ("bpw:controlType".equals(restProperty.getName())) {
-//				metadata.setControlType(restProperty.getValues().get(0));
-//			} else if ("bpw:hintText".equals(restProperty.getName())) {
-//				metadata.setHintText(restProperty.getValues().get(0));
-//			} else if ("bpw:required".equals(restProperty.getName())) {
-//				metadata.setRequired(Boolean.parseBoolean(restProperty.getValues().get(0)));
-//			} else if ("bpw:readOnly".equals(restProperty.getName())) {
-//				metadata.setReadonly(Boolean.parseBoolean(restProperty.getValues().get(0)));
-//			} else if ("bpw:selectOptions".equals(restProperty.getName())) {
-//				metadata.setSelectOptions(
-//						restProperty.getValues().toArray(new String[restProperty.getValues().size()]));
-//			}
-//		}
-//		return metadata;
-//	}
-
 	private ControlField toControlField(RestNode node) {
 		ControlField controlField = new ControlField();
 		controlField.setName(node.getName());
@@ -1352,9 +1335,6 @@ public abstract class BaseWcmRestController {
 			} 
 			
 		}
-//		ControlFieldMetadata[] controlFieldMetadata = node.getChildren().stream().filter(this::isControlFieldMetaData)
-//				.map(this::toControlFieldMetaData).toArray(ControlFieldMetadata[]::new);
-//		controlField.setControlFieldMetaData(controlFieldMetadata);
 		return controlField;
 	}
 	
@@ -1443,7 +1423,7 @@ public abstract class BaseWcmRestController {
 			String baseUrl) throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WCM_ROOT_PATH, 1);
+					WcmConstants.NODE_ROOT_PATH, 1);
 			return bpwizardNode.getChildren().stream()
 					.filter(this::notSystemLibrary)
 					.map(node -> toQueryStatementWithLibrary(node, repository, workspace));
@@ -1464,7 +1444,7 @@ public abstract class BaseWcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
-					String.format(WCM_QUERY_ROOT_PATH_PATTERN, query.getLibrary()), 3);
+					String.format(WcmConstants.NODE_QUERY_ROOT_PATH_PATTERN, query.getLibrary()), 3);
 			
 			return atNode.getChildren().stream().filter(this::isQueryStatement)
 					.map(node -> this.toQueryStatement(node, query.getRepository(), query.getWorkspace(), query.getLibrary()));
@@ -1492,5 +1472,18 @@ public abstract class BaseWcmRestController {
 			}  
 		}
 		return queryStatement;
+	}
+	
+	protected Stream<String> getLibraries(String repository, String workspace,
+			String baseUrl) throws WcmRepositoryException {
+		try {
+			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+					WcmConstants.NODE_ROOT_PATH, 1);
+			return bpwizardNode.getChildren().stream()
+					.filter(this::notSystemLibrary)
+					.map(RestNode::getName);
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e);
+		}
 	}
 }

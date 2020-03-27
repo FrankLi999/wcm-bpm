@@ -15,7 +15,7 @@ public class SiteArea implements HasName {
 
 	private String repository;
 	private String workspace;
-	private String nodePath;
+	private String wcmPath;
 	// private String name;
 	private SiteAreaLayout siteAreaLayout;
 	private String lockOwner;
@@ -41,11 +41,11 @@ public class SiteArea implements HasName {
 	public void setWorkspace(String workspace) {
 		this.workspace = workspace;
 	}
-	public String getNodePath() {
-		return nodePath;
+	public String getWcmPath() {
+		return wcmPath;
 	}
-	public void setNodePath(String nodePath) {
-		this.nodePath = nodePath;
+	public void setWcmPath(String wcmPath) {
+		this.wcmPath = wcmPath;
 	}
 	public String getName() {
 		return this.properties.get("name");
@@ -277,7 +277,7 @@ public class SiteArea implements HasName {
 	}
 	@Override
 	public String toString() {
-		return "SiteArea [repository=" + repository + ", workspace=" + workspace + ", nodePath=" + nodePath + ", name="
+		return "SiteArea [repository=" + repository + ", workspace=" + workspace + ", wcmPath=" + wcmPath + ", name="
 				+ this.getName() + ", siteAreaLayout=" + siteAreaLayout + ", lockOwner=" + lockOwner + ", elements=" + elements
 				+ ", properties=" + properties + ", metadata=" + metadata + ", searchData=" + searchData + ", badge="
 				+ badge + "]";

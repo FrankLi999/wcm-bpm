@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmHistory;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmVersion;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 
 @RestController
 @RequestMapping(WcmHistoryRestController.BASE_URI)
@@ -102,7 +103,7 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 			Session session = this.repositoryManager.getSession(repository, workspace);
 			this.doRestore(session, wcmPath, versionName);
 			if (this.authoringEnabled) {
-				session = this.repositoryManager.getSession(repository, DRAFT_WS);
+				session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS);
 				this.doRestore(session, wcmPath, versionName);
 			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -113,8 +114,7 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 	
 	private WcmHistory doGetHistory(Session session, String wcmPath) throws RepositoryException {
 		VersionManager vm = session.getWorkspace().getVersionManager();
-		wcmPath = wcmPath.startsWith("/") ? wcmPath.substring(1) : wcmPath;
-		String absPath = String.format(WCM_ROOT_PATH_PATTERN, wcmPath);
+		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
 		// .getVersionLabels(version)
 		VersionHistory vh = vm.getVersionHistory(absPath);
 		VersionIterator versionIterator = vh.getAllVersions();
@@ -135,8 +135,7 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 	
 	private void doRestore(Session session, String wcmPath, String versionName) throws RepositoryException {
 		VersionManager vm = session.getWorkspace().getVersionManager();
-		wcmPath = wcmPath.startsWith("/") ? wcmPath.substring(1) : wcmPath;
-		String absPath = String.format(WCM_ROOT_PATH_PATTERN, wcmPath);
+		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
 		vm.restore(absPath, versionName, true);
 	}
 }
