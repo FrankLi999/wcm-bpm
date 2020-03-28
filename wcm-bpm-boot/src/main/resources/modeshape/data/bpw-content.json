@@ -1179,7 +1179,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["searchData"]
+        "bpw:fieldNames": ["properties.searchData"]
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab/firstRow/firstColumn/searchData" : {
         "jcr:primaryType":"bpw:fieldLayout"
@@ -1192,7 +1192,7 @@
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab/firstRow/firstColumn/searchData/keywords" : {
         "jcr:primaryType":"bpw:fieldLayout",
         "bpw:name": "searchData.keywords",
-        "bpw:items": "searchData.keywords[]",
+        "bpw:items": "properties.searchData.keywords[]",
         "bpw:title": "Keywords",
         "bpw:multiple": "true"
     },
@@ -1205,7 +1205,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["metadata"]
+        "bpw:fieldNames": ["properties.metadata"]
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab/firstRow/firstColumn/metadata" : {
         "jcr:primaryType":"bpw:fieldLayout",
@@ -1213,12 +1213,12 @@
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab/firstRow/firstColumn/metadata/name" : {
         "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:name": "metadata.properties[].name",
+        "bpw:name": "metadata[].name",
         "bpw:title": "Name"
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab/firstRow/firstColumn/metadata/value" : {
         "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:name": "metadata.properties[].value",
+        "bpw:name": "metadata[].value",
         "bpw:title": "Value"
     },    
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab" : {
@@ -1255,7 +1255,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["badge"]
+        "bpw:fieldNames": ["properties.badge"]
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab/firstRow/firstColumn/badge" : {
         "jcr:primaryType":"bpw:fieldLayout"

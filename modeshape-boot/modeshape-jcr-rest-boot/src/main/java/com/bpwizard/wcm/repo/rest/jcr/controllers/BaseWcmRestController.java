@@ -435,9 +435,9 @@ public abstract class BaseWcmRestController {
 		
 		for (String key : formControls.keySet()) {
 			FormControl formControl = formControls.get(key);
-			if ("association".equals(formControl.getControlType())) {
+			if ("association".equals(formControl.getControlType())) {				
 				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, formControl.getJcrDataType(),
-						false);
+						formControl.isMultiple());
 				String fieldName = this.fieldNameFromNodeTypeName(formControl.getJcrDataType());
 				definitions.set(fieldName, definition);
 				ObjectNode objectNode = this.toPropertyNode(formControl, definitions, editMode);

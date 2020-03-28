@@ -24,7 +24,6 @@ public class SiteArea implements HasName {
 	private Map<String, String> properties;
 	
 	private WcmProperties metadata;
-
 	private SearchData searchData;
 	private NavigationBadge badge;
 
