@@ -78,6 +78,9 @@
 - bpw:key (STRING)
 - bpw:title  (STRING)
 - bpw:items (STRING)
+- bpw:displayFlex (BOOLEAN)
+- bpw:listItems (LONG)
+- bpw:flexDirection (STRING)
 + * (bpw:fieldLayout)
 
 /*

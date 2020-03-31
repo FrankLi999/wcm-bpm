@@ -10,6 +10,10 @@ public class FieldLayout {
 	private boolean multiple;
 	private String items;
 	
+	private boolean displayFlex;
+	private int listItems;
+	private String flexDirection;
+	
 	private FieldLayout fieldLayouts[];
 	
 	public String getItems() {
@@ -50,6 +54,25 @@ public class FieldLayout {
 	}
 	public void setKey(String key) {
 		this.key = key;
+	}
+	
+	public boolean isDisplayFlex() {
+		return displayFlex;
+	}
+	public void setDisplayFlex(boolean displayFlex) {
+		this.displayFlex = displayFlex;
+	}
+	public int getListItems() {
+		return listItems;
+	}
+	public void setListItems(int listItems) {
+		this.listItems = listItems;
+	}
+	public String getFlexDirection() {
+		return flexDirection;
+	}
+	public void setFlexDirection(String flexDirection) {
+		this.flexDirection = flexDirection;
 	}
 	@Override
 	public String toString() {

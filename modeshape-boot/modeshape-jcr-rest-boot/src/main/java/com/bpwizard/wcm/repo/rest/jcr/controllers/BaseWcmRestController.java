@@ -673,51 +673,7 @@ public abstract class BaseWcmRestController {
 					formColumn,
 					name);
 			if (associationLayout.isPresent()) {
-				ArrayNode layoutNodes = null;
-				if (associationLayout.get().isMultiple()) {
-					ObjectNode fieldNode = this.objectMapper.createObjectNode();
-					fieldNode.put("type", "array");
-					fieldNode.put("title", name);
-					fieldNodes.add(fieldNode);					
-					layoutNodes = this.objectMapper.createArrayNode();
-					fieldNode.set("items", layoutNodes);
-				} else {
-					layoutNodes = fieldNodes;
-				}
-				if (associationLayout.get().getFieldLayouts() == null || associationLayout.get().getFieldLayouts().length == 0) {
-					FieldLayout fieldLayout = associationLayout.get();
-					ObjectNode fieldNode = this.objectMapper.createObjectNode();
-					if (StringUtils.hasText(fieldLayout.getTitle())) {
-						fieldNode.put("title", fieldLayout.getTitle());
-					} else {
-						fieldNode.put("notitle", "true");
-					}
-					fieldNode.put("key", this.getLayoutFieldKey(fieldLayout.getKey(), prefix));
-					if (fieldLayout.isMultiple()) {
-						fieldNode.put("type", "array");
-						ArrayNode itemsNode = this.objectMapper.createArrayNode();
-						fieldNode.set("items", itemsNode);
-						itemsNode.add(fieldLayout.getItems());
-					} 
-					fieldNodes.add(fieldNode);
-				} else {
-					for (FieldLayout fieldLayout: associationLayout.get().getFieldLayouts()) {
-						ObjectNode fieldNode = this.objectMapper.createObjectNode();
-						if (StringUtils.hasText(fieldLayout.getTitle())) {
-							fieldNode.put("title", fieldLayout.getTitle());
-						} else {
-							fieldNode.put("notitle", "true");
-						}
-						fieldNode.put("key", this.getLayoutFieldKey(fieldLayout.getName(), prefix));
-						if (fieldLayout.isMultiple()) {
-							fieldNode.put("type", "array");
-							ArrayNode itemsNode = this.objectMapper.createArrayNode();
-							fieldNode.set("items", itemsNode);
-							itemsNode.add(fieldLayout.getItems());
-						} 
-						layoutNodes.add(fieldNode);
-					}
-				}
+				this.handleFieldLayout(prefix, name, associationLayout.get(), fieldNodes);
 			} else {
 				ObjectNode fieldNode = this.objectMapper.createObjectNode();
 				fieldNodes.add(fieldNode);
@@ -743,6 +699,60 @@ public abstract class BaseWcmRestController {
 		return columnNode;
 	}
 
+	protected void handleFieldLayout(String prefix, String name, FieldLayout fieldLayout, ArrayNode fieldNodes) {
+		ArrayNode layoutNodes = null;
+		if (fieldLayout.isMultiple()) {
+			ObjectNode fieldNode = this.objectMapper.createObjectNode();
+			fieldNode.put("type", "array");
+			if (fieldLayout.getListItems() > 0) {
+				fieldNode.put("listItems", fieldLayout.getListItems());
+			}
+			fieldNode.put("title", name);
+			fieldNodes.add(fieldNode);					
+			layoutNodes = this.objectMapper.createArrayNode();
+			fieldNode.set("items", layoutNodes);
+		} else {
+			layoutNodes = fieldNodes;
+		}
+		if (fieldLayout.getFieldLayouts() == null || fieldLayout.getFieldLayouts().length == 0) {
+			
+			ObjectNode fieldNode = this.objectMapper.createObjectNode();
+			if (StringUtils.hasText(fieldLayout.getTitle())) {
+				fieldNode.put("title", fieldLayout.getTitle());
+			} else {
+				fieldNode.put("notitle", "true");
+			}
+			fieldNode.put("key", this.getLayoutFieldKey(fieldLayout.getKey(), prefix));
+			if (fieldLayout.isMultiple()) {
+				fieldNode.put("type", "array");
+				ArrayNode itemsNode = this.objectMapper.createArrayNode();
+				fieldNode.set("items", itemsNode);
+				itemsNode.add(fieldLayout.getItems());
+			} 
+			fieldNodes.add(fieldNode);
+		} else {
+			for (FieldLayout childFieldLayout: fieldLayout.getFieldLayouts()) {
+				ObjectNode fieldNode = this.objectMapper.createObjectNode();
+				if (StringUtils.hasText(childFieldLayout.getTitle())) {
+					fieldNode.put("title", childFieldLayout.getTitle());
+				} else {
+					fieldNode.put("notitle", "true");
+				}
+				fieldNode.put("key", this.getLayoutFieldKey(childFieldLayout.getName(), prefix));
+				if (childFieldLayout.isMultiple()) {
+					fieldNode.put("type", "array");
+					if (childFieldLayout.getListItems() > 0) {
+						fieldNode.put("listItems", childFieldLayout.getListItems());
+					}
+					ArrayNode itemsNode = this.objectMapper.createArrayNode();
+					fieldNode.set("items", itemsNode);
+					itemsNode.add(childFieldLayout.getItems());
+				} 
+				layoutNodes.add(fieldNode);
+			}
+		}
+	}
+	
 	protected String[] getNameAndPrefix(String fieldName) {
 		String names[] = fieldName.split("\\.", 2);
 		if (names.length == 1) {
