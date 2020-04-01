@@ -742,23 +742,7 @@ public abstract class BaseWcmRestController {
 			}
 			
 			for (FieldLayout childFieldLayout: fieldLayout.getFieldLayouts()) {
-				ObjectNode fieldNode = this.objectMapper.createObjectNode();
-				if (StringUtils.hasText(childFieldLayout.getTitle())) {
-					fieldNode.put("title", childFieldLayout.getTitle());
-				} else {
-					fieldNode.put("notitle", "true");
-				}
-				fieldNode.put("key", this.getLayoutFieldKey(childFieldLayout.getName(), prefix));
-				if (childFieldLayout.isMultiple()) {
-					fieldNode.put("type", "array");
-					if (childFieldLayout.getListItems() > 0) {
-						fieldNode.put("listItems", childFieldLayout.getListItems());
-					}
-					ArrayNode itemsNode = this.objectMapper.createArrayNode();
-					fieldNode.set("items", itemsNode);
-					itemsNode.add(childFieldLayout.getItems());
-				} 
-				layoutNodes.add(fieldNode);
+				handleFieldLayout(prefix, childFieldLayout.getName(), childFieldLayout, layoutNodes);
 			}
 		}
 	}
