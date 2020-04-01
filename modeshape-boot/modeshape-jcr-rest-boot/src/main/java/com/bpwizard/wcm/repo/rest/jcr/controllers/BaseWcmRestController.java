@@ -700,22 +700,8 @@ public abstract class BaseWcmRestController {
 	}
 
 	protected void handleFieldLayout(String prefix, String name, FieldLayout fieldLayout, ArrayNode fieldNodes) {
-		ArrayNode layoutNodes = null;
-		if (fieldLayout.isMultiple()) {
-			ObjectNode fieldNode = this.objectMapper.createObjectNode();
-			fieldNode.put("type", "array");
-			if (fieldLayout.getListItems() > 0) {
-				fieldNode.put("listItems", fieldLayout.getListItems());
-			}
-			fieldNode.put("title", name);
-			fieldNodes.add(fieldNode);					
-			layoutNodes = this.objectMapper.createArrayNode();
-			fieldNode.set("items", layoutNodes);
-		} else {
-			layoutNodes = fieldNodes;
-		}
+
 		if (fieldLayout.getFieldLayouts() == null || fieldLayout.getFieldLayouts().length == 0) {
-			
 			ObjectNode fieldNode = this.objectMapper.createObjectNode();
 			if (StringUtils.hasText(fieldLayout.getTitle())) {
 				fieldNode.put("title", fieldLayout.getTitle());
@@ -725,12 +711,36 @@ public abstract class BaseWcmRestController {
 			fieldNode.put("key", this.getLayoutFieldKey(fieldLayout.getKey(), prefix));
 			if (fieldLayout.isMultiple()) {
 				fieldNode.put("type", "array");
+				if (fieldLayout.getListItems() > 0) {
+					fieldNode.put("listItems", fieldLayout.getListItems());
+				}
 				ArrayNode itemsNode = this.objectMapper.createArrayNode();
 				fieldNode.set("items", itemsNode);
 				itemsNode.add(fieldLayout.getItems());
 			} 
 			fieldNodes.add(fieldNode);
 		} else {
+			ArrayNode layoutNodes = null;
+			if (fieldLayout.isMultiple()) {
+				ObjectNode fieldNode = this.objectMapper.createObjectNode();
+				if (StringUtils.hasText(fieldLayout.getTitle())) {
+					fieldNode.put("title", fieldLayout.getTitle());
+				} else {
+					fieldNode.put("title", name);
+				}
+				fieldNode.put("type", "array");
+				if (fieldLayout.getListItems() > 0) {
+					fieldNode.put("listItems", fieldLayout.getListItems());
+				}
+				fieldNode.put("title", name);
+				
+				fieldNodes.add(fieldNode);					
+				layoutNodes = this.objectMapper.createArrayNode();
+				fieldNode.set("items", layoutNodes);
+			} else {
+				layoutNodes = fieldNodes;
+			}
+			
 			for (FieldLayout childFieldLayout: fieldLayout.getFieldLayouts()) {
 				ObjectNode fieldNode = this.objectMapper.createObjectNode();
 				if (StringUtils.hasText(childFieldLayout.getTitle())) {
