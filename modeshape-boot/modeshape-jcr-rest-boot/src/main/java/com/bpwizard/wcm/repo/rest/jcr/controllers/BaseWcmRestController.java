@@ -333,7 +333,6 @@ public abstract class BaseWcmRestController {
 			jsonNode.set("schema", schemaNode);
 			schemaNode.put("type", "object");
 
-			//TODO: 
 			if (StringUtils.hasText(at.getName())) {
 				schemaNode.put("name", at.getName());
 			}
@@ -400,24 +399,11 @@ public abstract class BaseWcmRestController {
 				}		
 			}
 			
-			// properties.addAll(propertyNodes);
 			schemaNode.set("properties", properties);
-			//TODO: add definitions node only when needed
 			schemaNode.set("definitions", definitions);
 					
 			jsonNode.set("layout", this.toFormLayoutNode(at));
-			// "params" node
-			// "validate": false
-	
-			// data: object to populate the form with default or previously submitted values
-			// options: object to set any global options for the form
-			// widgets: object to add custom widgets
-			// language: string to set the error message language (currently supports 'en'
-			// and 'fr')
-			// framework: string or object to set which framework to use
 			jsonForm.setFormSchema(jsonNode);
-	
-			// return new JsonForm[] {jsonFormCreate, jsonFormEdit};
 			return jsonForm;
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
@@ -692,7 +678,6 @@ public abstract class BaseWcmRestController {
 				if (StringUtils.hasText(formControl.getPlaceholder())) {
 					fieldNode.put("placeholder", formControl.getPlaceholder());
 				}
-				// TODO: others
 			}
 		}
 		columnNode.set("items", fieldNodes);
@@ -741,8 +726,19 @@ public abstract class BaseWcmRestController {
 				fieldNode.put("title", name);
 				
 				fieldNodes.add(fieldNode);					
-				layoutNodes = this.objectMapper.createArrayNode();
-				fieldNode.set("items", layoutNodes);
+
+				if (fieldLayout.isDisplayFlex()) {
+					ObjectNode itemsNode = this.objectMapper.createObjectNode();
+					fieldNode.set("items", itemsNode);
+					itemsNode.put("type", "div");
+					itemsNode.put("displayFlex", true);
+					itemsNode.put("flex-direction", StringUtils.hasText(fieldLayout.getFlexDirection()) ? fieldLayout.getFlexDirection() : "row");
+					layoutNodes = this.objectMapper.createArrayNode();
+					itemsNode.set("items", layoutNodes);
+				} else {
+					layoutNodes = this.objectMapper.createArrayNode();
+					fieldNode.set("items", layoutNodes);
+				}
 			} else {
 				layoutNodes = fieldNodes;
 			}
