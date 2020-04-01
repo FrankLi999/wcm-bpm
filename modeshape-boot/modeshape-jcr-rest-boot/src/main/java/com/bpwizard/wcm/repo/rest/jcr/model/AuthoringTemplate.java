@@ -199,8 +199,6 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 		elementFolder.set(control.getName(), controlNode);
 
 		controlNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formControl");
-		
-
 		if (StringUtils.hasText(control.getTitle())) {
 			controlNode.put("bpw:title", control.getTitle());
 		}
@@ -256,6 +254,13 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 		controlNode.put("bpw:unique", control.isUnique());
 		controlNode.put("bpw:editable", control.isEditable());
 		controlNode.put("bpw:expandable", control.isEditable());
+		
+		controlNode.put("bpw:multiple", control.isMultiple());
+		controlNode.put("bpw:rows", control.getRows());
+		controlNode.put("bpw:jcrDataType", control.getJcrDataType());
+		controlNode.put("bpw:richText", control.isRichText());
+		controlNode.put("bpw:flex", control.getFlex());
+		controlNode.put("bpw:placeholder", control.getPlaceholder());		
 	}
 	
 	private void addSteps(ObjectNode stepsNode, FormStep[] steps) {
@@ -337,8 +342,39 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			}
 			columnNode.set("bpw:fieldNames", controlArray);
 		}
+		if (column.getFieldLayouts() != null) {
+			ObjectNode columnNodeChildren = JsonUtils.createObjectNode();
+			columnNode.set("children", columnNodeChildren);
+			
+			for (FieldLayout fieldLayout: column.getFieldLayouts()) {
+				this.addFieldLayout(columnNodeChildren, fieldLayout);
+			}
+		}
 	}
 
+	private void addFieldLayout(ObjectNode containerNode, FieldLayout fieldLayout) {
+		ObjectNode fieldLayoutNode = JsonUtils.createObjectNode();
+		containerNode.set(fieldLayout.getName(), fieldLayoutNode);
+		fieldLayoutNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:fieldLayout");
+		fieldLayoutNode.put("bpw:multiple", fieldLayout.isMultiple());
+		fieldLayoutNode.put("bpw:name", fieldLayout.getName());
+		fieldLayoutNode.put("bpw:key", fieldLayout.getKey());
+		fieldLayoutNode.put("bpw:title", fieldLayout.getTitle());
+		fieldLayoutNode.put("bpw:items", fieldLayout.getItems());
+		fieldLayoutNode.put("bpw:displayFlex", fieldLayout.isDisplayFlex());
+		fieldLayoutNode.put("bpw:listItems", fieldLayout.getListItems());
+		fieldLayoutNode.put("bpw:flexDirection", fieldLayout.getFlexDirection());
+		fieldLayoutNode.put("bpw:flex", fieldLayout.getFlex());
+		fieldLayoutNode.put("bpw:placeHolder", fieldLayout.getPlaceHolder());
+		if (fieldLayout.getFieldLayouts() != null) {
+			ObjectNode fieldLayoutNodeChildren = JsonUtils.createObjectNode();
+			fieldLayoutNode.set("children", fieldLayoutNodeChildren);			
+			for (FieldLayout childFieldLayout: fieldLayout.getFieldLayouts()) {
+				this.addFieldLayout(fieldLayoutNodeChildren, childFieldLayout);
+			}
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return "AuthoringTemplate [name=" + name + ", repository=" + repository + ", workspace=" + workspace

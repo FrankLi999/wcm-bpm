@@ -378,6 +378,16 @@ public class WcmUtils {
 				associationLayout.setTitle(property.getValues().get(0));
 			} else if ("bpw:items".equals(property.getName())) {
 				associationLayout.setItems(property.getValues().get(0));
+			} else if ("bpw:displayFlex".equals(property.getName())) {
+				associationLayout.setDisplayFlex(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:listItems".equals(property.getName())) {
+				associationLayout.setListItems(Integer.parseInt(property.getValues().get(0)));
+			} else if ("bpw:flexDirection".equals(property.getName())) {
+				associationLayout.setFlexDirection(property.getValues().get(0));
+			} else if ("bpw:flex".equals(property.getName())) {
+				associationLayout.setFlex(property.getValues().get(0));
+			} else if ("bpw:placeHolder".equals(property.getName())) {
+				associationLayout.setPlaceHolder(property.getValues().get(0));
 			} 
 		}
 		if (StringUtils.isEmpty(associationLayout.getKey())) {
@@ -405,7 +415,17 @@ public class WcmUtils {
 				fieldLayout.setTitle(property.getValues().get(0));
 			} else if ("bpw:items".equals(property.getName())) {
 				fieldLayout.setItems(property.getValues().get(0));
-			}
+			} else if ("bpw:displayFlex".equals(property.getName())) {
+				fieldLayout.setDisplayFlex(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:listItems".equals(property.getName())) {
+				fieldLayout.setListItems(Integer.parseInt(property.getValues().get(0)));
+			} else if ("bpw:flexDirection".equals(property.getName())) {
+				fieldLayout.setFlexDirection(property.getValues().get(0));
+			} else if ("bpw:flex".equals(property.getName())) {
+				fieldLayout.setFlex(property.getValues().get(0));
+			} else if ("bpw:placeHolder".equals(property.getName())) {
+				fieldLayout.setPlaceHolder(property.getValues().get(0));
+			} 
 		}
 		if (StringUtils.isEmpty(fieldLayout.getKey())) {
 			fieldLayout.setKey(fieldLayout.getName());

@@ -81,6 +81,8 @@
 - bpw:displayFlex (BOOLEAN)
 - bpw:listItems (LONG)
 - bpw:flexDirection (STRING)
+- bpw:flex (String)
+- bpw:placeHolder (STRING)
 + * (bpw:fieldLayout)
 
 /*

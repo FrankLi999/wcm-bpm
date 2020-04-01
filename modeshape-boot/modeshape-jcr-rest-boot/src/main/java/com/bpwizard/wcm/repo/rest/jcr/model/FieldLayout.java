@@ -10,6 +10,8 @@ public class FieldLayout {
 	private boolean multiple;
 	private String items;
 	
+	private String placeHolder;
+	private String flex;
 	private boolean displayFlex;
 	private int listItems;
 	private String flexDirection;
@@ -55,7 +57,18 @@ public class FieldLayout {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	
+	public String getPlaceHolder() {
+		return placeHolder;
+	}
+	public void setPlaceHolder(String placeHolder) {
+		this.placeHolder = placeHolder;
+	}
+	public String getFlex() {
+		return flex;
+	}
+	public void setFlex(String flex) {
+		this.flex = flex;
+	}
 	public boolean isDisplayFlex() {
 		return displayFlex;
 	}
@@ -77,6 +90,8 @@ public class FieldLayout {
 	@Override
 	public String toString() {
 		return "FieldLayout [name=" + name + ", key=" + key + ", title=" + title + ", multiple=" + multiple + ", items="
-				+ items + ", fieldLayouts=" + Arrays.toString(fieldLayouts) + "]";
+				+ items + ", placeHolder=" + placeHolder + ", flex=" + flex + ", displayFlex=" + displayFlex
+				+ ", listItems=" + listItems + ", flexDirection=" + flexDirection + ", fieldLayouts="
+				+ Arrays.toString(fieldLayouts) + ", toString()=" + super.toString() + "]";
 	}
 }

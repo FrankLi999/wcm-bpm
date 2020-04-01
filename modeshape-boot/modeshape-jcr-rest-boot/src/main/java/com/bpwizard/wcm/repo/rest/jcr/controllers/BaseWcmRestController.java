@@ -709,6 +709,12 @@ public abstract class BaseWcmRestController {
 				fieldNode.put("notitle", "true");
 			}
 			fieldNode.put("key", this.getLayoutFieldKey(fieldLayout.getKey(), prefix));
+			if (StringUtils.hasText(fieldLayout.getFlex())) {
+				fieldNode.put("flex", fieldLayout.getFlex());
+			}
+			if (StringUtils.hasText(fieldLayout.getPlaceHolder())) {
+				fieldNode.put("placeholder", fieldLayout.getPlaceHolder());
+			}
 			if (fieldLayout.isMultiple()) {
 				fieldNode.put("type", "array");
 				if (fieldLayout.getListItems() > 0) {
