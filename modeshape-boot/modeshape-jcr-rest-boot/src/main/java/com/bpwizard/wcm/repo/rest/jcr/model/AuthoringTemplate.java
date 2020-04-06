@@ -365,7 +365,10 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 		fieldLayoutNode.put("bpw:listItems", fieldLayout.getListItems());
 		fieldLayoutNode.put("bpw:flexDirection", fieldLayout.getFlexDirection());
 		fieldLayoutNode.put("bpw:flex", fieldLayout.getFlex());
-		fieldLayoutNode.put("bpw:placeHolder", fieldLayout.getPlaceHolder());
+		fieldLayoutNode.put("bpw:placeHolder", fieldLayout.getPlaceHolder());		
+		fieldLayoutNode.put("bpw:expandable", fieldLayout.isExpandable());
+		fieldLayoutNode.put("bpw:expanded", fieldLayout.isExpanded());
+		
 		if (fieldLayout.getFieldLayouts() != null) {
 			ObjectNode fieldLayoutNodeChildren = JsonUtils.createObjectNode();
 			fieldLayoutNode.set("children", fieldLayoutNodeChildren);			

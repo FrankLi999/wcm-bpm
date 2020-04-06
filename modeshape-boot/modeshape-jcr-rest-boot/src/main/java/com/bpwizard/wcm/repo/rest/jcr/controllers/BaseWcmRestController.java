@@ -518,9 +518,6 @@ public abstract class BaseWcmRestController {
 					stepsNode.set("steps", stepArrayNode);
 					formNode.add(stepsNode);
 				}
-				// at.getFormControls()
-				// type ace, enum
-	
 			}
 		}
 		return formNode;
@@ -584,18 +581,13 @@ public abstract class BaseWcmRestController {
 			ObjectNode columnNode = this.getColumnNode(at, column);
 			columnNodes.add(columnNode);
 		}
-		// { , , "items": [ "first_name", "last_name" ] },
 		rowNode.set("items", columnNodes);
 		return rowNode;
 	}
 	
 	private ObjectNode toPropertyNode(FormControl formControl, ObjectNode definitions, boolean editMode) {
 		ObjectNode propertyNode = JsonNodeFactory.instance.objectNode();
-		// propertyNode.put("name", formControl.getName());
-		// propertyNode.put("type", formControl.getDataType());
-//		if ("properties".equals(formControl.getControlName())) {
-//			propertyNode.put("$ref", "#/definitions/properties");
-//		} else 
+
 		if ("association".equals(formControl.getControlType())) {
 			propertyNode.put("$ref",
 					String.format("#/definitions/%s", this.fieldNameFromNodeTypeName(formControl.getJcrDataType())));
@@ -606,15 +598,7 @@ public abstract class BaseWcmRestController {
 		if (formControl.getEnumeration() != null && formControl.getEnumeration().length > 0) {
 			propertyNode.set("enum", this.toArrayNode(formControl.getEnumeration()));
 		}
-		// type boolean, number
-		// range: integer:
-		// "minimum": 7,
-		/// "maximum": 77,
-		// "format": "color"
 
-		// emum: "enum": [ "male", "female", "alien" ]
-
-		// array
 		if (StringUtils.hasText(formControl.getHint())) {
 			propertyNode.put("description", formControl.getHint());
 		}
@@ -688,6 +672,18 @@ public abstract class BaseWcmRestController {
 
 		if (fieldLayout.getFieldLayouts() == null || fieldLayout.getFieldLayouts().length == 0) {
 			ObjectNode fieldNode = this.objectMapper.createObjectNode();
+			if (fieldLayout.isExpandable()) {
+				ObjectNode sectionNode = this.objectMapper.createObjectNode();
+				sectionNode.put("type", "section");
+				sectionNode.set("items", fieldNode);
+				sectionNode.put("expandable", true);
+				sectionNode.put("expanded", fieldLayout.isExpanded());
+				fieldNodes.add(sectionNode);
+			} else {
+				fieldNodes.add(fieldNode);
+			}
+			
+			
 			if (StringUtils.hasText(fieldLayout.getTitle())) {
 				fieldNode.put("title", fieldLayout.getTitle());
 			} else {
@@ -709,11 +705,21 @@ public abstract class BaseWcmRestController {
 				fieldNode.set("items", itemsNode);
 				itemsNode.add(fieldLayout.getItems());
 			} 
-			fieldNodes.add(fieldNode);
 		} else {
 			ArrayNode layoutNodes = null;
 			if (fieldLayout.isMultiple()) {
 				ObjectNode fieldNode = this.objectMapper.createObjectNode();
+				if (fieldLayout.isExpandable()) {
+					ObjectNode sectionNode = this.objectMapper.createObjectNode();
+					sectionNode.put("type", "section");
+					sectionNode.set("items", fieldNode);
+					sectionNode.put("expandable", true);
+					sectionNode.put("expanded", fieldLayout.isExpanded());
+					fieldNodes.add(sectionNode);
+				} else {
+					fieldNodes.add(fieldNode);
+				}
+				
 				if (StringUtils.hasText(fieldLayout.getTitle())) {
 					fieldNode.put("title", fieldLayout.getTitle());
 				} else {
@@ -725,8 +731,6 @@ public abstract class BaseWcmRestController {
 				}
 				fieldNode.put("title", name);
 				
-				fieldNodes.add(fieldNode);					
-
 				if (fieldLayout.isDisplayFlex()) {
 					ObjectNode itemsNode = this.objectMapper.createObjectNode();
 					fieldNode.set("items", itemsNode);

@@ -388,7 +388,11 @@ public class WcmUtils {
 				associationLayout.setFlex(property.getValues().get(0));
 			} else if ("bpw:placeHolder".equals(property.getName())) {
 				associationLayout.setPlaceHolder(property.getValues().get(0));
-			} 
+			} else if ("bpw:expandable".equals(property.getName())) {
+				associationLayout.setExpandable(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:expanded".equals(property.getName())) {
+				associationLayout.setExpanded(Boolean.parseBoolean(property.getValues().get(0)));
+			}
 		}
 		if (StringUtils.isEmpty(associationLayout.getKey())) {
 			associationLayout.setKey(associationLayout.getName());

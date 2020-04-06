@@ -699,7 +699,7 @@
     "library/system/authoringTemplate/contentType/elements/body" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Body",
-        "bpw:controlType": "textarea",
+        "bpw:controlType": "ace",
         "bpw:rows": "5",
         "bpw:richText": "true",
         "bpw:dataType": "string",
@@ -1283,7 +1283,7 @@
     "library/system/authoringTemplate/siteAreaType/elements/body" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Body",
-        "bpw:controlType": "textarea",
+        "bpw:controlType": "ace",
         "bpw:rows": "5",
         "bpw:richText": "true",
         "bpw:dataType": "string",
@@ -4221,7 +4221,7 @@
     "library/design/authoringTemplate/MyContent/elements/body" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Body",
-        "bpw:controlType": "text",
+        "bpw:controlType": "ace",
         "bpw:dataType": "string",
         "bpw:valdition": "{\"regex\": \"[^(<[.\n]+>)]*\"}",
         "bpw:mandatory": "true",

@@ -16,6 +16,9 @@ public class FieldLayout {
 	private int listItems;
 	private String flexDirection;
 	
+	private boolean expandable = false;
+	private boolean expanded = true;
+	
 	private FieldLayout fieldLayouts[];
 	
 	public String getItems() {
@@ -87,11 +90,24 @@ public class FieldLayout {
 	public void setFlexDirection(String flexDirection) {
 		this.flexDirection = flexDirection;
 	}
+	public boolean isExpandable() {
+		return expandable;
+	}
+	public void setExpandable(boolean expandable) {
+		this.expandable = expandable;
+	}
+	public boolean isExpanded() {
+		return expanded;
+	}
+	public void setExpanded(boolean expanded) {
+		this.expanded = expanded;
+	}
 	@Override
 	public String toString() {
 		return "FieldLayout [name=" + name + ", key=" + key + ", title=" + title + ", multiple=" + multiple + ", items="
 				+ items + ", placeHolder=" + placeHolder + ", flex=" + flex + ", displayFlex=" + displayFlex
-				+ ", listItems=" + listItems + ", flexDirection=" + flexDirection + ", fieldLayouts="
-				+ Arrays.toString(fieldLayouts) + ", toString()=" + super.toString() + "]";
+				+ ", listItems=" + listItems + ", flexDirection=" + flexDirection + ", expandable=" + expandable
+				+ ", expanded=" + expanded + ", fieldLayouts=" + Arrays.toString(fieldLayouts) + ", toString()="
+				+ super.toString() + "]";
 	}
 }

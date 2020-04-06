@@ -83,6 +83,8 @@
 - bpw:flexDirection (STRING)
 - bpw:flex (String)
 - bpw:placeHolder (STRING)
+- bpw:expandable (BOOLEAN)
+- bpw:expanded (BOOLEAN)
 + * (bpw:fieldLayout)
 
 /*
@@ -596,13 +598,13 @@
  - bpw:multiple (BOOLEAN)
  - bpw:value (STRING)
  
-[bpw:contentElementFolder] > nt:folder
+[bpw:contentElementFolder] > nt:folder orderable
 + * (bpw:contentElement)
 
-[bpw:propertyElementFolder] > nt:folder
+[bpw:propertyElementFolder] > nt:folder orderable
 + * (bpw:contentElement)
 
-[bpw:commentFolder] > nt:folder
+[bpw:commentFolder] > nt:folder orderable
 + * (bpw:comment)
 
 [bpw:comment] > nt:hierarchyNode
