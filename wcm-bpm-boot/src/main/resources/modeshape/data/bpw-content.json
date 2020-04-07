@@ -798,6 +798,7 @@
     },
     "library/system/authoringTemplate/fileType/elementGroups/tabs/contentTab" : {
         "jcr:primaryType":"bpw:formTab",
+        "bpw:order": 1,
         "bpw:tabName": "Content"
     },
     "library/system/authoringTemplate/fileType/elementGroups/tabs/contentTab/firstRow" : {
@@ -809,6 +810,7 @@
     },
     "library/system/authoringTemplate/fileType/elementGroups/tabs/metadataTab" : {
         "jcr:primaryType": "bpw:formTab",
+        "bpw:order": 2,
         "bpw:tabName": "Metadata"
     },
     "library/system/authoringTemplate/fileType/elementGroups/tabs/metadataTab/firstRow" : {
@@ -903,164 +905,184 @@
     "library/system/authoringTemplate/siteConfigType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
     },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps" : {
+        "jcr:primaryType": "bpw:formSteps"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout" : {
+        "jcr:primaryType": "bpw:formStep",
+        "bpw:stepName": "Layout",
+        "bpw:order": 1
+    },
+
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.rootSiteArea", "elements.colorTheme", "elements.customScrollbars"]
+    },
+    
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.layout_style"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/secondRow/secondColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.layout_width"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/secondRow/firstColumn/layout_style" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.style",
+        "bpw:title": "Layout Style"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/secondRow/secondColumn/layout_width" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.width",
+        "bpw:title": "Layout Width"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors" : {
+        "jcr:primaryType": "bpw:formStep",
+        "bpw:stepName": "Colors",
+        "bpw:order": 2
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.layout_navbar_primaryBackground", "elements.layout_navbar_secondaryBackground", "elements.layout_navbar_hidden"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/firstRow/secondColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.layout_navbar_folded", "elements.layout_navbar_position", "elements.layout_navbar_variant"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/firstRow/firstColumn/layout_navbar_primaryBackground" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.navbar.primaryBackground",
+        "bpw:title": "Navbar Primary Background"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/firstRow/firstColumn/layout_navbar_secondaryBackground" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.navbar.secondaryBackground",
+        "bpw:title": "Navbar Secondary Background"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/firstRow/firstColumn/layout_navbar_hidden" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.navbar.hidden",
+        "bpw:title": "Hide Navbar"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/firstRow/secondColumn/layout_navbar_folded" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.navbar.folded",
+        "bpw:title": "Navbar Folded"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/firstRow/secondColumn/layout_navbar_position" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.navbar.position",
+        "bpw:title": "Navbar Position"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/firstRow/secondColumn/layout_navbar_variant" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.navbar.variant",
+        "bpw:title": "Navbar Variant"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.layout_toolbar_customBackgroundColor", "elements.layout_toolbar_background"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/secondRow/secondColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.layout_toolbar_hidden", "elements.layout_toolbar_position"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/secondRow/firstColumn/layout_toolbar_customBackgroundColor" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.toolbar.customBackgroundColor",
+        "bpw:title": "Toolbar Custom Background Color"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/secondRow/firstColumn/layout_toolbar_background" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.toolbar.background",
+        "bpw:title": "Toolbar Background"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/secondRow/secondColumn/layout_toolbar_hidden" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.toolbar.hidden",
+        "bpw:title": "Hide Toolbar"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/colors/secondRow/secondColumn/layout_toolbar_position" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.toolbar.position",
+        "bpw:title": "Toolbar Position"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility" : {
+        "jcr:primaryType": "bpw:formStep",
+        "bpw:stepName": "Visibility",
+        "bpw:order": 3
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/firstRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.layout_footer_customBackgroundColor", "elements.layout_footer_background"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/firstRow/secondColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.layout_footer_hidden", "elements.layout_footer_position"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/firstRow/firstColumn/layout_footer_customBackgroundColor" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.footer.customBackgroundColor",
+        "bpw:title": "Footer Custom Background Color"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/firstRow/firstColumn/layout_footer_background" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.footer.background",
+        "bpw:title": "Footer Background"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/firstRow/secondColumn/layout_footer_hidden" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.footer.hidden",
+        "bpw:title": "Hide Footer"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/firstRow/secondColumn/layout_footer_position" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.footer.position",
+        "bpw:title": "Footer Position"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.layout_sidePanel_hidden"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/secondRow/secondColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.layout_sidePanel_position"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/secondRow/firstColumn/layout_sidePanel_hidden" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.sidePanel.hidden",
+        "bpw:title": "Hide Side Panel"
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/visibility/secondRow/secondColumn/layout_sidePanel_position" : {
+        "jcr:primaryType":"bpw:fieldLayout",
+        "bpw:key": "layout.sidePanel.position",
+        "bpw:title": "Side Panel Position"
+    },
+    
     "library/system/authoringTemplate/siteConfigType/elements" : {
         "jcr:primaryType": "bpw:elementFolder"
     },
     "library/system/authoringTemplate/siteConfigType/properties" : {
         "jcr:primaryType": "bpw:propertyFolder"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/firstRow" : {
-        "jcr:primaryType":"bpw:formRow"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/firstRow/firstColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.rootSiteArea", "elements.colorTheme", "elements.customScrollbars"]
-    },
-    
-    "library/system/authoringTemplate/siteConfigType/elementGroups/secondRow" : {
-        "jcr:primaryType":"bpw:formRow"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/secondRow/firstColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout_style"]
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/secondRow/secondColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout_width"]
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/secondRow/firstColumn/layout_style" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.style",
-        "bpw:title": "Layout Style"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/secondRow/secondColumn/layout_width" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.width",
-        "bpw:title": "Layout Width"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow" : {
-        "jcr:primaryType":"bpw:formRow"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/firstColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout_navbar_primaryBackground", "elements.layout_navbar_secondaryBackground", "elements.layout_navbar_hidden"]
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/secondColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout_navbar_folded", "elements.layout_navbar_position", "elements.layout_navbar_variant"]
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/firstColumn/layout_navbar_primaryBackground" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.navbar.primaryBackground",
-        "bpw:title": "Navbar Primary Background"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/firstColumn/layout_navbar_secondaryBackground" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.navbar.secondaryBackground",
-        "bpw:title": "Navbar Secondary Background"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/firstColumn/layout_navbar_hidden" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.navbar.hidden",
-        "bpw:title": "Hide Navbar"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/secondColumn/layout_navbar_folded" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.navbar.folded",
-        "bpw:title": "Navbar Folded"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/secondColumn/layout_navbar_position" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.navbar.position",
-        "bpw:title": "Navbar Position"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/thirdRow/secondColumn/layout_navbar_variant" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.navbar.variant",
-        "bpw:title": "Navbar Variant"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fourthRow" : {
-        "jcr:primaryType":"bpw:formRow"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fourthRow/firstColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout_toolbar_customBackgroundColor", "elements.layout_toolbar_background"]
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fourthRow/secondColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout_toolbar_hidden", "elements.layout_toolbar_position"]
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fourthRow/firstColumn/layout_toolbar_customBackgroundColor" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.toolbar.customBackgroundColor",
-        "bpw:title": "Toolbar Custom Background Color"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fourthRow/firstColumn/layout_toolbar_background" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.toolbar.background",
-        "bpw:title": "Toolbar Background"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fourthRow/secondColumn/layout_toolbar_hidden" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.toolbar.hidden",
-        "bpw:title": "Hide Toolbar"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fourthRow/secondColumn/layout_toolbar_position" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.toolbar.position",
-        "bpw:title": "Toolbar Position"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fifthRow" : {
-        "jcr:primaryType":"bpw:formRow"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fifthRow/firstColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout_footer_customBackgroundColor", "elements.layout_footer_background"]
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fifthRow/secondColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout_footer_hidden", "elements.layout_footer_position"]
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fifthRow/firstColumn/layout_footer_customBackgroundColor" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.footer.customBackgroundColor",
-        "bpw:title": "Footer Custom Background Color"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fifthRow/firstColumn/layout_footer_background" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.footer.background",
-        "bpw:title": "Footer Background"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fifthRow/secondColumn/layout_footer_hidden" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.footer.hidden",
-        "bpw:title": "Hide Footer"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/fifthRow/secondColumn/layout_footer_position" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.footer.position",
-        "bpw:title": "Footer Position"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/sixthRow" : {
-        "jcr:primaryType":"bpw:formRow"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/sixthRow/firstColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout_sidePanel_hidden"]
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/sixthRow/secondColumn" : {
-        "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout_sidePanel_position"]
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/sixthRow/firstColumn/layout_sidePanel_hidden" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.sidePanel.hidden",
-        "bpw:title": "Hide Side Panel"
-    },
-    "library/system/authoringTemplate/siteConfigType/elementGroups/sixthRow/secondColumn/layout_sidePanel_position" : {
-        "jcr:primaryType":"bpw:fieldLayout",
-        "bpw:key": "layout.sidePanel.position",
-        "bpw:title": "Side Panel Position"
     },
     "library/system/authoringTemplate/siteConfigType/properties/name": {
         "jcr:primaryType": "bpw:formControl",
@@ -1136,6 +1158,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/contentTab" : {
         "jcr:primaryType":"bpw:formTab",
+        "bpw:order": 1,
         "bpw:tabName": "Content"
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/contentTab/firstRow" : {
@@ -1154,6 +1177,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab" : {
         "jcr:primaryType":"bpw:formTab",
+         "bpw:order": 2,
         "bpw:tabName": "Properties"
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow" : {
@@ -1172,6 +1196,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab" : {
         "jcr:primaryType":"bpw:formTab",
+        "bpw:order": 3,
         "bpw:tabName": "Search Data"
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/searchDataTab/firstRow" : {
@@ -1198,6 +1223,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab" : {
         "jcr:primaryType":"bpw:formTab",
+        "bpw:order": 4,
         "bpw:tabName": "Meta Data"
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/metadataTab/firstRow" : {
@@ -1223,6 +1249,7 @@
     },    
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab" : {
         "jcr:primaryType":"bpw:formTab",
+        "bpw:order": 5,
         "bpw:tabName": "Navigation"
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/navigationTab/firstRow" : {
@@ -1248,6 +1275,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab" : {
         "jcr:primaryType":"bpw:formTab",
+        "bpw:order": 6,
         "bpw:tabName": "Badge"
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/badgeTab/firstRow" : {

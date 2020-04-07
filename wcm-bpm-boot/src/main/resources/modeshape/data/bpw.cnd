@@ -155,10 +155,12 @@
 - bpw:id (STRING)
 - bpw:fxFlex (LONG) 
 - bpw:fieldNames (STRING) multiple
+- bpw:order (LONG)
 + * (bpw:fieldLayout)
 
 [bpw:formRow] > bpw:formGroup
 - bpw:rowName (String)
+- bpw:order (LONG)
 + * (bpw:formColumn)
 
 [bpw:formRows] > bpw:formGroup
@@ -172,10 +174,12 @@
 
 [bpw:formTab]
 - bpw:tabName (STRING)
+- bpw:order (LONG)
 + * (bpw:formGroup)
 
 [bpw:formStep]
 - bpw:stepName (STRING)
+- bpw:order (LONG)
 + * (bpw:formGroup)
 
 [bpw:validationRule]> nt:hierarchyNode

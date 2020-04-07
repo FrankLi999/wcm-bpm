@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class FormRow extends BaseFormGroup {
 	private String rowName;
 	private String rowTitle;
+	private int order;
 	private FormColumn[] columns;
 
 	public FormColumn[] getColumns() {
@@ -31,8 +32,17 @@ public class FormRow extends BaseFormGroup {
 		this.rowTitle = rowTitle;
 	}
 
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
 	@Override
 	public String toString() {
-		return "FormRow [rowName=" + rowName + ", rowTitle=" + rowTitle + ", columns=" + Arrays.toString(columns) + "]";
+		return "FormRow [rowName=" + rowName + ", rowTitle=" + rowTitle + ", order=" + order + ", columns="
+				+ Arrays.toString(columns) + ", toString()=" + super.toString() + "]";
 	}
 }

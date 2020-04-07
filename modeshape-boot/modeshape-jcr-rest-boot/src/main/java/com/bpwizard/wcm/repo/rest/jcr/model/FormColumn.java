@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class FormColumn {
 	private String id;
 	private int fxFlex;
+	private int order;
     private String[] formControls;
     private FieldLayout fieldLayouts[];
 	public String getId() {
@@ -32,9 +33,16 @@ public class FormColumn {
 	public void setFieldLayouts(FieldLayout[] fieldLayouts) {
 		this.fieldLayouts = fieldLayouts;
 	}
+	public int getOrder() {
+		return order;
+	}
+	public void setOrder(int order) {
+		this.order = order;
+	}
 	@Override
 	public String toString() {
-		return "FormColumn [id=" + id + ", fxFlex=" + fxFlex + ", formControls=" + Arrays.toString(formControls)
-				+ ", fieldLayouts=" + Arrays.toString(fieldLayouts) + "]";
+		return "FormColumn [id=" + id + ", fxFlex=" + fxFlex + ", order=" + order + ", formControls="
+				+ Arrays.toString(formControls) + ", fieldLayouts=" + Arrays.toString(fieldLayouts) + ", toString()="
+				+ super.toString() + "]";
 	}
 }
