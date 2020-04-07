@@ -488,6 +488,7 @@ public abstract class BaseWcmRestController {
 					for (FormTab formTab : ((FormTabs) formGroup).getTabs()) {
 						ObjectNode tabNode = this.objectMapper.createObjectNode();
 						tabNode.put("title", formTab.getTabTitle());
+						tabNode.put("type", "tab");
 						ArrayNode tabItemNodes = this.objectMapper.createArrayNode();
 						for (BaseFormGroup formRow : formTab.getFormGroups()) {
 							ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
@@ -496,7 +497,7 @@ public abstract class BaseWcmRestController {
 						tabNode.set("items", tabItemNodes);
 						tabArrayNode.add(tabNode);
 					}
-					tabsNode.set("tabs", tabArrayNode);
+					tabsNode.set("items", tabArrayNode);
 					formNode.add(tabsNode);
 				}
 	
@@ -507,6 +508,7 @@ public abstract class BaseWcmRestController {
 					for (FormStep formStep : ((FormSteps) formGroup).getSteps()) {
 						ObjectNode stepNode = this.objectMapper.createObjectNode();
 						stepNode.put("title", formStep.getStepTitle());
+						stepNode.put("type", "step");
 						ArrayNode stepItemNodes = this.objectMapper.createArrayNode();
 						for (BaseFormGroup formRow : formStep.getFormGroups()) {
 							ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
@@ -515,7 +517,7 @@ public abstract class BaseWcmRestController {
 						stepNode.set("items", stepItemNodes);
 						stepArrayNode.add(stepNode);
 					}
-					stepsNode.set("steps", stepArrayNode);
+					stepsNode.set("items", stepArrayNode);
 					formNode.add(stepsNode);
 				}
 			}
