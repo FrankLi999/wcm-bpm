@@ -709,9 +709,8 @@
     "library/system/authoringTemplate/contentType/properties/workflow" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Workflow",
-        "bpw:controlType": "text",
+        "bpw:controlType": "wcm-workflow",
         "bpw:dataType": "string",
-        "bpw:valdition": "{\"regex\": \"[^(<[.\n]+>)]*\"}",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -4098,7 +4097,7 @@
     },
     "library/design/authoringTemplate/MySidePaneContent/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description", "properties.categories", "properties.workflow"]
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description"]
     },    
     "library/design/authoringTemplate/MySidePaneContent/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -4112,6 +4111,20 @@
     "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
         "bpw:fieldNames": ["elements.sidebody"]
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.categories"]
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/thirdRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/thirdRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.workflow"]
     },
     "library/design/authoringTemplate/MySidePaneContent/elements" : {
         "jcr:primaryType": "bpw:elementFolder"
@@ -4159,9 +4172,8 @@
     "library/design/authoringTemplate/MySidePaneContent/properties/workflow" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Workflow",
-        "bpw:controlType": "text",
+        "bpw:controlType": "wcm-workflow",
         "bpw:dataType": "string",
-        "bpw:valdition": "{\"regex\": \"[^(<[.\n]+>)]*\"}",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
@@ -4188,7 +4200,7 @@
     },
     "library/design/authoringTemplate/MyContent/propertyGroup/firstColumn" : {
         "jcr:primaryType": "bpw:formColumn",
-        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description", "properties.categories", "properties.workflow"]
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description"]
     },    
     "library/design/authoringTemplate/MyContent/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -4208,6 +4220,20 @@
     "library/design/authoringTemplate/MyContent/elementGroups/rows/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
         "bpw:fieldNames": ["elements.body"]
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/secondRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.categories"]
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/thirdRow" : {
+        "jcr:primaryType":"bpw:formRow"
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/thirdRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.workflow"]
     },
     "library/design/authoringTemplate/MyContent/properties/name" : {
         "jcr:primaryType": "bpw:formControl",
@@ -4260,9 +4286,8 @@
     "library/design/authoringTemplate/MyContent/properties/workflow" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Workflow",
-        "bpw:controlType": "text",
+        "bpw:controlType": "wcm-workflow",
         "bpw:dataType": "string",
-        "bpw:valdition": "{\"regex\": \"[^(<[.\n]+>)]*\"}",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
