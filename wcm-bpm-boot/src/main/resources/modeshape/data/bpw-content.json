@@ -683,18 +683,19 @@
     "library/system/authoringTemplate/contentType/properties/siteArea" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Site Area",
-        "bpw:controlType": "text",
-        "bpw:jcrDataType": "bpw:siteArea",
+        "bpw:controlType": "wcm-sitearea",
+        "bpw:jcrDataType": "string",
         "bpw:dataType": "string",
         "bpw:mandatory": "true"
     },
     "library/system/authoringTemplate/contentType/properties/categories" : {
         "jcr:primaryType": "bpw:formControl",
-        "bpw:title": "Category",
-        "bpw:controlType": "text",
-        "bpw:jcrDataType": "bpw:category",
+        "bpw:title": "Categories",
+        "bpw:controlType": "wcm-categories",
+        "bpw:jcrDataType": "string",
         "bpw:dataType": "string",
-        "bpw:userSearchable": "true"
+        "bpw:userSearchable": "true",
+        "bpw:multiple": "true"
     },
     "library/system/authoringTemplate/contentType/elements/body" : {
         "jcr:primaryType": "bpw:formControl",
@@ -1410,9 +1411,8 @@
     "library/system/authoringTemplate/siteAreaType/properties/siteConfig" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Site Config",
-        "bpw:controlType": "text",
+        "bpw:controlType": "site-config",
         "bpw:dataType": "string",
-        "bpw:jcrDataType": "bpw:siteConfig",
         "bpw:mandatory": "false"
     },
     "library/system/authoringTemplate/siteAreaType/properties/contentAreaLayout" : {
@@ -4151,8 +4151,8 @@
     "library/design/authoringTemplate/MySidePaneContent/properties/categories" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Category",
-        "bpw:controlType": "text",
-        "bpw:jcrDataType": "bpw:category",
+        "bpw:controlType": "wcm-categories",
+        "bpw:multiple": "true",
         "bpw:dataType": "string",
         "bpw:userSearchable": "true"
     },
@@ -4241,8 +4241,8 @@
     "library/design/authoringTemplate/MyContent/properties/categories" : {
         "jcr:primaryType": "bpw:formControl",
         "bpw:title": "Category",
-        "bpw:controlType": "text",
-        "bpw:jcrDataType": "bpw:category",
+        "bpw:controlType": "wcm-categories",
+        "bpw:multiple": "true",
         "bpw:dataType": "string",
         "bpw:userSearchable": "true"
     },
