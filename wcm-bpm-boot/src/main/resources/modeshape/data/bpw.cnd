@@ -244,7 +244,7 @@
 + onReivedDraft (bpw:AccessControlEntry)
 + onPublish (bpw:AccessControlEntry)
 
-[bpw:authoringTemplate] > bpw:resourceNode
+[bpw:authoringTemplate] > bpw:resourceNode orderable
 - bpw:baseResourceType (String)
 - bpw:contentWorkflow (String)
 + propertyGroup (bpw:formRow)
@@ -614,7 +614,7 @@
 [bpw:comment] > nt:hierarchyNode
  - bpw:comment (STRING)
  - bpw:reviewer (STRING)
-[bpw:content] > bpw:workflowNode
+[bpw:content] > bpw:workflowNode orderable
 - bpw:authoringTemplate (STRING)
 - bpw:categories (STRING) multiple
 + elements (bpw:contentElementFolder)

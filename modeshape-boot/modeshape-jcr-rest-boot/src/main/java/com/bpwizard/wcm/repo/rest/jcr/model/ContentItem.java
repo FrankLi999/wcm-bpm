@@ -187,6 +187,7 @@ public class ContentItem extends WorkflowNode {
 			propertyNode.put("bpw:value", contentElements.get(key));
 		}
 		
+		super.toJson(jsonNode, children);
 		return jsonNode;
 	}
 
