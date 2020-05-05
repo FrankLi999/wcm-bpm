@@ -1,6 +1,8 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -25,12 +27,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
+import com.bpwizard.wcm.repo.rest.jcr.model.AccessControlEntry;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
+import com.bpwizard.wcm.repo.rest.jcr.model.ContentItemElements;
+import com.bpwizard.wcm.repo.rest.jcr.model.ContentItemProperties;
+import com.bpwizard.wcm.repo.rest.jcr.model.FormControl;
+import com.bpwizard.wcm.repo.rest.jcr.model.SearchData;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperties;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperty;
+import com.bpwizard.wcm.repo.rest.jcr.model.WorkflowNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -61,7 +72,12 @@ public class ContentItemRestController extends BaseWcmRestController {
 		try {
 			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson());
+			AuthoringTemplate at = this.doGetAuthoringTemplate(
+					contentItem.getRepository(), 
+					WcmConstants.DRAFT_WS, 
+					contentItem.getProperties().getAuthoringTemplate(), 
+					request);
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at));
 			if (contentItem.getAcl() != null) {
 				String repositoryName = contentItem.getRepository();
 				String workspaceName = contentItem.getWorkspace();
@@ -91,15 +107,16 @@ public class ContentItemRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			contentItem.setCurrentLifecycleState("Published"); //TODO
+			contentItem.setLifeCycleStage(WcmConstants.WORKFLOW_STATGE_PUBLISHED);
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
-					contentItem.getAuthoringTemplate(), request);
+					contentItem.getProperties().getAuthoringTemplate(), request);
 			if (at.getContentItemAcl() != null) {
 			    contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
 			}
-			String absPath = WcmUtils.nodePath(contentItem.getWcmPath(), contentItem.getName());
+			String absPath = WcmUtils.nodePath(contentItem.getWcmPath(), contentItem.getProperties().getName());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DEFAULT_WS, absPath, contentItem.toJson());
+			
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DEFAULT_WS, absPath, contentItem.toJson(at));
 			Session session = this.repositoryManager.getSession(contentItem.getRepository(), WcmConstants.DEFAULT_WS);
 			if (contentItem.getAcl() != null) {
 				ModeshapeUtils.grantPermissions(session, absPath, contentItem.getAcl());
@@ -140,13 +157,13 @@ public class ContentItemRestController extends BaseWcmRestController {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		try {
-			contentItem.setCurrentLifecycleState("Published"); //TODO
+			contentItem.setLifeCycleStage(WcmConstants.WORKFLOW_STATGE_PUBLISHED);
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
-					contentItem.getAuthoringTemplate(), request);
+					contentItem.getProperties().getAuthoringTemplate(), request);
 			contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
 			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), absPath, contentItem.toJson());
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), absPath, contentItem.toJson(at));
 
 			if (contentItem.getAcl() != null) {
 				String repositoryName = contentItem.getRepository();
@@ -203,15 +220,15 @@ public class ContentItemRestController extends BaseWcmRestController {
 	@PutMapping(path = "/update-published", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void updateContentItem(@RequestBody ContentItem contentItem, HttpServletRequest request) { 
 		try {
-			contentItem.setCurrentLifecycleState("Published"); //TODO
+			contentItem.setLifeCycleStage(WcmConstants.WORKFLOW_STATGE_PUBLISHED);
 			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
-					contentItem.getAuthoringTemplate(), request);
+					contentItem.getProperties().getAuthoringTemplate(), request);
 			String baseUrl = RestHelper.repositoryUrl(request);
 			if (at.getContentItemAcl() != null) {
 			    contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
 			}
-			JsonNode contentItemJson = contentItem.toJson();
+			JsonNode contentItemJson = contentItem.toJson(at);
 			this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), absPath, contentItemJson);
 			Session session = this.repositoryManager.getSession(contentItem.getRepository(), WcmConstants.DEFAULT_WS);
 			if (contentItem.getAcl() != null) {
@@ -248,49 +265,123 @@ public class ContentItemRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String absPath = WcmUtils.nodePath(wcmPath);
 			RestNode contentItemNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					absPath, 4);
+					absPath, WcmConstants.CONTENT_ITEM_DEPATH);
 			
 			ContentItem contentItem = new ContentItem(); 
 			contentItem.setRepository(repository);
 			contentItem.setWorkspace(workspace);
 			contentItem.setWcmPath(wcmPath.startsWith("/") ? wcmPath : "/" + wcmPath);
-			Map<String, String> elements = new HashMap<>();
-			Map<String, String> properties = new HashMap<>();
-			contentItem.setElements(elements);
-			properties.put("name", contentItemNode.getName());
-			contentItem.setProperties(properties);
-	
-			this.resolveWorkflowNode(contentItem, contentItemNode, properties);
-			for (RestProperty property: contentItemNode.getJcrProperties()) {
-				if ("bpw:authoringTemplate".equals(property.getName())) {
-					contentItem.setAuthoringTemplate(property.getValues().get(0));
-				} else if ("bpw:categories".equals(property.getName())) {
-					contentItem.setCategories(property.getValues().toArray(new String[property.getValues().size()]));
-					properties.put("categories", String.join(",", property.getValues()));
-				} 
+			
+			ContentItemProperties contentItemProperties = new ContentItemProperties();
+			contentItem.setProperties(contentItemProperties);
+			for (RestProperty property: contentItemNode.getJcrProperties()) {				
+				if ("bpw:lifecycleStage".equals(property.getName())) {
+					contentItem.setLifeCycleStage(property.getValues().get(0));
+				} else if ("jcr:primaryType".equals(property.getName())) {
+					contentItemProperties.setNodeType(property.getValues().get(0));
+				}
 			}
+			//Resolve properties first
 			for (RestNode node: contentItemNode.getChildren()) {
-				if (this.wcmUtils.checkNodeType(node, "bpw:contentElementFolder")) {
-					for (RestNode enode: node.getChildren()) {
-						if (this.wcmUtils.checkNodeType(enode, "bpw:contentElement")) {
-							for (RestProperty property: enode.getJcrProperties()) {
-								if ("bpw:value".equals(property.getName())) {
-									elements.put(enode.getName(), property.getValues().get(0));
-									break;
-								} 
+				if (WcmConstants.WCM_NODE_PROPERTIES.equals(node.getName()) || WcmUtils.checkNodeType(node, "bpw:ContentItemproperties")) {					
+					contentItemProperties.setName(contentItemNode.getName());					
+					for (RestProperty property: node.getJcrProperties()) {
+						if ("bpw:authoringTemplate".equals(property.getName())) {
+							contentItemProperties.setAuthoringTemplate(property.getValues().get(0));
+						} else if ("bpw:categories".equals(property.getName())) {
+							contentItemProperties.setCategories(property.getValues().toArray(new String[property.getValues().size()]));
+						} else if ("bpw:name".equals(property.getName())) {
+							contentItemProperties.setName(property.getValues().get(0));
+						} else if ("bpw:title".equals(property.getName())) {
+							contentItemProperties.setTitle(property.getValues().get(0));
+						} else if ("bpw:description".equals(property.getName())) {
+							contentItemProperties.setDescription(property.getValues().get(0));
+						} else if ("bpw:author".equals(property.getName())) {
+							contentItemProperties.setAuthor(property.getValues().get(0));
+						} 
+					}
+					break;
+				}
+			}
+			AuthoringTemplate at = this.doGetAuthoringTemplate(repository, workspace, contentItem.getProperties().getAuthoringTemplate(), request);
+			
+ 			for (RestNode node: contentItemNode.getChildren()) {
+				if (WcmUtils.checkNodeType(node, "bpw:workflow")) {
+					WorkflowNode workflowNode = new WorkflowNode();
+					contentItem.setWorkflow(workflowNode);
+					this.resolveWorkflowNode(workflowNode, node);
+				} else if (WcmConstants.WCM_NODE_ELEMENTS.equals(node.getName()) || 
+						WcmUtils.checkNodeType(node, WcmUtils.getElementFolderType(at.getNodeType()))) {
+					// Map<String, JsonNode> elements = new HashMap<>();
+					Map<String, Object> elements = new HashMap<>();
+					ContentItemElements contentItemElements = new ContentItemElements();
+					contentItem.setElements(contentItemElements);
+					contentItemElements.setElements(elements);
+					
+					for (RestProperty property : node.getJcrProperties()) {
+						FormControl formControl = at.getElements().get(property.getName());
+						if ("integer".equals(formControl.getDataType()) 
+								|| "number".equals(formControl.getDataType()) 
+								|| "string".equals(formControl.getDataType())
+								|| "boolean".equals(formControl.getDataType())) {
+							if (formControl.isMultiple()) {					
+								String values[] = property.getValues().toArray(new String[property.getValues().size()]);
+								elements.put(property.getName(), WcmUtils.toArrayNode(values));
+							} else {
+								elements.put(property.getName(), JsonUtils.createTextNode(property.getValues().get(0)));
+							}
+						} else if ("object".equals(formControl.getDataType())) {
+							if (formControl.isMultiple()) {
+								String values[] = property.getValues().toArray(new String[property.getValues().size()]);
+								elements.put(property.getName(), JsonUtils.readTree(values));
+							} else {
+								elements.put(property.getName(), JsonUtils.readTree(property.getValues().get(0)));
+							}
+						} else if ("array".equals(formControl.getDataType())) {
+							elements.put(property.getName(), JsonUtils.readTree(property.getValues().get(0)));
+						}
+					}
+				} else if (WcmUtils.checkNodeType(node, "bpw:acl")) {
+					AccessControlEntry acl = new AccessControlEntry();
+					contentItem.setAcl(acl);
+					for (RestProperty property: node.getJcrProperties()) {
+						if ("bpw:viewers".equals(property.getName())) {
+							acl.setViewers(property.getValues().toArray(new String[property.getValues().size()]));
+						} else if ("bpw:editors".equals(property.getName())) {
+							acl.setEditors(property.getValues().toArray(new String[property.getValues().size()]));
+						} else if ("bpw:admins".equals(property.getName())) {
+							acl.setAdmins(property.getValues().toArray(new String[property.getValues().size()]));
+						} else if ("bpw:reviewers".equals(property.getName())) {
+							acl.setReviewers(property.getValues().toArray(new String[property.getValues().size()]));
+						} 
+					}
+				} else if (WcmUtils.checkNodeType(node, "bpw:metaData")) {
+					WcmProperties wcmProperties = new WcmProperties();
+					contentItem.setMetadata(wcmProperties);
+					List<WcmProperty>  properties = new ArrayList<>();
+					wcmProperties.setProperties(new WcmProperty[properties.size()]);
+					for (RestNode metaDataNode: node.getChildren()) {
+						if (WcmUtils.checkNodeType(node, "bpw:property")) {
+							WcmProperty wcmProperty = new WcmProperty();
+							properties.add(wcmProperty);
+							for (RestProperty restProperty: metaDataNode.getJcrProperties()) {
+								if ("bpw:name".equals(restProperty.getName())) {
+									wcmProperty.setName(restProperty.getValues().get(0));
+								} else if ("bpw:value".equals(restProperty.getName())) {
+									wcmProperty.setValue(restProperty.getValues().get(0));
+								}
 							}
 						}
 					}
-				} else if (this.wcmUtils.checkNodeType(node, "bpw:propertyElementFolder")) {
-					for (RestNode pnode: node.getChildren()) {
-						if (this.wcmUtils.checkNodeType(pnode, "bpw:contentElement")) {
-							for (RestProperty property: pnode.getJcrProperties()) {
-								if ("bpw:value".equals(property.getName())) {
-									properties.put(pnode.getName(), property.getValues().get(0));
-									break;
-								} 
-							}
-						}
+				} else if (WcmUtils.checkNodeType(node, "bpw:searchData")) {
+					SearchData searchData = new SearchData();
+					contentItem.setSearchData(searchData);
+					for (RestProperty property: node.getJcrProperties()) {
+						if ("description".equals(property.getName())) {
+							searchData.setDescription(property.getValues().get(0));
+						} else if ("keywords".equals(property.getName())) {
+							searchData.setKeywords(property.getValues().toArray(new String[property.getValues().size()]));
+						} 
 					}
 				}
 			}
@@ -321,15 +412,15 @@ public class ContentItemRestController extends BaseWcmRestController {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		try {
-			contentItem.setCurrentLifecycleState(WcmConstants.DRAFT_WS); //TODO
+			contentItem.setLifeCycleStage(WcmConstants.WORKFLOW_STATGE_DRAFT); 
 			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), WcmConstants.DRAFT_WS, 
-					contentItem.getAuthoringTemplate(), request);
+					contentItem.getProperties().getAuthoringTemplate(), request);
 			contentItem.setAcl(at.getContentItemAcl().getOnSaveDraftPermissions());
 			
 			// this.itemHandler.addItem(request, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItem.toJson());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson());
+			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at));
 			if (contentItem.getAcl() != null) {
 				String repositoryName = contentItem.getRepository();
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
@@ -464,7 +555,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 		try {
 	        Session session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS); 
 	        Node contentNode = session.getNode(contentItemPath);
-	        contentNode.setProperty("bpw:currentLifecycleState", "Published");
+	        contentNode.setProperty("bpw:currentLifecycleState", WcmConstants.WORKFLOW_STATGE_PUBLISHED);
 	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
 			AuthoringTemplate at = this.doGetAuthoringTemplate(repository, workspace, 
 					atPath, request);
@@ -525,7 +616,7 @@ public class ContentItemRestController extends BaseWcmRestController {
   			Session session = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
   			Node node = session.getNode(absPath);
   			String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
-            if ("Published".equals(workflowState)) {
+            if (WcmConstants.WORKFLOW_STATGE_PUBLISHED.equals(workflowState)) {
             	node.remove();
             	session.save();
             	if (this.authoringEnabled) {

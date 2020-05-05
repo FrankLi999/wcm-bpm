@@ -38,7 +38,6 @@ public class SiteareaRestController extends BaseWcmRestController {
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createSiteArea(@RequestBody SiteArea sa, HttpServletRequest request)
 			throws WcmRepositoryException {
-
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -94,7 +93,7 @@ public class SiteareaRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String absPath = WcmUtils.nodePath(wcmPath);
-			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, 4);
+			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.SITE_AREA_DEPTH);
 
 			SiteArea sa = new SiteArea();
 			sa.setRepository(repository);

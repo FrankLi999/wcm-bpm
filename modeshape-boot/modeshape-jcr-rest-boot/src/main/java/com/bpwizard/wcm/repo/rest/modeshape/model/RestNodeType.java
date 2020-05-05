@@ -36,6 +36,7 @@ import com.bpwizard.wcm.repo.rest.RestHelper;
 public final class RestNodeType { //implements JSONAble {
 
     private final Set<String> superTypesLinks;
+    private final Set<String> superTypes;
     private final Set<String> subTypesLinks;
     private final List<RestPropertyType> propertyTypes;
     private final List<RestChildType> childTypes;
@@ -60,9 +61,11 @@ public final class RestNodeType { //implements JSONAble {
         this.hasOrderableChildNodes = nodeType.hasOrderableChildNodes();
 
         this.superTypesLinks = new TreeSet<String>();
+        this.superTypes = new TreeSet<String>();
         for (NodeType superType : nodeType.getDeclaredSupertypes()) {
             String superTypeLink = RestHelper.urlFrom(baseUrl, RestHelper.NODE_TYPES_METHOD_NAME, RestHelper.URL_ENCODER.encode(superType.getName()));
             this.superTypesLinks.add(superTypeLink);
+            this.superTypes.add(superType.getName());
         }
 
         this.subTypesLinks = new TreeSet<String>();
@@ -90,6 +93,10 @@ public final class RestNodeType { //implements JSONAble {
 		return superTypesLinks;
 	}
 
+	public Set<String> getSuperTypes() {
+		return superTypes;
+	}
+	
 	public Set<String> getSubTypesLinks() {
 		return subTypesLinks;
 	}

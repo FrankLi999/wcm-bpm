@@ -7,6 +7,7 @@ import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -110,7 +111,7 @@ public class RenderTemplate extends ResourceNode implements HasName {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
 		
-		jsonNode.set("children", children);
+		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
 		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:renderTemplate");
 		super.toJson(jsonNode, children);
 		jsonNode.put("bpw:name", this.getName());
@@ -142,7 +143,7 @@ public class RenderTemplate extends ResourceNode implements HasName {
 				ObjectNode rowNode = JsonUtils.createObjectNode();
 				ObjectNode rowNodeChildren = JsonUtils.createObjectNode();
 				children.set("row" + rowCount++, rowNode);
-				rowNode.set("children", rowNodeChildren);
+				rowNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, rowNodeChildren);
 				rowNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:RenderTemplateLayoutRow");
 
 				int columnCount = 1;
@@ -151,7 +152,7 @@ public class RenderTemplate extends ResourceNode implements HasName {
 					ObjectNode columnNode = JsonUtils.createObjectNode();
 					ObjectNode columnNodeChildren = JsonUtils.createObjectNode();
 					rowNodeChildren.set("column" + columnCount++, columnNode);
-					columnNode.set("children", columnNodeChildren);
+					columnNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, columnNodeChildren);
 					columnNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:RenderTemplateLayoutColumn");
 					
 					if (StringUtils.hasText(column.getId())) {

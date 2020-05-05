@@ -92,7 +92,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 		String baseUrl = RestHelper.repositoryUrl(request);
 		
 		ValidationRule[] validationRules = this.getValidationRuleLibraries(repository, workspace, baseUrl)
-				.flatMap(library -> this.doGetBpmnWorkflows(library, baseUrl))
+				.flatMap(library -> this.doGetValidationRule(library, baseUrl))
 				.toArray(ValidationRule[]::new);
 		if ("asc".equals(sortDirection)) {
 			Arrays.sort(validationRules);
@@ -163,11 +163,11 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 		}	
 	}
 	
-	protected Stream<ValidationRule> doGetBpmnWorkflows(ValidationRule rule, String baseUrl)
+	protected Stream<ValidationRule> doGetValidationRule(ValidationRule rule, String baseUrl)
 			throws WcmRepositoryException {
 		try {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, rule.getRepository(), rule.getWorkspace(),
-					String.format(WcmConstants.NODE_VALIDATION_RULE_ROOT_PATH_PATTERN, rule.getLibrary()), 3);
+					String.format(WcmConstants.NODE_VALIDATION_RULE_ROOT_PATH_PATTERN, rule.getLibrary()), WcmConstants.VALIDATION_RULE_DEPTH);
 			
 			return atNode.getChildren().stream().filter(this::isValidationRule)
 					.map(node -> this.toValidationRule(node, rule.getRepository(), rule.getWorkspace(), rule.getLibrary()));
@@ -181,7 +181,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			String baseUrl) throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WcmConstants.NODE_ROOT_PATH, 1);
+					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream()
 					.filter(this::notSystemLibrary)
 					.map(node -> toValidationRuleWithLibrary(node, repository, workspace));
@@ -207,6 +207,25 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 		validationRule.setLibrary(library);
 		
 		validationRule.setName(node.getName());
+		for (RestNode childNode : node.getChildren()) {
+			if (WcmConstants.WCM_NODE_ELEMENTS.equals(childNode.getName())) {
+				for (RestProperty restProperty : childNode.getJcrProperties()) {
+					if ("rule".equals(restProperty.getName())) {
+						validationRule.setRule(restProperty.getValues().get(0));
+					} else if ("type".equals(restProperty.getName())) {
+						validationRule.setType(restProperty.getValues().get(0));
+					}
+				}
+			} else if (WcmConstants.WCM_NODE_PROPERTIES.equals(childNode.getName())) {
+				for (RestProperty restProperty : childNode.getJcrProperties()) {
+					if ("bpw:title".equals(restProperty.getName())) {
+						validationRule.setTitle(restProperty.getValues().get(0));
+					} else if ("bpw:description".equals(restProperty.getName())) {
+						validationRule.setDescription(restProperty.getValues().get(0));
+					}
+				}
+			} 
+		}
 		for (RestProperty restProperty : node.getJcrProperties()) {
 			if ("bpw:title".equals(restProperty.getName())) {
 				validationRule.setTitle(restProperty.getValues().get(0));

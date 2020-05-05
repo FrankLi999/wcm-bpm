@@ -7,6 +7,7 @@ public class FormTab {
 	private String tabTitle;
 	private int order;
 	private BaseFormGroup[] formGroups;
+	private VisbleCondition condition;
 	public String getTabName() {
 		return tabName;
 	}
@@ -31,9 +32,15 @@ public class FormTab {
 	public void setOrder(int order) {
 		this.order = order;
 	}
+	public VisbleCondition getCondition() {
+		return condition;
+	}
+	public void setCondition(VisbleCondition condition) {
+		this.condition = condition;
+	}
 	@Override
 	public String toString() {
 		return "FormTab [tabName=" + tabName + ", tabTitle=" + tabTitle + ", order=" + order + ", formGroups="
-				+ Arrays.toString(formGroups) + ", toString()=" + super.toString() + "]";
+				+ Arrays.toString(formGroups) + ", condition=" + condition + "]";
 	}
 }

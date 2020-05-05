@@ -16,6 +16,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public abstract class BaseFormGroup {
 	protected String groupName;
 	protected String groupTitle;
+	protected boolean isArray = false;
+	protected String filedPath;
+	private VisbleCondition condition;
+	
 	public String getGroupName() {
 		return groupName;
 	}
@@ -28,8 +32,27 @@ public abstract class BaseFormGroup {
 	public void setGroupTitle(String groupTitle) {
 		this.groupTitle = groupTitle;
 	}
+	public boolean isArray() {
+		return isArray;
+	}
+	public void setArray(boolean isArray) {
+		this.isArray = isArray;
+	}
+	public String getFiledPath() {
+		return filedPath;
+	}
+	public void setFiledPath(String filedPath) {
+		this.filedPath = filedPath;
+	}
+	public VisbleCondition getCondition() {
+		return condition;
+	}
+	public void setCondition(VisbleCondition condition) {
+		this.condition = condition;
+	}
 	@Override
 	public String toString() {
-		return "BaseFormGroup [groupName=" + groupName + ", groupTitle=" + groupTitle + "]";
+		return "BaseFormGroup [groupName=" + groupName + ", groupTitle=" + groupTitle + ", isArray=" + isArray
+				+ ", filedPath=" + filedPath + ", condition=" + condition + "]";
 	}
 }

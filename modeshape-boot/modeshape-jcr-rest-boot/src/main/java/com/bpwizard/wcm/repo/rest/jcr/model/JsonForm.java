@@ -7,6 +7,7 @@ public class JsonForm {
 	private String workspace;
 	private String library;
 	private String resourceType;
+	private String nodeType;
     private JsonNode formSchema;
 	public String getResourceType() {
 		return resourceType;
@@ -38,9 +39,15 @@ public class JsonForm {
 	public void setLibrary(String library) {
 		this.library = library;
 	}
+	public String getNodeType() {
+		return nodeType;
+	}
+	public void setNodeType(String nodeType) {
+		this.nodeType = nodeType;
+	}
 	@Override
 	public String toString() {
 		return "JsonForm [repository=" + repository + ", workspace=" + workspace + ", library=" + library
-				+ ", resourceType=" + resourceType + ", formSchema=" + formSchema + "]";
+				+ ", resourceType=" + resourceType + ", nodeType=" + nodeType + ", formSchema=" + formSchema + "]";
 	}
 }

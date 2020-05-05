@@ -6,8 +6,11 @@ public class FormColumn {
 	private String id;
 	private int fxFlex;
 	private int order;
+	private boolean isArray = false;
+	protected String filedPath;
     private String[] formControls;
-    private FieldLayout fieldLayouts[];
+    private BaseFormGroup[] formGroups;
+	private VisbleCondition condition;
 	public String getId() {
 		return id;
 	}
@@ -26,23 +29,40 @@ public class FormColumn {
 	public void setFormControls(String[] formControls) {
 		this.formControls = formControls;
 	}
-
-	public FieldLayout[] getFieldLayouts() {
-		return fieldLayouts;
-	}
-	public void setFieldLayouts(FieldLayout[] fieldLayouts) {
-		this.fieldLayouts = fieldLayouts;
-	}
 	public int getOrder() {
 		return order;
 	}
 	public void setOrder(int order) {
 		this.order = order;
 	}
+	public BaseFormGroup[] getFormGroups() {
+		return formGroups;
+	}
+	public void setFormGroups(BaseFormGroup[] formGroups) {
+		this.formGroups = formGroups;
+	}
+	public boolean isArray() {
+		return isArray;
+	}
+	public void setArray(boolean isArray) {
+		this.isArray = isArray;
+	}
+	public String getFiledPath() {
+		return filedPath;
+	}
+	public void setFiledPath(String filedPath) {
+		this.filedPath = filedPath;
+	}
+	public VisbleCondition getCondition() {
+		return condition;
+	}
+	public void setCondition(VisbleCondition condition) {
+		this.condition = condition;
+	}
 	@Override
 	public String toString() {
-		return "FormColumn [id=" + id + ", fxFlex=" + fxFlex + ", order=" + order + ", formControls="
-				+ Arrays.toString(formControls) + ", fieldLayouts=" + Arrays.toString(fieldLayouts) + ", toString()="
-				+ super.toString() + "]";
+		return "FormColumn [id=" + id + ", fxFlex=" + fxFlex + ", order=" + order + ", isArray=" + isArray
+				+ ", filedPath=" + filedPath + ", formControls=" + Arrays.toString(formControls) + ", formGroups="
+				+ Arrays.toString(formGroups) + ", condition=" + condition + "]";
 	}
 }

@@ -1,12 +1,15 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import org.modeshape.jcr.api.JcrConstants;
 import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
+import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -81,24 +84,34 @@ public class QueryStatement implements HasName, Serializable, Comparable<QuerySt
 
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
-		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:queryStatement");
+		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_queryStatementType");
 		
-		jsonNode.put("bpw:name", this.getName());
+		ObjectNode children = JsonUtils.createObjectNode();
+		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
+		
+		ObjectNode propertiesNode = JsonUtils.createObjectNode();
+		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
+		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ContentItemproperties");
+		propertiesNode.put("bpw:name", this.getName());
 		if (StringUtils.hasText(this.getTitle())) {
-			jsonNode.put("bpw:title", this.getTitle());
+			propertiesNode.put("bpw:title", this.getTitle());
 		} else {
-			jsonNode.put("bpw:title", this.getName());
+			propertiesNode.put("bpw:title", this.getName());
 		}
 		
-		jsonNode.put("bpw:query", this.getQuery());
-				
+		ObjectNode elementsNode = JsonUtils.createObjectNode();
+		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
+		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_queryStatementType_ElementFolder");
+		elementsNode.put("query", this.getQuery());
+		elementsNode.set("columns", WcmUtils.toArrayNode(this.getColumns()));
 		return jsonNode;
 	}
 
 	@Override
 	public String toString() {
 		return "QueryStatement [repository=" + repository + ", workspace=" + workspace + ", library=" + library
-				+ ", name=" + name + ", title=" + title + ", query=" + query + "]";
+				+ ", name=" + name + ", title=" + title + ", query=" + query + ", columns=" + Arrays.toString(columns)
+				+ "]";
 	}
 
 	@Override

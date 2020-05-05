@@ -1,0 +1,376 @@
+{
+    "library/system/form/textareaType" : {
+	    "jcr:primaryType": "bpw:authoringTemplate",
+	    "bpw:nodeType": "bpw:system_textareaType"
+	},
+	"library/system/form/textareaType/elements" : {
+	    "jcr:primaryType": "bpw:elementFolder"
+	},
+	"library/system/form/textareaType/properties" : {
+	    "jcr:primaryType": "bpw:propertyFolder"
+	},
+	"library/system/form/textareaType/elementGroups" : {
+	    "jcr:primaryType":"bpw:formGroupFoler"
+	},
+	"library/system/form/textareaType/elementGroups/rows" : {
+	    "jcr:primaryType":"bpw:formRows"
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_01" : {
+	    "jcr:primaryType":"bpw:formRow"
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_01/firstColumn" : {
+	    "jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["properties.name", "properties.title"]
+	},  
+	"library/system/form/textareaType/elementGroups/rows/row_02" : {
+	    "jcr:primaryType":"bpw:formRow"
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_02/firstColumn" : {
+	    "jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["elements.controlType", "elements.rows", "elements.dataType"]
+	},  	
+	"library/system/form/textareaType/elementGroups/rows/row_03" : {
+	    "jcr:primaryType":"bpw:formRow"
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_03/firstColumn" : {
+	    "jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["elements.jcrDataType", "elements.format"]
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_04" : {
+	    "jcr:primaryType":"bpw:formRow"
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_04/firstColumn" : {
+	    "jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["elements.defaultValue"]
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_05" : {
+	    "jcr:primaryType":"bpw:formRow"
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_05/firstColumn" : {
+	    "jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["elements.hint"]
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_06" : {
+	    "jcr:primaryType":"bpw:formRow"
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_06/firstColumn" : {
+	    "jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["elements.multiple", "elements.flex", "elements.placeholder"]
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_07" : {
+	    "jcr:primaryType":"bpw:formRow"
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_07/firstColumn" : {
+	    "jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["elements.mandatory", "elements.userSearchable", "elements.systemIndexed"]    
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_08" : {
+	    "jcr:primaryType":"bpw:formRow"
+	},
+	"library/system/form/textareaType/elementGroups/rows/row_08/firstColumn" : {
+	    "jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["elements.editable", "elements.expandable", "elements.richText"]
+	},
+	"library/system/form/textareaType/properties/name": {
+	    "jcr:primaryType": "bpw:FormControl",
+	    "bpw:controlType": "text",
+	    "bpw:dataType": "string",
+	    "bpw:mandatory": "true",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/properties/name/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Name",
+        "bpw:editable": "true",
+	    "bpw:placeHolder": "Element Name"
+    },
+    "library/system/form/textareaType/properties/name/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
+    },
+	"library/system/form/textareaType/properties/title" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "text",
+	    "bpw:dataType": "string",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"	    
+	},
+	"library/system/form/textareaType/properties/title/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Title",
+        "bpw:placeHolder": "Element Title"
+    },
+    "library/system/form/textareaType/properties/title/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[^(<[.\n]+>)]*"
+    },
+	"library/system/form/textareaType/elements/controlType" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "text",
+	    "bpw:dataType": "string",
+	    "bpw:jcrDataType": "STRING",	    
+	    "bpw:mandatory": "true",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/controlType/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Control Type"
+    },
+    "library/system/form/textareaType/elements/controlType/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:enum": ["textarea"]
+    }, 
+	"library/system/form/textareaType/elements/rows" : {
+	    "jcr:primaryType": "bpw:FormControl",
+	    
+	    "bpw:controlType": "number",
+	    "bpw:jcrDataType": "LONG",
+	    "bpw:dataType": "integer",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"	    
+	},
+	"library/system/form/textareaType/elements/rows/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Rows",
+        "bpw:placeHolder": "3"
+    },
+	"library/system/form/textareaType/elements/dataType" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "text",
+	    "bpw:dataType": "string",
+	    "bpw:jcrDataType": "STRING",	    
+	    "bpw:mandatory": "true",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/dataType/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "JSON Schema Data Type"
+    },
+    "library/system/form/textareaType/elements/dataType/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:enum": ["string"]
+    }, 
+	"library/system/form/textareaType/elements/jcrDataType" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "text",
+	    "bpw:dataType": "string",
+	    "bpw:jcrDataType": "STRING",	    
+	    "bpw:mandatory": "true",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/jcrDataType/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "JCR Data Type"
+    },
+    "library/system/form/textareaType/elements/jcrDataType/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:enum": ["STRING"]
+    },
+    "library/system/form/textareaType/elements/format" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "text",
+	    "bpw:dataType": "string",
+	    "bpw:jcrDataType": "STRING",	    
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	}, 
+	"library/system/form/textareaType/elements/format/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "JCR Data Format"
+    },
+    "library/system/form/textareaType/elements/format/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:enum": ["", "int32", "int64", "double", "float", "byte", "binary", "date", "date-time", "password"]
+    }, 
+	"library/system/form/textareaType/elements/defaultValue" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "textarea",
+	    "bpw:dataType": "string",
+	    "bpw:jcrDataType": "STRING",
+	    "bpw:systemIndexed": "true"
+	},
+	"library/system/form/textareaType/elements/defaultValue/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Default Value"
+    },
+	"library/system/form/textareaType/elements/hint" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "text",
+	    "bpw:dataType": "string",
+	    "bpw:jcrDataType": "STRING",
+	    "bpw:systemIndexed": "true"	
+	},
+	"library/system/form/textareaType/elements/hint/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Hint Text"
+    },
+	"library/system/form/textareaType/elements/flex" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "text",
+	    "bpw:dataType": "string",
+	    "bpw:jcrDataType": "STRING",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",	    
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/flex/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Flex",
+        "bpw:flex": "1 1 50px"
+    },
+	"library/system/form/textareaType/elements/placeholder" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "text",
+	    "bpw:dataType": "string",
+	    "bpw:jcrDataType": "STRING",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/placeholder/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Place Holder"
+    },
+	"library/system/form/textareaType/elements/multiple" : {
+	    "jcr:primaryType": "bpw:FormControl",
+	    "bpw:controlType": "checkbox",
+	    "bpw:dataType": "boolean",
+	    "bpw:jcrDataType": "BOOLEAN",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/multiple/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Multiple"
+    },
+    "library/system/form/textareaType/elements/multiple/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:defaultValue": "false"
+    },
+	"library/system/form/textareaType/elements/mandatory" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "checkbox",
+	    "bpw:dataType": "boolean",
+	    "bpw:jcrDataType": "BOOLEAN",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/mandatory/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Mandatory"
+    },
+    "library/system/form/textareaType/elements/mandatory/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:defaultValue": "false"
+    },
+	"library/system/form/textareaType/elements/userSearchable" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "checkbox",
+	    "bpw:dataType": "boolean",
+	    "bpw:jcrDataType": "BOOLEAN",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/userSearchable/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "User Searchable"
+    },
+    "library/system/form/textareaType/elements/userSearchable/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:defaultValue": "false"
+    },
+	"library/system/form/textareaType/elements/systemIndexed" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "checkbox",
+	    "bpw:dataType": "boolean",
+	    "bpw:jcrDataType": "BOOLEAN",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/systemIndexed/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "System Indexed"
+    },
+    "library/system/form/textareaType/elements/systemIndexed/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:defaultValue": "false"
+    },
+	"library/system/form/textareaType/elements/editable" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "checkbox",
+	    "bpw:dataType": "boolean",
+	    "bpw:jcrDataType": "BOOLEAN",	    
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/editable/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Editable"
+    },
+    "library/system/form/textareaType/elements/editable/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:defaultValue": "false"
+    },
+	"library/system/form/textareaType/elements/expandable" : {
+	    "jcr:primaryType": "bpw:FormControl",
+	    "bpw:controlType": "checkbox",
+	    "bpw:dataType": "boolean",
+	    "bpw:jcrDataType": "BOOLEAN",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/expandable/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Expandable"
+    },
+    "library/system/form/textareaType/elements/expandable/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:defaultValue": "false"
+    },
+	"library/system/form/textareaType/elements/richText" : {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "checkbox",
+	    "bpw:dataType": "boolean",
+	    "bpw:jcrDataType": "BOOLEAN",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"
+	},
+	"library/system/form/textareaType/elements/richText/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Rich Text"
+    },
+    "library/system/form/textareaType/elements/richText/commonConstraint": {
+        "jcr:primaryType": "bpw:CommonConstraint",
+        "bpw:defaultValue": "false"
+    }
+}

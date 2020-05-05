@@ -1,50 +1,47 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
-import java.util.Arrays;
+import java.util.Map;
 
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
 public class FormControl implements HasName {
 	private String name;
-	private String title;
-	private String jsonPath;
-	private String format;
-	private String controlType;
-	private String[] enumeration;
-	private String defaultValue;
-	private String hint;
-	private String dataType = "text";
-	private String jcrDataType = "STRING";
+	
+	private String fieldName; //For simple/array type with out number, use number starting from 1, such as "1", "1[]". 
+	private String controlType; //HTML control type
+	private String dataType = "string"; //Json schema type
+	private String format = ""; //Json schema type
+	private String jcrDataType = "STRING"; // JCR data type
 	private boolean multiple = false;
-	private String relationshipType;
-	private String relationshipCardinality;
-	private String valdition;
+	
+	private boolean autoCreate = false;
 	private boolean mandatory = false;
 	private boolean userSearchable = false;
 	private boolean systemIndexed = false;
 	private boolean showInList = false;
-	private boolean unique = false;
-	private boolean editable = true;
-	private boolean expandable = false;
-	private boolean richText = false;
-	private int rows = 3;
-	private String flex;
-	private String placeholder;
+	private FormControlLayout formControlLayout;
+	private CommonConstraint constraint;
+	private ObjectConstraint objectConstraint;
+	private StringConstraint stringConstraint;
+	private NumberConstraint numberConstraint;
+	private ArrayConstraint arrayConstraint;
+	private CustomConstraint customConstraint;
+	private ConditionalConstraint conditionalConstraint;
+	private Map<String, FormControl> notConstraint;
+	private Map<String, FormControl> oneOfConstraint;
+	private Map<String, FormControl> anyOfConstraint;
+	private Map<String, FormControl> allOfConstraint;
+	private Map<String, FormControl> formControls;
+	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getTitle() {
-		return title;
+	public String getFieldName() {
+		return fieldName;
 	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getJsonPath() {
-		return jsonPath;
-	}
-	public void setJsonPath(String jsonPath) {
-		this.jsonPath = jsonPath;
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
 	}
 	public String getFormat() {
 		return format;
@@ -57,24 +54,6 @@ public class FormControl implements HasName {
 	}
 	public void setControlType(String controlType) {
 		this.controlType = controlType;
-	}
-	public String[] getEnumeration() {
-		return enumeration;
-	}
-	public void setEnumeration(String[] enumeration) {
-		this.enumeration = enumeration;
-	}
-	public String getDefaultValue() {
-		return defaultValue;
-	}
-	public void setDefaultValue(String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
-	public String getHint() {
-		return hint;
-	}
-	public void setHint(String hint) {
-		this.hint = hint;
 	}
 	public String getDataType() {
 		return dataType;
@@ -94,23 +73,11 @@ public class FormControl implements HasName {
 	public void setMultiple(boolean multiple) {
 		this.multiple = multiple;
 	}
-	public String getRelationshipType() {
-		return relationshipType;
+	public boolean isAutoCreate() {
+		return autoCreate;
 	}
-	public void setRelationshipType(String relationshipType) {
-		this.relationshipType = relationshipType;
-	}
-	public String getRelationshipCardinality() {
-		return relationshipCardinality;
-	}
-	public void setRelationshipCardinality(String relationshipCardinality) {
-		this.relationshipCardinality = relationshipCardinality;
-	}
-	public String getValdition() {
-		return valdition;
-	}
-	public void setValdition(String valdition) {
-		this.valdition = valdition;
+	public void setAutoCreate(boolean autoCreate) {
+		this.autoCreate = autoCreate;
 	}
 	public boolean isMandatory() {
 		return mandatory;
@@ -136,58 +103,95 @@ public class FormControl implements HasName {
 	public void setShowInList(boolean showInList) {
 		this.showInList = showInList;
 	}
-	public boolean isUnique() {
-		return unique;
+	public FormControlLayout getFormControlLayout() {
+		return formControlLayout;
 	}
-	public void setUnique(boolean unique) {
-		this.unique = unique;
+	public void setFormControlLayout(FormControlLayout formControlLayout) {
+		this.formControlLayout = formControlLayout;
 	}
-	public boolean isEditable() {
-		return editable;
+	public CommonConstraint getConstraint() {
+		return constraint;
 	}
-	public void setEditable(boolean editable) {
-		this.editable = editable;
+	public void setConstraint(CommonConstraint constraint) {
+		this.constraint = constraint;
 	}
-	public boolean isExpandable() {
-		return expandable;
+	public ObjectConstraint getObjectConstraint() {
+		return objectConstraint;
 	}
-	public void setExpandable(boolean expandable) {
-		this.expandable = expandable;
+	public void setObjectConstraint(ObjectConstraint objectConstraint) {
+		this.objectConstraint = objectConstraint;
 	}
-	public boolean isRichText() {
-		return richText;
+	public StringConstraint getStringConstraint() {
+		return stringConstraint;
 	}
-	public void setRichText(boolean richText) {
-		this.richText = richText;
+	public void setStringConstraint(StringConstraint stringConstraint) {
+		this.stringConstraint = stringConstraint;
 	}
-	public int getRows() {
-		return rows;
+	public NumberConstraint getNumberConstraint() {
+		return numberConstraint;
 	}
-	public void setRows(int rows) {
-		this.rows = rows;
+	public void setNumberConstraint(NumberConstraint numberConstraint) {
+		this.numberConstraint = numberConstraint;
 	}
-	public String getFlex() {
-		return flex;
+	public ArrayConstraint getArrayConstraint() {
+		return arrayConstraint;
 	}
-	public void setFlex(String flex) {
-		this.flex = flex;
+	public void setArrayConstraint(ArrayConstraint arrayConstraint) {
+		this.arrayConstraint = arrayConstraint;
 	}
-	public String getPlaceholder() {
-		return placeholder;
+	public CustomConstraint getCustomConstraint() {
+		return customConstraint;
 	}
-	public void setPlaceholder(String placeholder) {
-		this.placeholder = placeholder;
+	public void setCustomConstraint(CustomConstraint customConstraint) {
+		this.customConstraint = customConstraint;
 	}
-
+	public ConditionalConstraint getConditionalConstraint() {
+		return conditionalConstraint;
+	}
+	public void setConditionalConstraint(ConditionalConstraint conditionalConstraint) {
+		this.conditionalConstraint = conditionalConstraint;
+	}
+	public Map<String, FormControl> getNotConstraint() {
+		return notConstraint;
+	}
+	public void setNotConstraint(Map<String, FormControl> notConstraint) {
+		this.notConstraint = notConstraint;
+	}
+	public Map<String, FormControl> getOneOfConstraint() {
+		return oneOfConstraint;
+	}
+	public void setOneOfConstraint(Map<String, FormControl> oneOfConstraint) {
+		this.oneOfConstraint = oneOfConstraint;
+	}
+	public Map<String, FormControl> getAnyOfConstraint() {
+		return anyOfConstraint;
+	}
+	public void setAnyOfConstraint(Map<String, FormControl> anyOfConstraint) {
+		this.anyOfConstraint = anyOfConstraint;
+	}
+	public Map<String, FormControl> getAllOfConstraint() {
+		return allOfConstraint;
+	}
+	public void setAllOfConstraint(Map<String, FormControl> allOfConstraint) {
+		this.allOfConstraint = allOfConstraint;
+	}
+	public Map<String, FormControl> getFormControls() {
+		return formControls;
+	}
+	public void setFormControls(Map<String, FormControl> formControls) {
+		this.formControls = formControls;
+	}
 	@Override
 	public String toString() {
-		return "FormControl [name=" + name + ", title=" + title + ", jsonPath=" + jsonPath + ", format=" + format
-				+ ", controlType=" + controlType + ", enumeration=" + Arrays.toString(enumeration) + ", defaultValue="
-				+ defaultValue + ", hint=" + hint + ", dataType=" + dataType + ", jcrDataType=" + jcrDataType
-				+ ", multiple=" + multiple + ", relationshipType=" + relationshipType + ", relationshipCardinality="
-				+ relationshipCardinality + ", valdition=" + valdition + ", mandatory=" + mandatory
-				+ ", userSearchable=" + userSearchable + ", systemIndexed=" + systemIndexed + ", showInList="
-				+ showInList + ", unique=" + unique + ", editable=" + editable + ", expandable=" + expandable
-				+ ", richText=" + richText + ", rows=" + rows + ", flex=" + flex + ", placeholder=" + placeholder + "]";
+		return "FormControl [name=" + name + ", fieldName=" + fieldName + ", controlType=" + controlType + ", dataType="
+				+ dataType + ", format=" + format + ", jcrDataType=" + jcrDataType + ", multiple=" + multiple
+				+ ", autoCreate=" + autoCreate + ", mandatory=" + mandatory + ", userSearchable=" + userSearchable
+				+ ", systemIndexed=" + systemIndexed + ", showInList=" + showInList + ", formControlLayout="
+				+ formControlLayout + ", constraint=" + constraint + ", objectConstraint=" + objectConstraint
+				+ ", stringConstraint=" + stringConstraint + ", numberConstraint=" + numberConstraint
+				+ ", arrayConstraint=" + arrayConstraint + ", customConstraint=" + customConstraint
+				+ ", conditionalConstraint=" + conditionalConstraint + ", notConstraint=" + notConstraint
+				+ ", oneOfConstraint=" + oneOfConstraint + ", anyOfConstraint=" + anyOfConstraint + ", allOfConstraint="
+				+ allOfConstraint + ", formControls=" + formControls + "]";
 	}
 }

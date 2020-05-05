@@ -8,6 +8,7 @@ import org.modeshape.jcr.api.JcrConstants;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.drew.lang.annotations.NotNull;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -80,7 +81,7 @@ public class ContentAreaLayout extends ResourceNode implements HasName {
 		ObjectNode children = JsonUtils.createObjectNode();
 		
 		super.toJson(jsonNode, children);
-		jsonNode.set("children", children);
+		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
 
 		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentAreaLayout");
 		jsonNode.put("bpw:name", this.name);
@@ -99,7 +100,7 @@ public class ContentAreaLayout extends ResourceNode implements HasName {
 			ObjectNode rowNode = JsonUtils.createObjectNode();
 			children.set("row" + rowCount++, rowNode);
 			ObjectNode rowNodeChildren = JsonUtils.createObjectNode();
-			rowNode.set("children", rowNodeChildren);
+			rowNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, rowNodeChildren);
 			rowNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:layoutRow");
 			int columnCount = 0;
 			
@@ -119,7 +120,7 @@ public class ContentAreaLayout extends ResourceNode implements HasName {
 		int viewerCount = 0;
 		if (viewers.length > 0) {
 			ObjectNode sidePaneChildren = JsonUtils.createObjectNode(); 
-			columnNode.set("children", sidePaneChildren);
+			columnNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, sidePaneChildren);
 			for (ResourceViewer viewer : viewers) {
 				ObjectNode viewerNode = JsonUtils.createObjectNode();
 				sidePaneChildren.set("viewer" + viewerCount++, viewerNode);

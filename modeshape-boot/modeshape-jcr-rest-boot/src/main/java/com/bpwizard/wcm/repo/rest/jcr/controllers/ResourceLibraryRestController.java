@@ -65,7 +65,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode libraryParentNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WcmConstants.NODE_ROOT_PATH, 2);
+					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_TWO_LEVEL);
 			Library[] libraries = libraryParentNode.getChildren().stream()
 					.filter(this::isLibrary)
 					.filter(this::notSystemLibrary)

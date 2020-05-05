@@ -21,25 +21,26 @@
 
 [bpw:folder]> nt:folder, mix:lastModified, mix:referenceable, mode:accessControllable
 
-[bpw:resourceNode] > nt:hierarchyNode, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable abstract
+[bpw:resourceMixin] mixin
+- bpw:name (STRING) COPY
 - bpw:title (STRING) COPY
 - bpw:description (STRING) COPY
+- bpw:author (STRING)
+
+[bpw:resourceNode] > nt:hierarchyNode, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable abstract
 + bpw:acl (bpw:AccessControlEntry)
 
-[bpw:baseControlType] > nt:hierarchyNode, mix:referenceable abstract
-- bpw:title (STRING) COPY
-- bpw:description (STRING) COPY
-
 [bpw:resourceFolder] > nt:folder, bpw:resourceNode
-[bpw:lifecycle] mixin
-- bpw:lifecyclePolicy (STRING)
-- bpw:currentLifecycleState (STRING)
 
-[bpw:workflowNode] > bpw:resourceNode, mix:shareable, bpw:lifecycle abstract
-- bpw:publishDate (STRING) COPY
-- bpw:expireDate (STRING) COPY
-- bpw:workflow (STRING) multiple COPY
-- bpw:workflowStage (STRING) COPY
+[bpw:lifecycle] mixin
+- lifecyclePolicy (STRING)
+- currentLifecycleState (STRING)
+
+[bpw:workflowNode] > mix:shareable, bpw:lifecycle abstract
+- publishDate (STRING) COPY
+- expireDate (STRING) COPY
+- workflow (STRING) COPY
+- workflowStage (STRING) COPY
 
 [bpw:property] 
 - bpw:name (STRING) COPY
@@ -63,29 +64,14 @@
 - bpw:name (STRING)
 - bpw:bpmn (STRING)
 + * (bpw:workflowStage)
-
+/*
 [bpw:bpmnWorkflow] > bpw:resourceNode
 - bpw:name (STRING)
 - bpw:bpmn (STRING)
-
+*/
 [bpw:pageSearchData]
 - description (STRING)
 - keywords (STRING) multiple
-
-[bpw:fieldLayout]
-- bpw:multiple (BOOLEAN)
-- bpw:name (STRING)
-- bpw:key (STRING)
-- bpw:title  (STRING)
-- bpw:items (STRING)
-- bpw:displayFlex (BOOLEAN)
-- bpw:listItems (LONG)
-- bpw:flexDirection (STRING)
-- bpw:flex (String)
-- bpw:placeHolder (STRING)
-- bpw:expandable (BOOLEAN)
-- bpw:expanded (BOOLEAN)
-+ * (bpw:fieldLayout)
 
 /*
 'Decimal', 'Text', 'True/False', 'Whole Number'
@@ -104,59 +90,135 @@
 */
 [bpw:relationshipTypeOptions]
 - options (STRING) multiple
-/*
-[bpw:controlFieldMetaData]
-- bpw:title (STRING)
-- bpw:controlType (STRING)
-- bpw:hintText (STRING)
-- bpw:required (BOOLEAN)
-- bpw:readOnly (BOOLEAN) = 'false'
-- bpw:selectOptions (STRING) multiple
-*/
+
 [bpw:controlField]
 - bpw:title (STRING)
 - bpw:icon (STRING)
 - bpw:hint (STRING)
-/*
-+ * (bpw:controlFieldMetaData)
-*/
+
 [bpw:formGroup] abstract
 - bpw:groupName (STRING)
 - bpw:groupTitle (STRING)
++ bpw:condition (bpw:VisbleCondition)
 
+[bpw:JavascriptFunction]
+- bpw:params (STRING) multiple
+- bpw:functionBody (STRING)
 
-[bpw:formControl] > nt:hierarchyNode
+[bpw:FormControlLayout] orderable
 - bpw:title (STRING)
-- bpw:jsonPath (STRING)
-- bpw:controlType (STRING)
-- bpw:rows (LONG)
-- bpw:enum (STRING) multiple COPY
-- bpw:defaultValue (STRING) COPY
 - bpw:hint (STRING) COPY
-- bpw:format (STRING) COPY
+- bpw:editable (BOOLEAN) = 'true' COPY
+- bpw:expandable (BOOLEAN) = 'false' COPY
+- bpw:expanded (BOOLEAN)
+- bpw:rows (LONG)
+- bpw:cols (LONG)
+- bpw:displayFlex (BOOLEAN)
+- bpw:flexDirection (STRING)
+- bpw:flex (String)
+- bpw:placeHolder (STRING)
+- bpw:listItems (LONG)
+
+[bpw:CommonConstraint] orderable
+- bpw:enum (STRING) multiple COPY
+- bpw:defaultValue (STRING) multiple COPY
+- bpw:constant (STRING) COPY
+
+[bpw:FormControls] 
++ * (bpw:FormControl)
+
+[bpw:dependency]
+- bpw:name (STRING)
+- bpw:dependencies (STRING) multiple
+
+[bpw:dependencies]
++ * (bpw:dependency)
+	 
+[bpw:ObjectConstraint] orderable
+- bpw:minProperties (LONG)
+- bpw:maxProperties (LONG)
+- bpw:required (STRING) multiple
+- bpw:propertyNamePattern (STRING)
++ dependencies (bpw:dependencies)
+/*
++ patternProperties (bpw:FormControls)
++ schemaDependencies (bpw:FormControls)	
+- bpw:allowAdditionalProperties (BOOLEAN)
++ additionalProperties (bpw:FormControls)	
+*/
+[bpw:StringConstraint] orderable
+- bpw:format (STRING) COPY < 'date', 'time', 'date-time', 'email', 'idn-email', 'hostname', 'idn-hostname', 
+    'ipv4', 'ipv6', 'uri', 'uri-reference', 'iri', 'iri-reference', 'uri-template', 
+    'url', 'uuid', 'color', 'json-pointer', 'relative-json-pointer', 'regex'
+- bpw:minLength (LONG)
+- bpw:maxLength (LONG)
+- bpw:pattern (STRING)
+- bpw:contentMediaType (STRING) COPY
+- bpw:contentEncoding (STRING) COPY
+- bpw:contentSchema (STRING) COPY
+
+[bpw:NumberConstraint] orderable
+- bpw:multipleOf (LONG)
+- bpw:maximum (LONG)
+- bpw:minimum (LONG)
+- bpw:exclusiveMaximum (BOOLEAN)
+- bpw:exclusiveMinimum (BOOLEAN)
+
+[bpw:ArrayConstraint] orderable
+- bpw:minItems (LONG)
+- bpw:maxItems (LONG)
+- bpw:uniqueItems (BOOLEAN) = 'false' COPY
+/*
+- bpw:items (STRING)
+- bpw:contains (STRING)
++ additionalItems (bpw:FormControls)
+*/
+
+[bpw:ConditionalConstraint] orderable
++ ifCondition (bpw:FormControls)
++ thenRule (bpw:FormControls)
++ elseRule (bpw:FormControls)
+
+[bpw:CustomConstraint] orderable
++ *  (bpw:JavascriptFunction)
+
+[bpw:FormControl] > nt:hierarchyNode orderable
+- bpw:name (STRING)
+- bpw:fieldName (STRING)
+- bpw:controlType (STRING)
 - bpw:dataType (STRING) = 'string' COPY
+- bpw:format (STRING) = 'string' COPY
 - bpw:jcrDataType (STRING) = 'STRING' COPY
 - bpw:multiple (BOOLEAN) = 'false' COPY
-- bpw:relationshipType (STRING) COPY
-- bpw:relationshipCardinality (STRING) COPY
-- bpw:valdition (STRING) COPY
++ formControlLayout (bpw:FormControlLayout)
++ commonConstraint (bpw:CommonConstraint)
++ objectConstraint (bpw:ObjectConstraint)
++ stringConstraint (bpw:StringConstraint)
++ numberConstraint (bpw:NumberConstraint)
++ arrayConstraint (bpw:ArrayConstraint)
++ conditionalConstraint (bpw:ConditionalConstraint)
++ notConstraint (bpw:FormControls)
++ allOf (bpw:FormControls)
++ oneOf (bpw:FormControls)
++ anyOf (bpw:FormControls)
++ customConstraint (bpw:CustomConstraint)
 - bpw:mandatory (BOOLEAN) = 'false' COPY
 - bpw:userSearchable (BOOLEAN) = 'false' COPY
 - bpw:systemIndexed (BOOLEAN) = 'false' COPY
 - bpw:showInList (BOOLEAN) = 'false' COPY
-- bpw:unique (BOOLEAN) = 'false' COPY
-- bpw:editable (BOOLEAN) = 'true' COPY
-- bpw:expandable (BOOLEAN) = 'false' COPY
-- bpw:richText (BOOLEAN) = 'false' COPY
-- bpw:flex (STRING)
-- bpw:placeholder (STRING)
++ * (bpw:FormControl)
+
+[bpw:VisbleCondition]
+- bpw:functionBody (STRING)
+- bpw:condition  (STRING)
 
 [bpw:formColumn]
 - bpw:id (STRING)
 - bpw:fxFlex (LONG) 
 - bpw:fieldNames (STRING) multiple
 - bpw:order (LONG)
-+ * (bpw:fieldLayout)
++ bpw:condition (bpw:VisbleCondition) 
++ * (bpw:formGroup)
 
 [bpw:formRow] > bpw:formGroup
 - bpw:rowName (String)
@@ -175,13 +237,15 @@
 [bpw:formTab]
 - bpw:tabName (STRING)
 - bpw:order (LONG)
++ bpw:condition (bpw:VisbleCondition) 
 + * (bpw:formGroup)
 
 [bpw:formStep]
 - bpw:stepName (STRING)
 - bpw:order (LONG)
++ bpw:condition (bpw:VisbleCondition) 
 + * (bpw:formGroup)
-
+/*
 [bpw:validationRule]> nt:hierarchyNode
 - bpw:name (STRING) COPY
 - bpw:title (STRING) COPY
@@ -193,48 +257,17 @@
 - bpw:name (String)
 - bpw:parent (String)
 + * (bpw:category)
-
-[bpw:contentType] > bpw:baseControlType
-- bpw:contentName (STRING) mandatory COPY
-- bpw:body (STRING) COPY
-
-[bpw:componentType] > bpw:baseControlType
-- bpw:widgetName (STRING) mandatory COPY
-- bpw:componentTemplate (STRING) COPY
-
-[bpw:fileType] > nt:file, bpw:baseControlType
-- bpw:fileName (STRING) mandatory COPY
-- bpw:content (BINARY) COPY
-+ bpw:metaData (bpw:properties)
-- bpw:showOnMenu (BOOLEAN) = 'false'
-- bpw:sortOrder (LONG) = 0
-
-[bpw:propertyType] > bpw:baseControlType
-- bpw:key (STRING) COPY
-- bpw:value (STRING) COPY
-
-[bpw:vanityURLType] > bpw:baseControlType
-- bpw:vanityURLName (STRING) mandatory COPY
-- bpw:uri (STRING)
-- bpw:forwardTo (STRING)
-
-[bpw:formType] > bpw:baseControlType
-- bpw:formName (STRING) mandatory COPY
-
-[bpw:personaType] > bpw:baseControlType
-- bpw:name (STRING) mandatory COPY
-- bpw:phote (BINARY)
-
+*/
 [bpw:elementFolder] > nt:folder orderable
-+ * (bpw:formControl)
++ * (bpw:FormControl)
 
 [bpw:propertyFolder] > nt:folder  orderable
-+ name (bpw:formControl)
-+ title (bpw:formControl)
-+ description (bpw:formControl)
-+ category (bpw:formControl)
-+ workflow (bpw:formControl)
-+ * (bpw:formControl)
++ name (bpw:FormControl)
++ title (bpw:FormControl)
++ description (bpw:FormControl)
++ category (bpw:FormControl)
++ workflow (bpw:FormControl)
++ * (bpw:FormControl)
 
 [bpw:formGroupFoler] > nt:folder
 + * (bpw:formGroup)
@@ -245,16 +278,17 @@
 + onPublish (bpw:AccessControlEntry)
 
 [bpw:authoringTemplate] > bpw:resourceNode orderable
+- bpw:nodeType (STRING)
 - bpw:baseResourceType (String)
 - bpw:contentWorkflow (String)
-+ propertyGroup (bpw:formRow)
 + elementGroups (bpw:formGroupFoler)
 + elements (bpw:elementFolder)
 + properties (bpw:propertyFolder)
 + contentItemAcl (bpw:contentItemAcl)
 
-[bpw:themeType] > nt:folder, bpw:resourceNode
-- bpw:themeName (STRING)
+[bpw:formType] > bpw:resourceMixin orderable
++ formLayout (bpw:formGroupFoler)
++ formControls (bpw:elementFolder)
 
 [bpw:navigationBadge]
 - bpw:title (STRING)
@@ -266,7 +300,7 @@
 - bpw:contentWidth (LONG)
 + sidePane (bpw:contentAreaSidePanel)
 + * (bpw:layoutRow)
-
+/*
 [bpw:siteArea] > bpw:resourceFolder
 - bpw:name (STRING) mandatory COPY
 - bpw:title (STRING) mandatory COPY
@@ -298,13 +332,12 @@
 + siteAreaLayout (bpw:siteAreaLayout)
 + * (bpw:resourceNode)
 
-
 [bpw:queryStatement] > nt:hierarchyNode 
 - bpw:name (STRING)
 - bpw:title (STRING)
 - bpw:query (STRING)
 - bpw:columns (STRING) multiple
-
+*/
 
 [bpw:resourcePath]
 - bpw:path (String)
@@ -512,12 +545,14 @@
 + footer (bpw:footer)
 + sidePanel (bpw:sidePanel)
 
+/*
 [bpw:siteConfig] > bpw:resourceNode
 - bpw:name (STRING)
 - bpw:colorTheme (STRING)
 - bpw:customScrollbars (BOOLEAN)
 - bpw:rootSiteArea (STRING)
 + layout (bpw:pageLayout)
+*/
 
 [bpw:contentAreaLayout] > bpw:resourceNode
 - bpw:name (STRING)
@@ -526,21 +561,25 @@
 + * (bpw:layoutRow)
 
 [bpw:workflowFolder] > bpw:resourceFolder
-+ * (bpw:bpmnWorkflow)
++ * (bpw:system_bpmnWorkflowType)
 
 [bpw:categoryFolder] > bpw:folder, mix:versionable
-+ * (bpw:category)
++ * (bpw:system_categoryType)
+
 [bpw:authoringTemplateFolder] > bpw:folder, mix:versionable
 + * (bpw:authoringTemplate)
+
+[bpw:formFolder] > bpw:folder, mix:versionable
++ * (bpw:formType)
 
 [bpw:controlFieldFolder] > bpw:folder
 + * (bpw:controlField)
 
 [bpw:themesFolder] > bpw:folder
-+ * (bpw:themeType)
++ * (bpw:system_themeType)
 
 [bpw:siteConfigFolder] > bpw:folder
-+ * (bpw:siteConfig)
++ * (bpw:system_siteConfigType)
 
 [bpw:contentAreaLayoutFolder] > bpw:folder, mix:versionable
 + * (bpw:contentAreaLayout)
@@ -549,15 +588,17 @@
 + * (bpw:renderTemplate)
 
 [bpw:queryFolder] > bpw:folder
-+ * (bpw:queryStatement)
++ * (bpw:system_queryStatementType)
 
 [bpw:assetFolder] > bpw:folder
 
+/*
 [bpw:library] > bpw:folder, mix:language, mix:versionable
 - bpw:title (STRING)
 - bpw:description (STRING)
 + rootSiteArea (bpw:siteArea)
 + authoringTemplate (bpw:authoringTemplateFolder)
++ form (bpw:formFolder)
 + theme (bpw:themesFolder)
 + siteConfig (bpw:siteConfigFolder)
 + contentAreaLayout (bpw:contentAreaLayoutFolder)
@@ -567,6 +608,7 @@
 + category (bpw:categoryFolder)
 + asset (bpw:assetFolder)
 + validationRule (bpw:validationRuleFolder)
+*/
 
 [bpw:supportedOpertion]
   - bpw:resourceName (STRING)
@@ -580,17 +622,17 @@
   - bpw:jcrType (STRING)
   
 [bpw:validationRuleFolder] > bpw:folder
-+ * [bpw:validationRule] 
++ * (bpw:system_validationRuleType)
 
 [bpw:opertionsFolder] > nt:folder
-+ * [bpw:supportedOpertions]
++ * (bpw:supportedOpertions)
 
 [bpw:configurationFolder] > bpw:folder
 + validationRule (bpw:validationRuleFolder)
 + operations (bpw:opertionsFolder)
 
 [bpw:libraryFolder] > bpw:folder
-+ * (bpw:library)
++ * (bpw:system_libraryType)
 
 [bpw:root] > bpw:folder
 + controlField (bpw:controlFieldFolder)
@@ -598,25 +640,354 @@
 + configuration (bpw:configurationFolder)
 + library (bpw:libraryFolder)
 
-[bpw:contentElement] > nt:hierarchyNode
- - bpw:multiple (BOOLEAN)
- - bpw:value (STRING)
- 
-[bpw:contentElementFolder] > nt:folder orderable
-+ * (bpw:contentElement)
+[bpw:baseContentItemElement]
+- bpw:name (STRING)
+- bpw:type (STRING) < 'bool', 'number', 'integer', 'string', 'richtext', 'binary', 'json', 'reference'
 
-[bpw:propertyElementFolder] > nt:folder orderable
-+ * (bpw:contentElement)
+[bpw:IntegerElement] > bpw:baseContentItemElement
+- bpw:value (LONG)
 
-[bpw:commentFolder] > nt:folder orderable
-+ * (bpw:comment)
+[bpw:NumberElement] > bpw:baseContentItemElement
+- bpw:value (STRING)
 
-[bpw:comment] > nt:hierarchyNode
+[bpw:StringElement] > bpw:baseContentItemElement
+- bpw:value (STRING)
+
+[bpw:BoolElement] > bpw:baseContentItemElement
+- bpw:value (BOOLEAN)
+
+[bpw:RichtextElement] > bpw:baseContentItemElement
+- bpw:value (STRING)
+
+[bpw:BinaryElement] > bpw:baseContentItemElement
+- bpw:value (BINARY)
+- bpw:encoding (STRING)
+
+[bpw:JsonElement] > bpw:baseContentItemElement
+- bpw:value (STRING)
+
+[bpw:RefereceElement]
+- bpw:reference (REFERENCE)
+
+[bpw:ContentItemElementFolder]  > nt:folder orderable
++ * (bpw:baseContentItemElement)
+
+[bpw:ContentItemproperties] > nt:folder, bpw:resourceMixin orderable
+- bpw:authoringTemplate (STRING)
+- bpw:workflow (STRING)
+- bpw:categories (STRING) multiple
+- * (STRING)
+
+[bpw:ContentItemCommentFolder] > nt:folder orderable
+- * (STRING)
+
+[bpw:Comment] > nt:hierarchyNode
  - bpw:comment (STRING)
  - bpw:reviewer (STRING)
-[bpw:content] > bpw:workflowNode orderable
-- bpw:authoringTemplate (STRING)
-- bpw:categories (STRING) multiple
-+ elements (bpw:contentElementFolder)
-+ properties (bpw:propertyElementFolder)
-+ comments (bpw:commentFolder)
+ 
+[bpw:Content] > nt:hierarchyNode, mix:shareable, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable orderable
+- bpw:lifecycleStage (STRING)
++ bpw:workflow (bpw:workflowNode)
++ bpw:acl (bpw:AccessControlEntry)
++ bpw:metaData (bpw:properties)
++ bpw:searchData (bpw:pageSearchData)
++ elements (bpw:ContentItemElementFolder)
++ properties (bpw:ContentItemproperties)
++ comments (bpw:ContentItemCommentFolder)
+
+
+[bpw:baseContentType] > bpw:resourceNode, nt:hierarchyNode, mix:shareable, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable abstract orderable
+- bpw:lifecycleStage (STRING)
++ bpw:workflow (bpw:workflowNode)
++ bpw:acl (bpw:AccessControlEntry)
++ bpw:metadata (bpw:properties)
++ bpw:searchData (bpw:pageSearchData) 
++ comments (bpw:ContentItemCommentFolder)
+
+[bpw:system_folderType_ElementFolder]  > bpw:ContentItemElementFolder
+- note (STRING) COPY
+
+[bpw:system_folderType] > bpw:baseContentType
++ elements (bpw:system_folderType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_libraryType_ElementFolder]  > bpw:ContentItemElementFolder
+- language (STRING) COPY
+
+[bpw:system_libraryType] > bpw:baseContentType
++ elements (bpw:system_libraryType_ElementFolder)
++ properties (bpw:ContentItemproperties)
++ rootSiteArea (bpw:system_siteAreaType)
++ authoringTemplate (bpw:authoringTemplateFolder)
++ form (bpw:formFolder)
++ theme (bpw:themesFolder)
++ siteConfig (bpw:siteConfigFolder)
++ contentAreaLayout (bpw:contentAreaLayoutFolder)
++ renderTemplate (bpw:renderTemplateFolder)
++ query (bpw:queryFolder)
++ workflow (bpw:workflowFolder)
++ category (bpw:categoryFolder)
++ asset (bpw:assetFolder)
++ validationRule (bpw:validationRuleFolder)
++ configuration (bpw:configurationFolder)
++ controlField (bpw:controlFieldFolder)
+ 
+[bpw:system_contentType_ElementFolder]  > bpw:ContentItemElementFolder
+- body (STRING) COPY
+
+[bpw:system_contentType] > bpw:baseContentType
++ elements (bpw:system_contentType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_componentType_ElementFolder]  > bpw:ContentItemElementFolder
+- componentTemplate (STRING) COPY
+
+
+[bpw:system_componentType] > bpw:baseContentType
++ elements (bpw:system_componentType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_fileType_ElementFolder]  > bpw:ContentItemElementFolder
+- content (BINARY) COPY
+- showOnMenu (BOOLEAN) = 'false'
++ metaData (bpw:properties)
+
+[bpw:system_fileType] > nt:file, bpw:baseContentType
++ elements (bpw:system_fileType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+
+[bpw:system_themeType_ElementFolder]  > bpw:ContentItemElementFolder
+- note (STRING) COPY
+
+[bpw:system_themeType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_themeType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_vanityURLType_ElementFolder]  > bpw:ContentItemElementFolder
+- url (STRING)
+- forwardTo (STRING)
+
+[bpw:system_vanityURLType] > bpw:baseContentType
++ elements (bpw:system_vanityURLType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+
+[bpw:system_categoryType_ElementFolder]  > bpw:ContentItemElementFolder
+
+[bpw:system_categoryType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_categoryType_ElementFolder)
++ properties (bpw:ContentItemproperties)
++ * (bpw:system_categoryType)
+
+[bpw:system_validationRuleType_ElementFolder]  > bpw:ContentItemElementFolder
+- type (STRING)
+- rule (STRING)
+
+[bpw:system_validationRuleType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_validationRuleType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_bpmnWorkflowType_ElementFolder]  > bpw:ContentItemElementFolder
+- bpmn (STRING)
+
+[bpw:system_bpmnWorkflowType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_bpmnWorkflowType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_queryStatementType_ElementFolder]  > bpw:ContentItemElementFolder
+- query (STRING)
+- columns (STRING) multiple
+
+[bpw:system_queryStatementType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_queryStatementType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_siteConfigType_ElementFolder]  > bpw:ContentItemElementFolder
+- rootSiteArea (STRING)
+- colorTheme (STRING)
+- customScrollbars (BOOLEAN)
++ layout (bpw:pageLayout)
+
+[bpw:system_siteConfigType] > nt:folder, bpw:baseContentType
++ bpw:elements (bpw:system_siteConfigType_ElementFolder)
++ bpw:properties (bpw:ContentItemproperties)
+
+[bpw:system_siteAreaType_ElementFolder]  > bpw:ContentItemElementFolder
+- body (STRING)
+- friendlyURL (STRING)
+- showOnMenu (BOOLEAN)
+- sorderOrder (LONG)
+- allowedFileExtension (STRING) multiple
+- allowedArtifactTypes (STRING) multiple
+- defaultContent (STRING)
+- url (STRING)
+- siteConfig (STRING)
+- contentAreaLayout (STRING)
+- cacheTTL (LONG)
+- securePage (BOOLEAN)
+- navigationId (STRING)
+- navigationType (STRING)
+- classes (STRING) multiple
+- function (STRING)
+- translate (STRING)
+- icon (STRING)
+- exactMatch (BOOLEAN)
+- externalUrl (BOOLEAN)
+- openInNewTab (BOOLEAN)
++ badge (bpw:navigationBadge)
+
+[bpw:system_siteAreaType] > bpw:resourceFolder, bpw:baseContentType
++ elements (bpw:system_siteAreaType_ElementFolder)
++ properties (bpw:ContentItemproperties)
++ siteAreaLayout (bpw:siteAreaLayout)
++ * (bpw:resourceNode)
+/*
+[bpw:system_formInputType_ElementFolder]  > bpw:ContentItemElementFolder
+- fieldName (STRING)
+- controlType (STRING) < 'text', 'checkbox', 'color', 'email', 'hidden', 'month', 'number', 'password', 'radio', 'search', 'url', 'week'
+- enumeration (STRING) multiple
+- dataType (STRING) < 'string', 'boolean', 'number', 'integer'
+- jcrDataType (STRING) < 'STRING', 'BOOLEAN', 'LONG', 'DOUBLE'
+- format (STRING) < '', 'int32', 'int64', 'double', 'float', 'byte', 'binary', 'date', 'date-time', 'password', 'richText'
+- defaultValue (STRING)
+- valdition (STRING)
+- hint (STRING)
+- multiple (BOOLEAN) 
+- flex (STRING)
+- placeholder (STRING)
+- mandatory (BOOLEAN) 
+- userSearchable (BOOLEAN) 
+- systemIndexed (BOOLEAN) 
+- editable (BOOLEAN)
++ formControlLayout (bpw:FormControlLayout)
++ commonConstraint (bpw:CommonConstraint)
++ objectConstraint (bpw:ObjectConstraint)
++ stringConstraint (bpw:StringConstraint)
++ numberConstraint (bpw:NumberConstraint)
++ arrayConstraint (bpw:ArrayConstraint)
++ conditionalConstraint (bpw:ConditionalConstraint)
++ notConstraint (bpw:FormControls)
++ allOf (bpw:FormControls)
++ oneOf (bpw:FormControls)
++ anyOf (bpw:FormControls)
++ customConstraint (bpw:CustomConstraint)
+
+[bpw:system_formInputType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_formInputType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_customFieldType_ElementFolder]  > bpw:ContentItemElementFolder
+- controlType (STRING) 
+- enumeration (STRING) multiple
+- dataType (STRING) < 'string', 'boolean', 'number', 'integer', 'object', 'array'
+- jcrDataType (STRING) < 'STRING', 'BOOLEAN', 'LONG', 'DOUBLE', 'BINARY'
+- format (STRING) < '', 'int32', 'int64', 'double', 'float', 'byte', 'binary', 'date', 'date-time', 'password', 'richText'
+- defaultValue (STRING)
+- valdition (STRING)
+- hint (STRING)
+- flex (STRING)
+- placeholder (STRING)
+- multiple (BOOLEAN) 
+- mandatory (BOOLEAN) 
+- userSearchable (BOOLEAN) 
+- systemIndexed (BOOLEAN) 
+- editable (BOOLEAN)
+
+[bpw:system_customFieldType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_customFieldType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_binaryType_ElementFolder]  > bpw:ContentItemElementFolder
+- controlType (STRING) < 'image', 'file'
+- dataType (STRING) < 'string'
+- jcrDataType (STRING) < 'BINARY'
+- format (STRING) < '', 'int32', 'int64', 'double', 'float', 'byte', 'binary', 'date', 'date-time', 'password', 'richText'
+- hint (STRING)
+- flex (STRING)
+- mandatory (BOOLEAN) 
+- userSearchable (BOOLEAN) 
+- systemIndexed (BOOLEAN) 
+
+[bpw:system_binaryType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_binaryType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_objectType_ElementFolder]  > bpw:ContentItemElementFolder
+- controlType (STRING) < 'object'
+- dataType (STRING) < 'string'
+- jcrDataType (STRING)
+- format (STRING) < '', 'int32', 'int64', 'double', 'float', 'byte', 'binary', 'date', 'date-time', 'password', 'richText'
+- hint (STRING)
+- flex (STRING)
+- multiple (BOOLEAN) 
+- mandatory (BOOLEAN) 
+- userSearchable (BOOLEAN) 
+- systemIndexed (BOOLEAN) 
+- editable (BOOLEAN)
+
+[bpw:system_objectType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_objectType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_formatedInputType_ElementFolder]  > bpw:ContentItemElementFolder
+- format (STRING)
+- controlType (STRING) < 'date', 'time', 'datetime-local', 'tel'
+- enumeration (STRING) multiple
+- dataType (STRING) < 'string', 'boolean', 'number', 'integer'
+- format (STRING) < '', 'int32', 'int64', 'double', 'float', 'byte', 'binary', 'date', 'date-time', 'password', 'richText'
+- dataFormat(STRING)
+- jcrDataType (STRING) < 'STRING', 'BOOLEAN', 'LONG', 'DOUBLE'
+- defaultValue (STRING)
+- valdition (STRING)
+- hint (STRING)
+- flex (STRING)
+- placeholder (STRING)
+- multiple (BOOLEAN) 
+- mandatory (BOOLEAN) 
+- userSearchable (BOOLEAN) 
+- systemIndexed (BOOLEAN) 
+- editable (BOOLEAN)
+
+[bpw:system_formatedInputType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_formatedInputType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:system_textareaType_ElementFolder]  > bpw:ContentItemElementFolder
+- controlType (STRING) < 'textarea'  
+- rows (LONG)
+- enumeration (STRING) multiple
+- dataType (STRING) < 'string'
+- jcrDataType (STRING) < 'STRING'
+- format (STRING) < '', 'int32', 'int64', 'double', 'float', 'byte', 'binary', 'date', 'date-time', 'password', 'richText'
+- defaultValue (STRING)
+- valdition (STRING)
+- hint (STRING)
+- flex (STRING)
+- placeholder (STRING)
+- multiple (BOOLEAN) 
+- mandatory (BOOLEAN) 
+- userSearchable (BOOLEAN) 
+- systemIndexed (BOOLEAN) 
+- editable (BOOLEAN)
+- expandable (BOOLEAN)
+- richText (BOOLEAN)
+
+[bpw:system_textareaType] > nt:folder, bpw:baseContentType
++ elements (bpw:system_textareaType_ElementFolder)
++ properties (bpw:ContentItemproperties)
+*/
+[bpw:design_MyContent_ElementFolder]  > bpw:ContentItemElementFolder
+- body (STRING)
+
+[bpw:design_MyContent] > nt:folder, bpw:baseContentType
++ elements (bpw:design_MyContent_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+
+[bpw:design_MySidePaneContent_ElementFolder]  > bpw:ContentItemElementFolder
+- sidebody (STRING)
+
+[bpw:design_MySidePaneContent] > nt:folder, bpw:baseContentType
++ elements (bpw:design_MySidePaneContent_ElementFolder)
++ properties (bpw:ContentItemproperties)

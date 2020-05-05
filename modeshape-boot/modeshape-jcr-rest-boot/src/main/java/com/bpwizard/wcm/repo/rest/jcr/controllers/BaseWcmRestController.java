@@ -1,9 +1,10 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,12 +29,15 @@ import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
+import com.bpwizard.wcm.repo.rest.jcr.model.ArrayConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.BaseFormGroup;
+import com.bpwizard.wcm.repo.rest.jcr.model.CommonConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.ControlField;
-import com.bpwizard.wcm.repo.rest.jcr.model.FieldLayout;
+import com.bpwizard.wcm.repo.rest.jcr.model.CustomConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.Footer;
+import com.bpwizard.wcm.repo.rest.jcr.model.Form;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormControl;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormRow;
@@ -42,6 +46,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.FormStep;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormSteps;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormTab;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormTabs;
+import com.bpwizard.wcm.repo.rest.jcr.model.JavascriptFunction;
 import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.LayoutRow;
@@ -51,12 +56,15 @@ import com.bpwizard.wcm.repo.rest.jcr.model.Navigation;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationBadge;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.NavigationType;
+import com.bpwizard.wcm.repo.rest.jcr.model.NumberConstraint;
+import com.bpwizard.wcm.repo.rest.jcr.model.ObjectConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.PageLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplateLayoutColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplateLayoutRow;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceElementRender;
+import com.bpwizard.wcm.repo.rest.jcr.model.ResourceMixin;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceViewer;
 import com.bpwizard.wcm.repo.rest.jcr.model.SearchData;
 import com.bpwizard.wcm.repo.rest.jcr.model.SidePane;
@@ -64,7 +72,9 @@ import com.bpwizard.wcm.repo.rest.jcr.model.SidePanel;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
+import com.bpwizard.wcm.repo.rest.jcr.model.StringConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
+import com.bpwizard.wcm.repo.rest.jcr.model.VisbleCondition;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperties;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperty;
 import com.bpwizard.wcm.repo.rest.jcr.model.WorkflowNode;
@@ -80,180 +90,213 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class BaseWcmRestController {
-	
+
 	@Value("${bpw.modeshape.authoring.enabled:true}")
 	protected boolean authoringEnabled = true;
-	
+
 	@Autowired
 	protected RestItemHandler itemHandler;
 
 	@Autowired
 	protected RepositoryManager repositoryManager;
-	
+
 	@Autowired
 	protected RestRepositoryHandler repositoryHandler;
 
 	@Autowired
 	protected RestNodeTypeHandler nodeTypeHandler;
-	
+
 	@Autowired
 	protected RestServerHandler serverHandler;
 
 	@Autowired
 	protected WcmUtils wcmUtils;
-	
+
 	protected ObjectMapper objectMapper = new ObjectMapper();
-	protected AuthoringTemplate doGetAuthoringTemplate(
-			String repository,
-			String workspace, 
-			String atPath,
-			HttpServletRequest request) 
-			throws WcmRepositoryException {
+
+	protected AuthoringTemplate doGetAuthoringTemplate(String repository, String workspace, String atPath,
+			HttpServletRequest request) throws WcmRepositoryException {
 		String baseUrl = RestHelper.repositoryUrl(request);
 		AuthoringTemplate at = this.wcmUtils.getAuthoringTemplate(repository, workspace, atPath, baseUrl);
 		return at;
 	}
-	
-	protected void doLock(
-			String repository,
-			String workspace, 
-			String absPath) throws RepositoryException {
-		
-		javax.jcr.lock.LockManager lm = this.repositoryManager.getSession(repository, workspace).getWorkspace().getLockManager();
+
+	protected Form doGetForm(String repository, String workspace, String atPath, HttpServletRequest request)
+			throws WcmRepositoryException {
+		String baseUrl = RestHelper.repositoryUrl(request);
+		Form form = this.wcmUtils.getForm(repository, workspace, atPath, baseUrl);
+		return form;
+	}
+
+	protected void doLock(String repository, String workspace, String absPath) throws RepositoryException {
+
+		javax.jcr.lock.LockManager lm = this.repositoryManager.getSession(repository, workspace).getWorkspace()
+				.getLockManager();
 		if (!lm.isLocked(absPath)) {
 			lm.lock(absPath, true, false, Long.MAX_VALUE, ModeshapeUtils.getUserName());
 		}
 	}
-	
+
 	protected boolean isControlField(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:controlField");
+		return WcmUtils.checkNodeType(node, "bpw:controlField");
 	}
 
 	protected boolean isSiteArea(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:siteArea");
-	}
-	
-	protected boolean isSiteConfig(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:siteConfig");
-	}
-	
-	protected boolean isControlFieldMetaData(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:controlFieldMetaData");
+		return WcmUtils.checkNodeType(node, "bpw:system_siteAreaType");
 	}
 
+	protected boolean isSiteConfig(RestNode node) {
+		return WcmUtils.checkNodeType(node, "bpw:system_siteConfigType");
+	}
+
+//	protected boolean isControlFieldMetaData(RestNode node) {
+//		return WcmUtils.checkNodeType(node, "bpw:controlFieldMetaData");
+//	}
+
 	protected boolean isLibrary(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:library");
+		return WcmUtils.checkNodeType(node, "bpw:system_libraryType");
 	}
 
 	protected boolean notSystemLibrary(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:library") && (!"system".equalsIgnoreCase(node.getName()));
+		return WcmUtils.checkNodeType(node, "bpw:system_libraryType") && (!"system".equalsIgnoreCase(node.getName()));
 	}
-	
+
 	protected boolean isTheme(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:themeType");
+		return WcmUtils.checkNodeType(node, "bpw:system_themeType");
 	}
 
 	protected boolean isRenderTemplate(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:renderTemplate");
+		return WcmUtils.checkNodeType(node, "bpw:renderTemplate");
 	}
 
 	protected boolean isContentAreaLayout(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:contentAreaLayout");
+		return WcmUtils.checkNodeType(node, "bpw:contentAreaLayout");
 	}
 
 	protected boolean isAuthortingTemplate(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:authoringTemplate");
-	}
-	
-	protected boolean isWorkflow(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:workflow");
+		return WcmUtils.checkNodeType(node, "bpw:authoringTemplate");
 	}
 
+	protected boolean isForm(RestNode node) {
+		return WcmUtils.checkNodeType(node, "bpw:formType");
+	}
+
+//	protected boolean isWorkflow(RestNode node) {
+//		return WcmUtils.checkNodeType(node, "bpw:workflow");
+//	}
+
 	protected boolean isBpmnWorkflow(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:bpmnWorkflow");
+		return WcmUtils.checkNodeType(node, "bpw:system_bpmnWorkflowType");
 	}
-	
+
 	protected boolean isQueryStatement(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:queryStatement");
+		return WcmUtils.checkNodeType(node, "bpw:system_queryStatementType");
 	}
-	
+
 	protected boolean isValidationRule(RestNode node) {
-		return this.wcmUtils.checkNodeType(node, "bpw:validationRule");
+		return WcmUtils.checkNodeType(node, "bpw:system_validationRuleType");
 	}
-	
-  	protected void doPurgeWcmItem(
-  			String repository,
-		    String workspace,
-  			String absPath) { 
-  		
-  		absPath = (absPath.startsWith("/")) ? absPath : String.format("/%s", absPath);
-  		try {
-  			if (this.authoringEnabled) {
-  				try {
-		  			Session draftSession = this.repositoryManager.getSession(repository, "draft");
-		  			Node draftNode = draftSession.getNode(absPath);
-		  			// String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
-		            // if ("Expired".equals(workflowState)) {
-		  			    draftNode.remove();
-		            	draftSession.save();
-		            // }
-  				} catch (Exception e) {
-  					//TODO: 
-  					e.printStackTrace();
-  				}
-  				try {
-	            	Session expiredSession = this.repositoryManager.getSession(repository, "expired");
-		  			Node expiredNode = expiredSession.getNode(absPath);
-		  			// String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
-		            // if ("Expired".equals(workflowState)) {
-		  			expiredNode.remove();
-		  			expiredSession.save();
-		            // }
-  				} catch (Exception e) {
-  					//TODO: 
-  					e.printStackTrace();
-  				}
-  			}
-  			
-  			try {
-  				Session session = this.repositoryManager.getSession(repository, "default");
-	  			Node node = session.getNode(absPath);
-	            node.remove();
-	            session.save();
-  			} catch (PathNotFoundException ex) {
-  				//logger.warn(String.format("Content item %s does not exist", absPath));
-  			}
-		} catch (WcmRepositoryException e ) {
+
+	protected void doPurgeWcmItem(String repository, String workspace, String absPath) {
+
+		absPath = (absPath.startsWith("/")) ? absPath : String.format("/%s", absPath);
+		try {
+			if (this.authoringEnabled) {
+				try {
+					Session draftSession = this.repositoryManager.getSession(repository, "draft");
+					Node draftNode = draftSession.getNode(absPath);
+					// String workflowState =
+					// node.getProperty("bpw:currentLifecycleState").getValue().getString();
+					// if ("Expired".equals(workflowState)) {
+					draftNode.remove();
+					draftSession.save();
+					// }
+				} catch (Exception e) {
+					// TODO:
+					e.printStackTrace();
+				}
+				try {
+					Session expiredSession = this.repositoryManager.getSession(repository, "expired");
+					Node expiredNode = expiredSession.getNode(absPath);
+					// String workflowState =
+					// node.getProperty("bpw:currentLifecycleState").getValue().getString();
+					// if ("Expired".equals(workflowState)) {
+					expiredNode.remove();
+					expiredSession.save();
+					// }
+				} catch (Exception e) {
+					// TODO:
+					e.printStackTrace();
+				}
+			}
+
+			try {
+				Session session = this.repositoryManager.getSession(repository, "default");
+				Node node = session.getNode(absPath);
+				node.remove();
+				session.save();
+			} catch (PathNotFoundException ex) {
+				// logger.warn(String.format("Content item %s does not exist", absPath));
+			}
+		} catch (WcmRepositoryException e) {
 			throw e;
-		} catch (RepositoryException re) { 
+		} catch (RepositoryException re) {
 			throw new WcmRepositoryException(re);
-	    } catch (Throwable t) {
+		} catch (Throwable t) {
 			throw new WcmRepositoryException(t);
 		}
-  	};
-  	
+	}
+
 	protected boolean filterLibrary(Library library, String filter) {
 		return StringUtils.hasText(filter) ? library.getName().startsWith(filter) : true;
 	}
+
+	protected JsonForm[] toJsonForms(HttpServletRequest request, Form form) throws WcmRepositoryException {
+		return new JsonForm[] { this.toJsonForm(request, form, false), this.toJsonForm(request, form, true) };
+	}
 	
-	protected Map<String, JsonForm[]> doGetAuthoringTemplateAsJsonForm(String repository,
-			String workspace, HttpServletRequest request) 
-			throws WcmRepositoryException {
+	protected Map<String, JsonForm[]> doGetSystemFormAsJsonForm(String repository, String workspace,
+			HttpServletRequest request) throws WcmRepositoryException {
 
 		String baseUrl = RestHelper.repositoryUrl(request);
-		Map<String, JsonForm[]> jsonForms =  this.getAuthoringTemplateLibraries(repository, workspace, baseUrl)
-				.flatMap(at -> this.getAuthoringTemplates(at, baseUrl))
-				.map(at -> this.toJsonForms(request, at)).collect(Collectors.toMap(
-						jfs -> String.format(WcmConstants.WCM_AT_PATH_PATTERN, jfs[0].getLibrary(), jfs[0].getResourceType()), 
-						Function.identity()));
+		Map<String, JsonForm[]> jsonForms = this.getFormLibraries(repository, workspace, baseUrl)
+				.flatMap(form -> this.getForms(form, baseUrl)).map(form -> this.toJsonForms(request, form))
+				.collect(Collectors.toMap(jfs -> String.format(WcmConstants.WCM_FORM_PATH_PATTERN, jfs[0].getLibrary(),
+						jfs[0].getResourceType()), Function.identity()));
 
-		
+		return jsonForms;
+	}
+
+	protected Map<String, JsonForm[]> doGetApplicationFormAsJsonForm(String repository, String workspace, String library,
+			HttpServletRequest request) throws WcmRepositoryException {
+
+		String baseUrl = RestHelper.repositoryUrl(request);
+		Form libraryForm = new Form();
+		libraryForm.setRepository(repository);
+		libraryForm.setWorkspace(workspace);
+		libraryForm.setLibrary(library);
+		Map<String, JsonForm[]> jsonForms = this.getForms(libraryForm, baseUrl)
+				.map(form -> this.toJsonForms(request, form))
+				.collect(Collectors.toMap(jfs -> String.format(WcmConstants.WCM_FORM_PATH_PATTERN, jfs[0].getLibrary(),
+						jfs[0].getResourceType()), Function.identity()));
+
 		return jsonForms;
 	}
 	
-	protected Map<String, JsonForm[]> doGetApplicationJsonForm(String repository,
-			String workspace, String library, HttpServletRequest request) 
-			throws WcmRepositoryException {
+	protected Map<String, JsonForm[]> doGetSystemAuthoringTemplateAsJsonForm(String repository, String workspace,
+			HttpServletRequest request) throws WcmRepositoryException {
+
+		String baseUrl = RestHelper.repositoryUrl(request);
+		Map<String, JsonForm[]> jsonForms = this.getAuthoringTemplateLibraries(repository, workspace, baseUrl)
+				.flatMap(at -> this.getAuthoringTemplates(at, baseUrl)).map(at -> this.toJsonForms(request, at))
+				.collect(Collectors.toMap(jfs -> String.format(WcmConstants.WCM_AT_PATH_PATTERN, jfs[0].getLibrary(),
+						jfs[0].getResourceType()), Function.identity()));
+
+		return jsonForms;
+	}
+
+	protected Map<String, JsonForm[]> doGetApplicationAuthoringTemplateAsJsonForm(String repository, String workspace, String library,
+			HttpServletRequest request) throws WcmRepositoryException {
 
 		String baseUrl = RestHelper.repositoryUrl(request);
 		AuthoringTemplate libraryAt = new AuthoringTemplate();
@@ -262,25 +305,36 @@ public abstract class BaseWcmRestController {
 		libraryAt.setLibrary(library);
 		Map<String, JsonForm[]> jsonForms = this.getAuthoringTemplates(libraryAt, baseUrl)
 				.map(at -> this.toJsonForms(request, at))
-				.collect(Collectors.toMap(
-					jfs -> String.format(WcmConstants.WCM_AT_PATH_PATTERN, jfs[0].getLibrary(), jfs[0].getResourceType()), 
-					Function.identity()));
+				.collect(Collectors.toMap(jfs -> String.format(WcmConstants.WCM_AT_PATH_PATTERN, jfs[0].getLibrary(),
+						jfs[0].getResourceType()), Function.identity()));
 
 		return jsonForms;
 	}
-	
+
 	protected Stream<AuthoringTemplate> getAuthoringTemplateLibraries(String repository, String workspace,
 			String baseUrl) throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WcmConstants.NODE_ROOT_PATH, 1);
+					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
 					.map(node -> toAuthoringTemplateWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
 	}
-	
+
+	protected Stream<Form> getFormLibraries(String repository, String workspace, String baseUrl)
+			throws WcmRepositoryException {
+		try {
+			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
+			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
+					.map(node -> toFormWithLibrary(node, repository, workspace));
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e);
+		}
+	}
+
 	protected AuthoringTemplate toAuthoringTemplateWithLibrary(RestNode node, String repository, String workspace) {
 		AuthoringTemplate authoringTemplateWithLibrary = new AuthoringTemplate();
 		authoringTemplateWithLibrary.setRepository(repository);
@@ -288,46 +342,113 @@ public abstract class BaseWcmRestController {
 		authoringTemplateWithLibrary.setLibrary(node.getName());
 		return authoringTemplateWithLibrary;
 	}
-	
-	protected void resolveWorkflowNode(WorkflowNode workflowNode, RestNode restNode, Map<String, String> properties) {
+
+	protected Form toFormWithLibrary(RestNode node, String repository, String workspace) {
+		Form formWithLibrary = new Form();
+		formWithLibrary.setRepository(repository);
+		formWithLibrary.setWorkspace(workspace);
+		formWithLibrary.setLibrary(node.getName());
+		return formWithLibrary;
+	}
+
+	protected void resolveWorkflowNode(WorkflowNode workflowNode, RestNode restNode) {
 		for (RestProperty property : restNode.getJcrProperties()) {
-			if ("bpw:title".equals(property.getName())) {
-				workflowNode.setTitle(property.getValues().get(0));
-				properties.put("title", property.getValues().get(0));
-			} else if ("bpw:description".equals(property.getName())) {
-				workflowNode.setDescription(property.getValues().get(0));
-				properties.put("description", property.getValues().get(0));
-			} else if ("bpw:publishDate".equals(property.getName())) {
+			if ("bpw:publishDate".equals(property.getName())) {
 				workflowNode.setPublishDate(property.getValues().get(0));
 			} else if ("bpw:expireDate".equals(property.getName())) {
 				workflowNode.setExpireDate(property.getValues().get(0));
 			} else if ("bpw:workflow".equals(property.getName())) {
 				workflowNode.setWorkflow(property.getValues().get(0));
-				properties.put("workflow", property.getValues().get(0));
 			} else if ("bpw:workflowStage".equals(property.getName())) {
 				workflowNode.setWorkflowStage(property.getValues().get(0));
-			} else if ("jcr:lockOwner".equals(property.getName())) {
-				workflowNode.setLockOwner(property.getValues().get(0));
-			} else if ("bpw:currentLifecycleState".equals(property.getName())) {
-				workflowNode.setCurrentLifecycleState(property.getValues().get(0));
-			}				
+			}
 		}
 	}
-	
-	protected  JsonForm[] toJsonForms(HttpServletRequest request, AuthoringTemplate at) throws WcmRepositoryException {
-	    return new JsonForm[] {
-            this.toJsonForm(request, at, false),
-            this.toJsonForm(request, at, true)
-	    };
+
+	protected JsonForm[] toJsonForms(HttpServletRequest request, AuthoringTemplate at) throws WcmRepositoryException {
+		return new JsonForm[] { this.toJsonForm(request, at, false), this.toJsonForm(request, at, true) };
 	}
-	
-	protected  JsonForm toJsonForm(HttpServletRequest request, AuthoringTemplate at, boolean editMode) throws WcmRepositoryException {
+
+	protected JsonForm toJsonForm(HttpServletRequest request, Form form, boolean editMode) throws WcmRepositoryException {
+		try {
+			JsonForm jsonForm = new JsonForm();
+			jsonForm.setRepository(form.getRepository());
+			jsonForm.setWorkspace(form.getWorkspace());
+			jsonForm.setLibrary(form.getLibrary());
+			jsonForm.setResourceType(form.getName());
+			ObjectNode jsonNode = JsonNodeFactory.instance.objectNode();
+			ObjectNode schemaNode = JsonNodeFactory.instance.objectNode();
+			jsonNode.set("schema", schemaNode);
+			schemaNode.put("type", "object");
+
+			if (StringUtils.hasText(form.getName())) {
+				schemaNode.put("name", form.getName());
+			}
+
+			if (StringUtils.hasText(form.getTitle())) {
+				schemaNode.put("title", form.getTitle());
+			}
+
+			if (StringUtils.hasText(form.getDescription())) {
+				schemaNode.put("description", form.getDescription());
+			}
+
+			Map<String, String> definitionMap = new HashMap<>();
+
+			ObjectNode properties = this.objectMapper.createObjectNode();
+			ObjectNode definitions = this.objectMapper.createObjectNode();
+			
+			if (form.getFormControls() != null && form.getFormControls().size() > 0) {
+				ObjectNode elementPropertiesNode = this.objectMapper.createObjectNode();
+				elementPropertiesNode.put("type", "object");
+				// ObjectNode elementProperties = this.objectMapper.createObjectNode();
+				//elementPropertiesNode.set("properties", elementProperties);
+				//properties.set("elements", elementPropertiesNode);
+				this.popluateFormControls(
+						request, 
+						form.getRepository(), 
+						form.getWorkspace(), 
+						properties,
+						definitions, 
+						form.getFormControls(), 
+						editMode, 
+						definitionMap);
+				String requiredElements[] = form.getFormControls().entrySet().stream().map(entry -> entry.getValue())
+						.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
+						.toArray(String[]::new);
+				if (requiredElements != null && requiredElements.length > 0) {
+					ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
+					for (String name : requiredElements) {
+						reqiuriedNode.add(name);
+					}
+					elementPropertiesNode.set("required", reqiuriedNode);
+				}
+			}
+
+			schemaNode.set("properties", properties);
+			if (definitionMap.size() > 0) {
+				schemaNode.set("definitions", definitions);
+			}
+
+			ArrayNode layoutArray = this.toFormLayoutNode(form);
+			if (layoutArray != null && layoutArray.size() > 0) {
+				jsonNode.set("layout", layoutArray);
+			}
+			jsonForm.setFormSchema(jsonNode);
+			return jsonForm;
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e);
+		}
+	}
+	protected JsonForm toJsonForm(HttpServletRequest request, AuthoringTemplate at, boolean editMode)
+			throws WcmRepositoryException {
 		try {
 			JsonForm jsonForm = new JsonForm();
 			jsonForm.setRepository(at.getRepository());
 			jsonForm.setWorkspace(at.getWorkspace());
 			jsonForm.setLibrary(at.getLibrary());
 			jsonForm.setResourceType(at.getName());
+			jsonForm.setNodeType(at.getNodeType());
 			ObjectNode jsonNode = JsonNodeFactory.instance.objectNode();
 			ObjectNode schemaNode = JsonNodeFactory.instance.objectNode();
 			jsonNode.set("schema", schemaNode);
@@ -336,34 +457,48 @@ public abstract class BaseWcmRestController {
 			if (StringUtils.hasText(at.getName())) {
 				schemaNode.put("name", at.getName());
 			}
-			
+
 			if (StringUtils.hasText(at.getTitle())) {
 				schemaNode.put("title", at.getTitle());
 			}
-	
+
 			if (StringUtils.hasText(at.getDescription())) {
 				schemaNode.put("description", at.getDescription());
 			}
-			
-			ObjectNode properties = this.objectMapper.createObjectNode();	
+
+			Map<String, String> definitionMap = new HashMap<>();
+
+			ObjectNode properties = this.objectMapper.createObjectNode();
 			ObjectNode definitions = this.objectMapper.createObjectNode();
-			if (at.getProperties() != null && at.getProperties().size() > 0) {
+			if (at.getProperties() != null) {
 				ObjectNode propertyPropertiesNode = this.objectMapper.createObjectNode();
 				propertyPropertiesNode.put("type", "object");
 				ObjectNode propertyProperties = this.objectMapper.createObjectNode();
 				propertyPropertiesNode.set("properties", propertyProperties);
 				properties.set("properties", propertyPropertiesNode);
-				this.popluateFormControls(
-						request, 
-						at.getRepository(), 
-						at.getWorkspace(),
-						propertyProperties,
-						definitions,
-						at.getProperties(),
-						editMode);
-				String requiredProperties[] = at.getProperties().entrySet().stream().map(entry -> entry.getValue())
+				Map<String, FormControl> atProperties = new HashMap<>();
+				// atProperties.put("authoringTemplate", at.getProperties().getAuthoringTemplate());
+				if (at.getProperties().getCategories() != null) {
+					atProperties.put("categories", at.getProperties().getCategories());
+				}
+				// atProperties.put("nodeType", at.getProperties().getNodeType());
+				if (at.getProperties().getWorkflow() != null) {
+					atProperties.put("workflow", at.getProperties().getWorkflow());
+				}
+				if (at.getProperties().getName() != null) {
+					atProperties.put("name", at.getProperties().getName());
+				}
+				if (at.getProperties().getTitle() != null) {
+				    atProperties.put("title", at.getProperties().getTitle());
+				}
+				if (at.getProperties().getDescription() != null) {
+					atProperties.put("description", at.getProperties().getDescription());
+				}
+				this.popluateFormControls(request, at.getRepository(), at.getWorkspace(), propertyProperties,
+						definitions, atProperties, editMode, definitionMap);
+				String requiredProperties[] = atProperties.entrySet().stream().map(entry -> entry.getValue())
 						.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
-						.toArray(String[]::new);				
+						.toArray(String[]::new);
 				if (requiredProperties != null && requiredProperties.length > 0) {
 					ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
 					for (String name : requiredProperties) {
@@ -372,37 +507,36 @@ public abstract class BaseWcmRestController {
 					propertyPropertiesNode.set("required", reqiuriedNode);
 				}
 			}
-						
+
 			if (at.getElements() != null && at.getElements().size() > 0) {
 				ObjectNode elementPropertiesNode = this.objectMapper.createObjectNode();
 				elementPropertiesNode.put("type", "object");
 				ObjectNode elementProperties = this.objectMapper.createObjectNode();
 				elementPropertiesNode.set("properties", elementProperties);
 				properties.set("elements", elementPropertiesNode);
-				this.popluateFormControls(
-						request, 
-						at.getRepository(), 
-						at.getWorkspace(),
-						elementProperties,
-						definitions,
-						at.getElements(),
-						editMode);
+				this.popluateFormControls(request, at.getRepository(), at.getWorkspace(), elementProperties,
+						definitions, at.getElements(), editMode, definitionMap);
 				String requiredElements[] = at.getElements().entrySet().stream().map(entry -> entry.getValue())
 						.filter(formControl -> formControl.isMandatory()).map(formControl -> formControl.getName())
-						.toArray(String[]::new);		
+						.toArray(String[]::new);
 				if (requiredElements != null && requiredElements.length > 0) {
 					ArrayNode reqiuriedNode = this.objectMapper.createArrayNode();
 					for (String name : requiredElements) {
 						reqiuriedNode.add(name);
 					}
 					elementPropertiesNode.set("required", reqiuriedNode);
-				}		
+				}
 			}
-			
+
 			schemaNode.set("properties", properties);
-			schemaNode.set("definitions", definitions);
-					
-			jsonNode.set("layout", this.toFormLayoutNode(at));
+			if (definitionMap.size() > 0) {
+				schemaNode.set("definitions", definitions);
+			}
+
+			ArrayNode layoutArray = this.toFormLayoutNode(at);
+			if (layoutArray != null && layoutArray.size() > 0) {
+				jsonNode.set("layout", layoutArray);
+			}
 			jsonForm.setFormSchema(jsonNode);
 			return jsonForm;
 		} catch (RepositoryException e) {
@@ -410,50 +544,67 @@ public abstract class BaseWcmRestController {
 		}
 	}
 
-	protected void popluateFormControls(
-			HttpServletRequest request, 
-			String repository, 
-			String workspace,
-			ObjectNode simpleProperties,
-			ObjectNode definitions,
-			Map<String, FormControl> formControls,
-			boolean editMode) throws RepositoryException {
-		
+	protected void popluateFormControls(HttpServletRequest request, String repository, String workspace,
+			ObjectNode propertiesNode, ObjectNode definitions, Map<String, FormControl> formControls, boolean editMode,
+			Map<String, String> definitionMap) throws RepositoryException {
+
 		for (String key : formControls.keySet()) {
 			FormControl formControl = formControls.get(key);
-			if ("association".equals(formControl.getControlType())) {				
-				ObjectNode definition = this.toTypeDefinition(request, repository, workspace, formControl.getJcrDataType(),
-						formControl.isMultiple());
-				String fieldName = this.fieldNameFromNodeTypeName(formControl.getJcrDataType());
-				definitions.set(fieldName, definition);
-				ObjectNode objectNode = this.toPropertyNode(formControl, definitions, editMode);
-				simpleProperties.set(key, objectNode);
+			if (WcmConstants.CONTROL_TYPE_OBJECT.equals(formControl.getControlType())) {
+				this.toTypeDefinition(request, formControl, repository, workspace, formControl.getJcrDataType(),
+						definitions, editMode, definitionMap);
+				ObjectNode objectNode = this.toAssociationPropertyNode(request, repository, workspace, definitions,
+						editMode, definitionMap, formControl);
+				propertiesNode.set(key, objectNode);
 			} else {
-			  ObjectNode objectNode = this.toPropertyNode(formControl, definitions, editMode);
-			  simpleProperties.set(key, objectNode);
+				ObjectNode objectNode = this.toSimplePropertyNode(request, repository, workspace, definitionMap,
+						formControl, definitions, editMode);
+				propertiesNode.set(key, objectNode);
 			}
 		}
 	}
-	
-	protected ObjectNode toJsonFormField(RestPropertyType restProperty) {
+
+	protected ObjectNode toJsonFormField(HttpServletRequest request, String repository, String workspace,
+			ObjectNode definitions, boolean editMode, Map<String, String> definitionMap, RestPropertyType restProperty,
+			FormControl formControl) throws RepositoryException {
+
 		ObjectNode objectNode = this.objectMapper.createObjectNode();
+		ObjectNode itemNode = null;
 		if (restProperty.isMultiple()) {
 			objectNode.put("type", "array");
-			ObjectNode itemNode = this.objectMapper.createObjectNode();
-			itemNode.put("type", this.schemaType(restProperty.getRequiredType()));
+			if (formControl != null && formControl.getArrayConstraint() != null) {
+				this.handleArrayConstraint(request, repository, workspace, definitions, editMode, definitionMap,
+						formControl, objectNode);
+				formControl = this.getArrayItemFormControl(formControl);
+			}
+			String schemaType = this.schemaType(restProperty.getRequiredType());
+			itemNode = this.objectMapper.createObjectNode();
+			itemNode.put("type", schemaType);
 			objectNode.set("items", itemNode);
+
 		} else {
-			objectNode.put("type", this.schemaType(restProperty.getRequiredType()));//restProperty.getRequiredType());
+			objectNode.put("type", this.schemaType(restProperty.getRequiredType()));
+			itemNode = objectNode;
 		}
+		this.handleSimpleFieldConstraint(request, repository, workspace, definitions, editMode, definitionMap,
+				formControl, itemNode);
 		return objectNode;
 	}
-	
+
 	static Map<String, String> schemaTypeMap = new HashMap<>();
 	static {
-		schemaTypeMap.put("STRING", "string");
-		schemaTypeMap.put("BOOLEAN", "boolean");
+		schemaTypeMap.put("STRING", "string"); // VARCHAR
+		schemaTypeMap.put("BOOLEAN", "boolean"); // BIT
+		schemaTypeMap.put("LONG", "integer"); // BIGINT
+		schemaTypeMap.put("DOUBLE", "number"); // DOUBLE
+		schemaTypeMap.put("DATE", "string"); // DATE
+		schemaTypeMap.put("BINARY", "string"); // BINARY
+
+		schemaTypeMap.put("NAME", "string"); // VARCHAR
+		schemaTypeMap.put("PATH", "string"); // //VARCHAR
+		schemaTypeMap.put("REFERENCE", "string"); //// CHAR(36)
 	}
-	
+
 	protected String schemaType(String jcrType) {
 		String schemaType = "string";
 		if (StringUtils.hasText(jcrType)) {
@@ -461,122 +612,430 @@ public abstract class BaseWcmRestController {
 		}
 		return schemaType = (schemaType == null) ? "string" : schemaType;
 	}
+
+	protected ArrayNode toFormLayoutNode(Form form) {
+		ArrayNode layoutNode = null;
+		if (form.getFormLayout() != null && form.getFormLayout().length > 0) {
+			layoutNode = this.objectMapper.createArrayNode();
+			this.populateFormLayout(form, form.getFormLayout(), layoutNode);
+		}
+		return layoutNode;
+	}
 	
 	protected ArrayNode toFormLayoutNode(AuthoringTemplate at) {
-		ArrayNode formNode = this.objectMapper.createArrayNode();
-		if (at.getPropertyRow() != null && at.getPropertyRow().getColumns().length > 0) {
-			formNode.add(this.getRowNode(at, at.getPropertyRow()));
-		}
+		ArrayNode layoutNode = null;
 		if (at.getElementGroups() != null && at.getElementGroups().length > 0) {
-			for (BaseFormGroup formGroup : at.getElementGroups()) {
-				if (formGroup instanceof FormRow) {
-					ObjectNode rowNode = this.getRowNode(at, (FormRow) formGroup);
-					formNode.add(rowNode);
-				}
+			layoutNode = this.objectMapper.createArrayNode();
+			this.populateFormGroups(at, at.getElementGroups(), layoutNode);
+		}
+		return layoutNode;
+	}
 	
-				if (formGroup instanceof FormRows) {
-					for (FormRow formRow : ((FormRows) formGroup).getRows()) {
-						ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
-						formNode.add(rowNode);
-					}
+	protected void populateFormLayout(Form form, BaseFormGroup[] formGroups, ArrayNode layoutNode) {
+		for (BaseFormGroup formGroup : formGroups) {
+			if (formGroup instanceof FormRow) {
+				ObjectNode rowNode = null;
+				if (formGroup.isArray()) {
+					rowNode = this.getRowArray(form, (FormRow) formGroup);
+				} else {
+					rowNode = this.getRowNode(form, (FormRow) formGroup);
 				}
-	
-				if (formGroup instanceof FormTabs) {
-					ObjectNode tabsNode = this.objectMapper.createObjectNode();
-					tabsNode.put("type", "tabs");
-					ArrayNode tabArrayNode = this.objectMapper.createArrayNode();
-					for (FormTab formTab : ((FormTabs) formGroup).getTabs()) {
-						ObjectNode tabNode = this.objectMapper.createObjectNode();
-						tabNode.put("title", formTab.getTabTitle());
-						tabNode.put("type", "tab");
-						ArrayNode tabItemNodes = this.objectMapper.createArrayNode();
-						for (BaseFormGroup formRow : formTab.getFormGroups()) {
-							ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
-							tabItemNodes.add(rowNode);
-						}
-						tabNode.set("items", tabItemNodes);
-						tabArrayNode.add(tabNode);
+				layoutNode.add(rowNode);
+			}
+
+			if (formGroup instanceof FormRows) {
+
+				for (FormRow formRow : ((FormRows) formGroup).getRows()) {
+					ObjectNode rowNode = null;
+					if (formGroup.isArray()) {
+						rowNode = this.getRowArray(form, formRow);
+					} else {
+						rowNode = this.getRowNode(form, formRow);
 					}
-					tabsNode.set("items", tabArrayNode);
-					formNode.add(tabsNode);
+					layoutNode.add(rowNode);
 				}
-	
-				if (formGroup instanceof FormSteps) {
-					ObjectNode stepsNode = this.objectMapper.createObjectNode();
-					stepsNode.put("type", "stepper");
-					ArrayNode stepArrayNode = this.objectMapper.createArrayNode();
-					for (FormStep formStep : ((FormSteps) formGroup).getSteps()) {
-						ObjectNode stepNode = this.objectMapper.createObjectNode();
-						stepNode.put("title", formStep.getStepTitle());
-						stepNode.put("type", "step");
-						ArrayNode stepItemNodes = this.objectMapper.createArrayNode();
-						for (BaseFormGroup formRow : formStep.getFormGroups()) {
-							ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
-							stepItemNodes.add(rowNode);
-						}
-						stepNode.set("items", stepItemNodes);
-						stepArrayNode.add(stepNode);
+			}
+
+			if (formGroup instanceof FormTabs) {
+				if (formGroup.isArray()) {
+					this.populateTabArray((FormTabs) formGroup, form, layoutNode);
+				} else {
+					this.populateTabs((FormTabs) formGroup, form, layoutNode);
+				}
+			}
+
+			if (formGroup instanceof FormSteps) {
+				this.populateSteps((FormSteps) formGroup, form, layoutNode);
+			}
+		}
+	}
+
+	protected void populateFormGroups(AuthoringTemplate at, BaseFormGroup[] formGroups, ArrayNode layoutNode) {
+		for (BaseFormGroup formGroup : formGroups) {
+			if (formGroup instanceof FormRow) {
+				ObjectNode rowNode = null;
+				if (formGroup.isArray()) {
+					rowNode = this.getRowArray(at, (FormRow) formGroup);
+				} else {
+					rowNode = this.getRowNode(at, (FormRow) formGroup);
+				}
+				layoutNode.add(rowNode);
+			}
+
+			if (formGroup instanceof FormRows) {
+
+				for (FormRow formRow : ((FormRows) formGroup).getRows()) {
+					ObjectNode rowNode = null;
+					if (formGroup.isArray()) {
+						rowNode = this.getRowArray(at, formRow);
+					} else {
+						rowNode = this.getRowNode(at, formRow);
 					}
-					stepsNode.set("items", stepArrayNode);
-					formNode.add(stepsNode);
+					layoutNode.add(rowNode);
+				}
+			}
+
+			if (formGroup instanceof FormTabs) {
+				if (formGroup.isArray()) {
+					this.populateTabArray((FormTabs) formGroup, at, layoutNode);
+				} else {
+					this.populateTabs((FormTabs) formGroup, at, layoutNode);
+				}
+			}
+
+			if (formGroup instanceof FormSteps) {
+				this.populateSteps((FormSteps) formGroup, at, layoutNode);
+			}
+		}
+	}
+	
+	protected void populateTabArray(FormTabs formTabs, Form form, ArrayNode layoutNode) {
+		ObjectNode tabArrayNode = this.objectMapper.createObjectNode();
+		tabArrayNode.put("type", "tabarray");
+		if (StringUtils.hasText(formTabs.getFiledPath())) {
+			tabArrayNode.put("key", formTabs.getFiledPath());
+		}
+		if (formTabs.getCondition() != null) {
+			this.setVisibleCondition(tabArrayNode, formTabs.getCondition());
+		}
+
+		ObjectNode arraySectionNode = this.objectMapper.createObjectNode();
+		tabArrayNode.set("items", arraySectionNode);
+		arraySectionNode.put("type", "section");
+
+		FormTab formTab = formTabs.getTabs()[0];
+		ArrayNode arrayItemNodes = this.objectMapper.createArrayNode();
+		for (BaseFormGroup formRow : formTab.getFormGroups()) {
+			ObjectNode rowNode = this.getRowNode(form, (FormRow) formRow);
+			arrayItemNodes.add(rowNode);
+		}
+		arraySectionNode.set("items", arrayItemNodes);
+		layoutNode.add(tabArrayNode);
+	}
+
+	protected void populateTabs(FormTabs formTabs, Form form, ArrayNode layoutNode) {
+		ObjectNode tabsNode = this.objectMapper.createObjectNode();
+		tabsNode.put("type", "tabs");
+		if (formTabs.getCondition() != null) {
+			this.setVisibleCondition(tabsNode, formTabs.getCondition());
+		}
+		ArrayNode tabArrayNode = this.objectMapper.createArrayNode();
+		for (FormTab formTab : formTabs.getTabs()) {
+			ObjectNode tabNode = this.objectMapper.createObjectNode();
+			tabNode.put("title", formTab.getTabTitle());
+			tabNode.put("type", "tab");
+			if (formTab.getCondition() != null) {
+				this.setVisibleCondition(tabNode, formTab.getCondition());
+			}
+			ArrayNode tabItemNodes = this.objectMapper.createArrayNode();
+			for (BaseFormGroup formRow : formTab.getFormGroups()) {
+				ObjectNode rowNode = this.getRowNode(form, (FormRow) formRow);
+				tabItemNodes.add(rowNode);
+			}
+			tabNode.set("items", tabItemNodes);
+			tabArrayNode.add(tabNode);
+		}
+		tabsNode.set("items", tabArrayNode);
+		layoutNode.add(tabsNode);
+	}
+
+	protected void populateTabArray(FormTabs formTabs, AuthoringTemplate at, ArrayNode layoutNode) {
+		ObjectNode tabArrayNode = this.objectMapper.createObjectNode();
+		tabArrayNode.put("type", "tabarray");
+		if (StringUtils.hasText(formTabs.getFiledPath())) {
+			tabArrayNode.put("key", formTabs.getFiledPath());
+		}
+		if (formTabs.getCondition() != null) {
+			this.setVisibleCondition(tabArrayNode, formTabs.getCondition());
+		}
+
+		ObjectNode arraySectionNode = this.objectMapper.createObjectNode();
+		tabArrayNode.set("items", arraySectionNode);
+		arraySectionNode.put("type", "section");
+
+		FormTab formTab = formTabs.getTabs()[0];
+		ArrayNode arrayItemNodes = this.objectMapper.createArrayNode();
+		for (BaseFormGroup formRow : formTab.getFormGroups()) {
+			ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
+			arrayItemNodes.add(rowNode);
+		}
+		arraySectionNode.set("items", arrayItemNodes);
+		layoutNode.add(tabArrayNode);
+	}
+
+	protected void populateTabs(FormTabs formTabs, AuthoringTemplate at, ArrayNode layoutNode) {
+		ObjectNode tabsNode = this.objectMapper.createObjectNode();
+		tabsNode.put("type", "tabs");
+		if (formTabs.getCondition() != null) {
+			this.setVisibleCondition(tabsNode, formTabs.getCondition());
+		}
+		ArrayNode tabArrayNode = this.objectMapper.createArrayNode();
+		for (FormTab formTab : formTabs.getTabs()) {
+			ObjectNode tabNode = this.objectMapper.createObjectNode();
+			tabNode.put("title", formTab.getTabTitle());
+			tabNode.put("type", "tab");
+			if (formTab.getCondition() != null) {
+				this.setVisibleCondition(tabNode, formTab.getCondition());
+			}
+			ArrayNode tabItemNodes = this.objectMapper.createArrayNode();
+			for (BaseFormGroup formRow : formTab.getFormGroups()) {
+				ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
+				tabItemNodes.add(rowNode);
+			}
+			tabNode.set("items", tabItemNodes);
+			tabArrayNode.add(tabNode);
+		}
+		tabsNode.set("items", tabArrayNode);
+		layoutNode.add(tabsNode);
+	}
+
+	protected void setVisibleCondition(ObjectNode widgetNode, VisbleCondition condition) {
+		if (StringUtils.hasText(condition.getCondition())) {
+			widgetNode.put("condition", condition.getCondition());
+		} else if (StringUtils.hasText(condition.getFunctionBody())) {
+			ObjectNode functionNode = JsonUtils.createObjectNode();
+			widgetNode.set("condition", functionNode);
+			functionNode.put("functionBody", condition.getFunctionBody());
+		}
+	}
+
+	protected void populateSteps(FormSteps formSteps, Form form, ArrayNode layoutNode) {
+		ObjectNode stepsNode = this.objectMapper.createObjectNode();
+		stepsNode.put("type", "stepper");
+		if (formSteps.getCondition() != null) {
+			this.setVisibleCondition(stepsNode, formSteps.getCondition());
+		}
+		ArrayNode stepArrayNode = this.objectMapper.createArrayNode();
+		for (FormStep formStep : formSteps.getSteps()) {
+			ObjectNode stepNode = this.objectMapper.createObjectNode();
+			stepNode.put("title", formStep.getStepTitle());
+			stepNode.put("type", "step");
+			if (formStep.getCondition() != null) {
+				this.setVisibleCondition(stepNode, formStep.getCondition());
+			}
+			ArrayNode stepItemNodes = this.objectMapper.createArrayNode();
+			for (BaseFormGroup formRow : formStep.getFormGroups()) {
+				ObjectNode rowNode = this.getRowNode(form, (FormRow) formRow);
+				stepItemNodes.add(rowNode);
+			}
+			stepNode.set("items", stepItemNodes);
+			stepArrayNode.add(stepNode);
+		}
+		stepsNode.set("items", stepArrayNode);
+		layoutNode.add(stepsNode);
+	}
+	
+	protected void populateSteps(FormSteps formSteps, AuthoringTemplate at, ArrayNode layoutNode) {
+		ObjectNode stepsNode = this.objectMapper.createObjectNode();
+		stepsNode.put("type", "stepper");
+		if (formSteps.getCondition() != null) {
+			this.setVisibleCondition(stepsNode, formSteps.getCondition());
+		}
+		ArrayNode stepArrayNode = this.objectMapper.createArrayNode();
+		for (FormStep formStep : formSteps.getSteps()) {
+			ObjectNode stepNode = this.objectMapper.createObjectNode();
+			stepNode.put("title", formStep.getStepTitle());
+			stepNode.put("type", "step");
+			if (formStep.getCondition() != null) {
+				this.setVisibleCondition(stepNode, formStep.getCondition());
+			}
+			ArrayNode stepItemNodes = this.objectMapper.createArrayNode();
+			for (BaseFormGroup formRow : formStep.getFormGroups()) {
+				ObjectNode rowNode = this.getRowNode(at, (FormRow) formRow);
+				stepItemNodes.add(rowNode);
+			}
+			stepNode.set("items", stepItemNodes);
+			stepArrayNode.add(stepNode);
+		}
+		stepsNode.set("items", stepArrayNode);
+		layoutNode.add(stepsNode);
+	}
+
+	protected void toTypeDefinition(HttpServletRequest request, FormControl formControl, String repository,
+			String workspace, String jcrDataType, ObjectNode definitions, boolean editMode,
+			Map<String, String> definitionMap) throws RepositoryException {
+		if (definitionMap.get(jcrDataType) == null) {
+			this.createTypeDefinition(request, formControl, repository, workspace, jcrDataType, definitions, editMode,
+					definitionMap);
+		}
+	}
+
+	protected void createTypeDefinition(HttpServletRequest request, FormControl formControl, String repository,
+			String workspace, String jcrDataType, ObjectNode definitions, boolean editMode,
+			Map<String, String> definitionMap) throws RepositoryException {
+
+		String baseUrl = RestHelper.repositoryUrl(request);
+		RestNodeType restNodeType = nodeTypeHandler.getNodeType(baseUrl, repository, workspace, jcrDataType);
+		Set<String> superJcrDataTypes = restNodeType.getSuperTypes();
+		boolean hasBpwSuperTypes = false;
+		if (superJcrDataTypes != null && superJcrDataTypes.size() > 0) {
+			for (String superJcrDataType : superJcrDataTypes) {
+				if (superJcrDataType.startsWith(WcmConstants.WCM_NODE_TYPE_PREFIX)) {
+					hasBpwSuperTypes = true;
+					FormControl superTypeControl = (formControl.getFormControls() == null) ? null
+							: formControl.getFormControls().get(superJcrDataType);
+					this.toTypeDefinition(request, superTypeControl, repository, workspace, superJcrDataType,
+							definitions, editMode, definitionMap);
 				}
 			}
 		}
-		return formNode;
-	}
-	
-	protected ObjectNode toTypeDefinition(HttpServletRequest request, String repository, String workspace,
-			RestChildType restChildType) throws RepositoryException {
-		return this.toTypeDefinition(request, repository, workspace, restChildType.getRequiredPrimaryTypeNames()[0],
-				"*".equals(restChildType.getName()));
-	}
-	
-	protected ObjectNode toTypeDefinition(HttpServletRequest request, String repository, String workspace,
-			String jcrDataType, boolean multiple) throws RepositoryException {
-		String baseUrl = RestHelper.repositoryUrl(request);
-		RestNodeType restNodeType = nodeTypeHandler.getNodeType(baseUrl, repository, workspace, jcrDataType);
 
 		ObjectNode definition = this.objectMapper.createObjectNode();
-		ObjectNode itemsNode;
+		definition.put("type", "object");
+		if (formControl != null && formControl.getObjectConstraint() != null) {
 
-		if (multiple) {
-			definition.put("type", "array");
-			itemsNode = this.objectMapper.createObjectNode();
-			itemsNode.put("type", "object");
-			definition.set("items", itemsNode);
-		} else {
-			definition.put("type", "object");
-			itemsNode = definition;
+			this.handleObjectConstraint(request, repository, workspace, definitions, editMode, definitionMap,
+					formControl, definition);
 		}
-
 		ObjectNode properties = this.objectMapper.createObjectNode();
-		itemsNode.set("properties", properties);
+		definition.set("properties", properties);
 		for (RestPropertyType restProperty : restNodeType.getPropertyTypes()) {
-			ObjectNode fieldNode = this.toJsonFormField(restProperty);
 			String fieldName = this.fieldNameFromNodeTypeName(restProperty.getName());
+			ObjectNode fieldNode = this.toJsonFormField(request, repository, workspace, definitions, editMode,
+					definitionMap, restProperty, this.getFormControl(formControl, fieldName));
 			properties.set(fieldName, fieldNode);
 		}
 		List<RestChildType> childTypes = restNodeType.getChildTypes();
 		if (childTypes != null && childTypes.size() > 0) {
 			for (RestChildType restChildType : childTypes) {
-				String fieldName = "*".equals(restChildType.getName())
-						? this.fieldNameFromNodeTypeName(restChildType.getDeclaringNodeTypeName())
-						: restChildType.getName();
-				ObjectNode childType = this.toTypeDefinition(request, repository, workspace, restChildType);
-				properties.set(fieldName, childType);
+				String childFieldType = this.fieldNameFromNodeTypeName(restChildType.getRequiredPrimaryTypeNames()[0]);
+				this.toTypeDefinition(request, this.getFormControl(formControl, childFieldType), repository, workspace,
+						restChildType.getRequiredPrimaryTypeNames()[0], definitions, editMode, definitionMap);
+				ObjectNode refNode = this.objectMapper.createObjectNode();
+				ObjectNode itemsNode;
+				if ("*".equals(restChildType.getName())) {
+					refNode.put("type", "array");
+					itemsNode = this.objectMapper.createObjectNode();
+					definition.set("items", itemsNode);
+				} else {
+					itemsNode = refNode;
+				}
+				itemsNode.put(WcmConstants.JSON_SCHEMA_REF, definitionMap.get(childFieldType));
+				properties.set(childFieldType, refNode);
 			}
 		}
-		return definition;
-		
+		ObjectNode definitionNode = null;
+		if (hasBpwSuperTypes) {
+			definitionNode = this.objectMapper.createObjectNode();
+			ArrayNode allOfArray = this.objectMapper.createArrayNode();
+			definitionNode.set(WcmConstants.JSON_SCHEMA_ALL_OF, allOfArray);
+
+			for (String superJcrDataType : superJcrDataTypes) {
+				if (superJcrDataType.startsWith(WcmConstants.WCM_NODE_TYPE_PREFIX)) {
+					ObjectNode refNode = this.objectMapper.createObjectNode();
+					refNode.put(WcmConstants.JSON_SCHEMA_REF, definitionMap.get(superJcrDataType));
+					allOfArray.add(refNode);
+				}
+			}
+			allOfArray.add(definition);
+		} else {
+			definitionNode = definition;
+		}
+		String fieldType = this.fieldNameFromNodeTypeName(jcrDataType);
+		definitions.set(fieldType, definitionNode);
+		definitionMap.put(fieldType, WcmUtils.definitionUrl(fieldType));
+
 	}
-	
+
+	protected FormControl getFormControl(FormControl formControl, String propertyName) {
+		FormControl result = null;
+		if (formControl != null && formControl.getFormControls() != null) {
+			result = formControl.getFormControls().get(propertyName);
+		}
+		return result;
+	}
+
+	protected FormControl getArrayItemFormControl(FormControl formControl) {
+		FormControl result = null;
+		if (formControl != null && formControl.getFormControls() != null) {
+			result = formControl.getFormControls().get("items[]");
+		}
+		return result;
+	}
+
 	protected String fieldNameFromNodeTypeName(String typeName) {
 		return typeName.startsWith("bpw:") ? typeName.substring("bpw:".length()) : typeName;
 	}
-	
-	protected ObjectNode getRowNode(AuthoringTemplate at, FormRow formRow) {
+
+	protected ObjectNode getRowArray(Form form, FormRow formRow) {
+		ObjectNode arrayNode = this.objectMapper.createObjectNode();
+		ArrayNode arrayItemNode = this.objectMapper.createArrayNode();
+		arrayNode.put("type", "array");
+		if (StringUtils.hasText(formRow.getFiledPath())) {
+			arrayNode.put("key", formRow.getFiledPath());
+		}
+		if (formRow.getCondition() != null) {
+			this.setVisibleCondition(arrayNode, formRow.getCondition());
+		}
+		arrayNode.set("items", arrayItemNode);
 		ObjectNode rowNode = this.objectMapper.createObjectNode();
-		rowNode.put("type", "flex");
+		arrayItemNode.add(rowNode);
+		rowNode.put("type", "div");
+		rowNode.put("flex-flow", "row wrap");
+		ArrayNode columnNodes = this.objectMapper.createArrayNode();
+		for (FormColumn column : formRow.getColumns()) {
+			ObjectNode columnNode = this.getColumnNode(form, column);
+			columnNodes.add(columnNode);
+		}
+		rowNode.set("items", columnNodes);
+		return arrayNode;
+	}
+	
+	protected ObjectNode getRowNode(Form form, FormRow formRow) {
+		ObjectNode rowNode = this.objectMapper.createObjectNode();
+		if (formRow.getCondition() != null) {
+			this.setVisibleCondition(rowNode, formRow.getCondition());
+		}
+		rowNode.put("type", "div");
+		rowNode.put("flex-flow", "row wrap");
+		ArrayNode columnNodes = this.objectMapper.createArrayNode();
+		for (FormColumn column : formRow.getColumns()) {
+			ObjectNode columnNode = null;
+			if (column.isArray()) {
+				columnNode = this.getColumnArray(form, column);
+			} else {
+				columnNode = this.getColumnNode(form, column);
+				columnNodes.add(columnNode);
+			}
+		}
+		rowNode.set("items", columnNodes);
+		return rowNode;
+	}
+	
+	protected ObjectNode getRowArray(AuthoringTemplate at, FormRow formRow) {
+		ObjectNode arrayNode = this.objectMapper.createObjectNode();
+		ArrayNode arrayItemNode = this.objectMapper.createArrayNode();
+		arrayNode.put("type", "array");
+		if (StringUtils.hasText(formRow.getFiledPath())) {
+			arrayNode.put("key", formRow.getFiledPath());
+		}
+		if (formRow.getCondition() != null) {
+			this.setVisibleCondition(arrayNode, formRow.getCondition());
+		}
+		arrayNode.set("items", arrayItemNode);
+		ObjectNode rowNode = this.objectMapper.createObjectNode();
+		arrayItemNode.add(rowNode);
+		rowNode.put("type", "div");
 		rowNode.put("flex-flow", "row wrap");
 		ArrayNode columnNodes = this.objectMapper.createArrayNode();
 		for (FormColumn column : formRow.getColumns()) {
@@ -584,203 +1043,712 @@ public abstract class BaseWcmRestController {
 			columnNodes.add(columnNode);
 		}
 		rowNode.set("items", columnNodes);
-		return rowNode;
+		return arrayNode;
 	}
 	
-	private ObjectNode toPropertyNode(FormControl formControl, ObjectNode definitions, boolean editMode) {
-		ObjectNode propertyNode = JsonNodeFactory.instance.objectNode();
+	protected ObjectNode getRowNode(AuthoringTemplate at, FormRow formRow) {
+		ObjectNode rowNode = this.objectMapper.createObjectNode();
+		if (formRow.getCondition() != null) {
+			this.setVisibleCondition(rowNode, formRow.getCondition());
+		}
+		rowNode.put("type", "div");
+		rowNode.put("flex-flow", "row wrap");
+		ArrayNode columnNodes = this.objectMapper.createArrayNode();
+		for (FormColumn column : formRow.getColumns()) {
+			ObjectNode columnNode = null;
+			if (column.isArray()) {
+				columnNode = this.getColumnArray(at, column);
+			} else {
+				columnNode = this.getColumnNode(at, column);
+				columnNodes.add(columnNode);
+			}
+		}
+		rowNode.set("items", columnNodes);
+		return rowNode;
+	}
 
-		if ("association".equals(formControl.getControlType())) {
-			propertyNode.put("$ref",
-					String.format("#/definitions/%s", this.fieldNameFromNodeTypeName(formControl.getJcrDataType())));
+	protected ObjectNode toAssociationPropertyNode(HttpServletRequest request, String repository, String workspace,
+			ObjectNode definitions, boolean editMode, Map<String, String> definitionMap, FormControl formControl)
+			throws RepositoryException {
+		ObjectNode propertyNode = this.objectMapper.createObjectNode();
+
+		ObjectNode itemsNode;
+
+		if (formControl.isMultiple()) {
+			propertyNode.put("type", "array");
+			itemsNode = this.objectMapper.createObjectNode();
+			itemsNode.put("type", "object");
+			propertyNode.set("items", itemsNode);
+			if (formControl.getArrayConstraint() != null) {
+				this.handleArrayConstraint(request, repository, workspace, definitions, editMode, definitionMap,
+						formControl, propertyNode);
+			}
 		} else {
-			propertyNode.put("type", formControl.getDataType());
+			itemsNode = propertyNode;
 		}
-		
-		if (formControl.getEnumeration() != null && formControl.getEnumeration().length > 0) {
-			propertyNode.set("enum", this.toArrayNode(formControl.getEnumeration()));
-		}
-
-		if (StringUtils.hasText(formControl.getHint())) {
-			propertyNode.put("description", formControl.getHint());
-		}
-		
-		if (editMode && !formControl.isEditable()) {
-			propertyNode.put("readonly", Boolean.TRUE);
-		}
-		
-		if (StringUtils.hasText(formControl.getDefaultValue())) {
-			propertyNode.put(WcmConstants.DEFAULT_WS, formControl.getDefaultValue());
-		}
+		itemsNode.put("$ref", WcmUtils.definitionUrl(this.fieldNameFromNodeTypeName(formControl.getJcrDataType())));
 		return propertyNode;
 	}
 
-	protected ArrayNode toArrayNode(String values[]) {
-    	
-		ArrayNode valueArray = JsonUtils.creatArrayNode();
-		for (String value : values) {
-			valueArray.add(value);
+	protected ObjectNode toSimplePropertyNode(HttpServletRequest request, String repository, String workspace,
+			Map<String, String> definitionMap, FormControl formControl, ObjectNode definitions, boolean editMode)
+			throws RepositoryException {
+		ObjectNode propertyNode = JsonNodeFactory.instance.objectNode();
+		if (formControl.getFormControlLayout() != null
+				&& StringUtils.hasText(formControl.getFormControlLayout().getHint())) {
+			propertyNode.put("description", formControl.getFormControlLayout().getHint());
 		}
-		return valueArray;
-    }
-	
-	private ObjectNode getColumnNode(AuthoringTemplate at, FormColumn formColumn) {
+
+		if (formControl.getFormControlLayout() != null && editMode
+				&& !formControl.getFormControlLayout().isEditable()) {
+			propertyNode.put("readonly", Boolean.TRUE);
+		}
+
+		if (formControl.isMultiple()) {
+			propertyNode.put("type", "array");
+			ObjectNode itemsNode = JsonNodeFactory.instance.objectNode();
+			propertyNode.set("items", itemsNode);
+			if (editMode && !formControl.getFormControlLayout().isEditable()) {
+				itemsNode.put("readonly", Boolean.TRUE);
+			}
+			if (formControl.getArrayConstraint() != null) {
+				this.handleArrayConstraint(request, repository, workspace, definitions, editMode, definitionMap,
+						formControl, propertyNode);
+			}
+			propertyNode = itemsNode;
+			// formControl = this.getArrayItemFormControl(formControl);
+		}
+		propertyNode.put("type", formControl.getDataType());
+		if (StringUtils.hasText(formControl.getFormat())) {
+			propertyNode.put("format", formControl.getFormat());
+		}
+		if (formControl.getFormControlLayout() != null
+				&& StringUtils.hasText(formControl.getFormControlLayout().getTitle())) {
+			propertyNode.put("title", formControl.getFormControlLayout().getTitle());
+		}
+
+		this.handleSimpleFieldConstraint(request, repository, workspace, definitions, editMode, definitionMap,
+				formControl, propertyNode);
+
+		return propertyNode;
+	}
+
+	private void handleSimpleFieldConstraint(HttpServletRequest request, String repository, String workspace,
+			ObjectNode definitions, boolean editMode, Map<String, String> definitionMap, FormControl formControl,
+			ObjectNode propertyNode) throws RepositoryException {
+		if ("String".equalsIgnoreCase(formControl.getDataType()) && formControl.getStringConstraint() != null) {
+			this.handleStringConstraint(formControl, propertyNode);
+		}
+
+		if ((("integer".equalsIgnoreCase(formControl.getDataType()))
+				|| "number".equalsIgnoreCase(formControl.getDataType())) && formControl.getNumberConstraint() != null) {
+			this.handleNumberConstraint(formControl, propertyNode);
+		}
+		this.handleCommonConstraint(formControl, propertyNode);
+	}
+
+	private void handleObjectConstraint(HttpServletRequest request, String repository, String workspace,
+			ObjectNode definitions, boolean editMode, Map<String, String> definitionMap, FormControl formControl,
+			ObjectNode propertyNode) throws RepositoryException {
+		ObjectConstraint objectConstraint = formControl.getObjectConstraint();
+
+		if (objectConstraint.getRequired() != null) {
+			propertyNode.set("required", WcmUtils.toArrayNode(objectConstraint.getRequired()));
+		}
+
+		if (objectConstraint.getMinProperties() != null) {
+			propertyNode.put("minProperties", objectConstraint.getMinProperties());
+		}
+
+		if (objectConstraint.getMaxProperties() != null) {
+			propertyNode.put("maxProperties", objectConstraint.getMaxProperties());
+		}
+		if (objectConstraint.getAllowAdditionalProperties() != null) {
+			propertyNode.put("additionalProperties", "true");
+		}
+
+		if (StringUtils.hasText(objectConstraint.getPropertyNamePattern())) {
+			ObjectNode patternNode = this.objectMapper.createObjectNode();
+			propertyNode.set("propertyNames", patternNode);
+			patternNode.put("pattern", objectConstraint.getPropertyNamePattern());
+		}
+
+		ObjectNode dependenciesNode = null;
+		if (objectConstraint.getDependencies() != null) {
+			dependenciesNode = this.objectMapper.createObjectNode();
+			propertyNode.set("dependencies", dependenciesNode);
+			for (String dependency : objectConstraint.getDependencies().keySet()) {
+				dependenciesNode.set(dependency,
+						WcmUtils.toArrayNode(objectConstraint.getDependencies().get(dependency)));
+			}
+		}
+
+		if (objectConstraint.getAdditionalProperties() != null
+				&& objectConstraint.getAdditionalProperties().size() > 0) {
+			ObjectNode additionalProperties = this.objectMapper.createObjectNode();
+			propertyNode.set("additionalProperties", additionalProperties);
+			this.popluateFormControls(request, repository, workspace, additionalProperties, definitions,
+					objectConstraint.getAdditionalProperties(), editMode, definitionMap);
+		}
+		if (objectConstraint.getPatternProperties() != null && objectConstraint.getPatternProperties().size() > 0) {
+			ObjectNode patternProperties = this.objectMapper.createObjectNode();
+			propertyNode.set("patternProperties", patternProperties);
+			this.popluateFormControls(request, repository, workspace, patternProperties, definitions,
+					objectConstraint.getPatternProperties(), editMode, definitionMap);
+		}
+
+		if (objectConstraint.getSchemaDependencies() != null && objectConstraint.getSchemaDependencies().size() > 0) {
+			if (dependenciesNode == null) {
+				dependenciesNode = this.objectMapper.createObjectNode();
+				propertyNode.set("dependencies", dependenciesNode);
+			}
+			this.popluateFormControls(request, repository, workspace, dependenciesNode, definitions,
+					objectConstraint.getSchemaDependencies(), editMode, definitionMap);
+		}
+	}
+
+	private void handleArrayConstraint(HttpServletRequest request, String repository, String workspace,
+			ObjectNode definitions, boolean editMode, Map<String, String> definitionMap, FormControl formControl,
+			ObjectNode propertyNode) throws RepositoryException {
+		ArrayConstraint arrayConstraint = formControl.getArrayConstraint();
+		if (arrayConstraint.getMaxItems() != null) {
+			propertyNode.put("maxItems", arrayConstraint.getMaxItems());
+		}
+		if (arrayConstraint.getMinItems() != null) {
+			propertyNode.put("minItems", arrayConstraint.getMinItems());
+		}
+		if (arrayConstraint.getUniqueItems() != null) {
+			propertyNode.put("uniqueItems", arrayConstraint.getUniqueItems());
+		}
+
+		if (arrayConstraint.getContains() != null) {
+			ObjectNode containNode = JsonNodeFactory.instance.objectNode();
+
+			propertyNode.set("contains", containNode);
+			containNode.put("type", arrayConstraint.getContains());
+		}
+		if (arrayConstraint.getAdditionalItems() != null && arrayConstraint.getAdditionalItems().size() > 0) {
+
+			ObjectNode additionalItems = this.objectMapper.createObjectNode();
+			propertyNode.set("additionalItems", additionalItems);
+			this.popluateFormControls(request, repository, workspace, additionalItems, definitions,
+					arrayConstraint.getAdditionalItems(), editMode, definitionMap);
+		}
+	}
+
+	private void handleCommonConstraint(FormControl formControl, ObjectNode propertyNode) {
+		if (formControl.getConstraint() != null) {
+			CommonConstraint commonConstraint = formControl.getConstraint();
+			if (commonConstraint.getEnumeration() != null && formControl.getConstraint().getEnumeration().length > 0) {
+				propertyNode.set("enum", WcmUtils.toArrayNode(commonConstraint.getEnumeration()));
+			}
+
+			if (commonConstraint.getDefaultValues() != null
+					&& formControl.getConstraint().getDefaultValues().length > 0) {
+				propertyNode.set("default", WcmUtils.toArrayNode(commonConstraint.getDefaultValues()));
+			}
+
+			if (StringUtils.hasText(commonConstraint.getConstant())) {
+				propertyNode.put("const", commonConstraint.getConstant());
+			}
+		}
+	}
+
+	private void handleStringConstraint(FormControl formControl, ObjectNode propertyNode) {
+		if (formControl.getStringConstraint() != null) {
+			StringConstraint stringConstraint = formControl.getStringConstraint();
+
+			if (stringConstraint.getMinLength() != null) {
+				propertyNode.put("minLength", stringConstraint.getMinLength());
+			}
+
+			if (stringConstraint.getMaxLength() != null) {
+				propertyNode.put("maxLength", stringConstraint.getMaxLength());
+			}
+
+			if (StringUtils.hasText(stringConstraint.getFormat())) {
+				propertyNode.put("format", stringConstraint.getFormat());
+			}
+
+			if (StringUtils.hasText(stringConstraint.getPattern())) {
+				propertyNode.put("pattern", stringConstraint.getPattern());
+			}
+
+			if (StringUtils.hasText(stringConstraint.getContentEncoding())) {
+				propertyNode.put("contentEncoding", stringConstraint.getContentEncoding());
+			}
+
+			if (StringUtils.hasText(stringConstraint.getContentMediaType())) {
+				propertyNode.put("contentMediaType", stringConstraint.getContentMediaType());
+			}
+
+			if (StringUtils.hasText(stringConstraint.getContentSchema())) {
+				propertyNode.put("contentSchema", stringConstraint.getContentSchema());
+			}
+		}
+	}
+
+	private void handleNumberConstraint(FormControl formControl, ObjectNode propertyNode) {
+		if (formControl.getStringConstraint() != null) {
+			NumberConstraint numberConstraint = formControl.getNumberConstraint();
+
+			if (numberConstraint.getMultipleOf() != null) {
+				propertyNode.put("multipleOf", numberConstraint.getMultipleOf());
+			}
+
+			if (numberConstraint.getMaximum() != null) {
+				if (numberConstraint.getExclusiveMaximum()) {
+					propertyNode.put("exclusiveMaximum", numberConstraint.getMinimum());
+				} else {
+					propertyNode.put("maximum", numberConstraint.getMaximum());
+				}
+			}
+
+			if (numberConstraint.getMinimum() != null) {
+				if (numberConstraint.getExclusiveMinimum()) {
+					propertyNode.put("exclusiveMinimum", numberConstraint.getMinimum());
+				} else {
+					propertyNode.put("minimum", numberConstraint.getMinimum());
+				}
+			}
+		}
+	}
+
+	protected ObjectNode getColumnArray(Form form, FormColumn formColumn) {
+		ObjectNode arrayNode = this.objectMapper.createObjectNode();
+		ArrayNode arrayItemNode = this.objectMapper.createArrayNode();
+		arrayNode.put("type", "array");
+		if (StringUtils.hasText(formColumn.getFiledPath())) {
+			arrayNode.put("key", formColumn.getFiledPath());
+		}
+		if (formColumn.getCondition() != null) {
+			this.setVisibleCondition(arrayNode, formColumn.getCondition());
+		}
+		arrayNode.set("items", arrayItemNode);
+		arrayItemNode.add(this.getColumnNode(form, formColumn));
+		return arrayNode;
+	}
+
+	protected ObjectNode getColumnNode(Form form, FormColumn formColumn) {
 		ObjectNode columnNode = this.objectMapper.createObjectNode();
 		columnNode.put("type", "div");
 		columnNode.put("displayFlex", true);
 		columnNode.put("flex-direction", "column");
 		columnNode.put("fxFlex", formColumn.getFxFlex());
 
-		ArrayNode fieldNodes = this.objectMapper.createArrayNode();
-		for (String fieldName : formColumn.getFormControls()) {
-			String names[] = this.getNameAndPrefix(fieldName);
-			String name = names[1];
-			String prefix = names[0];
-			FormControl formControl = null;
-			if (at.getElements() != null && at.getElements().size() > 0) {
-				formControl = at.getElements().get(name);
-			}
-			formControl = (formControl == null) ? at.getProperties().get(name) : formControl;
-			Optional<FieldLayout> associationLayout = this.getAssociationLayout(
-					formColumn,
-					name);
-			if (associationLayout.isPresent()) {
-				this.handleFieldLayout(prefix, name, associationLayout.get(), fieldNodes);
-			} else {
-				ObjectNode fieldNode = this.objectMapper.createObjectNode();
-				fieldNodes.add(fieldNode);
-				fieldNode.put("key", this.getLayoutFieldKey(formControl.getName(), prefix));
-				if (!"text".equals(formControl.getControlType())) {
-					fieldNode.put("type", formControl.getControlType());
-				}
-				if (StringUtils.hasText(formControl.getTitle())) {
-					fieldNode.put("title", formControl.getTitle());
-				} else {
-					fieldNode.put("notitle", true);
-				}
-				if (StringUtils.hasText(formControl.getFlex())) {
-					fieldNode.put("flex", formControl.getFlex());
-				}
-				if (StringUtils.hasText(formControl.getPlaceholder())) {
-					fieldNode.put("placeholder", formControl.getPlaceholder());
-				}
-			}
+		if (formColumn.getCondition() != null) {
+			this.setVisibleCondition(columnNode, formColumn.getCondition());
 		}
+
+		ArrayNode fieldNodes = this.objectMapper.createArrayNode();
+		for (String fieldPath : formColumn.getFormControls()) {
+			FormControl formControl = WcmUtils.getFormControl(form, fieldPath);
+
+			if (formControl == null) {
+				throw new WcmRepositoryException(String
+						.format("FormControl %s can not be found in authoring template %s", fieldPath, form.getName()));
+			}
+
+			this.buildFieldLayout(fieldPath, formControl, fieldNodes, form);
+		}
+
+		if (formColumn.getFormGroups() != null && formColumn.getFormGroups().length > 0) {
+			this.populateFormLayout(form, formColumn.getFormGroups(), fieldNodes);
+		}
+
+		columnNode.set("items", fieldNodes);
+		return columnNode;
+	}
+	
+	protected ObjectNode getColumnArray(AuthoringTemplate at, FormColumn formColumn) {
+		ObjectNode arrayNode = this.objectMapper.createObjectNode();
+		ArrayNode arrayItemNode = this.objectMapper.createArrayNode();
+		arrayNode.put("type", "array");
+		if (StringUtils.hasText(formColumn.getFiledPath())) {
+			arrayNode.put("key", formColumn.getFiledPath());
+		}
+		if (formColumn.getCondition() != null) {
+			this.setVisibleCondition(arrayNode, formColumn.getCondition());
+		}
+		arrayNode.set("items", arrayItemNode);
+		arrayItemNode.add(this.getColumnNode(at, formColumn));
+		return arrayNode;
+	}
+
+	protected ObjectNode getColumnNode(AuthoringTemplate at, FormColumn formColumn) {
+		ObjectNode columnNode = this.objectMapper.createObjectNode();
+		columnNode.put("type", "div");
+		columnNode.put("displayFlex", true);
+		columnNode.put("flex-direction", "column");
+		columnNode.put("fxFlex", formColumn.getFxFlex());
+
+		if (formColumn.getCondition() != null) {
+			this.setVisibleCondition(columnNode, formColumn.getCondition());
+		}
+
+		ArrayNode fieldNodes = this.objectMapper.createArrayNode();
+		for (String fieldPath : formColumn.getFormControls()) {
+			FormControl formControl = WcmUtils.getFormControl(at, fieldPath);
+
+			if (formControl == null) {
+				throw new WcmRepositoryException(String
+						.format("FormControl %s can not be found in authoring template %s", fieldPath, at.getName()));
+			}
+
+			this.buildFieldLayout(fieldPath, formControl, fieldNodes, at);
+		}
+
+		if (formColumn.getFormGroups() != null && formColumn.getFormGroups().length > 0) {
+			this.populateFormGroups(at, formColumn.getFormGroups(), fieldNodes);
+		}
+
 		columnNode.set("items", fieldNodes);
 		return columnNode;
 	}
 
-	protected void handleFieldLayout(String prefix, String name, FieldLayout fieldLayout, ArrayNode fieldNodes) {
+	protected void buildFieldLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+			Form form) {
 
-		if (fieldLayout.getFieldLayouts() == null || fieldLayout.getFieldLayouts().length == 0) {
-			ObjectNode fieldNode = this.objectMapper.createObjectNode();
-			if (fieldLayout.isExpandable()) {
+		if (formControl.getFormControls() == null || formControl.getFormControls().size() == 0) {
+			this.buildLeafNodeLayout(fieldPath, formControl, fieldNodes, form);
+		} else {
+			this.buildCompositeNodeLayout(fieldPath, formControl, fieldNodes, form);
+		}
+	}
+	
+	protected void buildLeafNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+			Form form) {
+
+		ObjectNode fieldNode = this.objectMapper.createObjectNode();
+
+		if (formControl.getFormControlLayout() != null) {
+			if (formControl.getFormControlLayout().isExpandable()) {
 				ObjectNode sectionNode = this.objectMapper.createObjectNode();
 				sectionNode.put("type", "section");
 				sectionNode.set("items", fieldNode);
 				sectionNode.put("expandable", true);
-				sectionNode.put("expanded", fieldLayout.isExpanded());
+				sectionNode.put("expanded", formControl.getFormControlLayout().isExpanded());
 				fieldNodes.add(sectionNode);
 			} else {
 				fieldNodes.add(fieldNode);
 			}
-			
-			
-			if (StringUtils.hasText(fieldLayout.getTitle())) {
-				fieldNode.put("title", fieldLayout.getTitle());
+			if (StringUtils.hasText(formControl.getFormControlLayout().getTitle())) {
+				fieldNode.put("title", formControl.getFormControlLayout().getTitle());
 			} else {
 				fieldNode.put("notitle", "true");
 			}
-			fieldNode.put("key", this.getLayoutFieldKey(fieldLayout.getKey(), prefix));
-			if (StringUtils.hasText(fieldLayout.getFlex())) {
-				fieldNode.put("flex", fieldLayout.getFlex());
+
+			if (StringUtils.hasText(formControl.getFormControlLayout().getFlex())) {
+				fieldNode.put("flex", formControl.getFormControlLayout().getFlex());
 			}
-			if (StringUtils.hasText(fieldLayout.getPlaceHolder())) {
-				fieldNode.put("placeholder", fieldLayout.getPlaceHolder());
+			if (StringUtils.hasText(formControl.getFormControlLayout().getPlaceHolder())) {
+				fieldNode.put("placeHolder", formControl.getFormControlLayout().getPlaceHolder());
 			}
-			if (fieldLayout.isMultiple()) {
-				fieldNode.put("type", "array");
-				if (fieldLayout.getListItems() > 0) {
-					fieldNode.put("listItems", fieldLayout.getListItems());
-				}
-				ArrayNode itemsNode = this.objectMapper.createArrayNode();
-				fieldNode.set("items", itemsNode);
-				itemsNode.add(fieldLayout.getItems());
-			} 
 		} else {
-			ArrayNode layoutNodes = null;
-			if (fieldLayout.isMultiple()) {
-				ObjectNode fieldNode = this.objectMapper.createObjectNode();
-				if (fieldLayout.isExpandable()) {
+			fieldNodes.add(fieldNode);
+		}
+
+		if (formControl.isMultiple()) {
+			fieldNode.put("type", "array");
+			if (formControl.getFormControlLayout() != null && formControl.getFormControlLayout().getListItems() > 0) {
+				fieldNode.put("listItems", formControl.getFormControlLayout().getListItems());
+			}
+			ObjectNode itemsNode = this.objectMapper.createObjectNode();
+			fieldNode.set("items", itemsNode);
+			itemsNode.put("key", WcmUtils.layoutPath(fieldPath, form));
+			fieldNode = itemsNode;
+		} else {
+			fieldNode.put("key", WcmUtils.layoutPath(fieldPath, form));
+		}
+
+		if (StringUtils.hasText(formControl.getControlType())) {
+			fieldNode.put("type", formControl.getControlType());
+			if (formControl.getFormControlLayout() != null) {
+				if ("textarea".equals(formControl.getControlType())) {
+					if (formControl.getFormControlLayout().getCols() != null) {
+						fieldNode.put("cols", formControl.getFormControlLayout().getCols());
+					}
+					if (formControl.getFormControlLayout().getRows() != null) {
+						fieldNode.put("rows", formControl.getFormControlLayout().getRows());
+					}
+				}
+			}
+		}
+
+		if (formControl.getCustomConstraint() != null) {
+			CustomConstraint customConstraint = formControl.getCustomConstraint();
+			ObjectNode functionsNode = this.objectMapper.createObjectNode();
+			fieldNode.set("functions", functionsNode);
+			for (JavascriptFunction function : customConstraint.getFunctions()) {
+				ObjectNode functionNode = this.objectMapper.createObjectNode();
+				functionsNode.set(function.getName(), functionNode);
+				functionNode.set("arguments", WcmUtils.toArrayNode(function.getParams()));
+				functionNode.put("body", function.getFunctionBody());
+			}
+
+		}
+	}
+
+	protected void buildCompositeNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+			Form form) {
+
+		// Array or section
+		String names[] = this.getNameAndPrefix(fieldPath);
+		String name = names[1];
+		// Form section
+		ArrayNode layoutNodes = null;
+		ObjectNode fieldNode = this.objectMapper.createObjectNode();
+
+		fieldNode.put("title", name);
+		if (formControl.getFormControlLayout() != null) {
+			if (StringUtils.hasText(formControl.getFormControlLayout().getTitle())) {
+				fieldNode.put("title", formControl.getFormControlLayout().getTitle());
+			}
+
+		}
+		if (formControl.isMultiple()) { // Array Items is of type Object,
+
+			fieldNode.put("type", "array");
+
+			if (formControl.getFormControlLayout() != null) {
+				if (formControl.getFormControlLayout().isExpandable()) {
 					ObjectNode sectionNode = this.objectMapper.createObjectNode();
 					sectionNode.put("type", "section");
 					sectionNode.set("items", fieldNode);
 					sectionNode.put("expandable", true);
-					sectionNode.put("expanded", fieldLayout.isExpanded());
+					sectionNode.put("expanded", formControl.getFormControlLayout().isExpanded());
 					fieldNodes.add(sectionNode);
-				} else {
-					fieldNodes.add(fieldNode);
 				}
-				
-				if (StringUtils.hasText(fieldLayout.getTitle())) {
-					fieldNode.put("title", fieldLayout.getTitle());
-				} else {
-					fieldNode.put("title", name);
+
+				if (formControl.getFormControlLayout().getListItems() > 0) {
+					fieldNode.put("listItems", formControl.getFormControlLayout().getListItems());
 				}
-				fieldNode.put("type", "array");
-				if (fieldLayout.getListItems() > 0) {
-					fieldNode.put("listItems", fieldLayout.getListItems());
-				}
-				fieldNode.put("title", name);
-				
-				if (fieldLayout.isDisplayFlex()) {
+
+				if (formControl.getFormControlLayout().isDisplayFlex()) {
 					ObjectNode itemsNode = this.objectMapper.createObjectNode();
 					fieldNode.set("items", itemsNode);
 					itemsNode.put("type", "div");
 					itemsNode.put("displayFlex", true);
-					itemsNode.put("flex-direction", StringUtils.hasText(fieldLayout.getFlexDirection()) ? fieldLayout.getFlexDirection() : "row");
+					if (StringUtils.hasText(formControl.getFormControlLayout().getFlex())) {
+						itemsNode.put("flex", formControl.getFormControlLayout().getFlex());
+					}
+					itemsNode.put("flex-direction",
+							StringUtils.hasText(formControl.getFormControlLayout().getFlexDirection())
+									? formControl.getFormControlLayout().getFlexDirection()
+									: "row");
 					layoutNodes = this.objectMapper.createArrayNode();
 					itemsNode.set("items", layoutNodes);
+				}
+			} else {
+				layoutNodes = this.objectMapper.createArrayNode();
+				fieldNode.set("items", layoutNodes);
+			}
+		} else { // section, div etc
+			fieldNodes.add(fieldNode);
+			fieldNode.put("type", formControl.getControlType());
+			if (formControl.getFormControlLayout() != null) {
+				if (formControl.getFormControlLayout().isExpandable()) {
+					fieldNode.put("expandable", true);
+					fieldNode.put("expanded", formControl.getFormControlLayout().isExpanded());
+				}
+				if (formControl.getFormControlLayout().isDisplayFlex()) {
+					fieldNode.put("displayFlex", true);
+					if (StringUtils.hasText(formControl.getFormControlLayout().getFlex())) {
+						fieldNode.put("flex", formControl.getFormControlLayout().getFlex());
+					}
+					fieldNode.put("flex-direction",
+							StringUtils.hasText(formControl.getFormControlLayout().getFlexDirection())
+									? formControl.getFormControlLayout().getFlexDirection()
+									: "row");
+				}
+			}
+			layoutNodes = this.objectMapper.createArrayNode();
+			fieldNode.set("items", layoutNodes);
+		}
+		for (FormControl childFormControl : formControl.getFormControls().values()) {
+			String childFieldPath = WcmUtils.fieldPath(fieldPath, childFormControl.getName());
+			this.buildFieldLayout(childFieldPath, childFormControl, layoutNodes, form);
+		}
+	}
+	
+	protected void buildFieldLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+			AuthoringTemplate at) {
+
+		if (formControl.getFormControls() == null || formControl.getFormControls().size() == 0) {
+			this.buildLeafNodeLayout(fieldPath, formControl, fieldNodes, at);
+		} else {
+			this.buildCompositeNodeLayout(fieldPath, formControl, fieldNodes, at);
+		}
+	}
+
+	protected void buildLeafNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+			AuthoringTemplate at) {
+
+		ObjectNode fieldNode = this.objectMapper.createObjectNode();
+
+		if (formControl.getFormControlLayout() != null) {
+			if (formControl.getFormControlLayout().isExpandable()) {
+				ObjectNode sectionNode = this.objectMapper.createObjectNode();
+				sectionNode.put("type", "section");
+				sectionNode.set("items", fieldNode);
+				sectionNode.put("expandable", true);
+				sectionNode.put("expanded", formControl.getFormControlLayout().isExpanded());
+				fieldNodes.add(sectionNode);
+			} else {
+				fieldNodes.add(fieldNode);
+			}
+			if (StringUtils.hasText(formControl.getFormControlLayout().getTitle())) {
+				fieldNode.put("title", formControl.getFormControlLayout().getTitle());
+			} else {
+				fieldNode.put("notitle", "true");
+			}
+
+			if (StringUtils.hasText(formControl.getFormControlLayout().getFlex())) {
+				fieldNode.put("flex", formControl.getFormControlLayout().getFlex());
+			}
+			if (StringUtils.hasText(formControl.getFormControlLayout().getPlaceHolder())) {
+				fieldNode.put("placeHolder", formControl.getFormControlLayout().getPlaceHolder());
+			}
+		} else {
+			fieldNodes.add(fieldNode);
+		}
+
+		if (formControl.isMultiple()) {
+			fieldNode.put("type", "array");
+			if (formControl.getFormControlLayout() != null && formControl.getFormControlLayout().getListItems() > 0) {
+				fieldNode.put("listItems", formControl.getFormControlLayout().getListItems());
+			}
+			ObjectNode itemsNode = this.objectMapper.createObjectNode();
+			fieldNode.set("items", itemsNode);
+			itemsNode.put("key", WcmUtils.layoutPath(fieldPath, at));
+			fieldNode = itemsNode;
+		} else {
+			fieldNode.put("key", WcmUtils.layoutPath(fieldPath, at));
+		}
+
+		if (StringUtils.hasText(formControl.getControlType())) {
+			fieldNode.put("type", formControl.getControlType());
+			if (formControl.getFormControlLayout() != null) {
+				if ("textarea".equals(formControl.getControlType())) {
+					if (formControl.getFormControlLayout().getCols() != null) {
+						fieldNode.put("cols", formControl.getFormControlLayout().getCols());
+					}
+					if (formControl.getFormControlLayout().getRows() != null) {
+						fieldNode.put("rows", formControl.getFormControlLayout().getRows());
+					}
+				}
+			}
+		}
+
+		if (formControl.getCustomConstraint() != null) {
+			CustomConstraint customConstraint = formControl.getCustomConstraint();
+			ObjectNode functionsNode = this.objectMapper.createObjectNode();
+			fieldNode.set("functions", functionsNode);
+			for (JavascriptFunction function : customConstraint.getFunctions()) {
+				ObjectNode functionNode = this.objectMapper.createObjectNode();
+				functionsNode.set(function.getName(), functionNode);
+				functionNode.set("arguments", WcmUtils.toArrayNode(function.getParams()));
+				functionNode.put("body", function.getFunctionBody());
+			}
+
+		}
+	}
+
+	protected void buildCompositeNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+			AuthoringTemplate at) {
+
+		// Array or section
+		String names[] = this.getNameAndPrefix(fieldPath);
+		String name = names[1];
+		// Form section
+		ArrayNode layoutNodes = null;
+		ObjectNode fieldNode = this.objectMapper.createObjectNode();
+
+		fieldNode.put("title", name);
+		if (formControl.getFormControlLayout() != null) {
+			if (StringUtils.hasText(formControl.getFormControlLayout().getTitle())) {
+				fieldNode.put("title", formControl.getFormControlLayout().getTitle());
+			}
+
+		}
+		if (formControl.isMultiple()) { // Array Items is of type Object,
+
+			fieldNode.put("type", "array");
+			layoutNodes = this.objectMapper.createArrayNode();
+			if (formControl.getFormControlLayout() != null) {
+				if (formControl.getFormControlLayout().isExpandable()) {
+					ObjectNode sectionNode = this.objectMapper.createObjectNode();
+					sectionNode.put("type", "section");
+					sectionNode.set("items", fieldNode);
+					sectionNode.put("expandable", true);
+					sectionNode.put("expanded", formControl.getFormControlLayout().isExpanded());
+					fieldNodes.add(sectionNode);
 				} else {
-					layoutNodes = this.objectMapper.createArrayNode();
+					fieldNodes.add(fieldNode);
+				}
+
+				if (formControl.getFormControlLayout().getListItems() > 0) {
+					fieldNode.put("listItems", formControl.getFormControlLayout().getListItems());
+				}
+
+				if (formControl.getFormControlLayout().isDisplayFlex()) {
+					ObjectNode itemsNode = this.objectMapper.createObjectNode();
+					fieldNode.set("items", itemsNode);
+					itemsNode.put("type", "div");
+					itemsNode.put("displayFlex", true);
+					if (StringUtils.hasText(formControl.getFormControlLayout().getFlex())) {
+						itemsNode.put("flex", formControl.getFormControlLayout().getFlex());
+					}
+					itemsNode.put("flex-direction",
+							StringUtils.hasText(formControl.getFormControlLayout().getFlexDirection())
+									? formControl.getFormControlLayout().getFlexDirection()
+									: "row");
+					itemsNode.set("items", layoutNodes);
+				} else {
 					fieldNode.set("items", layoutNodes);
 				}
 			} else {
-				layoutNodes = fieldNodes;
+				fieldNode.set("items", layoutNodes);
 			}
-			
-			for (FieldLayout childFieldLayout: fieldLayout.getFieldLayouts()) {
-				handleFieldLayout(prefix, childFieldLayout.getName(), childFieldLayout, layoutNodes);
+		} else { // section, div etc
+			fieldNodes.add(fieldNode);
+			fieldNode.put("type", formControl.getControlType());
+			if (formControl.getFormControlLayout() != null) {
+				if (formControl.getFormControlLayout().isExpandable()) {
+					fieldNode.put("expandable", true);
+					fieldNode.put("expanded", formControl.getFormControlLayout().isExpanded());
+				}
+				if (formControl.getFormControlLayout().isDisplayFlex()) {
+					fieldNode.put("displayFlex", true);
+					if (StringUtils.hasText(formControl.getFormControlLayout().getFlex())) {
+						fieldNode.put("flex", formControl.getFormControlLayout().getFlex());
+					}
+					fieldNode.put("flex-direction",
+							StringUtils.hasText(formControl.getFormControlLayout().getFlexDirection())
+									? formControl.getFormControlLayout().getFlexDirection()
+									: "row");
+				}
 			}
+			layoutNodes = this.objectMapper.createArrayNode();
+			fieldNode.set("items", layoutNodes);
+		}
+		for (FormControl childFormControl : formControl.getFormControls().values()) {
+			String childFieldPath = WcmUtils.fieldPath(fieldPath, childFormControl.getName());
+			this.buildFieldLayout(childFieldPath, childFormControl, layoutNodes, at);
 		}
 	}
-	
+
 	protected String[] getNameAndPrefix(String fieldName) {
 		String names[] = fieldName.split("\\.", 2);
 		if (names.length == 1) {
-			names = new String[] { "", names[0]};
+			names = new String[] { "", names[0] };
 		}
 		return names;
-	}
-	
-	protected Optional<FieldLayout> getAssociationLayout(FormColumn formColumn, String controlName) {
-		FieldLayout associationLayout = null;
-		for (FieldLayout layout : formColumn.getFieldLayouts()) {
-			if (controlName.equals(layout.getName())) {
-				associationLayout = layout;
-				break;
-			}
-		}
-		return associationLayout == null ? Optional.empty() : Optional.of(associationLayout);
-	}
-
-	protected String getLayoutFieldKey(String key, String prefix) {
-		return (prefix.length() > 0) ? String.format("%s.%s", prefix, key) : key;
 	}
 
 	protected String getJcrType(RestNode node) {
 		String jcrType = "";
-		for (RestProperty property: node.getJcrProperties()) {
+		for (RestProperty property : node.getJcrProperties()) {
 			if ("bpw:jcrType".equals(property.getName())) {
 				jcrType = property.getValues().get(0);
 				break;
@@ -788,20 +1756,20 @@ public abstract class BaseWcmRestController {
 		}
 		return jcrType;
 	}
-	
+
 	protected Stream<RenderTemplate> getRenderTemplates(RenderTemplate rt, HttpServletRequest request)
 			throws WcmRepositoryException {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode themeNode = (RestNode) this.itemHandler.item(baseUrl, rt.getRepository(), rt.getWorkspace(),
-					"/library/" + rt.getLibrary() + "/renderTemplate", 5);
+					"/library/" + rt.getLibrary() + "/renderTemplate", WcmConstants.RENDER_TEMPLATE_DEPATH);
 			return themeNode.getChildren().stream().filter(this::isRenderTemplate)
 					.map(node -> this.toRenderTemplate(node, rt.getRepository(), rt.getWorkspace(), rt.getLibrary()));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
 	}
-	
+
 	protected RenderTemplate toRenderTemplate(RestNode node, String repository, String workspace, String library) {
 		RenderTemplate rt = new RenderTemplate();
 		rt.setRepository(repository);
@@ -824,29 +1792,29 @@ public abstract class BaseWcmRestController {
 				rt.setResourceName(property.getValues().get(0));
 			} else if ("bpw:isQuery".equals(property.getName())) {
 				rt.setQuery(Boolean.parseBoolean(property.getValues().get(0)));
-			} 
+			}
 		}
-		
+
 		List<RenderTemplateLayoutRow> rows = new ArrayList<>();
-		for (RestNode rowNode: node.getChildren()) {
-			if (this.wcmUtils.checkNodeType(rowNode, "bpw:RenderTemplateLayoutRow")) {
+		for (RestNode rowNode : node.getChildren()) {
+			if (WcmUtils.checkNodeType(rowNode, "bpw:RenderTemplateLayoutRow")) {
 				RenderTemplateLayoutRow row = new RenderTemplateLayoutRow();
 				rows.add(row);
 				List<RenderTemplateLayoutColumn> columns = new ArrayList<>();
-				for (RestNode columnNode: rowNode.getChildren()) {
-					if (this.wcmUtils.checkNodeType(columnNode, "bpw:RenderTemplateLayoutColumn")) {
+				for (RestNode columnNode : rowNode.getChildren()) {
+					if (WcmUtils.checkNodeType(columnNode, "bpw:RenderTemplateLayoutColumn")) {
 						RenderTemplateLayoutColumn column = new RenderTemplateLayoutColumn();
-						columns.add(column);	
+						columns.add(column);
 						for (RestProperty property : columnNode.getJcrProperties()) {
 							if ("bpw:id".equals(property.getName())) {
 								column.setId(property.getValues().get(0));
 							} else if ("bpw:widtd".equals(property.getName())) {
 								column.setWidth(Integer.parseInt(property.getValues().get(0)));
-							} 
+							}
 						}
 						List<ResourceElementRender> elements = new ArrayList<>();
-						for (RestNode elementNode: columnNode.getChildren()) {
-							if (this.wcmUtils.checkNodeType(elementNode, "bpw:ResourceElementRender")) {
+						for (RestNode elementNode : columnNode.getChildren()) {
+							if (WcmUtils.checkNodeType(elementNode, "bpw:ResourceElementRender")) {
 								ResourceElementRender element = new ResourceElementRender();
 								elements.add(element);
 								element.setName(elementNode.getName());
@@ -854,24 +1822,24 @@ public abstract class BaseWcmRestController {
 									if ("bpw:source".equals(property.getName())) {
 										element.setSource(property.getValues().get(0));
 										break;
-									} 
+									}
 								}
 							}
 						}
 						column.setElements(elements.toArray(new ResourceElementRender[elements.size()]));
-						
+
 					}
 				}
 				row.setColumns(columns.toArray(new RenderTemplateLayoutColumn[columns.size()]));
 			}
 		}
-		
+
 		if (rows.size() > 0) {
 			rt.setRows(rows.toArray(new RenderTemplateLayoutRow[rows.size()]));
 		}
 		return rt;
 	}
-	
+
 	protected RenderTemplate toRenderTemplateWithLibrary(RestNode node, String repository, String workspace) {
 		RenderTemplate rtWithLibrary = new RenderTemplate();
 		rtWithLibrary.setRepository(repository);
@@ -879,71 +1847,70 @@ public abstract class BaseWcmRestController {
 		rtWithLibrary.setLibrary(node.getName());
 		return rtWithLibrary;
 	}
-	
-	protected Map<String, RenderTemplate> doGetRenderTemplates(String repository,
-			String workspace, HttpServletRequest request) 
-			throws WcmRepositoryException {
+
+	protected Map<String, RenderTemplate> doGetRenderTemplates(String repository, String workspace,
+			HttpServletRequest request) throws WcmRepositoryException {
 		Map<String, RenderTemplate> renderTemplates = this.getRenderTemplateLibraries(repository, workspace, request)
-				.flatMap(rt -> this.getRenderTemplates(rt, request)).collect(Collectors.toMap(
-						rt -> String.format(WcmConstants.WCM_RT_PATH_PATTERN, rt.getLibrary(), rt.getName()), 
+				.flatMap(rt -> this.getRenderTemplates(rt, request))
+				.collect(Collectors.toMap(
+						rt -> String.format(WcmConstants.WCM_RT_PATH_PATTERN, rt.getLibrary(), rt.getName()),
 						Function.identity()));
 
 		return renderTemplates;
 
 	}
-	
+
 	protected Stream<RenderTemplate> getRenderTemplateLibraries(String repository, String workspace,
 			HttpServletRequest request) throws WcmRepositoryException {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					"/library", 1);
+			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, "/library",
+					WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toRenderTemplateWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
 	}
-	
-	protected Map<String, ContentAreaLayout> doGetContentAreaLayouts(
-			String repository,
-			String workspace, 
-			HttpServletRequest request) 
-			throws WcmRepositoryException {
+
+	protected Map<String, ContentAreaLayout> doGetContentAreaLayouts(String repository, String workspace,
+			HttpServletRequest request) throws WcmRepositoryException {
 		String baseUrl = RestHelper.repositoryUrl(request);
-		Map<String, ContentAreaLayout> contentAreaLayouts = this.getContentAreaLayoutLibraries(repository, workspace, baseUrl)
+		Map<String, ContentAreaLayout> contentAreaLayouts = this
+				.getContentAreaLayoutLibraries(repository, workspace, baseUrl)
 				.flatMap(layout -> this.getContentArealayouts(layout, baseUrl))
-				.collect(Collectors.toMap(
-						layout -> String.format( WcmConstants.WCM_CONTENT_LAYOUT_PATH_PATTERN, layout.getLibrary(), layout.getName()), 
-						Function.identity()));
+				.collect(Collectors.toMap(layout -> String.format(WcmConstants.WCM_CONTENT_LAYOUT_PATH_PATTERN,
+						layout.getLibrary(), layout.getName()), Function.identity()));
 
 		return contentAreaLayouts;
 	}
-	
-	protected Stream<ContentAreaLayout> getContentAreaLayoutLibraries(String repository, String workspace, String baseUrl)
-			throws WcmRepositoryException {
+
+	protected Stream<ContentAreaLayout> getContentAreaLayoutLibraries(String repository, String workspace,
+			String baseUrl) throws WcmRepositoryException {
 		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					"/library", 1);
+			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, "/library",
+					WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toContentAreaLayoutWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
 	}
-	
+
 	private Stream<ContentAreaLayout> getContentArealayouts(ContentAreaLayout contentAreaLayout, String baseUrl)
 			throws WcmRepositoryException {
 		try {
-			RestNode contentAreaLayoutNode = (RestNode) this.itemHandler.item(baseUrl, contentAreaLayout.getRepository(),
-					contentAreaLayout.getWorkspace(), "/library/" + contentAreaLayout.getLibrary() + "/contentAreaLayout", 4);
+			RestNode contentAreaLayoutNode = (RestNode) this.itemHandler.item(baseUrl,
+					contentAreaLayout.getRepository(), contentAreaLayout.getWorkspace(),
+					"/library/" + contentAreaLayout.getLibrary() + "/contentAreaLayout",
+					WcmConstants.CONTENT_AREA_LAYOUT_DEPTH);
 			return contentAreaLayoutNode.getChildren().stream().filter(this::isContentAreaLayout)
 					.map(node -> this.toContentAreaLayout(node, contentAreaLayout));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
 	}
-	
+
 	private ContentAreaLayout toContentAreaLayoutWithLibrary(RestNode node, String repository, String workspace) {
 		ContentAreaLayout contentAreaLayoutWithLibrary = new ContentAreaLayout();
 		contentAreaLayoutWithLibrary.setRepository(repository);
@@ -951,7 +1918,7 @@ public abstract class BaseWcmRestController {
 		contentAreaLayoutWithLibrary.setLibrary(node.getName());
 		return contentAreaLayoutWithLibrary;
 	}
-	
+
 	protected ContentAreaLayout toContentAreaLayout(RestNode node, ContentAreaLayout layout) {
 		ContentAreaLayout contentAreaLayout = new ContentAreaLayout();
 		contentAreaLayout.setRepository(layout.getRepository());
@@ -963,13 +1930,13 @@ public abstract class BaseWcmRestController {
 			if (" bpw:contentWidth".equals(property.getName())) {
 				contentAreaLayout.setContentWidth(Integer.parseInt(property.getValues().get(0)));
 				break;
-			} 
+			}
 		}
 
 		List<LayoutRow> rows = new ArrayList<>();
 
 		node.getChildren().forEach(childNode -> {
-			if (this.wcmUtils.checkNodeType(childNode, "bpw:contentAreaSidePanel")) {
+			if (WcmUtils.checkNodeType(childNode, "bpw:contentAreaSidePanel")) {
 				SidePane sidepane = new SidePane();
 				for (RestProperty property : childNode.getJcrProperties()) {
 					if ("bpw:isLeft".equals(property.getName())) {
@@ -980,7 +1947,7 @@ public abstract class BaseWcmRestController {
 				}
 				sidepane.setViewers(this.resolveResourceViewer(childNode));
 				contentAreaLayout.setSidePane(sidepane);
-			} else if (this.wcmUtils.checkNodeType(childNode, "bpw:layoutRow")) {
+			} else if (WcmUtils.checkNodeType(childNode, "bpw:layoutRow")) {
 				LayoutRow row = this.resolveLayoutRow(childNode);
 				rows.add(row);
 			}
@@ -988,12 +1955,12 @@ public abstract class BaseWcmRestController {
 		contentAreaLayout.setRows(rows.toArray(new LayoutRow[rows.size()]));
 		return contentAreaLayout;
 	}
-	
+
 	protected ResourceViewer[] resolveResourceViewer(RestNode restNode) {
 		List<ResourceViewer> viewers = new ArrayList<>();
-		
+
 		restNode.getChildren().forEach(viewerNode -> {
-			if (this.wcmUtils.checkNodeType(viewerNode, "bpw:resourceViewer")) {
+			if (WcmUtils.checkNodeType(viewerNode, "bpw:resourceViewer")) {
 				ResourceViewer viewer = new ResourceViewer();
 				for (RestProperty property : viewerNode.getJcrProperties()) {
 					if ("bpw:title".equals(property.getName())) {
@@ -1009,11 +1976,11 @@ public abstract class BaseWcmRestController {
 		});
 		return viewers.toArray(new ResourceViewer[viewers.size()]);
 	}
-	
+
 	protected LayoutRow resolveLayoutRow(RestNode restNode) {
 		LayoutRow row = new LayoutRow();
 		LayoutColumn columns[] = restNode.getChildren().stream()
-				.filter(node -> this.wcmUtils.checkNodeType(node, "bpw:layoutColumn")).map(this::toLayoutColumn)
+				.filter(node -> WcmUtils.checkNodeType(node, "bpw:layoutColumn")).map(this::toLayoutColumn)
 				.toArray(LayoutColumn[]::new);
 		row.setColumns(columns);
 		return row;
@@ -1030,310 +1997,331 @@ public abstract class BaseWcmRestController {
 		return column;
 	}
 
-	protected Map<String, AuthoringTemplate> doGetAuthoringTemplates(String repository,
-			String workspace, HttpServletRequest request) 
-			throws WcmRepositoryException {
+	protected Map<String, AuthoringTemplate> doGetAuthoringTemplates(String repository, String workspace,
+			HttpServletRequest request) throws WcmRepositoryException {
 		String baseUrl = RestHelper.repositoryUrl(request);
-		Map<String, AuthoringTemplate> authoringTemplates = this.getAuthoringTemplateLibraries(repository, workspace, baseUrl)
+		Map<String, AuthoringTemplate> authoringTemplates = this
+				.getAuthoringTemplateLibraries(repository, workspace, baseUrl)
 				.flatMap(at -> this.getAuthoringTemplates(at, baseUrl))
 				.collect(Collectors.toMap(
-						at -> String.format(WcmConstants.WCM_AT_PATH_PATTERN, at.getLibrary(), at.getName()), 
+						at -> String.format(WcmConstants.WCM_AT_PATH_PATTERN, at.getLibrary(), at.getName()),
 						Function.identity()));
 
 		return authoringTemplates;
 	}
-	
+
 	protected Stream<AuthoringTemplate> getAuthoringTemplates(AuthoringTemplate at, String baseUrl)
 			throws WcmRepositoryException {
 		try {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
-					String.format(WcmConstants.NODE_AT_ROOT_PATH_PATTERN, at.getLibrary()), 8);
-			
-			return atNode.getChildren().stream().filter(this::isAuthortingTemplate)
-					.map(node -> this.wcmUtils.toAuthoringTemplate(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
+					String.format(WcmConstants.NODE_AT_ROOT_PATH_PATTERN, at.getLibrary()),
+					WcmConstants.AT_JSON_FORM_DEPATH);
+
+			return atNode.getChildren().stream().filter(this::isAuthortingTemplate).map(node -> this.wcmUtils
+					.toAuthoringTemplate(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
 		} catch (RepositoryException e) {
 			e.printStackTrace();
 			throw new WcmRepositoryException(e);
 		}
 	}
-	
-	protected SiteConfig doGetSiteConfig(
-			HttpServletRequest request,
-			String repository,
-			String workspace,
-			String library, 
-			String siteConfigName) throws WcmRepositoryException {
+
+	protected Map<String, Form> doGetForms(String repository, String workspace, HttpServletRequest request)
+			throws WcmRepositoryException {
+		String baseUrl = RestHelper.repositoryUrl(request);
+		Map<String, Form> forms = this.getFormLibraries(repository, workspace, baseUrl)
+				.flatMap(form -> this.getForms(form, baseUrl))
+				.collect(Collectors.toMap(
+						form -> String.format(WcmConstants.WCM_FORM_PATH_PATTERN, form.getLibrary(), form.getName()),
+						Function.identity()));
+
+		return forms;
+	}
+
+	protected Stream<Form> getForms(Form form, String baseUrl) throws WcmRepositoryException {
+		try {
+			RestNode formFolderNode = (RestNode) this.itemHandler.item(baseUrl, form.getRepository(), form.getWorkspace(),
+					String.format(WcmConstants.NODE_FORM_ROOT_PATH_PATTERN, form.getLibrary()),
+					WcmConstants.FORM_JSON_FORM_DEPATH);
+
+			return formFolderNode.getChildren().stream().filter(this::isForm).map(
+					node -> this.wcmUtils.toForm(node, form.getRepository(), form.getWorkspace(), form.getLibrary()));
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+			throw new WcmRepositoryException(e);
+		}
+	}
+
+	protected SiteConfig doGetSiteConfig(HttpServletRequest request, String repository, String workspace,
+			String library, String siteConfigName) throws WcmRepositoryException {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH_PATTERN, library, siteConfigName);
-			RestNode siteConfigNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, 2);
+			RestNode siteConfigNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath,
+					WcmConstants.SITE_CONFIG_DEPTH);
 			SiteConfig siteConfig = this.toSiteConfig(repository, workspace, library, siteConfigNode);
 			siteConfig.setRepository(repository);
 			siteConfig.setWorkspace(workspace);
 			siteConfig.setLibrary(library);
-		
+
 			return siteConfig;
 		} catch (RepositoryException re) {
 			throw new WcmRepositoryException(re);
-		}			
+		}
 	}
-	
-	protected SiteConfig toSiteConfig(
-			String repository,
-			String workspace,
-			String library, 
-			RestNode siteConfigNode) {
-		
+
+	protected SiteConfig toSiteConfig(String repository, String workspace, String library, RestNode siteConfigNode) {
+
 		// try {
-			SiteConfig siteConfig = new SiteConfig();
-			
-			siteConfig.setRepository(repository);
-			siteConfig.setWorkspace(workspace);
-			siteConfig.setLibrary(library);
-			
-			this.wcmUtils.resolveResourceNode(siteConfig, siteConfigNode);
-			for (RestProperty property : siteConfigNode.getJcrProperties()) {
-				if ("bpw:name".equals(property.getName())) {
-					siteConfig.setName(property.getValues().get(0));
-				} else if ("bpw:colorTheme".equals(property.getName())) {
-					siteConfig.setColorTheme(property.getValues().get(0));
-				} else if ("bpw:customScrollbars".equals(property.getName())) {
-					siteConfig.setCustomScrollbars(Boolean.parseBoolean(property.getValues().get(0)));
-				} else if ("bpw:rootSiteArea".equals(property.getName())) {
-					siteConfig.setRootSiteArea(property.getValues().get(0));
-				} 
-			}
-			
-			for (RestNode layoutNode: siteConfigNode.getChildren()) {
-				if ("layout".equals(layoutNode.getName())) {
-					PageLayout layout = new PageLayout();
-					siteConfig.setLayout(layout);
-					for (RestProperty property : layoutNode.getJcrProperties()) {
-						if ("bpw:style".equals(property.getName())) {
-							layout.setStyle(property.getValues().get(0));
-						} else if ("bpw:width".equals(property.getName())) {
-							layout.setWidth(property.getValues().get(0));
-						} 
+		SiteConfig siteConfig = new SiteConfig();
+
+		siteConfig.setRepository(repository);
+		siteConfig.setWorkspace(workspace);
+		siteConfig.setLibrary(library);
+		siteConfig.setName(siteConfigNode.getName());
+		
+		
+		for (RestNode childNode : siteConfigNode.getChildren()) {
+			if (WcmConstants.WCM_NODE_ELEMENTS.equals(childNode.getName())) {
+				for (RestProperty property : childNode.getJcrProperties()) {
+					if ("colorTheme".equals(property.getName())) {
+						siteConfig.setColorTheme(property.getValues().get(0));
+					} else if ("customScrollbars".equals(property.getName())) {
+						siteConfig.setCustomScrollbars(Boolean.parseBoolean(property.getValues().get(0)));
+					} else if ("rootSiteArea".equals(property.getName())) {
+						siteConfig.setRootSiteArea(property.getValues().get(0));
 					}
-					for (RestNode node: layoutNode.getChildren()) {
-						if ("navbar".equals(node.getName())) {
-							NavBar navbar = new NavBar();
-							layout.setNavbar(navbar);						
-							for (RestProperty property : node.getJcrProperties()) {
-								if ("folded".equals(property.getName())) {
-									navbar.setFolded(Boolean.getBoolean(property.getValues().get(0)));
-								} else if ("primaryBackground".equals(property.getName())) {
-									navbar.setPrimaryBackground(property.getValues().get(0));
-								} else if ("secondaryBackground".equals(property.getName())) {
-									navbar.setSecondaryBackground(property.getValues().get(0));
-								} else if ("variant".equals(property.getName())) {
-									navbar.setVariant(property.getValues().get(0));
-								} else if ("position".equals(property.getName())) {
-									navbar.setPosition(property.getValues().get(0));
-								} else if ("hidden".equals(property.getName())) {
-									navbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
-								} 
-							}
-						} else if ("toolbar".equals(node.getName())) {
-							Toolbar toolbar = new Toolbar();
-							layout.setToolbar(toolbar);						
-							for (RestProperty property : node.getJcrProperties()) {
-								if ("customBackgroundColor".equals(property.getName())) {
-									toolbar.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
-								} else if ("background".equals(property.getName())) {
-									toolbar.setBackground(property.getValues().get(0));
-								} else if ("position".equals(property.getName())) {
-									toolbar.setPosition(property.getValues().get(0));
-								} else if ("hidden".equals(property.getName())) {
-									toolbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
-								} 
-							}
-						} else if ("footer".equals(node.getName())) {
-							Footer footer = new Footer();
-							layout.setFooter(footer);				
-							for (RestProperty property : node.getJcrProperties()) {
-								if ("customBackgroundColor".equals(property.getName())) {
-									footer.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
-								} else if ("background".equals(property.getName())) {
-									footer.setBackground(property.getValues().get(0));
-								} else if ("position".equals(property.getName())) {
-									footer.setPosition(property.getValues().get(0));
-								} else if ("hidden".equals(property.getName())) {
-									footer.setHidden(Boolean.getBoolean(property.getValues().get(0)));
-								} 
-							}
-						} else if ("sidePanel".equals(node.getName())) {
-							SidePanel sidePanel = new SidePanel();
-							layout.setSidePanel(sidePanel);				
-							for (RestProperty property : node.getJcrProperties()) {
-								if ("position".equals(property.getName())) {
-									sidePanel.setPosition(property.getValues().get(0));
-								} else if ("hidden".equals(property.getName())) {
-									sidePanel.setHidden(Boolean.getBoolean(property.getValues().get(0)));
-								} 
+				}
+				for (RestNode layoutNode : childNode.getChildren()) {
+					if ("layout".equals(layoutNode.getName())) {
+						PageLayout layout = new PageLayout();
+						siteConfig.setLayout(layout);
+						for (RestProperty property : layoutNode.getJcrProperties()) {
+							if ("bpw:style".equals(property.getName())) {
+								layout.setStyle(property.getValues().get(0));
+							} else if ("bpw:width".equals(property.getName())) {
+								layout.setWidth(property.getValues().get(0));
 							}
 						}
+						for (RestNode node : layoutNode.getChildren()) {
+							if ("navbar".equals(node.getName())) {
+								NavBar navbar = new NavBar();
+								layout.setNavbar(navbar);
+								for (RestProperty property : node.getJcrProperties()) {
+									if ("folded".equals(property.getName())) {
+										navbar.setFolded(Boolean.getBoolean(property.getValues().get(0)));
+									} else if ("primaryBackground".equals(property.getName())) {
+										navbar.setPrimaryBackground(property.getValues().get(0));
+									} else if ("secondaryBackground".equals(property.getName())) {
+										navbar.setSecondaryBackground(property.getValues().get(0));
+									} else if ("variant".equals(property.getName())) {
+										navbar.setVariant(property.getValues().get(0));
+									} else if ("position".equals(property.getName())) {
+										navbar.setPosition(property.getValues().get(0));
+									} else if ("hidden".equals(property.getName())) {
+										navbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+									}
+								}
+							} else if ("toolbar".equals(node.getName())) {
+								Toolbar toolbar = new Toolbar();
+								layout.setToolbar(toolbar);
+								for (RestProperty property : node.getJcrProperties()) {
+									if ("customBackgroundColor".equals(property.getName())) {
+										toolbar.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
+									} else if ("background".equals(property.getName())) {
+										toolbar.setBackground(property.getValues().get(0));
+									} else if ("position".equals(property.getName())) {
+										toolbar.setPosition(property.getValues().get(0));
+									} else if ("hidden".equals(property.getName())) {
+										toolbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+									}
+								}
+							} else if ("footer".equals(node.getName())) {
+								Footer footer = new Footer();
+								layout.setFooter(footer);
+								for (RestProperty property : node.getJcrProperties()) {
+									if ("customBackgroundColor".equals(property.getName())) {
+										footer.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
+									} else if ("background".equals(property.getName())) {
+										footer.setBackground(property.getValues().get(0));
+									} else if ("position".equals(property.getName())) {
+										footer.setPosition(property.getValues().get(0));
+									} else if ("hidden".equals(property.getName())) {
+										footer.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+									}
+								}
+							} else if ("sidePanel".equals(node.getName())) {
+								SidePanel sidePanel = new SidePanel();
+								layout.setSidePanel(sidePanel);
+								for (RestProperty property : node.getJcrProperties()) {
+									if ("position".equals(property.getName())) {
+										sidePanel.setPosition(property.getValues().get(0));
+									} else if ("hidden".equals(property.getName())) {
+										sidePanel.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+									}
+								}
+							}
+						}
+						break;
 					}
-					break;
-				} 
-			}
-			return siteConfig;
-//		} catch (RepositoryException re) {
-//			throw new WcmRepositoryException(re);
-//		}
+				}
+			} else if (WcmConstants.WCM_NODE_PROPERTIES.equals(childNode.getName())) {
+				this.wcmUtils.resolveResourceNode(siteConfig, childNode);
+			} 
+		}
+		return siteConfig;
 	}
-	
-	protected Map<String, SiteArea> getSiteAreas(
-			String repository,			
-			String workspace, 
-			String library,
-			String rootSiteArea,
-			String baseUrl
-			) throws RepositoryException {
+
+	protected Map<String, SiteArea> getSiteAreas(String repository, String workspace, String library,
+			String rootSiteArea, String baseUrl) throws RepositoryException {
 		RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-				String.format(WcmConstants.NODE_REL_PATH_PATTERN, library, rootSiteArea), 5);
+				String.format(WcmConstants.NODE_REL_PATH_PATTERN, library, rootSiteArea), WcmConstants.SITE_AREA_DEPTH);
 		Map<String, SiteArea> siteAreas = new HashMap<>();
-		for (RestNode node :saNode.getChildren()) {
+		for (RestNode node : saNode.getChildren()) {
 			if (this.isSiteArea(node)) {
 				this.toSiteArea(node, siteAreas);
 			}
 		}
 		return siteAreas;
 	}
-	
+
 	private SiteArea toSiteArea(RestNode saNode, Map<String, SiteArea> siteAreas) {
 		SiteArea sa = new SiteArea();
 		this.loadSiteArea(saNode, sa);
 
-		for (RestNode node :saNode.getChildren()) {
+		for (RestNode node : saNode.getChildren()) {
 			if (this.isSiteArea(node)) {
 				this.toSiteArea(node, siteAreas);
 			}
 		}
-		String url = sa.getProperties().get("url");
+		String url = (String)sa.getElements().get("url");
 		siteAreas.put(url.replace("/", "~"), sa);
 		return sa;
 	}
-	
+
 	protected void loadSiteArea(RestNode saNode, SiteArea sa) {
-		Map<String, String> elements = new HashMap<>();
-		Map<String, String> properties = new HashMap<>();
-		sa.setProperties(properties);
+		Map<String, Object> elements = new HashMap<>();
+		ResourceMixin resourceMixin = new ResourceMixin();
+		sa.setProperties(resourceMixin);
 		sa.setElements(elements);
-		for (RestProperty property: saNode.getJcrProperties()) {
-			if ("bpw:body".equals(property.getName())) {
-				elements.put("body", property.getValues().get(0));
-			} else if (property.getName().startsWith("bpw:")){
-				properties.put(this.getSiteAreaPropertyName(property.getName()), property.getValues().get(0));
-			}
-		}
-		
-		for (RestNode node: saNode.getChildren()) {
-		   if (this.wcmUtils.checkNodeType(node, "bpw:properties") && ("bpw:metaData".equals(node.getName()))) {
-			   WcmProperties metadata = new WcmProperties();
-			   List<WcmProperty> propertyList = new ArrayList<>();
-			   for (RestNode kvNode: node.getChildren()) {
-				   if (this.wcmUtils.checkNodeType(kvNode, "bpw:property")) {
-					   WcmProperty wcmProperty = new WcmProperty();
-					   for (RestProperty property: kvNode.getJcrProperties()) {
-						   if ("bpw:name".equals(property.getName())) {
-							   wcmProperty.setName(property.getValues().get(0));
-						   } else if ("bpw:value".equals(property.getName())) {
-							   wcmProperty.setValue(property.getValues().get(0));
-						   }
-					   }
-					   propertyList.add(wcmProperty);
-				   }
-			   }
-			   metadata.setProperties(propertyList.toArray(new WcmProperty[propertyList.size()]));
-			   sa.setMetadata(metadata);
-		   } else if (this.wcmUtils.checkNodeType(node, "bpw:pageSearchData") && ("bpw:searchData".equals(node.getName()))) {
-			   SearchData searchData = new SearchData();
-			   for (RestProperty property: node.getJcrProperties()) {
-				   if ("description".equals(property.getName())) {
-					   searchData.setDescription(property.getValues().get(0));
-				   } else if ("keywords".equals(property.getName())) {
-					   searchData.setKeywords(property.getValues().toArray(new String[property.getValues().size()]));
-				   }
-			   }
-			   sa.setSearchData(searchData);
-		   } else if (this.wcmUtils.checkNodeType(node, "bpw:navigationBadge") && ("bpw:badge".equals(node.getName()))) {
-			   NavigationBadge badge = new NavigationBadge();
-			   for (RestProperty property: node.getJcrProperties()) {
-				   if ("bpw:title".equals(property.getName())) {
-					   badge.setTitle(property.getValues().get(0));
-				   } else if ("bpw:translate".equals(property.getName())) {
-					   badge.setTranslate(property.getValues().get(0));
-				   } else if ("bpw:bg".equals(property.getName())) {
-					   badge.setBg(property.getValues().get(0));
-				   } else if ("bpw:fg".equals(property.getName())) {
-					   badge.setFg(property.getValues().get(0));
-				   }
-			   }
-			   sa.setBadge(badge);
-		   } else if (this.wcmUtils.checkNodeType(node, "bpw:siteAreaLayout") && ("siteAreaLayout".equals(node.getName()))) {
-			   SiteAreaLayout siteAreaLayout = new SiteAreaLayout();
-			   List<LayoutRow> rows = new ArrayList<>();
-			   for (RestProperty property : node.getJcrProperties()) {
+		for (RestNode childNode : saNode.getChildren()) {
+			if (WcmConstants.WCM_NODE_ELEMENTS.equals(childNode.getName())) {
+				for (RestProperty property : childNode.getJcrProperties()) {
+					if (property.getName().indexOf(":") < 0) {
+						// elements.put(this.getSiteAreaPropertyName(property.getName()), property.getValues().get(0));
+						elements.put(property.getName(), property.getValues().get(0));
+					}
+				}
+				
+				for (RestNode node : childNode.getChildren()) {
+					if (WcmUtils.checkNodeType(node, "bpw:navigationBadge")
+							&& ("bpw:badge".equals(node.getName()))) {
+						NavigationBadge badge = new NavigationBadge();
+						for (RestProperty property : node.getJcrProperties()) {
+							if ("bpw:title".equals(property.getName())) {
+								badge.setTitle(property.getValues().get(0));
+							} else if ("bpw:translate".equals(property.getName())) {
+								badge.setTranslate(property.getValues().get(0));
+							} else if ("bpw:bg".equals(property.getName())) {
+								badge.setBg(property.getValues().get(0));
+							} else if ("bpw:fg".equals(property.getName())) {
+								badge.setFg(property.getValues().get(0));
+							}
+						}
+						sa.setBadge(badge);
+						break;
+					}
+				}
+			} else if (WcmConstants.WCM_NODE_PROPERTIES.equals(childNode.getName())) {
+				this.wcmUtils.resolveResourceMixin(resourceMixin, childNode);  
+			} else if (WcmUtils.checkNodeType(childNode, "bpw:siteAreaLayout")
+					&& ("siteAreaLayout".equals(childNode.getName()))) {
+				SiteAreaLayout siteAreaLayout = new SiteAreaLayout();
+				List<LayoutRow> rows = new ArrayList<>();
+				for (RestProperty property : childNode.getJcrProperties()) {
 					if ("bpw:contentWidth".equals(property.getName())) {
 						siteAreaLayout.setContentWidth(Integer.parseInt(property.getValues().get(0)));
 						break;
-					} 
-			   }
-			   for (RestNode childNode: node.getChildren()) {
-				   if (this.wcmUtils.checkNodeType(childNode, "bpw:contentAreaSidePanel") && "sidePane".equals(childNode.getName())) {
-					   SidePane sidePane = new SidePane();
-					   for (RestProperty property : childNode.getJcrProperties()) {
+					}
+				}
+				for (RestNode layoutNode : childNode.getChildren()) {
+					if (WcmUtils.checkNodeType(layoutNode, "bpw:contentAreaSidePanel")
+							&& "sidePane".equals(layoutNode.getName())) {
+						SidePane sidePane = new SidePane();
+						for (RestProperty property : layoutNode.getJcrProperties()) {
 							if ("bpw:isLeft".equals(property.getName())) {
 								sidePane.setLeft(Boolean.parseBoolean(property.getValues().get(0)));
 							} else if ("bpw:width".equals(property.getName())) {
 								sidePane.setWidth(Integer.parseInt(property.getValues().get(0)));
 							}
 						}
-					   sidePane.setViewers(this.resolveResourceViewer(childNode));
-					   siteAreaLayout.setSidePane(sidePane);
-				   } else if (this.wcmUtils.checkNodeType(childNode, "bpw:layoutRow")) {
-						LayoutRow row = this.resolveLayoutRow(childNode);
+						sidePane.setViewers(this.resolveResourceViewer(layoutNode));
+						siteAreaLayout.setSidePane(sidePane);
+					} else if (WcmUtils.checkNodeType(layoutNode, "bpw:layoutRow")) {
+						LayoutRow row = this.resolveLayoutRow(layoutNode);
 						rows.add(row);
-				   }
-			   }
-			   siteAreaLayout.setRows(rows.toArray(new LayoutRow[rows.size()]));
-			   sa.setSiteAreaLayout(siteAreaLayout);
-		   }
-		}
+					}
+				}
+				siteAreaLayout.setRows(rows.toArray(new LayoutRow[rows.size()]));
+				sa.setSiteAreaLayout(siteAreaLayout);
+			} else if (WcmUtils.checkNodeType(childNode, "bpw:properties") && ("bpw:metaData".equals(childNode.getName()))) {
+				WcmProperties metadata = new WcmProperties();
+				List<WcmProperty> propertyList = new ArrayList<>();
+				for (RestNode kvNode : childNode.getChildren()) {
+					if (WcmUtils.checkNodeType(kvNode, "bpw:property")) {
+						WcmProperty wcmProperty = new WcmProperty();
+						for (RestProperty property : kvNode.getJcrProperties()) {
+							if ("bpw:name".equals(property.getName())) {
+								wcmProperty.setName(property.getValues().get(0));
+							} else if ("bpw:value".equals(property.getName())) {
+								wcmProperty.setValue(property.getValues().get(0));
+							}
+						}
+						propertyList.add(wcmProperty);
+					}
+				}
+				metadata.setProperties(propertyList.toArray(new WcmProperty[propertyList.size()]));
+				sa.setMetadata(metadata);
+			} else if (WcmUtils.checkNodeType(childNode, "bpw:pageSearchData")
+					&& ("bpw:searchData".equals(childNode.getName()))) {
+				SearchData searchData = new SearchData();
+				for (RestProperty property : childNode.getJcrProperties()) {
+					if ("description".equals(property.getName())) {
+						searchData.setDescription(property.getValues().get(0));
+					} else if ("keywords".equals(property.getName())) {
+						searchData.setKeywords(property.getValues().toArray(new String[property.getValues().size()]));
+					}
+				}
+				sa.setSearchData(searchData);
+			}
+		} 
 	}
-	
-	private String getSiteAreaPropertyName(String propertyName) {
-		return propertyName.split(":", 2)[1];
-	}
-	
-	protected Navigation[] getNavigations(
-			String baseUrl,
-			String repository,			
-			String workspace, 
-			String library,
-			String rootSiteArea
-			) throws RepositoryException {
+
+//	private String getSiteAreaPropertyName(String propertyName) {
+//		return propertyName.split(":", 2)[1];
+//	}
+
+	protected Navigation[] getNavigations(String baseUrl, String repository, String workspace, String library,
+			String rootSiteArea) throws RepositoryException {
 		RestNode siteArea = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-				String.format(WcmConstants.NODE_REL_PATH_PATTERN, library, rootSiteArea), 3);
-		
+				String.format(WcmConstants.NODE_REL_PATH_PATTERN, library, rootSiteArea),
+				WcmConstants.NAVIGATION_DEPTH);
+
 		Navigation[] navigation = siteArea.getChildren().stream().filter(this::isSiteArea)
 				.map(node -> this.toNavigation(node)).toArray(Navigation[]::new);
 		return navigation;
 	}
-	
-	protected ControlField[] doGetControlField(String repository,
-			String workspace, HttpServletRequest request) 
+
+	protected ControlField[] doGetControlField(String repository, String workspace, HttpServletRequest request)
 			throws RepositoryException {
-			String baseUrl = RestHelper.repositoryUrl(request);
-			RestNode controlFieldFolder = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WcmConstants.NODE_CONTROL_FIELD_ROOT, 2);
-			ControlField[] ControlFileds = controlFieldFolder.getChildren().stream().filter(this::isControlField)
-					.map(this::toControlField).toArray(ControlField[]::new);
-	
-			return ControlFileds;
+		String baseUrl = RestHelper.repositoryUrl(request);
+		RestNode controlFieldFolder = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+				WcmConstants.NODE_CONTROL_FIELD_ROOT, WcmConstants.CONTROL_FIELD_DEPTH);
+		ControlField[] ControlFileds = controlFieldFolder.getChildren().stream().filter(this::isControlField)
+				.map(this::toControlField).toArray(ControlField[]::new);
+
+		return ControlFileds;
 	}
-	
+
 	private ControlField toControlField(RestNode node) {
 		ControlField controlField = new ControlField();
 		controlField.setName(node.getName());
@@ -1344,106 +2332,93 @@ public abstract class BaseWcmRestController {
 				controlField.setIcon(restProperty.getValues().get(0));
 			} else if ("bpw:hint".equals(restProperty.getName())) {
 				controlField.setHint(restProperty.getValues().get(0));
-			} 
-			
+			}
+
 		}
 		return controlField;
 	}
 	
 	private NavigationItem toNavigation(RestNode siteArea) {
-		Navigation navigation = new Navigation();
-		for (RestProperty property : siteArea.getJcrProperties()) {
-			if ("bpw:navigationId".equals(property.getName())) {
-				navigation.setId(property.getValues().get(0));
-			} else if ("bpw:navigationType".equals(property.getName())) {
-				navigation.setType(NavigationType.valueOf(property.getValues().get(0)));
-			} else if ("bpw:title".equals(property.getName())) {
-				navigation.setTitle(property.getValues().get(0));
-			} else if ("bpw:translate".equals(property.getName())) {
-				navigation.setTranslate(property.getValues().get(0));
-			} else if ("bpw:icon".equals(property.getName())) {
-				navigation.setIcon(property.getValues().get(0));
-			} else if ("bpw:url".equals(property.getName())) {
-				navigation.setUrl(property.getValues().get(0));
-			}
-		}
-		for (RestNode node: siteArea.getChildren()) {
-			if (this.wcmUtils.checkNodeType(node, "bpw:navigationBadge")) {
-				NavigationBadge badge = new NavigationBadge();
-				for (RestProperty property : node.getJcrProperties()) {
-					if ("bpw:title".equals(property.getName())) {
-						badge.setTitle(property.getValues().get(0));
-					} else if ("bpw:translate".equals(property.getName())) {
-						badge.setTranslate(property.getValues().get(0));
-					} else if ("bpw:bg".equals(property.getName())) {
-						badge.setBg(property.getValues().get(0));
-					} else if ("bpw:fg".equals(property.getName())) {
-						badge.setFg(property.getValues().get(0));
-					} 
-				}
-				navigation.setBadge(badge);
-			}
-		}
-		NavigationItem[] navigationItems = siteArea.getChildren().stream().filter(this::isSiteArea)
-				.map(node -> this.toNavigationItem(node, 1)).toArray(NavigationItem[]::new);
-		navigation.setChildren(navigationItems);
-		
-		return navigation;
+		return this.toNavigation(siteArea, 0);
 	}
 	
-	private NavigationItem toNavigationItem(RestNode siteArea, int level) {
-		NavigationItem navigation = new NavigationItem();
-		for (RestProperty property : siteArea.getJcrProperties()) {
-			if ("bpw:navigationId".equals(property.getName())) {
-				navigation.setId(property.getValues().get(0));
-			} else if ("bpw:navigationType".equals(property.getName())) {
-				navigation.setType(NavigationType.valueOf(property.getValues().get(0)));
-			} else if ("bpw:title".equals(property.getName())) {
-				navigation.setTitle(property.getValues().get(0));
-			} else if ("bpw:translate".equals(property.getName())) {
-				navigation.setTranslate(property.getValues().get(0));
-			} else if ("bpw:icon".equals(property.getName())) {
-				navigation.setIcon(property.getValues().get(0));
-			} else if ("bpw:url".equals(property.getName())) {
-				navigation.setUrl(property.getValues().get(0));
+	private NavigationItem toNavigation(RestNode siteArea, int level) {
+		
+		NavigationItem navigation = (level == 0) ? new Navigation() : new NavigationItem();
+		for (RestNode childNode : siteArea.getChildren()) {
+			if (WcmConstants.WCM_NODE_ELEMENTS.equals(childNode.getName())) {
+				for (RestProperty property : childNode.getJcrProperties()) {
+					if ("navigationId".equals(property.getName())) {
+						navigation.setId(property.getValues().get(0));
+					} else if ("navigationType".equals(property.getName())) {
+						navigation.setType(NavigationType.valueOf(property.getValues().get(0)));
+					} else if ("translate".equals(property.getName())) {
+						navigation.setTranslate(property.getValues().get(0));
+					} else if ("icon".equals(property.getName())) {
+						navigation.setIcon(property.getValues().get(0));
+					} else if ("url".equals(property.getName())) {
+						navigation.setUrl(property.getValues().get(0));
+					}
+				}
+				
+				for (RestNode node : childNode.getChildren()) {
+					if (WcmUtils.checkNodeType(node, "bpw:navigationBadge")) {
+						NavigationBadge badge = new NavigationBadge();
+						for (RestProperty property : node.getJcrProperties()) {
+							if ("bpw:title".equals(property.getName())) {
+								badge.setTitle(property.getValues().get(0));
+							} else if ("bpw:translate".equals(property.getName())) {
+								badge.setTranslate(property.getValues().get(0));
+							} else if ("bpw:bg".equals(property.getName())) {
+								badge.setBg(property.getValues().get(0));
+							} else if ("bpw:fg".equals(property.getName())) {
+								badge.setFg(property.getValues().get(0));
+							}
+						}
+						navigation.setBadge(badge);
+					}
+				}
+				
+			} else if (WcmConstants.WCM_NODE_PROPERTIES.equals(childNode.getName())) {
+				for (RestProperty property : childNode.getJcrProperties()) {
+					if ("bpw:title".equals(property.getName())) {
+						navigation.setTitle(property.getValues().get(0));
+						break;
+					}
+				}
 			}
 		}
 		if (level <= 2) {
 			NavigationItem[] navigationItems = siteArea.getChildren().stream().filter(this::isSiteArea)
-					.map(node -> this.toNavigationItem(node, level + 1)).toArray(NavigationItem[]::new);
+					.map(node -> this.toNavigation(node, level + 1)).toArray(NavigationItem[]::new);
 			navigation.setChildren(navigationItems);
 		}
 		return navigation;
 	}
-	
-	protected QueryStatement[] doLoadQueryStatements(
-		String repository,
-		String workspace,
-		HttpServletRequest request) 
+
+	protected QueryStatement[] doLoadQueryStatements(String repository, String workspace, HttpServletRequest request)
 			throws WcmRepositoryException {
-		
+
 		String baseUrl = RestHelper.repositoryUrl(request);
-		
+
 		QueryStatement[] queryStatements = this.getQueryLibraries(repository, workspace, baseUrl)
-				.flatMap(library -> this.doGetQueryStatements(library, baseUrl))
-				.toArray(QueryStatement[]::new);
-		
+				.flatMap(library -> this.doGetQueryStatements(library, baseUrl)).toArray(QueryStatement[]::new);
+
 		return queryStatements;
 	}
-	
-	protected Stream<QueryStatement> getQueryLibraries(String repository, String workspace,
-			String baseUrl) throws WcmRepositoryException {
+
+	protected Stream<QueryStatement> getQueryLibraries(String repository, String workspace, String baseUrl)
+			throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WcmConstants.NODE_ROOT_PATH, 1);
-			return bpwizardNode.getChildren().stream()
-					.filter(this::notSystemLibrary)
+					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
+			return bpwizardNode.getChildren().stream().filter(this::notSystemLibrary)
 					.map(node -> toQueryStatementWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
 	}
-	
+
 	protected QueryStatement toQueryStatementWithLibrary(RestNode node, String repository, String workspace) {
 		QueryStatement queryStatementWithLibrary = new QueryStatement();
 		queryStatementWithLibrary.setRepository(repository);
@@ -1451,49 +2426,58 @@ public abstract class BaseWcmRestController {
 		queryStatementWithLibrary.setLibrary(node.getName());
 		return queryStatementWithLibrary;
 	}
-	
+
 	protected Stream<QueryStatement> doGetQueryStatements(QueryStatement query, String baseUrl)
 			throws WcmRepositoryException {
 		try {
-			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
-					String.format(WcmConstants.NODE_QUERY_ROOT_PATH_PATTERN, query.getLibrary()), 3);
-			
-			return atNode.getChildren().stream().filter(this::isQueryStatement)
-					.map(node -> this.toQueryStatement(node, query.getRepository(), query.getWorkspace(), query.getLibrary()));
+			RestNode queryStatementNode = (RestNode) this.itemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
+					String.format(WcmConstants.NODE_QUERY_ROOT_PATH_PATTERN, query.getLibrary()),
+					WcmConstants.QUERY_STMT_DEPTH);
+
+			return queryStatementNode.getChildren().stream().filter(this::isQueryStatement).map(node -> this.toQueryStatement(node,
+					query.getRepository(), query.getWorkspace(), query.getLibrary()));
 		} catch (RepositoryException e) {
 			e.printStackTrace();
 			throw new WcmRepositoryException(e);
 		}
 	}
-	
-	protected QueryStatement toQueryStatement(RestNode node, String repository, String workspace, String library) {
+
+	protected QueryStatement toQueryStatement(RestNode restNode, String repository, String workspace, String library) {
 		QueryStatement queryStatement = new QueryStatement();
-		
+
 		queryStatement.setRepository(repository);
 		queryStatement.setWorkspace(workspace);
 		queryStatement.setLibrary(library);
-		
-		queryStatement.setName(node.getName());
-		for (RestProperty restProperty : node.getJcrProperties()) {
-			if ("bpw:title".equals(restProperty.getName())) {
-				queryStatement.setTitle(restProperty.getValues().get(0));
-			} else if ("bpw:query".equals(restProperty.getName())) {
-				queryStatement.setQuery(restProperty.getValues().get(0));
-			} else if ("bpw:columns".equals(restProperty.getName())) {
-				queryStatement.setColumns(restProperty.getValues().toArray(new String[restProperty.getValues().size()]));
-			}  
-		}
+
+		queryStatement.setName(restNode.getName());
+		restNode.getChildren().forEach(node -> {
+			if (WcmUtils.isElementFolderNode(node)) {
+				for (RestProperty restProperty : node.getJcrProperties()) {
+					if ("query".equals(restProperty.getName())) {
+						queryStatement.setQuery(restProperty.getValues().get(0));
+					} else if ("columns".equals(restProperty.getName())) {
+						queryStatement
+								.setColumns(restProperty.getValues().toArray(new String[restProperty.getValues().size()]));
+					}
+				}
+			} else if (WcmUtils.isPropertyFolderNode(node)) {
+				for (RestProperty restProperty : node.getJcrProperties()) {
+					if ("bpw:title".equals(restProperty.getName())) {
+						queryStatement.setTitle(restProperty.getValues().get(0));
+						break;
+					}
+				}
+			} 
+		});
 		return queryStatement;
 	}
-	
-	protected Stream<String> getLibraries(String repository, String workspace,
-			String baseUrl) throws WcmRepositoryException {
+
+	protected Stream<String> getLibraries(String repository, String workspace, String baseUrl)
+			throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WcmConstants.NODE_ROOT_PATH, 1);
-			return bpwizardNode.getChildren().stream()
-					.filter(this::notSystemLibrary)
-					.map(RestNode::getName);
+					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
+			return bpwizardNode.getChildren().stream().filter(this::notSystemLibrary).map(RestNode::getName);
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}

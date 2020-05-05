@@ -113,11 +113,13 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			String path = String.format(WcmConstants.NODE_AT_PATH_PATTERN, at.getLibrary(), at.getName());
 			String repositoryName = at.getRepository();
 			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, at.toJson());
+			this.wcmUtils.registerNodeType(at.getWorkspace(), at);
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
 				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
-				// session.save();
+				this.wcmUtils.registerNodeType(WcmConstants.DRAFT_WS, at);
 			}
+			
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}

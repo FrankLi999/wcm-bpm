@@ -9,7 +9,8 @@ public class WcmSystem {
 	private Map<String, WcmOperation[]> operations;
 	
 	private Theme jcrThemes[];
-	private Map<String, JsonForm[]> jsonForms;
+	private Map<String, JsonForm[]> authoringTemplateForms;
+	private Map<String, JsonForm[]> forms;
 	private QueryStatement[] queryStatements;
 	private Map<String, RenderTemplate> renderTemplates;
 	private Map<String, ContentAreaLayout> contentAreaLayouts;
@@ -40,11 +41,11 @@ public class WcmSystem {
 	public void setOperations(Map<String, WcmOperation[]> operations) {
 		this.operations = operations;
 	}
-	public Map<String, JsonForm[]> getJsonForms() {
-		return jsonForms;
+	public Map<String, JsonForm[]> getAuthoringTemplateForms() {
+		return authoringTemplateForms;
 	}
-	public void setJsonForms(Map<String, JsonForm[]> jsonForms) {
-		this.jsonForms = jsonForms;
+	public void setAuthoringTemplateForms(Map<String, JsonForm[]> authoringTemplateForms) {
+		this.authoringTemplateForms = authoringTemplateForms;
 	}
 	public Map<String, RenderTemplate> getRenderTemplates() {
 		return renderTemplates;
@@ -106,10 +107,16 @@ public class WcmSystem {
 	public void setQueryStatements(QueryStatement[] queryStatements) {
 		this.queryStatements = queryStatements;
 	}
+	public Map<String, JsonForm[]> getForms() {
+		return forms;
+	}
+	public void setForms(Map<String, JsonForm[]> forms) {
+		this.forms = forms;
+	}
 	@Override
 	public String toString() {
 		return "WcmSystem [wcmRepositories=" + Arrays.toString(wcmRepositories) + ", operations=" + operations
-				+ ", jcrThemes=" + Arrays.toString(jcrThemes) + ", jsonForms=" + jsonForms + ", queryStatements="
+				+ ", jcrThemes=" + Arrays.toString(jcrThemes) + ", authoringTemplateForms=" + authoringTemplateForms + ", forms=" + forms + ", queryStatements="
 				+ Arrays.toString(queryStatements) + ", renderTemplates=" + renderTemplates + ", contentAreaLayouts="
 				+ contentAreaLayouts + ", authoringTemplates=" + authoringTemplates + ", siteConfig=" + siteConfig
 				+ ", navigations=" + Arrays.toString(navigations) + ", siteAreas=" + siteAreas + ", controlFiels="

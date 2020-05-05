@@ -1,29 +1,33 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import org.modeshape.jcr.api.JcrConstants;
 import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
+import com.bpwizard.wcm.repo.rest.WcmUtils;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ContentItem extends WorkflowNode {
+public class ContentItem {
 	
 	private static final long serialVersionUID = -6271150516003474875L;
 	private String id;
-	private String[] categories;
 	private String repository;
 	private String workspace;
 	private String wcmPath;
-	private String authoringTemplate;
 	private String lifeCycleStage;
-
-	private Map<String, String> elements;
-	private Map<String, String> properties;
+	private boolean locked;
+	private boolean checkedOut;
+	private WorkflowNode workflow;
+	private AccessControlEntry acl;
+	private WcmProperties metadata;
+	private SearchData searchData;
+	
+	private ContentItemProperties properties;
+	private ContentItemElements elements;
 	
 	public String getId() {
 		return id;
@@ -31,18 +35,6 @@ public class ContentItem extends WorkflowNode {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return this.properties.get("name");
-	}
-
-	public String[] getCategories() {
-		return categories;
-	}
-
-	public void setCategories(String[] categories) {
-		this.categories = categories;
 	}
 
 	public String getRepository() {
@@ -69,31 +61,6 @@ public class ContentItem extends WorkflowNode {
 		this.wcmPath = wcmPath;
 	}
 
-	public String getAuthoringTemplate() {
-		return authoringTemplate;
-	}
-
-	public void setAuthoringTemplate(String authoringTemplate) {
-		this.authoringTemplate = authoringTemplate;
-	}
-
-
-	public Map<String, String> getElements() {
-		return elements;
-	}
-
-	public void setElements(Map<String, String> elements) {
-		this.elements = elements;
-	}
-
-	public Map<String, String> getProperties() {
-		return properties;
-	}
-
-	public void setProperties(Map<String, String> properties) {
-		this.properties = properties;
-	}
-
 	public String getLifeCycleStage() {
 		return lifeCycleStage;
 	}
@@ -102,100 +69,169 @@ public class ContentItem extends WorkflowNode {
 		this.lifeCycleStage = lifeCycleStage;
 	}
 
+	public WorkflowNode getWorkflow() {
+		return workflow;
+	}
+
+	public void setWorkflow(WorkflowNode workflow) {
+		this.workflow = workflow;
+	}
+
+	public AccessControlEntry getAcl() {
+		return acl;
+	}
+
+	public void setAcl(AccessControlEntry acl) {
+		this.acl = acl;
+	}
+
+	public WcmProperties getMetadata() {
+		return metadata;
+	}
+
+	public void setMetadata(WcmProperties metadata) {
+		this.metadata = metadata;
+	}
+
+	public SearchData getSearchData() {
+		return searchData;
+	}
+
+	public void setSearchData(SearchData searchData) {
+		this.searchData = searchData;
+	}
+
+	public ContentItemProperties getProperties() {
+		return properties;
+	}
+
+	public void setProperties(ContentItemProperties properties) {
+		this.properties = properties;
+	}
+
+	public ContentItemElements getElements() {
+		return elements;
+	}
+
+	public void setElements(ContentItemElements elements) {
+		this.elements = elements;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	public boolean isCheckedOut() {
+		return checkedOut;
+	}
+
+	public void setCheckedOut(boolean checkedOut) {
+		this.checkedOut = checkedOut;
+	}
+
 	//TODO: super.toJson()
-	public JsonNode toJson() {
+	public JsonNode toJson(AuthoringTemplate at) throws JsonProcessingException {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
+		ObjectNode properties = JsonUtils.createObjectNode();
+		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
+		jsonNode.set(WcmConstants.JCR_JSON_NODE_PROPERTIES, properties);
+		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, this.getProperties().getNodeType());
 		
-		jsonNode.set("children", children);
-		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:content");
-		jsonNode.put("bpw:authoringTemplate", this.getAuthoringTemplate());
-
-		String name = this.properties.get("name");
-//		if (StringUtils.hasText(name)) {
-//			jsonNode.put("bpw:name", name);
-//			// this.properties.remove("name");			
-//		}
-		String title = this.properties.get("title");
-		title = StringUtils.hasText(title) ? title : name;
-		if (StringUtils.hasText(title)) {
-			this.setTitle(title);
-			// this.properties.remove("title");
+		if (StringUtils.hasText(this.lifeCycleStage)) {
+			properties.put("bpw:lifecycleStage", this.lifeCycleStage);
 		}
-		if (StringUtils.hasText(this.properties.get("description"))) {
-			this.setDescription(this.properties.get("description"));
-			// this.properties.remove("description");
-		}
-		if (StringUtils.hasText(this.properties.get("workflow"))) {
-			this.setWorkflow(this.properties.get("workflow")); 
-			// this.properties.remove("workflow");
-		}
-		if (StringUtils.hasText(this.properties.get("publishDate"))) {
-			this.setPublishDate(this.properties.get("publishDate"));
-			// this.properties.remove("publishDate");
-		}
-		if (StringUtils.hasText(this.properties.get("expireDate"))) {
-			this.setExpireDate(this.properties.get("expireDate"));
-			// this.properties.remove("expireDate");
-		}
-		if (StringUtils.hasText(this.properties.get("categories"))) {
-			String categories[] = (this.properties.get("categories")).split(",");
-			if (categories != null && categories.length > 0) {
-				ArrayNode valueArray = JsonUtils.creatArrayNode();
-				for (String value : categories) {
-					valueArray.add(value);
-				}
-				jsonNode.set("bpw:categories", valueArray);
-			}
-			// this.properties.remove("categories");
-		}
-		
 		
 		ObjectNode comementFolderNode = JsonUtils.createObjectNode();
 		ObjectNode comementFolderChildren = JsonUtils.createObjectNode();
-		comementFolderNode.set("children", comementFolderChildren);
-		comementFolderNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:commentFolder");
-		children.set("comments", comementFolderNode);
+		comementFolderNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, comementFolderChildren);
+		comementFolderNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:ContentItemCommentFolder");
+		children.set(WcmConstants.WCM_NODE_COMMENTTS, comementFolderNode);
+		
+		ObjectNode workflowNode = JsonUtils.createObjectNode();
+		workflowNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:workflowNode");
+		children.set("bpw:workflow", workflowNode);
+		this.workflow.toJson(workflowNode);
+		
+		ObjectNode aclNode = JsonUtils.createObjectNode();
+		aclNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:AccessControlEntry");
+		children.set("bpw:acl", aclNode);
+
+    	if (this.getAcl() != null) {
+			ObjectNode aclEntryNode = JsonUtils.createObjectNode();
+			children.set("bpw:acl", aclEntryNode);
+			acl.toJson(aclEntryNode);
+		}
+
+		ObjectNode metaDataNode = JsonUtils.createObjectNode();
+		aclNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:properties");
+		children.set("bpw:metadata", metaDataNode);
+		if (this.getMetadata() != null) {
+			ObjectNode metaDataNodeChildren = JsonUtils.createObjectNode();
+			metaDataNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, metaDataNodeChildren);
+			metaDataNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:properties");
+			WcmProperties metadata = (WcmProperties)this.getMetadata();
+			for (WcmProperty property: metadata.getProperties()) {
+				
+				ObjectNode kvNode = JsonUtils.createObjectNode();
+				metaDataNodeChildren.set(property.getName(), kvNode);
+				kvNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:property");
+				kvNode.put("bpw:name", property.getName());
+				kvNode.put("bpw:value", property.getValue());
+			}
+		} 
+		
+		ObjectNode searchDataNode = JsonUtils.createObjectNode();
+		aclNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:pageSearchData");
+		children.set("bpw:searchData", aclNode);
+		if (this.getSearchData() != null) {	
+
+			SearchData searchData = (SearchData) this.getSearchData();
+			if (StringUtils.hasText(searchData.getDescription())) {
+				searchDataNode.put("description", searchData.getDescription());
+			}
+			if (searchData.getKeywords() != null) {
+				String[] keywords = searchData.getKeywords();
+				ArrayNode keywordArray = WcmUtils.toArrayNode(searchData.getKeywords());
+				for (String keyword : keywords) {
+					keywordArray.add(keyword);
+				}				
+				searchDataNode.set("keywords", keywordArray);
+			}	
+		}
 		
 		ObjectNode elementsNode = JsonUtils.createObjectNode();
-		ObjectNode elementsNodeChildren = JsonUtils.createObjectNode();
-		elementsNode.set("children", elementsNodeChildren);
-		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:contentElementFolder");
-		children.set("elements", elementsNode);
+		ObjectNode elementsChildren = JsonUtils.createObjectNode();
+		elementsNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, elementsChildren);
+		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE,  WcmUtils.getElementFolderType(this.getProperties().getNodeType()));
+		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
 		
-		Map<String, String> contentElements = this.getElements();
-		for (String key: contentElements.keySet()) {
-			ObjectNode elementNode = JsonUtils.createObjectNode();
-			elementsNodeChildren.set(key, elementNode);
-			elementNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentElement");
-			elementNode.put("bpw:multiple", false);
-			elementNode.put("bpw:value", contentElements.get(key));
-		}
+		this.getElements().toJson(elementsNode, elementsChildren, at);
 		
 		ObjectNode propertiesNode = JsonUtils.createObjectNode();
 		ObjectNode propertiesNodeChildren = JsonUtils.createObjectNode();
-		propertiesNode.set("children", propertiesNodeChildren);
-		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:propertyElementFolder");
-		children.set("properties", propertiesNode);
+		propertiesNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, propertiesNodeChildren);
+		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE,  WcmConstants.JCR_TYPE_PROPERTY_FOLDER);
+		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
 		
-		Map<String, String> propertyElements = this.getElements();
-		for (String key: propertyElements.keySet()) {
-			ObjectNode propertyNode = JsonUtils.createObjectNode();
-			propertiesNodeChildren.set(key, propertyNode);
-			propertyNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:contentElement");
-			propertyNode.put("bpw:multiple", false);
-			propertyNode.put("bpw:value", contentElements.get(key));
-		}
-		
-		super.toJson(jsonNode, children);
+		ContentItemProperties contentItemProperties = this.getProperties();
+		contentItemProperties.toJson(propertiesNode, propertiesNodeChildren);
 		return jsonNode;
 	}
 
 	@Override
 	public String toString() {
-		return "ContentItem [id=" + id + ", name=" + this.getName() + ", categories=" + Arrays.toString(categories)
-				+ ", repository=" + repository + ", workspace=" + workspace + ", wcmPath=" + wcmPath
-				+ ", authoringTemplate=" + authoringTemplate + ", lifeCycleStage=" + lifeCycleStage + ", elements="
-				+ elements + ", properties=" + properties + ", toString()=" + super.toString() + "]";
+		return "ContentItem [id=" + id + ", repository=" + repository + ", workspace=" + workspace + ", wcmPath="
+				+ wcmPath + ", lifeCycleStage=" + lifeCycleStage + ", locked=" + locked + ", checkedOut=" + checkedOut
+				+ ", workflow=" + workflow + ", acl=" + acl + ", metadata=" + metadata + ", searchData=" + searchData
+				+ ", properties=" + properties + ", elements=" + elements + "]";
 	}
 }

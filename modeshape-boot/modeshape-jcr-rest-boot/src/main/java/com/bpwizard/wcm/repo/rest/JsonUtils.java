@@ -1,8 +1,11 @@
 package com.bpwizard.wcm.repo.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 
 public class JsonUtils {
 	protected static final ObjectMapper mapper = new ObjectMapper();
@@ -13,5 +16,25 @@ public class JsonUtils {
 	
 	public static ArrayNode creatArrayNode() {
         return mapper.createArrayNode();
+    }
+	
+	public static TextNode createTextNode(String fromValue) {
+        return new TextNode(fromValue);
+    }
+	
+	public static JsonNode readTree(String fromValue) {
+        return mapper.convertValue(fromValue, JsonNode.class);
+    }
+	
+	public static ArrayNode readTree(String fromValues[]) throws JsonProcessingException {
+		ArrayNode arrayNode = creatArrayNode();
+		for (String value: fromValues) {
+			arrayNode.add(mapper.readTree(value));
+		}
+		return arrayNode;
+    }
+	
+	public static String writeValueAsString(JsonNode jsonNode) throws JsonProcessingException {
+        return mapper.writeValueAsString(jsonNode);
     }
 }

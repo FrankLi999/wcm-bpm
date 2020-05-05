@@ -7,6 +7,7 @@ import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -91,21 +92,28 @@ public class ValidationRule implements HasName, Serializable, Comparable<Validat
 	public JsonNode toJson() {
 		
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
-		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:validationRule");
+		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_validationRuleType");
 		
+		ObjectNode children = JsonUtils.createObjectNode();
+		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
+		
+		ObjectNode propertiesNode = JsonUtils.createObjectNode();
+		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
+		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ContentItemproperties");	
 		if (StringUtils.hasText(this.getTitle())) {
-			jsonNode.put("bpw:title", this.getTitle());
-		}
-		
+			propertiesNode.put("bpw:title", this.getTitle());
+		}		
 		if (StringUtils.hasText(this.getDescription())) {
-			jsonNode.put("bpw:description", this.getDescription());
+			propertiesNode.put("bpw:description", this.getDescription());
 		}
 		
 		jsonNode.put("bpw:name", this.getName());
+		ObjectNode elementsNode = JsonUtils.createObjectNode();
+		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
+		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_validationRuleType_ElementFolder");
 		String type = StringUtils.hasLength(this.getType())? this.getType() : "regex";
-		jsonNode.put("bpw:type", type);		
-		jsonNode.put("bpw:rule", this.getRule());
-				
+		elementsNode.put("type", type);		
+		elementsNode.put("rule", this.getRule());				
 		return jsonNode;
 	}
 

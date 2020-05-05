@@ -7,6 +7,7 @@ public class FormStep {
 	private String stepTitle;
 	private int order;
 	private BaseFormGroup[] formGroups;
+	private VisbleCondition condition;
 	public String getStepName() {
 		return stepName;
 	}
@@ -31,9 +32,15 @@ public class FormStep {
 	public void setOrder(int order) {
 		this.order = order;
 	}
+	public VisbleCondition getCondition() {
+		return condition;
+	}
+	public void setCondition(VisbleCondition condition) {
+		this.condition = condition;
+	}
 	@Override
 	public String toString() {
 		return "FormStep [stepName=" + stepName + ", stepTitle=" + stepTitle + ", order=" + order + ", formGroups="
-				+ Arrays.toString(formGroups) + ", toString()=" + super.toString() + "]";
+				+ Arrays.toString(formGroups) + ", condition=" + condition + "]";
 	}
 }

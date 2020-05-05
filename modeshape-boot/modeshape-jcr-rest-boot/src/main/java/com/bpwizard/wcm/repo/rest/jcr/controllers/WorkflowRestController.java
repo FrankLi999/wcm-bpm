@@ -166,7 +166,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
-					String.format(WcmConstants.NODE_WORKFLOW_ROOT_PATH_PATTERN, at.getLibrary()), 3);
+					String.format(WcmConstants.NODE_WORKFLOW_ROOT_PATH_PATTERN, at.getLibrary()), WcmConstants.BPMN_WORKFLOW_DEPTH);
 			
 			return atNode.getChildren().stream().filter(this::isBpmnWorkflow)
 					.map(node -> this.toBpmnWorkflow(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
@@ -180,7 +180,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			String baseUrl) throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WcmConstants.NODE_ROOT_PATH, 1);
+					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream()
 					.filter(this::notSystemLibrary)
 					.map(node -> toBpmnWorkflowWithLibrary(node, repository, workspace));
@@ -204,15 +204,26 @@ public class WorkflowRestController extends BaseWcmRestController {
 		bpmnWorkflow.setRepository(repository);
 		bpmnWorkflow.setWorkspace(workspace);
 		bpmnWorkflow.setLibrary(library);
-		for (RestProperty restProperty : node.getJcrProperties()) {
-			if ("bpw:title".equals(restProperty.getName())) {
-				bpmnWorkflow.setTitle(restProperty.getValues().get(0));
-			} else if ("bpw:description".equals(restProperty.getName())) {
-				bpmnWorkflow.setDescription(restProperty.getValues().get(0));
-			} else if ("bpw:bpmn".equals(restProperty.getName())) {
-				bpmnWorkflow.setBpmn(restProperty.getValues().get(0));
-			} 
+		for (RestNode childNode : node.getChildren()) {
+			if (WcmConstants.WCM_NODE_ELEMENTS.equals(childNode.getName())) {
+				for (RestProperty restProperty : childNode.getJcrProperties()) {
+					if ("bpw:bpmn".equals(restProperty.getName())) {
+						bpmnWorkflow.setBpmn(restProperty.getValues().get(0));
+						break;
+					} 
+				}
+				
+			} else if (WcmConstants.WCM_NODE_PROPERTIES.equals(childNode.getName())) {
+				for (RestProperty restProperty : childNode.getJcrProperties()) {
+					if ("bpw:title".equals(restProperty.getName())) {
+						bpmnWorkflow.setTitle(restProperty.getValues().get(0));
+					} else if ("bpw:description".equals(restProperty.getName())) {
+						bpmnWorkflow.setDescription(restProperty.getValues().get(0));
+					} 
+				}
+			}
 		}
+		
 		return bpmnWorkflow;
 	}
 }

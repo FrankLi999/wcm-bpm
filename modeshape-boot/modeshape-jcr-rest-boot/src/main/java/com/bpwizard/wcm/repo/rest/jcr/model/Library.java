@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import org.modeshape.jcr.api.JcrConstants;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.validation.LibraryName;
 import com.bpwizard.wcm.repo.validation.RepositoryName;
 import com.bpwizard.wcm.repo.validation.ValidateString;
@@ -75,15 +76,27 @@ public class Library implements Serializable, Comparable<Library> {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
 		
-		jsonNode.set("children", children);
-		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:library");
-		jsonNode.put("jcr:language", this.getLanguage());
-		jsonNode.put("bpw:title", this.getTitle());
-		jsonNode.put("bpw:description", this.getDescription());
+		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
+		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_libraryType");
+		
+		ObjectNode propertiesNode = JsonUtils.createObjectNode();
+		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
+		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ContentItemproperties");
+		propertiesNode.put("bpw:title", this.getTitle());
+		propertiesNode.put("bpw:description", this.getDescription());
+		
+		ObjectNode elementsNode = JsonUtils.createObjectNode();
+		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
+		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_libraryType_ElementFolder");
+		elementsNode.put("language", this.getLanguage());
 		
 		ObjectNode assetFolderNode = JsonUtils.createObjectNode();
 		children.set("asset", assetFolderNode);
 		assetFolderNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:assetFolder");
+		
+		ObjectNode formFolderNode = JsonUtils.createObjectNode();
+		children.set("form", formFolderNode);
+		formFolderNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formFolder");
 		
 		ObjectNode themeFolderNode = JsonUtils.createObjectNode();
 		children.set("theme", themeFolderNode);

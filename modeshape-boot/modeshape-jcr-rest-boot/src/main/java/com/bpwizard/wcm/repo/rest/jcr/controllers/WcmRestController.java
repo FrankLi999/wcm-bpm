@@ -54,7 +54,7 @@ public class WcmRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			Map<String, JsonForm[]> jsonForms = this.doGetAuthoringTemplateAsJsonForm(repository, workspace, request);
+			Map<String, JsonForm[]> jsonForms = this.doGetSystemAuthoringTemplateAsJsonForm(repository, workspace, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -197,7 +197,7 @@ public class WcmRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String absPath = WcmUtils.nodePath(filter.getWcmPath());
-			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, 2);
+			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.READ_DEPTH_TWO_LEVEL);
 			
 			WcmNode[] wcmNodes = saNode.getChildren().stream()
 			    .filter(node -> this.applyFilter(node, filter))

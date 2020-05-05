@@ -72,7 +72,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String library = rtPath.split("/", 5)[3];
 			RestNode rtNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					rtPath, 4);
+					rtPath, WcmConstants.RENDER_TEMPLATE_DEPATH);
 			
 			RenderTemplate rt = this.toRenderTemplate(rtNode, repository, workspace, library);
 			if (logger.isDebugEnabled()) {

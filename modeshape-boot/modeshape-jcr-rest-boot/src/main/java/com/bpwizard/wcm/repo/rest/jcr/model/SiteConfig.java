@@ -3,6 +3,7 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 import org.modeshape.jcr.api.JcrConstants;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -80,19 +81,27 @@ public class SiteConfig extends ResourceNode {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
 		
-		jsonNode.set("children", children);
+		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
+		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_siteConfigType");
 		
-		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:siteConfig");
-		jsonNode.put("bpw:name", this.getName());
-		jsonNode.put("bpw:colorTheme", this.getColorTheme());
-		jsonNode.put("bpw:rootSiteArea", this.getRootSiteArea());
-		jsonNode.put("bpw:customScrollbars", this.isCustomScrollbars());
+		ObjectNode propertiesNode = JsonUtils.createObjectNode();
+		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
+		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ContentItemproperties");
+		propertiesNode.put("bpw:name", this.getName());
+//		propertiesNode.put("bpw:title", this.getTitle());
+//		propertiesNode.put("bpw:description", this.getDescription());
 		
-
+		ObjectNode elementsNode = JsonUtils.createObjectNode();
+		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
+		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_siteConfigType_ElementFolder");
+		elementsNode.put("colorTheme", this.getColorTheme());
+		elementsNode.put("rootSiteArea", this.getRootSiteArea());
+		elementsNode.put("customScrollbars", this.isCustomScrollbars());
+		
 		ObjectNode layout = JsonUtils.createObjectNode();
-		children.set("layout", layout);
+		elementsNode.set("layout", layout);
 		ObjectNode layoutChildren = JsonUtils.createObjectNode();
-		layout.set("children", layoutChildren);
+		layout.set(WcmConstants.JCR_JSON_NODE_CHILDREN, layoutChildren);
 		
 		layout.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:pageLayout");
 		layout.put("bpw:style", this.layout.getStyle());

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
@@ -69,14 +70,19 @@ public class WcmSystemRestController extends BaseWcmRestController {
 				wcmSystem.setControlFiels(this.doGetControlField(repository, workspace, request));
 				wcmSystem.setWcmRepositories(this.getWcmRepositories(request));	
 
-				Map<String, JsonForm[]> jsonForms = this.doGetAuthoringTemplateAsJsonForm(repository, workspace, request);
-				wcmSystem.setJsonForms(jsonForms);
+				Map<String, JsonForm[]> authoringTemplateForms = this.doGetSystemAuthoringTemplateAsJsonForm(repository, workspace, request);
+				wcmSystem.setAuthoringTemplateForms(authoringTemplateForms);
+				
+				Map<String, JsonForm[]> forms = this.doGetSystemFormAsJsonForm(repository, workspace, request);
+				wcmSystem.setForms(forms);
 				
 				QueryStatement[] queryStatements = this.doLoadQueryStatements(repository, workspace, request);
 				wcmSystem.setQueryStatements(queryStatements);
 			} else {
-				Map<String, JsonForm[]> jsonForms = this.doGetApplicationJsonForm(repository, workspace, library, request);
-				wcmSystem.setJsonForms(jsonForms);
+				Map<String, JsonForm[]> authoringTemplateForms = this.doGetApplicationAuthoringTemplateAsJsonForm(repository, workspace, library, request);
+				wcmSystem.setAuthoringTemplateForms(authoringTemplateForms);
+				Map<String, JsonForm[]> forms = this.doGetApplicationFormAsJsonForm(repository, workspace, library, request);
+				wcmSystem.setForms(forms);
 			}
 			
 			wcmSystem.setJcrThemes(this.getTheme(repository, workspace, request));
@@ -142,9 +148,9 @@ public class WcmSystemRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode operationsNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					String.format(WcmConstants.NODE_ROOT_REL_PATH_PATTERN, WcmConstants.OPERATION_REL_PATH), 2);
+					String.format(WcmConstants.NODE_ROOT_REL_PATH_PATTERN, WcmConstants.OPERATION_REL_PATH), WcmConstants.OPERATION_DEFAULT);
 			Map<String, WcmOperation[]> wcmOperationMap = operationsNode.getChildren().stream()
-					.filter(node -> this.wcmUtils.checkNodeType(node, "bpw:supportedOpertions"))
+					.filter(node -> WcmUtils.checkNodeType(node, "bpw:supportedOpertions"))
 					.map(this::supportedOpertionsToWcmOperation)
 					.collect(Collectors.toMap(wcmOperations -> wcmOperations[0].getJcrType(), Function.identity()));
 			if (logger.isDebugEnabled()) {
@@ -180,7 +186,7 @@ public class WcmSystemRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WcmConstants.NODE_ROOT_PATH, 1);
+					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toThemeWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
@@ -191,7 +197,7 @@ public class WcmSystemRestController extends BaseWcmRestController {
 	private Stream<Theme> getThemes(Theme theme, String baseUrl) throws WcmRepositoryException {
 		try {
 			RestNode themeNode = (RestNode) this.itemHandler.item(baseUrl, theme.getRepositoryName(), theme.getWorkspace(),
-					String.format(WcmConstants.NODE_THEME_ROOT_PATH_PATTERN, theme.getLibrary()), 1);
+					String.format(WcmConstants.NODE_THEME_ROOT_PATH_PATTERN, theme.getLibrary()), WcmConstants.READ_DEPTH_DEFAULT);
 			return themeNode.getChildren().stream().filter(this::isTheme).map(node -> this.toTheme(node, theme));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
@@ -206,18 +212,34 @@ public class WcmSystemRestController extends BaseWcmRestController {
 		return themeWithLibrary;
 	}
 
-	private Theme toTheme(RestNode node, Theme theme) {
+	private Theme toTheme(RestNode restNode, Theme theme) {
 		Theme result = new Theme();
 		result.setRepositoryName(theme.getRepositoryName());
 		result.setWorkspace(theme.getWorkspace());
 		result.setLibrary(theme.getLibrary());
-		result.setName(node.getName());
-		this.wcmUtils.resolveResourceNode(result, node);
+		result.setName(restNode.getName());
+		restNode.getChildren().forEach(node -> {
+			if (WcmUtils.isElementFolderNode(node)) {
+				for (RestProperty restProperty : node.getJcrProperties()) {
+					if ("note".equals(restProperty.getName())) {
+						result.setNote(restProperty.getValues().get(0));
+						break;
+					} 
+				}
+			} else if (WcmUtils.isPropertyFolderNode(node)) {
+				for (RestProperty restProperty : node.getJcrProperties()) {
+					if ("bpw:title".equals(restProperty.getName())) {
+						result.setTitle(restProperty.getValues().get(0));
+						break;
+					}
+				}
+			} 
+		});
 		return result;
 	}
 
 	private WcmOperation[] supportedOpertionsToWcmOperation(final RestNode node) {
-		return node.getChildren().stream().filter(n -> this.wcmUtils.checkNodeType(n, "bpw:supportedOpertion"))
+		return node.getChildren().stream().filter(n -> WcmUtils.checkNodeType(n, "bpw:supportedOpertion"))
 			.map(n -> {
 				WcmOperation wcmOperation = new WcmOperation();
 				wcmOperation.setJcrType(this.getJcrType(node));
@@ -283,7 +305,7 @@ public class WcmSystemRestController extends BaseWcmRestController {
 			String baseUrl) throws WcmRepositoryException {
 		try {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WcmConstants.NODE_ROOT_PATH, 1);
+					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> {
 						 WcmLibrary  wcmLibrary = new  WcmLibrary();

@@ -4,6 +4,7 @@ import org.modeshape.jcr.api.JcrConstants;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -58,17 +59,25 @@ public class BpmnWorkflow extends ResourceNode implements HasName, Comparable<Bp
 	
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
-		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:bpmnWorkflow");
+		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_bpmnWorkflowType");
 		
 		ObjectNode children = null;
-		if (this.getAcl() != null) {
-			children = JsonUtils.createObjectNode();
-			jsonNode.set("children", children);
-		}
-		super.toJson(jsonNode, children);
-		jsonNode.put("bpw:name", this.getName());
-		jsonNode.put("bpw:bpmn", this.getBpmn());
-				
+		children = JsonUtils.createObjectNode();
+		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
+	    
+		
+		
+		ObjectNode propertiesNode = JsonUtils.createObjectNode();
+		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
+		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ContentItemproperties");
+		propertiesNode.put("bpw:name", this.getName());
+		
+		super.toJson(propertiesNode, children);
+		
+		ObjectNode elementsNode = JsonUtils.createObjectNode();
+		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
+		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_bpmnWorkflowType_ElementFolder");
+		elementsNode.put("bpw:bpmn", this.getBpmn());		
 		return jsonNode;
 	}
 	

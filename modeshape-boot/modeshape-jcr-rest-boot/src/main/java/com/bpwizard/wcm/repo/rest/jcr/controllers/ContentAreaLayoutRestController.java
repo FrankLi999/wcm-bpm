@@ -69,7 +69,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			RestNode contentAreaLayoutNode = (RestNode) this.itemHandler.item(baseUrl, repository,
-					workspace, absPath, 4);
+					workspace, absPath, WcmConstants.CONTENT_AREA_LAYOUT_DEPTH);
 			ContentAreaLayout layout = new ContentAreaLayout();
 			layout.setRepository(repository);
 			layout.setWorkspace(workspace);

@@ -8,6 +8,7 @@ public class Theme extends ResourceNode implements HasName {
 	private String library;
 	private String repositoryName;
 	private String workspace;
+	private String note;
 	public String getName() {
 		return name;
 	}
@@ -32,9 +33,15 @@ public class Theme extends ResourceNode implements HasName {
 	public void setLibrary(String library) {
 		this.library = library;
 	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
 	@Override
 	public String toString() {
 		return "Theme [name=" + name + ", library=" + library + ", repositoryName=" + repositoryName + ", workspace="
-				+ workspace + ", toString()=" + super.toString() + "]";
+				+ workspace + ", note=" + note + "]";
 	}
 }

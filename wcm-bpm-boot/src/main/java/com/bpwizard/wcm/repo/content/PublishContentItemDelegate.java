@@ -16,6 +16,7 @@ import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 
 public class PublishContentItemDelegate implements JavaDelegate {
 	private static final Logger logger = LogManager.getLogger(PublishContentItemDelegate.class);
@@ -37,7 +38,7 @@ public class PublishContentItemDelegate implements JavaDelegate {
 			
 	        Session session = this.repositoryManager.getSession(repository, "draft"); 
 	        Node contentNode = session.getNode(contentPath);
-	        contentNode.setProperty("bpw:currentLifecycleState", "Published");
+	        contentNode.setProperty("bpw:currentLifecycleState", WcmConstants.WORKFLOW_STATGE_PUBLISHED);
 	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
 			AuthoringTemplate at = this.wcmUtils.getAuthoringTemplate(repository, "default", 
 					atPath, baseUrl);

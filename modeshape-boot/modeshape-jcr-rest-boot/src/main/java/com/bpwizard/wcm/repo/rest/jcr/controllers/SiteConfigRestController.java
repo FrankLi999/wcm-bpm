@@ -91,7 +91,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH, library);
-			RestNode siteConfigFolder = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, 3);
+			RestNode siteConfigFolder = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.SITE_CONFIG_DEPTH);
 			SiteConfig[] siteConfigs = siteConfigFolder.getChildren().stream()
 					.filter(node -> this.isSiteConfig(node))
 					.map(node -> this.toSiteConfig(repository, workspace, library, node))

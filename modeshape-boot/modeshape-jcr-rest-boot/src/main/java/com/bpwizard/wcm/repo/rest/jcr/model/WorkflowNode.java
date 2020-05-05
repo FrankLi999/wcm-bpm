@@ -1,10 +1,12 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
+import java.io.Serializable;
+
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class WorkflowNode extends ResourceNode {
+public class WorkflowNode  implements Serializable {
 	private static final long serialVersionUID = -2123676751280039604L;
 	private String workflow;
 	private String workflowStage;
@@ -45,9 +47,7 @@ public class WorkflowNode extends ResourceNode {
 	public void setCurrentLifecycleState(String currentLifecycleState) {
 		this.currentLifecycleState = currentLifecycleState;
 	}
-	protected void toJson(ObjectNode jsonNode, ObjectNode children) {
-		super.toJson(jsonNode, children);
-
+	protected void toJson(ObjectNode jsonNode) {
 		if (StringUtils.hasText(workflow)) {
 			jsonNode.put("bpw:workflow", workflow);
 		}
