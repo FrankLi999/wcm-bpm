@@ -94,7 +94,7 @@
     </Appenders>
     
     <Loggers>
-        <Logger name="org.bpwizard" level="${sys:APP_LOG_LEVEL}">
+        <Logger name="com.bpwizard" level="${sys:APP_LOG_LEVEL}">
             <AppenderRef ref="APP-ASYNC" />
         </Logger>
         

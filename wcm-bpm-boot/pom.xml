@@ -255,6 +255,15 @@
 			<artifactId>modeshape-persistence-relational</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.modeshape</groupId>
+			<artifactId>modeshape-elasticsearch-index-provider</artifactId>
+			<version>${modeshape.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.modeshape</groupId>
+	        <artifactId>modeshape-extractor-tika</artifactId>
+        </dependency>
+		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>javax.servlet-api</artifactId>
 		    <scope>provided</scope>
@@ -270,12 +279,13 @@
 		    <groupId>com.github.ulisesbocchio</groupId>
 		    <artifactId>jasypt-spring-boot-starter</artifactId>
 		</dependency>
-		<!-- 
+		
 		<dependency>
             <groupId>org.jgroups</groupId>
             <artifactId>jgroups</artifactId>
-            <version>${jgroups.version}</version>
+            <!-- <version>${jgroups.version}</version>  -->
         </dependency>
+        <!-- 
         <dependency>
 		    <groupId>org.jgroups</groupId>
 		    <artifactId>jgroups-raft</artifactId>

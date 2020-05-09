@@ -25,6 +25,17 @@
             "password" : "P@ssw0rd"
         }
     },
+    "indexProviders" : {
+        "elasticsearch" : {
+           "classname" : "org.modeshape.jcr.index.elasticsearch.EsIndexProvider",
+           "host" : "localhost",
+           "port" : 9200
+        },
+        "local" : {
+            "classname" : "local",
+            "directory" : "target/indexes"
+        }
+    },
     "sequencing" : {
         "sequencers" : {
             "Images sequencer" : {

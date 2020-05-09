@@ -56,8 +56,8 @@ server:
   contextPath: /
   # servlet.session.persistent: false
   # port: 19090
-  # port: ${PORT:8080}
-  port: 8080
+  port: ${WCM_BPM_PORT:18080}
+  # port: 8080
 # Spring Commons related properties
 bpw:
   # prepopulate Users and Roles

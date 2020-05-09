@@ -4,17 +4,25 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PropertyType;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Workspace;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeIterator;
 import javax.jcr.nodetype.PropertyDefinition;
+import javax.jcr.observation.Event;
+import javax.jcr.observation.EventJournal;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
@@ -27,12 +35,17 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modeshape.jcr.api.index.IndexColumnDefinitionTemplate;
+import org.modeshape.jcr.api.index.IndexDefinition;
+import org.modeshape.jcr.api.index.IndexDefinition.IndexKind;
+import org.modeshape.jcr.api.index.IndexDefinitionTemplate;
 import org.modeshape.jcr.api.query.Query;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +53,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bpwizard.wcm.repo.payload.IndexColumn;
+import com.bpwizard.wcm.repo.payload.IndexModel;
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
@@ -365,6 +380,126 @@ public class ModeshapeController {
 		return "{\"node-type\": \"up\"}";
 	}
 	
+	@GetMapping("/journalEvent")
+	public ResponseEntity<?> getJournalEvent() {
+		try {
+			Workspace workspace = this.repositoryManager.getSession("bpwizard", "default").getWorkspace();
+			EventJournal eventJournal = workspace.getObservationManager().getEventJournal();
+			logger.debug("Journal Events>>>>");
+
+			Map<String, String> eventsTypes = new HashMap<>();
+			while (eventJournal.hasNext()) {
+				try {
+					Event event = eventJournal.nextEvent();
+					logger.debug("Journal Event:" + event.getClass());
+					logger.debug(event);
+					eventsTypes.put(event.getClass().toString(), event.toString());
+				} catch (java.util.NoSuchElementException ex) {
+					logger.debug("donw event journaling");
+					break;
+				}
+			}
+			return ResponseEntity.ok().body(eventsTypes);
+		} catch (RepositoryException ex) {
+			ex.printStackTrace();
+			return ResponseEntity.status(400).body("{\"error\" : \"" + ex.getMessage()  + "\"}");
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping("/journal")
+	public ResponseEntity<?> getJournal() {
+		try {
+			Workspace workspace = this.repositoryManager.getSession("bpwizard", "default").getWorkspace();
+			EventJournal eventJournal = workspace.getObservationManager().getEventJournal();
+			logger.debug("Journal >>>>");
+			Map<String, String> eventsTypes = new HashMap<>();
+			eventJournal.forEachRemaining(e -> this.processEvent(e, eventsTypes));
+			return ResponseEntity.ok().body(eventsTypes);
+		} catch (RepositoryException ex) {
+			ex.printStackTrace();
+			return ResponseEntity.status(400).body("{\"error\" : \"" + ex.getMessage()  + "\"}");
+		}
+	}
+	
+	private void processEvent(Object event, Map<String, String> eventsTypes) {
+		logger.debug("Journal Event:" + event.getClass());
+		logger.debug(event);
+		eventsTypes.put(event.getClass().toString(), event.toString());
+	}
+	
+	@GetMapping("/index")
+	public ResponseEntity<?> getIndex() {
+		try {
+			org.modeshape.jcr.api.Workspace workspace = (org.modeshape.jcr.api.Workspace) this.repositoryManager.getSession("bpwizard", "default").getWorkspace();
+			org.modeshape.jcr.api.index.IndexManager indexManager = workspace.getIndexManager();
+			Map<String, IndexDefinition> indexes = indexManager.getIndexDefinitions();
+			Map<String, IndexModel> indexModels = new HashMap<>();
+			for (String key: indexes.keySet()) {
+				IndexModel indexModel = new IndexModel();
+				IndexDefinition indexDefinition = indexes.get(key);
+				indexModel.setName(indexDefinition.getName());
+				indexModel.setKind(indexDefinition.getKind().name());
+				indexModel.setProvider(indexDefinition.getProviderName());
+				indexModel.setNodeType(indexDefinition.getNodeTypeName());
+				indexModel.setSynchronous(indexDefinition.isSynchronous());
+				IndexColumn columns[] = new IndexColumn[indexDefinition.size()];
+				for (int i = 0 ; i < indexDefinition.size(); i++) {
+					columns[i] = new IndexColumn(
+							indexDefinition.getColumnDefinition(i).getPropertyName(),
+							PropertyType.nameFromValue(indexDefinition.getColumnDefinition(i).getColumnType()));
+				}
+				indexModel.setColumns(columns);
+				indexModels.put(key, indexModel);
+			}
+			return ResponseEntity.ok().body(indexModels);
+		} catch (RepositoryException ex) {
+			ex.printStackTrace();
+			return ResponseEntity.status(400).body("{\"error\" : \"" + ex.getMessage()  + "\"}");
+		}
+	}
+	@PostMapping("/index")
+	public String createIndex(@RequestBody IndexModel indexModel) {
+		try {
+			org.modeshape.jcr.api.Workspace workspace = (org.modeshape.jcr.api.Workspace) this.repositoryManager.getSession("bpwizard", "default").getWorkspace();
+			org.modeshape.jcr.api.index.IndexManager indexManager = workspace.getIndexManager();
+			IndexDefinitionTemplate indexDefinition = indexManager.createIndexDefinitionTemplate();
+			
+			List<IndexColumnDefinitionTemplate> columnDefinitions = new ArrayList<>();
+			for (int i = 0; i < indexModel.getColumns().length; i++) {
+				IndexColumnDefinitionTemplate columnDefinition = indexManager.createIndexColumnDefinitionTemplate();
+				columnDefinitions.add(columnDefinition);
+				columnDefinition.setPropertyName(indexModel.getColumns()[i].getColumnName());
+				columnDefinition.setColumnType(PropertyType.valueFromName(indexModel.getColumns()[i].getPropertyType()));
+			}
+			indexDefinition.setNodeTypeName(indexModel.getNodeType());
+			indexDefinition.setProviderName(indexModel.getProvider());
+			indexDefinition.setWorkspace(indexModel.getWorkspace());
+			indexDefinition.setKind(IndexKind.valueOf(indexModel.getKind()));
+			indexDefinition.setName(indexModel.getName());
+			indexDefinition.setColumnDefinitions(columnDefinitions);
+			indexDefinition.setSynchronous(indexModel.isSynchronous());
+			indexManager.registerIndex(indexDefinition, true);
+			return "done";
+		} catch (RepositoryException ex) {
+			ex.printStackTrace();
+			return ex.getMessage();
+		}
+	}
+	
+	@DeleteMapping("/index")
+	public String removeIndex(@PathVariable("index") String index) {
+		try {
+			org.modeshape.jcr.api.Workspace workspace = (org.modeshape.jcr.api.Workspace) this.repositoryManager.getSession("bpwizard", "default").getWorkspace();
+			org.modeshape.jcr.api.index.IndexManager indexManager = workspace.getIndexManager();
+			indexManager.unregisterIndexes(index);
+			return "done";
+		} catch (RepositoryException ex) {
+			ex.printStackTrace();
+			return ex.getMessage();
+		}
+	}
+	
 	@GetMapping("/features")
 	public String features() throws Exception {
 		
@@ -377,6 +512,7 @@ public class ModeshapeController {
 		
 		
 	}
+	
 	@GetMapping("/testACL")
 	public String testACL() throws Exception {
 		String path = WcmConstants.NODE_ROOT_PATH;
