@@ -28,11 +28,10 @@
             <artifactId>modeshape-spring</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+		<!-- <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>  --> 
 		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
-			<!-- <artifactId>camunda-bpm-spring-boot-starter</artifactId> -->
-			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId> 
-			<!-- <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId> -->
+			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
 		</dependency>
 		
 		<dependency>
@@ -74,13 +73,12 @@
   			<artifactId>camunda-engine-feel-juel</artifactId>
 	    </dependency>
 
-	     <!-- 
 		<dependency>
 			<groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>camunda-rest-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		 -->
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -132,6 +130,10 @@
         <dependency>
     		<groupId>org.springframework.boot</groupId>
     		<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		 <dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
             <groupId>org.springframework.security</groupId>
@@ -203,19 +205,21 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-web</artifactId>
+		    <!--
 		    <exclusions>
 		        <exclusion>
 		            <groupId>org.springframework.boot</groupId>
 		            <artifactId>spring-boot-starter-tomcat</artifactId>
 		        </exclusion>
 		    </exclusions>
+		   -->
 		</dependency>
-		
+		<!-- 
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-undertow</artifactId>
 		</dependency>
-		
+		-->
 		<!--SpringFox dependencies -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -279,11 +283,9 @@
 		    <groupId>com.github.ulisesbocchio</groupId>
 		    <artifactId>jasypt-spring-boot-starter</artifactId>
 		</dependency>
-		
 		<dependency>
             <groupId>org.jgroups</groupId>
             <artifactId>jgroups</artifactId>
-            <!-- <version>${jgroups.version}</version>  -->
         </dependency>
         <!-- 
         <dependency>
@@ -325,16 +327,73 @@
 		    <groupId>io.micrometer</groupId>
 		    <artifactId>micrometer-core</artifactId>
 		</dependency>
-		
+		<!--  
 		<dependency>
           <groupId>com.h2database</groupId>
           <artifactId>h2</artifactId>
           <scope>test</scope>
         </dependency>
+        -->
         <dependency>
 		    <groupId>mysql</groupId>
 		    <artifactId>mysql-connector-java</artifactId>
 		</dependency>
+		
+		<!-- ignite caching -->
+		<dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-core</artifactId>
+        </dependency>
+
+        
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-spring</artifactId>
+        </dependency>
+        
+        <dependency>
+			<groupId>org.apache.ignite</groupId>
+			<artifactId>ignite-slf4j</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>com.bpwizard.spring</groupId>
+            <artifactId>spring-boot-ignite</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.197</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-indexing</artifactId>
+            <version>${ignite.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+		<!--
+		<dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-rest-http</artifactId>
+        </dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>		
+		<dependency>
+		    <groupId>org.apache.ignite</groupId>
+		    <artifactId>ignite-spring-data</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
+        -->
 	</dependencies>
 
 	<build>

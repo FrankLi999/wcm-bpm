@@ -204,8 +204,8 @@ management:
       enabled: true
 camunda:
   bpm:
-    #jpa: 
-      #enabled: false
+    jpa: 
+      enabled: false
     authorization:
       enabled: true
     # database:
@@ -281,3 +281,36 @@ hazelcast:
 jasypt:
   encryptor:
     password: password
+
+ignite:
+  enabled: true
+  instanceName: wcm-bpm
+  # To send a computational task to a server node
+  peerClassLoadingEnabled: true
+  localHost: 127.0.0.1
+  ipfinderAddresses: 192.168.110.81:47500..47509
+  tcpDiscoveryLocalPort: 47500
+  tcpDiscoveryLocalPortRange: 9
+  # communicationSpiLocalAddress: localhost
+  communicationSpiLocalAddress: 127.0.0.1
+  communicationSpiLocalPort: 48100
+  communicationSpiSlowClientQueueLimit: 1000
+  caches:
+    -
+      cacheName: wcm
+      atomicityMode: ATOMIC
+      cacheMode: REPLICATED
+      writeThrough: false
+      readThrough: false
+      writeBehindEnabled: false
+      backups: 1
+      statisticsEnabled: true
+    -
+      cacheName: bpm
+      atomicityMode: ATOMIC
+      cacheMode: REPLICATED
+      writeThrough: false
+      readThrough: false
+      writeBehindEnabled: false
+      backups: 1
+      statisticsEnabled: true
