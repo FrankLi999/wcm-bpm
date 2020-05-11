@@ -9,7 +9,14 @@ public class CacheConfig {
 	private boolean writeBehindEnabled;
 	private int backups;
 	private boolean statisticsEnabled;
-	private long writeBehindFlushFrequency;
+	private long writeBehindFlushFrequency;	
+	private boolean initSchema;
+	private String dataSourceBean;
+	private String createTableQuery;
+    private String loadQuery;
+    private String updateQuery;
+	private String insertQuery;
+	private String deleteQuery;
 	
 	public String getAtomicityMode() {
 		return atomicityMode;
@@ -65,11 +72,56 @@ public class CacheConfig {
 	public void setWriteBehindFlushFrequency(long writeBehindFlushFrequency) {
 		this.writeBehindFlushFrequency = writeBehindFlushFrequency;
 	}
+	public boolean isInitSchema() {
+		return initSchema;
+	}
+	public void setInitSchema(boolean initSchema) {
+		this.initSchema = initSchema;
+	}
+	public String getDataSourceBean() {
+		return dataSourceBean;
+	}
+	public void setDataSourceBean(String dataSourceBean) {
+		this.dataSourceBean = dataSourceBean;
+	}
+	public String getCreateTableQuery() {
+		return createTableQuery;
+	}
+	public void setCreateTableQuery(String createTableQuery) {
+		this.createTableQuery = createTableQuery;
+	}
+	public String getLoadQuery() {
+		return loadQuery;
+	}
+	public void setLoadQuery(String loadQuery) {
+		this.loadQuery = loadQuery;
+	}
+	public String getUpdateQuery() {
+		return updateQuery;
+	}
+	public void setUpdateQuery(String updateQuery) {
+		this.updateQuery = updateQuery;
+	}
+	public String getInsertQuery() {
+		return insertQuery;
+	}
+	public void setInsertQuery(String insertQuery) {
+		this.insertQuery = insertQuery;
+	}
+	public String getDeleteQuery() {
+		return deleteQuery;
+	}
+	public void setDeleteQuery(String deleteQuery) {
+		this.deleteQuery = deleteQuery;
+	}
 	@Override
 	public String toString() {
 		return "CacheConfig [atomicityMode=" + atomicityMode + ", cacheMode=" + cacheMode + ", cacheName=" + cacheName
 				+ ", writeThrough=" + writeThrough + ", readThrough=" + readThrough + ", writeBehindEnabled="
 				+ writeBehindEnabled + ", backups=" + backups + ", statisticsEnabled=" + statisticsEnabled
-				+ ", writeBehindFlushFrequency=" + writeBehindFlushFrequency + "]";
+				+ ", writeBehindFlushFrequency=" + writeBehindFlushFrequency + ", initSchema=" + initSchema
+				+ ", dataSourceBean=" + dataSourceBean + ", createTableQuery=" + createTableQuery + ", loadQuery="
+				+ loadQuery + ", updateQuery=" + updateQuery + ", insertQuery=" + insertQuery + ", deleteQuery="
+				+ deleteQuery + "]";
 	}
 }

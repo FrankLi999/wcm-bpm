@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.cache.eviction.lru.LruEvictionPolicyFactory;
 import org.apache.ignite.cache.spring.SpringCacheManager;
+import org.apache.ignite.cache.store.jdbc.CacheJdbcBlobStoreFactory;
 import org.apache.ignite.configuration.CacheConfiguration;
-import org.apache.ignite.configuration.DataRegionConfiguration;
-import org.apache.ignite.configuration.DataStorageConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.logger.slf4j.Slf4jLogger;
 import org.apache.ignite.spi.communication.tcp.TcpCommunicationSpi;
@@ -53,22 +50,22 @@ public class IgniteCacheConfiguration {
 //	}
 //	
 	@Bean
-	public CacheManager cacheManager(IgniteConfiguration igniteConfiguration) {
+	public CacheManager cacheManager(IgniteProperties igniteProperties) {
     // public CacheManager cacheManager(Ignite ignite) {
 		log.debug("Starting Ignite CacheManager");
-        SpringCacheManager cacheManager = new SpringCacheManager();
-        //cacheManager.setConfiguration(ignite.configuration());
-        cacheManager.setConfiguration(igniteConfiguration);
+        //BpwCacheManager cacheManager = new BpwCacheManager();
+		SpringCacheManager cacheManager = new SpringCacheManager();
+        cacheManager.setConfiguration(igniteConfiguration(igniteProperties));
         return cacheManager;
     }
 
-    @Bean(name = "igniteConfiguration")
-    public IgniteConfiguration igniteConfiguration(IgniteProperties igniteProperties, DataSource dataSource) {
+    // @Bean(name = "igniteConfiguration")
+    public IgniteConfiguration igniteConfiguration(IgniteProperties igniteProperties) {
     	IgniteConfiguration igniteConfiguration = new IgniteConfiguration();
         // igniteConfiguration.setGridName("testGrid");
     	igniteConfiguration.setIgniteInstanceName(igniteProperties.getInstanceName());
         // igniteConfiguration.setClientMode(true);
-        igniteConfiguration.setPeerClassLoadingEnabled(igniteProperties.isPeerClassLoadingEnabled());
+        // igniteConfiguration.setPeerClassLoadingEnabled(igniteProperties.isPeerClassLoadingEnabled());
         // igniteConfiguration.setLocalHost(igniteProperties.getLocalHost());
 
         TcpDiscoverySpi tcpDiscoverySpi = new TcpDiscoverySpi();
@@ -89,13 +86,18 @@ public class IgniteCacheConfiguration {
         igniteConfiguration.setGridLogger( new Slf4jLogger());
 
         //storage configuration
-        DataStorageConfiguration dsCfgn = new DataStorageConfiguration();
-        igniteConfiguration.setDataStorageConfiguration(dsCfgn);
-        DataRegionConfiguration dfltDataRegConf = new DataRegionConfiguration();
-        dfltDataRegConf.setPersistenceEnabled(true);
-        dsCfgn.setDefaultDataRegionConfiguration(dfltDataRegConf);
+//        DataStorageConfiguration dsCfgn = new DataStorageConfiguration();
+//        igniteConfiguration.setDataStorageConfiguration(dsCfgn);
+//        DataRegionConfiguration dataRegConf = new DataRegionConfiguration();
+//        dataRegConf.setPersistenceEnabled(true);
+////        dataRegConf.setName("2GB_Region");
+////        dataRegConf.setInitialSize(50L * 1024 * 1024); //50M
+////        dataRegConf.setInitialSize(2L * 1024 * 1024 * 1024); //2GB
+////        dataRegConf.setPageEvictionMode(DataPageEvictionMode.RANDOM_2_LRU); //RANDOM_LRU
+////        dsCfgn.setDataRegionConfigurations(dataRegConf);
+//        dsCfgn.setDefaultDataRegionConfiguration(dataRegConf);
+        igniteConfiguration.setCacheConfiguration(cacheConfiguration(igniteProperties.getCaches()));
         
-        igniteConfiguration.setCacheConfiguration(cacheConfiguration(igniteProperties.getCaches(), dataSource));
         
         return igniteConfiguration;
 
@@ -103,7 +105,7 @@ public class IgniteCacheConfiguration {
 
     @SuppressWarnings({ "rawtypes", "unchecked"})
 	//@Bean(name = "cacheConfiguration")
-    public CacheConfiguration[] cacheConfiguration(List<CacheConfig> caches, DataSource dataSource) {
+    public CacheConfiguration[] cacheConfiguration(List<CacheConfig> caches) {
         List<CacheConfiguration> cacheConfigurations = new ArrayList<>();
         for (CacheConfig cacheConfig: caches) {
         	CacheConfiguration cacheConfiguration = new CacheConfiguration();
@@ -118,17 +120,34 @@ public class IgniteCacheConfiguration {
             }
             cacheConfiguration.setBackups(1);
             cacheConfiguration.setStatisticsEnabled(cacheConfig.isStatisticsEnabled());
-            cacheConfiguration.setEvictionPolicyFactory(new LruEvictionPolicyFactory(8));
+            cacheConfiguration.setEvictionPolicyFactory(new LruEvictionPolicyFactory(100, 10, 50*1024*1024));
+            cacheConfiguration.setOnheapCacheEnabled(true);
             if (cacheConfig.isWriteThrough() || cacheConfig.isReadThrough()) {
-            	ObjectStoreFactory storeFactory = new ObjectStoreFactory();
+            	CacheJdbcBlobStoreFactory storeFactory = new CacheJdbcBlobStoreFactory();
+            	storeFactory.setInitSchema(cacheConfig.isInitSchema());
+            	//storeFactory.setDataSource(dataSource);
+            	storeFactory.setDataSourceBean(cacheConfig.getDataSourceBean());
+            	storeFactory.setCreateTableQuery(cacheConfig.getCreateTableQuery());
+            	storeFactory.setLoadQuery(cacheConfig.getLoadQuery());
+            	storeFactory.setUpdateQuery(cacheConfig.getUpdateQuery());
+            	storeFactory.setInsertQuery(cacheConfig.getInsertQuery());
+            	storeFactory.setDeleteQuery(cacheConfig.getDeleteQuery());
             	cacheConfiguration.setCacheStoreFactory(storeFactory);
-            	storeFactory.setDataSource(dataSource);
-            	storeFactory.setInitSchema(true);
             }
-            
             
             cacheConfigurations.add(cacheConfiguration);
         }
         return cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()]);
     }
+    
+//    @Bean(name = "igniteDataSource")
+//    public DataSource igniteSqlDataSource() {
+//        @SuppressWarnings("rawtypes")
+//		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+//        dataSourceBuilder.driverClassName("com.mysql.jdbc.Driver");
+//        dataSourceBuilder.url("jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true");
+//        dataSourceBuilder.username("wcmbpm");
+//        dataSourceBuilder.password("P@ssw0rd");
+//        return dataSourceBuilder.build();
+//    }
 }

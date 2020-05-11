@@ -316,6 +316,13 @@ ignite:
       backups: 1
       statisticsEnabled: true
       writeBehindFlushFrequency: 5000
+      initSchema: true
+      dataSourceBean: modeshapeDataSource
+      createTableQuery: "create table if not exists WCM_ENTRIES (akey binary(250) primary key, val varbinary(20480))"
+      loadQuery: "select * from WCM_ENTRIES where akey=?"
+      updateQuery: "update WCM_ENTRIES set val=? where akey=?"
+      insertQuery: "insert into WCM_ENTRIES (akey, val) values (?, ?)"
+      deleteQuery: "delete from WCM_ENTRIES where akey=?"
     -
       cacheName: bpm
       atomicityMode: ATOMIC
@@ -325,13 +332,27 @@ ignite:
       writeBehindEnabled: false
       backups: 1
       statisticsEnabled: false
+      initSchema: true
+      dataSourceBean: modeshapeDataSource
+      createTableQuery: "create table if not exists BPM_ENTRIES (akey binary(250) primary key, val varbinary(20480))"
+      loadQuery: "select * from BPM_ENTRIES where akey=?"
+      updateQuery: "update BPM_ENTRIES set val=? where akey=?"
+      insertQuery: "insert into BPM_ENTRIES (akey, val) values (?, ?)"
+      deleteQuery: "delete from BPM_ENTRIES where akey=?"
     -
       cacheName: miscoflow
       atomicityMode: ATOMIC
       cacheMode: REPLICATED
-      writeThrough: false
-      readThrough: false
+      writeThrough: true
+      readThrough: true
       writeBehindEnabled: true
       backups: 1
       statisticsEnabled: true
+      initSchema: true
+      dataSourceBean: modeshapeDataSource
+      createTableQuery: "create table if not exists MICROFLOW_ENTRIES (akey binary(250) primary key, val varbinary(20480))"
+      loadQuery: "select * from MICROFLOW_ENTRIES where akey=?"
+      updateQuery: "update MICROFLOW_ENTRIES set val=? where akey=?"
+      insertQuery: "insert into MICROFLOW_ENTRIES (akey, val) values (?, ?)"
+      deleteQuery: "delete from MICROFLOW_ENTRIES where akey=?"
       
