@@ -13,11 +13,17 @@
 #spring.jpa.properties.hibernate.cache.use_query_cache=true
 #spring.jpa.properties.hibernate.cache.use_minimal_puts=true
 #spring.jpa.properties.hibernate.cache.region.factory_class=com.hazelcast.hibernate.HazelcastCacheRegionFactory
-
+        
+logging: 
+  level:
+     org.hibernate.SQL: DEBUG
+     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+     
 keycloak:
   base-url: http://mysql:8080/auth
   realm: wcm_bpm
   realm-url: ${kc.base-url}/realms/${kc.realm}
+
 spring:
   #cache:
   #  type: hazelcast
@@ -53,6 +59,9 @@ spring:
       hibernate:
         # dialect: org.hibernate.dialect.H2Dialect
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        id:
+          new_generator_mappings: false
+        format_sql: true
         # jdbc.lob.non_contextual_creation: true        
         # cache:
           # use_second_level_cache: true
@@ -60,6 +69,7 @@ spring:
           # use_minimal_puts: true
           # region:
             # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
+            
   datasource:
     # url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
@@ -300,17 +310,28 @@ ignite:
       cacheName: wcm
       atomicityMode: ATOMIC
       cacheMode: REPLICATED
-      writeThrough: false
-      readThrough: false
+      writeThrough: true
+      readThrough: true
       writeBehindEnabled: false
       backups: 1
       statisticsEnabled: true
+      writeBehindFlushFrequency: 5000
     -
       cacheName: bpm
       atomicityMode: ATOMIC
       cacheMode: REPLICATED
-      writeThrough: false
-      readThrough: false
+      writeThrough: true
+      readThrough: true
       writeBehindEnabled: false
       backups: 1
+      statisticsEnabled: false
+    -
+      cacheName: miscoflow
+      atomicityMode: ATOMIC
+      cacheMode: REPLICATED
+      writeThrough: false
+      readThrough: false
+      writeBehindEnabled: true
+      backups: 1
       statisticsEnabled: true
+      

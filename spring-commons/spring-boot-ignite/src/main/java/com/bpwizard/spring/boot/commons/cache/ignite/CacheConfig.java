@@ -9,6 +9,8 @@ public class CacheConfig {
 	private boolean writeBehindEnabled;
 	private int backups;
 	private boolean statisticsEnabled;
+	private long writeBehindFlushFrequency;
+	
 	public String getAtomicityMode() {
 		return atomicityMode;
 	}
@@ -57,10 +59,17 @@ public class CacheConfig {
 	public void setStatisticsEnabled(boolean statisticsEnabled) {
 		this.statisticsEnabled = statisticsEnabled;
 	}
+	public long getWriteBehindFlushFrequency() {
+		return writeBehindFlushFrequency;
+	}
+	public void setWriteBehindFlushFrequency(long writeBehindFlushFrequency) {
+		this.writeBehindFlushFrequency = writeBehindFlushFrequency;
+	}
 	@Override
 	public String toString() {
 		return "CacheConfig [atomicityMode=" + atomicityMode + ", cacheMode=" + cacheMode + ", cacheName=" + cacheName
-				+ ", WriteThrough=" + writeThrough + ", readThrough=" + readThrough + ", writeBehindEnabled="
-				+ writeBehindEnabled + ", backups=" + backups + ", statisticsEnabled=" + statisticsEnabled + "]";
+				+ ", writeThrough=" + writeThrough + ", readThrough=" + readThrough + ", writeBehindEnabled="
+				+ writeBehindEnabled + ", backups=" + backups + ", statisticsEnabled=" + statisticsEnabled
+				+ ", writeBehindFlushFrequency=" + writeBehindFlushFrequency + "]";
 	}
 }

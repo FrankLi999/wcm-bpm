@@ -97,7 +97,9 @@
         <Logger name="com.bpwizard" level="${sys:APP_LOG_LEVEL}">
             <AppenderRef ref="APP-ASYNC" />
         </Logger>
-        
+        <Logger name="org.hibernate" level="${sys:APP_LOG_LEVEL}">
+            <AppenderRef ref="APP-ASYNC" />
+        </Logger>
         <Root level="${sys:ROOT_LOG_LEVEL}">
             <AppenderRef ref="ROOT-ASYNC"/>
         </Root>

@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.ignite.Ignite;
-import org.apache.ignite.Ignition;
+import javax.sql.DataSource;
+
 import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.cache.CacheMode;
+import org.apache.ignite.cache.eviction.lru.LruEvictionPolicyFactory;
 import org.apache.ignite.cache.spring.SpringCacheManager;
 import org.apache.ignite.configuration.CacheConfiguration;
+import org.apache.ignite.configuration.DataRegionConfiguration;
+import org.apache.ignite.configuration.DataStorageConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
+import org.apache.ignite.logger.slf4j.Slf4jLogger;
 import org.apache.ignite.spi.communication.tcp.TcpCommunicationSpi;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
@@ -59,7 +63,7 @@ public class IgniteCacheConfiguration {
     }
 
     @Bean(name = "igniteConfiguration")
-    public IgniteConfiguration igniteConfiguration(IgniteProperties igniteProperties) {
+    public IgniteConfiguration igniteConfiguration(IgniteProperties igniteProperties, DataSource dataSource) {
     	IgniteConfiguration igniteConfiguration = new IgniteConfiguration();
         // igniteConfiguration.setGridName("testGrid");
     	igniteConfiguration.setIgniteInstanceName(igniteProperties.getInstanceName());
@@ -82,17 +86,24 @@ public class IgniteCacheConfiguration {
         communicationSpi.setLocalPort(igniteProperties.getCommunicationSpiLocalPort());
         communicationSpi.setSlowClientQueueLimit(igniteProperties.getCommunicationSpiSlowClientQueueLimit());
         igniteConfiguration.setCommunicationSpi(communicationSpi);
+        igniteConfiguration.setGridLogger( new Slf4jLogger());
 
-
-        igniteConfiguration.setCacheConfiguration(cacheConfiguration(igniteProperties.getCaches()));
-
+        //storage configuration
+        DataStorageConfiguration dsCfgn = new DataStorageConfiguration();
+        igniteConfiguration.setDataStorageConfiguration(dsCfgn);
+        DataRegionConfiguration dfltDataRegConf = new DataRegionConfiguration();
+        dfltDataRegConf.setPersistenceEnabled(true);
+        dsCfgn.setDefaultDataRegionConfiguration(dfltDataRegConf);
+        
+        igniteConfiguration.setCacheConfiguration(cacheConfiguration(igniteProperties.getCaches(), dataSource));
+        
         return igniteConfiguration;
 
     }
 
-    @SuppressWarnings({ "rawtypes"})
+    @SuppressWarnings({ "rawtypes", "unchecked"})
 	//@Bean(name = "cacheConfiguration")
-    public CacheConfiguration[] cacheConfiguration(List<CacheConfig> caches) {
+    public CacheConfiguration[] cacheConfiguration(List<CacheConfig> caches, DataSource dataSource) {
         List<CacheConfiguration> cacheConfigurations = new ArrayList<>();
         for (CacheConfig cacheConfig: caches) {
         	CacheConfiguration cacheConfiguration = new CacheConfiguration();
@@ -102,8 +113,20 @@ public class IgniteCacheConfiguration {
             cacheConfiguration.setWriteThrough(cacheConfig.isWriteThrough());
             cacheConfiguration.setReadThrough(cacheConfig.isReadThrough());
             cacheConfiguration.setWriteBehindEnabled(cacheConfig.isWriteBehindEnabled());
+            if (cacheConfig.isWriteBehindEnabled()) {
+            	cacheConfiguration.setWriteBehindFlushFrequency(cacheConfig.getWriteBehindFlushFrequency());
+            }
             cacheConfiguration.setBackups(1);
             cacheConfiguration.setStatisticsEnabled(cacheConfig.isStatisticsEnabled());
+            cacheConfiguration.setEvictionPolicyFactory(new LruEvictionPolicyFactory(8));
+            if (cacheConfig.isWriteThrough() || cacheConfig.isReadThrough()) {
+            	ObjectStoreFactory storeFactory = new ObjectStoreFactory();
+            	cacheConfiguration.setCacheStoreFactory(storeFactory);
+            	storeFactory.setDataSource(dataSource);
+            	storeFactory.setInitSchema(true);
+            }
+            
+            
             cacheConfigurations.add(cacheConfiguration);
         }
         return cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()]);

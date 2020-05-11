@@ -193,8 +193,23 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.ignite</groupId>
+				<artifactId>ignite-log4j2</artifactId>
+				<version>${ignite.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.ignite</groupId>
 				<artifactId>ignite-slf4j</artifactId>
 				<version>${ignite.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.ignite</groupId>
+			    <artifactId>ignite-hibernate_5.3</artifactId>
+			    <version>${ignite.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mybatis.caches</groupId>
+				<artifactId>mybatis-ignite</artifactId>
+				<version>1.1.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -203,7 +218,7 @@
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
-		</repository>
+		</repository>		
 	</repositories>
 	<!-- 	
 	<repositories>
