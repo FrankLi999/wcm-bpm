@@ -25,6 +25,7 @@ public class RenderTemplate extends ResourceNode implements HasName {
 	private String note;
 	private boolean query;
 	private String resourceName;
+	private String nodeType;
 	private RenderTemplateLayoutRow rows[];
 	
 	private String lockOwner;
@@ -107,7 +108,13 @@ public class RenderTemplate extends ResourceNode implements HasName {
 	public void setLockOwner(String lockOwner) {
 		this.lockOwner = lockOwner;
 	}	
-	public JsonNode toJson() {
+	public String getNodeType() {
+		return nodeType;
+	}
+	public void setNodeType(String nodeType) {
+		this.nodeType = nodeType;
+	}
+	public JsonNode toJson(AuthoringTemplate at) {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
 		
@@ -134,7 +141,9 @@ public class RenderTemplate extends ResourceNode implements HasName {
 		}
 		if (StringUtils.hasText(this.getResourceName())) {
 			jsonNode.put("bpw:resourceName", this.getResourceName());
+			jsonNode.put("bpw:nodeType", at.getNodeType());
 		}
+		
 		jsonNode.put("bpw:isQuery", this.isQuery());
 		
 		if (this.getRows() != null && this.getRows().length > 0) {
@@ -178,7 +187,9 @@ public class RenderTemplate extends ResourceNode implements HasName {
 		return "RenderTemplate [repository=" + repository + ", workspace=" + workspace + ", library=" + library
 				+ ", name=" + name + ", code=" + code + ", preloop=" + preloop + ", postloop=" + postloop
 				+ ", maxEntries=" + maxEntries + ", note=" + note + ", query=" + query + ", resourceName="
-				+ resourceName + ", rows=" + Arrays.toString(rows) + ", lockOwner=" + lockOwner + ", toString()="
-				+ super.toString() + "]";
+				+ resourceName + ", nodeType=" + nodeType + ", rows=" + Arrays.toString(rows) + ", lockOwner="
+				+ lockOwner + ", super.toString()=" + super.toString() + "]";
 	}
+	
+	
 }

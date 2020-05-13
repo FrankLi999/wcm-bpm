@@ -1764,13 +1764,13 @@ public abstract class BaseWcmRestController {
 			RestNode themeNode = (RestNode) this.itemHandler.item(baseUrl, rt.getRepository(), rt.getWorkspace(),
 					"/library/" + rt.getLibrary() + "/renderTemplate", WcmConstants.RENDER_TEMPLATE_DEPATH);
 			return themeNode.getChildren().stream().filter(this::isRenderTemplate)
-					.map(node -> this.toRenderTemplate(node, rt.getRepository(), rt.getWorkspace(), rt.getLibrary()));
+					.map(node -> this.toRenderTemplate(node, rt.getRepository(), rt.getWorkspace(), rt.getLibrary(), request));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e);
 		}
 	}
 
-	protected RenderTemplate toRenderTemplate(RestNode node, String repository, String workspace, String library) {
+	protected RenderTemplate toRenderTemplate(RestNode node, String repository, String workspace, String library, HttpServletRequest request) {
 		RenderTemplate rt = new RenderTemplate();
 		rt.setRepository(repository);
 		rt.setWorkspace(workspace);
@@ -1793,6 +1793,11 @@ public abstract class BaseWcmRestController {
 			} else if ("bpw:isQuery".equals(property.getName())) {
 				rt.setQuery(Boolean.parseBoolean(property.getValues().get(0)));
 			}
+		}
+		
+		if (StringUtils.hasText(rt.getResourceName())) {
+			AuthoringTemplate at = this.doGetAuthoringTemplate(repository, workspace, rt.getResourceName(), request);
+			rt.setNodeType(at.getNodeType());
 		}
 
 		List<RenderTemplateLayoutRow> rows = new ArrayList<>();

@@ -19,6 +19,8 @@ public class ContentItem {
 	private String workspace;
 	private String wcmPath;
 	private String lifeCycleStage;
+	private String authoringTemplate;
+	private String nodeType;
 	private boolean locked;
 	private boolean checkedOut;
 	private WorkflowNode workflow;
@@ -137,6 +139,19 @@ public class ContentItem {
 		this.checkedOut = checkedOut;
 	}
 
+	public String getAuthoringTemplate() {
+		return authoringTemplate;
+	}
+	public void setAuthoringTemplate(String authoringTemplate) {
+		this.authoringTemplate = authoringTemplate;
+	}
+	public String getNodeType() {
+		return nodeType;
+	}
+	public void setNodeType(String nodeType) {
+		this.nodeType = nodeType;
+	}
+	
 	//TODO: super.toJson()
 	public JsonNode toJson(AuthoringTemplate at) throws JsonProcessingException {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
@@ -144,7 +159,11 @@ public class ContentItem {
 		ObjectNode properties = JsonUtils.createObjectNode();
 		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
 		jsonNode.set(WcmConstants.JCR_JSON_NODE_PROPERTIES, properties);
-		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, this.getProperties().getNodeType());
+		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, at.getNodeType());
+		
+		if (StringUtils.hasText(this.getAuthoringTemplate())) {
+			jsonNode.put("bpw:authoringTemplate", this.getAuthoringTemplate());
+		}
 		
 		if (StringUtils.hasText(this.lifeCycleStage)) {
 			properties.put("bpw:lifecycleStage", this.lifeCycleStage);
@@ -211,7 +230,7 @@ public class ContentItem {
 		ObjectNode elementsNode = JsonUtils.createObjectNode();
 		ObjectNode elementsChildren = JsonUtils.createObjectNode();
 		elementsNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, elementsChildren);
-		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE,  WcmUtils.getElementFolderType(this.getProperties().getNodeType()));
+		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE,  WcmUtils.getElementFolderType(this.getNodeType()));
 		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
 		
 		this.getElements().toJson(elementsNode, elementsChildren, at);
@@ -230,8 +249,9 @@ public class ContentItem {
 	@Override
 	public String toString() {
 		return "ContentItem [id=" + id + ", repository=" + repository + ", workspace=" + workspace + ", wcmPath="
-				+ wcmPath + ", lifeCycleStage=" + lifeCycleStage + ", locked=" + locked + ", checkedOut=" + checkedOut
-				+ ", workflow=" + workflow + ", acl=" + acl + ", metadata=" + metadata + ", searchData=" + searchData
-				+ ", properties=" + properties + ", elements=" + elements + "]";
+				+ wcmPath + ", lifeCycleStage=" + lifeCycleStage + ", authoringTemplate=" + authoringTemplate
+				+ ", nodeType=" + nodeType + ", locked=" + locked + ", checkedOut=" + checkedOut + ", workflow="
+				+ workflow + ", acl=" + acl + ", metadata=" + metadata + ", searchData=" + searchData + ", properties="
+				+ properties + ", elements=" + elements + "]";
 	}
 }

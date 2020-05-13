@@ -75,7 +75,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 			AuthoringTemplate at = this.doGetAuthoringTemplate(
 					contentItem.getRepository(), 
 					WcmConstants.DRAFT_WS, 
-					contentItem.getProperties().getAuthoringTemplate(), 
+					contentItem.getAuthoringTemplate(), 
 					request);
 			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at));
 			if (contentItem.getAcl() != null) {
@@ -109,7 +109,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 		try {
 			contentItem.setLifeCycleStage(WcmConstants.WORKFLOW_STATGE_PUBLISHED);
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
-					contentItem.getProperties().getAuthoringTemplate(), request);
+					contentItem.getAuthoringTemplate(), request);
 			if (at.getContentItemAcl() != null) {
 			    contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
 			}
@@ -159,7 +159,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 		try {
 			contentItem.setLifeCycleStage(WcmConstants.WORKFLOW_STATGE_PUBLISHED);
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
-					contentItem.getProperties().getAuthoringTemplate(), request);
+					contentItem.getAuthoringTemplate(), request);
 			contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
 			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -223,7 +223,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 			contentItem.setLifeCycleStage(WcmConstants.WORKFLOW_STATGE_PUBLISHED);
 			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
-					contentItem.getProperties().getAuthoringTemplate(), request);
+					contentItem.getAuthoringTemplate(), request);
 			String baseUrl = RestHelper.repositoryUrl(request);
 			if (at.getContentItemAcl() != null) {
 			    contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
@@ -278,17 +278,17 @@ public class ContentItemRestController extends BaseWcmRestController {
 				if ("bpw:lifecycleStage".equals(property.getName())) {
 					contentItem.setLifeCycleStage(property.getValues().get(0));
 				} else if ("jcr:primaryType".equals(property.getName())) {
-					contentItemProperties.setNodeType(property.getValues().get(0));
-				}
+					contentItem.setNodeType(property.getValues().get(0));
+				} else if ("bpw:authoringTemplate".equals(property.getName())) {
+					contentItem.setAuthoringTemplate(property.getValues().get(0));
+				} 
 			}
 			//Resolve properties first
 			for (RestNode node: contentItemNode.getChildren()) {
 				if (WcmConstants.WCM_NODE_PROPERTIES.equals(node.getName()) || WcmUtils.checkNodeType(node, "bpw:ContentItemproperties")) {					
 					contentItemProperties.setName(contentItemNode.getName());					
 					for (RestProperty property: node.getJcrProperties()) {
-						if ("bpw:authoringTemplate".equals(property.getName())) {
-							contentItemProperties.setAuthoringTemplate(property.getValues().get(0));
-						} else if ("bpw:categories".equals(property.getName())) {
+						if ("bpw:categories".equals(property.getName())) {
 							contentItemProperties.setCategories(property.getValues().toArray(new String[property.getValues().size()]));
 						} else if ("bpw:name".equals(property.getName())) {
 							contentItemProperties.setName(property.getValues().get(0));
@@ -303,7 +303,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 					break;
 				}
 			}
-			AuthoringTemplate at = this.doGetAuthoringTemplate(repository, workspace, contentItem.getProperties().getAuthoringTemplate(), request);
+			AuthoringTemplate at = this.doGetAuthoringTemplate(repository, workspace, contentItem.getAuthoringTemplate(), request);
 			
  			for (RestNode node: contentItemNode.getChildren()) {
 				if (WcmUtils.checkNodeType(node, "bpw:workflow")) {
@@ -415,7 +415,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 			contentItem.setLifeCycleStage(WcmConstants.WORKFLOW_STATGE_DRAFT); 
 			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), WcmConstants.DRAFT_WS, 
-					contentItem.getProperties().getAuthoringTemplate(), request);
+					contentItem.getAuthoringTemplate(), request);
 			contentItem.setAcl(at.getContentItemAcl().getOnSaveDraftPermissions());
 			
 			// this.itemHandler.addItem(request, contentItem.getRepository(), contentItem.getWorkspace(), path, contentItem.toJson());

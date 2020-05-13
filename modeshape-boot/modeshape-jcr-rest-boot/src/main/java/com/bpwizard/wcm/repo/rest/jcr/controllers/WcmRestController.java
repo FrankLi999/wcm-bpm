@@ -225,12 +225,14 @@ public class WcmRestController extends BaseWcmRestController {
 				.filter(property -> "jcr:primaryType".equals(property.getName()))
 				.map(property -> property.getValues().get(0))
 				.anyMatch(nodeType -> Arrays.stream(
-						filter.getNodeTypes()).anyMatch(nodeType::equals) &&
+						filter.getNodeTypes()).anyMatch(nodeType::matches) &&
 						this.propertyMatch(node, filter, nodeType));
 	}
 	
 	private boolean propertyMatch(RestNode node, WcmNavigatorFilter filter, String nodeType) {
-		if (filter.getConditions() == null || filter.getConditions().get(nodeType) == null) { return true; } 
+		if (filter.getConditions() == null || filter.getConditions().get(nodeType) == null) { 
+			return true; 
+		} 
 		Map<String, String> nameValues = filter.getConditions().get(nodeType);
 		Set<String> properties = new HashSet<>();
 		properties.addAll(nameValues.keySet());

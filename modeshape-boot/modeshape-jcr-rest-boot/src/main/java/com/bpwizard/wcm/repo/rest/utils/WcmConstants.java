@@ -43,10 +43,10 @@ public class WcmConstants {
 	
 	public  static final String OPERATION_REL_PATH = "system/configuration/operations";
 	
-	public  static final String ELEMENT_FOLDER_TYPE = "bpw_at:%s_%s_ElementFolder";
-	public  static final String PROPERTY_FOLDER_TYPE = "bpw_at:%s_%s_PropertyFolder";
-	public  static final String COMMENT_FOLDER_TYPE = "bpw_at:%s_%s_CommentFolder";
-	public  static final String CONTENT_TYPE = "bpw_at:%s_%s_ContentType";
+	public  static final String ELEMENT_FOLDER_TYPE = "bpw:%s_%s_ElementFolder";
+	public  static final String PROPERTY_FOLDER_TYPE = "bpw:%s_%s_PropertyFolder";
+	public  static final String COMMENT_FOLDER_TYPE = "bpw:%s_%s_CommentFolder";
+	public  static final String CONTENT_TYPE = "bpw:%s_%s_AT";
 	
 	public  static final String DEFINITION_PATH_PATTERN = "#/definitions/%s";
 	

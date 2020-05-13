@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
+import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -74,7 +75,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			RestNode rtNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
 					rtPath, WcmConstants.RENDER_TEMPLATE_DEPATH);
 			
-			RenderTemplate rt = this.toRenderTemplate(rtNode, repository, workspace, library);
+			RenderTemplate rt = this.toRenderTemplate(rtNode, repository, workspace, library, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -125,7 +126,8 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
-			this.itemHandler.addItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, rt.toJson());
+			AuthoringTemplate at = this.doGetAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
+			this.itemHandler.addItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, rt.toJson(at));
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
 				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
@@ -152,7 +154,8 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
-			JsonNode rtJson = rt.toJson();
+			AuthoringTemplate at = this.doGetAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
+			JsonNode rtJson = rt.toJson(at);
 			this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), path, rtJson);
 			if (this.authoringEnabled) {
 				this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), path, rtJson);

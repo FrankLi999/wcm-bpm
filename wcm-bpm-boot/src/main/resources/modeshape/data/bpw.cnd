@@ -673,7 +673,6 @@
 + * (bpw:baseContentItemElement)
 
 [bpw:ContentItemproperties] > nt:folder, bpw:resourceMixin orderable
-- bpw:authoringTemplate (STRING)
 - bpw:workflow (STRING)
 - bpw:categories (STRING) multiple
 - * (STRING)
@@ -687,6 +686,7 @@
  
 [bpw:Content] > nt:hierarchyNode, mix:shareable, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable orderable
 - bpw:lifecycleStage (STRING)
+- bpw:authoringTemplate (STRING)
 + bpw:workflow (bpw:workflowNode)
 + bpw:acl (bpw:AccessControlEntry)
 + bpw:metaData (bpw:properties)
@@ -698,6 +698,7 @@
 
 [bpw:baseContentType] > bpw:resourceNode, nt:hierarchyNode, mix:shareable, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable abstract orderable
 - bpw:lifecycleStage (STRING)
+- bpw:authoringTemplate (STRING)
 + bpw:workflow (bpw:workflowNode)
 + bpw:acl (bpw:AccessControlEntry)
 + bpw:metadata (bpw:properties)
@@ -980,14 +981,23 @@
 [bpw:design_MyContent_ElementFolder]  > bpw:ContentItemElementFolder
 - body (STRING)
 
-[bpw:design_MyContent] > nt:folder, bpw:baseContentType
+[bpw:design_MyContent_AT] > nt:folder, bpw:baseContentType
 + elements (bpw:design_MyContent_ElementFolder)
++ properties (bpw:ContentItemproperties)
+
+[bpw:design_MyFile_ElementFolder]  > bpw:ContentItemElementFolder
+- body (STRING)
+- file (BINARY)
+- files (BINARY) multiple
+
+[bpw:design_MyFile_AT] > nt:folder, bpw:baseContentType
++ elements (bpw:design_MyFile_ElementFolder)
 + properties (bpw:ContentItemproperties)
 
 
 [bpw:design_MySidePaneContent_ElementFolder]  > bpw:ContentItemElementFolder
 - sidebody (STRING)
 
-[bpw:design_MySidePaneContent] > nt:folder, bpw:baseContentType
+[bpw:design_MySidePaneContent_AT] > nt:folder, bpw:baseContentType
 + elements (bpw:design_MySidePaneContent_ElementFolder)
 + properties (bpw:ContentItemproperties)

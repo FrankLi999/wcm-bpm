@@ -340,7 +340,7 @@ ignite:
       insertQuery: "insert into BPM_ENTRIES (akey, val) values (?, ?)"
       deleteQuery: "delete from BPM_ENTRIES where akey=?"
     -
-      cacheName: miscoflow
+      cacheName: microflow
       atomicityMode: ATOMIC
       cacheMode: REPLICATED
       writeThrough: true
