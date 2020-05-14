@@ -139,7 +139,7 @@ public class RenderTemplate extends ResourceNode implements HasName {
 		if (StringUtils.hasText(this.getNote())) {
 			jsonNode.put("bpw:note", this.getNote());
 		}
-		if (StringUtils.hasText(this.getResourceName())) {
+		if ((!this.isQuery()) && StringUtils.hasText(this.getResourceName())) {
 			jsonNode.put("bpw:resourceName", this.getResourceName());
 			jsonNode.put("bpw:nodeType", at.getNodeType());
 		}

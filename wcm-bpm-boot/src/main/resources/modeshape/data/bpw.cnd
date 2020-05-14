@@ -492,6 +492,7 @@
 - bpw:maxEntries (LONG)
 - bpw:note (STRING)
 - bpw:resourceName (STRING)
+- bpw:nodeType (STRING)
 - bpw:isQuery (BOOLEAN)
 + * (bpw:RenderTemplateLayoutRow)
 

@@ -126,7 +126,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
-			AuthoringTemplate at = this.doGetAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
+			AuthoringTemplate at = rt.isQuery() ? null : this.doGetAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
 			this.itemHandler.addItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, rt.toJson(at));
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);

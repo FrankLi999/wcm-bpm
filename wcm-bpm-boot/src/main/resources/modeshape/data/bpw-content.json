@@ -8646,6 +8646,7 @@
 		"bpw:maxEntries": "10",
 		"bpw:note": "MySidePaneRenderTemplate note",
 		"bpw:resourceName": "/design/authoringTemplate/MySidePaneContent",
+		"bpw:nodeType": "bpw:design_MySidePaneContent_AT",
 		"bpw:isQuery": "false"
 	},
 	"library/design/renderTemplate/MyRenderTemplate": {
@@ -8660,6 +8661,7 @@
 		"bpw:maxEntries": "10",
 		"bpw:note": "MyRenderTemplate note",
 		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
 		"bpw:isQuery": "false"
 	},
 	"library/design/renderTemplate/MyContentRenderLayout": {
@@ -8673,6 +8675,7 @@
 		"bpw:maxEntries": "10",
 		"bpw:note": "MyContentRenderLayout note",
 		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
 		"bpw:isQuery": "false"
 	},
 	"library/design/renderTemplate/MyContentRenderLayout/row1": {
