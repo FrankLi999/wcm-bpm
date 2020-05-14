@@ -109,6 +109,10 @@ public class WcmUtils {
 		return String.format(WcmConstants.DEFINITION_PATH_PATTERN, fieldType);
 	}
 	
+	public static String jsonSchemaPattern(String pattern) {
+		return String.format(WcmConstants.JSON_STRING_PATTERN, pattern);
+	}
+	
 	public static FormControl getFormControl(Form form, String fieldName) {
 		String jsonPath[] = fieldName.split("\\.");
 		FormControl formControl = null;

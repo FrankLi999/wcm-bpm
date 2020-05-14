@@ -770,7 +770,7 @@
     },
     "library/system/authoringTemplate/libraryType/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },   
     "library/system/authoringTemplate/libraryType/properties/description" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -803,7 +803,7 @@
     },
     "library/system/authoringTemplate/libraryType/elements/language/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },    
     "library/system/authoringTemplate/libraryType/elements/language/commonConstraint": {
         "jcr:primaryType": "bpw:CommonConstraint",
@@ -856,7 +856,7 @@
     },
     "library/system/authoringTemplate/folderType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/folderType/elements/note": {
         "jcr:primaryType": "bpw:FormControl",
@@ -873,7 +873,7 @@
     },
     "library/system/authoringTemplate/folderType/elements/note/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/contentType" : {
         "jcr:primaryType":"bpw:authoringTemplate",
@@ -923,7 +923,7 @@
     },
     "library/system/authoringTemplate/contentType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/contentType/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -940,7 +940,7 @@
     },
     "library/system/authoringTemplate/contentType/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/contentType/properties/categories" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -1026,7 +1026,7 @@
     },
     "library/system/authoringTemplate/componentType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/componentType/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -1043,7 +1043,7 @@
     },
     "library/system/authoringTemplate/componentType/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/componentType/elements/componentTemplate" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -1125,7 +1125,7 @@
     },
     "library/system/authoringTemplate/fileType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/fileType/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -1142,7 +1142,7 @@
     },
     "library/system/authoringTemplate/fileType/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/fileType/properties/description" : {
         "jcr:primaryType": "bpw:FormControl",       
@@ -1268,7 +1268,7 @@
     },
     "library/system/authoringTemplate/themeType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/themeType/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -1285,7 +1285,7 @@
     },
     "library/system/authoringTemplate/themeType/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/themeType/elements/note" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -1302,7 +1302,7 @@
     },
     "library/system/authoringTemplate/themeType/elements/note/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/vanityURLType" : {
         "jcr:primaryType":"bpw:authoringTemplate",
@@ -1351,7 +1351,7 @@
     },
     "library/system/authoringTemplate/vanityURLType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/vanityURLType/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -1431,7 +1431,7 @@
     },
     "library/system/authoringTemplate/categoryType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/validationRuleType" : {
         "jcr:primaryType": "bpw:authoringTemplate",
@@ -1458,7 +1458,7 @@
     },
     "library/system/authoringTemplate/validationRuleType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/validationRuleType/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -1475,7 +1475,7 @@
     },
     "library/system/authoringTemplate/validationRuleType/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/validationRuleType/properties/description" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -1543,7 +1543,7 @@
     },
     "library/system/authoringTemplate/validationRuleType/elements/type/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/validationRuleType/elements/rule" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -1560,7 +1560,7 @@
     },
     "library/system/authoringTemplate/validationRuleType/elements/rule/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/bpmnWorkflowType" : {
         "jcr:primaryType": "bpw:authoringTemplate",
@@ -1587,7 +1587,7 @@
     },
     "library/system/authoringTemplate/bpmnWorkflowType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/bpmnWorkflowType/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -1604,7 +1604,7 @@
     },
     "library/system/authoringTemplate/bpmnWorkflowType/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/bpmnWorkflowType/properties/description" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -1664,7 +1664,7 @@
     },
     "library/system/authoringTemplate/bpmnWorkflowType/elements/bpmn/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/queryStatementType" : {
         "jcr:primaryType": "bpw:authoringTemplate",
@@ -1691,7 +1691,7 @@
     },
     "library/system/authoringTemplate/queryStatementType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/queryStatementType/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -1708,7 +1708,7 @@
     },
     "library/system/authoringTemplate/queryStatementType/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/queryStatementType/elementGroups" : {
         "jcr:primaryType":"bpw:formGroupFoler"
@@ -1747,7 +1747,7 @@
     },
     "library/system/authoringTemplate/queryStatementType/elements/query/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/siteConfigType" : {
         "jcr:primaryType": "bpw:authoringTemplate",
@@ -1874,7 +1874,7 @@
     },
     "library/system/authoringTemplate/siteConfigType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/siteConfigType/elements/rootSiteArea" : {
         "jcr:primaryType": "bpw:FormControl",  
@@ -1891,7 +1891,7 @@
     },
     "library/system/authoringTemplate/siteConfigType/elements/rootSiteArea/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/siteConfigType/elements/colorTheme" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -2312,7 +2312,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/siteAreaType/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -2329,7 +2329,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/authoringTemplate/siteAreaType/properties/description" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -3101,7 +3101,7 @@
     },
     "library/system/form/formInputType/formControls/formControlLayout/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/form/formInputType/formControls/formControlLayout/editable" : {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -3947,7 +3947,7 @@
     },
     "library/system/form/textareaType/formControls/formControlLayout/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/form/textareaType/formControls/formControlLayout/editable" : {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -4755,7 +4755,7 @@
     },
     "library/system/form/customFieldType/formControls/formControlLayout/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/form/customFieldType/formControls/formControlLayout/editable" : {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -5579,7 +5579,7 @@
     },
     "library/system/form/binaryType/formControls/formControlLayout/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/form/binaryType/formControls/formControlLayout/editable" : {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -6353,7 +6353,7 @@
     },
     "library/system/form/objectType/formControls/formControlLayout/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/form/objectType/formControls/formControlLayout/editable" : {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -7164,7 +7164,7 @@
     },
     "library/system/form/formatedInputType/formControls/formControlLayout/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/system/form/formatedInputType/formControls/formControlLayout/editable" : {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -8244,7 +8244,7 @@
     },
     "library/design/authoringTemplate/MySidePaneContent/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/design/authoringTemplate/MySidePaneContent/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -8261,7 +8261,7 @@
     },
     "library/design/authoringTemplate/MySidePaneContent/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/design/authoringTemplate/MySidePaneContent/properties/description" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -8314,7 +8314,7 @@
     },
     "library/design/authoringTemplate/MySidePaneContent/elements/sidebody/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/design/authoringTemplate/MyContent" : {
         "jcr:primaryType": "bpw:authoringTemplate",
@@ -8380,7 +8380,7 @@
     },
     "library/design/authoringTemplate/MyContent/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/design/authoringTemplate/MyContent/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -8397,7 +8397,7 @@
     },
     "library/design/authoringTemplate/MyContent/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/design/authoringTemplate/MyContent/properties/description" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -8436,7 +8436,7 @@
     },
     "library/design/authoringTemplate/MyContent/elements/body/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/design/authoringTemplate/MyContent/properties/workflow" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -8532,7 +8532,7 @@
     },
     "library/design/authoringTemplate/MyFile/properties/name/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/design/authoringTemplate/MyFile/properties/title" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -8549,7 +8549,7 @@
     },
     "library/design/authoringTemplate/MyFile/properties/title/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/design/authoringTemplate/MyFile/properties/description" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -8618,7 +8618,7 @@
     },
     "library/design/authoringTemplate/MyFile/elements/body/stringConstraint": {
         "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[^(<[.\n]+>)]*"
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/design/authoringTemplate/MyFile/properties/workflow" : {
         "jcr:primaryType": "bpw:FormControl",

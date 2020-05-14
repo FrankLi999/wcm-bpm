@@ -1170,7 +1170,8 @@ public abstract class BaseWcmRestController {
 		if (StringUtils.hasText(objectConstraint.getPropertyNamePattern())) {
 			ObjectNode patternNode = this.objectMapper.createObjectNode();
 			propertyNode.set("propertyNames", patternNode);
-			patternNode.put("pattern", objectConstraint.getPropertyNamePattern());
+			patternNode.put("pattern", WcmUtils.jsonSchemaPattern(objectConstraint.getPropertyNamePattern()));
+			
 		}
 
 		ObjectNode dependenciesNode = null;
@@ -1271,7 +1272,7 @@ public abstract class BaseWcmRestController {
 			}
 
 			if (StringUtils.hasText(stringConstraint.getPattern())) {
-				propertyNode.put("pattern", stringConstraint.getPattern());
+				propertyNode.put("pattern", WcmUtils.jsonSchemaPattern(stringConstraint.getPattern()));
 			}
 
 			if (StringUtils.hasText(stringConstraint.getContentEncoding())) {
