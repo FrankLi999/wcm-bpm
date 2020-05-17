@@ -971,7 +971,6 @@
         "jcr:primaryType": "bpw:FormControl",        
         "bpw:controlType": "ace",
         "bpw:dataType": "string",
-        "bpw:format": "richText",
         "bpw:mandatory": "true"
     },
     "library/system/authoringTemplate/contentType/elements/body/formControlLayout": {
@@ -2224,15 +2223,31 @@
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.contentAreaLayout", "elements.siteConfig", "elements.friendlyURL"]
+        "bpw:fieldNames": ["elements.contentAreaLayout"]
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/secondRow" : {
         "jcr:primaryType":"bpw:formRow",
-        "bpw:order": 2
+        "bpw:order": 1
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/secondRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.showOnMenu", "elements.allowedArtifactTypes", "elements.allowedFileExtension"]
+        "bpw:fieldNames": ["elements.siteConfig"]
+    },
+    "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/thirdRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 1
+    },
+    "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/thirdRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.showOnMenu", "elements.friendlyURL"]
+    },
+    "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/fourthRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 2
+    },
+    "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/propertiesTab/fourthRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.allowedArtifactTypes", "elements.allowedFileExtension"]
     },
     "library/system/authoringTemplate/siteAreaType/elementGroups/tabs/contentTab" : {
         "jcr:primaryType":"bpw:formTab",
@@ -2349,7 +2364,6 @@
         "bpw:controlType": "ace",        
         "bpw:dataType": "string",
         "bpw:jcrDataType": "STRING",
-        "bpw:format": "richText",
         "bpw:mandatory": "false"
     },
     "library/system/authoringTemplate/siteAreaType/elements/body/formControlLayout": {
@@ -2449,7 +2463,7 @@
     },
     "library/system/authoringTemplate/siteAreaType/elements/contentAreaLayout" : {
         "jcr:primaryType": "bpw:FormControl",
-        "bpw:controlType": "text",
+        "bpw:controlType": "content-area-layout",
         "bpw:dataType": "string",
         "bpw:jcrDataType": "REFERENCE",
         "bpw:mandatory": "false"
