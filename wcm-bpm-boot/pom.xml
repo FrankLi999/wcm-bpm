@@ -23,6 +23,10 @@
         <opentracing-spring-jaeger-cloud.version>2.0.3</opentracing-spring-jaeger-cloud.version>
     </properties>
 	<dependencies>
+		<dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
 	    <dependency>
             <groupId>com.bpwizard.wcm-bpm</groupId>
             <artifactId>modeshape-spring</artifactId>

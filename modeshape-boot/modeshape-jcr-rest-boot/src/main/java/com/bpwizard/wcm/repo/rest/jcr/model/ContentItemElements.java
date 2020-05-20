@@ -1,8 +1,10 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -23,25 +25,39 @@ public class ContentItemElements {
         elements.put(key, value);
     }
 	
-	public void toJson(ObjectNode elementsNpde, ObjectNode elementsChildren, AuthoringTemplate at) throws JsonProcessingException {
+	@SuppressWarnings("unchecked")
+	public void toJson(ObjectNode elementsNode, ObjectNode elementsChildren, AuthoringTemplate at) throws JsonProcessingException {
 		for (String elementName: elements.keySet()) {
 			FormControl formControl = at.getElements().get(elementName);
 			// JsonNode jsonNode= getElements().get(elementName);
-			Object jsonNode= getElements().get(elementName);
-			System.out.println(">>>>>>>>>>>>>>> toJson content item elenment: " + elementName + "," + jsonNode + " .class:" + jsonNode.getClass());
+			Object value = getElements().get(elementName);
+			System.out.println(">>>>>>>>>>>>>>> toJson content item elenment: " + elementName + "," + value + " .class:" + value);
 			if ("integer".equals(formControl.getDataType())) {
-//				if (formControl.isMultiple()) {					
-//					elementsNpde.set(elementName, jsonNode.to);
-//				} else {
-//					elementsNpde.put(elementName, jsonNode.asText());
-//				}
+				if (formControl.isMultiple()) {					
+					elementsNode.set(elementName, WcmUtils.toArrayNode((List<Integer>)value));
+				} else {
+					elementsNode.put(elementName, (Integer)value);
+				}
 			} else if ("boolean".equals(formControl.getDataType())) {
-				//float or //double or by default integer
+				if (formControl.isMultiple()) {					
+					elementsNode.set(elementName, WcmUtils.toArrayNode((List<Boolean>)value));
+				} else {
+					elementsNode.put(elementName, (Boolean)value);
+				}
 			} else if ("number".equals(formControl.getDataType())) {
-				//float or //double or by default integer
+				if (formControl.isMultiple()) {					
+					elementsNode.set(elementName, WcmUtils.toArrayNode((List)value));
+				} else {
+					elementsNode.put(elementName, value.toString());
+				}
 			} else if ("string".equals(formControl.getDataType())) {
-				//format: binary, byte for file upload
+				if (formControl.isMultiple()) {					
+					elementsNode.set(elementName, WcmUtils.toArrayNode((List<String>)value));
+				} else {
+					elementsNode.put(elementName, (String)value);
+				}
 			} else if ("object".equals(formControl.getDataType())) {
+				//TODO
 //				if (formControl.isMultiple()) {
 //					String values[] = (jsonNode instanceof ObjectNode) 
 //							? new String[] {JsonUtils.writeValueAsString(jsonNode)}
@@ -51,6 +67,7 @@ public class ContentItemElements {
 //					elementsNpde.put(elementName, JsonUtils.writeValueAsString(jsonNode));
 //				}
 			} else if ("array".equals(formControl.getDataType())) {
+				//TODO
 				//elementsNpde.put(elementName, JsonUtils.writeValueAsString(jsonNode));
 			}
 		} 

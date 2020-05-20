@@ -156,9 +156,9 @@ public class ContentItem {
 	public JsonNode toJson(AuthoringTemplate at) throws JsonProcessingException {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
-		ObjectNode properties = JsonUtils.createObjectNode();
+		// ObjectNode properties = JsonUtils.createObjectNode();
 		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
-		jsonNode.set(WcmConstants.JCR_JSON_NODE_PROPERTIES, properties);
+		// jsonNode.set(WcmConstants.JCR_JSON_NODE_PROPERTIES, properties);
 		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, at.getNodeType());
 		
 		if (StringUtils.hasText(this.getAuthoringTemplate())) {
@@ -166,19 +166,21 @@ public class ContentItem {
 		}
 		
 		if (StringUtils.hasText(this.lifeCycleStage)) {
-			properties.put("bpw:lifecycleStage", this.lifeCycleStage);
+			jsonNode.put("bpw:lifecycleStage", this.lifeCycleStage);
 		}
 		
 		ObjectNode comementFolderNode = JsonUtils.createObjectNode();
 		ObjectNode comementFolderChildren = JsonUtils.createObjectNode();
 		comementFolderNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, comementFolderChildren);
 		comementFolderNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:ContentItemCommentFolder");
-		children.set(WcmConstants.WCM_NODE_COMMENTTS, comementFolderNode);
+		children.set(WcmConstants.WCM_ITEM_COMMENTTS, comementFolderNode);
 		
 		ObjectNode workflowNode = JsonUtils.createObjectNode();
 		workflowNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:workflowNode");
 		children.set("bpw:workflow", workflowNode);
-		this.workflow.toJson(workflowNode);
+		if (this.workflow != null) {
+			this.workflow.toJson(workflowNode);
+		}
 		
 		ObjectNode aclNode = JsonUtils.createObjectNode();
 		aclNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:AccessControlEntry");
@@ -191,12 +193,11 @@ public class ContentItem {
 		}
 
 		ObjectNode metaDataNode = JsonUtils.createObjectNode();
-		aclNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:properties");
+		metaDataNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:properties");
 		children.set("bpw:metadata", metaDataNode);
 		if (this.getMetadata() != null) {
 			ObjectNode metaDataNodeChildren = JsonUtils.createObjectNode();
 			metaDataNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, metaDataNodeChildren);
-			metaDataNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:properties");
 			WcmProperties metadata = (WcmProperties)this.getMetadata();
 			for (WcmProperty property: metadata.getProperties()) {
 				
@@ -209,8 +210,8 @@ public class ContentItem {
 		} 
 		
 		ObjectNode searchDataNode = JsonUtils.createObjectNode();
-		aclNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:pageSearchData");
-		children.set("bpw:searchData", aclNode);
+		searchDataNode.put(JcrConstants.JCR_PRIMARY_TYPE,  "bpw:pageSearchData");
+		children.set("bpw:searchData", searchDataNode);
 		if (this.getSearchData() != null) {	
 
 			SearchData searchData = (SearchData) this.getSearchData();
@@ -230,16 +231,21 @@ public class ContentItem {
 		ObjectNode elementsNode = JsonUtils.createObjectNode();
 		ObjectNode elementsChildren = JsonUtils.createObjectNode();
 		elementsNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, elementsChildren);
-		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE,  WcmUtils.getElementFolderType(this.getNodeType()));
-		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
+		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
+//		ObjectNode elementsProperties = JsonUtils.createObjectNode();
+//		elementsNode.set(WcmConstants.JCR_JSON_NODE_PROPERTIES, elementsProperties);
+		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE,  WcmUtils.getElementFolderType(at.getLibrary(), at.getName()));
+		children.set(WcmConstants.WCM_ITEM_ELEMENTS, elementsNode);
 		
 		this.getElements().toJson(elementsNode, elementsChildren, at);
 		
 		ObjectNode propertiesNode = JsonUtils.createObjectNode();
 		ObjectNode propertiesNodeChildren = JsonUtils.createObjectNode();
 		propertiesNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, propertiesNodeChildren);
+		children.set(WcmConstants.WCM_ITEM_PROPERTIES, propertiesNode);
+//		ObjectNode propertiesProperties = JsonUtils.createObjectNode();
+//		propertiesNode.set(WcmConstants.JCR_JSON_NODE_PROPERTIES, propertiesProperties);
 		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE,  WcmConstants.JCR_TYPE_PROPERTY_FOLDER);
-		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
 		
 		ContentItemProperties contentItemProperties = this.getProperties();
 		contentItemProperties.toJson(propertiesNode, propertiesNodeChildren);

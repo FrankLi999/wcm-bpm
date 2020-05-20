@@ -68,16 +68,16 @@ public class BpmnWorkflow extends ResourceNode implements HasName, Comparable<Bp
 		
 		
 		ObjectNode propertiesNode = JsonUtils.createObjectNode();
-		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
-		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ContentItemproperties");
+		children.set(WcmConstants.WCM_ITEM_PROPERTIES, propertiesNode);
+		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, WcmConstants.JCR_TYPE_PROPERTY_FOLDER);
 		propertiesNode.put("bpw:name", this.getName());
 		
 		super.toJson(propertiesNode, children);
 		
 		ObjectNode elementsNode = JsonUtils.createObjectNode();
-		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
+		children.set(WcmConstants.WCM_ITEM_ELEMENTS, elementsNode);
 		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_bpmnWorkflowType_ElementFolder");
-		elementsNode.put("bpw:bpmn", this.getBpmn());		
+		elementsNode.put("bpmn", this.getBpmn());		
 		return jsonNode;
 	}
 	

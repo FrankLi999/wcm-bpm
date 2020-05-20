@@ -1104,9 +1104,11 @@ public abstract class BaseWcmRestController {
 			propertyNode.put("readonly", Boolean.TRUE);
 		}
 
+		ObjectNode itemsNode = null;
+		// if (formControl.isMultiple() && (!"file".equals(formControl.getControlType()))) {
 		if (formControl.isMultiple()) {
 			propertyNode.put("type", "array");
-			ObjectNode itemsNode = JsonNodeFactory.instance.objectNode();
+			itemsNode = JsonNodeFactory.instance.objectNode();
 			propertyNode.set("items", itemsNode);
 			if (editMode && !formControl.getFormControlLayout().isEditable()) {
 				itemsNode.put("readonly", Boolean.TRUE);
@@ -1115,20 +1117,20 @@ public abstract class BaseWcmRestController {
 				this.handleArrayConstraint(request, repository, workspace, definitions, editMode, definitionMap,
 						formControl, propertyNode);
 			}
-			propertyNode = itemsNode;
-			// formControl = this.getArrayItemFormControl(formControl);
+
+		} else {
+			itemsNode = propertyNode;
 		}
-		propertyNode.put("type", formControl.getDataType());
-		if (StringUtils.hasText(formControl.getFormat())) {
-			propertyNode.put("format", formControl.getFormat());
-		}
+		
+		itemsNode.put("type", formControl.getDataType());
+
 		if (formControl.getFormControlLayout() != null
 				&& StringUtils.hasText(formControl.getFormControlLayout().getTitle())) {
-			propertyNode.put("title", formControl.getFormControlLayout().getTitle());
+			itemsNode.put("title", formControl.getFormControlLayout().getTitle());
 		}
-
+		
 		this.handleSimpleFieldConstraint(request, repository, workspace, definitions, editMode, definitionMap,
-				formControl, propertyNode);
+				formControl, itemsNode);
 
 		return propertyNode;
 	}
@@ -1449,7 +1451,7 @@ public abstract class BaseWcmRestController {
 			fieldNodes.add(fieldNode);
 		}
 
-		if (formControl.isMultiple()) {
+		if (formControl.isMultiple() && (!"file".equals(formControl.getControlType()))) {
 			fieldNode.put("type", "array");
 			if (formControl.getFormControlLayout() != null && formControl.getFormControlLayout().getListItems() > 0) {
 				fieldNode.put("listItems", formControl.getFormControlLayout().getListItems());
@@ -1460,6 +1462,13 @@ public abstract class BaseWcmRestController {
 			fieldNode = itemsNode;
 		} else {
 			fieldNode.put("key", WcmUtils.layoutPath(fieldPath, form));
+		}
+		
+		if ("file".equals(formControl.getControlType())) {
+			if (formControl.isMultiple()) {
+				fieldNode.put("multiple", "true");
+			}
+			fieldNode.put("format", formControl.getFormat());
 		}
 
 		if (StringUtils.hasText(formControl.getControlType())) {
@@ -1614,7 +1623,7 @@ public abstract class BaseWcmRestController {
 			fieldNodes.add(fieldNode);
 		}
 
-		if (formControl.isMultiple()) {
+		if (formControl.isMultiple() && (!"file".equals(formControl.getControlType()))) {
 			fieldNode.put("type", "array");
 			if (formControl.getFormControlLayout() != null && formControl.getFormControlLayout().getListItems() > 0) {
 				fieldNode.put("listItems", formControl.getFormControlLayout().getListItems());
@@ -1626,7 +1635,9 @@ public abstract class BaseWcmRestController {
 		} else {
 			fieldNode.put("key", WcmUtils.layoutPath(fieldPath, at));
 		}
-
+		if (formControl.isMultiple() && "file".equals(formControl.getControlType())) {
+			fieldNode.put("multiple", "true");
+		}
 		if (StringUtils.hasText(formControl.getControlType())) {
 			fieldNode.put("type", formControl.getControlType());
 			if (formControl.getFormControlLayout() != null) {
@@ -2087,7 +2098,7 @@ public abstract class BaseWcmRestController {
 		
 		
 		for (RestNode childNode : siteConfigNode.getChildren()) {
-			if (WcmConstants.WCM_NODE_ELEMENTS.equals(childNode.getName())) {
+			if (WcmConstants.WCM_ITEM_ELEMENTS.equals(childNode.getName())) {
 				for (RestProperty property : childNode.getJcrProperties()) {
 					if ("colorTheme".equals(property.getName())) {
 						siteConfig.setColorTheme(property.getValues().get(0));
@@ -2170,7 +2181,7 @@ public abstract class BaseWcmRestController {
 						break;
 					}
 				}
-			} else if (WcmConstants.WCM_NODE_PROPERTIES.equals(childNode.getName())) {
+			} else if (WcmConstants.WCM_ITEM_PROPERTIES.equals(childNode.getName())) {
 				this.wcmUtils.resolveResourceNode(siteConfig, childNode);
 			} 
 		}
@@ -2210,7 +2221,7 @@ public abstract class BaseWcmRestController {
 		sa.setProperties(resourceMixin);
 		sa.setElements(elements);
 		for (RestNode childNode : saNode.getChildren()) {
-			if (WcmConstants.WCM_NODE_ELEMENTS.equals(childNode.getName())) {
+			if (WcmConstants.WCM_ITEM_ELEMENTS.equals(childNode.getName())) {
 				for (RestProperty property : childNode.getJcrProperties()) {
 					if (property.getName().indexOf(":") < 0) {
 						// elements.put(this.getSiteAreaPropertyName(property.getName()), property.getValues().get(0));
@@ -2237,7 +2248,7 @@ public abstract class BaseWcmRestController {
 						break;
 					}
 				}
-			} else if (WcmConstants.WCM_NODE_PROPERTIES.equals(childNode.getName())) {
+			} else if (WcmConstants.WCM_ITEM_PROPERTIES.equals(childNode.getName())) {
 				this.wcmUtils.resolveResourceMixin(resourceMixin, childNode);  
 			} else if (WcmUtils.checkNodeType(childNode, "bpw:siteAreaLayout")
 					&& ("siteAreaLayout".equals(childNode.getName()))) {
@@ -2352,7 +2363,7 @@ public abstract class BaseWcmRestController {
 		
 		NavigationItem navigation = (level == 0) ? new Navigation() : new NavigationItem();
 		for (RestNode childNode : siteArea.getChildren()) {
-			if (WcmConstants.WCM_NODE_ELEMENTS.equals(childNode.getName())) {
+			if (WcmConstants.WCM_ITEM_ELEMENTS.equals(childNode.getName())) {
 				for (RestProperty property : childNode.getJcrProperties()) {
 					if ("navigationId".equals(property.getName())) {
 						navigation.setId(property.getValues().get(0));
@@ -2385,7 +2396,7 @@ public abstract class BaseWcmRestController {
 					}
 				}
 				
-			} else if (WcmConstants.WCM_NODE_PROPERTIES.equals(childNode.getName())) {
+			} else if (WcmConstants.WCM_ITEM_PROPERTIES.equals(childNode.getName())) {
 				for (RestProperty property : childNode.getJcrProperties()) {
 					if ("bpw:title".equals(property.getName())) {
 						navigation.setTitle(property.getValues().get(0));

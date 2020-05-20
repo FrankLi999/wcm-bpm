@@ -113,15 +113,15 @@ public class SiteArea implements HasName {
 		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_siteAreaType");
 		
 		ObjectNode propertiesNode = JsonUtils.createObjectNode();
-		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
-		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ContentItemproperties");
+		children.set(WcmConstants.WCM_ITEM_PROPERTIES, propertiesNode);
+		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, WcmConstants.JCR_TYPE_PROPERTY_FOLDER);
 //		propertiesNode.put("bpw:description", this.getDescription());
 		propertiesNode.put("bpw:name", this.getName());
 		String title = StringUtils.hasText(this.getProperties().getTitle()) ? this.getProperties().getTitle() : this.getName();
 		propertiesNode.put("title", title);
 
 		ObjectNode elementsNode = JsonUtils.createObjectNode();
-		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
+		children.set(WcmConstants.WCM_ITEM_ELEMENTS, elementsNode);
 		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_siteAreaType_ElementFolder");
 		//elementsNode.put("language", this.getLanguage());
 		

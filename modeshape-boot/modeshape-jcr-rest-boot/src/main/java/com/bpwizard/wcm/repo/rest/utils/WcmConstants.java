@@ -44,7 +44,7 @@ public class WcmConstants {
 	public  static final String OPERATION_REL_PATH = "system/configuration/operations";
 	
 	public  static final String ELEMENT_FOLDER_TYPE = "bpw:%s_%s_ElementFolder";
-	public  static final String PROPERTY_FOLDER_TYPE = "bpw:%s_%s_PropertyFolder";
+	// public  static final String PROPERTY_FOLDER_TYPE = "bpw:%s_%s_PropertyFolder";
 	public  static final String COMMENT_FOLDER_TYPE = "bpw:%s_%s_CommentFolder";
 	public  static final String CONTENT_TYPE = "bpw:%s_%s_AT";
 	
@@ -79,12 +79,12 @@ public class WcmConstants {
 	public static final String JCR_JSON_NODE_CHILDREN = "children";
 	public static final String JCR_JSON_NODE_PROPERTIES = "properties";
 	
-	public static final String JCR_TYPE_ELEMENTS_FOLDER_PATTERN = "%s_ElementFolder";
+	public static final String JCR_TYPE_ELEMENTS_FOLDER_PATTERN = "bpw:%s_%s_ElementFolder";
 	public static final String JCR_TYPE_PROPERTY_FOLDER = "bpw:ContentItemproperties";
 	
-	public static final String WCM_NODE_ELEMENTS = "elements";
-	public static final String WCM_NODE_PROPERTIES = "properties";
-	public static final String WCM_NODE_COMMENTTS = "comments";
+	public static final String WCM_ITEM_ELEMENTS = "elements";
+	public static final String WCM_ITEM_PROPERTIES = "itemProperties";
+	public static final String WCM_ITEM_COMMENTTS = "comments";
 	
 	public static final String JSON_STRING_PATTERN = "^%s$";
 }

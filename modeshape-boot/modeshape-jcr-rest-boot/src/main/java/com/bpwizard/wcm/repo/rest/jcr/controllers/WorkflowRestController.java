@@ -205,7 +205,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 		bpmnWorkflow.setWorkspace(workspace);
 		bpmnWorkflow.setLibrary(library);
 		for (RestNode childNode : node.getChildren()) {
-			if (WcmConstants.WCM_NODE_ELEMENTS.equals(childNode.getName())) {
+			if (WcmConstants.WCM_ITEM_ELEMENTS.equals(childNode.getName())) {
 				for (RestProperty restProperty : childNode.getJcrProperties()) {
 					if ("bpw:bpmn".equals(restProperty.getName())) {
 						bpmnWorkflow.setBpmn(restProperty.getValues().get(0));
@@ -213,7 +213,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 					} 
 				}
 				
-			} else if (WcmConstants.WCM_NODE_PROPERTIES.equals(childNode.getName())) {
+			} else if (WcmConstants.WCM_ITEM_PROPERTIES.equals(childNode.getName())) {
 				for (RestProperty restProperty : childNode.getJcrProperties()) {
 					if ("bpw:title".equals(restProperty.getName())) {
 						bpmnWorkflow.setTitle(restProperty.getValues().get(0));

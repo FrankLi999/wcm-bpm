@@ -36,7 +36,7 @@
 - lifecyclePolicy (STRING)
 - currentLifecycleState (STRING)
 
-[bpw:workflowNode] > mix:shareable, bpw:lifecycle abstract
+[bpw:workflowNode] > mix:shareable, bpw:lifecycle
 - publishDate (STRING) COPY
 - expireDate (STRING) COPY
 - workflow (STRING) COPY
@@ -612,14 +612,14 @@
 
 [bpw:system_folderType] > bpw:baseContentType
 + elements (bpw:system_folderType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 [bpw:system_libraryType_ElementFolder]  > bpw:ContentItemElementFolder
 - language (STRING) COPY
 
 [bpw:system_libraryType] > bpw:baseContentType
 + elements (bpw:system_libraryType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 + rootSiteArea (bpw:system_siteAreaType)
 + authoringTemplate (bpw:authoringTemplateFolder)
 + form (bpw:formFolder)
@@ -640,7 +640,7 @@
 
 [bpw:system_contentType] > bpw:baseContentType
 + elements (bpw:system_contentType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 [bpw:system_componentType_ElementFolder]  > bpw:ContentItemElementFolder
 - componentTemplate (STRING) COPY
@@ -648,7 +648,7 @@
 
 [bpw:system_componentType] > bpw:baseContentType
 + elements (bpw:system_componentType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 [bpw:system_fileType_ElementFolder]  > bpw:ContentItemElementFolder
 - content (BINARY) COPY
@@ -657,7 +657,7 @@
 
 [bpw:system_fileType] > nt:file, bpw:baseContentType
 + elements (bpw:system_fileType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 
 [bpw:system_themeType_ElementFolder]  > bpw:ContentItemElementFolder
@@ -665,7 +665,7 @@
 
 [bpw:system_themeType] > nt:folder, bpw:baseContentType
 + elements (bpw:system_themeType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 [bpw:system_vanityURLType_ElementFolder]  > bpw:ContentItemElementFolder
 - url (STRING)
@@ -673,14 +673,14 @@
 
 [bpw:system_vanityURLType] > bpw:baseContentType
 + elements (bpw:system_vanityURLType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 
 [bpw:system_categoryType_ElementFolder]  > bpw:ContentItemElementFolder
 
 [bpw:system_categoryType] > nt:folder, bpw:baseContentType
 + elements (bpw:system_categoryType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 + * (bpw:system_categoryType)
 
 [bpw:system_validationRuleType_ElementFolder]  > bpw:ContentItemElementFolder
@@ -689,14 +689,14 @@
 
 [bpw:system_validationRuleType] > nt:folder, bpw:baseContentType
 + elements (bpw:system_validationRuleType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 [bpw:system_bpmnWorkflowType_ElementFolder]  > bpw:ContentItemElementFolder
 - bpmn (STRING)
 
 [bpw:system_bpmnWorkflowType] > nt:folder, bpw:baseContentType
 + elements (bpw:system_bpmnWorkflowType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 [bpw:system_queryStatementType_ElementFolder]  > bpw:ContentItemElementFolder
 - query (STRING)
@@ -704,7 +704,7 @@
 
 [bpw:system_queryStatementType] > nt:folder, bpw:baseContentType
 + elements (bpw:system_queryStatementType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 [bpw:system_siteConfigType_ElementFolder]  > bpw:ContentItemElementFolder
 - rootSiteArea (STRING)
@@ -713,8 +713,8 @@
 + layout (bpw:pageLayout)
 
 [bpw:system_siteConfigType] > nt:folder, bpw:baseContentType
-+ bpw:elements (bpw:system_siteConfigType_ElementFolder)
-+ bpw:properties (bpw:ContentItemproperties)
++ elements (bpw:system_siteConfigType_ElementFolder)
++ itemProperties (bpw:ContentItemproperties)
 
 [bpw:system_siteAreaType_ElementFolder]  > bpw:ContentItemElementFolder
 - body (STRING)
@@ -742,7 +742,7 @@
 
 [bpw:system_siteAreaType] > bpw:resourceFolder, bpw:baseContentType
 + elements (bpw:system_siteAreaType_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 + siteAreaLayout (bpw:siteAreaLayout)
 + * (bpw:resourceNode)
 
@@ -751,7 +751,7 @@
 
 [bpw:design_MyContent_AT] > nt:folder, bpw:baseContentType
 + elements (bpw:design_MyContent_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 [bpw:design_MyFile_ElementFolder]  > bpw:ContentItemElementFolder
 - body (STRING)
@@ -760,7 +760,7 @@
 
 [bpw:design_MyFile_AT] > nt:folder, bpw:baseContentType
 + elements (bpw:design_MyFile_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)
 
 
 [bpw:design_MySidePaneContent_ElementFolder]  > bpw:ContentItemElementFolder
@@ -768,4 +768,4 @@
 
 [bpw:design_MySidePaneContent_AT] > nt:folder, bpw:baseContentType
 + elements (bpw:design_MySidePaneContent_ElementFolder)
-+ properties (bpw:ContentItemproperties)
++ itemProperties (bpw:ContentItemproperties)

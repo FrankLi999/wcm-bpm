@@ -53,10 +53,16 @@
 		<drools-version>7.27.0.Final</drools-version>
 		<spring-cloud.version>Hoxton.RC2</spring-cloud.version>
 		<spring-cloud-kubernetes.version>1.1.1.RELEASE</spring-cloud-kubernetes.version>
+		<jaxb.api.version>2.3.1</jaxb.api.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+		    <dependency>
+	            <groupId>javax.xml.bind</groupId>
+	            <artifactId>jaxb-api</artifactId>
+	            <version>${jaxb.api.version}</version>
+	        </dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>

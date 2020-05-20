@@ -85,14 +85,14 @@ public class SiteConfig extends ResourceNode {
 		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_siteConfigType");
 		
 		ObjectNode propertiesNode = JsonUtils.createObjectNode();
-		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
-		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ContentItemproperties");
+		children.set(WcmConstants.WCM_ITEM_PROPERTIES, propertiesNode);
+		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, WcmConstants.JCR_TYPE_PROPERTY_FOLDER);
 		propertiesNode.put("bpw:name", this.getName());
 //		propertiesNode.put("bpw:title", this.getTitle());
 //		propertiesNode.put("bpw:description", this.getDescription());
 		
 		ObjectNode elementsNode = JsonUtils.createObjectNode();
-		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
+		children.set(WcmConstants.WCM_ITEM_ELEMENTS, elementsNode);
 		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_siteConfigType_ElementFolder");
 		elementsNode.put("colorTheme", this.getColorTheme());
 		elementsNode.put("rootSiteArea", this.getRootSiteArea());

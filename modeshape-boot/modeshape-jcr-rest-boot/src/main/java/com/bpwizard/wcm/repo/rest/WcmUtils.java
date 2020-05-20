@@ -88,12 +88,20 @@ public class WcmUtils {
 		return path[path.length - 1];
 	}
 	
-	public static String getElementFolderType(String nodeType) {
-		return String.format(WcmConstants.JCR_TYPE_ELEMENTS_FOLDER_PATTERN, nodeType);
+	public static String getElementFolderType(String library, String atName) {
+		return String.format(WcmConstants.JCR_TYPE_ELEMENTS_FOLDER_PATTERN, library, atName);
 	}
 	
 	public static String getContentType(String library, String at) {
 		return String.format(WcmConstants.CONTENT_TYPE, library, at);
+	}
+	
+	public static ArrayNode toArrayNode(List<? extends Object> values) {
+		ArrayNode valueArray = JsonUtils.creatArrayNode();
+		for (Object value : values) {
+			valueArray.add(value.toString());
+		}
+		return valueArray;
 	}
 	
 	public static ArrayNode toArrayNode(String values[]) {
@@ -283,7 +291,7 @@ public class WcmUtils {
         elementFolderNodeType.getPropertyDefinitionTemplates().add(this.createPropertyDefinitionDefault(
         		"*", nodeTypeManager));
         
-        String propertyFolderType = String.format(WcmConstants.PROPERTY_FOLDER_TYPE, at.getLibrary(), at.getName());
+        String propertyFolderType = WcmConstants.JCR_TYPE_PROPERTY_FOLDER;
         NodeTypeTemplate propertyFolderNodeType = this.createElementFolderNodeType(
         		propertyFolderType, 
         		new String[] {WcmConstants.FOLDER_NODE_TYPE},
@@ -339,12 +347,12 @@ public class WcmUtils {
         		true);
         
         NodeDefinitionTemplate elementFolder = this.createNodeDefinitionTemplate(
-        		"elements",
+        		WcmConstants.WCM_ITEM_ELEMENTS,
         		new String[] { elementFolderType },
         		nodeTypeManager);
         
         NodeDefinitionTemplate propertyFolder = this.createNodeDefinitionTemplate(
-        		"properties",
+        		WcmConstants.WCM_ITEM_PROPERTIES,
         		new String[] { propertyFolderType },
         		nodeTypeManager);		
         		

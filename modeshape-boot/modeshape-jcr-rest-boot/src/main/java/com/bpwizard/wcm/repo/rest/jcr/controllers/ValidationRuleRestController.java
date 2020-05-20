@@ -208,7 +208,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 		
 		validationRule.setName(node.getName());
 		for (RestNode childNode : node.getChildren()) {
-			if (WcmConstants.WCM_NODE_ELEMENTS.equals(childNode.getName())) {
+			if (WcmConstants.WCM_ITEM_ELEMENTS.equals(childNode.getName())) {
 				for (RestProperty restProperty : childNode.getJcrProperties()) {
 					if ("rule".equals(restProperty.getName())) {
 						validationRule.setRule(restProperty.getValues().get(0));
@@ -216,7 +216,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 						validationRule.setType(restProperty.getValues().get(0));
 					}
 				}
-			} else if (WcmConstants.WCM_NODE_PROPERTIES.equals(childNode.getName())) {
+			} else if (WcmConstants.WCM_ITEM_PROPERTIES.equals(childNode.getName())) {
 				for (RestProperty restProperty : childNode.getJcrProperties()) {
 					if ("bpw:title".equals(restProperty.getName())) {
 						validationRule.setTitle(restProperty.getValues().get(0));

@@ -5,7 +5,7 @@
     "library/system" : {
         "jcr:primaryType":"bpw:system_libraryType"
     },
-    "library/system/properties" : {
+    "library/system/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:authoringTemplate": "/system/authoringTemplate/libraryType"
     },
@@ -7698,7 +7698,7 @@
     "library/camunda" : {
         "jcr:primaryType":"bpw:system_libraryType"
     },
-    "library/camunda/properties" : {
+    "library/camunda/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:authoringTemplate": "/system/authoringTemplate/libraryType"
     },
@@ -7936,7 +7936,7 @@
     "library/apigateway" : {
         "jcr:primaryType":"bpw:system_libraryType"
     },
-    "library/apigateway/properties" : {
+    "library/apigateway/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:authoringTemplate": "/system/authoringTemplate/libraryType"
     },
@@ -8129,7 +8129,7 @@
     "library/design" : {
         "jcr:primaryType":"bpw:system_libraryType"
     },
-    "library/design/properties" : {
+    "library/design/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:name": "design"
     },
@@ -8613,7 +8613,7 @@
     },
     "library/design/authoringTemplate/MyFile/elements/file/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
-        "bpw:title": "Upload Files"
+        "bpw:title": "Upload File"
     },
     "library/design/authoringTemplate/MyFile/elements/files" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -8833,7 +8833,7 @@
         "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
         "body": "Content1 Body"
     },
-    "library/camunda/rootSiteArea/home/MyContent/properties" : {
+    "library/camunda/rootSiteArea/home/MyContent/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:workflow": "bpmn:wcm_content_flow",
         "bpw:description":"MyContent",
@@ -8847,7 +8847,7 @@
         "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
         "body": "Content1 Body"
     },
-    "library/camunda/rootSiteArea/home/MyContent1/properties" : {
+    "library/camunda/rootSiteArea/home/MyContent1/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:workflow": "bpmn:wcm_content_flow",
         "bpw:description":"MyContent1",
@@ -8861,7 +8861,7 @@
         "jcr:primaryType":"bpw:design_MySidePaneContent_ElementFolder",
         "sidebody":"MySidePaneContent Body"
     },
-    "library/camunda/rootSiteArea/home/MySidePaneContent/properties" : {
+    "library/camunda/rootSiteArea/home/MySidePaneContent/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:workflow": "bpmn:wcm_content_flow",
         "bpw:description":"MySidePaneContent",
@@ -8875,7 +8875,7 @@
         "jcr:primaryType":"bpw:design_MySidePaneContent_ElementFolder",
         "sidebody":"MySidePaneContent1 Body"
     },
-    "library/camunda/rootSiteArea/home/MySidePaneContent1/properties" : {
+    "library/camunda/rootSiteArea/home/MySidePaneContent1/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:workflow": "bpmn:wcm_content_flow",
         "bpw:description":"MySidePaneContent1",

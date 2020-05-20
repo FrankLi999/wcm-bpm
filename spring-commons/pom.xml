@@ -26,6 +26,7 @@
 	</parent>
 	<modules>
 	    <module>spring-boot-hazelcast</module>
+		<module>spring-boot-ignite</module>
 		<module>spring-boot-commons-exceptions</module>
 		<module>spring-boot-commons</module>
 		<module>spring-boot-commons-non-reactive</module>

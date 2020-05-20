@@ -65,12 +65,12 @@ public class Category implements HasName {
 		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
 		
 		ObjectNode propertiesNode = JsonUtils.createObjectNode();
-		children.set(WcmConstants.WCM_NODE_PROPERTIES, propertiesNode);
-		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ContentItemproperties");
+		children.set(WcmConstants.WCM_ITEM_PROPERTIES, propertiesNode);
+		propertiesNode.put(JcrConstants.JCR_PRIMARY_TYPE, WcmConstants.JCR_TYPE_PROPERTY_FOLDER);
 		propertiesNode.put("bpw:name", this.getName());
 		
 		ObjectNode elementsNode = JsonUtils.createObjectNode();
-		children.set(WcmConstants.WCM_NODE_ELEMENTS, elementsNode);
+		children.set(WcmConstants.WCM_ITEM_ELEMENTS, elementsNode);
 		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_categoryType_ElementFolder");
 		return jsonNode;
 	}

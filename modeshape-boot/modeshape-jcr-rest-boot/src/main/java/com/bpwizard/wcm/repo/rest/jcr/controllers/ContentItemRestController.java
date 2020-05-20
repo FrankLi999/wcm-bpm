@@ -285,7 +285,8 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			//Resolve properties first
 			for (RestNode node: contentItemNode.getChildren()) {
-				if (WcmConstants.WCM_NODE_PROPERTIES.equals(node.getName()) || WcmUtils.checkNodeType(node, "bpw:ContentItemproperties")) {					
+				if (WcmConstants.WCM_ITEM_PROPERTIES.equals(node.getName()) || 
+						WcmUtils.checkNodeType(node, WcmConstants.JCR_TYPE_PROPERTY_FOLDER)) {					
 					contentItemProperties.setName(contentItemNode.getName());					
 					for (RestProperty property: node.getJcrProperties()) {
 						if ("bpw:categories".equals(property.getName())) {
@@ -310,8 +311,8 @@ public class ContentItemRestController extends BaseWcmRestController {
 					WorkflowNode workflowNode = new WorkflowNode();
 					contentItem.setWorkflow(workflowNode);
 					this.resolveWorkflowNode(workflowNode, node);
-				} else if (WcmConstants.WCM_NODE_ELEMENTS.equals(node.getName()) || 
-						WcmUtils.checkNodeType(node, WcmUtils.getElementFolderType(at.getNodeType()))) {
+				} else if (WcmConstants.WCM_ITEM_ELEMENTS.equals(node.getName()) || 
+						WcmUtils.checkNodeType(node, WcmUtils.getElementFolderType(at.getLibrary(), at.getName()))) {
 					// Map<String, JsonNode> elements = new HashMap<>();
 					Map<String, Object> elements = new HashMap<>();
 					ContentItemElements contentItemElements = new ContentItemElements();
@@ -331,6 +332,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 								elements.put(property.getName(), JsonUtils.createTextNode(property.getValues().get(0)));
 							}
 						} else if ("object".equals(formControl.getDataType())) {
+							//TODO
 							if (formControl.isMultiple()) {
 								String values[] = property.getValues().toArray(new String[property.getValues().size()]);
 								elements.put(property.getName(), JsonUtils.readTree(values));
@@ -338,6 +340,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 								elements.put(property.getName(), JsonUtils.readTree(property.getValues().get(0)));
 							}
 						} else if ("array".equals(formControl.getDataType())) {
+							//TODO
 							elements.put(property.getName(), JsonUtils.readTree(property.getValues().get(0)));
 						}
 					}
