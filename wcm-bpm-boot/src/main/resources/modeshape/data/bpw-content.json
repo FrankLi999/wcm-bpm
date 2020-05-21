@@ -7771,48 +7771,45 @@
         "icon": "archive",
         "url": "/bpm/home",
         "translate": "NAV.BPM.HOME.TITLE",
-        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+        "contentAreaLayout": "/design/contentAreaLayout/CamundaHomeLayout"
     },
     "library/camunda/rootSiteArea/home/siteAreaLayout" : {
         "jcr:primaryType":"bpw:siteAreaLayout",
-        "bpw:contentWidth": "80"
+        "bpw:contentWidth": "100"
     },
     "library/camunda/rootSiteArea/home/siteAreaLayout/sidePane" : {
         "jcr:primaryType":"bpw:contentAreaSidePanel",
         "bpw:isLeft": "true",
-        "bpw:width": "20"
-    },
-    "library/camunda/rootSiteArea/home/siteAreaLayout/sidePane/viewer_s0" : {
-        "jcr:primaryType":"bpw:resourceViewer",
-        "bpw:title": "MySidePaneRenderTemplate",
-        "bpw:renderTemplateName": "/design/renderTemplate/MySidePaneRenderTemplate",
-        "bpw:contentPath": "/camunda/rootSiteArea/home/MySidePaneContent1"
+        "bpw:width": "0"
     },
     "library/camunda/rootSiteArea/home/siteAreaLayout/row0" : {
         "jcr:primaryType":"bpw:layoutRow"
     },
     "library/camunda/rootSiteArea/home/siteAreaLayout/row0/column0" : {
         "jcr:primaryType":"bpw:layoutColumn",
-        "bpw:width": "100"
+        "bpw:width": "66"
     },
-    "library/camunda/rootSiteArea/home/siteAreaLayout/row0/column0/viewer_c0_0_0" : {
+    "library/camunda/rootSiteArea/home/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "My Applications Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
+        "bpw:contentPath": "/camunda/rootSiteArea/home/MyApplications"
+    },
+    "library/camunda/rootSiteArea/home/siteAreaLayout/row0/column0/viewer1" : {
         "jcr:primaryType":"bpw:resourceViewer",
         "bpw:title": "MyRenderTemplate",
-       "bpw:renderTemplateName": "/design/renderTemplate/MyRenderTemplate",
-       "bpw:contentPath": ["/camunda/rootSiteArea/home/MyContent","/camunda/rootSiteArea/home/MyContent1"]
+        "bpw:renderTemplateName": "design/renderTemplate/RT_MyLinks",
+        "bpw:contentPath": "/camunda/rootSiteArea/home/MyLinks"
     },
-    "library/camunda/rootSiteArea/home/siteAreaLayout/row1" : {
-        "jcr:primaryType":"bpw:layoutRow"
-    },
-    "library/camunda/rootSiteArea/home/siteAreaLayout/row1/column0" : {
+    "library/camunda/rootSiteArea/home/siteAreaLayout/row0/column1" : {
         "jcr:primaryType":"bpw:layoutColumn",
-        "bpw:width": "100"
+        "bpw:width": "33"
     },
-    "library/camunda/rootSiteArea/home/siteAreaLayout/row1/column0/viewer_c1_0_0" : {
+    "library/camunda/rootSiteArea/home/siteAreaLayout/row0/column1/viewer_0" : {
         "jcr:primaryType":"bpw:resourceViewer",
-        "bpw:title": "MyRenderTemplate",
-        "bpw:renderTemplateName": "/design/renderTemplate/MyContentRenderLayout",
-        "bpw:contentPath": ["/camunda/rootSiteArea/home/MyContent", "/camunda/rootSiteArea/home/MyContent1"]
+        "bpw:title": "UserProfile Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_UserProfile",
+        "bpw:contentPath": "library/camunda/rootSiteArea/home/UserProfile"
     },
     "library/camunda/rootSiteArea/tasklist" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
@@ -8602,7 +8599,7 @@
     },
     "library/design/authoringTemplate/MyFile/elements/file" : {
         "jcr:primaryType": "bpw:FormControl",
-        "bpw:controlType": "file",
+        "bpw:controlType": "wcm-file",
         "bpw:dataType": "string",
         "bpw:format": "binary",
         "bpw:jcrDataType": "BINARY",
@@ -8617,7 +8614,7 @@
     },
     "library/design/authoringTemplate/MyFile/elements/files" : {
         "jcr:primaryType": "bpw:FormControl",
-        "bpw:controlType": "file",
+        "bpw:controlType": "wcm-file",
         "bpw:dataType": "string",
         "bpw:format": "binary",
         "bpw:jcrDataType": "BINARY",
@@ -8880,5 +8877,238 @@
         "bpw:workflow": "bpmn:wcm_content_flow",
         "bpw:description":"MySidePaneContent1",
         "bpw:title":"MySidePaneContent1"
+    },
+    "library/camunda/category/Task" : {
+        "jcr:primaryType":"bpw:system_categoryType"
+    },
+    "library/camunda/category/Task/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name": "Task",
+        "bpw:title": "Task",
+        "bpw:description": "BPM Tasks"
+    },
+    "library/camunda/category/Task/TaskItem" : {
+        "jcr:primaryType":"bpw:system_categoryType"
+    },
+    "library/camunda/category/Task/TaskItem/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name": "TaskItem",
+        "bpw:title": "Task Item",
+        "bpw:description": "BPM Task Item"
+    },
+    "library/camunda/category/Process" : {
+        "jcr:primaryType":"bpw:system_categoryType"
+    },
+    "library/camunda/category/Process/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name": "Process",
+        "bpw:title": "Process",
+        "bpw:description": "BPM Process"
+    },
+    "library/camunda/category/Process/ProcessInstance" : {
+        "jcr:primaryType":"bpw:system_categoryType"
+    },
+    "library/camunda/category/Process/ProcessInstance/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name": "ProcessInstance",
+        "bpw:title": "Process Instance",
+        "bpw:description": "BPM Process Instance"
+    },
+    "library/camunda/category/Process/ProcessDefinition" : {
+        "jcr:primaryType":"bpw:system_categoryType"
+    },
+    "library/camunda/category/Process/ProcessDefinition/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name": "ProcessDefinition",
+        "bpw:title": "Process Definition",
+        "bpw:description": "BPM Process Definition"
+    },
+    "library/camunda/workflow/ContentItemWorkflow" : {
+        "jcr:primaryType":"bpw:system_bpmnWorkflowType"
+    },
+    "library/camunda/workflow/ContentItemWorkflow/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name": "ContentItemWorkflow",
+        "bpw:title": "Content Item Workflow",
+        "bpw:description": "Content Item Workflow"
+    },
+    "library/camunda/workflow/ContentItemWorkflow/elements" : {
+        "jcr:primaryType":"bpw:system_bpmnWorkflowType_ElementFolder",
+        "bpmn": "Content Item Workflow"
+    },
+    "library/camunda/rootSiteArea/home/MyApplications" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/home/MyApplications/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<bpm-applications></bpm-applications>"
+    },
+    "library/camunda/rootSiteArea/home/MyApplications/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"BPM Application Links",
+        "bpw:title":"Applications"
+    },
+    "library/camunda/rootSiteArea/home/MyLinks" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/home/MyLinks/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<bpm-links></bpm-links>"
+    },
+    "library/camunda/rootSiteArea/home/MyLinks/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"Static Links",
+        "bpw:title":"Links"
+    },
+    "library/camunda/rootSiteArea/home/UserProfile" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/home/UserProfile/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<user-profile></user-profile>"
+    },
+    "library/camunda/rootSiteArea/home/UserProfile/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"User Prpfile",
+        "bpw:title":"Use Profile"
+    },
+    "library/design/renderTemplate/MyApplicationsRenderTemplate": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "RT_MyApplications",
+		"bpw:title": "My Applications Render Template",
+		"bpw:description": "My Applications Render Template",
+		"bpw:preloop": "",
+		"bpw:postloop": "",
+		
+		"bpw:maxEntries": "3",
+		"bpw:note": "Render BPM application links",
+		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
+		"bpw:isQuery": "false"
+	},
+	"library/design/renderTemplate/MyApplicationsRenderTemplate/row1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"library/design/renderTemplate/MyApplicationsRenderTemplate/row1/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "100"
+	},
+	"library/design/renderTemplate/MyApplicationsRenderTemplate/row1/column1/title": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+	    "bpw:name": "title",
+	    "bpw:source": "property"
+	},
+	"library/design/renderTemplate/MyApplicationsRenderTemplate/row2": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"library/design/renderTemplate/MyApplicationsRenderTemplate/row2/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "100"
+	},
+	"library/design/renderTemplate/MyApplicationsRenderTemplate/row2/column1/body": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+		"bpw:name": "body",
+		"bpw:source": "property"
+	},
+	"library/design/renderTemplate/MyLinksRenderTemplate": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "RT_MyLinks",
+		"bpw:title": "My Links Render Template",
+		"bpw:description": "My Links Render Template",
+		"bpw:preloop": "",
+		"bpw:postloop": "",
+		
+		"bpw:maxEntries": "3",
+		"bpw:note": "Render BPM application links",
+		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
+		"bpw:isQuery": "false"
+	},
+	"library/design/renderTemplate/MyLinksRenderTemplate/row1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"library/design/renderTemplate/MyLinksRenderTemplate/row1/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "100"
+	},
+	"library/design/renderTemplate/MyLinksRenderTemplate/row1/column1/title": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+	    "bpw:name": "title",
+	    "bpw:source": "property"
+	},
+	"library/design/renderTemplate/MyLinksRenderTemplate/row2": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"library/design/renderTemplate/MyLinksRenderTemplate/row2/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "100"
+	},
+	"library/design/renderTemplate/MyLinksRenderTemplate/row2/column1/body": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+		"bpw:name": "body",
+		"bpw:source": "property"
+	},
+	"library/design/renderTemplate/UserProfileRenderTemplate": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "RT_UserProfile",
+		"bpw:title": "UserProfile Render Template",
+		"bpw:description": "UserProfile Template",
+		"bpw:code": "<render-element element='body'></render-element>",
+		"bpw:preloop": "",
+		"bpw:postloop": "",		
+		"bpw:maxEntries": "1",
+		"bpw:note": "Render user profile",
+		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
+		"bpw:isQuery": "false"
+	},
+	"library/design/contentAreaLayout/CamundaHomeLayout" : {
+        "jcr:primaryType":"bpw:contentAreaLayout",
+        "bpw:name": "Layout_CamundaHome",
+        "bpw:contentWidth": "100"
+    },
+    "library/design/contentAreaLayout/CamundaHomeLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/design/contentAreaLayout/CamundaHomeLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/design/contentAreaLayout/CamundaHomeLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "66"
+    },
+    "library/design/contentAreaLayout/CamundaHomeLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "My Applications Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
+        "bpw:contentPath": "/camunda/rootSiteArea/home/MyApplications"
+    },
+    "library/design/contentAreaLayout/CamundaHomeLayout/row0/column0/viewer1" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "MyRenderTemplate",
+        "bpw:renderTemplateName": "design/renderTemplate/RT_MyLinks",
+        "bpw:contentPath": "/camunda/rootSiteArea/home/MyLinks"
+    },
+    "library/design/contentAreaLayout/CamundaHomeLayout/row0/column1" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "33"
+    },
+    "library/design/contentAreaLayout/CamundaHomeLayout/row0/column1/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "UserProfile Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_UserProfile",
+        "bpw:contentPath": "library/camunda/rootSiteArea/home/UserProfile"
     }
 }

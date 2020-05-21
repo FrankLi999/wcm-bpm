@@ -31,7 +31,6 @@ public class ContentItemElements {
 			FormControl formControl = at.getElements().get(elementName);
 			// JsonNode jsonNode= getElements().get(elementName);
 			Object value = getElements().get(elementName);
-			System.out.println(">>>>>>>>>>>>>>> toJson content item elenment: " + elementName + "," + value + " .class:" + value);
 			if ("integer".equals(formControl.getDataType())) {
 				if (formControl.isMultiple()) {					
 					elementsNode.set(elementName, WcmUtils.toArrayNode((List<Integer>)value));
