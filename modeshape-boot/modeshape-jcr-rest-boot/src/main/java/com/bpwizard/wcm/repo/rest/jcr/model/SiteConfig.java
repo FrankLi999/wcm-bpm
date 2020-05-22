@@ -93,13 +93,16 @@ public class SiteConfig extends ResourceNode {
 		
 		ObjectNode elementsNode = JsonUtils.createObjectNode();
 		children.set(WcmConstants.WCM_ITEM_ELEMENTS, elementsNode);
+		ObjectNode elementsChildren = JsonUtils.createObjectNode();
+		elementsNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, elementsChildren);
+		
 		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_siteConfigType_ElementFolder");
 		elementsNode.put("colorTheme", this.getColorTheme());
 		elementsNode.put("rootSiteArea", this.getRootSiteArea());
 		elementsNode.put("customScrollbars", this.isCustomScrollbars());
 		
 		ObjectNode layout = JsonUtils.createObjectNode();
-		elementsNode.set("layout", layout);
+		elementsChildren.set("layout", layout);
 		ObjectNode layoutChildren = JsonUtils.createObjectNode();
 		layout.set(WcmConstants.JCR_JSON_NODE_CHILDREN, layoutChildren);
 		

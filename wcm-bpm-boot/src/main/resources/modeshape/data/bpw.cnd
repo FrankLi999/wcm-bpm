@@ -465,7 +465,7 @@
 - hidden (BOOLEAN)
 - position (STRING)
 
-[bpw:pageLayout]
+[bpw:pageLayout] orderable
 - bpw:style (STRING)
 - bpw:width (STRING)
 + navbar (bpw:navbar)

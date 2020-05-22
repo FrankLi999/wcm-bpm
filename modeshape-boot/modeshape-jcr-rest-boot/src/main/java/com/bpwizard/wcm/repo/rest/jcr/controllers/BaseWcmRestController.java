@@ -2125,7 +2125,7 @@ public abstract class BaseWcmRestController {
 								layout.setNavbar(navbar);
 								for (RestProperty property : node.getJcrProperties()) {
 									if ("folded".equals(property.getName())) {
-										navbar.setFolded(Boolean.getBoolean(property.getValues().get(0)));
+										navbar.setFolded(Boolean.valueOf(property.getValues().get(0)));
 									} else if ("primaryBackground".equals(property.getName())) {
 										navbar.setPrimaryBackground(property.getValues().get(0));
 									} else if ("secondaryBackground".equals(property.getName())) {
@@ -2135,7 +2135,7 @@ public abstract class BaseWcmRestController {
 									} else if ("position".equals(property.getName())) {
 										navbar.setPosition(property.getValues().get(0));
 									} else if ("hidden".equals(property.getName())) {
-										navbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+										navbar.setHidden(Boolean.valueOf(property.getValues().get(0)));
 									}
 								}
 							} else if ("toolbar".equals(node.getName())) {
@@ -2143,13 +2143,13 @@ public abstract class BaseWcmRestController {
 								layout.setToolbar(toolbar);
 								for (RestProperty property : node.getJcrProperties()) {
 									if ("customBackgroundColor".equals(property.getName())) {
-										toolbar.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
+										toolbar.setCustomBackgroundColor(Boolean.valueOf(property.getValues().get(0)));
 									} else if ("background".equals(property.getName())) {
 										toolbar.setBackground(property.getValues().get(0));
 									} else if ("position".equals(property.getName())) {
 										toolbar.setPosition(property.getValues().get(0));
 									} else if ("hidden".equals(property.getName())) {
-										toolbar.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+										toolbar.setHidden(Boolean.valueOf(property.getValues().get(0)));
 									}
 								}
 							} else if ("footer".equals(node.getName())) {
@@ -2157,13 +2157,13 @@ public abstract class BaseWcmRestController {
 								layout.setFooter(footer);
 								for (RestProperty property : node.getJcrProperties()) {
 									if ("customBackgroundColor".equals(property.getName())) {
-										footer.setCustomBackgroundColor(Boolean.getBoolean(property.getValues().get(0)));
+										footer.setCustomBackgroundColor(Boolean.valueOf(property.getValues().get(0)));
 									} else if ("background".equals(property.getName())) {
 										footer.setBackground(property.getValues().get(0));
 									} else if ("position".equals(property.getName())) {
 										footer.setPosition(property.getValues().get(0));
 									} else if ("hidden".equals(property.getName())) {
-										footer.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+										footer.setHidden(Boolean.valueOf(property.getValues().get(0)));
 									}
 								}
 							} else if ("sidePanel".equals(node.getName())) {
@@ -2173,7 +2173,7 @@ public abstract class BaseWcmRestController {
 									if ("position".equals(property.getName())) {
 										sidePanel.setPosition(property.getValues().get(0));
 									} else if ("hidden".equals(property.getName())) {
-										sidePanel.setHidden(Boolean.getBoolean(property.getValues().get(0)));
+										sidePanel.setHidden(Boolean.valueOf(property.getValues().get(0)));
 									}
 								}
 							}

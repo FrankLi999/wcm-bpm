@@ -35,7 +35,6 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AccessControlEntry;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
-import com.bpwizard.wcm.repo.rest.jcr.model.ContentItemElements;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentItemProperties;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormControl;
 import com.bpwizard.wcm.repo.rest.jcr.model.SearchData;
@@ -315,12 +314,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 						WcmUtils.checkNodeType(node, WcmUtils.getElementFolderType(at.getLibrary(), at.getName()))) {
 					// Map<String, JsonNode> elements = new HashMap<>();
 					Map<String, Object> elements = new HashMap<>();
-					ContentItemElements contentItemElements = new ContentItemElements();
-					contentItem.setElements(contentItemElements);
-					contentItemElements.setElements(elements);
+					contentItem.setElements(elements);
 					
 					for (RestProperty property : node.getJcrProperties()) {
+						
 						FormControl formControl = at.getElements().get(property.getName());
+						if (formControl == null) {
+							continue;
+						}
 						if ("integer".equals(formControl.getDataType()) 
 								|| "number".equals(formControl.getDataType()) 
 								|| "string".equals(formControl.getDataType())

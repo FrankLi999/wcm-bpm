@@ -48,6 +48,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmPrincipal;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 
+@SuppressWarnings("removal")
 @RestController
 @RequestMapping(WcmAclRestController.BASE_URI)
 @Validated

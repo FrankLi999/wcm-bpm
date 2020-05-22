@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.security.acl.Group;
 import java.util.Enumeration;
 
+@SuppressWarnings("removal")
 public class ModeshapeGroup implements Group {
 	private String group;
     
