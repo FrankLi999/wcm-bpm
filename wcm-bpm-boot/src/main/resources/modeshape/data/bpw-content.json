@@ -7742,7 +7742,7 @@
     "library/camunda/rootSiteArea" : {
         "jcr:primaryType":"bpw:system_siteAreaType"  
     },
-    "library/camunda/rootSiteArea/properties" : {
+    "library/camunda/rootSiteArea/itemProperties" : {
     	"jcr:primaryType":"bpw:ContentItemproperties",
     	"bpw:name":"site",
         "bpw:title":"BPM"
@@ -7759,7 +7759,7 @@
     "library/camunda/rootSiteArea/home" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/camunda/rootSiteArea/home/properties" : {
+    "library/camunda/rootSiteArea/home/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:name":"home",
         "bpw:title":"Home"
@@ -7814,7 +7814,7 @@
     "library/camunda/rootSiteArea/tasklist" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/camunda/rootSiteArea/tasklist/properties" : {
+    "library/camunda/rootSiteArea/tasklist/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"tasklist",
          "bpw:title":"Task List"
@@ -7831,7 +7831,7 @@
     "library/camunda/rootSiteArea/tasklist/taskinstance" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/camunda/rootSiteArea/tasklist/taskinstance/properties" : {
+    "library/camunda/rootSiteArea/tasklist/taskinstance/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:name":"taskinstance",
         "bpw:title":"Task Instance"
@@ -7848,7 +7848,7 @@
     "library/camunda/rootSiteArea/tasklist/processinstance" : {
         "jcr:primaryType":"bpw:system_siteAreaType" 
     },
-    "library/camunda/rootSiteArea/tasklist/processinstance/properties" : {
+    "library/camunda/rootSiteArea/tasklist/processinstance/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:name":"processinstance",
         "bpw:title":"Process Instance"
@@ -7865,7 +7865,7 @@
     "library/camunda/rootSiteArea/tasklist/processinstance/processoperation" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/camunda/rootSiteArea/tasklist/processinstance/processoperation/properties" : {
+    "library/camunda/rootSiteArea/tasklist/processinstance/processoperation/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"processinstance",
         "bpw:title":"Process Operation"
@@ -7882,14 +7882,14 @@
     "library/camunda/rootSiteArea/modeler" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/camunda/rootSiteArea/modeler/properties" : {
+    "library/camunda/rootSiteArea/modeler/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:name":"modeler",
         "bpw:title":"Modeler"
     } ,
     "library/camunda/rootSiteArea/modeler/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
-        "navigationId": "bpm_modelert",
+        "navigationId": "bpm_modeler",
         "navigationType": "item",
         "icon": "archive",
         "url": "/bpm/modeler",
@@ -7899,7 +7899,7 @@
     "library/camunda/rootSiteArea/dashboard" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/camunda/rootSiteArea/dashboard/properties" : {
+    "library/camunda/rootSiteArea/dashboard/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:name":"dashboard",
         "bpw:title":"Dashboard"
@@ -7916,7 +7916,7 @@
     "library/camunda/rootSiteArea/monitor" : {
         "jcr:primaryType":"bpw:system_siteAreaType"  
     },
-    "library/camunda/rootSiteArea/monitor/properties" : {
+    "library/camunda/rootSiteArea/monitor/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"monitor",
         "bpw:title":"Monitor"
@@ -7928,6 +7928,23 @@
         "icon": "archive",
         "url": "/bpm/monitor",
         "translate": "NAV.BPM.MONITOR.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/camunda/rootSiteArea/admin" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"  
+    },
+    "library/camunda/rootSiteArea/admin/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+         "bpw:name":"admin",
+        "bpw:title":"Admin"
+    },
+    "library/camunda/rootSiteArea/admin/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "bpm_admin",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/bpm/admin",
+        "translate": "NAV.BPM.ADMIN.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     },
     "library/apigateway" : {
@@ -7978,7 +7995,7 @@
     "library/apigateway/rootSiteArea" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/properties" : {
+    "library/apigateway/rootSiteArea/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
 		"bpw:name":"site",
         "bpw:title":"API GATEWAY"
@@ -7995,7 +8012,7 @@
     "library/apigateway/rootSiteArea/home" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/home/properties" : {
+    "library/apigateway/rootSiteArea/home/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
 		"bpw:name":"home",
         "bpw:title":"Home"
@@ -8012,7 +8029,7 @@
     "library/apigateway/rootSiteArea/tasklist" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/tasklist/properties" : {
+    "library/apigateway/rootSiteArea/tasklist/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
 		"bpw:name":"tasklist",
         "bpw:title":"Task List"
@@ -8029,7 +8046,7 @@
     "library/apigateway/rootSiteArea/modeler" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/modeler/properties" : {
+    "library/apigateway/rootSiteArea/modeler/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:name":"modeler",
         "bpw:title":"Modeler"
@@ -8046,7 +8063,7 @@
     "library/apigateway/rootSiteArea/dashboard" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/dashboard/properties" : {
+    "library/apigateway/rootSiteArea/dashboard/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:name":"dashboard",
         "bpw:title":"Dashboard"
@@ -8063,7 +8080,7 @@
     "library/apigateway/rootSiteArea/monitor" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/monitor/properties" : {
+    "library/apigateway/rootSiteArea/monitor/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"monitor",
         "bpw:title":"Monitor"
@@ -8798,7 +8815,7 @@
         "jcr:primaryType":"bpw:navbar",
         "primaryBackground":"fuse-navy-700",
         "secondaryBackground":"fuse-navy-900",
-        "hidden":"true",
+        "hidden":"false",
         "folded":"false",
         "position":"top",
         "variant":"vertical-style-1"
@@ -8832,7 +8849,7 @@
     },
     "library/camunda/rootSiteArea/home/MyContent/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "bpmn:wcm_content_flow",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
         "bpw:description":"MyContent",
         "bpw:title":"MyContent"
     },
@@ -8846,7 +8863,7 @@
     },
     "library/camunda/rootSiteArea/home/MyContent1/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "bpmn:wcm_content_flow",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
         "bpw:description":"MyContent1",
         "bpw:title":"MyContent1"
     },
@@ -8860,7 +8877,7 @@
     },
     "library/camunda/rootSiteArea/home/MySidePaneContent/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "bpmn:wcm_content_flow",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
         "bpw:description":"MySidePaneContent",
         "bpw:title":"MySidePaneContent"
     },
@@ -8874,7 +8891,7 @@
     },
     "library/camunda/rootSiteArea/home/MySidePaneContent1/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "bpmn:wcm_content_flow",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
         "bpw:description":"MySidePaneContent1",
         "bpw:title":"MySidePaneContent1"
     },
@@ -9110,5 +9127,373 @@
         "bpw:title": "UserProfile Render Template",
         "bpw:renderTemplateName": "/design/renderTemplate/RT_UserProfile",
         "bpw:contentPath": "/camunda/rootSiteArea/home/UserProfile"
+    },
+    "library/camunda/rootSiteArea/home/applications" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/camunda/rootSiteArea/home/applications/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name":"applications",
+        "bpw:title":"Applications",
+        "bpw:description":"BPM applications"
+    },
+    "library/camunda/rootSiteArea/home/applications/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "showOnMenu": false
+    },
+    "library/camunda/rootSiteArea/home/links" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/camunda/rootSiteArea/home/links/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name":"links",
+        "bpw:title":"Links",
+        "bpw:description":"BPM links"
+    },
+    "library/camunda/rootSiteArea/home/links/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "showOnMenu": false
+    },
+    "library/design/authoringTemplate/MyApplication" : {
+        "jcr:primaryType": "bpw:authoringTemplate",
+        "bpw:baseResourceType": "contentType",
+        "bpw:contentWorkflow": "bpmn:wcm_content_flow"
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups" : {
+        "jcr:primaryType":"bpw:formGroupFoler"
+    },
+    "library/design/authoringTemplate/MyApplication/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "library/design/authoringTemplate/MyApplication/properties" : {
+        "jcr:primaryType": "bpw:propertyFolder"
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows/propertyRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 0
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows/propertyRow/firstColumn" : {
+        "jcr:primaryType": "bpw:formColumn",
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description"]
+    },    
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow",
+         "bpw:order": 1
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.workflow"]
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows/secondRow" : {
+        "jcr:primaryType":"bpw:formRow",
+         "bpw:order": 2
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.categories"]
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows/thirdRow" : {
+        "jcr:primaryType":"bpw:formRow",
+         "bpw:order": 3
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows/thirdRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.link"]
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows/fourthRow" : {
+        "jcr:primaryType":"bpw:formRow",
+         "bpw:order": 3
+    },
+    "library/design/authoringTemplate/MyApplication/elementGroups/rows/fourthRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.image"]
+    },
+    "library/design/authoringTemplate/MyApplication/properties/name" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MyApplication/properties/name/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Name"
+    },
+    "library/design/authoringTemplate/MyApplication/properties/name/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
+    },
+    "library/design/authoringTemplate/MyApplication/properties/title" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MyApplication/properties/title/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Title"
+    },
+    "library/design/authoringTemplate/MyApplication/properties/title/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
+    },
+    "library/design/authoringTemplate/MyApplication/properties/description" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:systemIndexed": "true"
+    },
+    "library/design/authoringTemplate/MyApplication/properties/description/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Description"
+    },
+    "library/design/authoringTemplate/MyApplication/properties/categories" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "wcm-categories",
+        "bpw:jcrDataType": "REFERENCE",
+        "bpw:multiple": "true",
+        "bpw:dataType": "string",
+        "bpw:userSearchable": "true"
+    },
+    "library/design/authoringTemplate/MyApplication/properties/categories/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Category"
+    },
+    "library/design/authoringTemplate/MyApplication/properties/workflow" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "wcm-workflow",
+        "bpw:dataType": "string",
+        "bpw:jcrDataType": "REFERENCE",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    }, 
+    "library/design/authoringTemplate/MyApplication/properties/workflow/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+         "bpw:title": "Workflow"
+    },
+    "library/design/authoringTemplate/MyApplication/elements/link" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MyApplication/elements/link/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Link"
+    },
+    "library/design/authoringTemplate/MyApplication/elements/image" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "wcm-file",
+        "bpw:dataType": "string",
+        "bpw:jcrDataType": "BINARY",
+        "bpw:mandatory": "false",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MyApplication/elements/image/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Image"
+    },
+    "library/design/authoringTemplate/MyLink" : {
+        "jcr:primaryType": "bpw:authoringTemplate",
+        "bpw:baseResourceType": "contentType",
+        "bpw:contentWorkflow": "bpmn:wcm_content_flow"
+    },
+    "library/design/authoringTemplate/MyLink/elementGroups" : {
+        "jcr:primaryType":"bpw:formGroupFoler"
+    },
+    "library/design/authoringTemplate/MyLink/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "library/design/authoringTemplate/MyLink/properties" : {
+        "jcr:primaryType": "bpw:propertyFolder"
+    },
+    "library/design/authoringTemplate/MyLink/elementGroups/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "library/design/authoringTemplate/MyLink/elementGroups/rows/propertyRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 0
+    },
+    "library/design/authoringTemplate/MyLink/elementGroups/rows/propertyRow/firstColumn" : {
+        "jcr:primaryType": "bpw:formColumn",
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description"]
+    },    
+    "library/design/authoringTemplate/MyLink/elementGroups/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow",
+         "bpw:order": 1
+    },
+    "library/design/authoringTemplate/MyLink/elementGroups/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.workflow"]
+    },
+    "library/design/authoringTemplate/MyLink/elementGroups/rows/secondRow" : {
+        "jcr:primaryType":"bpw:formRow",
+         "bpw:order": 2
+    },
+    "library/design/authoringTemplate/MyLink/elementGroups/rows/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.categories"]
+    },
+    "library/design/authoringTemplate/MyLink/elementGroups/rows/thirdRow" : {
+        "jcr:primaryType":"bpw:formRow",
+         "bpw:order": 3
+    },
+    "library/design/authoringTemplate/MyLink/elementGroups/rows/thirdRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.link"]
+    },
+    "library/design/authoringTemplate/MyLink/properties/name" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MyLink/properties/name/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Name"
+    },
+    "library/design/authoringTemplate/MyLink/properties/name/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
+    },
+    "library/design/authoringTemplate/MyLink/properties/title" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MyLink/properties/title/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Title"
+    },
+    "library/design/authoringTemplate/MyLink/properties/title/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
+    },
+    "library/design/authoringTemplate/MyLink/properties/description" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:systemIndexed": "true"
+    },
+    "library/design/authoringTemplate/MyLink/properties/description/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Description"
+    },
+    "library/design/authoringTemplate/MyLink/properties/categories" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "wcm-categories",
+        "bpw:jcrDataType": "REFERENCE",
+        "bpw:multiple": "true",
+        "bpw:dataType": "string",
+        "bpw:userSearchable": "true"
+    },
+    "library/design/authoringTemplate/MyLink/properties/categories/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Category"
+    },
+    "library/design/authoringTemplate/MyLink/properties/workflow" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "wcm-workflow",
+        "bpw:dataType": "string",
+        "bpw:jcrDataType": "REFERENCE",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    }, 
+    "library/design/authoringTemplate/MyLink/properties/workflow/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+         "bpw:title": "Workflow"
+    },
+    "library/design/authoringTemplate/MyLink/elements/link" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MyLink/elements/link/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Link"
+    },
+    "library/camunda/rootSiteArea/home/applications/tasklist" : {
+        "jcr:primaryType":"bpw:design_MyApplication_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyApplication"      
+    },
+    "library/camunda/rootSiteArea/home/applications/tasklist/elements" : {
+        "jcr:primaryType":"bpw:design_MyApplication_ElementFolder",
+        "link": "/bpm/tasklist"
+    },
+    "library/camunda/rootSiteArea/home/applications/tasklist/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow":"/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"BPM Task List",
+        "bpw:title":"Tasklist"
+    },
+    "library/camunda/rootSiteArea/home/applications/cockpit" : {
+        "jcr:primaryType":"bpw:design_MyApplication_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyApplication"      
+    },
+    "library/camunda/rootSiteArea/home/applications/cockpit/elements" : {
+        "jcr:primaryType":"bpw:design_MyApplication_ElementFolder",
+        "link": "/bpm/monitor"
+    },
+    "library/camunda/rootSiteArea/home/applications/cockpit/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"Operation and monitoring",
+        "bpw:title":"Cockpit"
+    },
+    "library/camunda/rootSiteArea/home/applications/admin" : {
+        "jcr:primaryType":"bpw:design_MyApplication_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyApplication"      
+    },
+    "library/camunda/rootSiteArea/home/applications/admin/elements" : {
+        "jcr:primaryType":"bpw:design_MyApplication_ElementFolder",
+        "link": "/bpm/admin"
+    },
+    "library/camunda/rootSiteArea/home/applications/admin/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"System Administration",
+        "bpw:title":"Admin"
+    },
+    "library/camunda/rootSiteArea/home/links/documentation" : {
+        "jcr:primaryType":"bpw:design_MyLink_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyApplication"      
+    },
+    "library/camunda/rootSiteArea/home/links/documentation/elements" : {
+        "jcr:primaryType":"bpw:design_MyLink_ElementFolder",
+        "link": "https://docs.camunda.org/manual/latest/webapps/"
+    },
+    "library/camunda/rootSiteArea/home/links/documentation/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"Link to Camunda documents",
+        "bpw:title":"Documentation"
     }
 }

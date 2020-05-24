@@ -769,3 +769,19 @@
 [bpw:design_MySidePaneContent_AT] > nt:folder, bpw:baseContentType
 + elements (bpw:design_MySidePaneContent_ElementFolder)
 + itemProperties (bpw:ContentItemproperties)
+
+[bpw:design_MyApplication_ElementFolder]  > bpw:ContentItemElementFolder
+- link (STRING)
+- image (BINARY)
+
+[bpw:design_MyApplication_AT] > nt:folder, bpw:baseContentType
++ elements (bpw:design_MyApplication_ElementFolder)
++ itemProperties (bpw:ContentItemproperties)
+
+[bpw:design_MyLink_ElementFolder]  > bpw:ContentItemElementFolder
+- link (STRING)
+
+[bpw:design_MyLink_AT] > nt:folder, bpw:baseContentType
++ elements (bpw:design_MyLink_ElementFolder)
++ itemProperties (bpw:ContentItemproperties)
+

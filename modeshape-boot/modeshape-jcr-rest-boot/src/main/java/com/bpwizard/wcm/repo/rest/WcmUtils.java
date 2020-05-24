@@ -490,6 +490,22 @@ public class WcmUtils {
 				property -> "jcr:primaryType".equals(property.getName()) && property.getValues().contains(nodeType));
 	}
 	
+	public static boolean showOnMenu(RestNode siteArea) {
+		boolean result = true;
+		for (RestNode childNode : siteArea.getChildren()) {
+			if (WcmConstants.WCM_ITEM_ELEMENTS.equals(childNode.getName())) {
+				for (RestProperty property : childNode.getJcrProperties()) {
+					if ("showOnMenu".equals(property.getName())) {
+						result = Boolean.valueOf(property.getValues().get(0));
+						break;
+					} 
+				}
+				break;
+			}
+		}
+		return result;
+	}
+	
 	public void unlock(
 			String repository,
 			String workspace, 

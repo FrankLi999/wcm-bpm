@@ -145,6 +145,10 @@ public abstract class BaseWcmRestController {
 		return WcmUtils.checkNodeType(node, "bpw:system_siteAreaType");
 	}
 
+	protected boolean isSitePage(RestNode node) {
+		return WcmUtils.checkNodeType(node, "bpw:system_siteAreaType") && WcmUtils.showOnMenu(node);
+	}
+	
 	protected boolean isSiteConfig(RestNode node) {
 		return WcmUtils.checkNodeType(node, "bpw:system_siteConfigType");
 	}
@@ -2211,7 +2215,9 @@ public abstract class BaseWcmRestController {
 			}
 		}
 		String url = (String)sa.getElements().get("url");
-		siteAreas.put(url.replace("/", "~"), sa);
+		if (StringUtils.hasText(url)) {
+			siteAreas.put(url.replace("/", "~"), sa);
+		}
 		return sa;
 	}
 
@@ -2323,7 +2329,7 @@ public abstract class BaseWcmRestController {
 				String.format(WcmConstants.NODE_REL_PATH_PATTERN, library, rootSiteArea),
 				WcmConstants.NAVIGATION_DEPTH);
 
-		Navigation[] navigation = siteArea.getChildren().stream().filter(this::isSiteArea)
+		Navigation[] navigation = siteArea.getChildren().stream().filter(this::isSitePage)
 				.map(node -> this.toNavigation(node)).toArray(Navigation[]::new);
 		return navigation;
 	}
@@ -2362,6 +2368,7 @@ public abstract class BaseWcmRestController {
 	private NavigationItem toNavigation(RestNode siteArea, int level) {
 		
 		NavigationItem navigation = (level == 0) ? new Navigation() : new NavigationItem();
+		
 		for (RestNode childNode : siteArea.getChildren()) {
 			if (WcmConstants.WCM_ITEM_ELEMENTS.equals(childNode.getName())) {
 				for (RestProperty property : childNode.getJcrProperties()) {
@@ -2375,7 +2382,7 @@ public abstract class BaseWcmRestController {
 						navigation.setIcon(property.getValues().get(0));
 					} else if ("url".equals(property.getName())) {
 						navigation.setUrl(property.getValues().get(0));
-					}
+					} 
 				}
 				
 				for (RestNode node : childNode.getChildren()) {
@@ -2406,7 +2413,7 @@ public abstract class BaseWcmRestController {
 			}
 		}
 		if (level <= 2) {
-			NavigationItem[] navigationItems = siteArea.getChildren().stream().filter(this::isSiteArea)
+			NavigationItem[] navigationItems = siteArea.getChildren().stream().filter(this::isSitePage)
 					.map(node -> this.toNavigation(node, level + 1)).toArray(NavigationItem[]::new);
 			navigation.setChildren(navigationItems);
 		}
