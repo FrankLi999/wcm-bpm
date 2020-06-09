@@ -1,0 +1,16 @@
+org\bpwizard\bpm\boot\test\helper\ProcessEngineExtension.class
+org\bpwizard\bpm\boot\test\helper\TestProcessEngine$Registration.class
+org\bpwizard\bpm\boot\test\helper\Deployments.class
+org\bpwizard\bpm\boot\test\helper\ProcessEngineTestCase.class
+org\bpwizard\bpm\boot\test\helper\TestApplication.class
+org\bpwizard\bpm\boot\test\helper\TestProcessApplicationUtil.class
+org\bpwizard\bpm\boot\test\helper\ProcessEngineExtensionWithMock.class
+org\bpwizard\bpm\boot\test\helper\TestCoverageProcessEngineExtension.class
+org\camunda\bpm\extension\process_test_coverage\spring\SpringProcessWithCoverageEngineConfiguration.class
+org\bpwizard\bpm\boot\test\helper\TestProcessEngineImpl.class
+org\bpwizard\bpm\boot\test\helper\ProcessEngineWithMockTestCase.class
+org\bpwizard\bpm\boot\test\helper\StandaloneInMemoryTestConfigurationWithMock.class
+org\bpwizard\bpm\boot\test\helper\StandaloneInMemoryTestConfiguration.class
+org\bpwizard\bpm\boot\test\helper\TestProcessApplicationUtil$1.class
+org\bpwizard\bpm\boot\test\helper\TestProcessEngine.class
+org\bpwizard\bpm\boot\test\helper\EnsureCleanAfterTest.class

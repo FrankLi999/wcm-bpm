@@ -108,7 +108,7 @@
 
 [bpw:CommonConstraint] orderable
 - bpw:enum (STRING) multiple COPY
-- bpw:defaultValue (STRING) multiple COPY
+- bpw:defaultValue (STRING) COPY
 - bpw:constant (STRING) COPY
 
 [bpw:FormControls] 
@@ -167,6 +167,7 @@
 - bpw:format (STRING) = 'string' COPY
 - bpw:jcrDataType (STRING) = 'STRING' COPY
 - bpw:multiple (BOOLEAN) = 'false' COPY
+- bpw:useReference (BOOLEAN) = 'true' COPY
 + formControlLayout (bpw:FormControlLayout)
 + commonConstraint (bpw:CommonConstraint)
 + objectConstraint (bpw:ObjectConstraint)

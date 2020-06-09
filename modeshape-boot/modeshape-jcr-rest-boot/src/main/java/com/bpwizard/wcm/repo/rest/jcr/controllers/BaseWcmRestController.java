@@ -15,6 +15,8 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,7 +92,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class BaseWcmRestController {
-
+	private static final Logger logger = LogManager.getLogger(BaseWcmRestController.class);
 	@Value("${bpw.modeshape.authoring.enabled:true}")
 	protected boolean authoringEnabled = true;
 
@@ -116,8 +118,14 @@ public abstract class BaseWcmRestController {
 
 	protected AuthoringTemplate doGetAuthoringTemplate(String repository, String workspace, String atPath,
 			HttpServletRequest request) throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
 		String baseUrl = RestHelper.repositoryUrl(request);
 		AuthoringTemplate at = this.wcmUtils.getAuthoringTemplate(repository, workspace, atPath, baseUrl);
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
 		return at;
 	}
 
@@ -878,9 +886,11 @@ public abstract class BaseWcmRestController {
 	protected void toTypeDefinition(HttpServletRequest request, FormControl formControl, String repository,
 			String workspace, String jcrDataType, ObjectNode definitions, boolean editMode,
 			Map<String, String> definitionMap) throws RepositoryException {
-		if (definitionMap.get(jcrDataType) == null) {
-			this.createTypeDefinition(request, formControl, repository, workspace, jcrDataType, definitions, editMode,
-					definitionMap);
+		if (formControl != null) {
+			if (definitionMap.get(jcrDataType) == null) {
+				this.createTypeDefinition(request, formControl, repository, workspace, jcrDataType, definitions, editMode,
+						definitionMap);
+			}
 		}
 	}
 
@@ -930,7 +940,8 @@ public abstract class BaseWcmRestController {
 				if ("*".equals(restChildType.getName())) {
 					refNode.put("type", "array");
 					itemsNode = this.objectMapper.createObjectNode();
-					definition.set("items", itemsNode);
+					// definition.set("items", itemsNode);
+					refNode.set("items", itemsNode);
 				} else {
 					itemsNode = refNode;
 				}
@@ -978,7 +989,8 @@ public abstract class BaseWcmRestController {
 	}
 
 	protected String fieldNameFromNodeTypeName(String typeName) {
-		return typeName.startsWith("bpw:") ? typeName.substring("bpw:".length()) : typeName;
+		String result = typeName.startsWith("bpw:") ? typeName.substring("bpw:".length()) : typeName;
+		return StringUtils.uncapitalize(result);
 	}
 
 	protected ObjectNode getRowArray(Form form, FormRow formRow) {
@@ -1032,6 +1044,7 @@ public abstract class BaseWcmRestController {
 		arrayNode.put("type", "array");
 		if (StringUtils.hasText(formRow.getFiledPath())) {
 			arrayNode.put("key", formRow.getFiledPath());
+
 		}
 		if (formRow.getCondition() != null) {
 			this.setVisibleCondition(arrayNode, formRow.getCondition());
@@ -1074,8 +1087,7 @@ public abstract class BaseWcmRestController {
 	protected ObjectNode toAssociationPropertyNode(HttpServletRequest request, String repository, String workspace,
 			ObjectNode definitions, boolean editMode, Map<String, String> definitionMap, FormControl formControl)
 			throws RepositoryException {
-		ObjectNode propertyNode = this.objectMapper.createObjectNode();
-
+		ObjectNode propertyNode = this.objectMapper.createObjectNode();		
 		ObjectNode itemsNode;
 
 		if (formControl.isMultiple()) {
@@ -1089,8 +1101,18 @@ public abstract class BaseWcmRestController {
 			}
 		} else {
 			itemsNode = propertyNode;
+			itemsNode.put("type", "object");
 		}
-		itemsNode.put("$ref", WcmUtils.definitionUrl(this.fieldNameFromNodeTypeName(formControl.getJcrDataType())));
+		
+		if (formControl.isUseReference()) {
+			itemsNode.put("$ref", WcmUtils.definitionUrl(this.fieldNameFromNodeTypeName(formControl.getJcrDataType())));
+		} else {
+			ObjectNode propertiesNode = this.objectMapper.createObjectNode();	
+			this.popluateFormControls(request, repository, workspace, propertiesNode, definitions, 
+					formControl.getFormControls(), editMode, definitionMap);
+			itemsNode.set(WcmConstants.JCR_JSON_NODE_PROPERTIES, propertiesNode);
+		}
+		
 		return propertyNode;
 	}
 
@@ -1348,6 +1370,8 @@ public abstract class BaseWcmRestController {
 		}
 
 		ArrayNode fieldNodes = this.objectMapper.createArrayNode();
+		ArrayNode layoutNodes = fieldNodes;
+		boolean addChildNodesByDefault = formColumn.getFormGroups() == null || formColumn.getFormGroups().length == 0;
 		for (String fieldPath : formColumn.getFormControls()) {
 			FormControl formControl = WcmUtils.getFormControl(form, fieldPath);
 
@@ -1356,13 +1380,14 @@ public abstract class BaseWcmRestController {
 						.format("FormControl %s can not be found in authoring template %s", fieldPath, form.getName()));
 			}
 
-			this.buildFieldLayout(fieldPath, formControl, fieldNodes, form);
+			layoutNodes = this.buildFieldLayout(fieldPath, formControl, fieldNodes, form, addChildNodesByDefault);
 		}
 
-		if (formColumn.getFormGroups() != null && formColumn.getFormGroups().length > 0) {
-			this.populateFormLayout(form, formColumn.getFormGroups(), fieldNodes);
+		if (!addChildNodesByDefault) {
+			if (formColumn.getFormGroups() != null && formColumn.getFormGroups().length > 0) {
+				this.populateFormLayout(form, formColumn.getFormGroups(), layoutNodes);
+			}
 		}
-
 		columnNode.set("items", fieldNodes);
 		return columnNode;
 	}
@@ -1394,6 +1419,8 @@ public abstract class BaseWcmRestController {
 		}
 
 		ArrayNode fieldNodes = this.objectMapper.createArrayNode();
+		ArrayNode layoutNodes = fieldNodes;
+		boolean addChildNodesByDefault = formColumn.getFormGroups() == null || formColumn.getFormGroups().length == 0;
 		for (String fieldPath : formColumn.getFormControls()) {
 			FormControl formControl = WcmUtils.getFormControl(at, fieldPath);
 
@@ -1402,28 +1429,31 @@ public abstract class BaseWcmRestController {
 						.format("FormControl %s can not be found in authoring template %s", fieldPath, at.getName()));
 			}
 
-			this.buildFieldLayout(fieldPath, formControl, fieldNodes, at);
+			layoutNodes = this.buildFieldLayout(fieldPath, formControl, fieldNodes, at, addChildNodesByDefault);
 		}
 
-		if (formColumn.getFormGroups() != null && formColumn.getFormGroups().length > 0) {
-			this.populateFormGroups(at, formColumn.getFormGroups(), fieldNodes);
+		if (!addChildNodesByDefault) {
+			if (formColumn.getFormGroups() != null && formColumn.getFormGroups().length > 0) {
+				this.populateFormGroups(at, formColumn.getFormGroups(), layoutNodes);
+			}
 		}
 
 		columnNode.set("items", fieldNodes);
 		return columnNode;
 	}
 
-	protected void buildFieldLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
-			Form form) {
-
+	protected ArrayNode buildFieldLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+			Form form, boolean addChildNodesByDefault) {
+		ArrayNode layoutNodes = null;
 		if (formControl.getFormControls() == null || formControl.getFormControls().size() == 0) {
-			this.buildLeafNodeLayout(fieldPath, formControl, fieldNodes, form);
+			layoutNodes = this.buildLeafNodeLayout(fieldPath, formControl, fieldNodes, form);
 		} else {
-			this.buildCompositeNodeLayout(fieldPath, formControl, fieldNodes, form);
+			layoutNodes = this.buildCompositeNodeLayout(fieldPath, formControl, fieldNodes, form, addChildNodesByDefault);
 		}
+		return layoutNodes;
 	}
 	
-	protected void buildLeafNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+	protected ArrayNode buildLeafNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
 			Form form) {
 
 		ObjectNode fieldNode = this.objectMapper.createObjectNode();
@@ -1493,7 +1523,7 @@ public abstract class BaseWcmRestController {
 			CustomConstraint customConstraint = formControl.getCustomConstraint();
 			ObjectNode functionsNode = this.objectMapper.createObjectNode();
 			fieldNode.set("functions", functionsNode);
-			for (JavascriptFunction function : customConstraint.getFunctions()) {
+			for (JavascriptFunction function : customConstraint.getJavascriptFunction()) {
 				ObjectNode functionNode = this.objectMapper.createObjectNode();
 				functionsNode.set(function.getName(), functionNode);
 				functionNode.set("arguments", WcmUtils.toArrayNode(function.getParams()));
@@ -1501,10 +1531,11 @@ public abstract class BaseWcmRestController {
 			}
 
 		}
+		return fieldNodes;
 	}
 
-	protected void buildCompositeNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
-			Form form) {
+	protected ArrayNode buildCompositeNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+			Form form, boolean addChildNodesByDefault) {
 
 		// Array or section
 		String names[] = this.getNameAndPrefix(fieldPath);
@@ -1523,7 +1554,8 @@ public abstract class BaseWcmRestController {
 		if (formControl.isMultiple()) { // Array Items is of type Object,
 
 			fieldNode.put("type", "array");
-
+			// fieldNode.put("key", WcmUtils.layoutPath(fieldPath, form));
+			fieldNode.put("key", fieldPath);
 			if (formControl.getFormControlLayout() != null) {
 				if (formControl.getFormControlLayout().isExpandable()) {
 					ObjectNode sectionNode = this.objectMapper.createObjectNode();
@@ -1532,6 +1564,8 @@ public abstract class BaseWcmRestController {
 					sectionNode.put("expandable", true);
 					sectionNode.put("expanded", formControl.getFormControlLayout().isExpanded());
 					fieldNodes.add(sectionNode);
+				} else {
+					fieldNodes.add(fieldNode);
 				}
 
 				if (formControl.getFormControlLayout().getListItems() > 0) {
@@ -1552,14 +1586,20 @@ public abstract class BaseWcmRestController {
 									: "row");
 					layoutNodes = this.objectMapper.createArrayNode();
 					itemsNode.set("items", layoutNodes);
+				} else {
+					layoutNodes = this.objectMapper.createArrayNode();
+					fieldNode.set("items", layoutNodes);
 				}
 			} else {
 				layoutNodes = this.objectMapper.createArrayNode();
 				fieldNode.set("items", layoutNodes);
+				fieldNodes.add(fieldNode);
 			}
 		} else { // section, div etc
 			fieldNodes.add(fieldNode);
 			fieldNode.put("type", formControl.getControlType());
+			//fieldNode.put("key", WcmUtils.layoutPath(fieldPath, form));
+			fieldNode.put("key", fieldPath);
 			if (formControl.getFormControlLayout() != null) {
 				if (formControl.getFormControlLayout().isExpandable()) {
 					fieldNode.put("expandable", true);
@@ -1579,23 +1619,28 @@ public abstract class BaseWcmRestController {
 			layoutNodes = this.objectMapper.createArrayNode();
 			fieldNode.set("items", layoutNodes);
 		}
-		for (FormControl childFormControl : formControl.getFormControls().values()) {
-			String childFieldPath = WcmUtils.fieldPath(fieldPath, childFormControl.getName());
-			this.buildFieldLayout(childFieldPath, childFormControl, layoutNodes, form);
+		if (addChildNodesByDefault) {
+			for (FormControl childFormControl : formControl.getFormControls().values()) {
+				String childFieldPath = WcmUtils.fieldPath(fieldPath, childFormControl.getName());
+				this.buildFieldLayout(childFieldPath, childFormControl, layoutNodes, form, true);
+			}
 		}
+		return layoutNodes;
+		
 	}
 	
-	protected void buildFieldLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
-			AuthoringTemplate at) {
-
+	protected ArrayNode buildFieldLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+			AuthoringTemplate at, boolean addChildNodesByDefault) {
+		ArrayNode layoutNodes = null;
 		if (formControl.getFormControls() == null || formControl.getFormControls().size() == 0) {
-			this.buildLeafNodeLayout(fieldPath, formControl, fieldNodes, at);
+			layoutNodes = this.buildLeafNodeLayout(fieldPath, formControl, fieldNodes, at);
 		} else {
-			this.buildCompositeNodeLayout(fieldPath, formControl, fieldNodes, at);
+			layoutNodes = this.buildCompositeNodeLayout(fieldPath, formControl, fieldNodes, at, addChildNodesByDefault);
 		}
+		return layoutNodes;
 	}
 
-	protected void buildLeafNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+	protected ArrayNode buildLeafNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
 			AuthoringTemplate at) {
 
 		ObjectNode fieldNode = this.objectMapper.createObjectNode();
@@ -1660,7 +1705,7 @@ public abstract class BaseWcmRestController {
 			CustomConstraint customConstraint = formControl.getCustomConstraint();
 			ObjectNode functionsNode = this.objectMapper.createObjectNode();
 			fieldNode.set("functions", functionsNode);
-			for (JavascriptFunction function : customConstraint.getFunctions()) {
+			for (JavascriptFunction function : customConstraint.getJavascriptFunction()) {
 				ObjectNode functionNode = this.objectMapper.createObjectNode();
 				functionsNode.set(function.getName(), functionNode);
 				functionNode.set("arguments", WcmUtils.toArrayNode(function.getParams()));
@@ -1668,10 +1713,11 @@ public abstract class BaseWcmRestController {
 			}
 
 		}
+		return fieldNodes;
 	}
 
-	protected void buildCompositeNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
-			AuthoringTemplate at) {
+	protected ArrayNode buildCompositeNodeLayout(String fieldPath, FormControl formControl, ArrayNode fieldNodes,
+			AuthoringTemplate at, boolean addChildNodesByDefault) {
 
 		// Array or section
 		String names[] = this.getNameAndPrefix(fieldPath);
@@ -1690,6 +1736,7 @@ public abstract class BaseWcmRestController {
 		if (formControl.isMultiple()) { // Array Items is of type Object,
 
 			fieldNode.put("type", "array");
+			fieldNode.put("key", fieldPath);
 			layoutNodes = this.objectMapper.createArrayNode();
 			if (formControl.getFormControlLayout() != null) {
 				if (formControl.getFormControlLayout().isExpandable()) {
@@ -1726,9 +1773,11 @@ public abstract class BaseWcmRestController {
 			} else {
 				fieldNode.set("items", layoutNodes);
 			}
+			fieldNodes = layoutNodes;
 		} else { // section, div etc
 			fieldNodes.add(fieldNode);
 			fieldNode.put("type", formControl.getControlType());
+			fieldNode.put("key", fieldPath);
 			if (formControl.getFormControlLayout() != null) {
 				if (formControl.getFormControlLayout().isExpandable()) {
 					fieldNode.put("expandable", true);
@@ -1748,10 +1797,13 @@ public abstract class BaseWcmRestController {
 			layoutNodes = this.objectMapper.createArrayNode();
 			fieldNode.set("items", layoutNodes);
 		}
-		for (FormControl childFormControl : formControl.getFormControls().values()) {
-			String childFieldPath = WcmUtils.fieldPath(fieldPath, childFormControl.getName());
-			this.buildFieldLayout(childFieldPath, childFormControl, layoutNodes, at);
+		if (addChildNodesByDefault) {
+			for (FormControl childFormControl : formControl.getFormControls().values()) {
+				String childFieldPath = WcmUtils.fieldPath(fieldPath, childFormControl.getName());
+				this.buildFieldLayout(childFieldPath, childFormControl, layoutNodes, at, true);
+			}
 		}
+		return layoutNodes;
 	}
 
 	protected String[] getNameAndPrefix(String fieldName) {

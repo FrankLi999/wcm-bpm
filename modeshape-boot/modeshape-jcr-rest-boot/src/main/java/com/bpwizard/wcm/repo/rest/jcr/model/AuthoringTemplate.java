@@ -246,6 +246,7 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 		}
 		
 		controlNode.put("bpw:multiple", control.isMultiple());
+		controlNode.put("bpw:useReference", control.isUseReference());
 		controlNode.put("bpw:mandatory", control.isMandatory());
 		controlNode.put("bpw:userSearchable", control.isUserSearchable());
 		controlNode.put("bpw:systemIndexed", control.isSystemIndexed());
@@ -546,7 +547,7 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 			}
 		}
 		CustomConstraint customConstraint = control.getCustomConstraint();
-		JavascriptFunction[] functions = customConstraint.getFunctions();
+		JavascriptFunction[] functions = customConstraint.getJavascriptFunction();
 		if (customConstraint != null && functions != null && functions.length > 0) {
 			ObjectNode constraintNode = JsonUtils.createObjectNode();
 			controlChildrenNode.set("customConstraint", constraintNode);

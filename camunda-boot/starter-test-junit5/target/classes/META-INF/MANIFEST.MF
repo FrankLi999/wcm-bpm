@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Built-By: frank
+Build-Jdk: 13.0.1
+Implementation-Title: camunda-bpm-spring-boot-starter-test-junit5
+Implementation-Version: 3.4.3
+Implementation-Vendor-Id: org.camunda.bpm.springboot
+Implementation-Vendor: Camunda Services GmbH
+Created-By: Maven Integration for Eclipse
+

@@ -1,0 +1,14 @@
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\ProcessEngineWithMockTestCase.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\TestProcessEngineImpl.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\Deployments.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\ProcessEngineExtension.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\TestApplication.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\camunda\bpm\extension\process_test_coverage\spring\SpringProcessWithCoverageEngineConfiguration.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\TestCoverageProcessEngineExtension.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\ProcessEngineTestCase.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\EnsureCleanAfterTest.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\StandaloneInMemoryTestConfigurationWithMock.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\TestProcessApplicationUtil.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\ProcessEngineExtensionWithMock.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\TestProcessEngine.java
+C:\projects\wcm-bpm\camunda-boot\starter-test-junit5\src\main\java\org\bpwizard\bpm\boot\test\helper\StandaloneInMemoryTestConfiguration.java

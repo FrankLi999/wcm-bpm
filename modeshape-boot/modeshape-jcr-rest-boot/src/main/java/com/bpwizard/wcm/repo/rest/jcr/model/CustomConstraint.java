@@ -3,18 +3,18 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 import java.util.Arrays;
 
 public class CustomConstraint {
-	private JavascriptFunction functions[];
+	private JavascriptFunction javascriptFunction[];
 
-	public JavascriptFunction[] getFunctions() {
-		return functions;
+	public JavascriptFunction[] getJavascriptFunction() {
+		return javascriptFunction;
 	}
 
-	public void setFunctions(JavascriptFunction[] functions) {
-		this.functions = functions;
+	public void setJavascriptFunction(JavascriptFunction[] javascriptFunction) {
+		this.javascriptFunction = javascriptFunction;
 	}
 
 	@Override
 	public String toString() {
-		return "CustomConstraint [functions=" + Arrays.toString(functions) + "]";
+		return "CustomConstraint [javascriptFunction=" + Arrays.toString(javascriptFunction) + "]";
 	}
 }

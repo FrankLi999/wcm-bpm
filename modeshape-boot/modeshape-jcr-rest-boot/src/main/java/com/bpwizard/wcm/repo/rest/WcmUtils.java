@@ -181,33 +181,21 @@ public class WcmUtils {
 		FormControl formControl = null;
 		
 			
-		StringBuilder layoutPath = new StringBuilder(jsonPath[0]);
+		// StringBuilder layoutPath = new StringBuilder(jsonPath[0]);
+		StringBuilder layoutPath = new StringBuilder("");	
 		Map<String, FormControl> formControls = form.getFormControls();				
 		
-		boolean isParentNodeArray = false;
+		// boolean isParentNodeArray = false;
 		
 		int i = 0;
 		for (;(i < jsonPath.length) && (formControls != null); i++) {
 			formControl = formControls.get(jsonPath[i]);
 			formControls = formControl.getFormControls();
-			// String controlFieldName = StringUtils.hasText(formControl.getFieldName()) ? 
-			//		formControl.getFieldName() : "1";
 			String controlFieldName = StringUtils.hasText(formControl.getName()) ? 
 			    formControl.getName() : "1";
-			if (formControl.isMultiple()) {
-				if (isParentNodeArray) { 
-					layoutPath.append("[]");
-				} else {
-					WcmUtils.appendControlField(i, controlFieldName, layoutPath, true);
-				}
-				isParentNodeArray = true;
-			} else {
-				WcmUtils.appendControlField(i, controlFieldName, layoutPath, false);
-				isParentNodeArray = false;
-			}
+			WcmUtils.appendControlField(i, controlFieldName, layoutPath, formControl.isMultiple());
 		}
 		result = (i == jsonPath.length) ? layoutPath.toString() : fieldPath;
-		
 		return result;
 	}
 	
@@ -221,7 +209,7 @@ public class WcmUtils {
 			Map<String, FormControl> formControls = "elements".equals(jsonPath[0]) ? at.getElements() 
 					 : Collections.<String, FormControl>emptyMap();				
 			
-			boolean isParentNodeArray = false;
+			// boolean isParentNodeArray = false;
 			
 			int i = 1;
 			for (;(i < jsonPath.length - 1) && (formControls != null); i++) {
@@ -229,20 +217,18 @@ public class WcmUtils {
 				formControls = formControl.getFormControls();
 				String controlFieldName = StringUtils.hasText(formControl.getName()) ? 
 						formControl.getName() : "1";
-//				String controlFieldName = StringUtils.hasText(formControl.getFieldName()) ? 
-//						formControl.getFieldName() : "1";
-				
-				if (formControl.isMultiple()) {
-					if (isParentNodeArray) { 
-						layoutPath.append("[]");
-					} else {
-						WcmUtils.appendControlField(i, controlFieldName, layoutPath, true);
-					}
-					isParentNodeArray = true;
-				} else {
-					WcmUtils.appendControlField(i, controlFieldName, layoutPath, false);
-					isParentNodeArray = false;
-				}
+				WcmUtils.appendControlField(i, controlFieldName, layoutPath, formControl.isMultiple());
+//				if (formControl.isMultiple()) {
+//					if (isParentNodeArray) { 
+//						layoutPath.append("[]");
+//					} else {
+//						WcmUtils.appendControlField(i, controlFieldName, layoutPath, true);
+//					}
+//					isParentNodeArray = true;
+//				} else {
+//					WcmUtils.appendControlField(i, controlFieldName, layoutPath, false);
+//					isParentNodeArray = false;
+//				}
 			}
 			result = (i == jsonPath.length) ? layoutPath.toString() : fieldPath;
 		}
@@ -647,6 +633,8 @@ public class WcmUtils {
 				formControl.setJcrDataType(property.getValues().get(0));
 			} else if ("bpw:multiple".equals(property.getName())) {
 				formControl.setMultiple(Boolean.parseBoolean(property.getValues().get(0)));
+			} else if ("bpw:useReference".equals(property.getName())) {
+				formControl.setUseReference(Boolean.parseBoolean(property.getValues().get(0)));
 			} else if ("bpw:mandatory".equals(property.getName())) {
 				formControl.setMandatory(Boolean.parseBoolean(property.getValues().get(0)));
 			} else if ("bpw:systemIndexed".equals(property.getName())) {
@@ -862,7 +850,7 @@ public class WcmUtils {
 		}
 		
 		if (functions.size() > 0) {
-			customConstraint.setFunctions(functions.toArray(new JavascriptFunction[functions.size()]));
+			customConstraint.setJavascriptFunction(functions.toArray(new JavascriptFunction[functions.size()]));
 		}
 		return customConstraint;
 	}
@@ -999,14 +987,23 @@ public class WcmUtils {
 			}
 		}
 
-		for (RestNode node: columnNode.getChildren()) {
-			if (isElementGroupNode(node)) {
-				List<BaseFormGroup> formGroups = this.populateFormGroups(node);
+		if (columnNode.getChildren() != null && columnNode.getChildren().size() > 0) {
+			List<BaseFormGroup> formGroups = new ArrayList<>();
+			for (RestNode node: columnNode.getChildren()) {
+				if (checkNodeType(node, "bpw:VisbleCondition")) {
+					column.setCondition(toVisibleCondition(node));
+				} else {
+					Optional<BaseFormGroup> formGroup = this.populateFormGroup(node);
+					if (formGroup.isPresent()) {
+						formGroups.add(formGroup.get());
+					}
+				}				
+			}
+			if (formGroups.size() > 0) {
 				column.setFormGroups(formGroups.toArray(new BaseFormGroup[formGroups.size()]));
-			} else if (checkNodeType(node, "bpw:VisbleCondition")) {
-				column.setCondition(toVisibleCondition(node));
 			}
 		}
+		
 		return column;
 	}
 

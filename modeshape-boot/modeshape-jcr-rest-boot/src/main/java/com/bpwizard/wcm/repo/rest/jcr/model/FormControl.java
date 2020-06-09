@@ -11,7 +11,7 @@ public class FormControl implements HasName {
 	private String format = ""; //Json schema type
 	private String jcrDataType = "STRING"; // JCR data type
 	private boolean multiple = false;
-	
+	private boolean useReference = true;
 	private boolean autoCreate = false;
 	private boolean mandatory = false;
 	private boolean userSearchable = false;
@@ -181,6 +181,12 @@ public class FormControl implements HasName {
 	public void setFormControls(Map<String, FormControl> formControls) {
 		this.formControls = formControls;
 	}
+	public boolean isUseReference() {
+		return useReference;
+	}
+	public void setUseReference(boolean useReference) {
+		this.useReference = useReference;
+	}
 	@Override
 	public String toString() {
 		return "FormControl [name=" + name + ", fieldName=" + fieldName + ", controlType=" + controlType + ", dataType="
@@ -188,7 +194,7 @@ public class FormControl implements HasName {
 				+ ", autoCreate=" + autoCreate + ", mandatory=" + mandatory + ", userSearchable=" + userSearchable
 				+ ", systemIndexed=" + systemIndexed + ", showInList=" + showInList + ", formControlLayout="
 				+ formControlLayout + ", constraint=" + constraint + ", objectConstraint=" + objectConstraint
-				+ ", stringConstraint=" + stringConstraint + ", numberConstraint=" + numberConstraint
+				+ ", useReference=" + useReference + ", stringConstraint=" + stringConstraint + ", numberConstraint=" + numberConstraint
 				+ ", arrayConstraint=" + arrayConstraint + ", customConstraint=" + customConstraint
 				+ ", conditionalConstraint=" + conditionalConstraint + ", notConstraint=" + notConstraint
 				+ ", oneOfConstraint=" + oneOfConstraint + ", anyOfConstraint=" + anyOfConstraint + ", allOfConstraint="

@@ -2883,14 +2883,14 @@
 	},
 	"library/system/form/formInputType/formLayout/tabs/customTab/row_01/firstColumn" : {
 	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.params"]
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction"]
 	},
-	"library/system/form/formInputType/formLayout/tabs/customTab/row_02" : {
+	"library/system/form/formInputType/formLayout/tabs/customTab/row_01/firstColumn/row_01" : {
 	    "jcr:primaryType":"bpw:formRow"
 	},
-	"library/system/form/formInputType/formLayout/tabs/customTab/row_02/firstColumn" : {
+	"library/system/form/formInputType/formLayout/tabs/customTab/row_01/firstColumn/row_01/firstColumn" : {
 	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.functionBody"]
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction.params", "customConstraint.javascriptFunction.functionBody"]
 	},
 	"library/system/form/formInputType/formControls/name": {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -3254,7 +3254,7 @@
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:mandatory": "false",
-	    "bpw:multiple": "true",
+	    "bpw:multiple": "false",
 	    "bpw:systemIndexed": "true",
 	    "bpw:userSearchable": "true",
 	    "bpw:showInList": "true"
@@ -3502,28 +3502,39 @@
 	    "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "object",
 	    "bpw:dataType": "object",
+	    "bpw:useReference": "false",
+	    "bpw:jcrDataType": "bpw:CustomConstraint"
+	},
+	"library/system/form/formInputType/formControls/customConstraint/javascriptFunction" : {
+	    "jcr:primaryType": "bpw:FormControl",
+	    "bpw:controlType": "object",
+	    "bpw:dataType": "object",
 	    "bpw:jcrDataType": "bpw:JavascriptFunction",
 	    "bpw:multiple": "true"
 	},
-	"library/system/form/formInputType/formControls/customConstraint/params" : {
+	"library/system/form/formInputType/formControls/customConstraint/javascriptFunction/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Javascript Function"
+    },
+	"library/system/form/formInputType/formControls/customConstraint/javascriptFunction/params" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "true"
     },
-    "library/system/form/formInputType/formControls/customConstraint/params/formControlLayout": {
+    "library/system/form/formInputType/formControls/customConstraint/javascriptFunction/params/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Parameters"
     },
-    "library/system/form/formInputType/formControls/customConstraint/functionBody" : {
+    "library/system/form/formInputType/formControls/customConstraint/javascriptFunction/functionBody" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "false"
     },
-    "library/system/form/formInputType/formControls/customConstraint/functionBody/formControlLayout": {
+    "library/system/form/formInputType/formControls/customConstraint/javascriptFunction/functionBody/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Function Body"
     }, 
@@ -3729,14 +3740,14 @@
 	},
 	"library/system/form/textareaType/formLayout/tabs/customTab/row_01/firstColumn" : {
 	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.params"]
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction"]
 	},
-	"library/system/form/textareaType/formLayout/tabs/customTab/row_02" : {
+	"library/system/form/textareaType/formLayout/tabs/customTab/row_01/firstColumn/row_01" : {
 	    "jcr:primaryType":"bpw:formRow"
 	},
-	"library/system/form/textareaType/formLayout/tabs/customTab/row_02/firstColumn" : {
+	"library/system/form/textareaType/formLayout/tabs/customTab/row_01/firstColumn/row_01/firstColumn" : {
 	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.functionBody"]
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction.params", "customConstraint.javascriptFunction.functionBody"]
 	},
 	"library/system/form/textareaType/formControls/name": {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -4100,7 +4111,7 @@
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:mandatory": "false",
-	    "bpw:multiple": "true",
+	    "bpw:multiple": "false",
 	    "bpw:systemIndexed": "true",
 	    "bpw:userSearchable": "true",
 	    "bpw:showInList": "true"
@@ -4288,32 +4299,43 @@
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Unique Items"
     },
-    "library/system/form/textareaType/formControls/customConstraint" : {
+	"library/system/form/textareaType/formControls/customConstraint" : {
+	    "jcr:primaryType": "bpw:FormControl",
+	    "bpw:controlType": "object",
+	    "bpw:dataType": "object",
+	    "bpw:useReference": "false",
+	    "bpw:jcrDataType": "bpw:CustomConstraint"
+	},
+	"library/system/form/textareaType/formControls/customConstraint/javascriptFunction" : {
 	    "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "object",
 	    "bpw:dataType": "object",
 	    "bpw:jcrDataType": "bpw:JavascriptFunction",
 	    "bpw:multiple": "true"
 	},
-    "library/system/form/textareaType/formControls/customConstraint/params" : {
+	"library/system/form/textareaType/formControls/customConstraint/javascriptFunction/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Javascript Function"
+    },
+    "library/system/form/textareaType/formControls/customConstraint/javascriptFunction/params" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "true"
     },
-    "library/system/form/textareaType/formControls/customConstraint/params/formControlLayout": {
+    "library/system/form/textareaType/formControls/customConstraint/javascriptFunction/params/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Parameters"
     },
-    "library/system/form/textareaType/formControls/customConstraint/functionBody" : {
+    "library/system/form/textareaType/formControls/customConstraint/javascriptFunction/functionBody" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "false"
     },
-    "library/system/form/textareaType/formControls/customConstraint/functionBody/formControlLayout": {
+    "library/system/form/textareaType/formControls/customConstraint/javascriptFunction/functionBody/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Function Body"
     },   
@@ -4536,15 +4558,15 @@
 	    "jcr:primaryType":"bpw:formRow"
 	},
 	"library/system/form/customFieldType/formLayout/tabs/customTab/row_01/firstColumn" : {
-	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.params"]
+		"jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction"]
 	},
-	"library/system/form/customFieldType/formLayout/tabs/customTab/row_02" : {
+	"library/system/form/customFieldType/formLayout/tabs/customTab/row_01/firstColumn/row_01" : {
 	    "jcr:primaryType":"bpw:formRow"
 	},
-	"library/system/form/customFieldType/formLayout/tabs/customTab/row_02/firstColumn" : {
-	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.functionBody"]
+	"library/system/form/customFieldType/formLayout/tabs/customTab/row_01/firstColumn/row_01/firstColumn" : {
+		"jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction.params", "customConstraint.javascriptFunction.functionBody"]
 	},
 	"library/system/form/customFieldType/formControls/name": {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -4908,7 +4930,7 @@
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:mandatory": "false",
-	    "bpw:multiple": "true",
+	    "bpw:multiple": "false",
 	    "bpw:systemIndexed": "true",
 	    "bpw:userSearchable": "true",
 	    "bpw:showInList": "true"
@@ -5152,32 +5174,43 @@
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Unique Items"
     },
-    "library/system/form/customFieldType/formControls/customConstraint" : {
+	"library/system/form/customFieldType/formControls/customConstraint" : {
+	    "jcr:primaryType": "bpw:FormControl",
+	    "bpw:controlType": "object",
+	    "bpw:dataType": "object",
+	    "bpw:useReference": "false",
+	    "bpw:jcrDataType": "bpw:CustomConstraint"
+	},
+	"library/system/form/customFieldType/formControls/customConstraint/javascriptFunction" : {
 	    "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "object",
 	    "bpw:dataType": "object",
 	    "bpw:jcrDataType": "bpw:JavascriptFunction",
 	    "bpw:multiple": "true"
 	},
-    "library/system/form/customFieldType/formControls/customConstraint/params" : {
+	"library/system/form/customFieldType/formControls/customConstraint/javascriptFunction/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Javascript Function"
+    },
+    "library/system/form/customFieldType/formControls/customConstraint/javascriptFunction/params" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "true"
     },
-    "library/system/form/customFieldType/formControls/customConstraint/params/formControlLayout": {
+    "library/system/form/customFieldType/formControls/customConstraint/javascriptFunction/params/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Parameters"
     },
-    "library/system/form/customFieldType/formControls/customConstraint/functionBody" : {
+    "library/system/form/customFieldType/formControls/customConstraint/javascriptFunction/functionBody" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "false"
     },
-    "library/system/form/customFieldType/formControls/customConstraint/functionBody/formControlLayout": {
+    "library/system/form/customFieldType/formControls/customConstraint/javascriptFunction/functionBody/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Function Body"
     },        
@@ -5361,14 +5394,14 @@
 	},
 	"library/system/form/binaryType/formLayout/tabs/customTab/row_01/firstColumn" : {
 	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.params"]
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction"]
 	},
-	"library/system/form/binaryType/formLayout/tabs/customTab/row_02" : {
+	"library/system/form/binaryType/formLayout/tabs/customTab/row_01/firstColumn/row_01" : {
 	    "jcr:primaryType":"bpw:formRow"
 	},
-	"library/system/form/binaryType/formLayout/tabs/customTab/row_02/firstColumn" : {
+	"library/system/form/binaryType/formLayout/tabs/customTab/row_01/firstColumn/row_01/firstColumn" : {
 	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.functionBody"]
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction.params", "customConstraint.javascriptFunction.functionBody"]
 	},
 	"library/system/form/binaryType/formControls/name": {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -5732,7 +5765,7 @@
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:mandatory": "false",
-	    "bpw:multiple": "true",
+	    "bpw:multiple": "false",
 	    "bpw:systemIndexed": "true",
 	    "bpw:userSearchable": "true",
 	    "bpw:showInList": "true"
@@ -5924,28 +5957,39 @@
 	    "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "object",
 	    "bpw:dataType": "object",
-		"bpw:jcrDataType": "bpw:JavascriptFunction",
+	    "bpw:useReference": "false",
+	    "bpw:jcrDataType": "bpw:CustomConstraint"
+	},
+	"library/system/form/binaryType/formControls/customConstraint/javascriptFunction" : {
+	    "jcr:primaryType": "bpw:FormControl",
+	    "bpw:controlType": "object",
+	    "bpw:dataType": "object",
+	    "bpw:jcrDataType": "bpw:JavascriptFunction",
 	    "bpw:multiple": "true"
 	},
-	"library/system/form/binaryType/formControls/customConstraint/params" : {
+	"library/system/form/binaryType/formControls/customConstraint/javascriptFunction/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Javascript Function"
+    },
+	"library/system/form/binaryType/formControls/customConstraint/javascriptFunction/params" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "true"
     },
-    "library/system/form/binaryType/formControls/customConstraint/params/formControlLayout": {
+    "library/system/form/binaryType/formControls/customConstraint/javascriptFunction/params/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Parameters"
     },
-    "library/system/form/binaryType/formControls/customConstraint/functionBody" : {
+    "library/system/form/binaryType/formControls/customConstraint/javascriptFunction/functionBody" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "false"
     },
-    "library/system/form/binaryType/formControls/customConstraint/functionBody/formControlLayout": {
+    "library/system/form/binaryType/formControls/customConstraint/javascriptFunction/functionBody/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Function Body"
     },
@@ -6143,14 +6187,14 @@
 	},
 	"library/system/form/objectType/formLayout/tabs/customTab/row_01/firstColumn" : {
 	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.params"]
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction"]
 	},
-	"library/system/form/objectType/formLayout/tabs/customTab/row_02" : {
+	"library/system/form/objectType/formLayout/tabs/customTab/row_01/firstColumn/row_01" : {
 	    "jcr:primaryType":"bpw:formRow"
 	},
-	"library/system/form/objectType/formLayout/tabs/customTab/row_02/firstColumn" : {
+	"library/system/form/objectType/formLayout/tabs/customTab/row_01/firstColumn/row_01/firstColumn" : {
 	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.functionBody"]
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction.params", "customConstraint.javascriptFunction.functionBody"]
 	},
 	"library/system/form/objectType/formControls/name": {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -6506,7 +6550,7 @@
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:mandatory": "false",
-	    "bpw:multiple": "true",
+	    "bpw:multiple": "false",
 	    "bpw:systemIndexed": "true",
 	    "bpw:userSearchable": "true",
 	    "bpw:showInList": "true"
@@ -6696,32 +6740,43 @@
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Unique Items"
     },
-    "library/system/form/objectType/formControls/customConstraint" : {
+	"library/system/form/objectType/formControls/customConstraint" : {
+	    "jcr:primaryType": "bpw:FormControl",
+	    "bpw:controlType": "object",
+	    "bpw:dataType": "object",
+	    "bpw:useReference": "false",
+	    "bpw:jcrDataType": "bpw:CustomConstraint"
+	},
+	"library/system/form/objectType/formControls/customConstraint/javascriptFunction" : {
 	    "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "object",
 	    "bpw:dataType": "object",
 	    "bpw:jcrDataType": "bpw:JavascriptFunction",
 	    "bpw:multiple": "true"
 	},
-    "library/system/form/objectType/formControls/customConstraint/params" : {
+	"library/system/form/objectType/formControls/customConstraint/javascriptFunction/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Javascript Function"
+    },
+    "library/system/form/objectType/formControls/customConstraint/javascriptFunction/params" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "true"
     },
-    "library/system/form/objectType/formControls/customConstraint/params/formControlLayout": {
+    "library/system/form/objectType/formControls/customConstraint/javascriptFunction/params/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Parameters"
     },
-    "library/system/form/objectType/formControls/customConstraint/functionBody" : {
+    "library/system/form/objectType/formControls/customConstraint/javascriptFunction/functionBody" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "false"
     },
-    "library/system/form/objectType/formControls/customConstraint/functionBody/formControlLayout": {
+    "library/system/form/objectType/formControls/customConstraint/javascriptFunction/functionBody/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Function Body"
     },
@@ -6946,14 +7001,14 @@
 	},
 	"library/system/form/formatedInputType/formLayout/tabs/customTab/row_01/firstColumn" : {
 	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.params"]
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction"]
 	},
-	"library/system/form/formatedInputType/formLayout/tabs/customTab/row_02" : {
+	"library/system/form/formatedInputType/formLayout/tabs/customTab/row_01/firstColumn/row_01" : {
 	    "jcr:primaryType":"bpw:formRow"
 	},
-	"library/system/form/formatedInputType/formLayout/tabs/customTab/row_02/firstColumn" : {
+	"library/system/form/formatedInputType/formLayout/tabs/customTab/row_01/firstColumn/row_01/firstColumn" : {
 	    "jcr:primaryType": "bpw:formColumn",
-	    "bpw:fieldNames": ["customConstraint.functionBody"]
+	    "bpw:fieldNames": ["customConstraint.javascriptFunction.params", "customConstraint.javascriptFunction.functionBody"]
 	},
 	"library/system/form/formatedInputType/formControls/name": {
 	    "jcr:primaryType": "bpw:FormControl",	    
@@ -7317,7 +7372,7 @@
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:mandatory": "false",
-	    "bpw:multiple": "true",
+	    "bpw:multiple": "false",
 	    "bpw:systemIndexed": "true",
 	    "bpw:userSearchable": "true",
 	    "bpw:showInList": "true"
@@ -7561,32 +7616,43 @@
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Unique Items"
     },
-    "library/system/form/formatedInputType/formControls/customConstraint" : {
+	"library/system/form/formatedInputType/formControls/customConstraint" : {
+	    "jcr:primaryType": "bpw:FormControl",
+	    "bpw:controlType": "object",
+	    "bpw:dataType": "object",
+	    "bpw:useReference": "false",
+	    "bpw:jcrDataType": "bpw:CustomConstraint"
+	},
+	"library/system/form/formatedInputType/formControls/customConstraint/javascriptFunction" : {
 	    "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "object",
 	    "bpw:dataType": "object",
 	    "bpw:jcrDataType": "bpw:JavascriptFunction",
 	    "bpw:multiple": "true"
 	},
-	"library/system/form/formatedInputType/formControls/customConstraint/params" : {
+	"library/system/form/formatedInputType/formControls/customConstraint/javascriptFunction/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Javascript Function"
+    },
+	"library/system/form/formatedInputType/formControls/customConstraint/javascriptFunction/params" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "true"
     },
-    "library/system/form/formatedInputType/formControls/customConstraint/params/formControlLayout": {
+    "library/system/form/formatedInputType/formControls/customConstraint/javascriptFunction/params/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Parameters"
     },
-    "library/system/form/formatedInputType/formControls/customConstraint/functionBody" : {
+    "library/system/form/formatedInputType/formControls/customConstraint/javascriptFunction/functionBody" : {
         "jcr:primaryType": "bpw:FormControl",
 	    "bpw:controlType": "text",
 	    "bpw:dataType": "string",
 	    "bpw:jcrDataType": "STRING",
 	    "bpw:multiple": "false"
     },
-    "library/system/form/formatedInputType/formControls/customConstraint/functionBody/formControlLayout": {
+    "library/system/form/formatedInputType/formControls/customConstraint/javascriptFunction/functionBody/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Function Body"
     },        
