@@ -15,6 +15,7 @@ public class WcmSystem {
 	private Map<String, RenderTemplate> renderTemplates;
 	private Map<String, ContentAreaLayout> contentAreaLayouts;
 	private Map<String, AuthoringTemplate> authoringTemplates;
+	private Map<String, Form> formTemplates;
 	private SiteConfig siteConfig;
 	private Navigation[] navigations;
 	//Navigation id to SiteArea map
@@ -113,14 +114,22 @@ public class WcmSystem {
 	public void setForms(Map<String, JsonForm[]> forms) {
 		this.forms = forms;
 	}
+	
+	public Map<String, Form> getFormTemplates() {
+		return formTemplates;
+	}
+	public void setFormTemplates(Map<String, Form> formTemplates) {
+		this.formTemplates = formTemplates;
+	}
 	@Override
 	public String toString() {
 		return "WcmSystem [wcmRepositories=" + Arrays.toString(wcmRepositories) + ", operations=" + operations
-				+ ", jcrThemes=" + Arrays.toString(jcrThemes) + ", authoringTemplateForms=" + authoringTemplateForms + ", forms=" + forms + ", queryStatements="
-				+ Arrays.toString(queryStatements) + ", renderTemplates=" + renderTemplates + ", contentAreaLayouts="
-				+ contentAreaLayouts + ", authoringTemplates=" + authoringTemplates + ", siteConfig=" + siteConfig
+				+ ", jcrThemes=" + Arrays.toString(jcrThemes) + ", authoringTemplateForms=" + authoringTemplateForms
+				+ ", forms=" + forms + ", queryStatements=" + Arrays.toString(queryStatements) + ", renderTemplates="
+				+ renderTemplates + ", contentAreaLayouts=" + contentAreaLayouts + ", authoringTemplates="
+				+ authoringTemplates + ", formTemplates=" + formTemplates + ", siteConfig=" + siteConfig
 				+ ", navigations=" + Arrays.toString(navigations) + ", siteAreas=" + siteAreas + ", controlFiels="
 				+ Arrays.toString(controlFiels) + ", langs=" + Arrays.toString(langs) + ", locales="
-				+ Arrays.toString(locales) + ", toString()=" + super.toString() + "]";
+				+ Arrays.toString(locales) + "]";
 	}
 }

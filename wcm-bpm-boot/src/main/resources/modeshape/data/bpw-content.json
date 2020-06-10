@@ -430,6 +430,35 @@
         "bpw:defaultTitle": "Purge Authoring Template",
         "bpw:defaultIcon": "delete_forever"
     },
+    "library/system/configuration/operations/formFolder" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:formFolder"
+    }, 
+    "library/system/configuration/operations/formFolder/create" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "form",
+        "bpw:operation": "Create",
+        "bpw:defaultTitle": "New Form",
+        "bpw:defaultIcon": "create"
+    },
+    "library/system/configuration/operations/form" : {
+        "jcr:primaryType":"bpw:supportedOpertions",
+        "bpw:jcrType": "bpw:formType"
+    },
+    "library/system/configuration/operations/form/edit" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "form",
+        "bpw:operation": "Edit",
+        "bpw:defaultTitle": "Edit Form",
+        "bpw:defaultIcon": "edit"
+    },
+    "library/system/configuration/operations/form/purge" : {
+        "jcr:primaryType":"bpw:supportedOpertion",
+        "bpw:resourceName": "form",
+        "bpw:operation": "Purge",
+        "bpw:defaultTitle": "Purge Form",
+        "bpw:defaultIcon": "delete_forever"
+    },
     "library/system/configuration/operations/categoryFolder" : {
         "jcr:primaryType":"bpw:supportedOpertions",
         "bpw:jcrType": "bpw:categoryFolder"

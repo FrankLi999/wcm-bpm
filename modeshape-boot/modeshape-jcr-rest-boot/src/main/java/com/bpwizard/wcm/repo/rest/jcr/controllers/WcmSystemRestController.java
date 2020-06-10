@@ -66,7 +66,7 @@ public class WcmSystemRestController extends BaseWcmRestController {
 				wcmSystem.setOperations(operations);
 				
 				wcmSystem.setAuthoringTemplates(this.doGetAuthoringTemplates(repository, workspace, request));
-				
+				wcmSystem.setFormTemplates(this.doGetForms(repository, workspace, request));
 				wcmSystem.setControlFiels(this.doGetControlField(repository, workspace, request));
 				wcmSystem.setWcmRepositories(this.getWcmRepositories(request));	
 
