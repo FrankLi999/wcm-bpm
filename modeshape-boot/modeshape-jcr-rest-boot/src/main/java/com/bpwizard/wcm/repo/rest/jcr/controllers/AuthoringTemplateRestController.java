@@ -146,6 +146,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			String repositoryName = at.getRepository();
 			JsonNode atJson = at.toJson();
 			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, atJson);
+			this.wcmUtils.registerNodeType(at.getWorkspace(), at);
 			if (this.authoringEnabled) {
 				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, atJson);
 			}

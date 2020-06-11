@@ -347,13 +347,13 @@ public class Form extends ResourceMixin implements HasName {
 			controlChildrenNode.set("arrayConstraint", constraintNode);
 			constraintNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ArrayConstraint");
 			if (arrayConstraint.getMaxItems() != null) {
-				controlNode.put("bpw:maxItems", arrayConstraint.getMaxItems());
+				constraintNode.put("bpw:maxItems", arrayConstraint.getMaxItems());
 			}
 			if (arrayConstraint.getMinItems() != null) {
-				controlNode.put("bpw:minItems", arrayConstraint.getMinItems());
+				constraintNode.put("bpw:minItems", arrayConstraint.getMinItems());
 			}
 			if (arrayConstraint.getUniqueItems() != null) {
-				controlNode.put("bpw:uniqueItems", arrayConstraint.getUniqueItems());
+				constraintNode.put("bpw:uniqueItems", arrayConstraint.getUniqueItems());
 			}
 			if (StringUtils.hasText(arrayConstraint.getContains())) {
 				constraintNode.put("bpw:contains", arrayConstraint.getContains());
@@ -463,22 +463,23 @@ public class Form extends ResourceMixin implements HasName {
 			}
 		}
 		CustomConstraint customConstraint = control.getCustomConstraint();
-		JavascriptFunction[] functions = customConstraint.getJavascriptFunction();
-		if (customConstraint != null && functions != null && functions.length > 0) {
-			ObjectNode constraintNode = JsonUtils.createObjectNode();
-			controlChildrenNode.set("customConstraint", constraintNode);
-			constraintNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:CustomConstraint");
-			ObjectNode functionsChildrenNode = JsonUtils.createObjectNode();
-			constraintNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, functionsChildrenNode);
-			for (JavascriptFunction function : functions) {
-				ObjectNode functionNode = JsonUtils.createObjectNode();
-				functionsChildrenNode.set(function.getName(), functionNode);
-				functionNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:JavascriptFunction");
-				functionNode.set("bpw:params", WcmUtils.toArrayNode(function.getParams()));
-				functionNode.put("bpw:functionBody", function.getFunctionBody());
+		if (customConstraint != null) {
+			JavascriptFunction[] functions = customConstraint.getJavascriptFunction();
+			if (functions != null && functions.length > 0) {
+				ObjectNode constraintNode = JsonUtils.createObjectNode();
+				controlChildrenNode.set("customConstraint", constraintNode);
+				constraintNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:CustomConstraint");
+				ObjectNode functionsChildrenNode = JsonUtils.createObjectNode();
+				constraintNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, functionsChildrenNode);
+				for (JavascriptFunction function : functions) {
+					ObjectNode functionNode = JsonUtils.createObjectNode();
+					functionsChildrenNode.set(function.getName(), functionNode);
+					functionNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:JavascriptFunction");
+					functionNode.set("bpw:params", WcmUtils.toArrayNode(function.getParams()));
+					functionNode.put("bpw:functionBody", function.getFunctionBody());
+				}
 			}
 		}
-
 		if (control.getFormControls() != null) {
 
 			ObjectNode controlNodeChildren = JsonUtils.createObjectNode();

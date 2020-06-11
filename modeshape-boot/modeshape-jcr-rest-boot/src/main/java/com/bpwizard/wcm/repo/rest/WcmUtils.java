@@ -1073,13 +1073,13 @@ public class WcmUtils {
 		PropertyDefinitionTemplate propertyDef = nodeTypeManager.createPropertyDefinitionTemplate();
 		propertyDef.setName(name);
 		propertyDef.setAutoCreated(false);
-		propertyDef.setMandatory(true);
+		propertyDef.setMandatory(false);
 		propertyDef.setProtected(false);
 		propertyDef.setOnParentVersion(OnParentVersionAction.COPY);
 		propertyDef.setMultiple(false);
 		propertyDef.setFullTextSearchable(true);
 		propertyDef.setQueryOrderable(true);
-		propertyDef.setRequiredType(PropertyType.valueFromName("STRING"));
+		propertyDef.setRequiredType(PropertyType.STRING);
         return propertyDef;
 	}
 	
@@ -1112,16 +1112,21 @@ public class WcmUtils {
     	propertydef.setOnParentVersion(OnParentVersionAction.COPY);
     	propertydef.setMultiple(formControl.isMandatory());
     	propertydef.setFullTextSearchable(formControl.isUserSearchable());
-    	
-    	if (formControl.getConstraint().getDefaultValues() != null) {
-    		propertydef.setDefaultValues(getValues(formControl.getConstraint().getDefaultValues(), session));
-    	}
     	propertydef.setQueryOrderable(true);
-    	propertydef.setRequiredType(PropertyType.valueFromName(formControl.getJcrDataType().toUpperCase()));
-
-        if (formControl.getConstraint().getEnumeration() != null) {
-        	propertydef.setValueConstraints(formControl.getConstraint().getEnumeration());
-        } 
+    	if (StringUtils.hasText(formControl.getJcrDataType())) {
+    		propertydef.setRequiredType(PropertyType.valueFromName(StringUtils.capitalize(formControl.getJcrDataType().toLowerCase())));
+    	} else {
+    		propertydef.setRequiredType(PropertyType.STRING);
+    	}
+    	if (formControl.getConstraint() != null) {
+	    	if (formControl.getConstraint().getDefaultValues() != null) {
+	    		propertydef.setDefaultValues(getValues(formControl.getConstraint().getDefaultValues(), session));
+	    	}
+	
+	        if (formControl.getConstraint().getEnumeration() != null) {
+	        	propertydef.setValueConstraints(formControl.getConstraint().getEnumeration());
+	        } 
+    	}
         return propertydef;
 	}
 }

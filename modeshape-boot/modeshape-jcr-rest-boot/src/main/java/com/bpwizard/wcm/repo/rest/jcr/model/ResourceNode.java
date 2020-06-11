@@ -26,13 +26,13 @@ public class ResourceNode extends ResourceMixin implements Serializable {
 	}
 	
 	protected void toJson(ObjectNode jsonNode, ObjectNode children) {		
-		if (StringUtils.hasText(this.getTitle())) {
-			jsonNode.put("bpw:title", this.getTitle());
-		}
-		
-		if (StringUtils.hasText(this.getDescription())) {
-			jsonNode.put("bpw:description", this.getDescription());
-		}
+//		if (StringUtils.hasText(this.getTitle())) {
+//			jsonNode.put("bpw:title", this.getTitle());
+//		}
+//		
+//		if (StringUtils.hasText(this.getDescription())) {
+//			jsonNode.put("bpw:description", this.getDescription());
+//		}
 		
 		if (this.getAcl() != null) {
 			this.addAccessControlEntry(children, "bpw:acl", this.getAcl());
