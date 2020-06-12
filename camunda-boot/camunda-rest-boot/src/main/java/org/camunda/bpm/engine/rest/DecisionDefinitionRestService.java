@@ -25,7 +25,7 @@ import org.camunda.bpm.engine.rest.dto.repository.DecisionDefinitionDto;
 
 public interface DecisionDefinitionRestService {
 
-	public static final String PATH = "/decision-definition";
+	public static final String PATH = "/camunda/api/engine/decision-definition";
 
 //	@Path("/{id}")
 //	DecisionDefinitionResource getDecisionDefinitionById(@PathParam("id") String decisionDefinitionId);

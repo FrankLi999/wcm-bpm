@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Roman Smirnov
  *
  */
-@RestController
+@RestController(value="historicIncidentApi")
 @RequestMapping(HistoryRestService.PATH + HistoricIncidentRestService.PATH)
 public class HistoricIncidentRestController extends AbstractRestProcessEngineAware implements HistoricIncidentRestService {
 

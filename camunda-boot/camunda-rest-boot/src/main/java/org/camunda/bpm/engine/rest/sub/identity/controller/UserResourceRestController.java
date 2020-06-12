@@ -42,7 +42,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -67,7 +66,8 @@ public class UserResourceRestController extends AbstractIdentityRestService impl
 		return user;
 	}
 
-	@RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	// @RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/availableOperations", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourceOptionsDto availableOperations(@PathVariable("userId") String userId) {
 		ResourceOptionsDto dto = new ResourceOptionsDto();
 

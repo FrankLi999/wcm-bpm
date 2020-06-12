@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@RestController
+@RestController(value="deploymentDefinitionApi")
 @RequestMapping(DeploymentRestService.PATH)
 public class DeploymentRestController extends AbstractRestProcessEngineAware implements DeploymentRestService {
 
@@ -145,7 +145,6 @@ public class DeploymentRestController extends AbstractRestProcessEngineAware imp
 
 		for (MultipartFile file : files) {
 			//FormPart part = payload.getNamedPart(name);
-
 			if (!RESERVED_KEYWORDS.contains(file.getName())) {
 				String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 				if (fileName != null) {

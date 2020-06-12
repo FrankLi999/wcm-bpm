@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Deivarayan Azhagappan
  *
  */
-@RestController
+@RestController(value="historicIdentityLinkLogApi")
 @RequestMapping(HistoryRestService.PATH + HistoricIdentityLinkLogRestService.PATH)
 public class HistoricIdentityLinkLogRestController extends AbstractRestProcessEngineAware implements HistoricIdentityLinkLogRestService {
 

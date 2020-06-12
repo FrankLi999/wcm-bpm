@@ -25,7 +25,6 @@ import org.camunda.bpm.engine.rest.dto.runtime.CreateCaseInstanceDto;
 import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
 import org.camunda.bpm.engine.rest.exception.RestException;
 import org.camunda.bpm.engine.rest.sub.repository.CaseDefinitionResource;
-import org.camunda.bpm.engine.rest.sub.repository.controller.ProcessDefinitionResourceRestController;
 import org.camunda.bpm.engine.runtime.CaseInstance;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +33,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Component
+@Service
 public class CaseDefinitionService implements CaseDefinitionResource {
 	// public final static String PATH = "/camunda/api/engine/sub/repository/case-definition";
 	

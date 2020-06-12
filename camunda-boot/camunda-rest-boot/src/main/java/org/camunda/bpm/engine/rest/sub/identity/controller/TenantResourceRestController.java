@@ -39,7 +39,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;;
 
@@ -79,7 +78,8 @@ public class TenantResourceRestController extends AbstractIdentityRestService im
 		this.identityService.deleteTenant(tenantId);
 	}
 
-	@RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	// @RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/availableOperations", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourceOptionsDto availableOperations(@PathVariable("tenantId") String tenantId) {
 		ResourceOptionsDto dto = new ResourceOptionsDto();
 

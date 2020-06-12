@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController(value="migrationApi")
 @RequestMapping(MigrationRestService.PATH)
 public class MigrationRestController extends AbstractRestProcessEngineAware implements MigrationRestService {
 

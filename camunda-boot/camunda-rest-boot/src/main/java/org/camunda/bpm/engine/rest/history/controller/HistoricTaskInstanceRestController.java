@@ -50,7 +50,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Roman Smirnov
  *HistoricTaskInstanceRestService
  */
-@RestController
+@RestController(value="historicTaskInstanceApi")
 @RequestMapping(HistoryRestService.PATH + HistoricTaskInstanceRestService.PATH)
 public class HistoricTaskInstanceRestController extends AbstractRestProcessEngineAware implements HistoricTaskInstanceRestService {
 

@@ -48,7 +48,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -58,7 +57,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author Daniel Meyer
  *
  */
-@RestController
+@RestController(value="authorizationApi")
 @RequestMapping(AuthorizationRestService.PATH)
 public class AuthorizationRestController extends AbstractAuthorizedRestResource implements AuthorizationRestService {
 
@@ -146,7 +145,8 @@ public class AuthorizationRestController extends AbstractAuthorizedRestResource 
 		return getAuthorizationCount(queryDto);
 	}
 	
-	@RequestMapping(path="/count", method = RequestMethod.OPTIONS, produces= {MediaType.APPLICATION_JSON_VALUE})
+	// @RequestMapping(value="/**", method = RequestMethod.OPTIONS, produces= {MediaType.APPLICATION_JSON_VALUE})
+	@GetMapping(path="/availableOperations", produces= {MediaType.APPLICATION_JSON_VALUE})
 	public ResourceOptionsDto availableOperations() {
 
 		UriComponentsBuilder baseUriBuilder = UriComponentsBuilder.fromPath(rootResourcePath)

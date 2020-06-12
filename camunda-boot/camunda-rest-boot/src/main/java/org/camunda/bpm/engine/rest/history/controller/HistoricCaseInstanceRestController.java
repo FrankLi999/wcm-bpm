@@ -36,11 +36,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-@RestController
+@RestController(value="historicCaseInstanceApi")
 @RequestMapping(HistoryRestService.PATH + HistoricCaseInstanceRestService.PATH)
 public class HistoricCaseInstanceRestController extends AbstractRestProcessEngineAware implements HistoricCaseInstanceRestService {
 
-	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<HistoricCaseInstanceDto> getHistoricCaseInstances(
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult,
@@ -50,7 +50,7 @@ public class HistoricCaseInstanceRestController extends AbstractRestProcessEngin
 		return queryHistoricCaseInstances(queryHistoricCaseInstanceDto, firstResult, maxResults);
 	}
 
-	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<HistoricCaseInstanceDto> queryHistoricCaseInstances(
 			@RequestBody HistoricCaseInstanceQueryDto queryDto,
 			@RequestParam("firstResult") Integer firstResult,

@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Askar Akhmerov
  */
-@RestController
+@RestController(value="historicDecisionStatisticsApi")
 @RequestMapping(HistoryRestService.PATH + HistoricDecisionStatisticsRestService.PATH)
 public class HistoricDecisionStatisticsRestController extends AbstractRestProcessEngineAware implements HistoricDecisionStatisticsRestService {
 

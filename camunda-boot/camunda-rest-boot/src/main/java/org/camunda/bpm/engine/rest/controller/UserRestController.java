@@ -52,7 +52,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author Daniel Meyer
  *
  */
-@RestController
+@RestController(value="userApi")
 @RequestMapping(UserRestService.PATH)
 public class UserRestController extends AbstractAuthorizedRestResource implements UserRestService {
 
@@ -95,7 +95,8 @@ public class UserRestController extends AbstractAuthorizedRestResource implement
 
 	}
 
-	@RequestMapping(path="/", method=RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	// @RequestMapping(path="/", method=RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path="/availableOperations", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourceOptionsDto availableOperations(HttpServletRequest request) {
 
 		final IdentityService identityService = getIdentityService();

@@ -40,14 +40,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Daniel Meyer
  *
  */
-@RestController
+@RestController(value="MetricsRestControllerSub")
 @RequestMapping(MetricsRestService.PATH + "/{metricsName}")
 public class MetricsRestController extends AbstractRestProcessEngineAware implements MetricsResource {
 
 	//protected String metricsName;
-	protected ProcessEngine processEngine;
-	protected ObjectMapper objectMapper;
-
+	
 	public MetricsRestController() {}
 
 	@GetMapping(path="/sum", produces=MediaType.APPLICATION_JSON_VALUE)

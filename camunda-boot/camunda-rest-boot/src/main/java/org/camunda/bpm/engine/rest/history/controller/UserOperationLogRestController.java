@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Danny Gräf
  */
-@RestController
+@RestController(value="userOperationLogApi")
 @RequestMapping(HistoryRestService.PATH + UserOperationLogRestService.PATH)
 public class UserOperationLogRestController extends AbstractRestProcessEngineAware implements UserOperationLogRestService {
 

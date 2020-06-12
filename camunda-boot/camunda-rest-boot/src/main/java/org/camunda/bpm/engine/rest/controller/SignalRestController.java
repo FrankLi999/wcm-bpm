@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Tassilo Weidner
  */
-@RestController
+@RestController(value="signalApi")
 @RequestMapping(SignalRestService.PATH)
 public class SignalRestController extends AbstractRestProcessEngineAware implements SignalRestService {
 

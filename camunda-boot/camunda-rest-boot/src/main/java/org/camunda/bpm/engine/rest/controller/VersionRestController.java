@@ -19,7 +19,11 @@ package org.camunda.bpm.engine.rest.controller;
 import org.camunda.bpm.engine.rest.dto.VersionDto;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController(value="versionApi")
+@RequestMapping(VersionRestController.PATH)
 public class VersionRestController extends AbstractRestProcessEngineAware {
 
 	public static final String PATH = "/camunda/api/engine/version";

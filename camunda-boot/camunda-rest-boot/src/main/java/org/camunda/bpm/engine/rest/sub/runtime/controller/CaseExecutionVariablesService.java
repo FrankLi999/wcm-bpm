@@ -23,14 +23,14 @@ import org.camunda.bpm.engine.rest.sub.VariableResource;
 import org.camunda.bpm.engine.rest.sub.impl.AbstractVariablesService;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Roman Smirnov
  *
  */
-@Component
+@Service
 public class CaseExecutionVariablesService extends AbstractVariablesService implements VariableResource {
 
 //	public CaseExecutionVariablesService(ProcessEngine engine, String resourceId, ObjectMapper objectMapper) {

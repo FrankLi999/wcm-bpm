@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Roman Smirnov
  *
  */
-@RestController
+@RestController(value="historicDetailApi")
 @RequestMapping(HistoryRestService.PATH + HistoricDetailRestService.PATH)
 public class HistoricDetailRestController extends AbstractRestProcessEngineAware implements HistoricDetailRestService {
 

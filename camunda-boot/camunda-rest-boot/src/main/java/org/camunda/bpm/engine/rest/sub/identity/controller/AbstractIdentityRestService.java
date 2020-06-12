@@ -28,7 +28,6 @@ import org.springframework.http.HttpStatus;
  *
  */
 public abstract class AbstractIdentityRestService extends AbstractAuthorizedRestResource {
-
 	protected IdentityService identityService;
 
 	@PostConstruct

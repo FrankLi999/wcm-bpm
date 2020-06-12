@@ -48,7 +48,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  *
  */
 
-@RestController
+@RestController(value="authorizationRestControllerSub")
 @RequestMapping(AuthorizationRestService.PATH + "/{resourceId}")
 public class AuthorizationRestController extends AbstractAuthorizedRestResource implements AuthorizationResource {
 	@Autowired
@@ -81,7 +81,8 @@ public class AuthorizationRestController extends AbstractAuthorizedRestResource 
 		this.authorizationService.saveAuthorization(dbAuthorization);
 	}
 
-	@RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	// @RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/availableOperations", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourceOptionsDto availableOperations(@PathVariable("resourceId") String resourceId) {
 
 		ResourceOptionsDto dto = new ResourceOptionsDto();

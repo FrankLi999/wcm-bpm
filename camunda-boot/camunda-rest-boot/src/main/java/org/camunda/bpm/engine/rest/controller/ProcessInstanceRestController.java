@@ -52,7 +52,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController(value="processInstanceApi")
 @RequestMapping(ProcessInstanceRestService.PATH)
 public class ProcessInstanceRestController extends AbstractRestProcessEngineAware
 		implements ProcessInstanceRestService {

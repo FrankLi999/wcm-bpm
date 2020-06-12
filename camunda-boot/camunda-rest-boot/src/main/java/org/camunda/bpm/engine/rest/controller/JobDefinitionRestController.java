@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author roman.smirnov
  */
-@RestController
+@RestController(value="jobDefinitionApi")
 @RequestMapping(JobDefinitionRestService.PATH)
 public class JobDefinitionRestController extends AbstractRestProcessEngineAware implements JobDefinitionRestService {
 

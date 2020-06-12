@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RestController
+@RestController(value="taskApi")
 @RequestMapping(TaskRestService.PATH)
 public class TaskRestController implements TaskRestService {
 

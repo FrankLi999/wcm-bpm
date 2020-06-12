@@ -36,6 +36,7 @@ import org.camunda.bpm.engine.rest.sub.runtime.CaseInstanceResource;
 import org.camunda.bpm.engine.runtime.CaseExecutionCommandBuilder;
 import org.camunda.bpm.engine.runtime.CaseInstance;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,7 +61,7 @@ public class CaseInstanceResourceRestController extends AbstractRestProcessEngin
 //		this.objectMapper = objectMapper;
 //	}
 
-	@GetMapping(path="/", produces="MediaType.APPLICATION_JSON_VALUE")
+	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CaseInstanceDto getCaseInstance(@PathVariable("caseInstanceId") String caseInstanceId) {
 		CaseService caseService = this.processEngine.getCaseService();
 
@@ -75,7 +76,7 @@ public class CaseInstanceResourceRestController extends AbstractRestProcessEngin
 		return result;
 	}
 
-	@PostMapping(path="/complete", consumes="MediaType.APPLICATION_JSON_VALUE")
+	@PostMapping(path="/complete", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public void complete(@PathVariable("caseInstanceId") String caseInstanceId, @RequestBody CaseExecutionTriggerDto triggerDto) {
 		try {
 			CaseService caseService = this.processEngine.getCaseService();
@@ -100,7 +101,7 @@ public class CaseInstanceResourceRestController extends AbstractRestProcessEngin
 		}
 	}
 
-	@PostMapping(path="/close", consumes="MediaType.APPLICATION_JSON_VALUE")
+	@PostMapping(path="/close", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public void close(@PathVariable("caseInstanceId") String caseInstanceId, @RequestBody CaseExecutionTriggerDto triggerDto) {
 		try {
 			CaseService caseService = this.processEngine.getCaseService();
@@ -125,7 +126,7 @@ public class CaseInstanceResourceRestController extends AbstractRestProcessEngin
 		}
 	}
 
-	@PostMapping(path="/terminate", consumes="MediaType.APPLICATION_JSON_VALUE")
+	@PostMapping(path="/terminate", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public void terminate(@PathVariable("caseInstanceId") String caseInstanceId, @RequestBody CaseExecutionTriggerDto triggerDto) {
 		try {
 			CaseService caseService = this.processEngine.getCaseService();

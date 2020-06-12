@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Miklas Boskamp
  *
  */
-@RestController
+@RestController(value="schemaLogApi")
 @RequestMapping(SchemaLogRestService.PATH)
 public class SchemaLogRestController extends AbstractRestProcessEngineAware implements SchemaLogRestService {
 

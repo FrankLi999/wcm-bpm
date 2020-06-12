@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Daniel Meyer
  *
  */
-@RestController
+@RestController(value="metricsApi")
 @RequestMapping(MetricsRestService.PATH)
 public class MetricsRestController extends AbstractRestProcessEngineAware implements MetricsRestService {
 

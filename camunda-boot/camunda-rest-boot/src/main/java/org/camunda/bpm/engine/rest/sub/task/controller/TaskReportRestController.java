@@ -28,6 +28,7 @@ import org.camunda.bpm.engine.rest.dto.task.TaskCountByCandidateGroupResultDto;
 import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
 import org.camunda.bpm.engine.rest.util.VariantUtils;
 import org.camunda.bpm.engine.task.TaskCountByCandidateGroupResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,10 +46,11 @@ public class TaskReportRestController {
 	public static final String APPLICATION_CSV_VALUE = "application/csv";
 	public static final String TEXT_CSV_VALUE = "text/csv";
 	
+	@Autowired
 	protected ProcessEngine engine;
 
-	public TaskReportRestController(ProcessEngine engine) {
-		this.engine = engine;
+	public TaskReportRestController() {
+		// this.engine = engine;
 	}
 
 	@GetMapping(path="/candidate-group-count", produces= {MediaType.APPLICATION_JSON_VALUE, "text/csv", "application/csv"})

@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.rest.CaseDefinitionRestService;
+import org.camunda.bpm.engine.rest.DecisionDefinitionRestService;
 import org.camunda.bpm.engine.rest.dto.HistoryTimeToLiveDto;
 import org.camunda.bpm.engine.rest.dto.VariableValueDto;
 import org.camunda.bpm.engine.rest.dto.dmn.EvaluateDecisionDto;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(CaseDefinitionRestService.PATH + "/key/{key}/tenant-id/{tenantId}")
+@RequestMapping(DecisionDefinitionRestService.PATH + "/key/{key}/tenant-id/{tenantId}")
 public class DecisionDefinitionByKeyAndTenantRestController {
 	
 	

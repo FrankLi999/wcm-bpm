@@ -30,10 +30,10 @@ import org.camunda.bpm.engine.rest.util.PathUtil;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -56,7 +56,8 @@ public class TenantGroupMembersRestController extends AbstractIdentityRestServic
 		identityService.deleteTenantGroupMembership(tenantId, groupId);
 	}
 
-	@RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	// @RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/availableOperations", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourceOptionsDto availableOperations(@PathVariable("tenantId") String tenantId) {
 		ResourceOptionsDto dto = new ResourceOptionsDto();
 

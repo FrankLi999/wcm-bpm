@@ -58,7 +58,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Thorben Lindhauer
  *
  */
-@RestController
+@RestController(value="externalTaskApi")
 @RequestMapping(ExternalTaskRestService.PATH)
 public class ExternalTaskRestController extends AbstractRestProcessEngineAware implements ExternalTaskRestService {
 

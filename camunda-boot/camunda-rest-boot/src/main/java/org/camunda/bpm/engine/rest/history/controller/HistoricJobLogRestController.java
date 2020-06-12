@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Roman Smirnov
  *
  */
-@RestController
+@RestController(value="historyApi")
 @RequestMapping(HistoryRestService.PATH + HistoricJobLogRestService.PATH)
 public class HistoricJobLogRestController extends AbstractRestProcessEngineAware implements HistoricJobLogRestService {
 

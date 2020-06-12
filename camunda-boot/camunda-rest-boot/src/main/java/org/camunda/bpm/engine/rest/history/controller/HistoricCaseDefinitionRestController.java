@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 
-@RestController
+@RestController(value="historicCaseDefinitionApi")
 @RequestMapping(HistoryRestService.PATH + HistoricCaseDefinitionRestService.PATH)
 public class HistoricCaseDefinitionRestController extends AbstractRestProcessEngineAware implements HistoricCaseDefinitionRestService {
 

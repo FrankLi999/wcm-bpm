@@ -55,7 +55,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 /**
  * @author Sebastian Menski
  */
-@RestController
+@RestController(value="filterTaskApi")
 @RequestMapping(FilterRestService.PATH)
 public class FilterRestController extends AbstractAuthorizedRestResource implements FilterRestService {
 
@@ -116,7 +116,7 @@ public class FilterRestController extends AbstractAuthorizedRestResource impleme
 		return FilterDto.fromFilter(filter);
 	}
 
-	@RequestMapping(path="/create", method=RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path="/availableOperations", method=RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourceOptionsDto availableOperations() {
 
 		UriComponentsBuilder baseUriBuilder = UriComponentsBuilder.fromPath(this.rootResourcePath)

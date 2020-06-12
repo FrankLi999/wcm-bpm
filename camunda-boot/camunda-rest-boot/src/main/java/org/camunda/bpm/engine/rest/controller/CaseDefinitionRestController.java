@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Roman Smirnov
  *
  */
-@RestController
+@RestController(value="caseDefinitionApi")
 @RequestMapping(CaseDefinitionRestService.PATH)
 public class CaseDefinitionRestController extends AbstractRestProcessEngineAware implements CaseDefinitionRestService {
 

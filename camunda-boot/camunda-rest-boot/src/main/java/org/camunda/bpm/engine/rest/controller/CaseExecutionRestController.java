@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController(value="caseExecutionApi")
 @RequestMapping(CaseExecutionRestService.PATH)
 public class CaseExecutionRestController extends AbstractRestProcessEngineAware implements CaseExecutionRestService {
 

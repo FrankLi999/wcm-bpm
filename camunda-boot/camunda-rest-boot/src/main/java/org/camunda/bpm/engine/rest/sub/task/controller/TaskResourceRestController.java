@@ -54,7 +54,6 @@ import org.camunda.bpm.engine.rest.util.EncodingUtil;
 import org.camunda.bpm.engine.task.IdentityLink;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.variable.VariableMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -78,11 +77,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping(TaskRestService.PATH + "/{taskId}")
 public class TaskResourceRestController extends AbstractTaskResourceRestController implements TaskResource {
 	
-	@Autowired
-	TaskVariablesRestController taskVariablesService;
-	
-	@Autowired
-	LocalTaskVariablesRestController localTaskVariablesService;
+//	@Autowired
+//	TaskVariablesRestController taskVariablesService;
+//	
+//	@Autowired
+//	LocalTaskVariablesRestController localTaskVariablesService;
 	
 	protected ObjectMapper objectMapper = new ObjectMapper();
 	protected String rootResourcePath = "/";

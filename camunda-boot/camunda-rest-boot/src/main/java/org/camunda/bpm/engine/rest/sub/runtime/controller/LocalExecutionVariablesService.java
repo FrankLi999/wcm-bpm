@@ -23,11 +23,13 @@ import org.camunda.bpm.engine.rest.sub.VariableResource;
 import org.camunda.bpm.engine.rest.sub.impl.AbstractVariablesService;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.camunda.bpm.engine.variable.value.TypedValue;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Daniel Meyer
  */
+@Service
 public class LocalExecutionVariablesService extends AbstractVariablesService implements VariableResource {
 
 	protected String getResourceTypeName() {

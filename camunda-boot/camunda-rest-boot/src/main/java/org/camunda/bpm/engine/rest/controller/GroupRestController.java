@@ -51,7 +51,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author Daniel Meyer
  *
  */
-@RestController
+@RestController(value="groupApi")
 @RequestMapping(GroupRestService.PATH)
 public class GroupRestController extends AbstractAuthorizedRestResource implements GroupRestService {
 
@@ -93,7 +93,7 @@ public class GroupRestController extends AbstractAuthorizedRestResource implemen
 
 	}
 
-	@RequestMapping(path="/", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path="/availableOperations", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourceOptionsDto availableOperations(HttpServletRequest request) {
 
 		final IdentityService identityService = getIdentityService();

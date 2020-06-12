@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Roman Smirnov
  *
  */
-@RestController
+@RestController(value="incidentApi")
 @RequestMapping(IncidentRestService.PATH)
 public class IncidentRestController extends AbstractRestProcessEngineAware implements IncidentRestService {
 

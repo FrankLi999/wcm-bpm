@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Roman Smirnov
  *
  */
-@RestController
+@RestController(value="caseInstanceApi")
 @RequestMapping(CaseInstanceRestService.PATH)
 public class CaseInstanceRestController extends AbstractRestProcessEngineAware implements CaseInstanceRestService {
 

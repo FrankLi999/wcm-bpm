@@ -67,7 +67,8 @@ public class GroupResourceRestController extends AbstractIdentityRestService imp
 		return group;
 	}
 
-	@RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	// @RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/availableOperations", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourceOptionsDto availableOperations(@PathVariable("groupId") String groupId) {
 		groupId = this.decodeGroupId(groupId);
 		ResourceOptionsDto dto = new ResourceOptionsDto();

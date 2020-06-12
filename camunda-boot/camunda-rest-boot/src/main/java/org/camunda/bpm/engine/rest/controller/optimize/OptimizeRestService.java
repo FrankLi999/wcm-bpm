@@ -47,13 +47,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RestController
+@RestController(value="optimizeApi")
 @RequestMapping(OptimizeRestService.PATH)
 public class OptimizeRestService { //extends AbstractRestProcessEngineAware {
 	public final static String PATH = "/camunda/api/engine/impl/optimize";
 	public static final String RESOURCE_PATH = "/optimize";
 
 	private DateConverter dateConverter;
+	
 	@Autowired
 	ProcessEngine engine;
 	

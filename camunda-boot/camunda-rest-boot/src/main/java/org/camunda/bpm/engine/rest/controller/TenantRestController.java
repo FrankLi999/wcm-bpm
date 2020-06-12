@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;;
 
-@RestController
+@RestController(value="tenantApi")
 @RequestMapping(TenantRestService.PATH)
 public class TenantRestController extends AbstractAuthorizedRestResource implements TenantRestService {
 
@@ -101,7 +101,7 @@ public class TenantRestController extends AbstractAuthorizedRestResource impleme
 		getIdentityService().saveTenant(newTenant);
 	}
 
-	@RequestMapping(path="/", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path="/availableOperations", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResourceOptionsDto availableOperations(HttpServletRequest request) {
 
 		UriComponentsBuilder baseUriBuilder = UriComponentsBuilder.fromPath(this.rootResourcePath)

@@ -77,7 +77,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -205,7 +204,8 @@ public class FilterResourceRestController extends AbstractAuthorizedRestResource
 		return new CountResultDto(executeFilterCount(resourceId, extendingQuery));
 	}
 
-	@RequestMapping(path="/", method={RequestMethod.OPTIONS}, produces=MediaType.APPLICATION_JSON_VALUE)
+	// @RequestMapping(path="/", method={RequestMethod.OPTIONS}, produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path="/availableOperations", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourceOptionsDto availableOperations(@PathVariable("filterId") String resourceId, HttpServletRequest request) {
 
 		ResourceOptionsDto dto = new ResourceOptionsDto();

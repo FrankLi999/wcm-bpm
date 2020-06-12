@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RestController
+@RestController(value="messageApi")
 @RequestMapping(MessageRestService.PATH)
 public class MessageRestController extends AbstractRestProcessEngineAware implements MessageRestService {
 

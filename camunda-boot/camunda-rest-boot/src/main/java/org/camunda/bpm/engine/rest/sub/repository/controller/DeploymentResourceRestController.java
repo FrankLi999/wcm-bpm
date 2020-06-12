@@ -36,7 +36,6 @@ import org.camunda.bpm.engine.rest.dto.repository.DeploymentWithDefinitionsDto;
 import org.camunda.bpm.engine.rest.dto.repository.RedeploymentDto;
 import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
 import org.camunda.bpm.engine.rest.sub.repository.DeploymentResource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,8 +54,8 @@ public class DeploymentResourceRestController extends AbstractRestProcessEngineA
 	public final static String PATH = "/camunda/api/engine/sub/repository/deployment";
 	public static final String CASCADE = "cascade";
 	
-	@Autowired
-	DeploymentResourcesResourceRestController deploymentResourcesService;
+//	@Autowired
+//	DeploymentResourcesResourceRestController deploymentResourcesService;
 	
 	public DeploymentResourceRestController() {}
 
