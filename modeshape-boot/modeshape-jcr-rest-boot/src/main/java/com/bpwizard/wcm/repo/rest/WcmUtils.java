@@ -414,8 +414,8 @@ public class WcmUtils {
 		at.setName(node.getName());
 		this.resolveResourceNode(at, node);
 		for (RestProperty property : node.getJcrProperties()) {
-			if ("bpw:baseResourceType".equals(property.getName())) {
-				at.setBaseResourceType(property.getValues().get(0));
+			if ("bpw:baseType".equals(property.getName())) {
+				at.setBaseType(property.getValues().get(0));
 			} else if ("bpw:contentWorkflow".equals(property.getName())) {
 				at.setContentItemWorkflow(property.getValues().get(0));
 			} else if ("bpw:nodeType".equals(property.getName())) {

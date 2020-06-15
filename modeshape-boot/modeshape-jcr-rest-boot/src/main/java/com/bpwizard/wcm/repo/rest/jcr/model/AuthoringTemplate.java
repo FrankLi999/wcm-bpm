@@ -20,7 +20,7 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 	private String repository;
 	private String workspace;
 	private String library;
-	private String baseResourceType;
+	private String baseType;
 	private String nodeType;
 	private AccessControlList contentItemAcl;
 	private BaseFormGroup[] elementGroups;
@@ -46,11 +46,11 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 		this.name = name;
 	}
 	
-	public String getBaseResourceType() {
-		return baseResourceType;
+	public String getBaseType() {
+		return baseType;
 	}
-	public void setBaseResourceType(String baseResourceType) {
-		this.baseResourceType = baseResourceType;
+	public void setBaseType(String baseType) {
+		this.baseType = baseType;
 	}
 	public Map<String, FormControl> getElements() {
 		return elements;
@@ -113,8 +113,8 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 		jsonNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
 		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:authoringTemplate");
 		
-		if (StringUtils.hasText(this.getBaseResourceType())) {
-			jsonNode.put("bpw:baseResourceType", this.getBaseResourceType());
+		if (StringUtils.hasText(this.getBaseType())) {
+			jsonNode.put("bpw:baseType", this.getBaseType());
 		}
 		jsonNode.put("bpw:nodeType", StringUtils.hasText(this.nodeType) ? 
 				this.nodeType: WcmUtils.getContentType(this.getLibrary(), this.getName()));
@@ -692,7 +692,7 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 	@Override
 	public String toString() {
 		return "AuthoringTemplate [name=" + name + ", repository=" + repository + ", workspace=" + workspace
-				+ ", library=" + library + ", baseResourceType=" + baseResourceType + ", nodeType=" + nodeType
+				+ ", library=" + library + ", baseType=" + baseType + ", nodeType=" + nodeType
 				+ ", contentItemAcl=" + contentItemAcl + ", elementGroups=" + Arrays.toString(elementGroups)
 				+ ", contentItemWorkflow=" + contentItemWorkflow + ", elements=" + elements + ", properties="
 				+ properties + "]";

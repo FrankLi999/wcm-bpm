@@ -8305,7 +8305,7 @@
     },
     "library/design/authoringTemplate/MySidePaneContent" : {
         "jcr:primaryType": "bpw:authoringTemplate",
-        "bpw:baseResourceType": "contentType",
+        "bpw:baseType": "contentType",
         "bpw:contentWorkflow": "bpmn:wcm_content_flow"
     },
     "library/design/authoringTemplate/MySidePaneContent/elementGroups" : {
@@ -8441,7 +8441,7 @@
     },
     "library/design/authoringTemplate/MyContent" : {
         "jcr:primaryType": "bpw:authoringTemplate",
-        "bpw:baseResourceType": "contentType",
+        "bpw:baseType": "contentType",
         "bpw:contentWorkflow": "bpmn:wcm_content_flow"
     },
     "library/design/authoringTemplate/MyContent/elementGroups" : {
@@ -8577,7 +8577,7 @@
     },
     "library/design/authoringTemplate/MyFile" : {
         "jcr:primaryType": "bpw:authoringTemplate",
-        "bpw:baseResourceType": "contentType",
+        "bpw:baseType": "contentType",
         "bpw:contentWorkflow": "bpmn:wcm_content_flow"
     },
     "library/design/authoringTemplate/MyFile/elementGroups" : {
@@ -9251,7 +9251,7 @@
     },
     "library/design/authoringTemplate/MyApplication" : {
         "jcr:primaryType": "bpw:authoringTemplate",
-        "bpw:baseResourceType": "contentType",
+        "bpw:baseType": "contentType",
         "bpw:contentWorkflow": "bpmn:wcm_content_flow"
     },
     "library/design/authoringTemplate/MyApplication/elementGroups" : {
@@ -9405,7 +9405,7 @@
     },
     "library/design/authoringTemplate/MyLink" : {
         "jcr:primaryType": "bpw:authoringTemplate",
-        "bpw:baseResourceType": "contentType",
+        "bpw:baseType": "contentType",
         "bpw:contentWorkflow": "bpmn:wcm_content_flow"
     },
     "library/design/authoringTemplate/MyLink/elementGroups" : {

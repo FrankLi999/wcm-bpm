@@ -245,7 +245,7 @@
 
 [bpw:authoringTemplate] > bpw:resourceNode orderable
 - bpw:nodeType (STRING)
-- bpw:baseResourceType (String)
+- bpw:baseType (String)
 - bpw:contentWorkflow (String)
 + elementGroups (bpw:formGroupFoler)
 + elements (bpw:elementFolder)
