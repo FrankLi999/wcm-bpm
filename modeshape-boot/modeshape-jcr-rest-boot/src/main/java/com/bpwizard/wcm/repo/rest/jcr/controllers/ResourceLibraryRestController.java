@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Library;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
@@ -185,13 +186,23 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		library.setName(node.getName());
 		
 		for (RestProperty property: node.getJcrProperties()) {
-			if ("jcr:language".equals(property.getName())) {
-				library.setLanguage(property.getValues().get(0));
-			} else if ("bpw:title".equals(property.getName())) {
+			if ("bpw:title".equals(property.getName())) {
 				library.setTitle(property.getValues().get(0));
 			} else if ("bpw:description".equals(property.getName())) {
 				library.setDescription(property.getValues().get(0));
 			} 
+		}
+		
+		
+		for (RestNode childNode: node.getChildren()) {
+			if (WcmUtils.checkNodeType(childNode, "bpw:system_libraryType_ElementFolder")) {
+				for (RestProperty property: childNode.getJcrProperties()) {
+					if ("language".equals(property.getName())) {
+						library.setLanguage(property.getValues().get(0));
+						break;
+					} 
+				}
+			}
 		}
 		return library;
 	}

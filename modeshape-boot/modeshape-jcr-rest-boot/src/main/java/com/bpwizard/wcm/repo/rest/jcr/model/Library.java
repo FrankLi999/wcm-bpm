@@ -1,10 +1,13 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.validation.constraints.NotBlank;
 
 import org.modeshape.jcr.api.JcrConstants;
+import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -134,18 +137,23 @@ public class Library implements Serializable, Comparable<Library> {
 		children.set("validationRule", validationRuleNode);
 		validationRuleNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:validationRuleFolder");
 		
-		ObjectNode rootSiteAreaNode = JsonUtils.createObjectNode();
-		children.set("rootSiteArea", rootSiteAreaNode);
-		rootSiteAreaNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:siteArea");
-		rootSiteAreaNode.put("bpw:name", this.getName());
-		rootSiteAreaNode.put("bpw:title", this.getTitle());
-		rootSiteAreaNode.put("bpw:navigationId", this.getName());
-		rootSiteAreaNode.put("bpw:navigationType", "group");
-		rootSiteAreaNode.put("bpw:navigationId", this.getName());
-		rootSiteAreaNode.put("bpw:siteConfig", this.getName());
-		rootSiteAreaNode.put("bpw:url", String.format("/%s", this.getName()));
-		rootSiteAreaNode.put("bpw:translate", "NAV.BPM.APPLICATIONS");
-		rootSiteAreaNode.put("bpw:contentAreaLayout", "bpwizard/default/design/MyLayout");
+		SiteArea rootSiteArea = new SiteArea();
+		ResourceMixin rootSiteAreaProperties = new ResourceMixin();
+		rootSiteArea.setProperties(rootSiteAreaProperties);
+		rootSiteAreaProperties.setName("rootSiteArea");
+		rootSiteAreaProperties.setTitle(this.getTitle());
+		rootSiteAreaProperties.setDescription(this.getDescription());
+		
+		Map<String, Object> rootSiteAreaElements = new HashMap<>();
+		rootSiteArea.setElements(rootSiteAreaElements);
+		rootSiteAreaElements.put("navigationId", this.getName());
+		rootSiteAreaElements.put("navigationType", "group");
+		rootSiteAreaElements.put("siteConfig", this.getName());
+		rootSiteAreaElements.put("url", String.format("/%s", this.getName()));
+		rootSiteAreaElements.put("translate", String.format("NAV.%s.APPLICATIONS", this.getName().toUpperCase()));
+		rootSiteAreaElements.put("contentAreaLayout", WcmConstants.DEFAULT_SA_LAYOUT);
+		
+		children.set("rootSiteArea", rootSiteArea.toJson());
         return jsonNode;
 	}
 	

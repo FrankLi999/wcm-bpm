@@ -87,4 +87,6 @@ public class WcmConstants {
 	public static final String WCM_ITEM_COMMENTTS = "comments";
 	
 	public static final String JSON_STRING_PATTERN = "^%s$";
+	
+	public static final String DEFAULT_SA_LAYOUT = "/design/contentAreaLayout/MyLayout";
 }
