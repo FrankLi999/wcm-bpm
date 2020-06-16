@@ -107,7 +107,7 @@ public class ValidationRule implements HasName, Serializable, Comparable<Validat
 			propertiesNode.put("bpw:description", this.getDescription());
 		}
 		
-		jsonNode.put("bpw:name", this.getName());
+		propertiesNode.put("bpw:name", this.getName());
 		ObjectNode elementsNode = JsonUtils.createObjectNode();
 		children.set(WcmConstants.WCM_ITEM_ELEMENTS, elementsNode);
 		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_validationRuleType_ElementFolder");
