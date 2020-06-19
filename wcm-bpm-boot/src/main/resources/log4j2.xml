@@ -4,6 +4,7 @@
     <Properties>
         <Property name="ROOT_LOG_LEVEL">AUDIT</Property>
         <Property name="APP_LOG_LEVEL">WARN</Property>
+         <Property name="SQL_LOG_LEVEL">WARN</Property>
         <Property name="LOG_PATH">${sys:log.root.dir}</Property>
         <Property name="APP_NAME">wcm-root</Property>
         <Property name="LOG_PATTERN">
@@ -97,7 +98,7 @@
         <Logger name="com.bpwizard" level="${sys:APP_LOG_LEVEL}">
             <AppenderRef ref="APP-ASYNC" />
         </Logger>
-        <Logger name="org.hibernate" level="${sys:APP_LOG_LEVEL}">
+        <Logger name="org.hibernate" level="${sys:SQL_LOG_LEVEL}">
             <AppenderRef ref="APP-ASYNC" />
         </Logger>
         <!-- 

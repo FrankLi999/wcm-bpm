@@ -103,7 +103,9 @@ public class QueryStatement implements HasName, Serializable, Comparable<QuerySt
 		children.set(WcmConstants.WCM_ITEM_ELEMENTS, elementsNode);
 		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_queryStatementType_ElementFolder");
 		elementsNode.put("query", this.getQuery());
-		elementsNode.set("columns", WcmUtils.toArrayNode(this.getColumns()));
+		if (this.getColumns() != null) {
+			elementsNode.set("columns", WcmUtils.toArrayNode(this.getColumns()));
+		}
 		return jsonNode;
 	}
 

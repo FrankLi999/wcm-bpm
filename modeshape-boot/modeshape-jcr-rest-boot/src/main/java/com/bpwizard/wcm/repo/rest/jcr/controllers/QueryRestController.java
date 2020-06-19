@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.query.InvalidQueryException;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.servlet.http.HttpServletRequest;
@@ -84,22 +85,19 @@ public class QueryRestController extends BaseWcmRestController {
 		}
 		try {
 			String repositoryName = query.getRepository();
-			ObjectNode qJson = (ObjectNode) query.toJson();
+			
 			try {
 				QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
 				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
 				QueryResult jcrResult = jcrQuery.execute();
 				String columnNames[] = jcrResult.getColumnNames();
-				if (columnNames != null && columnNames.length > 0) {
-					ArrayNode valueArray = JsonUtils.creatArrayNode();
-					for (String value : columnNames) {
-						valueArray.add(value);
-					}
-					qJson.set("bpw:columns", valueArray);	
-				}
+				query.setColumns(columnNames);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("JCR Query Error.", e);
+				String message = (e instanceof InvalidQueryException) ? ((InvalidQueryException)e).getMessage() : "Invalid JCR Query";
+				throw new WcmRepositoryException(message);
 			}
+			ObjectNode qJson = (ObjectNode) query.toJson();
 			// javax.jcr.query.qom.QueryObjectModel qom = null
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
