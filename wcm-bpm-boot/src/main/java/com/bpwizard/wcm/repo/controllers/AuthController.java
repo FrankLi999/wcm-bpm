@@ -74,7 +74,7 @@ public class AuthController {
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", loginRequest.getEmail()));
         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-        return ResponseEntity.ok(AuthResponse.fromUserAndToken(user, shortLivedAuthToken, sessionId));
+        return ResponseEntity.ok(AuthResponse.fromUserAndToken(user, shortLivedAuthToken, properties.getJwt().getShortLivedMillis(), sessionId));
     }
 
     @PostMapping("/signup")

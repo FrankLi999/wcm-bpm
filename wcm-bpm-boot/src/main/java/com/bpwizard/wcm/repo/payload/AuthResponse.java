@@ -17,7 +17,9 @@ public class AuthResponse {
     private String accessToken;
     private String tokenType = "Bearer";
     private String sessionId = "n/a";
-    public static AuthResponse fromUserAndToken(User user, String accessToken, String sessionId) {
+    private long expireIn;
+    
+    public static AuthResponse fromUserAndToken(User user, String accessToken, long expireIn, String sessionId) {
     	AuthResponse authResponse = new AuthResponse();
     	authResponse.setAccessToken(accessToken);
     	authResponse.setId(user.getId().toString());
@@ -26,7 +28,7 @@ public class AuthResponse {
     	authResponse.setName(user.getName());
     	authResponse.setFirstName(user.getFirstName());
     	authResponse.setLastName(user.getLastName());
-    	
+    	authResponse.setExpireIn(expireIn);
     	authResponse.setSessionId(sessionId);
     	authResponse.setRoles(user.getRoles().stream().map(Role::getName).toArray(String[]::new));
     	return authResponse;
@@ -104,6 +106,14 @@ public class AuthResponse {
 		this.accessToken = accessToken;
 	}
 
+	public long getExpireIn() {
+		return this.expireIn;
+	}
+
+	public void setExpireIn(long expireIn) {
+		this.expireIn = expireIn;
+	}
+
 	public String getTokenType() {
 		return tokenType;
 	}
@@ -120,15 +130,12 @@ public class AuthResponse {
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "AuthResponse [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name
 				+ ", firstName=" + firstName + ", lastName=" + lastName + ", imageUrl=" + imageUrl + ", roles="
-				+ Arrays.toString(roles) + ", accessToken=" + accessToken + ", tokenType=" + tokenType + ", sessionId="
-				+ sessionId + "]";
+				+ Arrays.toString(roles) + ", accessToken=" + accessToken + ", expireIn=" + expireIn + ", tokenType="
+				+ tokenType + ", sessionId=" + sessionId + "]";
 	}
-
-	
-
 }
