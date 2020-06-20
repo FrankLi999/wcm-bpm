@@ -13,21 +13,22 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
 import com.bpwizard.wcm.repo.rest.jcr.apierror.ApiError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
-@ControllerAdvice
+// @Order(Ordered.HIGHEST_PRECEDENCE)
+// @RestControllerAdvice
 @Slf4j
 public class WcmRestExceptionHandler extends ResponseEntityExceptionHandler {
 

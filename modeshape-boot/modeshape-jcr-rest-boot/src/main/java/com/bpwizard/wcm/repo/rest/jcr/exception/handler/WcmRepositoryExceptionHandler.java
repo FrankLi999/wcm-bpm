@@ -9,12 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.bpwizard.spring.boot.commons.exceptions.SpringFieldError;
-import com.bpwizard.spring.boot.commons.exceptions.handlers.AbstractValidationExceptionHandler;
+import com.bpwizard.spring.boot.commons.exceptions.handlers.AbstractExceptionHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class WcmRepositoryExceptionHandler extends AbstractValidationExceptionHandler<WcmRepositoryException> {
+public class WcmRepositoryExceptionHandler extends AbstractExceptionHandler<WcmRepositoryException> {
 
 	public WcmRepositoryExceptionHandler() {		
 		super(WcmRepositoryException.class);
@@ -28,7 +28,7 @@ public class WcmRepositoryExceptionHandler extends AbstractValidationExceptionHa
 	
 	@Override
 	public HttpStatus getStatus(WcmRepositoryException ex) {
-		return HttpStatus.INTERNAL_SERVER_ERROR;
+		return HttpStatus.BAD_REQUEST;
 	}
 	
 	@Override

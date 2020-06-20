@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.bpwizard.spring.boot.commons.exceptions.SpringFieldError;
 import com.bpwizard.spring.boot.commons.exceptions.handlers.AbstractValidationExceptionHandler;
 
-@Component
+// @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ThrowableHandler extends AbstractValidationExceptionHandler<Throwable> {
 

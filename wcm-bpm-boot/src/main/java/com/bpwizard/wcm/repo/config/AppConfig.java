@@ -17,7 +17,8 @@ import com.bpwizard.wcm.repo.rest.filter.LoggingFilter;
 @Configuration
 @EntityScan(basePackages= {"com.bpwizard.spring.boot.commons.service.repo"})
 @EnableJpaRepositories({"com.bpwizard.spring.boot.commons.service.repo"})
-@ComponentScan(basePackages={"com.bpwizard.spring.boot.commons.service.repo"})
+// @ComponentScan(basePackages={"com.bpwizard.spring.boot.commons.service.repo"})
+@ComponentScan(basePackages={"com.bpwizard.spring.boot.commons"})
 @AutoConfigureBefore({ModeshapeAppConfig.class, ModeshapeConfig.class})
 public class AppConfig {
 	@Autowired 
