@@ -63,12 +63,16 @@ public class SpringErrorAttributes<T extends Throwable> extends DefaultErrorAttr
 			if (errorResponse.getMessage() != null)
 				errorAttributes.put("message", errorResponse.getMessage());
 			
+			if (errorResponse.getErrorCode() != null)
+				errorAttributes.put("errorCode", errorResponse.getErrorCode());
+			if (errorResponse.getArguments() != null)
+				errorAttributes.put("arguments", errorResponse.getArguments());
 			Integer status = errorResponse.getStatus();
 			
 			if (status != null) {
 				errorAttributes.put(HTTP_STATUS_KEY, status); // a way to pass response status to SpringErrorController
 				errorAttributes.put("status", status);
-				errorAttributes.put("error", errorResponse.getError());
+				errorAttributes.put("reasonPhrase", errorResponse.getReasonPhrase());
 			}
 
 			if (errorResponse.getErrors() != null)

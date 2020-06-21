@@ -26,11 +26,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.BpmnWorkflow;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -89,20 +91,25 @@ public class WorkflowRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 
-		String baseUrl = RestHelper.repositoryUrl(request);
-		
-		BpmnWorkflow[] bpmnWorkflows = this.getBpmnWorkflowLibraries(repository, workspace, baseUrl)
-				.flatMap(library -> this.doGetBpmnWorkflows(library, baseUrl))
-				.toArray(BpmnWorkflow[]::new);
-		if ("asc".equals(sortDirection)) {
-			Arrays.sort(bpmnWorkflows);
-		} else if ("desc".equals(sortDirection)) {
-			Arrays.sort(bpmnWorkflows, Collections.reverseOrder());
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			
+			BpmnWorkflow[] bpmnWorkflows = this.getBpmnWorkflowLibraries(repository, workspace, baseUrl)
+					.flatMap(library -> this.doGetBpmnWorkflows(library, baseUrl))
+					.toArray(BpmnWorkflow[]::new);
+			if ("asc".equals(sortDirection)) {
+				Arrays.sort(bpmnWorkflows);
+			} else if ("desc".equals(sortDirection)) {
+				Arrays.sort(bpmnWorkflows, Collections.reverseOrder());
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(bpmnWorkflows);
+		} catch (WcmRepositoryException e) {
+			logger.error(e);
+			throw e;
 		}
-		if (logger.isDebugEnabled()) {
-			logger.traceExit();
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(bpmnWorkflows);
 	}
 	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -113,25 +120,28 @@ public class WorkflowRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String absPath = String.format(WcmConstants.NODE_WORKFLOW_PATH_PATTERN, bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WcmConstants.NODE_WORKFLOW_PATH_PATTERN, bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
 			String repositoryName = bpmnWorkflow.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, bpmnWorkflow.toJson());
+			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, bpmnWorkflow.toJson());
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, absPath, absPath, true);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_WORKFLOW_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -141,24 +151,27 @@ public class WorkflowRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String absPath = String.format(WcmConstants.NODE_WORKFLOW_PATH_PATTERN, bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
 		try {
-			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WcmConstants.NODE_WORKFLOW_PATH_PATTERN, bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
+			String baseUrl = RestHelper.repositoryUrl(request);			
 			String repositoryName = bpmnWorkflow.getRepository();
 			JsonNode atJson = bpmnWorkflow.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, atJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, atJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, absPath, atJson);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_WORKFLOW_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 
@@ -170,9 +183,9 @@ public class WorkflowRestController extends BaseWcmRestController {
 			
 			return atNode.getChildren().stream().filter(this::isBpmnWorkflow)
 					.map(node -> this.toBpmnWorkflow(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-			throw new WcmRepositoryException(e);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_WORKFLOW_ERROR, new String[] {baseUrl}));
 		}
 	}
 	
@@ -184,8 +197,9 @@ public class WorkflowRestController extends BaseWcmRestController {
 			return bpwizardNode.getChildren().stream()
 					.filter(this::notSystemLibrary)
 					.map(node -> toBpmnWorkflowWithLibrary(node, repository, workspace));
-		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
 	

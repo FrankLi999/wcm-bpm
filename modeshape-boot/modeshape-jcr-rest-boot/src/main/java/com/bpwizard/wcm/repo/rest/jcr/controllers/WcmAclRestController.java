@@ -40,12 +40,14 @@ import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
 import com.bpwizard.spring.boot.commons.service.repo.domain.RoleRepository;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
 import com.bpwizard.spring.boot.commons.service.repo.domain.UserRepository;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Grant;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmGroup;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmPermission;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmPrincipal;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 
 @SuppressWarnings("removal")
@@ -100,15 +102,17 @@ public class WcmAclRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			this.grantAclAcl(grant, repository, workspace);
+			this.grantAcl(grant, repository, workspace);
 			if (this.authoringEnabled) {
-				grantAclAcl(grant, repository, "draft");
+				grantAcl(grant, repository, "draft");
 			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.UPDATE_GRANTS_ERROR, null));
 		}	
 	}
 	
@@ -128,9 +132,13 @@ public class WcmAclRestController extends BaseWcmRestController {
 			AccessControlManager acm = session.getAccessControlManager();
 			Grant grant = this.doGetAcl(session, acm, wcmPath);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(grant);
+		} catch (WcmRepositoryException e) {
+			logger.error(e);
+			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
-		}	
+			logger.error(t);
+			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GET_ACL_ERROR, null));
+		}		
 	}
 	
 	@GetMapping(path = "/library-grant/{repository}/{workspace}", 
@@ -157,8 +165,12 @@ public class WcmAclRestController extends BaseWcmRestController {
 			libraryGrants.put("category", this.doGetAcl(session, acm, String.format("%s/category", wcmPath)));
 			libraryGrants.put("workflow", this.doGetAcl(session, acm, String.format("%s/workflow", wcmPath)));
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(libraryGrants);
+		} catch (WcmRepositoryException e) {
+			logger.error(e);
+			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -189,8 +201,12 @@ public class WcmAclRestController extends BaseWcmRestController {
 				logger.traceEntry();
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(roles);
+		} catch (WcmRepositoryException e) {
+			logger.error(e);
+			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GET_GROUPS_ERROR, null));
 		}	
 	}
 	
@@ -222,16 +238,20 @@ public class WcmAclRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(users);
 				
+		} catch (WcmRepositoryException e) {
+			logger.error(e);
+			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GET_USERS_ERROR, null));
 		}	
 	}
 	
-	private void grantAclAcl(Grant grant, String repository, String workspace) {
+	private void grantAcl(Grant grant, String repository, String workspace) {
+		String absPath = String.format(grant.getWcmPath().startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, grant.getWcmPath());
 		try {
 			Session session = this.repositoryManager.getSession(repository, workspace);
 			AccessControlManager acm = session.getAccessControlManager();
-			String absPath = String.format(grant.getWcmPath().startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, grant.getWcmPath());
 			AccessControlList acl = null;
 			AccessControlPolicyIterator it = acm.getApplicablePolicies(absPath);
 			if (it.hasNext()) {
@@ -256,7 +276,7 @@ public class WcmAclRestController extends BaseWcmRestController {
 			acm.setPolicy(absPath, acl);
 			session.save();
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GRANT_ACL_ERROR, null));
 		}	
 	}
 

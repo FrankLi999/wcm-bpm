@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ArrayConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
@@ -56,6 +57,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.VisbleCondition;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
@@ -156,11 +158,6 @@ public class WcmUtils {
 	
 	private static FormControl getAtProperty(AuthoringTemplate at, String property) {
 		FormControl formControl = null;
-//		if ("authoringTemplate".equals(property)) {
-//			formControl = at.getProperties().getAuthoringTemplate();
-//		} else if ("nodeType".equals(property)) {
-//			formControl = at.getProperties().getNodeType();
-//		} else 
 		if ("workflow".equals(property)) {
 			formControl = at.getProperties().getWorkflow();
 		} else if ("categories".equals(property)) {
@@ -218,17 +215,6 @@ public class WcmUtils {
 				String controlFieldName = StringUtils.hasText(formControl.getName()) ? 
 						formControl.getName() : "1";
 				WcmUtils.appendControlField(i, controlFieldName, layoutPath, formControl.isMultiple());
-//				if (formControl.isMultiple()) {
-//					if (isParentNodeArray) { 
-//						layoutPath.append("[]");
-//					} else {
-//						WcmUtils.appendControlField(i, controlFieldName, layoutPath, true);
-//					}
-//					isParentNodeArray = true;
-//				} else {
-//					WcmUtils.appendControlField(i, controlFieldName, layoutPath, false);
-//					isParentNodeArray = false;
-//				}
 			}
 			result = (i == jsonPath.length) ? layoutPath.toString() : fieldPath;
 		}
@@ -283,22 +269,12 @@ public class WcmUtils {
         		new String[] {WcmConstants.FOLDER_NODE_TYPE},
         		nodeTypeManager,
         		true);
-        //AuthoringTemplate properties
-//    	propertyFolderNodeType.getPropertyDefinitionTemplates().add(this.createPropertyDefinitionTemplate(
-//        		"authoringTemplate", 
-//        		at.getProperties().getAuthoringTemplate(),
-//        		session,
-//        		nodeTypeManager));
+
     	propertyFolderNodeType.getPropertyDefinitionTemplates().add(this.createPropertyDefinitionTemplate(
         		"categories", 
         		at.getProperties().getCategories(),
         		session,
         		nodeTypeManager));
-//    	propertyFolderNodeType.getPropertyDefinitionTemplates().add(this.createPropertyDefinitionTemplate(
-//        		"nodeType", 
-//        		at.getProperties().getNodeType(),
-//        		session,
-//        		nodeTypeManager));
     	
     	propertyFolderNodeType.getPropertyDefinitionTemplates().add(this.createPropertyDefinitionTemplate(
         		"workflow", 
@@ -361,9 +337,9 @@ public class WcmUtils {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String absPath = WcmUtils.nodePath(wcmAtPath);
 		try {
-			String library = WcmUtils.library(wcmAtPath);
-			String absPath = WcmUtils.nodePath(wcmAtPath);
+			String library = WcmUtils.library(wcmAtPath);			
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
 					absPath, WcmConstants.AT_JSON_FORM_DEPATH);
 			
@@ -372,10 +348,15 @@ public class WcmUtils {
 				logger.traceExit();
 			}
 			return at;
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_AT_ERROR, new String[] {absPath}));
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -388,9 +369,9 @@ public class WcmUtils {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String absPath = WcmUtils.nodePath(wcmAtPath);
 		try {
-			String library = WcmUtils.library(wcmAtPath);
-			String absPath = WcmUtils.nodePath(wcmAtPath);
+			String library = WcmUtils.library(wcmAtPath);			
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
 					absPath, WcmConstants.FORM_JSON_FORM_DEPATH);
 			
@@ -399,10 +380,15 @@ public class WcmUtils {
 				logger.traceExit();
 			}
 			return form;
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_FORM_ERROR, new String[] {absPath}));
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	

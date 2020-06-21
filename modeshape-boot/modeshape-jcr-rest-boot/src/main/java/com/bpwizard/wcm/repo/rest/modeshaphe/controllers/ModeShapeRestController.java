@@ -42,6 +42,7 @@ import com.bpwizard.wcm.repo.rest.handler.RestNodeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestQueryHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.modeshape.model.BackupResponse;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestException;
@@ -51,6 +52,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestQueryPlanResult;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestQueryResult;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 
 @RestController
 @RequestMapping(ModeShapeRestController.BASE_URI)
@@ -110,7 +112,7 @@ public class ModeShapeRestController {
 	        logger.debug("Exiting ...");
 	        return workspacess;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_GET_WS, null));
     	}
     }
     
@@ -174,7 +176,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	    	return ResponseEntity.status(HttpStatus.CREATED).body(response);
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_BACKUP, null));
     	}
     }
     
@@ -232,7 +234,7 @@ public class ModeShapeRestController {
 			return (restoreResponse!= null) ? ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restoreResponse) : 
 				ResponseEntity.status(HttpStatus.CREATED).body(backupResponse);
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_COPY_WS, null));
 		}
 	}
     /**
@@ -289,7 +291,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	    	return (response != null) ? ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response) :  ResponseEntity.ok().build();
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_RESTORE, null));
     	}
     }
     
@@ -325,7 +327,7 @@ public class ModeShapeRestController {
 	        logger.debug("Exiting ...");
 	    	return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_GET_BINARY, null));
     	}
     }
     
@@ -353,7 +355,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	    	return restNodeType;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_GET_NODE_TYPE, null));
     	}
     }
     
@@ -382,7 +384,7 @@ public class ModeShapeRestController {
     		logger.debug("Exiting ...");
         	return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_CND, null));
     	}
     	
     }
@@ -415,7 +417,7 @@ public class ModeShapeRestController {
 	        logger.debug("Exiting ...");
 	    	return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_CND, null));
     	}
     }
     
@@ -448,7 +450,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	    	return item;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_GET_ITEM, null));
     	}
     }
     
@@ -483,7 +485,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	    	return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_ITEM, null));
     	}
     }
 
@@ -521,7 +523,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	    	return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_ITEMS, null));
     	}
     }
     
@@ -558,8 +560,8 @@ public class ModeShapeRestController {
 	    	ResponseEntity<?> response = this.itemHandler.addItems(baseUrl, rawRepositoryName, rawWorkspaceName, file.getInputStream());
 	    	logger.debug("Exiting ...");
 	    	return response;
-    	} catch (Throwable e) {
-    		throw new WcmRepositoryException(e);
+    	} catch (Throwable t) {
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_ITEMS, null));
     	} 
     }
     
@@ -586,7 +588,7 @@ public class ModeShapeRestController {
 	        logger.debug("Exiting ...");
 	        return ResponseEntity.noContent().build();
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_DELETE_ITEM, null));
     	}
     }
 
@@ -620,7 +622,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_DELETE_ITEMS, null));
     	}
     }
     
@@ -657,7 +659,7 @@ public class ModeShapeRestController {
 	        logger.debug("Exiting ...");
 	        return item;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_PUT_ITEM, null));
     	}
     }
 
@@ -695,7 +697,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_PUT_ITEMS, null));
     	}
     }
     
@@ -726,7 +728,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_BINARY, null));
     	}
     }
     
@@ -757,7 +759,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_PUT_BINARY, null));
     	}
     }
 
@@ -790,7 +792,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_BINARY, null));
     	}
     }
     
@@ -825,7 +827,7 @@ public class ModeShapeRestController {
 	        logger.debug("Exiting ...");
 	    	return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_DOWNLOAD_BINARY, null));
     	}
     }
     
@@ -871,7 +873,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_UPLOAD_BINARY, null));
     	}
     }
     
@@ -916,7 +918,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_UPLOAD_BINARY, null));
     	}
     }
     
@@ -956,7 +958,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_XPATH_QUERY, null));
     	}
     }
     
@@ -997,7 +999,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_JSQL_QUERY, null));
     	}
     }
     
@@ -1039,7 +1041,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_JSQL2_QUERY, null));
     	}
     }
 
@@ -1081,7 +1083,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_JCR_SEARCH, null));
     	}
     }
     
@@ -1122,7 +1124,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_XPATH_QUERY_PLAN, null));
     	}
     }
     
@@ -1163,7 +1165,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_JSQL_QUERY_PLAN, null));
     	}
     }
 
@@ -1204,7 +1206,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_JSQL2_QUERY_PLAN, null));
     	}
     }
 
@@ -1245,7 +1247,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	        return result;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_JCR_SEARCH_PLAN, null));
     	}
     }
     
@@ -1279,7 +1281,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	    	return item;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_GET_NODE_ID, null));
     	}
     }
     
@@ -1315,7 +1317,7 @@ public class ModeShapeRestController {
 	    	logger.debug("Exiting ...");
 	    	return item;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_PUT_NODE_ID, null));
     	}
     }
     
@@ -1341,7 +1343,7 @@ public class ModeShapeRestController {
 	        logger.debug("Exiting ...");
 	    	return response;
     	} catch (Throwable t) {
-    		throw new WcmRepositoryException(t);
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_DELETE_NODE_ID, null));
     	}
     }
     

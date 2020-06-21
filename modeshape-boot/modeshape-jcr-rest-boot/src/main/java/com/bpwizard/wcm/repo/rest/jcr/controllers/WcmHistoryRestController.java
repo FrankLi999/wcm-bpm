@@ -26,10 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmHistory;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmVersion;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 
 @RestController
 @RequestMapping(WcmHistoryRestController.BASE_URI)
@@ -62,7 +64,8 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 			libraryHistories.put("workflow", this.doGetHistory(session, String.format("%s/workflow", wcmPath)));
 			return ResponseEntity.status(HttpStatus.OK).body(libraryHistories);
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GET_LIB_HISTORY_ERROR, null));
 		}	
 	}
 
@@ -82,7 +85,8 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 			WcmHistory history = this.doGetHistory(session, wcmPath);
 			return ResponseEntity.status(HttpStatus.OK).body(history);
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GET_VERSION_HISTORY_ERROR, null));
 		}	
 	}
 	
@@ -108,7 +112,8 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.RESTORE_VERSION_ERROR, null));
 		}	
 	}
 	

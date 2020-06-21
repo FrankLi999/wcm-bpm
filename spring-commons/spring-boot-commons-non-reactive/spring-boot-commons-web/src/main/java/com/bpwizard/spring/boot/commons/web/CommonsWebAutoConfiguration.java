@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolve
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 // import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,9 +34,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import com.bpwizard.spring.boot.commons.CommonsAutoConfiguration;
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.exceptions.ErrorResponseComposer;
-import com.bpwizard.spring.boot.commons.exceptions.ExceptionIdMaker;
-import com.bpwizard.spring.boot.commons.exceptions.handlers.AbstractExceptionHandler;
-import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.web.exceptions.DefaultExceptionHandlerControllerAdvice;
 import com.bpwizard.spring.boot.commons.web.exceptions.SpringErrorAttributes;
 import com.bpwizard.spring.boot.commons.web.exceptions.SpringErrorController;
@@ -180,12 +178,12 @@ public class CommonsWebAutoConfiguration {
 	/**
 	 * Merge ValidationMessages.properties into messages.properties
 	 */	
-//    @Bean
-//	@ConditionalOnMissingBean(Validator.class)
-//    public Validator validator(MessageSource messageSource) {
-//
-//        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-//        localValidatorFactoryBean.setValidationMessageSource(messageSource);
-//        return localValidatorFactoryBean;
-//    }
+    @Bean
+	@ConditionalOnMissingBean(Validator.class)
+    public Validator validator(MessageSource messageSource) {
+
+        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+        localValidatorFactoryBean.setValidationMessageSource(messageSource);
+        return localValidatorFactoryBean;
+    }
 }

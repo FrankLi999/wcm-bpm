@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -41,32 +43,38 @@ public class SiteareaRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-		try {
-			String absPath = WcmUtils.nodePath(sa.getWcmPath(),sa.getName());
+		String absPath = WcmUtils.nodePath(sa.getWcmPath(),sa.getName());
+		try {	
 			String repositoryName = sa.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			this.itemHandler.addItem(baseUrl, repositoryName, sa.getWorkspace(), absPath, sa.toJson());
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
 				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, absPath, absPath, true);
-				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
-
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
-		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_SA_ERROR, new String[] {absPath}));
+	    } catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
 	@PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void saveSiteArea(@RequestBody SiteArea sa, HttpServletRequest request) throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		String absPath = WcmUtils.nodePath(sa.getWcmPath());
 		try {
-			String absPath = WcmUtils.nodePath(sa.getWcmPath());
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String repositoryName = sa.getRepository();
 			JsonNode saJson = sa.toJson();
@@ -74,12 +82,18 @@ public class SiteareaRestController extends BaseWcmRestController {
 			if (this.authoringEnabled) {
 				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, absPath, saJson);
 			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) {
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_SA_ERROR, new String[] {absPath}));
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -106,9 +120,11 @@ public class SiteareaRestController extends BaseWcmRestController {
 			}
 			return sa;
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -119,8 +135,8 @@ public class SiteareaRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String absPath = WcmUtils.nodePath(wcmPath);
 		try {
-			String absPath = WcmUtils.nodePath(wcmPath);
 			this.doLock(repository, workspace, absPath);
 			SiteArea siteArea = this.getSiteArea(repository, workspace, absPath, request);
 			if (logger.isDebugEnabled()) {
@@ -128,11 +144,14 @@ public class SiteareaRestController extends BaseWcmRestController {
 			}
 			return siteArea;
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) {
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_SA_ERROR, new String[] {absPath}));
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 

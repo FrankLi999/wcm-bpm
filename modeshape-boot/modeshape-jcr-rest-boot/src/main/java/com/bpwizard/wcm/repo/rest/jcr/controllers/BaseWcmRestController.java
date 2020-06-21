@@ -30,6 +30,7 @@ import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ArrayConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
@@ -86,6 +87,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestNodeType;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestPropertyType;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -193,10 +195,6 @@ public abstract class BaseWcmRestController {
 		return WcmUtils.checkNodeType(node, "bpw:formType");
 	}
 
-//	protected boolean isWorkflow(RestNode node) {
-//		return WcmUtils.checkNodeType(node, "bpw:workflow");
-//	}
-
 	protected boolean isBpmnWorkflow(RestNode node) {
 		return WcmUtils.checkNodeType(node, "bpw:system_bpmnWorkflowType");
 	}
@@ -217,45 +215,32 @@ public abstract class BaseWcmRestController {
 				try {
 					Session draftSession = this.repositoryManager.getSession(repository, "draft");
 					Node draftNode = draftSession.getNode(absPath);
-					// String workflowState =
-					// node.getProperty("bpw:currentLifecycleState").getValue().getString();
-					// if ("Expired".equals(workflowState)) {
 					draftNode.remove();
 					draftSession.save();
-					// }
 				} catch (Exception e) {
-					// TODO:
-					e.printStackTrace();
+					logger.warn(String.format("Failed to delete item %s from draft repository", absPath), e);
 				}
 				try {
 					Session expiredSession = this.repositoryManager.getSession(repository, "expired");
 					Node expiredNode = expiredSession.getNode(absPath);
-					// String workflowState =
-					// node.getProperty("bpw:currentLifecycleState").getValue().getString();
-					// if ("Expired".equals(workflowState)) {
 					expiredNode.remove();
 					expiredSession.save();
-					// }
 				} catch (Exception e) {
-					// TODO:
-					e.printStackTrace();
+					logger.warn(String.format("Failed to delete item %s from expired repository", absPath), e);
 				}
 			}
-
-			try {
-				Session session = this.repositoryManager.getSession(repository, "default");
-				Node node = session.getNode(absPath);
-				node.remove();
-				session.save();
-			} catch (PathNotFoundException ex) {
-				// logger.warn(String.format("Content item %s does not exist", absPath));
-			}
+			Session session = this.repositoryManager.getSession(repository, "default");
+			Node node = session.getNode(absPath);
+			node.remove();
+			session.save();
+		} catch (PathNotFoundException ex) {
+			throw new WcmRepositoryException(ex, new WcmError(ex.getMessage(), WcmErrors.PURGE_ITEM_ERROR, new String[] {absPath}));
 		} catch (WcmRepositoryException e) {
 			throw e;
 		} catch (RepositoryException re) {
-			throw new WcmRepositoryException(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.PURGE_ITEM_ERROR, null));
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -331,7 +316,7 @@ public abstract class BaseWcmRestController {
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
 					.map(node -> toAuthoringTemplateWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, new String[] {baseUrl}));
 		}
 	}
 
@@ -343,7 +328,7 @@ public abstract class BaseWcmRestController {
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
 					.map(node -> toFormWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, new String[] {baseUrl}));
 		}
 	}
 
@@ -413,9 +398,6 @@ public abstract class BaseWcmRestController {
 			if (form.getFormControls() != null && form.getFormControls().size() > 0) {
 				ObjectNode elementPropertiesNode = this.objectMapper.createObjectNode();
 				elementPropertiesNode.put("type", "object");
-				// ObjectNode elementProperties = this.objectMapper.createObjectNode();
-				//elementPropertiesNode.set("properties", elementProperties);
-				//properties.set("elements", elementPropertiesNode);
 				this.popluateFormControls(
 						request, 
 						form.getRepository(), 
@@ -449,9 +431,10 @@ public abstract class BaseWcmRestController {
 			jsonForm.setFormSchema(jsonNode);
 			return jsonForm;
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.JSON_FORM_ERROR, new String[] {form.getName()}));
 		}
 	}
+	
 	protected JsonForm toJsonForm(HttpServletRequest request, AuthoringTemplate at, boolean editMode)
 			throws WcmRepositoryException {
 		try {
@@ -552,7 +535,7 @@ public abstract class BaseWcmRestController {
 			jsonForm.setFormSchema(jsonNode);
 			return jsonForm;
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.AT_FORM_ERROR, new String[] {at.getName()}));
 		}
 	}
 
@@ -1376,8 +1359,12 @@ public abstract class BaseWcmRestController {
 			FormControl formControl = WcmUtils.getFormControl(form, fieldPath);
 
 			if (formControl == null) {
-				throw new WcmRepositoryException(String
-						.format("FormControl %s can not be found in authoring template %s", fieldPath, form.getName()));
+				throw new WcmRepositoryException(
+						new WcmError(
+							String.format("FormControl %s can not be found in form template %s", fieldPath, form.getName()),
+							WcmErrors.FORM_CONTROL_NOT_FOUND, 
+							new String[] {fieldPath, form.getName()})
+				);
 			}
 
 			layoutNodes = this.buildFieldLayout(fieldPath, formControl, fieldNodes, form, addChildNodesByDefault);
@@ -1425,8 +1412,12 @@ public abstract class BaseWcmRestController {
 			FormControl formControl = WcmUtils.getFormControl(at, fieldPath);
 
 			if (formControl == null) {
-				throw new WcmRepositoryException(String
-						.format("FormControl %s can not be found in authoring template %s", fieldPath, at.getName()));
+				throw new WcmRepositoryException(
+						new WcmError(
+							String.format("FormControl %s can not be found in authoring template %s", fieldPath, at.getName()),
+							WcmErrors.AT_CONTROL_NOT_FOUND, 
+							new String[] {fieldPath, at.getName()})
+				);
 			}
 
 			layoutNodes = this.buildFieldLayout(fieldPath, formControl, fieldNodes, at, addChildNodesByDefault);
@@ -1827,14 +1818,16 @@ public abstract class BaseWcmRestController {
 
 	protected Stream<RenderTemplate> getRenderTemplates(RenderTemplate rt, HttpServletRequest request)
 			throws WcmRepositoryException {
+		String absPath = "/library/" + rt.getLibrary() + "/renderTemplate";
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
+			
 			RestNode themeNode = (RestNode) this.itemHandler.item(baseUrl, rt.getRepository(), rt.getWorkspace(),
-					"/library/" + rt.getLibrary() + "/renderTemplate", WcmConstants.RENDER_TEMPLATE_DEPATH);
+					 absPath, WcmConstants.RENDER_TEMPLATE_DEPATH);
 			return themeNode.getChildren().stream().filter(this::isRenderTemplate)
 					.map(node -> this.toRenderTemplate(node, rt.getRepository(), rt.getWorkspace(), rt.getLibrary(), request));
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.AT_CONTROL_NOT_FOUND, new String[] { absPath} ));
 		}
 	}
 
@@ -1942,7 +1935,7 @@ public abstract class BaseWcmRestController {
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toRenderTemplateWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
 
@@ -1966,21 +1959,22 @@ public abstract class BaseWcmRestController {
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toContentAreaLayoutWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
 
 	private Stream<ContentAreaLayout> getContentArealayouts(ContentAreaLayout contentAreaLayout, String baseUrl)
 			throws WcmRepositoryException {
+		String absPath = "/library/" + contentAreaLayout.getLibrary() + "/contentAreaLayout";
 		try {
 			RestNode contentAreaLayoutNode = (RestNode) this.itemHandler.item(baseUrl,
 					contentAreaLayout.getRepository(), contentAreaLayout.getWorkspace(),
-					"/library/" + contentAreaLayout.getLibrary() + "/contentAreaLayout",
+					absPath,
 					WcmConstants.CONTENT_AREA_LAYOUT_DEPTH);
 			return contentAreaLayoutNode.getChildren().stream().filter(this::isContentAreaLayout)
 					.map(node -> this.toContentAreaLayout(node, contentAreaLayout));
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_CONTENT_AREA_LAYOUT_ERROR, new String[] { absPath}));
 		}
 	}
 
@@ -2085,16 +2079,16 @@ public abstract class BaseWcmRestController {
 
 	protected Stream<AuthoringTemplate> getAuthoringTemplates(AuthoringTemplate at, String baseUrl)
 			throws WcmRepositoryException {
+		String absPath = String.format(WcmConstants.NODE_AT_ROOT_PATH_PATTERN, at.getLibrary());
 		try {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
-					String.format(WcmConstants.NODE_AT_ROOT_PATH_PATTERN, at.getLibrary()),
+					absPath,
 					WcmConstants.AT_JSON_FORM_DEPATH);
 
 			return atNode.getChildren().stream().filter(this::isAuthortingTemplate).map(node -> this.wcmUtils
 					.toAuthoringTemplate(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
 		} catch (RepositoryException e) {
-			e.printStackTrace();
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_AT_ERROR, new String[] { absPath}));
 		}
 	}
 
@@ -2111,34 +2105,33 @@ public abstract class BaseWcmRestController {
 	}
 
 	protected Stream<Form> getForms(Form form, String baseUrl) throws WcmRepositoryException {
+		String absPath = String.format(WcmConstants.NODE_FORM_ROOT_PATH_PATTERN, form.getLibrary());
 		try {
 			RestNode formFolderNode = (RestNode) this.itemHandler.item(baseUrl, form.getRepository(), form.getWorkspace(),
-					String.format(WcmConstants.NODE_FORM_ROOT_PATH_PATTERN, form.getLibrary()),
+					absPath,
 					WcmConstants.FORM_JSON_FORM_DEPATH);
 
 			return formFolderNode.getChildren().stream().filter(this::isForm).map(
 					node -> this.wcmUtils.toForm(node, form.getRepository(), form.getWorkspace(), form.getLibrary()));
 		} catch (RepositoryException e) {
-			e.printStackTrace();
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_FORM_ERROR, new String[] { absPath}));
 		}
 	}
 
 	protected SiteConfig doGetSiteConfig(HttpServletRequest request, String repository, String workspace,
 			String library, String siteConfigName) throws WcmRepositoryException {
+		String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH_PATTERN, library, siteConfigName);
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH_PATTERN, library, siteConfigName);
 			RestNode siteConfigNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath,
 					WcmConstants.SITE_CONFIG_DEPTH);
 			SiteConfig siteConfig = this.toSiteConfig(repository, workspace, library, siteConfigNode);
 			siteConfig.setRepository(repository);
 			siteConfig.setWorkspace(workspace);
 			siteConfig.setLibrary(library);
-
 			return siteConfig;
 		} catch (RepositoryException re) {
-			throw new WcmRepositoryException(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_SITE_CONFIG_ERROR, new String[] { absPath}));
 		}
 	}
 
@@ -2371,10 +2364,6 @@ public abstract class BaseWcmRestController {
 		} 
 	}
 
-//	private String getSiteAreaPropertyName(String propertyName) {
-//		return propertyName.split(":", 2)[1];
-//	}
-
 	protected Navigation[] getNavigations(String baseUrl, String repository, String workspace, String library,
 			String rootSiteArea) throws RepositoryException {
 		RestNode siteArea = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
@@ -2491,7 +2480,7 @@ public abstract class BaseWcmRestController {
 			return bpwizardNode.getChildren().stream().filter(this::notSystemLibrary)
 					.map(node -> toQueryStatementWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
 
@@ -2505,16 +2494,16 @@ public abstract class BaseWcmRestController {
 
 	protected Stream<QueryStatement> doGetQueryStatements(QueryStatement query, String baseUrl)
 			throws WcmRepositoryException {
+		String absPath = String.format(WcmConstants.NODE_QUERY_ROOT_PATH_PATTERN, query.getLibrary());
 		try {
 			RestNode queryStatementNode = (RestNode) this.itemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
-					String.format(WcmConstants.NODE_QUERY_ROOT_PATH_PATTERN, query.getLibrary()),
+					absPath,
 					WcmConstants.QUERY_STMT_DEPTH);
 
 			return queryStatementNode.getChildren().stream().filter(this::isQueryStatement).map(node -> this.toQueryStatement(node,
 					query.getRepository(), query.getWorkspace(), query.getLibrary()));
 		} catch (RepositoryException e) {
-			e.printStackTrace();
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_QUERY_ERROR, null));
 		}
 	}
 
@@ -2555,7 +2544,7 @@ public abstract class BaseWcmRestController {
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::notSystemLibrary).map(RestNode::getName);
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
 }

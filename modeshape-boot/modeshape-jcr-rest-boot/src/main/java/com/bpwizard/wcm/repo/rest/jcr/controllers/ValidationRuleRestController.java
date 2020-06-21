@@ -26,11 +26,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ValidationRule;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -42,67 +44,45 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/validationRule";
 	private static final Logger logger = LogManager.getLogger(ValidationRuleRestController.class);
 	
-//	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ValidationRule getValidationRule(
-//			@PathVariable("repository") String repository,
-//		    @PathVariable("workspace") String workspace,
-//		    @RequestParam("path") String nodePath, 
-//			HttpServletRequest request) 
-//			throws WcmRepositoryException {
-//
-//		if (logger.isDebugEnabled()) {
-//			logger.traceEntry();
-//		}
-//		try {
-//			String baseUrl = RestHelper.repositoryUrl(request);
-//			RestNode validationRuleNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-//					nodePath, 2);
-//			ValidationRule validationRule = this.toValidationRule(validationRuleNode);
-//			validationRule.setRepository(repository);
-//			validationRule.setWorkspace(workspace);
-//			validationRule.setLibrary(nodePath.split("/", 5)[3]);
-//			if (logger.isDebugEnabled()) {
-//				logger.traceExit();
-//			}
-//			return validationRule;
-//		} catch (WcmRepositoryException e ) {
-//			throw e;
-//		} catch (Throwable t) {
-//			throw new WcmRepositoryException(t);
-//		}		
-//	}
-	
 	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ValidationRule[]> loadValidationRules(
-		@PathVariable("repository") String repository,
-		@PathVariable("workspace") String workspace,
-		@RequestParam(name="filter", defaultValue = "") String filter,
-	    @RequestParam(name="sort", defaultValue = "asc") 
-		@ValidateString(acceptedValues={"asc", "desc"}, message="Sort order can only be asc or desc")
-		String sortDirection,
-	    @RequestParam(name="pageIndex", defaultValue = "0") int pageIndex,
-	    @RequestParam(name="pageSize", defaultValue = "3") @Min(3) @Max(10) int pageSize,
-		HttpServletRequest request) 
-			throws WcmRepositoryException {
+			@PathVariable("repository") String repository,
+			@PathVariable("workspace") String workspace,
+			@RequestParam(name="filter", defaultValue = "") String filter,
+		    @RequestParam(name="sort", defaultValue = "asc") 
+			@ValidateString(acceptedValues={"asc", "desc"}, message="Sort order can only be asc or desc")
+			String sortDirection,
+		    @RequestParam(name="pageIndex", defaultValue = "0") int pageIndex,
+		    @RequestParam(name="pageSize", defaultValue = "3") @Min(3) @Max(10) int pageSize,
+			HttpServletRequest request) 
+				throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
 
-		String baseUrl = RestHelper.repositoryUrl(request);
-		
-		ValidationRule[] validationRules = this.getValidationRuleLibraries(repository, workspace, baseUrl)
-				.flatMap(library -> this.doGetValidationRule(library, baseUrl))
-				.toArray(ValidationRule[]::new);
-		if ("asc".equals(sortDirection)) {
-			Arrays.sort(validationRules);
-		} else if ("desc".equals(sortDirection)) {
-			Arrays.sort(validationRules, Collections.reverseOrder());
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			
+			ValidationRule[] validationRules = this.getValidationRuleLibraries(repository, workspace, baseUrl)
+					.flatMap(library -> this.doGetValidationRule(library, baseUrl))
+					.toArray(ValidationRule[]::new);
+			if ("asc".equals(sortDirection)) {
+				Arrays.sort(validationRules);
+			} else if ("desc".equals(sortDirection)) {
+				Arrays.sort(validationRules, Collections.reverseOrder());
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(validationRules);
+		} catch (WcmRepositoryException e) {
+			logger.error(e);
+			throw e;			
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
-		if (logger.isDebugEnabled()) {
-			logger.traceExit();
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(validationRules);
 	}
 	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -113,26 +93,30 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String absPath = String.format(WcmConstants.NODE_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WcmConstants.NODE_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
+			
 			String repositoryName = validationRule.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, validationRule.toJson());
+			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, validationRule.toJson());
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, absPath, absPath, true);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_VALIDATION_RULE_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
-		}	
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+		}
 	}
 
 	@PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -142,14 +126,14 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String absPath = String.format(WcmConstants.NODE_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WcmConstants.NODE_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
 			String repositoryName = validationRule.getRepository();
 			JsonNode atJson = validationRule.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, atJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, atJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, absPath, atJson);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -157,23 +141,26 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_VALIDATION_RULE_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
 	protected Stream<ValidationRule> doGetValidationRule(ValidationRule rule, String baseUrl)
 			throws WcmRepositoryException {
+		String absPath = String.format(WcmConstants.NODE_VALIDATION_RULE_ROOT_PATH_PATTERN, rule.getLibrary());
 		try {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, rule.getRepository(), rule.getWorkspace(),
-					String.format(WcmConstants.NODE_VALIDATION_RULE_ROOT_PATH_PATTERN, rule.getLibrary()), WcmConstants.VALIDATION_RULE_DEPTH);
+					absPath, WcmConstants.VALIDATION_RULE_DEPTH);
 			
 			return atNode.getChildren().stream().filter(this::isValidationRule)
 					.map(node -> this.toValidationRule(node, rule.getRepository(), rule.getWorkspace(), rule.getLibrary()));
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-			throw new WcmRepositoryException(e);
+		} catch (RepositoryException re) {;
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_VALIDATION_RULE_ERROR, new String[] {absPath}));
 		}
 	}
 	
@@ -186,7 +173,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 					.filter(this::notSystemLibrary)
 					.map(node -> toValidationRuleWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
 	

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
@@ -40,6 +41,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories.Repository;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces.Workspace;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 
 @RestController
 @RequestMapping(WcmSystemRestController.BASE_URI)
@@ -109,9 +111,11 @@ public class WcmSystemRestController extends BaseWcmRestController {
 			}
 			return wcmSystem;
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -133,9 +137,11 @@ public class WcmSystemRestController extends BaseWcmRestController {
 			}
 			return wcmRepositories;
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -158,11 +164,11 @@ public class WcmSystemRestController extends BaseWcmRestController {
 			}
 			return wcmOperationMap;
 		} catch (WcmRepositoryException e) {
-			e.printStackTrace();
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			t.printStackTrace();
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -190,7 +196,8 @@ public class WcmSystemRestController extends BaseWcmRestController {
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toThemeWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			logger.error(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
 
@@ -200,7 +207,9 @@ public class WcmSystemRestController extends BaseWcmRestController {
 					String.format(WcmConstants.NODE_THEME_ROOT_PATH_PATTERN, theme.getLibrary()), WcmConstants.READ_DEPTH_DEFAULT);
 			return themeNode.getChildren().stream().filter(this::isTheme).map(node -> this.toTheme(node, theme));
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			logger.error(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_THEME_ERROR, null));
+
 		}
 	}
 
@@ -290,7 +299,8 @@ public class WcmSystemRestController extends BaseWcmRestController {
 			wcmRepository.setWorkspaces(wcmWorkspaces);
 			return wcmRepository;
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			logger.error(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_REPO_ERROR, null));
 		}		
 	}
     
@@ -313,7 +323,9 @@ public class WcmSystemRestController extends BaseWcmRestController {
 						 return wcmLibrary;
 					}).toArray(WcmLibrary[]::new);
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			logger.error(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_LIBS_ERROR, null));
+
 		}
 	}
 }

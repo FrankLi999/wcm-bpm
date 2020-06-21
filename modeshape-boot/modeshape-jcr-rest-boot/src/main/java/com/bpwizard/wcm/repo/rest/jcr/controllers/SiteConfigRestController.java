@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.PageConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
@@ -54,9 +55,11 @@ public class SiteConfigRestController extends BaseWcmRestController {
 
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -73,9 +76,11 @@ public class SiteConfigRestController extends BaseWcmRestController {
 				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, absPath, jsonItem);
 			}
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -101,9 +106,11 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			}
 			return siteConfigs;
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -124,9 +131,11 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			}
 			return siteConfig;
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -152,9 +161,11 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			}
 			return pageConfig;
 		} catch (WcmRepositoryException e) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 

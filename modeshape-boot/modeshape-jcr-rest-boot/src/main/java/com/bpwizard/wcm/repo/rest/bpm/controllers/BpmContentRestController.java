@@ -28,10 +28,12 @@ import com.bpwizard.wcm.repo.rest.bpm.model.BpmLink;
 import com.bpwizard.wcm.repo.rest.bpm.model.BpmLinks;
 import com.bpwizard.wcm.repo.rest.bpm.model.UserProfile;
 import com.bpwizard.wcm.repo.rest.jcr.controllers.BaseWcmRestController;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 
 @RestController
 @RequestMapping(BpmContentRestController.BASE_URI)
@@ -81,7 +83,7 @@ public class BpmContentRestController extends BaseWcmRestController {
 			return bpmApplications;
 		} catch (RepositoryException ex) {
 			logger.error(ex);
-			throw new WcmRepositoryException(ex);
+			throw new WcmRepositoryException(ex, WcmError.createWcmError(ex.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
 
@@ -119,7 +121,7 @@ public class BpmContentRestController extends BaseWcmRestController {
 			return bpmLinks;
 		} catch (RepositoryException ex) {
 			logger.error(ex);
-			throw new WcmRepositoryException(ex);
+			throw new WcmRepositoryException(ex, WcmError.createWcmError(ex.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
 

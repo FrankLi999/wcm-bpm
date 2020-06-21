@@ -28,11 +28,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -48,31 +51,35 @@ public class QueryRestController extends BaseWcmRestController {
 
 	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<QueryStatement[]> loadQueryStatements(
-		@PathVariable("repository") String repository,
-		@PathVariable("workspace") String workspace,
-		@RequestParam(name="filter", defaultValue = "") String filter,
-	    @RequestParam(name="sort", defaultValue = "asc") 
-		@ValidateString(acceptedValues={"asc", "desc"}, message="Sort order can only be asc or desc")
-		String sortDirection,
-	    @RequestParam(name="pageIndex", defaultValue = "0") int pageIndex,
-	    @RequestParam(name="pageSize", defaultValue = "3") @Min(3) @Max(10) int pageSize,
-		HttpServletRequest request) 
-			throws WcmRepositoryException {
+			@PathVariable("repository") String repository,
+			@PathVariable("workspace") String workspace,
+			@RequestParam(name="filter", defaultValue = "") String filter,
+		    @RequestParam(name="sort", defaultValue = "asc") 
+			@ValidateString(acceptedValues={"asc", "desc"}, message="Sort order can only be asc or desc")
+			String sortDirection,
+		    @RequestParam(name="pageIndex", defaultValue = "0") int pageIndex,
+		    @RequestParam(name="pageSize", defaultValue = "3") @Min(3) @Max(10) int pageSize,
+			HttpServletRequest request) throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
 
-		QueryStatement[] queryStatements = this.doLoadQueryStatements(repository, workspace, request);
-		if ("asc".equals(sortDirection)) {
-			Arrays.sort(queryStatements);
-		} else if ("desc".equals(sortDirection)) {
-			Arrays.sort(queryStatements, Collections.reverseOrder());
+		try {
+			QueryStatement[] queryStatements = this.doLoadQueryStatements(repository, workspace, request);
+			if ("asc".equals(sortDirection)) {
+				Arrays.sort(queryStatements);
+			} else if ("desc".equals(sortDirection)) {
+				Arrays.sort(queryStatements, Collections.reverseOrder());
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(queryStatements);
+		} catch (WcmRepositoryException e ) {
+			logger.error(e);
+			throw e;
 		}
-		if (logger.isDebugEnabled()) {
-			logger.traceExit();
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(queryStatements);
 	}
 	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -95,7 +102,10 @@ public class QueryRestController extends BaseWcmRestController {
 			} catch (Exception e) {
 				logger.error("JCR Query Error.", e);
 				String message = (e instanceof InvalidQueryException) ? ((InvalidQueryException)e).getMessage() : "Invalid JCR Query";
-				throw new WcmRepositoryException(message);
+				throw new WcmRepositoryException(e, new WcmError(
+						SpringExceptionUtils.getMessage("com.bpwizard.modeshape.invalid_query", message), 
+						WcmErrors.INVALID_JCR_QUERY, 
+						null));
 			}
 			ObjectNode qJson = (ObjectNode) query.toJson();
 			// javax.jcr.query.qom.QueryObjectModel qom = null
@@ -112,11 +122,14 @@ public class QueryRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_QUERY_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 
@@ -154,11 +167,14 @@ public class QueryRestController extends BaseWcmRestController {
 				logger.traceExit();
 			}
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_QUERY_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	

@@ -31,6 +31,7 @@ import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AccessControlEntry;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
@@ -44,6 +45,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WorkflowNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -88,11 +90,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -132,11 +137,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 			
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_PUBLISH_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -175,11 +183,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.EDIT_DRAFT_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -208,19 +219,23 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CANCEL_DRAFT_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
 	@PutMapping(path = "/update-published", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void updateContentItem(@RequestBody ContentItem contentItem, HttpServletRequest request) { 
+		String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 		try {
 			contentItem.setLifeCycleStage(WcmConstants.WORKFLOW_STATGE_PUBLISHED);
-			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
+			
 			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
 					contentItem.getAuthoringTemplate(), request);
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -236,16 +251,16 @@ public class ContentItemRestController extends BaseWcmRestController {
 			this.wcmUtils.unlock(contentItem.getRepository(), contentItem.getWorkspace(), absPath);
 			if (this.authoringEnabled) {
 				this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItemJson);
-//				Session draftSession = this.repositoryManager.getSession(contentItem.getRepository(), );
-//				draftSession.getWorkspace().clone(DEFAULT_WS, contentItem.getNodePath(), contentItem.getNodePath(), true);
-				// draftSession.save();
 			}
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_CONTENT_ITEM_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -260,9 +275,10 @@ public class ContentItemRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String absPath = WcmUtils.nodePath(wcmPath);
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String absPath = WcmUtils.nodePath(wcmPath);
+			
 			RestNode contentItemNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
 					absPath, WcmConstants.CONTENT_ITEM_DEPATH);
 			
@@ -394,9 +410,11 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			return contentItem;
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 	
@@ -435,11 +453,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -483,11 +504,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.REJECT_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -530,11 +554,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.APPROVE_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -574,11 +601,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.PUBLISH_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}		
 	}
 	
@@ -600,11 +630,14 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			return contentItem;
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 	
@@ -631,11 +664,14 @@ public class ContentItemRestController extends BaseWcmRestController {
             	}
             }
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.EXPIRE_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
   		if (logger.isDebugEnabled()) {
 			logger.traceExit();
@@ -654,11 +690,14 @@ public class ContentItemRestController extends BaseWcmRestController {
             node.setProperty("bpw:currentLifecycleState", state);
   			session.save();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_CONTENT_ITEM_WORKFLOW_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
   	};
 }

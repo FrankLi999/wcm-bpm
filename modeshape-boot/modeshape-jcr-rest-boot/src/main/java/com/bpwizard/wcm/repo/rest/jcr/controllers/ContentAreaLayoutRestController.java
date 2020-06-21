@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -54,7 +56,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -78,7 +80,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			this.toContentAreaLayout(contentAreaLayoutNode, layout);
 			return layout;
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_CONTENT_AREA_LAYOUT_ERROR, new String[] {absPath}));
 		}
 		
 	}
@@ -103,9 +105,9 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_CONTENT_AREA_LAYOUT_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 	
@@ -137,7 +139,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 	
@@ -149,14 +151,14 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String absPath = String.format( WcmConstants.NODE_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format( WcmConstants.NODE_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
 			String repositoryName = pageLayout.getRepository();
 			JsonNode layoutJson = pageLayout.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, pageLayout.getWorkspace(), path, layoutJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, pageLayout.getWorkspace(), absPath, layoutJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, layoutJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, absPath, layoutJson);
 //				
 //				Session session = this.repositoryManager.getSession(repositoryName, DRAFT_WS);
 //				session.getWorkspace().clone(DEFAULT_WS, path, path, true);
@@ -168,9 +170,9 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_CONTENT_AREA_LAYOUT_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 }

@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Form;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -50,9 +52,11 @@ public class FormRestController extends BaseWcmRestController {
 			}
 			return forms;
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -66,11 +70,16 @@ public class FormRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-		Form form = this.doGetForm(repository, workspace, formPath, request);
-		if (logger.isDebugEnabled()) {
-			logger.traceExit();
-		}
-		return form;
+		try {
+			Form form = this.doGetForm(repository, workspace, formPath, request);
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return form;
+		} catch (WcmRepositoryException e ) {
+			logger.error(e);
+			throw e;
+		} 
 	}
 	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -96,11 +105,14 @@ public class FormRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_FORM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -125,11 +137,14 @@ public class FormRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_FORM_ERROR, null));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 }

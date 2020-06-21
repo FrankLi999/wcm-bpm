@@ -39,6 +39,7 @@ public class ErrorResponseComposer<T extends Throwable> {
 	 * Given an exception, finds a handler for 
 	 * building the response and uses that to build and return the response
 	 */
+	@SuppressWarnings("unchecked")
 	public Optional<ErrorResponse> compose(T ex) {
 
 		AbstractExceptionHandler<T> handler = null;

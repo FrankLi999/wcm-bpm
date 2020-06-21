@@ -61,6 +61,8 @@ import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -107,7 +109,8 @@ public class ModeshapeController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}	
 	}
 	
@@ -148,7 +151,8 @@ public class ModeshapeController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}	
 	}
 	
@@ -164,25 +168,21 @@ public class ModeshapeController {
 			String repositoryName = query.getRepository();
 			ObjectNode qJson = (ObjectNode) query.toJson();
 			
-			// javax.jcr.query.qom.QueryObjectModel qom = null
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
 			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, qJson);
-//			if (this.authoringEnabled) {
-//				Session session = this.repositoryManager.getSession(repositoryName, "draft");
-//				session.getWorkspace().clone("default", path, path, true);
-//			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
-	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
+
 		}	
 	}
 	
@@ -211,11 +211,12 @@ public class ModeshapeController {
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
+
 		}	
 	}
 	@GetMapping("/ping")
@@ -228,13 +229,6 @@ public class ModeshapeController {
             
             assert root != null;
             logger.debug("Found the root node in the \"" + session.getWorkspace().getName() + "\" workspace");
-
-            // Node n = root.addNode("Node" + rnd.nextInt());
-
-            // n.setProperty("key", "value");
-            // n.setProperty("content", session.getValueFactory().createBinary(new ByteArrayInputStream(new byte[1000])));
-
-            // session.save();
 
             logger.debug("Added one node under root");
             logger.debug("+ Root childs");
@@ -251,15 +245,11 @@ public class ModeshapeController {
             	System.out.println("+------p type---> " + n.getPrimaryNodeType().getName());
             	
             }
-		} catch (Exception e) {
-	        e.printStackTrace();
+    		return "{\"modeshape\": \"up\"}";
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
         } 
-//		finally {
-//        	if (session != null) {
-//                session.logout();
-//        	}
-//        }
-		return "{\"modeshape\": \"up\"}";
 	}
 	
 	@GetMapping("/export/{folder}")
@@ -273,28 +263,17 @@ public class ModeshapeController {
             assert root != null;
             logger.debug("Found the root node in the \"" + session.getWorkspace().getName() + "\" workspace");
 
-            // Node n = root.addNode("Node" + rnd.nextInt());
-
-            // n.setProperty("key", "value");
-            // n.setProperty("content", session.getValueFactory().createBinary(new ByteArrayInputStream(new byte[1000])));
-
-            // session.save();
-
             logger.debug("Added one node under root");
             logger.debug("+ Root childs");
             String absPath = "root".equals(folder) ? "/" : ("/" + folder);
             OutputStream os = new FileOutputStream("c:\\temp\\sample_content.xml");
             session.exportSystemView(absPath, os, false, false);
             os.close();
-		} catch (Exception e) {
-	        e.printStackTrace();
+    		return "{\"export\": \"done\"}";
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
         } 
-//		finally {
-//        	if (session != null) {
-//                session.logout();
-//        	}
-//        }
-		return "{\"export\": \"done\"}";
 	}
 	
 	@GetMapping("/import")
@@ -319,15 +298,11 @@ public class ModeshapeController {
             session.save();
             logger.debug("Added one node under root");
             logger.debug("+ Root childs");
-		} catch (Exception e) {
-	        e.printStackTrace();
+            return "{\"import\": \"done\"}";
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
         } 
-//		finally {
-//        	if (session != null) {
-//                session.logout();
-//        	}
-//        }
-		return "{\"import\": \"done\"}";
 	}
 	
 	@GetMapping("/node-types")
@@ -368,16 +343,11 @@ public class ModeshapeController {
             		System.out.println("              &&&&&&&&&&&&&&&  PropertyDefinition "  + i + ":"+ pds[k].getName());
             	}
             }
-            
-		} catch (Exception e) {
-	        e.printStackTrace();
+            return "{\"node-type\": \"up\"}";
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
         } 
-//		finally {
-//        	if (session != null) {
-//                session.logout();
-//        	}
-//        }
-		return "{\"node-type\": \"up\"}";
 	}
 	
 	@GetMapping("/journalEvent")
@@ -400,9 +370,9 @@ public class ModeshapeController {
 				}
 			}
 			return ResponseEntity.ok().body(eventsTypes);
-		} catch (RepositoryException ex) {
-			ex.printStackTrace();
-			return ResponseEntity.status(400).body("{\"error\" : \"" + ex.getMessage()  + "\"}");
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
 	
@@ -416,9 +386,9 @@ public class ModeshapeController {
 			Map<String, String> eventsTypes = new HashMap<>();
 			eventJournal.forEachRemaining(e -> this.processEvent(e, eventsTypes));
 			return ResponseEntity.ok().body(eventsTypes);
-		} catch (RepositoryException ex) {
-			ex.printStackTrace();
-			return ResponseEntity.status(400).body("{\"error\" : \"" + ex.getMessage()  + "\"}");
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
 	
@@ -453,9 +423,9 @@ public class ModeshapeController {
 				indexModels.put(key, indexModel);
 			}
 			return ResponseEntity.ok().body(indexModels);
-		} catch (RepositoryException ex) {
-			ex.printStackTrace();
-			return ResponseEntity.status(400).body("{\"error\" : \"" + ex.getMessage()  + "\"}");
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
 	@PostMapping("/index")
@@ -481,9 +451,9 @@ public class ModeshapeController {
 			indexDefinition.setSynchronous(indexModel.isSynchronous());
 			indexManager.registerIndex(indexDefinition, true);
 			return "done";
-		} catch (RepositoryException ex) {
-			ex.printStackTrace();
-			return ex.getMessage();
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
 	
@@ -494,173 +464,181 @@ public class ModeshapeController {
 			org.modeshape.jcr.api.index.IndexManager indexManager = workspace.getIndexManager();
 			indexManager.unregisterIndexes(index);
 			return "done";
-		} catch (RepositoryException ex) {
-			ex.printStackTrace();
-			return ex.getMessage();
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
 	
 	@GetMapping("/features")
 	public String features() throws Exception {
-		
-		Repository repo = this.repositoryManager.getRepository("bpwizard");
-		StringBuilder support = new StringBuilder("Descriptors").append(" : ");
-		for (String desc: repo.getDescriptorKeys()) {
-			support.append(desc).append("---:---").append(repo.getDescriptor(desc)).append("<br /><br />");
+		try {
+			Repository repo = this.repositoryManager.getRepository("bpwizard");
+			StringBuilder support = new StringBuilder("Descriptors").append(" : ");
+			for (String desc: repo.getDescriptorKeys()) {
+				support.append(desc).append("---:---").append(repo.getDescriptor(desc)).append("<br /><br />");
+			}
+			return support.toString();
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
-		return support.toString();
-		
 		
 	}
 	
 	@GetMapping("/testACL")
 	public String testACL() throws Exception {
-		String path = WcmConstants.NODE_ROOT_PATH;
-		String[] readPrivileges = new String[] {
-		  Privilege.JCR_READ
-		};
-		
-		String[] editorPrivileges = new String[] {
-		  Privilege.JCR_READ,
-		  Privilege.JCR_WRITE,
-		  Privilege.JCR_REMOVE_NODE,
-		  Privilege.JCR_ADD_CHILD_NODES,
-		  Privilege.JCR_REMOVE_CHILD_NODES,
-		  Privilege.JCR_REMOVE_CHILD_NODES
-		};
-		
-		String[] adminPrivileges = new String[] {
-			Privilege.JCR_ALL 
-		};
-		// Principal principal = new TestPrincipal();
-		
-		Principal adminPrincipal = new TestPrincipal("admin@example.com");
-		Principal demoPrincipal = new TestPrincipal("demo@example.com");  
-		Principal anonymousPrincipal = new TestPrincipal("anonymouse"); 
-		// Principal group = new TestGroup();
-		Principal wcmViewer = new TestGroup("wcm-viewer");
-		Principal wcmReviewer = new TestGroup("wcm-reviewer");
-		Principal wcmEditor = new TestGroup("wcm-editor");
-		Principal wcmAdmin = new TestGroup("wcm-admin");
-		
-		Session session = this.repositoryManager.getSession("bpwizard", "default");
-		AccessControlManager acm = session.getAccessControlManager();
-		 
-		// Convert the privilege strings to Privilege instances ...
-		Privilege[] readPermissions = new Privilege[readPrivileges.length];
-		for (int i = 0; i < readPrivileges.length; i++) {
-			readPermissions[i] = acm.privilegeFromName(readPrivileges[i]);
+		try {
+			String path = WcmConstants.NODE_ROOT_PATH;
+			String[] readPrivileges = new String[] {
+			  Privilege.JCR_READ
+			};
+			
+			String[] editorPrivileges = new String[] {
+			  Privilege.JCR_READ,
+			  Privilege.JCR_WRITE,
+			  Privilege.JCR_REMOVE_NODE,
+			  Privilege.JCR_ADD_CHILD_NODES,
+			  Privilege.JCR_REMOVE_CHILD_NODES,
+			  Privilege.JCR_REMOVE_CHILD_NODES
+			};
+			
+			String[] adminPrivileges = new String[] {
+				Privilege.JCR_ALL 
+			};
+			// Principal principal = new TestPrincipal();
+			
+			Principal adminPrincipal = new TestPrincipal("admin@example.com");
+			Principal demoPrincipal = new TestPrincipal("demo@example.com");  
+			Principal anonymousPrincipal = new TestPrincipal("anonymouse"); 
+			// Principal group = new TestGroup();
+			Principal wcmViewer = new TestGroup("wcm-viewer");
+			Principal wcmReviewer = new TestGroup("wcm-reviewer");
+			Principal wcmEditor = new TestGroup("wcm-editor");
+			Principal wcmAdmin = new TestGroup("wcm-admin");
+			
+			Session session = this.repositoryManager.getSession("bpwizard", "default");
+			AccessControlManager acm = session.getAccessControlManager();
+			 
+			// Convert the privilege strings to Privilege instances ...
+			Privilege[] readPermissions = new Privilege[readPrivileges.length];
+			for (int i = 0; i < readPrivileges.length; i++) {
+				readPermissions[i] = acm.privilegeFromName(readPrivileges[i]);
+			}
+			 
+			Privilege[] editorPermissions = new Privilege[editorPrivileges.length];
+			for (int i = 0; i < editorPrivileges.length; i++) {
+				editorPermissions[i] = acm.privilegeFromName(editorPrivileges[i]);
+			}
+			
+			Privilege[] adminPermissions = new Privilege[adminPrivileges.length];
+			for (int i = 0; i < adminPrivileges.length; i++) {
+				adminPermissions[i] = acm.privilegeFromName(adminPrivileges[i]);
+			}
+			
+			AccessControlList acl = null;
+			AccessControlPolicyIterator it = acm.getApplicablePolicies(path);
+			
+			if (it.hasNext()) {
+			    acl = (AccessControlList)it.nextAccessControlPolicy();
+			} else {
+			    acl = (AccessControlList)acm.getPolicies(path)[0];
+			}
+	
+			acl.addAccessControlEntry(anonymousPrincipal, readPermissions);
+			acl.addAccessControlEntry(adminPrincipal, adminPermissions);
+			acl.addAccessControlEntry(demoPrincipal, editorPermissions);
+			acl.addAccessControlEntry(wcmViewer, readPermissions);
+			acl.addAccessControlEntry(wcmReviewer, readPermissions);
+			acl.addAccessControlEntry(wcmEditor, editorPermissions);
+			acl.addAccessControlEntry(wcmAdmin, adminPermissions);
+	//		 
+			acm.setPolicy(path, acl);
+			session.save();
+	
+			Session draftSession = this.repositoryManager.getSession("bpwizard", "draft");
+			AccessControlManager darftAcm = draftSession.getAccessControlManager();
+			
+			// Convert the privilege strings to Privilege instances ...
+			Privilege[] draftReadPermissions = new Privilege[readPrivileges.length];
+			for (int i = 0; i < readPrivileges.length; i++) {
+				draftReadPermissions[i] = darftAcm.privilegeFromName(readPrivileges[i]);
+			}
+			 
+			Privilege[] draftEditorPermissions = new Privilege[editorPrivileges.length];
+			for (int i = 0; i < editorPrivileges.length; i++) {
+				draftEditorPermissions[i] = darftAcm.privilegeFromName(editorPrivileges[i]);
+			}
+			
+			Privilege[] draftAdminPermissions = new Privilege[adminPrivileges.length];
+			for (int i = 0; i < adminPrivileges.length; i++) {
+				draftAdminPermissions[i] = darftAcm.privilegeFromName(adminPrivileges[i]);
+			}
+			
+			AccessControlList draftAcl = null;
+			AccessControlPolicyIterator draftIt = darftAcm.getApplicablePolicies(path);
+			
+			if (draftIt.hasNext()) {
+				 draftAcl = (AccessControlList)draftIt.nextAccessControlPolicy();
+			} else {
+				 draftAcl = (AccessControlList)darftAcm.getPolicies(path)[0];
+			}
+	
+			 draftAcl.addAccessControlEntry(anonymousPrincipal, draftReadPermissions);
+			 draftAcl.addAccessControlEntry(adminPrincipal, draftAdminPermissions);
+			 draftAcl.addAccessControlEntry(demoPrincipal, draftEditorPermissions);
+			 draftAcl.addAccessControlEntry(wcmViewer, draftReadPermissions);
+			 draftAcl.addAccessControlEntry(wcmReviewer, draftReadPermissions);
+			 draftAcl.addAccessControlEntry(wcmEditor, draftEditorPermissions);
+			 draftAcl.addAccessControlEntry(wcmAdmin, draftAdminPermissions);
+			
+			darftAcm.setPolicy(path,  draftAcl);
+			draftSession.save();
+	
+			//
+			
+			Session expiredSession = this.repositoryManager.getSession("bpwizard", "expired");
+			AccessControlManager expiredAcm = draftSession.getAccessControlManager();
+			
+			// Convert the privilege strings to Privilege instances ...
+			Privilege[] expiredReadPermissions = new Privilege[readPrivileges.length];
+			for (int i = 0; i < readPrivileges.length; i++) {
+				expiredReadPermissions[i] = darftAcm.privilegeFromName(readPrivileges[i]);
+			}
+			 
+			Privilege[] expiredEditorPermissions = new Privilege[editorPrivileges.length];
+			for (int i = 0; i < editorPrivileges.length; i++) {
+				expiredEditorPermissions[i] = darftAcm.privilegeFromName(editorPrivileges[i]);
+			}
+			
+			Privilege[] expiredAdminPermissions = new Privilege[adminPrivileges.length];
+			for (int i = 0; i < adminPrivileges.length; i++) {
+				expiredAdminPermissions[i] = darftAcm.privilegeFromName(adminPrivileges[i]);
+			}
+			
+			AccessControlList expiredAcl = null;
+			AccessControlPolicyIterator expiredIt = darftAcm.getApplicablePolicies(path);
+			
+			if (expiredIt.hasNext()) {
+				expiredAcl = (AccessControlList)expiredIt.nextAccessControlPolicy();
+			} else {
+				expiredAcl = (AccessControlList)expiredAcm.getPolicies(path)[0];
+			}
+	
+			expiredAcl.addAccessControlEntry(anonymousPrincipal, expiredReadPermissions);
+			expiredAcl.addAccessControlEntry(adminPrincipal, expiredAdminPermissions);
+			expiredAcl.addAccessControlEntry(demoPrincipal, expiredEditorPermissions);
+			expiredAcl.addAccessControlEntry(wcmViewer, expiredReadPermissions);
+			expiredAcl.addAccessControlEntry(wcmReviewer, expiredReadPermissions);
+			expiredAcl.addAccessControlEntry(wcmEditor, expiredEditorPermissions);
+			expiredAcl.addAccessControlEntry(wcmAdmin, expiredAdminPermissions);
+			
+			expiredAcm.setPolicy(path,  expiredAcl);
+			expiredSession.save();
+			return "done";
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
-		 
-		Privilege[] editorPermissions = new Privilege[editorPrivileges.length];
-		for (int i = 0; i < editorPrivileges.length; i++) {
-			editorPermissions[i] = acm.privilegeFromName(editorPrivileges[i]);
-		}
-		
-		Privilege[] adminPermissions = new Privilege[adminPrivileges.length];
-		for (int i = 0; i < adminPrivileges.length; i++) {
-			adminPermissions[i] = acm.privilegeFromName(adminPrivileges[i]);
-		}
-		
-		AccessControlList acl = null;
-		AccessControlPolicyIterator it = acm.getApplicablePolicies(path);
-		
-		if (it.hasNext()) {
-		    acl = (AccessControlList)it.nextAccessControlPolicy();
-		} else {
-		    acl = (AccessControlList)acm.getPolicies(path)[0];
-		}
-
-		acl.addAccessControlEntry(anonymousPrincipal, readPermissions);
-		acl.addAccessControlEntry(adminPrincipal, adminPermissions);
-		acl.addAccessControlEntry(demoPrincipal, editorPermissions);
-		acl.addAccessControlEntry(wcmViewer, readPermissions);
-		acl.addAccessControlEntry(wcmReviewer, readPermissions);
-		acl.addAccessControlEntry(wcmEditor, editorPermissions);
-		acl.addAccessControlEntry(wcmAdmin, adminPermissions);
-//		 
-		acm.setPolicy(path, acl);
-		session.save();
-
-		Session draftSession = this.repositoryManager.getSession("bpwizard", "draft");
-		AccessControlManager darftAcm = draftSession.getAccessControlManager();
-		
-		// Convert the privilege strings to Privilege instances ...
-		Privilege[] draftReadPermissions = new Privilege[readPrivileges.length];
-		for (int i = 0; i < readPrivileges.length; i++) {
-			draftReadPermissions[i] = darftAcm.privilegeFromName(readPrivileges[i]);
-		}
-		 
-		Privilege[] draftEditorPermissions = new Privilege[editorPrivileges.length];
-		for (int i = 0; i < editorPrivileges.length; i++) {
-			draftEditorPermissions[i] = darftAcm.privilegeFromName(editorPrivileges[i]);
-		}
-		
-		Privilege[] draftAdminPermissions = new Privilege[adminPrivileges.length];
-		for (int i = 0; i < adminPrivileges.length; i++) {
-			draftAdminPermissions[i] = darftAcm.privilegeFromName(adminPrivileges[i]);
-		}
-		
-		AccessControlList draftAcl = null;
-		AccessControlPolicyIterator draftIt = darftAcm.getApplicablePolicies(path);
-		
-		if (draftIt.hasNext()) {
-			 draftAcl = (AccessControlList)draftIt.nextAccessControlPolicy();
-		} else {
-			 draftAcl = (AccessControlList)darftAcm.getPolicies(path)[0];
-		}
-
-		 draftAcl.addAccessControlEntry(anonymousPrincipal, draftReadPermissions);
-		 draftAcl.addAccessControlEntry(adminPrincipal, draftAdminPermissions);
-		 draftAcl.addAccessControlEntry(demoPrincipal, draftEditorPermissions);
-		 draftAcl.addAccessControlEntry(wcmViewer, draftReadPermissions);
-		 draftAcl.addAccessControlEntry(wcmReviewer, draftReadPermissions);
-		 draftAcl.addAccessControlEntry(wcmEditor, draftEditorPermissions);
-		 draftAcl.addAccessControlEntry(wcmAdmin, draftAdminPermissions);
-		
-		darftAcm.setPolicy(path,  draftAcl);
-		draftSession.save();
-
-		//
-		
-		Session expiredSession = this.repositoryManager.getSession("bpwizard", "expired");
-		AccessControlManager expiredAcm = draftSession.getAccessControlManager();
-		
-		// Convert the privilege strings to Privilege instances ...
-		Privilege[] expiredReadPermissions = new Privilege[readPrivileges.length];
-		for (int i = 0; i < readPrivileges.length; i++) {
-			expiredReadPermissions[i] = darftAcm.privilegeFromName(readPrivileges[i]);
-		}
-		 
-		Privilege[] expiredEditorPermissions = new Privilege[editorPrivileges.length];
-		for (int i = 0; i < editorPrivileges.length; i++) {
-			expiredEditorPermissions[i] = darftAcm.privilegeFromName(editorPrivileges[i]);
-		}
-		
-		Privilege[] expiredAdminPermissions = new Privilege[adminPrivileges.length];
-		for (int i = 0; i < adminPrivileges.length; i++) {
-			expiredAdminPermissions[i] = darftAcm.privilegeFromName(adminPrivileges[i]);
-		}
-		
-		AccessControlList expiredAcl = null;
-		AccessControlPolicyIterator expiredIt = darftAcm.getApplicablePolicies(path);
-		
-		if (expiredIt.hasNext()) {
-			expiredAcl = (AccessControlList)expiredIt.nextAccessControlPolicy();
-		} else {
-			expiredAcl = (AccessControlList)expiredAcm.getPolicies(path)[0];
-		}
-
-		expiredAcl.addAccessControlEntry(anonymousPrincipal, expiredReadPermissions);
-		expiredAcl.addAccessControlEntry(adminPrincipal, expiredAdminPermissions);
-		expiredAcl.addAccessControlEntry(demoPrincipal, expiredEditorPermissions);
-		expiredAcl.addAccessControlEntry(wcmViewer, expiredReadPermissions);
-		expiredAcl.addAccessControlEntry(wcmReviewer, expiredReadPermissions);
-		expiredAcl.addAccessControlEntry(wcmEditor, expiredEditorPermissions);
-		expiredAcl.addAccessControlEntry(wcmAdmin, expiredAdminPermissions);
-		
-		expiredAcm.setPolicy(path,  expiredAcl);
-		expiredSession.save();
-		return "done";
 	}
 }

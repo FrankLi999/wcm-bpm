@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 
 import org.modeshape.jcr.api.JcrConstants;
-import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ControlField;
 import com.bpwizard.wcm.repo.rest.jcr.model.JsonForm;
@@ -37,6 +38,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 
 @RestController
 @RequestMapping(WcmRestController.BASE_URI)
@@ -60,9 +62,11 @@ public class WcmRestController extends BaseWcmRestController {
 			}
 			return jsonForms;
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 
@@ -79,10 +83,15 @@ public class WcmRestController extends BaseWcmRestController {
 				logger.traceExit();
 			}
 			return ControlFileds;
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, WcmError.createWcmError(re.getMessage(), WcmErrors.GET_CONTROL_ERROR, null));
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 		
@@ -97,9 +106,11 @@ public class WcmRestController extends BaseWcmRestController {
 		try {
 			this.wcmUtils.unlock(repository, workspace, absPath);
     	} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+    		logger.error(re);
+			throw new WcmRepositoryException(re, WcmError.createWcmError(re.getMessage(), WcmErrors.UNLOCK_ITEM_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
@@ -125,9 +136,11 @@ public class WcmRestController extends BaseWcmRestController {
 				lm.unlock(absPath);
 			} 
     	} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+    		logger.error(re);
+			throw new WcmRepositoryException(re, WcmError.createWcmError(re.getMessage(), WcmErrors.RESTORE_ITEM_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
     	if (logger.isDebugEnabled()) {
 			logger.traceExit();
@@ -150,11 +163,11 @@ public class WcmRestController extends BaseWcmRestController {
   			}
   			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
-//		} catch (RepositoryException re) { 
-//			throw new WcmRepositoryException(re);
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 
   	};
@@ -164,8 +177,8 @@ public class WcmRestController extends BaseWcmRestController {
   			@PathVariable("repository") String repository,
 		    @PathVariable("workspace") String workspace,
   			@RequestParam("path") String wcmPath) { 
+  		String absPath = (wcmPath.startsWith(WcmConstants.NODE_ROOT_PATH)) ? wcmPath : String.format(WcmConstants.NODE_ROOT_PATH_PATTERN, wcmPath);
   		try {
-  			String absPath = (wcmPath.startsWith(WcmConstants.NODE_ROOT_PATH)) ? wcmPath : String.format(WcmConstants.NODE_ROOT_PATH_PATTERN, wcmPath);
   			Session session = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
   			Node node = session.getNode(absPath);
   			node.remove();
@@ -177,11 +190,14 @@ public class WcmRestController extends BaseWcmRestController {
 	            session.save();
             }
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.PURGE_ITEM_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
   	};
   	
@@ -209,9 +225,14 @@ public class WcmRestController extends BaseWcmRestController {
 			}
 			return wcmNodes; 
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+		} catch (RepositoryException re) { 
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_NODE_ERROR, null));
+	    } catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	};
 	
@@ -237,7 +258,8 @@ public class WcmRestController extends BaseWcmRestController {
 		Set<String> properties = new HashSet<>();
 		properties.addAll(nameValues.keySet());
 		for (RestProperty property: node.getJcrProperties()) {
-			if (nameValues.get(property.getName()) != null && property.getValues().get(0).equals(nameValues.get(property.getName()))) {
+			if (nameValues.get(property.getName()) != null && 
+					property.getValues().get(0).equals(nameValues.get(property.getName()))) {
 				properties.remove(property.getName());
 				if (properties.size() == 0) {
 					break;
@@ -259,7 +281,8 @@ public class WcmRestController extends BaseWcmRestController {
 			} 
 		}
 	
-		wcmNode.setWcmPath(String.format(wcmPath.startsWith("/")? WcmConstants.WCM_REL_PATH_PATTERN : WcmConstants.WCM_PATH_PATTERN, wcmPath, node.getName()));
+		wcmNode.setWcmPath(String.format(wcmPath.startsWith("/")? WcmConstants.WCM_REL_PATH_PATTERN : 
+			WcmConstants.WCM_PATH_PATTERN, wcmPath, node.getName()));
 		return wcmNode;
 	}
 	

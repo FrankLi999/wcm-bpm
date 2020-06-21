@@ -13,7 +13,9 @@ import lombok.Setter;
 public class ErrorResponse {
 	
 	private String exceptionId;
-	private String error;
+	private String reasonPhrase;
+	private String errorCode;
+	private String[] arguments;
 	private String message;
 	private Integer status; // We'd need it as integer in JSON serialization
 	private Collection<SpringFieldError> errors;

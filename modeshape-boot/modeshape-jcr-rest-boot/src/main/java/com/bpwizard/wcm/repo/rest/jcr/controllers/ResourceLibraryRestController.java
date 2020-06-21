@@ -28,11 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Library;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.bpwizard.wcm.repo.validation.RepositoryName;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 import com.bpwizard.wcm.repo.validation.WorkspaceName;
@@ -83,8 +85,15 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(libraries);
 		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e);
-		}
+			logger.error(e);
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
+		} catch (WcmRepositoryException e ) {
+			logger.error(e);
+			throw e;
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+		}	
 	}
 	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -116,9 +125,11 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}	
 	
@@ -155,9 +166,11 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -169,11 +182,19 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-		this.doPurgeWcmItem(
-				library.getRepository(), 
-				library.getWorkspace(), 
-				String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName()));
-		
+		String absPath = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName()); 
+		try {
+			this.doPurgeWcmItem(
+					library.getRepository(), 
+					library.getWorkspace(), 
+					absPath);
+		} catch (WcmRepositoryException e) {
+			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
+			throw e;
+		} catch (Throwable t) {
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+		}
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
 		}

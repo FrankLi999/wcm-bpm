@@ -2,8 +2,6 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.io.Serializable;
 
-import org.springframework.util.StringUtils;
-
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

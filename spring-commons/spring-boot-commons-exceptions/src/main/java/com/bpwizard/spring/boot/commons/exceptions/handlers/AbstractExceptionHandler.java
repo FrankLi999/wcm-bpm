@@ -43,6 +43,14 @@ public abstract class AbstractExceptionHandler<T extends Throwable> {
 		return null;
 	}
 
+	protected String getErrorCode(T ex) {
+		return null;
+	}
+	
+	protected String[] getArguments(T ex) {
+		return null;
+	}
+	
 	public ErrorResponse getErrorResponse(T ex) {
     	
 		ErrorResponse errorResponse = new ErrorResponse();
@@ -50,10 +58,15 @@ public abstract class AbstractExceptionHandler<T extends Throwable> {
 		errorResponse.setExceptionId(getExceptionId(ex));
 		errorResponse.setMessage(getMessage(ex));
 		
+		if (this.getErrorCode(ex) != null) {
+			errorResponse.setErrorCode(this.getErrorCode(ex));
+			errorResponse.setArguments(this.getArguments(ex));
+		}
+		
 		HttpStatus status = getStatus(ex);
 		if (status != null) {
 			errorResponse.setStatus(status.value());
-			errorResponse.setError(status.getReasonPhrase());
+			errorResponse.setReasonPhrase(status.getReasonPhrase());
 		}
 		
 		errorResponse.setErrors(getErrors(ex));

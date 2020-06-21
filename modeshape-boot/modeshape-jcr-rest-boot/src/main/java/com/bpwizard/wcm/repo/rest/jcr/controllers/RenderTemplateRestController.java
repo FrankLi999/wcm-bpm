@@ -22,11 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
@@ -52,9 +54,11 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			}
 			return renderTemplates;
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 
@@ -81,9 +85,11 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			}
 			return rt;
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
@@ -105,11 +111,14 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			}
 			return renderTemplate;
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
 		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_RT_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -122,15 +131,15 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String absPath = String.format(WcmConstants.NODE_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
 		try {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WcmConstants.NODE_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
 			AuthoringTemplate at = rt.isQuery() ? null : this.doGetAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
-			this.itemHandler.addItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, rt.toJson(at));
+			this.itemHandler.addItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, rt.toJson(at));
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, absPath, absPath, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {
@@ -139,9 +148,14 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_RT_ERROR, new String[] {absPath}));
+	    } catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
 
@@ -150,22 +164,25 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			@RequestBody RenderTemplate rt, 
 			HttpServletRequest request)
 			throws WcmRepositoryException {
+		String absPath = String.format(WcmConstants.NODE_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());;
 		try {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WcmConstants.NODE_RT_PATH_PATTERN, rt.getLibrary(), rt.getName());
 			AuthoringTemplate at = this.doGetAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
 			JsonNode rtJson = rt.toJson(at);
-			this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), path, rtJson);
+			this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), absPath, rtJson);
 			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), path, rtJson);
+				this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), absPath, rtJson);
 			}
 		} catch (WcmRepositoryException e ) {
+			logger.error(e);
 			throw e;
-		} catch (RepositoryException re) { 
-			throw new WcmRepositoryException(re);
+		} catch (RepositoryException re) {
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_RT_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			throw new WcmRepositoryException(t);
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 }
