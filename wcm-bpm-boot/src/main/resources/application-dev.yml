@@ -187,7 +187,21 @@ bpw:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
     allowed-origins: http://wcm-ui:3009, http://bpm-ui:4009
-    
+#    exposedHeaders: 
+#      - Cache-Control
+#      - Connection
+#      - Content-Type
+#      - Date
+#      - Expires
+#      - Pragma,Server
+#      - Set-Cookie
+#      - Transfer-Encoding
+#      - X-Content-Type-Options
+#      - X-XSS-Protection
+#      - X-Frame-Options
+#      - X-Application-Context
+#      - lang
+#      - Authorization
   recaptcha:
     sitekey: 6LdwxRcUAAAAABkhOGWQXhl9FsR27D5YUJRuGzx0
     secretkey: 6LdwxRcUAAAAADaG0Eo1qkYCco15cnngiBoBt2IO

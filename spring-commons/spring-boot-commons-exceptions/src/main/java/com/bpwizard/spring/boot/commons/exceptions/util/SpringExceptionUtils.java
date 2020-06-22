@@ -8,7 +8,6 @@ import javax.validation.ConstraintViolationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
@@ -66,7 +65,7 @@ public class SpringExceptionUtils {
 		
 		// http://stackoverflow.com/questions/10792551/how-to-obtain-a-current-user-locale-from-spring-without-passing-it-as-a-paramete
 		return messageSource.getMessage(messageKey, args,
-				LocaleContextHolder.getLocale());
+				SpringLocaleHolder.getLocale());
 	}	
 
 	

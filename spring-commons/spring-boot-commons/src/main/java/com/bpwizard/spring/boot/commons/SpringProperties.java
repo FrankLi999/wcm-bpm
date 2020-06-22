@@ -153,6 +153,7 @@ public class SpringProperties {
 				"Referer",
 				"User-Agent",
 				"x-requested-with",
+				"lang",
 				HttpHeaders.AUTHORIZATION};
 		
 		/**
@@ -178,6 +179,7 @@ public class SpringProperties {
 				"X-XSS-Protection",
 				"X-Frame-Options",
 				"X-Application-Context",
+				"lang",
 				SecurityUtils.TOKEN_RESPONSE_HEADER_NAME};
 		
 		/**

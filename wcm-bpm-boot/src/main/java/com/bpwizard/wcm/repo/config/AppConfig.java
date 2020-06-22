@@ -12,7 +12,7 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
 
 import com.bpwizard.wcm.repo.rest.filter.CleanupFilter;
 import com.bpwizard.wcm.repo.rest.filter.LoggingFilter;
-
+import com.bpwizard.spring.boot.commons.web.filter.LocaleFilter;
 
 @Configuration
 @EntityScan(basePackages= {"com.bpwizard.spring.boot.commons.service.repo"})
@@ -42,6 +42,17 @@ public class AppConfig {
 
      registrationBean.setFilter(loggingFilter);
      registrationBean.addUrlPatterns("/modeshape/api/*");
+     // registrationBean.setOrder(1); //set precedence
+     return registrationBean;
+    }
+
+	@Bean
+    public FilterRegistrationBean<LocaleFilter> localeFilterRegistrationBean() {
+     FilterRegistrationBean<LocaleFilter> registrationBean = new FilterRegistrationBean<>();
+     LocaleFilter localeFilter = new LocaleFilter();
+
+     registrationBean.setFilter(localeFilter);
+     registrationBean.addUrlPatterns("/*");
      // registrationBean.setOrder(1); //set precedence
      return registrationBean;
     }
