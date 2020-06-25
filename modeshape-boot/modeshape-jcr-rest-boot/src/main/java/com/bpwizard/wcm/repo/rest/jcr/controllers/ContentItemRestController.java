@@ -56,8 +56,8 @@ public class ContentItemRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api/contentItem";
 
-	@PostMapping(path = "/save-drfat", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> saveDraft(
+	@PostMapping(path = "/update-drfat", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> updateDraft(
 			@RequestBody ContentItem contentItem, 
 			HttpServletRequest request)
 			throws WcmRepositoryException {
@@ -78,7 +78,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 					WcmConstants.DRAFT_WS, 
 					contentItem.getAuthoringTemplate(), 
 					request);
-			this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at));
+			this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at));
 			if (contentItem.getAcl() != null) {
 				String repositoryName = contentItem.getRepository();
 				String workspaceName = contentItem.getWorkspace();
@@ -419,7 +419,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 	}
 	
 	@PostMapping(path = "/create-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> creatContentItemAsDraft(			
+	public ResponseEntity<?> createDraft(			
 			@RequestBody ContentItem contentItem, 
 			HttpServletRequest request)
 			throws WcmRepositoryException {
