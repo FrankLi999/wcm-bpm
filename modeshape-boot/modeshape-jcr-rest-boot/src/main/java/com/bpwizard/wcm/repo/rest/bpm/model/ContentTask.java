@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.content.model;
+package com.bpwizard.wcm.repo.rest.bpm.model;
 
 import java.io.Serializable;
 

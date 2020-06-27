@@ -41,6 +41,8 @@
 - expireDate (STRING) COPY
 - workflow (STRING) COPY
 - workflowStage (STRING) COPY
+- processInstanceId (STRING) COPY
+- reviewTaskId (STRING) COPY
 
 [bpw:property] 
 - bpw:name (STRING) COPY
@@ -600,7 +602,6 @@
 
 
 [bpw:baseContentType] > bpw:resourceNode, nt:hierarchyNode, mix:shareable, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable abstract orderable
-- bpw:lifecycleStage (STRING)
 - bpw:authoringTemplate (STRING)
 + bpw:workflow (bpw:workflowNode)
 + bpw:acl (bpw:AccessControlEntry)

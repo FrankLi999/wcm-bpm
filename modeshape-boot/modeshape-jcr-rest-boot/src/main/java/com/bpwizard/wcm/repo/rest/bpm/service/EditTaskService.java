@@ -1,26 +1,30 @@
-package com.bpwizard.wcm.repo.content;
+package com.bpwizard.wcm.repo.rest.bpm.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.variable.Variables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReviewTaskService {
+public class EditTaskService {
 	@Autowired
 	ProcessEngine processEngine;
-	
+
 	public String claimTask(String contentId, String taskName, String userId) {
+//		ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
+//	    LockedExternalTask externalTask = externalTaskService.fetchAndLock(1, workerId).topic(topic, 24 * 60 * 1000).processInstanceVariableEquals("contentId", contentId).execute().get(0);
+//	    
+//	    if (externalTask != null) {
+//	    	// ((ExternalTaskEntity)externalTask).lock(workerId, 24 * 60 * 1000);
+//	    	// externalTaskService.fetchAndLock(1, EXTERNAL_WORKER_ID).topic(TOPIC_WCM_EDIT, 300000).execute();
+//	    	return externalTask.getId();
+//	    } else {
+//	    	return "n/a";
+//	    }
 		
-//	    ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
-//	    List<LockedExternalTask> externalTasks = externalTaskService.fetchAndLock(1, workerId, true).topic(topic, 24 * 60 * 1000).processInstanceVariableEquals("contentId", contentId).execute();
-//	    LockedExternalTask externalTask = (externalTasks != null && externalTasks.size() > 0) ? externalTasks.get(0) : null;
-//	    String externalTaskId = (externalTask != null) ? externalTask.getId() : "n/a";
 		List<Task> tasks = this.processEngine.getTaskService().createTaskQuery()
 	            //.processInstanceId(workflow)
 	    		//.processInstanceBusinessKey(ContentServerUtils.getBusinessKey(workflow, contentId))
@@ -39,11 +43,8 @@ public class ReviewTaskService {
 	    return userTaskId;
 	}
 	
-	public String completeReview(
-			String taskId,  
-			boolean approved, 
-			String comment) {
-		
+	//One transaction
+	public String completeEdit(String taskId) {
 //	    ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
 //	    ExternalTask externalTask = externalTaskService.createExternalTaskQuery()
 //	    		.externalTaskId(taskId)
@@ -51,18 +52,18 @@ public class ReviewTaskService {
 //	    		.workerId(workerId)
 //		    	.topicName(topic)
 //		    	.singleResult();
-//	    System.out.println(">>>>>>>>>>>>>>>>>> to complete review task: " + externalTask);
-	    
-	    //save content, with comment
-	    
-	    		
-	    // Map<String, Object> variables = approved ? Variables.createVariables().putValue("reviewRejected", Boolean.FALSE) : Variables.createVariables().putValue("reviewRejected", Boolean.TRUE).putValue("comment", comment);
-	    
-	    TaskQuery userTaskQuery = this.processEngine.getTaskService().createTaskQuery();
+//	 
+//	    if (externalTask != null) {
+//	    	externalTaskService.complete(externalTask.getId(), workerId);
+//	    	return "completed";
+//	    } else {
+//	    	return "n/a";
+//	    }
+		
+		TaskQuery userTaskQuery = this.processEngine.getTaskService().createTaskQuery();
 	    Task task = userTaskQuery.taskId(taskId).singleResult();
 	    String userTaskId = task.getId();
-	    Map<String, Object> userTaskVariables = approved ? Variables.createVariables().putValue("reviewRejected", Boolean.FALSE) : Variables.createVariables().putValue("reviewRejected", Boolean.TRUE).putValue("comment", comment);
-	    this.processEngine.getTaskService().complete(userTaskId, userTaskVariables);
+	    this.processEngine.getTaskService().complete(userTaskId);
 	    
 //	    if (externalTask != null) {
 //	    	externalTaskService.complete(externalTask.getId(), workerId, variables);
@@ -72,6 +73,4 @@ public class ReviewTaskService {
 //	    }
 	    return "completed " + userTaskId;
 	}
-	
-	
 }

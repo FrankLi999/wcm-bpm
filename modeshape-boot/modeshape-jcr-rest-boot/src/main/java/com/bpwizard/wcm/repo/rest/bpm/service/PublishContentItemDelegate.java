@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.content;
+package com.bpwizard.wcm.repo.rest.bpm.service;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;

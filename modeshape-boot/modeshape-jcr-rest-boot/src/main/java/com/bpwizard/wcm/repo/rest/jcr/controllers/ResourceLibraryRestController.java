@@ -202,6 +202,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 	
 	private Library toLibrary(RestNode node, String repository, String workspace) {
 		Library library = new Library();
+		library.setWcmAuthority(WcmUtils.getWcmAuthority(null));
 		library.setRepository(repository);
 		library.setWorkspace(workspace);
 		library.setName(node.getName());

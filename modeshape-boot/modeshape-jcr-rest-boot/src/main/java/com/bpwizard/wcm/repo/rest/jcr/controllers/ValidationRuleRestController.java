@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ValidationRule;
@@ -188,7 +189,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 
 	private ValidationRule toValidationRule(RestNode node, String repository, String workspace, String library) {
 		ValidationRule validationRule = new ValidationRule();
-		
+		validationRule.setWcmAuthority(WcmUtils.getWcmAuthority(null));
 		validationRule.setRepository(repository);
 		validationRule.setWorkspace(workspace);
 		validationRule.setLibrary(library);

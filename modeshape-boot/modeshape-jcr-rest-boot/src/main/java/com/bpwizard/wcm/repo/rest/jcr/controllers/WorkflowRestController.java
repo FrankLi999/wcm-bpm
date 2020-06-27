@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.BpmnWorkflow;
@@ -213,6 +214,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 	
 	protected BpmnWorkflow toBpmnWorkflow(RestNode node, String repository, String workspace, String library) {
 		BpmnWorkflow bpmnWorkflow = new BpmnWorkflow();
+		bpmnWorkflow.setWcmAuthority(WcmUtils.getWcmAuthority(null));
 		bpmnWorkflow.setName(node.getName());
 		
 		bpmnWorkflow.setRepository(repository);

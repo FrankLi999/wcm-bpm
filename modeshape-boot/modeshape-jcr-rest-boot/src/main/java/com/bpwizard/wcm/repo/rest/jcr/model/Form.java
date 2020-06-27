@@ -14,13 +14,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class Form extends ResourceMixin implements HasName {
+public class Form extends ResourceMixin implements HasName, HasWcmAuthority {
 	private String repository;
 	private String workspace;
 	private String library;
 	private BaseFormGroup[] formLayout;
 	private Map<String, FormControl> formControls;
-
+	private WcmAuthority wcmAuthority;
 	public Form() {
 	}
 
@@ -62,6 +62,14 @@ public class Form extends ResourceMixin implements HasName {
 
 	public void setFormControls(Map<String, FormControl> formControls) {
 		this.formControls = formControls;
+	}
+
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
 	}
 
 	public JsonNode toJson() {
@@ -611,6 +619,6 @@ public class Form extends ResourceMixin implements HasName {
 		return "Form [repository=" + repository + ", workspace=" + workspace + ", library=" + library + ", formLayout="
 				+ Arrays.toString(formLayout) + ", formControls=" + formControls + ", getName()=" + getName()
 				+ ", getTitle()=" + getTitle() + ", getDescription()=" + getDescription() + ", getAuthor()="
-				+ getAuthor() + "]";
+				+ getAuthor() + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 }

@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.content;
+package com.bpwizard.wcm.repo.rest.bpm.service;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;

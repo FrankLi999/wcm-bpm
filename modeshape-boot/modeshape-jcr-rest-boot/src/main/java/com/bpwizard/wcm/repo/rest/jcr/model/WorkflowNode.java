@@ -12,7 +12,8 @@ public class WorkflowNode  implements Serializable {
 	private String workflowStage;
 	private String publishDate;
 	private String expireDate;
-	private String currentLifecycleState;
+	private String processInstanceId;
+	private String reviewTaskId;
 	
 	public String getWorkflow() {
 		return workflow;
@@ -40,38 +41,47 @@ public class WorkflowNode  implements Serializable {
 		this.expireDate = expireDate;
 	}
 	
-	
-	public String getCurrentLifecycleState() {
-		return currentLifecycleState;
+	public String getProcessInstanceId() {
+		return processInstanceId;
 	}
-	public void setCurrentLifecycleState(String currentLifecycleState) {
-		this.currentLifecycleState = currentLifecycleState;
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
+	public String getReviewTaskId() {
+		return reviewTaskId;
+	}
+	public void setReviewTaskId(String reviewTaskId) {
+		this.reviewTaskId = reviewTaskId;
 	}
 	protected void toJson(ObjectNode jsonNode) {
 		if (StringUtils.hasText(workflow)) {
-			jsonNode.put("bpw:workflow", workflow);
+			jsonNode.put("workflow", workflow);
 		}
 
 		if (StringUtils.hasText(workflowStage)) {
-			jsonNode.put("bpw:workflowStage", workflowStage);
+			jsonNode.put("workflowStage", workflowStage);
 		}
 		
 		if (StringUtils.hasText(publishDate)) {
-			jsonNode.put("bpw:publishDate", publishDate);
+			jsonNode.put("publishDate", publishDate);
 		}
 		
 		if (StringUtils.hasText(expireDate)) {
-			jsonNode.put("bpw:expireDate", expireDate);
+			jsonNode.put("expireDate", expireDate);
 		}
 		
-		if (StringUtils.hasText(currentLifecycleState)) {
-			jsonNode.put("bpw:currentLifecycleState", currentLifecycleState);
+		if (StringUtils.hasText(this.processInstanceId)) {
+			jsonNode.put("processInstanceId", this.processInstanceId);
+		}
+		
+		if (StringUtils.hasText(this.reviewTaskId)) {
+			jsonNode.put("reviewTaskId", this.reviewTaskId);
 		}
 	}
 	@Override
 	public String toString() {
 		return "WorkflowNode [workflow=" + workflow + ", workflowStage=" + workflowStage + ", publishDate="
-				+ publishDate + ", expireDate=" + expireDate + ", currentLifecycleState=" + currentLifecycleState
-				+ ", toString()=" + super.toString() + "]";
+				+ publishDate + ", expireDate=" + expireDate + ", processInstanceId=" + processInstanceId 
+				+ ", reviewTaskId=" + reviewTaskId + "]";
 	}
 }

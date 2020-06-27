@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @LibraryName(propertyNames= {"name"})
-public class Library implements Serializable, Comparable<Library> {
+public class Library implements HasWcmAuthority, Serializable, Comparable<Library> {
 	private static final long serialVersionUID = 1L;
 	
 	@RepositoryName()
@@ -36,6 +36,8 @@ public class Library implements Serializable, Comparable<Library> {
 	@NotBlank(message = "Library Lanaguage is mandatory")
 	@ValidateString(acceptedValues={"en", "fr", "zh"}, message="Language must be en, fr or zh")
 	private String language;
+	
+	private WcmAuthority wcmAuthority;
 	
 	public String getRepository() {
 		return repository;
@@ -74,6 +76,12 @@ public class Library implements Serializable, Comparable<Library> {
 		this.language = language;
 	}
 	
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
@@ -159,7 +167,7 @@ public class Library implements Serializable, Comparable<Library> {
 	@Override
 	public String toString() {
 		return "Library [repository=" + repository + ", workspace=" + workspace + ", name=" + name + ", title=" + title
-				+ ", description=" + description + ", language=" + language + "]";
+				+ ", description=" + description + ", language=" + language + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 	
 	@Override

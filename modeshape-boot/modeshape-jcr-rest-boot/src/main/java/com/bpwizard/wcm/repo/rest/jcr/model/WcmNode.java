@@ -1,6 +1,6 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
-public class WcmNode {
+public class WcmNode implements HasWcmAuthority {
 	private String repository;
 	private String workspace;
     private String wcmPath;
@@ -10,6 +10,7 @@ public class WcmNode {
     private String lastModified;
     private String owner;
     private String status;
+    private WcmAuthority wcmAuthority;
     
 	public String getRepository() {
 		return repository;
@@ -83,10 +84,18 @@ public class WcmNode {
 		this.status = status;
 	}
 
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
+
 	@Override
 	public String toString() {
 		return "WcmNode [repository=" + repository + ", workspace=" + workspace + ", wcmPath=" + wcmPath + ", name="
 				+ name + ", title=" + title + ", nodeType=" + nodeType + ", lastModified=" + lastModified + ", owner="
-				+ owner + ", status=" + status + "]";
+				+ owner + ", status=" + status + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 }

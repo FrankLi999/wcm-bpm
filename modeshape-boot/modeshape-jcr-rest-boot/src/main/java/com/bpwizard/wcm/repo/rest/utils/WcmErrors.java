@@ -107,4 +107,5 @@ public class WcmErrors {
 	public static final String MODESHAPE_DELETE_NODE_ID = "com.bpwizard.modeshape.delete_node_id";
 	
 	
+	public static final String EMAIL_ERROR = "com.bpwizard.modeshape.email_error";
 }

@@ -7,7 +7,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class SiteConfig extends ResourceNode {
+public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 	private static final long serialVersionUID = 1L;
 	private String repository;
 	private String workspace;
@@ -20,7 +20,7 @@ public class SiteConfig extends ResourceNode {
     
     private PageLayout layout;
     private String lockOwner;
-    
+    private WcmAuthority wcmAuthority;
     public String getRepository() {
 		return repository;
 	}
@@ -76,6 +76,13 @@ public class SiteConfig extends ResourceNode {
 	}
 	public void setLockOwner(String lockOwner) {
 		this.lockOwner = lockOwner;
+	}
+	
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
 	}
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
@@ -166,6 +173,7 @@ public class SiteConfig extends ResourceNode {
 	public String toString() {
 		return "SiteConfig [repository=" + repository + ", workspace=" + workspace + ", library=" + library
 				+ ", rootSiteArea=" + rootSiteArea + ", name=" + name + ", colorTheme=" + colorTheme
-				+ ", customScrollbars=" + customScrollbars + ", layout=" + layout + ", LockOwner=" + lockOwner + "]";
+				+ ", customScrollbars=" + customScrollbars + ", layout=" + layout + ", LockOwner=" + lockOwner 
+				 + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 }

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class Workflow extends ResourceNode {
+public class Workflow extends ResourceNode implements HasWcmAuthority {
 	private static final long serialVersionUID = 1L;
 	
 	private String repository;
@@ -15,7 +15,7 @@ public class Workflow extends ResourceNode {
 	// private String businessKey;
 	private String bpmn;
 	private WorkflowStage workflowStages[];
-	
+	private WcmAuthority wcmAuthority;
 	
 	public String getRepository() {
 		return repository;
@@ -69,10 +69,19 @@ public class Workflow extends ResourceNode {
 		return null;
 	}
 	
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
+
 	@Override
 	public String toString() {
 		return "Workflow [repository=" + repository + ", workspace=" + workspace + ", library=" + library + ", name="
 				+ name + ", bpmn=" + bpmn + ", workflowStages="
-				+ Arrays.toString(workflowStages) + ", toString()=" + super.toString() + "]";
+				+ Arrays.toString(workflowStages) + ", toString()=" + super.toString() 
+				 + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 }

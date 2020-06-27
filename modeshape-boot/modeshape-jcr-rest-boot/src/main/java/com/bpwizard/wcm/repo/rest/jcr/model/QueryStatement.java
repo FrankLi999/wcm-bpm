@@ -13,7 +13,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class QueryStatement implements HasName, Serializable, Comparable<QueryStatement> {
+public class QueryStatement implements HasName, HasWcmAuthority, Serializable, Comparable<QueryStatement> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -25,6 +25,7 @@ public class QueryStatement implements HasName, Serializable, Comparable<QuerySt
 	private String title;
 	private String query;
 	private String[] columns;
+	private WcmAuthority wcmAuthority;
 	
 	public String getRepository() {
 		return repository;
@@ -82,6 +83,18 @@ public class QueryStatement implements HasName, Serializable, Comparable<QuerySt
 		this.columns = columns;
 	}
 
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_queryStatementType");
@@ -113,7 +126,7 @@ public class QueryStatement implements HasName, Serializable, Comparable<QuerySt
 	public String toString() {
 		return "QueryStatement [repository=" + repository + ", workspace=" + workspace + ", library=" + library
 				+ ", name=" + name + ", title=" + title + ", query=" + query + ", columns=" + Arrays.toString(columns)
-				+ "]";
+				 + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 
 	@Override

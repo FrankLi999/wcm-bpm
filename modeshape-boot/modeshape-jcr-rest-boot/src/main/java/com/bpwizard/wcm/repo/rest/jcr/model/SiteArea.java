@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class SiteArea implements HasName {
+public class SiteArea implements HasName, HasWcmAuthority {
 
 	private String repository;
 	private String workspace;
@@ -27,7 +27,7 @@ public class SiteArea implements HasName {
 //	private ContentItemElements elements;
 	private WcmProperties metadata;
 	private SearchData searchData;
-	// private NavigationBadge badge;
+	private WcmAuthority wcmAuthority;
 
 	
 	public String getRepository() {
@@ -104,7 +104,12 @@ public class SiteArea implements HasName {
 	public void setBadge(NavigationBadge badge) {
 		this.getElements().put("badge", badge);
 	}
-	
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
@@ -287,6 +292,7 @@ public class SiteArea implements HasName {
 	public String toString() {
 		return "SiteArea [repository=" + repository + ", workspace=" + workspace + ", wcmPath=" + wcmPath
 				+ ", siteAreaLayout=" + siteAreaLayout + ", lockOwner=" + lockOwner + ", elements=" + elements
-				+ ", properties=" + properties + ", metadata=" + metadata + ", searchData=" + searchData + "]";
+				+ ", properties=" + properties + ", metadata=" + metadata + ", searchData=" + searchData 
+				 + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 }

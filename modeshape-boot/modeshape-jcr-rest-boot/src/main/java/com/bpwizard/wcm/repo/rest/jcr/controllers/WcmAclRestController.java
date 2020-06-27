@@ -128,7 +128,7 @@ public class WcmAclRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			Session session = this.repositoryManager.getSession("bpwizard", "default");
+			Session session = this.repositoryManager.getSession(repository, workspace);
 			AccessControlManager acm = session.getAccessControlManager();
 			Grant grant = this.doGetAcl(session, acm, wcmPath);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(grant);

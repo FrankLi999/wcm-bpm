@@ -113,6 +113,7 @@ public class SiteareaRestController extends BaseWcmRestController {
 			sa.setRepository(repository);
 			sa.setWorkspace(workspace);
 			sa.setWcmPath(wcmPath);
+			sa.setWcmAuthority(WcmUtils.getWcmAuthority(wcmPath));
 			this.loadSiteArea(saNode, sa);
 
 			if (logger.isDebugEnabled()) {

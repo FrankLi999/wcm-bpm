@@ -8,7 +8,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class BpmnWorkflow extends ResourceNode implements HasName, Comparable<BpmnWorkflow> {
+public class BpmnWorkflow extends ResourceNode implements HasName, HasWcmAuthority, Comparable<BpmnWorkflow> {
 	private static final long serialVersionUID = 1L;
 	private String repository;
 	private String workspace;
@@ -16,7 +16,7 @@ public class BpmnWorkflow extends ResourceNode implements HasName, Comparable<Bp
 	
 	private String name;
 	private String bpmn;
-	
+	private WcmAuthority wcmAuthority; 
 	public String getRepository() {
 		return repository;
 	}
@@ -57,6 +57,14 @@ public class BpmnWorkflow extends ResourceNode implements HasName, Comparable<Bp
 		this.bpmn = bpmn;
 	}
 	
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
+
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		jsonNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_bpmnWorkflowType");
@@ -83,7 +91,8 @@ public class BpmnWorkflow extends ResourceNode implements HasName, Comparable<Bp
 	
 	@Override
 	public String toString() {
-		return "BpmnWorkflow [name=" + name + ", bpmn=" + bpmn + ", toString()=" + super.toString() + "]";
+		return "BpmnWorkflow [name=" + name + ", bpmn=" + bpmn + ", toString()=" + super.toString() 
+			+ ", wcmAuthority=" + wcmAuthority + "]";
 	}
 
 	@Override

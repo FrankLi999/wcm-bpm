@@ -1,11 +1,11 @@
-package com.bpwizard.wcm.repo.content;
+package com.bpwizard.wcm.repo.rest.bpm.service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.wcm.repo.content.model.ContentTask;
+import com.bpwizard.wcm.repo.rest.bpm.model.ContentTask;
 
 @Component
 public class ContentTaskRepo {

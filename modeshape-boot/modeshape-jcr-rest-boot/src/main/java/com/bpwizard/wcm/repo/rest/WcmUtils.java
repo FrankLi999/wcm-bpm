@@ -27,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.bpwizard.spring.boot.commons.security.UserDto;
+import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
@@ -36,7 +38,9 @@ import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplateProperties;
 import com.bpwizard.wcm.repo.rest.jcr.model.BaseFormGroup;
 import com.bpwizard.wcm.repo.rest.jcr.model.CommonConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.ConditionalConstraint;
+import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.CustomConstraint;
+import com.bpwizard.wcm.repo.rest.jcr.model.DraftItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.Form;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormColumn;
 import com.bpwizard.wcm.repo.rest.jcr.model.FormControl;
@@ -54,6 +58,8 @@ import com.bpwizard.wcm.repo.rest.jcr.model.ResourceMixin;
 import com.bpwizard.wcm.repo.rest.jcr.model.ResourceNode;
 import com.bpwizard.wcm.repo.rest.jcr.model.StringConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.VisbleCondition;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmAuthority;
+import com.bpwizard.wcm.repo.rest.jcr.model.WorkflowNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -70,7 +76,12 @@ public class WcmUtils {
 	
 	@Autowired
 	protected RepositoryManager repositoryManager;
-	
+
+	public static String getCurrentUsername() {
+		UserDto currentUser = WebUtils.currentUser();
+		return currentUser.getUsername();
+	}
+
 	public static String nodePath(String wcmPath) {
 		return String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, 
 				wcmPath);
@@ -156,6 +167,24 @@ public class WcmUtils {
 		return formControl;
 	}
 	
+	public static DraftItem toDraftItem(ContentItem contentItem) {
+		DraftItem draftItem = new DraftItem();
+		
+		draftItem.setRepository(contentItem.getRepository());
+		draftItem.setWcmPath(contentItem.getWcmPath());
+		WorkflowNode workflowNode = contentItem.getWorkflow();
+		if (workflowNode != null) {
+			draftItem.setProcessInstanceId(workflowNode.getProcessInstanceId());
+			draftItem.setReviewTaskId(workflowNode.getReviewTaskId());
+		}
+		draftItem.setId(contentItem.getId());
+		draftItem.setName(contentItem.getProperties().getName());
+		draftItem.setTitle(contentItem.getProperties().getTitle());
+		draftItem.setDescription(contentItem.getProperties().getDescription());
+		draftItem.setAuthor(contentItem.getProperties().getAuthor());
+		draftItem.setWcmAuthority(contentItem.getWcmAuthority());
+		return draftItem;
+	}
 	private static FormControl getAtProperty(AuthoringTemplate at, String property) {
 		FormControl formControl = null;
 		if ("workflow".equals(property)) {
@@ -221,6 +250,25 @@ public class WcmUtils {
 		return result;
 	}
 	
+	public static boolean isDraftContentItem(RestNode node) {
+		boolean isContentItem = node.getJcrProperties().stream().anyMatch(
+				property -> "jcr:primaryType".equals(property.getName()) && property.getValues().get(0).endsWith("_AT"));
+		boolean isDraft = false;
+		
+		for (RestNode childNode: node.getChildren()) {
+			if (WcmUtils.checkNodeType(childNode, "bpw:workflowNode")) {
+				for (RestProperty property : childNode.getJcrProperties()) {
+					if ("workflowStage".equals(property.getName())) {
+						isDraft = WcmConstants.WORKFLOW_STATGE_DRAFT.equals(property.getValues().get(0));
+						break;
+					}
+				}
+			}
+		}
+		
+		return isContentItem && isDraft;
+	}
+	
 	private static void appendControlField(int position, String controlFieldName, StringBuilder layoutPath, boolean isArray) {
 		if (position > 0) {
 			layoutPath.append(".");
@@ -243,6 +291,10 @@ public class WcmUtils {
 		return values;
 	}
 	
+	public static WcmAuthority getWcmAuthority(String wcmPath) {
+		return new WcmAuthority();
+	}
+
 	@SuppressWarnings("unchecked")
 	public void registerNodeType(String worksoace, AuthoringTemplate at) throws RepositoryException {
 		Session session = this.repositoryManager.getSession(at.getRepository(), worksoace);
@@ -394,6 +446,7 @@ public class WcmUtils {
 	
 	public AuthoringTemplate toAuthoringTemplate(RestNode node, String repository, String workspace, String library) {
 		AuthoringTemplate at = new AuthoringTemplate();
+		at.setWcmAuthority(WcmUtils.getWcmAuthority(null));
 		at.setRepository(repository);
 		at.setWorkspace(workspace);
 		at.setLibrary(library);
@@ -417,6 +470,7 @@ public class WcmUtils {
 	
 	public Form toForm(RestNode node, String repository, String workspace, String library) {
 		Form form = new Form();
+		form.setWcmAuthority(WcmUtils.getWcmAuthority(null));
 		form.setRepository(repository);
 		form.setWorkspace(workspace);
 		form.setLibrary(library);

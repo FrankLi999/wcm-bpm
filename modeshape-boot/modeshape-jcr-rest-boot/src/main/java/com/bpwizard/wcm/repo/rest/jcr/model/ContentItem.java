@@ -14,14 +14,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ContentItem {
+public class ContentItem implements HasWcmAuthority {
 	
 	private static final long serialVersionUID = -6271150516003474875L;
 	private String id;
 	private String repository;
 	private String workspace;
 	private String wcmPath;
-	private String lifeCycleStage;
+	// private String lifeCycleStage;
 	private String authoringTemplate;
 	private String nodeType;
 	private boolean locked;
@@ -33,6 +33,8 @@ public class ContentItem {
 	
 	private ContentItemProperties properties;
 	private Map<String, Object> elements;
+	private WcmAuthority wcmAuthority;
+	
 	public String getId() {
 		return id;
 	}
@@ -65,13 +67,13 @@ public class ContentItem {
 		this.wcmPath = wcmPath;
 	}
 
-	public String getLifeCycleStage() {
-		return lifeCycleStage;
-	}
-
-	public void setLifeCycleStage(String lifeCycleStage) {
-		this.lifeCycleStage = lifeCycleStage;
-	}
+//	public String getLifeCycleStage() {
+//		return lifeCycleStage;
+//	}
+//
+//	public void setLifeCycleStage(String lifeCycleStage) {
+//		this.lifeCycleStage = lifeCycleStage;
+//	}
 
 	public WorkflowNode getWorkflow() {
 		return workflow;
@@ -154,6 +156,14 @@ public class ContentItem {
 		this.nodeType = nodeType;
 	}
 	
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
+
 	//TODO: super.toJson()
 	public JsonNode toJson(AuthoringTemplate at) throws JsonProcessingException {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
@@ -167,9 +177,9 @@ public class ContentItem {
 			jsonNode.put("bpw:authoringTemplate", this.getAuthoringTemplate());
 		}
 		
-		if (StringUtils.hasText(this.lifeCycleStage)) {
-			jsonNode.put("bpw:lifecycleStage", this.lifeCycleStage);
-		}
+//		if (StringUtils.hasText(this.lifeCycleStage)) {
+//			jsonNode.put("bpw:lifecycleStage", this.lifeCycleStage);
+//		}
 		
 		ObjectNode comementFolderNode = JsonUtils.createObjectNode();
 		ObjectNode comementFolderChildren = JsonUtils.createObjectNode();
@@ -257,10 +267,10 @@ public class ContentItem {
 	@Override
 	public String toString() {
 		return "ContentItem [id=" + id + ", repository=" + repository + ", workspace=" + workspace + ", wcmPath="
-				+ wcmPath + ", lifeCycleStage=" + lifeCycleStage + ", authoringTemplate=" + authoringTemplate
+				+ wcmPath + ", authoringTemplate=" + authoringTemplate
 				+ ", nodeType=" + nodeType + ", locked=" + locked + ", checkedOut=" + checkedOut + ", workflow="
 				+ workflow + ", acl=" + acl + ", metadata=" + metadata + ", searchData=" + searchData + ", properties="
-				+ properties + ", elements=" + elements + "]";
+				+ properties + ", elements=" + elements + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

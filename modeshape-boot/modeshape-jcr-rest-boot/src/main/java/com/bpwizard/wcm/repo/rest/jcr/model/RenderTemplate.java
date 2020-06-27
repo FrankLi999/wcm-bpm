@@ -11,7 +11,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class RenderTemplate extends ResourceNode implements HasName {
+public class RenderTemplate extends ResourceNode implements HasName, HasWcmAuthority {
 
 	private static final long serialVersionUID = 1L;
 	private String repository;
@@ -29,6 +29,7 @@ public class RenderTemplate extends ResourceNode implements HasName {
 	private RenderTemplateLayoutRow rows[];
 	
 	private String lockOwner;
+	private WcmAuthority wcmAuthority;
 	
 	public String getName() {
 		return name;
@@ -114,6 +115,13 @@ public class RenderTemplate extends ResourceNode implements HasName {
 	public void setNodeType(String nodeType) {
 		this.nodeType = nodeType;
 	}
+	
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
 	public JsonNode toJson(AuthoringTemplate at) {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
@@ -188,7 +196,8 @@ public class RenderTemplate extends ResourceNode implements HasName {
 				+ ", name=" + name + ", code=" + code + ", preloop=" + preloop + ", postloop=" + postloop
 				+ ", maxEntries=" + maxEntries + ", note=" + note + ", query=" + query + ", resourceName="
 				+ resourceName + ", nodeType=" + nodeType + ", rows=" + Arrays.toString(rows) + ", lockOwner="
-				+ lockOwner + ", super.toString()=" + super.toString() + "]";
+				+ lockOwner + ", super.toString()=" + super.toString() 
+				 + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 	
 	

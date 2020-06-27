@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ContentAreaLayout extends ResourceNode implements HasName {
+public class ContentAreaLayout extends ResourceNode implements HasName, HasWcmAuthority {
 
 	private static final long serialVersionUID = 1L;
 	String name;
@@ -23,6 +23,7 @@ public class ContentAreaLayout extends ResourceNode implements HasName {
 	String library;
 	int contentWidth;
 	SidePane sidePane;
+	private WcmAuthority wcmAuthority;
 	@Valid
 	@NotNull
 	LayoutRow rows[];
@@ -76,6 +77,12 @@ public class ContentAreaLayout extends ResourceNode implements HasName {
 	public void setLockOwner(String lockOwner) {
 		this.lockOwner = lockOwner;
 	}	
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
 		ObjectNode children = JsonUtils.createObjectNode();
@@ -142,6 +149,6 @@ public class ContentAreaLayout extends ResourceNode implements HasName {
 	public String toString() {
 		return "ContentAreaLayout [name=" + name + ", repository=" + repository + ", workspace=" + workspace
 				+ ", library=" + library + ", contentWidth=" + contentWidth + ", sidePane=" + sidePane + ", rows="
-				+ Arrays.toString(rows) + ", lockOwner=" + lockOwner + "]";
+				+ Arrays.toString(rows) + ", lockOwner=" + lockOwner + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 }

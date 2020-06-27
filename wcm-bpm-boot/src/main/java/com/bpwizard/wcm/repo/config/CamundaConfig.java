@@ -9,10 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.bpwizard.wcm.repo.content.ContentReviewTaskEndListener;
-import com.bpwizard.wcm.repo.content.ContentReviewTaskStartListener;
-import com.bpwizard.wcm.repo.content.PublishContentItemDelegate;
-
 @Configuration
 @EnableProcessApplication("wcm-boot")
 @ComponentScan(basePackages={" org.camunda.bpm.engine.rest"})
@@ -61,20 +57,5 @@ public class CamundaConfig {
 		filterRegistration.addUrlPatterns("/rest/*");
 		filterRegistration.addUrlPatterns("/content/server/*");
 		return filterRegistration;
-	}
-	
-	@Bean
-	public PublishContentItemDelegate publishContentItemDelegate() {
-		return new PublishContentItemDelegate();
-	}
-	
-	@Bean
-	public ContentReviewTaskStartListener contentReviewTaskStartListener() {
-		return new ContentReviewTaskStartListener();
-	}
-
-	@Bean
-	public ContentReviewTaskEndListener contentReviewTaskEndListener() {
-		return new ContentReviewTaskEndListener();
 	}
 }

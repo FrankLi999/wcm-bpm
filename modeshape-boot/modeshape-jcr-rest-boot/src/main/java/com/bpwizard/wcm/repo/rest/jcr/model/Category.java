@@ -8,14 +8,15 @@ import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class Category implements HasName {
+public class Category implements HasName, HasWcmAuthority {
 	private String repository;
 	private String workspace;
 	private String library;
 	
 	private String name;
 	private String parent;
-
+	private WcmAuthority wcmAuthority;
+	
 	public String getRepository() {
 		return repository;
 	}
@@ -56,6 +57,14 @@ public class Category implements HasName {
 		this.parent = parent;
 	}
 
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
+
 	public JsonNode toJson() {
 		
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
@@ -78,6 +87,6 @@ public class Category implements HasName {
 	@Override
 	public String toString() {
 		return "Category [repository=" + repository + ", workspace=" + workspace + ", library=" + library + ", name="
-				+ name + ", parent=" + parent + "]";
+				+ name + ", parent=" + parent + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 }

@@ -8566,7 +8566,7 @@
         "bpw:controlType": "wcm-workflow",
         "bpw:dataType": "string",
         "bpw:jcrDataType": "REFERENCE",
-        "bpw:mandatory": "true",
+        "bpw:mandatory": "false",
         "bpw:systemIndexed": "true",
         "bpw:userSearchable": "true",
         "bpw:showInList": "true"

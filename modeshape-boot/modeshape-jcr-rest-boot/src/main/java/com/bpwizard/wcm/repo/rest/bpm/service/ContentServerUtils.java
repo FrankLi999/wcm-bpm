@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.content;
+package com.bpwizard.wcm.repo.rest.bpm.service;
 
 public class ContentServerUtils {
 	public static String getBusinessKey(String workflow, String contentId) {

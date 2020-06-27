@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class AuthoringTemplate extends ResourceNode implements HasName {
+public class AuthoringTemplate extends ResourceNode implements HasName, HasWcmAuthority {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String repository;
@@ -27,6 +27,7 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 	private String contentItemWorkflow;
 	private Map<String, FormControl> elements;
 	private AuthoringTemplateProperties properties;
+	private WcmAuthority wcmAuthority;
 	
 	public AuthoringTemplate() {
 	}
@@ -104,6 +105,14 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 
 	public void setNodeType(String nodeType) {
 		this.nodeType = nodeType;
+	}
+
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
 	}
 
 	public JsonNode toJson() {
@@ -695,6 +704,6 @@ public class AuthoringTemplate extends ResourceNode implements HasName {
 				+ ", library=" + library + ", baseType=" + baseType + ", nodeType=" + nodeType
 				+ ", contentItemAcl=" + contentItemAcl + ", elementGroups=" + Arrays.toString(elementGroups)
 				+ ", contentItemWorkflow=" + contentItemWorkflow + ", elements=" + elements + ", properties="
-				+ properties + "]";
+				+ properties + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 }

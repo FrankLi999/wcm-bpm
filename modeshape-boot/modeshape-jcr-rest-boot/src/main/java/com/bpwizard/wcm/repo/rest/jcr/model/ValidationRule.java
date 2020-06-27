@@ -11,7 +11,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ValidationRule implements HasName, Serializable, Comparable<ValidationRule> {
+public class ValidationRule implements HasName, HasWcmAuthority, Serializable, Comparable<ValidationRule> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ public class ValidationRule implements HasName, Serializable, Comparable<Validat
 	private String description;
 	private String type;
 	private String rule;
-	
+	private WcmAuthority wcmAuthority;
 	public String getRepository() {
 		return repository;
 	}
@@ -89,6 +89,14 @@ public class ValidationRule implements HasName, Serializable, Comparable<Validat
 		this.description = description;
 	}
 
+	public WcmAuthority getWcmAuthority() {
+		return wcmAuthority;
+	}
+
+	public void setWcmAuthority(WcmAuthority wcmAuthority) {
+		this.wcmAuthority = wcmAuthority;
+	}
+
 	public JsonNode toJson() {
 		
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
@@ -121,7 +129,7 @@ public class ValidationRule implements HasName, Serializable, Comparable<Validat
 	public String toString() {
 		return "ValidationRule [repository=" + repository + ", workspace=" + workspace + ", library=" + library
 				+ ", name=" + name + ", title=" + title + ", description=" + description + ", type=" + type + ", rule="
-				+ rule + "]";
+				+ rule  + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 	
 	@Override

@@ -32,11 +32,14 @@ import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
+import com.bpwizard.wcm.repo.rest.jcr.model.AccessControlEntry;
 import com.bpwizard.wcm.repo.rest.jcr.model.ArrayConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.BaseFormGroup;
 import com.bpwizard.wcm.repo.rest.jcr.model.CommonConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
+import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
+import com.bpwizard.wcm.repo.rest.jcr.model.ContentItemProperties;
 import com.bpwizard.wcm.repo.rest.jcr.model.ControlField;
 import com.bpwizard.wcm.repo.rest.jcr.model.CustomConstraint;
 import com.bpwizard.wcm.repo.rest.jcr.model.Footer;
@@ -88,6 +91,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestPropertyType;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -350,14 +354,18 @@ public abstract class BaseWcmRestController {
 
 	protected void resolveWorkflowNode(WorkflowNode workflowNode, RestNode restNode) {
 		for (RestProperty property : restNode.getJcrProperties()) {
-			if ("bpw:publishDate".equals(property.getName())) {
+			if ("publishDate".equals(property.getName())) {
 				workflowNode.setPublishDate(property.getValues().get(0));
-			} else if ("bpw:expireDate".equals(property.getName())) {
+			} else if ("expireDate".equals(property.getName())) {
 				workflowNode.setExpireDate(property.getValues().get(0));
-			} else if ("bpw:workflow".equals(property.getName())) {
+			} else if ("workflow".equals(property.getName())) {
 				workflowNode.setWorkflow(property.getValues().get(0));
-			} else if ("bpw:workflowStage".equals(property.getName())) {
+			} else if ("workflowStage".equals(property.getName())) {
 				workflowNode.setWorkflowStage(property.getValues().get(0));
+			} else if ("processInstanceId".equals(property.getName())) {
+				workflowNode.setProcessInstanceId(property.getValues().get(0));
+			} else if ("reviewTaskId".equals(property.getName())) {
+				workflowNode.setReviewTaskId(property.getValues().get(0));
 			}
 		}
 	}
@@ -1833,6 +1841,7 @@ public abstract class BaseWcmRestController {
 
 	protected RenderTemplate toRenderTemplate(RestNode node, String repository, String workspace, String library, HttpServletRequest request) {
 		RenderTemplate rt = new RenderTemplate();
+		rt.setWcmAuthority(WcmUtils.getWcmAuthority(null));
 		rt.setRepository(repository);
 		rt.setWorkspace(workspace);
 		rt.setLibrary(library);
@@ -1988,6 +1997,7 @@ public abstract class BaseWcmRestController {
 
 	protected ContentAreaLayout toContentAreaLayout(RestNode node, ContentAreaLayout layout) {
 		ContentAreaLayout contentAreaLayout = new ContentAreaLayout();
+		contentAreaLayout.setWcmAuthority(WcmUtils.getWcmAuthority(null));
 		contentAreaLayout.setRepository(layout.getRepository());
 		contentAreaLayout.setWorkspace(layout.getWorkspace());
 		contentAreaLayout.setLibrary(layout.getLibrary());
@@ -2139,7 +2149,7 @@ public abstract class BaseWcmRestController {
 
 		// try {
 		SiteConfig siteConfig = new SiteConfig();
-
+		siteConfig.setWcmAuthority(WcmUtils.getWcmAuthority(null));
 		siteConfig.setRepository(repository);
 		siteConfig.setWorkspace(workspace);
 		siteConfig.setLibrary(library);
@@ -2509,7 +2519,7 @@ public abstract class BaseWcmRestController {
 
 	protected QueryStatement toQueryStatement(RestNode restNode, String repository, String workspace, String library) {
 		QueryStatement queryStatement = new QueryStatement();
-
+		queryStatement.setWcmAuthority(WcmUtils.getWcmAuthority(null));
 		queryStatement.setRepository(repository);
 		queryStatement.setWorkspace(workspace);
 		queryStatement.setLibrary(library);
@@ -2547,4 +2557,147 @@ public abstract class BaseWcmRestController {
 			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
+	
+	protected ContentItem toContentItem(RestNode contentItemNode, String repository, 
+			String workspace, String wcmPath, HttpServletRequest request) {
+	    
+		ContentItem contentItem = new ContentItem(); 
+		contentItem.setWcmAuthority(WcmUtils.getWcmAuthority(wcmPath));
+		contentItem.setRepository(repository);
+		contentItem.setWorkspace(workspace);
+		contentItem.setWcmPath(wcmPath.startsWith("/") ? wcmPath : "/" + wcmPath);
+		
+		ContentItemProperties contentItemProperties = new ContentItemProperties();
+		contentItem.setProperties(contentItemProperties);
+		for (RestProperty property: contentItemNode.getJcrProperties()) {				
+			if ("jcr:primaryType".equals(property.getName())) {
+				contentItem.setNodeType(property.getValues().get(0));
+			} else if ("bpw:authoringTemplate".equals(property.getName())) {
+				contentItem.setAuthoringTemplate(property.getValues().get(0));
+			} 
+		}
+		//Resolve properties first
+		for (RestNode node: contentItemNode.getChildren()) {
+			if (WcmConstants.WCM_ITEM_PROPERTIES.equals(node.getName()) || 
+					WcmUtils.checkNodeType(node, WcmConstants.JCR_TYPE_PROPERTY_FOLDER)) {					
+				contentItemProperties.setName(contentItemNode.getName());					
+				for (RestProperty property: node.getJcrProperties()) {
+					if ("bpw:categories".equals(property.getName())) {
+						contentItemProperties.setCategories(property.getValues().toArray(new String[property.getValues().size()]));
+					} else if ("bpw:name".equals(property.getName())) {
+						contentItemProperties.setName(property.getValues().get(0));
+					} else if ("bpw:title".equals(property.getName())) {
+						contentItemProperties.setTitle(property.getValues().get(0));
+					} else if ("bpw:description".equals(property.getName())) {
+						contentItemProperties.setDescription(property.getValues().get(0));
+					} else if ("bpw:author".equals(property.getName())) {
+						contentItemProperties.setAuthor(property.getValues().get(0));
+					} 
+				}
+				break;
+			}
+		}
+		AuthoringTemplate at = this.doGetAuthoringTemplate(repository, workspace, contentItem.getAuthoringTemplate(), request);
+		
+		for (RestNode node: contentItemNode.getChildren()) {
+			if (WcmUtils.checkNodeType(node, "bpw:workflowNode")) {
+				WorkflowNode workflowNode = new WorkflowNode();
+				contentItem.setWorkflow(workflowNode);
+				this.resolveWorkflowNode(workflowNode, node);
+			} else if (WcmConstants.WCM_ITEM_ELEMENTS.equals(node.getName()) || 
+					WcmUtils.checkNodeType(node, WcmUtils.getElementFolderType(at.getLibrary(), at.getName()))) {
+				// Map<String, JsonNode> elements = new HashMap<>();
+				Map<String, Object> elements = new HashMap<>();
+				contentItem.setElements(elements);
+				
+				for (RestProperty property : node.getJcrProperties()) {
+					
+					FormControl formControl = at.getElements().get(property.getName());
+					if (formControl == null) {
+						continue;
+					}
+					if ("integer".equals(formControl.getDataType()) 
+							|| "number".equals(formControl.getDataType()) 
+							|| "string".equals(formControl.getDataType())
+							|| "boolean".equals(formControl.getDataType())) {
+						if (formControl.isMultiple()) {					
+							String values[] = property.getValues().toArray(new String[property.getValues().size()]);
+							elements.put(property.getName(), WcmUtils.toArrayNode(values));
+						} else {
+							elements.put(property.getName(), JsonUtils.createTextNode(property.getValues().get(0)));
+						}
+					} else if ("object".equals(formControl.getDataType())) {
+						//TODO
+						if (formControl.isMultiple()) {
+							String values[] = property.getValues().toArray(new String[property.getValues().size()]);
+							try {
+							elements.put(property.getName(), JsonUtils.readTree(values));
+							} catch(JsonProcessingException e) {
+								logger.error(e);
+								throw new WcmRepositoryException(WcmError.WCM_ERROR);
+							}
+						} else {
+							elements.put(property.getName(), JsonUtils.readTree(property.getValues().get(0)));
+						}
+					} else if ("array".equals(formControl.getDataType())) {
+						//TODO
+						elements.put(property.getName(), JsonUtils.readTree(property.getValues().get(0)));
+					}
+				}
+			} else if (WcmUtils.checkNodeType(node, "bpw:acl")) {
+				AccessControlEntry acl = new AccessControlEntry();
+				contentItem.setAcl(acl);
+				for (RestProperty property: node.getJcrProperties()) {
+					if ("bpw:viewers".equals(property.getName())) {
+						acl.setViewers(property.getValues().toArray(new String[property.getValues().size()]));
+					} else if ("bpw:editors".equals(property.getName())) {
+						acl.setEditors(property.getValues().toArray(new String[property.getValues().size()]));
+					} else if ("bpw:admins".equals(property.getName())) {
+						acl.setAdmins(property.getValues().toArray(new String[property.getValues().size()]));
+					} else if ("bpw:reviewers".equals(property.getName())) {
+						acl.setReviewers(property.getValues().toArray(new String[property.getValues().size()]));
+					} 
+				}
+			} else if (WcmUtils.checkNodeType(node, "bpw:metaData")) {
+				WcmProperties wcmProperties = new WcmProperties();
+				contentItem.setMetadata(wcmProperties);
+				List<WcmProperty>  properties = new ArrayList<>();
+				wcmProperties.setProperties(new WcmProperty[properties.size()]);
+				for (RestNode metaDataNode: node.getChildren()) {
+					if (WcmUtils.checkNodeType(node, "bpw:property")) {
+						WcmProperty wcmProperty = new WcmProperty();
+						properties.add(wcmProperty);
+						for (RestProperty restProperty: metaDataNode.getJcrProperties()) {
+							if ("bpw:name".equals(restProperty.getName())) {
+								wcmProperty.setName(restProperty.getValues().get(0));
+							} else if ("bpw:value".equals(restProperty.getName())) {
+								wcmProperty.setValue(restProperty.getValues().get(0));
+							}
+						}
+					}
+				}
+			} else if (WcmUtils.checkNodeType(node, "bpw:searchData")) {
+				SearchData searchData = new SearchData();
+				contentItem.setSearchData(searchData);
+				for (RestProperty property: node.getJcrProperties()) {
+					if ("description".equals(property.getName())) {
+						searchData.setDescription(property.getValues().get(0));
+					} else if ("keywords".equals(property.getName())) {
+						searchData.setKeywords(property.getValues().toArray(new String[property.getValues().size()]));
+					} 
+				}
+			}
+		}
+		return contentItem;
+	}
+	
+	protected void setWorkflowStage(ContentItem contentItem, String stage) {
+		WorkflowNode workflowNode = contentItem.getWorkflow();
+		if (workflowNode == null) {
+			workflowNode = new WorkflowNode();
+			contentItem.setWorkflow(workflowNode);
+		}
+		workflowNode.setWorkflowStage(stage);
+	}
 }
+

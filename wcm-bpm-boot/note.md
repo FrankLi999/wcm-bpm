@@ -1,3 +1,17 @@
+## FAKE Mail server
+
+http://nilhcem.com/FakeSMTP/
+
+> cd C:\tools\FakeSMTP-2.0\target
+
+> with GUI
+java -jar fakeSMTP-2.0.jar -s -p 2525 -a 127.0.0.1 -m
+
+> NO Gui:
+java -jar fakeSMTP-2.0.jar -s -b -p 2525 -a 127.0.0.1
+
+
+> No need to save email to file system: -m
 ## Glowroot path
 
 https://glowroot.org/
