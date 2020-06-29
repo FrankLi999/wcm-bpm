@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.version.VersionManager;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,8 +47,11 @@ import com.bpwizard.wcm.repo.rest.bpm.service.WcmFlowService;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
+import com.bpwizard.wcm.repo.rest.jcr.model.ClaimReivewTaskReuqest;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.DraftItem;
+import com.bpwizard.wcm.repo.rest.jcr.model.DraftItemRequest;
+import com.bpwizard.wcm.repo.rest.jcr.model.PublishItemRequest;
 import com.bpwizard.wcm.repo.rest.jcr.model.WorkflowNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -61,17 +65,20 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api/contentItem";
 
-	@Autowired
-	private ReviewTaskService externalRevieService;
+//	@Autowired
+//	private ReviewTaskService reviewTaskService;
 	
 	@Autowired
-	private EditTaskService externalEditService;
+	private EditTaskService editTaskService;
 	
 	@Autowired
 	private WcmFlowService wcmFlowService;
 	
 	@Autowired
 	private ContentTaskService contentTaskService;
+	
+	@Autowired
+	private ReviewTaskService reviewTaskService;
 
 	@Autowired
 	private MailService mailService;
@@ -177,11 +184,11 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			
-			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, "draft",
+			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, WcmConstants.DRAFT_WS,
 					absPath, WcmConstants.CONTENT_ITEM_DEPATH);
 			DraftItem[] draftItems = saNode.getChildren().stream()
 					.filter(WcmUtils::isDraftContentItem)
-					.map(node -> this.toContentItem(node, repository, "draft", String.format("%s/%s", siteArea, node.getName()), request))
+					.map(node -> this.toContentItem(node, repository, WcmConstants.DRAFT_WS, String.format("%s/%s", siteArea, node.getName()), request))
 					.map(WcmUtils::toDraftItem)
 					.toArray(DraftItem[]::new);
 			if (logger.isDebugEnabled()) {
@@ -323,12 +330,9 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		}	
 	}
 	
-	@PutMapping(path = "/reject-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/reject-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> rejectContentItemDraft(
-		    @PathVariable("repository") String repository,
-		    @PathVariable("workspace") String workspace,
-			@RequestParam("path") String contentItemPath,
-			@RequestBody String comment, 
+			@RequestBody DraftItemRequest rejectRequest, 
 			HttpServletRequest request)
 			throws WcmRepositoryException {
 		
@@ -345,19 +349,34 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			
 			UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	        String username = principal.getUsername();
-	        Session session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS); 
-	        Node contentNode = session.getNode(contentItemPath);
+	        Session session = this.repositoryManager.getSession(rejectRequest.getRepository(), WcmConstants.DRAFT_WS); 
+	        VersionManager versionManager = session.getWorkspace().getVersionManager();
+	        String absPath = WcmUtils.nodePath(rejectRequest.getWcmPath());
+	        versionManager.checkout(absPath);
+	        Node contentNode = session.getNode(absPath);
 	        Node commentsNode = contentNode.getNode("comments");
-	        Node commentNode = commentsNode.addNode("comment-"+ username + "-reject-" + System.currentTimeMillis(), "bpw:comment");
-	        commentNode.setProperty("bpw:comment", comment);
+	        Node commentNode = commentsNode.addNode("Reject-" + System.currentTimeMillis(), "bpw:Comment");
+	        commentNode.setProperty("bpw:comment", rejectRequest.getComment());
 	        commentNode.setProperty("bpw:reviewer", username);
+	        commentNode.setProperty("bpw:approved", false);
 	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
-			AuthoringTemplate at = this.doGetAuthoringTemplate(repository, workspace, 
+			AuthoringTemplate at = this.doGetAuthoringTemplate(rejectRequest.getRepository(), WcmConstants.DRAFT_WS, 
 					atPath, request);
-			ModeshapeUtils.grantPermissions(session, contentItemPath, at.getContentItemAcl().getOnReviewedDraftPermissions());
-			this.wcmUtils.unlock(repository, workspace, contentItemPath);
+			if (at.getContentItemAcl() != null && at.getContentItemAcl().getOnReviewedDraftPermissions() != null) {
+				ModeshapeUtils.grantPermissions(session, absPath, at.getContentItemAcl().getOnReviewedDraftPermissions());
+			}
+			// this.wcmUtils.unlock(rejectRequest.getRepository(), WcmConstants.DRAFT_WS, rejectRequest.getWcmPath());
+			versionManager.checkin(absPath);
 	        session.save();
-	        //TODO: notify editor
+
+	        CompleteReviewRequest completeReviewRequest = CompleteReviewRequest.createCompleteReviewRequest(
+	        		rejectRequest.getReviewTaskId(), 
+	        		false,
+	        		rejectRequest.getComment(),
+	        		this.getAuthorizationToken(request),
+	        		"http://wcm-server:28080/wcm/api/contentItem/publish");
+	        this.completeReview(completeReviewRequest);
+	        
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -374,12 +393,9 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		}	
 	}
 	
-	@PutMapping(path = "/approve-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/approve-draft", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> approveContentItemDraft(
-		    @PathVariable("repository") String repository,
-		    @PathVariable("workspace") String workspace,
-			@RequestParam("path") String contentItemPath,
-			@RequestBody String comment, 
+			@RequestBody DraftItemRequest approvalRequest,  
 			HttpServletRequest request)
 			throws WcmRepositoryException {
 		
@@ -395,19 +411,34 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		try {			
 			UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	        String username = principal.getUsername();
-	        Session session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS); 
-	        Node contentNode = session.getNode(contentItemPath);
+	        Session session = this.repositoryManager.getSession(approvalRequest.getRepository(), WcmConstants.DRAFT_WS);
+	        VersionManager versionManager = session.getWorkspace().getVersionManager();
+	        String absPath = WcmUtils.nodePath(approvalRequest.getWcmPath());
+	        versionManager.checkout(absPath);
+	        Node contentNode = session.getNode(absPath);
 	        Node commentsNode = contentNode.getNode("comments");
-	        Node commentNode = commentsNode.addNode("comment-"+ username + "-approval-" + System.currentTimeMillis(), "bpw:comment");
-	        commentNode.setProperty("bpw:comment", comment);
+	        Node commentNode = commentsNode.addNode("Approval-" + System.currentTimeMillis(), "bpw:Comment");
+	        commentNode.setProperty("bpw:comment", approvalRequest.getComment());
 	        commentNode.setProperty("bpw:reviewer", username);
+	        commentNode.setProperty("bpw:approved", true);
 	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
-			AuthoringTemplate at = this.doGetAuthoringTemplate(repository, workspace, 
+			AuthoringTemplate at = this.doGetAuthoringTemplate(approvalRequest.getRepository(), WcmConstants.DRAFT_WS, 
 					atPath, request);
-			ModeshapeUtils.grantPermissions(session, contentItemPath, at.getContentItemAcl().getOnReviewedDraftPermissions());
-			this.wcmUtils.unlock(repository, workspace, contentItemPath);
-	        session.save();
-	        //TODO: notify editor
+			if (at.getContentItemAcl() != null && at.getContentItemAcl().getOnReviewedDraftPermissions() != null) {
+				ModeshapeUtils.grantPermissions(session, absPath, at.getContentItemAcl().getOnReviewedDraftPermissions());
+			}
+			// this.wcmUtils.unlock(approvalRequest.getRepository(), WcmConstants.DRAFT_WS, absPath);
+			versionManager.checkin(absPath);
+			session.save();
+	        
+	        CompleteReviewRequest completeReviewRequest = CompleteReviewRequest.createCompleteReviewRequest(
+	        		approvalRequest.getReviewTaskId(), 
+	        		true,
+	        		approvalRequest.getComment(),
+	        		this.getAuthorizationToken(request),
+	        		"http://wcm-server:28080/wcm/api/contentItem/publish");
+	        this.completeReview(completeReviewRequest);
+
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -424,12 +455,41 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		}	
 	}
 	
-	@PutMapping(path = "/publish", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/claim-review-task", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> claimReviewTask(
+			@RequestBody ClaimReivewTaskReuqest claimRequest,  
+			HttpServletRequest request)
+			throws WcmRepositoryException {
+
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		String reviewTaskId = this.reviewTaskService.claimTask(
+				claimRequest.getContentId(), 
+				"review-content", 
+				WcmUtils.getCurrentUsername());
+		try {
+			Session session = this.repositoryManager.getSession(claimRequest.getRepository(), WcmConstants.DRAFT_WS); 
+			VersionManager versionManager = session.getWorkspace().getVersionManager();
+			String absPath = WcmUtils.nodePath(claimRequest.getWcmPath());
+			versionManager.checkout(absPath);
+		    Node contentNode = session.getNode(absPath);
+		    Node workflowNode = contentNode.getNode("bpw:workflow");
+		    workflowNode.setProperty("reviewTaskId", reviewTaskId);
+		    versionManager.checkin(absPath);
+		    session.save();
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.ok(reviewTaskId);
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e, WcmError.WCM_ERROR);
+		}
+	}
+	
+	@PostMapping(path = "/publish", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> publishContentItem(
-		    @PathVariable("repository") String repository,
-		    @PathVariable("workspace") String workspace,
-			@RequestParam("path") String contentItemPath,
-			@RequestBody String comment, 
+		    @RequestBody PublishItemRequest publishRequest, 
 			HttpServletRequest request)
 			throws WcmRepositoryException {
 		
@@ -443,17 +503,25 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		try {
-	        Session session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS); 
-	        Node contentNode = session.getNode(contentItemPath);
-	        contentNode.setProperty("bpw:currentLifecycleState", WcmConstants.WORKFLOW_STATGE_PUBLISHED);
-	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
-			AuthoringTemplate at = this.doGetAuthoringTemplate(repository, workspace, 
+	        Session session = this.repositoryManager.getSession(publishRequest.getRepository(), WcmConstants.DRAFT_WS); 
+	        VersionManager versionManager = session.getWorkspace().getVersionManager();
+			String absPath = WcmUtils.nodePath(publishRequest.getWcmPath());
+			versionManager.checkout(absPath);
+			
+	        Node contentNode = session.getNode(absPath);
+	        Node workflowNode = contentNode.getNode("bpw:workflow");
+	        workflowNode.setProperty("workflowStage", WcmConstants.WORKFLOW_STATGE_PUBLISHED);
+	        String atPath = workflowNode.getParent().getProperty("bpw:authoringTemplate").getString();
+			AuthoringTemplate at = this.doGetAuthoringTemplate(publishRequest.getRepository(), WcmConstants.DRAFT_WS, 
 					atPath, request);
-			ModeshapeUtils.grantPermissions(session, contentItemPath, at.getContentItemAcl().getOnPublishPermissions());
-			this.wcmUtils.unlock(repository, workspace, contentItemPath);
-	        session.save();
-	        Session defaultSession = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
-	        defaultSession.getWorkspace().clone(WcmConstants.DRAFT_WS, contentItemPath, contentItemPath, true);
+			if (at.getContentItemAcl() != null && at.getContentItemAcl().getOnPublishPermissions() != null) {
+				ModeshapeUtils.grantPermissions(session, absPath, at.getContentItemAcl().getOnPublishPermissions());
+			}
+			// this.wcmUtils.unlock(publishRequest.getRepository(), WcmConstants.DRAFT_WS, publishRequest.getWcmPath());
+			versionManager.checkin(absPath);
+			session.save();
+	        Session defaultSession = this.repositoryManager.getSession(publishRequest.getRepository(), WcmConstants.DEFAULT_WS);
+	        defaultSession.getWorkspace().clone(WcmConstants.DRAFT_WS, absPath, absPath, true);
 	        // defaultSession.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -546,6 +614,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		String processInstanceId = wcmFlowService.startContentFlowWithMessage(
 				startFlowRequest.getRepository(),
 				startFlowRequest.getWorkspace(),
+				startFlowRequest.getContentId(),
 				startFlowRequest.getWcmPath(),
 				startFlowRequest.getBaseUrl(),
 				startFlowRequest.getWorkflow());
@@ -572,7 +641,8 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
     	String processInstanceId = wcmFlowService.startContentFlow(
 				startFlowRequest.getRepository(),
 				startFlowRequest.getWorkspace(),
-				startFlowRequest.getWcmPath(),
+				startFlowRequest.getContentId(),
+				startFlowRequest.getWcmPath(),				
 				startFlowRequest.getBaseUrl(),
 				startFlowRequest.getWorkflow());
 		try {
@@ -599,30 +669,32 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
         String username = principal.getUsername();
 		
 		//@CurrentUser SpringPrincipal userPrincipal, 
-		return this.externalRevieService.claimTask(
+		return this.reviewTaskService.claimTask(
 				reviewContentItemRequest.getContentId(),
 				reviewContentItemRequest.getTaskName(), 
 				username);
 	}
 	
 	protected String completeReview(@RequestBody CompleteReviewRequest completeReviewRequest) {
-		return this.externalRevieService.completeReview(
+		return this.reviewTaskService.completeReview(
 				completeReviewRequest.getReviewTaskId(),
 				completeReviewRequest.isApproved(), 
-				completeReviewRequest.getComment());
+				completeReviewRequest.getComment(),
+				completeReviewRequest.getToken(),
+				completeReviewRequest.getPublishServiceUrl());
 	}
 	
 	protected String editContentItem(@RequestBody EditContentItemRequest editContentItemRequest) {
 		UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.getUsername();
-		return this.externalEditService.claimTask(
+		return this.editTaskService.claimTask(
 				editContentItemRequest.getContentId(),
 				editContentItemRequest.getTaskName(), 
 				username);
 	}
 	
 	protected String completeEdit(@RequestBody CompleteEditRequest completeEditRequest) {
-		return this.externalEditService.completeEdit(
+		return this.editTaskService.completeEdit(
 				completeEditRequest.getTaskId());
 	}
 	
@@ -669,5 +741,9 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	
 	protected String getContentReviewUrl(ContentItem contentItem) {
 		return String.format("http://wcm-ui:3009/wcm-authoring/review?contentPath=%s", contentItem.getWcmPath());
+	}
+	
+	protected String getAuthorizationToken(HttpServletRequest request) {
+		return request.getHeader("Authorization");
 	}
 }

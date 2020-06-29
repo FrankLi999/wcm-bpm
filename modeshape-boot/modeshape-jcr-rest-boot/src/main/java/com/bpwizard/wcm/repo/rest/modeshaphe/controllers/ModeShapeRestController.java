@@ -52,6 +52,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestQueryPlanResult;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestQueryResult;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 
 @RestController
@@ -183,8 +184,8 @@ public class ModeShapeRestController {
     @PostMapping(path="/{repositoryName}/" + RestHelper.COPY_METHOD_NAME, produces= MediaType.APPLICATION_JSON_VALUE) 
 	public ResponseEntity<?> copyWorkspace(HttpServletRequest request,
 	                    @PathVariable("repositoryName") String repositoryName,
-	                    @RequestParam(name="from", defaultValue="default") final String from,
-	                    @RequestParam(name="ito", defaultValue="draft") final String to,
+	                    @RequestParam(name="from", defaultValue=WcmConstants.DEFAULT_WS) final String from,
+	                    @RequestParam(name="ito", defaultValue=WcmConstants.DRAFT_WS) final String to,
 	                    @RequestParam(name="includeBinaries", defaultValue="true") final boolean includeBinaries,
 	                    @RequestParam(name="documentsPerFile", defaultValue="100000") final long documentsPerFile,
 	                    @RequestParam(name="compress", defaultValue="true") final boolean compress,

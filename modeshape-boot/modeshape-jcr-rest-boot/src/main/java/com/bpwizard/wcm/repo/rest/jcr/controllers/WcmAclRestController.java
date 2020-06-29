@@ -104,7 +104,7 @@ public class WcmAclRestController extends BaseWcmRestController {
 		try {
 			this.grantAcl(grant, repository, workspace);
 			if (this.authoringEnabled) {
-				grantAcl(grant, repository, "draft");
+				grantAcl(grant, repository, WcmConstants.DRAFT_WS);
 			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (WcmRepositoryException e) {
@@ -154,7 +154,7 @@ public class WcmAclRestController extends BaseWcmRestController {
 		}
 		try {
 			Map<String, Grant> libraryGrants = new HashMap<>();
-			Session session = this.repositoryManager.getSession("bpwizard", "default");
+			Session session = this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO, WcmConstants.DEFAULT_WS);
 			
 			AccessControlManager acm = session.getAccessControlManager();
 			libraryGrants.put("library", this.doGetAcl(session, acm, wcmPath));

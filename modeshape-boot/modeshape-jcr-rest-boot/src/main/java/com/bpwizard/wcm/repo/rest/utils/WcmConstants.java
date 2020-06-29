@@ -24,7 +24,8 @@ public class WcmConstants {
 	public  static final String DEFAULT_WS = "default";	
 	public  static final String DRAFT_WS = "draft";
 	public  static final String EXPIRED_WS = "expired";
-
+	public  static final String BPWIZARD_REPO = "bpwizard";
+	
 	public  static final String WORKFLOW_STATGE_PUBLISHED = "Published";
 	public  static final String WORKFLOW_STATGE_DRAFT = "Draft";
 	

@@ -9590,5 +9590,39 @@
         "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
         "bpw:description":"Link to Camunda documents",
         "bpw:title":"Documentation"
+    },
+    	"library/design/form/reviewTask" : {
+	    "jcr:primaryType": "bpw:formType"
+	},
+	"library/design/form/reviewTask/formControls" : {
+	    "jcr:primaryType": "bpw:elementFolder"
+	},
+	"library/design/form/reviewTask/formLayout" : {
+	    "jcr:primaryType":"bpw:formGroupFoler"
+	},
+	"library/design/form/reviewTask/formLayout/rows" : {
+	    "jcr:primaryType":"bpw:formRows"
+	},
+	"library/design/form/reviewTask/formLayout/rows/row_01" : {
+	    "jcr:primaryType":"bpw:formRow"
+	},
+	"library/design/form/reviewTask/formLayout/rows/row_01/firstColumn" : {
+	    "jcr:primaryType": "bpw:formColumn",
+	    "bpw:fieldNames": ["comment"]
+	},  
+	"library/design/form/reviewTask/formControls/comment": {
+	    "jcr:primaryType": "bpw:FormControl",	    
+	    "bpw:controlType": "textarea",
+	    "bpw:dataType": "string",
+	    "bpw:mandatory": "false",
+	    "bpw:systemIndexed": "true",
+	    "bpw:userSearchable": "true",
+	    "bpw:showInList": "true"	    
+	},
+	"library/design/form/reviewTask/formControls/comment/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Comment",
+        "bpw:editable": "true",
+	    "bpw:placeHolder": "comment"
     }
 }

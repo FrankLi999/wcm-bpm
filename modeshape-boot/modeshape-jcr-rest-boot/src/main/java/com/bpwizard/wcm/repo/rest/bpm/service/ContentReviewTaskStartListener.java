@@ -4,6 +4,8 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+
 public class ContentReviewTaskStartListener implements JavaDelegate {
 
 	@Autowired
@@ -16,14 +18,13 @@ public class ContentReviewTaskStartListener implements JavaDelegate {
 		System.out.println(">>>>>>>>>>>>>>>>>start activiy instance id:" + delegate.getActivityInstanceId());
 		System.out.println(">>>>>>>>>>>>>>>>>start id:" + delegate.getId());
 		String repository = (String) delegate.getVariable("repository");
-		String workspace = (String) delegate.getVariable("workspace");
-		String contentPath = (String) delegate.getVariable("contentPath");
+		String contentPath = (String) delegate.getVariable("wcmPath");
 		String contentId = (String) delegate.getVariable("contentId");
 		this.reviewTasks.registerContentTask(
 				activityId,
 				TOPIC,
 				repository,
-				workspace,
+				WcmConstants.DRAFT_WS,
 				contentPath,
 				contentId);
 	}

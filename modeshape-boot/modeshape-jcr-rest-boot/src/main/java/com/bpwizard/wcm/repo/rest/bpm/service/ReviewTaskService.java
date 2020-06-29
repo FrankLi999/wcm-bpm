@@ -42,7 +42,9 @@ public class ReviewTaskService {
 	public String completeReview(
 			String taskId,  
 			boolean approved, 
-			String comment) {
+			String comment,
+			String token,
+			String publishServiceUrl) {
 		
 //	    ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
 //	    ExternalTask externalTask = externalTaskService.createExternalTaskQuery()
@@ -61,7 +63,11 @@ public class ReviewTaskService {
 	    TaskQuery userTaskQuery = this.processEngine.getTaskService().createTaskQuery();
 	    Task task = userTaskQuery.taskId(taskId).singleResult();
 	    String userTaskId = task.getId();
-	    Map<String, Object> userTaskVariables = approved ? Variables.createVariables().putValue("reviewRejected", Boolean.FALSE) : Variables.createVariables().putValue("reviewRejected", Boolean.TRUE).putValue("comment", comment);
+	    Map<String, Object> userTaskVariables = Variables.createVariables()
+	    		.putValue("publishServiceUrl", publishServiceUrl)
+	    		.putValue("token", token)
+	    		.putValue("comment", comment)
+	    		.putValue("reviewRejected", approved ? Boolean.FALSE: Boolean.TRUE);
 	    this.processEngine.getTaskService().complete(userTaskId, userTaskVariables);
 	    
 //	    if (externalTask != null) {

@@ -26,7 +26,6 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
-import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -129,28 +128,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 		    HttpServletRequest request) 
 		    throws WcmRepositoryException {
 		
-		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
-		}
-		String absPath = WcmUtils.nodePath(wcmPath);
-		try {
-			String baseUrl = RestHelper.repositoryUrl(request);
-			
-			RestNode contentItemNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					absPath, WcmConstants.CONTENT_ITEM_DEPATH);
-			
-			ContentItem contentItem = this.toContentItem(contentItemNode, repository, workspace, wcmPath, request);
-			if (logger.isDebugEnabled()) {
-				logger.traceExit();
-			}
-			return contentItem;
-		} catch (WcmRepositoryException e ) {
-			logger.error(e);
-			throw e;
-		} catch (Throwable t) {
-			logger.error(t);
-	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
-		}
+		return this.doGetContentItem(repository, workspace, wcmPath, request);
 	}
 	
 	@PutMapping(path = "/lock/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -217,7 +217,7 @@ public abstract class BaseWcmRestController {
 		try {
 			if (this.authoringEnabled) {
 				try {
-					Session draftSession = this.repositoryManager.getSession(repository, "draft");
+					Session draftSession = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS);
 					Node draftNode = draftSession.getNode(absPath);
 					draftNode.remove();
 					draftSession.save();
@@ -225,7 +225,7 @@ public abstract class BaseWcmRestController {
 					logger.warn(String.format("Failed to delete item %s from draft repository", absPath), e);
 				}
 				try {
-					Session expiredSession = this.repositoryManager.getSession(repository, "expired");
+					Session expiredSession = this.repositoryManager.getSession(repository, WcmConstants.EXPIRED_WS);
 					Node expiredNode = expiredSession.getNode(absPath);
 					expiredNode.remove();
 					expiredSession.save();
@@ -233,7 +233,7 @@ public abstract class BaseWcmRestController {
 					logger.warn(String.format("Failed to delete item %s from expired repository", absPath), e);
 				}
 			}
-			Session session = this.repositoryManager.getSession(repository, "default");
+			Session session = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
 			Node node = session.getNode(absPath);
 			node.remove();
 			session.save();
@@ -1265,7 +1265,7 @@ public abstract class BaseWcmRestController {
 
 			if (commonConstraint.getDefaultValues() != null
 					&& formControl.getConstraint().getDefaultValues().length > 0) {
-				propertyNode.set("default", WcmUtils.toArrayNode(commonConstraint.getDefaultValues()));
+				propertyNode.set(WcmConstants.DEFAULT_WS, WcmUtils.toArrayNode(commonConstraint.getDefaultValues()));
 			}
 
 			if (StringUtils.hasText(commonConstraint.getConstant())) {
@@ -2558,6 +2558,35 @@ public abstract class BaseWcmRestController {
 		}
 	}
 	
+	protected ContentItem doGetContentItem(
+		    String repository,
+		    String workspace,
+		    String wcmPath,
+		    HttpServletRequest request) 
+		    throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		String absPath = WcmUtils.nodePath(wcmPath);
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			
+			RestNode contentItemNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+					absPath, WcmConstants.CONTENT_ITEM_DEPATH);
+			
+			ContentItem contentItem = this.toContentItem(contentItemNode, repository, workspace, wcmPath, request);
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return contentItem;
+		} catch (WcmRepositoryException e ) {
+			logger.error(e);
+			throw e;
+		} catch (Throwable t) {
+			logger.error(t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+		}
+	}
 	protected ContentItem toContentItem(RestNode contentItemNode, String repository, 
 			String workspace, String wcmPath, HttpServletRequest request) {
 	    
@@ -2566,7 +2595,7 @@ public abstract class BaseWcmRestController {
 		contentItem.setRepository(repository);
 		contentItem.setWorkspace(workspace);
 		contentItem.setWcmPath(wcmPath.startsWith("/") ? wcmPath : "/" + wcmPath);
-		
+		contentItem.setId(contentItemNode.getId());
 		ContentItemProperties contentItemProperties = new ContentItemProperties();
 		contentItem.setProperties(contentItemProperties);
 		for (RestProperty property: contentItemNode.getJcrProperties()) {				

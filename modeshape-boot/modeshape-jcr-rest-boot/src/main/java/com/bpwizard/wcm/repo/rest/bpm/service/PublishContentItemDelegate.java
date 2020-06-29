@@ -1,9 +1,5 @@
 package com.bpwizard.wcm.repo.rest.bpm.service;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.delegate.BpmnError;
@@ -11,12 +7,14 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
-import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
-import com.bpwizard.wcm.repo.rest.WcmUtils;
-import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
-import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
-import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.bpwizard.wcm.repo.rest.jcr.model.PublishItemRequest;
 
 public class PublishContentItemDelegate implements JavaDelegate {
 	private static final Logger logger = LogManager.getLogger(PublishContentItemDelegate.class);
@@ -25,7 +23,8 @@ public class PublishContentItemDelegate implements JavaDelegate {
 	protected RepositoryManager repositoryManager;
 
 	@Autowired
-	private WcmUtils wcmUtils;
+	RestTemplate restTemplate;
+	
 	@Override
 	public void execute(DelegateExecution delegate) throws Exception {
 		if (logger.isDebugEnabled()) {
@@ -33,30 +32,27 @@ public class PublishContentItemDelegate implements JavaDelegate {
 		}
 		try {
 			String repository = (String) delegate.getVariable("repository");
-			String contentPath = (String) delegate.getVariable("contentPath");
-			String baseUrl = (String) delegate.getVariable("baseUrl");
-			
-	        Session session = this.repositoryManager.getSession(repository, "draft"); 
-	        Node contentNode = session.getNode(contentPath);
-	        contentNode.setProperty("bpw:currentLifecycleState", WcmConstants.WORKFLOW_STATGE_PUBLISHED);
-	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
-			AuthoringTemplate at = this.wcmUtils.getAuthoringTemplate(repository, "default", 
-					atPath, baseUrl);
-			ModeshapeUtils.grantPermissions(session, contentPath, at.getContentItemAcl().getOnPublishPermissions());
-	        this.wcmUtils.unlock(repository, "draft", contentPath);
-	        session.save();
-	        session.getWorkspace().clone("default", contentPath, contentPath, true);
+			String wcmPath = (String) delegate.getVariable("wcmPath");
+			String contentId = (String) delegate.getVariable("contentId");
+			String token = (String) delegate.getVariable("token");
+			String publishServiceUrl = (String) delegate.getVariable("publishServiceUrl");
+			// String baseUrl = (String) delegate.getVariable("baseUrl");
+			PublishItemRequest publishRequest = PublishItemRequest.createPublishItemRequest(repository, wcmPath, contentId);
+			HttpHeaders headers = new HttpHeaders();
+			headers.set("Authorization", token);//Set the header for each request
+			HttpEntity<PublishItemRequest> requestEntity = new HttpEntity<>(publishRequest, headers);
+			ResponseEntity<Void> resp = restTemplate.exchange(publishServiceUrl, HttpMethod.POST, requestEntity, Void.class);
+			if (!resp.getStatusCode().is2xxSuccessful()) {
+				throw new BpmnError("WCM_ERROR_PUBLISH");
+			}
 	        if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
-		} catch (WcmRepositoryException e ) {
-			logger.error(e);
-			throw new BpmnError("WCM_ERROR_PUBLISH");
-		} catch (RepositoryException re) { 
-			logger.error(re);
-			throw new BpmnError("WCM_ERROR_PUBLISH");
+		} catch (BpmnError e) {
+			logger.error("WCM_ERROR_PUBLISH", e);
+			throw e;
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("WCM_ERROR_PUBLISH", t);
 			throw new BpmnError("WCM_ERROR_PUBLISH");
 		}			
 	}

@@ -275,33 +275,50 @@ public class ContentItem implements HasWcmAuthority {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void elementToJson(ObjectNode elementsNode, ObjectNode elementsChildren, AuthoringTemplate at) throws JsonProcessingException {
+		//TODO
 		for (String elementName: elements.keySet()) {
 			FormControl formControl = at.getElements().get(elementName);
 			// JsonNode jsonNode= getElements().get(elementName);
 			Object value = getElements().get(elementName);
 			if ("integer".equals(formControl.getDataType())) {
-				if (formControl.isMultiple()) {					
-					elementsNode.set(elementName, WcmUtils.toArrayNode((List<Integer>)value));
+				if (formControl.isMultiple()) {				
+					elementsNode.set(elementName, (value instanceof ArrayNode) ? (ArrayNode)value : WcmUtils.toArrayNode((List<Integer>)value));
 				} else {
-					elementsNode.put(elementName, (Integer)value);
+					if (value instanceof JsonNode) {
+						elementsNode.set(elementName, (JsonNode)value);
+					} else {
+						elementsNode.put(elementName, (Integer)value);
+					}
 				}
 			} else if ("boolean".equals(formControl.getDataType())) {
-				if (formControl.isMultiple()) {					
-					elementsNode.set(elementName, WcmUtils.toArrayNode((List<Boolean>)value));
+				if (formControl.isMultiple()) {
+					elementsNode.set(elementName, (value instanceof ArrayNode) ? (ArrayNode)value : WcmUtils.toArrayNode((List<Boolean>)value));
 				} else {
-					elementsNode.put(elementName, (Boolean)value);
+					if (value instanceof JsonNode) {
+						elementsNode.set(elementName, (JsonNode)value);
+					} else {
+						elementsNode.put(elementName, (Boolean)value);
+					}
 				}
 			} else if ("number".equals(formControl.getDataType())) {
-				if (formControl.isMultiple()) {					
-					elementsNode.set(elementName, WcmUtils.toArrayNode((List)value));
+				if (formControl.isMultiple()) {		
+					elementsNode.set(elementName, (value instanceof ArrayNode) ? (ArrayNode)value : WcmUtils.toArrayNode((List)value));
 				} else {
-					elementsNode.put(elementName, value.toString());
+					if (value instanceof JsonNode) {
+						elementsNode.set(elementName, (JsonNode)value);
+					} else {
+						elementsNode.put(elementName, value.toString());
+					}
 				}
 			} else if ("string".equals(formControl.getDataType())) {
 				if (formControl.isMultiple()) {					
-					elementsNode.set(elementName, WcmUtils.toArrayNode((List<String>)value));
+					elementsNode.set(elementName, (value instanceof ArrayNode) ? (ArrayNode)value : WcmUtils.toArrayNode((List<String>)value));
 				} else {
-					elementsNode.put(elementName, (String)value);
+					if (value instanceof JsonNode) {
+						elementsNode.set(elementName, (JsonNode)value);
+					} else {
+						elementsNode.put(elementName, (String)value);
+					}
 				}
 			} else if ("object".equals(formControl.getDataType())) {
 				//TODO

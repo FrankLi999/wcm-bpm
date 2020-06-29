@@ -26,6 +26,7 @@ public class UserController {
 	private static final Logger logger = LogManager.getLogger(UserController.class);
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
 	private SpringProperties properties;
     

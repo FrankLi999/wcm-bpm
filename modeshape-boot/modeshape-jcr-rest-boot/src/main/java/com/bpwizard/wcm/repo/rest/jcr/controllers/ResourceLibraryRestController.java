@@ -115,8 +115,8 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 					path, 
 					library.toJson());
 			if (this.authoringEnabled) {
-				Session session = repositoryManager.getSession(repositoryName, "draft");
-				session.getWorkspace().clone("default", path, path, true);
+				Session session = repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
 				// session.save();
 			}
 			if (logger.isDebugEnabled()) {

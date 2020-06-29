@@ -583,11 +583,12 @@
 - * (STRING)
 
 [bpw:ContentItemCommentFolder] > nt:folder orderable
-- * (STRING)
++ * (bpw:Comment)
 
 [bpw:Comment] > nt:hierarchyNode
  - bpw:comment (STRING)
  - bpw:reviewer (STRING)
+ - bpw:approved (BOOLEAN)
  
 [bpw:Content] > nt:hierarchyNode, mix:shareable, mix:lastModified, mix:versionable, mix:lockable, mix:referenceable orderable
 - bpw:lifecycleStage (STRING)

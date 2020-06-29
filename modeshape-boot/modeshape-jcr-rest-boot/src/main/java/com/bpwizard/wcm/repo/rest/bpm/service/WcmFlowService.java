@@ -22,12 +22,14 @@ public class WcmFlowService {
 			String repository, 
 			String workspace, 
 			String contentId,
+			String wcmPath,
 			String baseUrl,
 			String workflow) {
 		Map<String, Object> variables = Variables.createVariables()
 				.putValue("repository", repository)
 				.putValue("workspace", workspace)
 				.putValue("contentId", contentId)
+				.putValue("wcmPath", wcmPath)
 		        .putValue("baseUrl", baseUrl);
 		ProcessInstance processInstance = this.runtimeService.startProcessInstanceByKey(workflow, ContentServerUtils.getBusinessKey(workflow, contentId), variables);
 		//ProcessInstance processInstance = this.runtimeService.startProcessInstanceById(workflow, variables);
@@ -39,6 +41,7 @@ public class WcmFlowService {
 			String repository, 
 			String workspace, 
 			String contentId,
+			String wcmPath,
 			String baseUrl,
 			String workflow) {
 		
@@ -48,6 +51,7 @@ public class WcmFlowService {
 				  .setVariable("repository", repository)
 				  .setVariable("workspace", workspace)
 				  .setVariable("contentId", contentId)
+				  .setVariable("wcmPath", wcmPath)
 				  .setVariable("baseUrl", baseUrl)
 				  .correlateStartMessage();
 //				  //.correlateAllWithResult();

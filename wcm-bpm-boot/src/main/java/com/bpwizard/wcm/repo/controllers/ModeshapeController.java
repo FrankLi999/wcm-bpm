@@ -14,7 +14,6 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PropertyType;
 import javax.jcr.Repository;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
 import javax.jcr.nodetype.NodeDefinition;
@@ -58,10 +57,10 @@ import com.bpwizard.wcm.repo.payload.IndexModel;
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
+import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
-import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -88,7 +87,7 @@ public class ModeshapeController {
 			String repositoryName = query.getRepository();
 			ObjectNode qJson = (ObjectNode) query.toJson();
 			try {
-				QueryManager qrm = this.repositoryManager.getSession(repositoryName, "default").getWorkspace().getQueryManager();
+				QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
 				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
 				QueryResult jcrResult = jcrQuery.execute();
 				String columnNames[] = jcrResult.getColumnNames();
@@ -125,7 +124,7 @@ public class ModeshapeController {
 			String repositoryName = query.getRepository();
 			ObjectNode qJson = (ObjectNode) query.toJson();
 
-			QueryManager qrm = this.repositoryManager.getSession(repositoryName, "default").getWorkspace().getQueryManager();
+			QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
 			javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
 			QueryResult jcrResult = jcrQuery.execute();
 			String columnNames[] = jcrResult.getColumnNames();
@@ -171,7 +170,7 @@ public class ModeshapeController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
-			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, qJson);
+			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -202,10 +201,10 @@ public class ModeshapeController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
-			this.itemHandler.addItem(baseUrl,  repositoryName, "default", path, qJson);
+			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 
-			Session session = this.repositoryManager.getSession(repositoryName, "draft");
-			session.getWorkspace().clone("default", path, path, true);
+			Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+			session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -223,7 +222,7 @@ public class ModeshapeController {
 	public String modeShape() {
 		Session session = null;
 		try {
-			session = this.repositoryManager.getSession("bpwizard");
+			session = this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO);
 			// Get the root node ...
             Node root = session.getRootNode();
             
@@ -256,7 +255,7 @@ public class ModeshapeController {
 	public String exportContent(@PathVariable("folder") String folder) {
 		Session session = null;
 		try {
-			session = this.repositoryManager.getSession("bpwizard");
+			session = this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO);
 			// Get the root node ...
             Node root = session.getRootNode();
             
@@ -280,7 +279,7 @@ public class ModeshapeController {
 	public String importContent() {
 		Session session = null;
 		try {
-			session = this.repositoryManager.getSession("bpwizard");
+			session = this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO);
 			// Get the root node ...
             Node root = session.getRootNode();
             
@@ -309,7 +308,7 @@ public class ModeshapeController {
 	public String getNodeTypes() {
 		Session session = null;
 		try {
-			session = this.repositoryManager.getSession("bpwizard");
+			session = this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO);
 			//Random rnd = new Random();
 			// Get the root node ...
             Node root = session.getRootNode();
@@ -353,7 +352,7 @@ public class ModeshapeController {
 	@GetMapping("/journalEvent")
 	public ResponseEntity<?> getJournalEvent() {
 		try {
-			Workspace workspace = this.repositoryManager.getSession("bpwizard", "default").getWorkspace();
+			Workspace workspace = this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO, WcmConstants.DEFAULT_WS).getWorkspace();
 			EventJournal eventJournal = workspace.getObservationManager().getEventJournal();
 			logger.debug("Journal Events>>>>");
 
@@ -380,7 +379,7 @@ public class ModeshapeController {
 	@GetMapping("/journal")
 	public ResponseEntity<?> getJournal() {
 		try {
-			Workspace workspace = this.repositoryManager.getSession("bpwizard", "default").getWorkspace();
+			Workspace workspace = this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO, WcmConstants.DEFAULT_WS).getWorkspace();
 			EventJournal eventJournal = workspace.getObservationManager().getEventJournal();
 			logger.debug("Journal >>>>");
 			Map<String, String> eventsTypes = new HashMap<>();
@@ -401,7 +400,7 @@ public class ModeshapeController {
 	@GetMapping("/index")
 	public ResponseEntity<?> getIndex() {
 		try {
-			org.modeshape.jcr.api.Workspace workspace = (org.modeshape.jcr.api.Workspace) this.repositoryManager.getSession("bpwizard", "default").getWorkspace();
+			org.modeshape.jcr.api.Workspace workspace = (org.modeshape.jcr.api.Workspace) this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO, WcmConstants.DEFAULT_WS).getWorkspace();
 			org.modeshape.jcr.api.index.IndexManager indexManager = workspace.getIndexManager();
 			Map<String, IndexDefinition> indexes = indexManager.getIndexDefinitions();
 			Map<String, IndexModel> indexModels = new HashMap<>();
@@ -431,7 +430,7 @@ public class ModeshapeController {
 	@PostMapping("/index")
 	public String createIndex(@RequestBody IndexModel indexModel) {
 		try {
-			org.modeshape.jcr.api.Workspace workspace = (org.modeshape.jcr.api.Workspace) this.repositoryManager.getSession("bpwizard", "default").getWorkspace();
+			org.modeshape.jcr.api.Workspace workspace = (org.modeshape.jcr.api.Workspace) this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO, WcmConstants.DEFAULT_WS).getWorkspace();
 			org.modeshape.jcr.api.index.IndexManager indexManager = workspace.getIndexManager();
 			IndexDefinitionTemplate indexDefinition = indexManager.createIndexDefinitionTemplate();
 			
@@ -460,7 +459,7 @@ public class ModeshapeController {
 	@DeleteMapping("/index")
 	public String removeIndex(@PathVariable("index") String index) {
 		try {
-			org.modeshape.jcr.api.Workspace workspace = (org.modeshape.jcr.api.Workspace) this.repositoryManager.getSession("bpwizard", "default").getWorkspace();
+			org.modeshape.jcr.api.Workspace workspace = (org.modeshape.jcr.api.Workspace) this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO, WcmConstants.DEFAULT_WS).getWorkspace();
 			org.modeshape.jcr.api.index.IndexManager indexManager = workspace.getIndexManager();
 			indexManager.unregisterIndexes(index);
 			return "done";
@@ -473,7 +472,7 @@ public class ModeshapeController {
 	@GetMapping("/features")
 	public String features() throws Exception {
 		try {
-			Repository repo = this.repositoryManager.getRepository("bpwizard");
+			Repository repo = this.repositoryManager.getRepository(WcmConstants.BPWIZARD_REPO);
 			StringBuilder support = new StringBuilder("Descriptors").append(" : ");
 			for (String desc: repo.getDescriptorKeys()) {
 				support.append(desc).append("---:---").append(repo.getDescriptor(desc)).append("<br /><br />");
@@ -517,7 +516,7 @@ public class ModeshapeController {
 			Principal wcmEditor = new TestGroup("wcm-editor");
 			Principal wcmAdmin = new TestGroup("wcm-admin");
 			
-			Session session = this.repositoryManager.getSession("bpwizard", "default");
+			Session session = this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO, WcmConstants.DEFAULT_WS);
 			AccessControlManager acm = session.getAccessControlManager();
 			 
 			// Convert the privilege strings to Privilege instances ...
@@ -556,7 +555,7 @@ public class ModeshapeController {
 			acm.setPolicy(path, acl);
 			session.save();
 	
-			Session draftSession = this.repositoryManager.getSession("bpwizard", "draft");
+			Session draftSession = this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO, WcmConstants.DRAFT_WS);
 			AccessControlManager darftAcm = draftSession.getAccessControlManager();
 			
 			// Convert the privilege strings to Privilege instances ...
@@ -597,7 +596,7 @@ public class ModeshapeController {
 	
 			//
 			
-			Session expiredSession = this.repositoryManager.getSession("bpwizard", "expired");
+			Session expiredSession = this.repositoryManager.getSession(WcmConstants.BPWIZARD_REPO, WcmConstants.EXPIRED_WS);
 			AccessControlManager expiredAcm = draftSession.getAccessControlManager();
 			
 			// Convert the privilege strings to Privilege instances ...
