@@ -274,10 +274,12 @@ public class WcmRestController extends BaseWcmRestController {
 		wcmNode.setRepository(repository);
 		wcmNode.setWorkspace(workspace);
 		wcmNode.setName(node.getName());
+		wcmNode.setId(node.getId());
 		for (RestProperty property: node.getJcrProperties()) {
 			if ("jcr:primaryType".equals(property.getName())) {
 				wcmNode.setNodeType(property.getValues().get(0));
-				break;
+			} else if ("jcr:createdBy".equals(property.getName())) {
+				wcmNode.setOwner(property.getValues().get(0));
 			} 
 		}
 	

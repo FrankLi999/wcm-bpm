@@ -43,6 +43,20 @@ public class EditTaskService {
 	    return userTaskId;
 	}
 	
+	public String getEditTaskId(String contentId, String taskName) {
+		List<Task> tasks = this.processEngine.getTaskService().createTaskQuery()
+				.processVariableValueEquals("contentId", contentId)
+				.taskUnassigned()
+				.taskDefinitionKey(taskName)
+				.list();
+		
+	    String userTaskId = null;
+	    if (tasks != null && tasks.size() > 0) {
+		    userTaskId = tasks.get(0).getId();
+	    }
+	    return userTaskId;
+	}
+	
 	//One transaction
 	public String completeEdit(String taskId) {
 //	    ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
