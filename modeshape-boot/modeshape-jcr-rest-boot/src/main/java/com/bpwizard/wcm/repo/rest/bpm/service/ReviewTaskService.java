@@ -16,25 +16,16 @@ public class ReviewTaskService {
 	ProcessEngine processEngine;
 	
 	public String claimTask(String contentId, String taskName, String userId) {
-		
-//	    ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
-//	    List<LockedExternalTask> externalTasks = externalTaskService.fetchAndLock(1, workerId, true).topic(topic, 24 * 60 * 1000).processInstanceVariableEquals("contentId", contentId).execute();
-//	    LockedExternalTask externalTask = (externalTasks != null && externalTasks.size() > 0) ? externalTasks.get(0) : null;
-//	    String externalTaskId = (externalTask != null) ? externalTask.getId() : "n/a";
 		List<Task> tasks = this.processEngine.getTaskService().createTaskQuery()
-	            //.processInstanceId(workflow)
-	    		//.processInstanceBusinessKey(ContentServerUtils.getBusinessKey(workflow, contentId))
 				.processVariableValueEquals("contentId", contentId)
 				.taskUnassigned()
 				.taskDefinitionKey(taskName)
-				//.taskName("review-content")
 				.list();
 		
 	    String userTaskId = null;
 	    if (tasks != null && tasks.size() > 0) {
 		    userTaskId = tasks.get(0).getId();
 		    this.processEngine.getTaskService().claim(userTaskId, userId);
-		    // return String.format("%s~~%s", externalTaskId, userTaskId);
 	    }
 	    return userTaskId;
 	}
@@ -59,20 +50,6 @@ public class ReviewTaskService {
 			String comment,
 			String token,
 			String publishServiceUrl) {
-		
-//	    ExternalTaskService externalTaskService = processEngine.getExternalTaskService();
-//	    ExternalTask externalTask = externalTaskService.createExternalTaskQuery()
-//	    		.externalTaskId(taskId)
-//	    		.locked()
-//	    		.workerId(workerId)
-//		    	.topicName(topic)
-//		    	.singleResult();
-//	    System.out.println(">>>>>>>>>>>>>>>>>> to complete review task: " + externalTask);
-	    
-	    //save content, with comment
-	    
-	    		
-	    // Map<String, Object> variables = approved ? Variables.createVariables().putValue("reviewRejected", Boolean.FALSE) : Variables.createVariables().putValue("reviewRejected", Boolean.TRUE).putValue("comment", comment);
 	    
 	    TaskQuery userTaskQuery = this.processEngine.getTaskService().createTaskQuery();
 	    Task task = userTaskQuery.taskId(taskId).singleResult();
@@ -83,13 +60,6 @@ public class ReviewTaskService {
 	    		.putValue("comment", comment)
 	    		.putValue("reviewRejected", approved ? Boolean.FALSE: Boolean.TRUE);
 	    this.processEngine.getTaskService().complete(userTaskId, userTaskVariables);
-	    
-//	    if (externalTask != null) {
-//	    	externalTaskService.complete(externalTask.getId(), workerId, variables);
-//	    	return "completed";
-//	    } else {
-//	    	return "n/a";
-//	    }
 	    return "completed " + userTaskId;
 	}
 	

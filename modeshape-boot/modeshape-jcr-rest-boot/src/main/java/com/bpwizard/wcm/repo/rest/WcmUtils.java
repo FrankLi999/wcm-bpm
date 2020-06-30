@@ -175,8 +175,8 @@ public class WcmUtils {
 		WorkflowNode workflowNode = contentItem.getWorkflow();
 		if (workflowNode != null) {
 			draftItem.setProcessInstanceId(workflowNode.getProcessInstanceId());
-			draftItem.setReviewTaskId(workflowNode.getReviewTaskId());
-			draftItem.setEditTaskId(workflowNode.getEditTaskId());
+			draftItem.setReviewer(workflowNode.getReviewer());
+			draftItem.setEditor(workflowNode.getEditor());
 		}
 		draftItem.setId(contentItem.getId());
 		draftItem.setName(contentItem.getProperties().getName());

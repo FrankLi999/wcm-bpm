@@ -5,7 +5,7 @@ public class DraftItemRequest {
 	private String wcmPath;
 	private String contentId;
 	private String processInstanceId;
-	private String reviewTaskId;
+	private String reviewer;
 	private String comment;
 	private boolean approved;
 	public String getRepository() {
@@ -32,11 +32,11 @@ public class DraftItemRequest {
 	public void setProcessInstanceId(String processInstanceId) {
 		this.processInstanceId = processInstanceId;
 	}
-	public String getReviewTaskId() {
-		return reviewTaskId;
+	public String getReviewer() {
+		return reviewer;
 	}
-	public void setReviewTaskId(String reviewTaskId) {
-		this.reviewTaskId = reviewTaskId;
+	public void setReviewer(String reviewer) {
+		this.reviewer = reviewer;
 	}
 	public String getComment() {
 		return comment;
@@ -53,7 +53,7 @@ public class DraftItemRequest {
 	@Override
 	public String toString() {
 		return "DraftItemRequest [repository=" + repository + ", wcmPath=" + wcmPath + ", contentId=" + contentId
-				+ ", processInstanceId=" + processInstanceId + ", reviewTaskId=" + reviewTaskId + ", comment=" + comment
+				+ ", processInstanceId=" + processInstanceId + ", reviewer=" + reviewer + ", comment=" + comment
 				+ ", approved=" + approved + "]";
 	}
 }

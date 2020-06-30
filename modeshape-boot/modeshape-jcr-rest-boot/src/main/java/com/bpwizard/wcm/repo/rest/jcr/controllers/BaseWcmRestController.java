@@ -364,10 +364,10 @@ public abstract class BaseWcmRestController {
 				workflowNode.setWorkflowStage(property.getValues().get(0));
 			} else if ("processInstanceId".equals(property.getName())) {
 				workflowNode.setProcessInstanceId(property.getValues().get(0));
-			} else if ("reviewTaskId".equals(property.getName())) {
-				workflowNode.setReviewTaskId(property.getValues().get(0));
-			} else if ("editTaskId".equals(property.getName())) {
-				workflowNode.setEditTaskId(property.getValues().get(0));
+			} else if ("reviewer".equals(property.getName())) {
+				workflowNode.setReviewer(property.getValues().get(0));
+			} else if ("editor".equals(property.getName())) {
+				workflowNode.setEditor(property.getValues().get(0));
 			}
 		}
 	}

@@ -389,7 +389,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        commentNode.setProperty("bpw:reviewer", username);
 	        commentNode.setProperty("bpw:approved", false);
 	        Node workflowNode = contentNode.getNode("bpw:workflow");
-	        workflowNode.setProperty("reviewTaskId", (String)null);
+	        workflowNode.setProperty("reviewer", (String)null);
 	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
 	        String authorEmail = contentNode.getProperty("jcr:createdBy").getString();
 			AuthoringTemplate at = this.doGetAuthoringTemplate(rejectRequest.getRepository(), WcmConstants.DRAFT_WS, 
@@ -400,9 +400,11 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			// this.wcmUtils.unlock(rejectRequest.getRepository(), WcmConstants.DRAFT_WS, rejectRequest.getWcmPath());
 			versionManager.checkin(absPath);
 	        session.save();
-
+			String reviewTaskId = this.reviewTaskService.getReviewTaskId(
+					rejectRequest.getContentId(), 
+					"review-content"); 
 	        CompleteReviewRequest completeReviewRequest = CompleteReviewRequest.createCompleteReviewRequest(
-	        		rejectRequest.getReviewTaskId(), 
+	        		reviewTaskId, 
 	        		false,
 	        		rejectRequest.getComment(),
 	        		this.getAuthorizationToken(request),
@@ -453,7 +455,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        commentNode.setProperty("bpw:reviewer", WcmUtils.getCurrentUsername());
 	        commentNode.setProperty("bpw:approved", true);
 	        Node workflowNode = contentNode.getNode("bpw:workflow");
-	        workflowNode.setProperty("reviewTaskId", (String)null);
+	        workflowNode.setProperty("reviewer", (String)null);
 	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
 			AuthoringTemplate at = this.doGetAuthoringTemplate(approvalRequest.getRepository(), WcmConstants.DRAFT_WS, 
 					atPath, request);
@@ -464,8 +466,11 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			versionManager.checkin(absPath);
 			session.save();
 	        
+			String reviewTaskId = this.reviewTaskService.getReviewTaskId(
+					approvalRequest.getContentId(), 
+					"review-content"); 
 	        CompleteReviewRequest completeReviewRequest = CompleteReviewRequest.createCompleteReviewRequest(
-	        		approvalRequest.getReviewTaskId(), 
+	        		reviewTaskId, 
 	        		true,
 	        		approvalRequest.getComment(),
 	        		this.getAuthorizationToken(request),
@@ -505,8 +510,8 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		try {
 			String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String editTaskId = contentItem.getWorkflow().getEditTaskId();
-			contentItem.getWorkflow().setEditTaskId(null);
+			String editor = contentItem.getWorkflow().getEditor();
+			contentItem.getWorkflow().setEditor(null);
 			AuthoringTemplate at = this.doGetAuthoringTemplate(
 					contentItem.getRepository(), 
 					WcmConstants.DRAFT_WS, 
@@ -519,7 +524,8 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 				Session session = this.repositoryManager.getSession(repositoryName, workspaceName);
 				ModeshapeUtils.grantPermissions(session, absPath, contentItem.getAcl());
 			}
-			if (StringUtils.hasText(editTaskId)) {
+			if (StringUtils.hasText(editor)) {
+				String editTaskId = this.editTaskService.getEditTaskId(contentItem.getId(), "edit-task");
 				CompleteEditRequest completeEditRequest = CompleteEditRequest.createCompleteEditRequest(
 						editTaskId);
 		        this.completeEdit(completeEditRequest);
@@ -565,13 +571,14 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			versionManager.checkout(absPath);
 		    Node contentNode = session.getNode(absPath);
 		    Node workflowNode = contentNode.getNode("bpw:workflow");
-		    workflowNode.setProperty("reviewTaskId", reviewTaskId);
+		    String currentUser = WcmUtils.getCurrentUsername();
+		    workflowNode.setProperty("reviewer", currentUser);
 		    versionManager.checkin(absPath);
 		    session.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
-			return ResponseEntity.ok(String.format("{\"reviewTaskId\": \"%s\"}", reviewTaskId));
+			return ResponseEntity.ok(String.format("{\"reviewer\": \"%s\"}", currentUser));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e, WcmError.WCM_ERROR);
 		}
@@ -601,13 +608,14 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			versionManager.checkout(absPath);
 		    Node contentNode = session.getNode(absPath);
 		    Node workflowNode = contentNode.getNode("bpw:workflow");
-		    workflowNode.setProperty("editTaskId", editTaskId);
+		    String editor = WcmUtils.getCurrentUsername();
+		    workflowNode.setProperty("editor", editor);
 		    versionManager.checkin(absPath);
 		    session.save();
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
-			return ResponseEntity.ok(String.format("{\"editTaskId\": \"%s\"}", editTaskId));
+			return ResponseEntity.ok(String.format("{\"editor\": \"%s\"}", editor));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e, WcmError.WCM_ERROR);
 		}

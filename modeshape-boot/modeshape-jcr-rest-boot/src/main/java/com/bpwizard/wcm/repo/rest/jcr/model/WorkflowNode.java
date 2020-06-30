@@ -13,8 +13,8 @@ public class WorkflowNode  implements Serializable {
 	private String publishDate;
 	private String expireDate;
 	private String processInstanceId;
-	private String reviewTaskId;
-	private String editTaskId;
+	private String reviewer;
+	private String editor;
 	
 	public String getWorkflow() {
 		return workflow;
@@ -48,17 +48,17 @@ public class WorkflowNode  implements Serializable {
 	public void setProcessInstanceId(String processInstanceId) {
 		this.processInstanceId = processInstanceId;
 	}
-	public String getReviewTaskId() {
-		return reviewTaskId;
+	public String getReviewer() {
+		return reviewer;
 	}
-	public void setReviewTaskId(String reviewTaskId) {
-		this.reviewTaskId = reviewTaskId;
+	public void setReviewer(String reviewer) {
+		this.reviewer = reviewer;
 	}
-	public String getEditTaskId() {
-		return editTaskId;
+	public String getEditor() {
+		return editor;
 	}
-	public void setEditTaskId(String editTaskId) {
-		this.editTaskId = editTaskId;
+	public void setEditor(String editor) {
+		this.editor = editor;
 	}
 	protected void toJson(ObjectNode jsonNode) {
 		if (StringUtils.hasText(workflow)) {
@@ -81,18 +81,18 @@ public class WorkflowNode  implements Serializable {
 			jsonNode.put("processInstanceId", this.processInstanceId);
 		}
 		
-		if (StringUtils.hasText(this.reviewTaskId)) {
-			jsonNode.put("reviewTaskId", this.reviewTaskId);
+		if (StringUtils.hasText(this.reviewer)) {
+			jsonNode.put("reviewer", this.reviewer);
 		}
 		
-		if (StringUtils.hasText(this.editTaskId)) {
-			jsonNode.put("editTaskId", this.editTaskId);
+		if (StringUtils.hasText(this.editor)) {
+			jsonNode.put("editor", this.editor);
 		}
 	}
 	@Override
 	public String toString() {
 		return "WorkflowNode [workflow=" + workflow + ", workflowStage=" + workflowStage + ", publishDate="
-				+ publishDate + ", expireDate=" + expireDate + ", processInstanceId=" + processInstanceId 
-				+ ", editTaskId=" + editTaskId + ", reviewTaskId=" + reviewTaskId + "]";
+				+ publishDate + ", expireDate=" + expireDate + ", processInstanceId=" + processInstanceId
+				+ ", reviewer=" + reviewer + ", editor=" + editor + "]";
 	}
 }

@@ -42,8 +42,8 @@
 - workflow (STRING) COPY
 - workflowStage (STRING) COPY
 - processInstanceId (STRING) COPY
-- reviewTaskId (STRING) COPY
-- editTaskId (STRING) COPY
+- reviewer (STRING) COPY
+- editor (STRING) COPY
 
 [bpw:property] 
 - bpw:name (STRING) COPY
