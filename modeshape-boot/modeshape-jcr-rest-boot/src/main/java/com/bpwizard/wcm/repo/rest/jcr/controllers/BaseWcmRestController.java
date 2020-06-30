@@ -366,6 +366,8 @@ public abstract class BaseWcmRestController {
 				workflowNode.setProcessInstanceId(property.getValues().get(0));
 			} else if ("reviewTaskId".equals(property.getName())) {
 				workflowNode.setReviewTaskId(property.getValues().get(0));
+			} else if ("editTaskId".equals(property.getName())) {
+				workflowNode.setEditTaskId(property.getValues().get(0));
 			}
 		}
 	}

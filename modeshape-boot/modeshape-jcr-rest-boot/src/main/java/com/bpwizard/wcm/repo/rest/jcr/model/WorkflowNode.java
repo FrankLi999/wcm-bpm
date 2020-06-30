@@ -14,6 +14,7 @@ public class WorkflowNode  implements Serializable {
 	private String expireDate;
 	private String processInstanceId;
 	private String reviewTaskId;
+	private String editTaskId;
 	
 	public String getWorkflow() {
 		return workflow;
@@ -53,6 +54,12 @@ public class WorkflowNode  implements Serializable {
 	public void setReviewTaskId(String reviewTaskId) {
 		this.reviewTaskId = reviewTaskId;
 	}
+	public String getEditTaskId() {
+		return editTaskId;
+	}
+	public void setEditTaskId(String editTaskId) {
+		this.editTaskId = editTaskId;
+	}
 	protected void toJson(ObjectNode jsonNode) {
 		if (StringUtils.hasText(workflow)) {
 			jsonNode.put("workflow", workflow);
@@ -77,11 +84,15 @@ public class WorkflowNode  implements Serializable {
 		if (StringUtils.hasText(this.reviewTaskId)) {
 			jsonNode.put("reviewTaskId", this.reviewTaskId);
 		}
+		
+		if (StringUtils.hasText(this.editTaskId)) {
+			jsonNode.put("editTaskId", this.editTaskId);
+		}
 	}
 	@Override
 	public String toString() {
 		return "WorkflowNode [workflow=" + workflow + ", workflowStage=" + workflowStage + ", publishDate="
 				+ publishDate + ", expireDate=" + expireDate + ", processInstanceId=" + processInstanceId 
-				+ ", reviewTaskId=" + reviewTaskId + "]";
+				+ ", editTaskId=" + editTaskId + ", reviewTaskId=" + reviewTaskId + "]";
 	}
 }

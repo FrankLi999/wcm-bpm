@@ -19,6 +19,7 @@ public class WcmFlowService {
 	RuntimeService runtimeService;
 	
 	public String startContentFlow(
+			String author,
 			String repository, 
 			String workspace, 
 			String contentId,
@@ -26,6 +27,7 @@ public class WcmFlowService {
 			String baseUrl,
 			String workflow) {
 		Map<String, Object> variables = Variables.createVariables()
+				.putValue("author", author)
 				.putValue("repository", repository)
 				.putValue("workspace", workspace)
 				.putValue("contentId", contentId)

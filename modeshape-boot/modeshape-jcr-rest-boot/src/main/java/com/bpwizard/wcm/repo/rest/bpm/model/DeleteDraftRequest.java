@@ -4,6 +4,12 @@ public class DeleteDraftRequest {
 	private String contentId;
 	private String workflow;
 
+	public static DeleteDraftRequest createDeleteDraftRequest(String contentId, String workflow) {
+		DeleteDraftRequest deleteDraftRequest = new DeleteDraftRequest();
+		deleteDraftRequest.setContentId(contentId);
+		deleteDraftRequest.setWorkflow(workflow);
+		return deleteDraftRequest;
+	}
 	public String getContentId() {
 		return contentId;
 	}

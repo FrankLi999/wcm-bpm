@@ -2,12 +2,18 @@ package com.bpwizard.wcm.repo.rest.bpm.model;
 
 public class CompleteEditRequest {
 	private String taskId;
+	public static CompleteEditRequest createCompleteEditRequest(String taskId) {
+		CompleteEditRequest completeEditRequest = new CompleteEditRequest();
+		completeEditRequest.setTaskId(taskId);
+		return completeEditRequest;
+	}
+	
 
 	public String getTaskId() {
 		return taskId;
 	}
 
-	public void setTaskId(String taskId) {
+	private void setTaskId(String taskId) {
 		this.taskId = taskId;
 	}
 

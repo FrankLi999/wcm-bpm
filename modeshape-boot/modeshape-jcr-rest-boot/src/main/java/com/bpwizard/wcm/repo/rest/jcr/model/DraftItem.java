@@ -8,6 +8,7 @@ public class DraftItem implements HasWcmAuthority {
 	private String title;
 	private String description;
 	private String processInstanceId;
+	private String editTaskId;
 	private String reviewTaskId;
 	private String author;
 	private WcmAuthority wcmAuthority;
@@ -54,6 +55,12 @@ public class DraftItem implements HasWcmAuthority {
 	public void setProcessInstanceId(String processInstanceId) {
 		this.processInstanceId = processInstanceId;
 	}
+	public String getEditTaskId() {
+		return editTaskId;
+	}
+	public void setEditTaskId(String editTaskId) {
+		this.editTaskId = editTaskId;
+	}
 	public String getReviewTaskId() {
 		return reviewTaskId;
 	}
@@ -76,6 +83,6 @@ public class DraftItem implements HasWcmAuthority {
 	public String toString() {
 		return "DraftItem [repository=" + repository + ", wcmPath=" + wcmPath + ", name=" + name + ", id=" + id
 				+ ", title=" + title + ", description=" + description + ", processInstanceId=" + processInstanceId
-				+ ", reviewTaskId=" + reviewTaskId + ", author=" + author + ", wcmAuthority=" + wcmAuthority + "]";
+				+ ", editTaskId=" + editTaskId + ", reviewTaskId=" + reviewTaskId + ", author=" + author + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 }

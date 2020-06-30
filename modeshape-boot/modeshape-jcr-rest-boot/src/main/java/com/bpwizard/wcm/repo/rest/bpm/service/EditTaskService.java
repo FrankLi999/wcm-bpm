@@ -34,7 +34,7 @@ public class EditTaskService {
 				//.taskName("review-content")
 				.list();
 		
-	    String userTaskId = "n/a";
+	    String userTaskId = null;
 	    if (tasks != null && tasks.size() > 0) {
 		    userTaskId = tasks.get(0).getId();
 		    this.processEngine.getTaskService().claim(userTaskId, userId);

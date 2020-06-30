@@ -1,7 +1,7 @@
 package com.bpwizard.wcm.repo.rest.bpm.model;
 
 public class StartFlowRequest {
-	
+	String author;
 	String repository;
 	String workspace;
 	String wcmPath;
@@ -10,6 +10,7 @@ public class StartFlowRequest {
 	String workflow;
 	
 	public static StartFlowRequest createStartContentFlowRequest(
+			String author,
 			String repository,
 			String workspace,
 			String contentId,
@@ -18,6 +19,7 @@ public class StartFlowRequest {
 			String workflow) {
 		
 		StartFlowRequest request = new StartFlowRequest();
+		request.setAuthor(author);
 		request.setRepository(repository);
 		request.setWorkspace(workspace);
 		request.setContentId(contentId);
@@ -27,6 +29,14 @@ public class StartFlowRequest {
 		
 		return request;
 	}
+	public String getAuthor() {
+		return author;
+	}
+
+	private void setAuthor(String author) {
+		this.author = author;
+	}
+
 	public String getRepository() {
 		return repository;
 	}
@@ -66,7 +76,8 @@ public class StartFlowRequest {
 	}
 	@Override
 	public String toString() {
-		return "StartFlowRequest [repository=" + repository + ", workspace=" + workspace + ", wcmPath="
-				+ wcmPath + ", baseUrl=" + baseUrl + ", workflow=" + workflow + "]";
+		return "StartFlowRequest [author=" + author + ", repository=" + repository + ", workspace=" + workspace
+				+ ", wcmPath=" + wcmPath + ", contentId=" + contentId + ", baseUrl=" + baseUrl + ", workflow="
+				+ workflow + "]";
 	}
 }
