@@ -96,10 +96,10 @@ public class ProcessDefinitionRestController extends AbstractRestProcessEngineAw
 	@Override
 	@GetMapping(path="/statistics", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<StatisticsResultDto> getStatistics(
-			@RequestParam("failedJobs") Boolean includeFailedJobs, 
-			@RequestParam("rootIncidents") Boolean includeRootIncidents,
-			@RequestParam Boolean includeIncidents, 
-			@RequestParam("incidentsForType") String includeIncidentsForType) {
+			@RequestParam(name="failedJobs", required=false) Boolean includeFailedJobs, 
+			@RequestParam(name="rootIncidents", required=false) Boolean includeRootIncidents,
+			@RequestParam(name="incidents", required=false) Boolean includeIncidents, 
+			@RequestParam(name="incidentsForType", required=false) String includeIncidentsForType) {
 		if (includeIncidents != null && includeIncidentsForType != null) {
 			throw new InvalidRequestException(HttpStatus.BAD_REQUEST,
 					"Only one of the query parameter includeIncidents or includeIncidentsForType can be set.");

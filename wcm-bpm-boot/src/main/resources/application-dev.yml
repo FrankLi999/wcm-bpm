@@ -112,8 +112,8 @@ spring:
       client:
         registration:
           google:
-            clientId: 5014057553-8gm9um6vnli3cle5rgigcdjpdrid14m9.apps.googleusercontent.com
-            clientSecret: tWZKVLxaD_ARWsriiiUFYoIk
+            clientId: 261631246788-24j092i1c5o1h557cdmcqn9ir3un5liv.apps.googleusercontent.com
+            clientSecret: WKhGpSSMc0L_6-_SQhQU32oa
             redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
@@ -126,8 +126,8 @@ spring:
               - email
               - public_profile
           github:
-            clientId: d3e47fc2ddd966fa4352
-            clientSecret: bdaedae5-8aed-4d3c-a079-3077fc355bbe
+            clientId: 1f9824d889fc63e9e97a
+            clientSecret: 78c73961f61eb28a22f41ff5b5313324415ee4c4
             redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - user:email
@@ -175,8 +175,9 @@ bpw:
     # redirectUri mentioned by the client in the /oauth2/authorize request.
     # We're not using cookies because they won't work well in mobile clients.
     authorizedRedirectUris:
-      - http://localhost:3000/oauth2/redirect
-      - http://localhost:4000/oauth2/redirect
+      - http://wcm-ui:3009/oauth2/redirect
+      - http://bpm-ui:4009/oauth2/redirect
+      - http://gateway-ui:5009/oauth2/redirect
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
   # application-url: http://localhost:19090
@@ -186,7 +187,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://wcm-ui:3009, http://bpm-ui:4009
+    allowed-origins: http://wcm-ui:3009, http://bpm-ui:4009, http://gateway-ui:5009
 #    exposedHeaders: 
 #      - Cache-Control
 #      - Connection
@@ -308,7 +309,7 @@ jasypt:
     password: password
 
 ignite:
-  enabled: true
+  enabled: false
   instanceName: wcm-bpm
   # To send a computational task to a server node
   peerClassLoadingEnabled: true

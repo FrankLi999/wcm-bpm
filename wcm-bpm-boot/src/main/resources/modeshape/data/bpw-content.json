@@ -8007,7 +8007,42 @@
         "url": "/bpm/dashboard",
         "translate": "NAV.BPM.DASHBOARD.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
-    } ,
+    },
+    "library/camunda/rootSiteArea/dashboard/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+	"library/camunda/rootSiteArea/dashboard/siteAreaLayout/sidePane" : {
+	    "jcr:primaryType":"bpw:contentAreaSidePanel",
+	    "bpw:isLeft": "true",
+	    "bpw:width": "0"
+	},
+	"library/camunda/rootSiteArea/dashboard/siteAreaLayout/row0" : {
+	    "jcr:primaryType":"bpw:layoutRow"
+	},
+	"library/camunda/rootSiteArea/dashboard/siteAreaLayout/row0/column0" : {
+	    "jcr:primaryType":"bpw:layoutColumn",
+	    "bpw:width": "100"
+	},
+	"library/camunda/rootSiteArea/dashboard/siteAreaLayout/row0/column0/viewer0" : {
+	    "jcr:primaryType":"bpw:resourceViewer",
+	    "bpw:title": "Right Now",
+	    "bpw:renderTemplateName": "/design/renderTemplate/RT_DashboardRightNow",
+	    "bpw:contentPath": "/camunda/rootSiteArea/dashboard/RightNow"
+	},
+	"library/camunda/rootSiteArea/dashboard/siteAreaLayout/row1" : {
+	    "jcr:primaryType":"bpw:layoutRow"
+	},
+	"library/camunda/rootSiteArea/dashboard/siteAreaLayout/row1/column0" : {
+	    "jcr:primaryType":"bpw:layoutColumn",
+	    "bpw:width": "100"
+	},
+	"library/camunda/rootSiteArea/dashboard/siteAreaLayout/row1/column0/viewer0" : {
+	    "jcr:primaryType":"bpw:resourceViewer",
+	    "bpw:title": "Deployed",
+	    "bpw:renderTemplateName": "/design/renderTemplate/RT_DashboardDeployed",
+	    "bpw:contentPath": "/camunda/rootSiteArea/dashboard/Deployed"
+	},
     "library/camunda/rootSiteArea/monitor" : {
         "jcr:primaryType":"bpw:system_siteAreaType"  
     },
@@ -8546,7 +8581,7 @@
     },  
     "library/design/authoringTemplate/MyContent/elements/body" : {
         "jcr:primaryType": "bpw:FormControl",
-        "bpw:controlType": "ace",
+        "bpw:controlType": "textarea",
         "bpw:dataType": "string",
         "bpw:mandatory": "true",
         "bpw:systemIndexed": "true",
@@ -8556,10 +8591,6 @@
     "library/design/authoringTemplate/MyContent/elements/body/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Body"
-    },
-    "library/design/authoringTemplate/MyContent/elements/body/stringConstraint": {
-        "jcr:primaryType": "bpw:StringConstraint",
-        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
     "library/design/authoringTemplate/MyContent/properties/workflow" : {
         "jcr:primaryType": "bpw:FormControl",
@@ -9090,6 +9121,34 @@
         "bpw:description":"User Prpfile",
         "bpw:title":"Use Profile"
     },
+    "library/camunda/rootSiteArea/dashboard/RightNow" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/dashboard/RightNow/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Right Now</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"><div class=\"fuse-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Running Process Instances</div></div><camunda-running-instance></camunda-running-instance></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"34\"><div class=\"fuse-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Incidents</div></div><camunda-open-incidents></camunda-open-incidents></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"><div class=\"fuse-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Human Tasks</div></div><camunda-human-tasks></camunda-human-tasks></div></div></div><div></div>"
+    },
+    "library/camunda/rootSiteArea/dashboard/RightNow/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"Information about deployed artifacts",
+        "bpw:title":"Right Now"
+    },
+	"library/camunda/rootSiteArea/dashboard/Deployed" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/dashboard/Deployed/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<camunda-process-definitions></camunda-process-definitions><camunda-case-definitions></camunda-case-definitions><camunda-decision-definitions></camunda-decision-definitions><camunda-deployed></camunda-deployed>"
+    },
+    "library/camunda/rootSiteArea/dashboard/Deployed/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"Information about deployed artifacts",
+        "bpw:title":"Deployed"
+    },
     "library/design/renderTemplate/MyApplicationsRenderTemplate": {
 		"jcr:primaryType": "bpw:renderTemplate",
 		"bpw:name": "RT_MyApplications",
@@ -9180,6 +9239,34 @@
 		"bpw:postloop": "",		
 		"bpw:maxEntries": "1",
 		"bpw:note": "Render user profile",
+		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
+		"bpw:isQuery": "false"
+	},
+	"library/design/renderTemplate/RT_DashboardRightNow": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "RT_DashboardRightNow",
+		"bpw:title": "Dashboard Right Now Render Template",
+		"bpw:description": "Dashboard Right Now Render Template",
+		"bpw:code": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Right Now</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"> <div class=\"fuse-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Running Process Instances</div></div><camunda-running-instance></camunda-running-instance></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"34\"><div class=\"fuse-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Incidents</div></div><camunda-open-incidents></camunda-open-incidents></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"><div class=\"fuse-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Human Tasks</div></div><camunda-human-tasks></camunda-human-tasks></div></div></div><div></div>",
+		"bpw:preloop": "",
+		"bpw:postloop": "",
+		"bpw:maxEntries": "1",
+		"bpw:note": "Render BPM dashboard right now",
+		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
+		"bpw:isQuery": "false"
+	},
+	"library/design/renderTemplate/RT_DashboardDeployed": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "RT_DashboardDeployed",
+		"bpw:title": "Dashboard Deployed Render Template",
+		"bpw:description": "Dashboard Deployed Render Template",
+		"bpw:code": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Deployed</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><!-- process definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"fuse-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Process Definitions</div></div><camunda-process-definitions></camunda-process-definitions></div></div><!-- case definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"fuse-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Case Definitions</div></div><camunda-case-definitions></camunda-case-definitions></div></div><!-- decision definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"fuse-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Decision Definitions</div></div><camunda-decision-definitions></camunda-decision-definitions></div></div><!-- deployed widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"fuse-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Deployed</div></div><camunda-deployed></camunda-deployed></div></div></div><div></div>",
+		"bpw:preloop": "",
+		"bpw:postloop": "",		
+		"bpw:maxEntries": "1",
+		"bpw:note": "Render BPM dashboard deployed",
 		"bpw:resourceName": "/design/authoringTemplate/MyContent",
 		"bpw:nodeType": "bpw:design_MyContent_AT",
 		"bpw:isQuery": "false"

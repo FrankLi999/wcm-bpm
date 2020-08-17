@@ -213,7 +213,7 @@ public class WcmRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String absPath = WcmUtils.nodePath(filter.getWcmPath());
-			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.READ_DEPTH_TWO_LEVEL);
+			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.READ_DEPTH_THREE_LEVEL);
 			
 			WcmNode[] wcmNodes = saNode.getChildren().stream()
 			    .filter(node -> this.applyFilter(node, filter))
@@ -283,6 +283,16 @@ public class WcmRestController extends BaseWcmRestController {
 			} 
 		}
 	
+		for (RestNode childNode: node.getChildren()) {
+			if (WcmUtils.checkNodeType(childNode, "bpw:workflowNode")) {
+				for (RestProperty property: childNode.getJcrProperties()) {
+					if ("workflowStage".equals(property.getName())) {
+						wcmNode.setStatus(property.getValues().get(0));
+						break;
+					}
+				}
+			}
+		}
 		wcmNode.setWcmPath(String.format(wcmPath.startsWith("/")? WcmConstants.WCM_REL_PATH_PATTERN : 
 			WcmConstants.WCM_PATH_PATTERN, wcmPath, node.getName()));
 		return wcmNode;

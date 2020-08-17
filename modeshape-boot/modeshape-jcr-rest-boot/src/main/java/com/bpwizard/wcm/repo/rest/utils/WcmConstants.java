@@ -60,7 +60,8 @@ public class WcmConstants {
 	public static final int FORM_JSON_FORM_DEPATH = -1;
 	public static final int CONTENT_ITEM_DEPATH = -1;
 	public static final int READ_DEPTH_DEFAULT = 1;
-	public static final int READ_DEPTH_TWO_LEVEL = 2;
+	public static final int READ_DEPTH_TWO_LEVEL = 3;
+	public static final int READ_DEPTH_THREE_LEVEL = 3;
 	public static final int RENDER_TEMPLATE_DEPATH = 5;
 	public static final int CONTENT_AREA_LAYOUT_DEPTH = 4;
 	public static final int SITE_CONFIG_DEPTH = 3;

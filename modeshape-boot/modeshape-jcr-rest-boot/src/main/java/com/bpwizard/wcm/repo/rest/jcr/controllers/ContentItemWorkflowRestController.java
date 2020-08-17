@@ -408,7 +408,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        		false,
 	        		rejectRequest.getComment(),
 	        		this.getAuthorizationToken(request),
-	        		"http://wcm-server:28080/wcm/api/contentItem/publish");
+	        		"http://wcm-server.bpwizard.com:28080/wcm/api/contentItem/publish");
 	        this.completeReview(completeReviewRequest);
 	        this.notifyRejectedItem(authorEmail, rejectRequest);
 			if (logger.isDebugEnabled()) {
@@ -474,7 +474,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        		true,
 	        		approvalRequest.getComment(),
 	        		this.getAuthorizationToken(request),
-	        		"http://wcm-server:28080/wcm/api/contentItem/publish");
+	        		"http://wcm-server.bpwizard.com:28080/wcm/api/contentItem/publish");
 	        this.completeReview(completeReviewRequest);
 
 			if (logger.isDebugEnabled()) {
