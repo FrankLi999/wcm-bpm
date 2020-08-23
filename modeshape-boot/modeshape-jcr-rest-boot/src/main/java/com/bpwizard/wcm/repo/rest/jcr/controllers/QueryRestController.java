@@ -1,23 +1,34 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.query.InvalidQueryException;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.jcr.query.Row;
+import javax.jcr.query.RowIterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modeshape.common.SystemFailureException;
+import org.modeshape.jcr.JcrI18n;
 import org.modeshape.jcr.api.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,13 +38,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
+import com.bpwizard.wcm.repo.rest.jcr.model.ColumnValue;
 import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.bpwizard.wcm.repo.validation.ValidateString;
@@ -82,55 +97,62 @@ public class QueryRestController extends BaseWcmRestController {
 		}
 	}
 	
-	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createQueryStatement(
+	@PostMapping(path = "/query", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> executeQueryStatement(
 			@RequestBody QueryStatement query, HttpServletRequest request) 
 			throws WcmRepositoryException {
-
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String repositoryName = query.getRepository();
 		try {
-			String repositoryName = query.getRepository();
-			
-			try {
-				QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
-				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
-				QueryResult jcrResult = jcrQuery.execute();
-				String columnNames[] = jcrResult.getColumnNames();
-				query.setColumns(columnNames);
-			} catch (Exception e) {
-				logger.error("JCR Query Error.", e);
-				String message = (e instanceof InvalidQueryException) ? ((InvalidQueryException)e).getMessage() : "Invalid JCR Query";
-				throw new WcmRepositoryException(e, new WcmError(
-						SpringExceptionUtils.getMessage("com.bpwizard.modeshape.invalid_query", message), 
-						WcmErrors.INVALID_JCR_QUERY, 
-						null));
+			QueryManager qrm = this.repositoryManager.getSession(repositoryName, query.getWorkspace()).getWorkspace().getQueryManager();
+			com.bpwizard.wcm.repo.rest.jcr.model.QueryResult result = new com.bpwizard.wcm.repo.rest.jcr.model.QueryResult();
+			String queryStatement = query.getQuery();
+			if (!StringUtils.hasText(queryStatement)) {
+				queryStatement = this.doGetQueryStatement(query, request);
 			}
-			ObjectNode qJson = (ObjectNode) query.toJson();
-			// javax.jcr.query.qom.QueryObjectModel qom = null
-			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
-			
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
-			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
+			javax.jcr.query.Query jcrQuery = qrm.createQuery(queryStatement, Query.JCR_SQL2);
+			QueryResult jcrResult = jcrQuery.execute();
+			String columnNames[] = jcrResult.getColumnNames();
+			RowIterator iterator = jcrResult.getRows();
+			List<Map<String, ColumnValue>> rowValues = new ArrayList<>();
+			result.setRows(rowValues);
+			while (iterator.hasNext()) {
+				Row row = iterator.nextRow();
+				Map<String, ColumnValue> rowValue = new HashMap<>();
+				rowValues.add(rowValue);
+				for (String columnName: columnNames) {
+					if (null != row.getValue(columnName)) {
+						rowValue.put(columnName, getColumnValue(row.getValue(columnName)));
+					}
+				}
 			}
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.traceEntry();
 			}
-			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (WcmRepositoryException e ) {
-			logger.error(e);
-			throw e;
-		} catch (RepositoryException re) { 
+			return ResponseEntity.ok(result);
+		} catch (RepositoryException re) {
 			logger.error(re);
-			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_QUERY_ERROR, null));
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_QUERY_ERROR, null));
 	    } catch (Throwable t) {
 	    	logger.error(t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
+	}
+	
+	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createQueryStatement(
+			@RequestBody QueryStatement query, HttpServletRequest request) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		this.doCreateQueryStatement(query, request);
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -178,4 +200,143 @@ public class QueryRestController extends BaseWcmRestController {
 		}	
 	}
 	
+
+	//TODO: failed scenario - all or nothing
+	@PostMapping(path= "/{repositoryName}/{workspaceName}/loadqueries",
+		    consumes = MediaType.MULTIPART_FORM_DATA_VALUE, 
+		    produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> loadQueries( HttpServletRequest request,
+    		@PathVariable( "repositoryName" ) String repository,
+    		@PathVariable( "workspaceName" ) String workspace,
+    		@RequestParam("file") MultipartFile file ) throws WcmRepositoryException {
+    	logger.debug("Entering ...");
+    	try {
+    		com.bpwizard.wcm.repo.rest.jcr.model.Query[] queries = this.readJson(
+    				file.getInputStream(), 
+    				com.bpwizard.wcm.repo.rest.jcr.model.Query[].class);
+    		for (com.bpwizard.wcm.repo.rest.jcr.model.Query query: queries) {
+    			
+    			this.doCreateQueryStatement(toQueryStatement(query, repository, workspace), request);
+    		}
+	    	logger.debug("Exiting ...");
+	    	return ResponseEntity.status(HttpStatus.CREATED).build();
+    	} catch (Throwable t) {
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_ITEMS, null));
+    	} 
+    }
+	
+	private QueryStatement toQueryStatement(com.bpwizard.wcm.repo.rest.jcr.model.Query query, String repository, String workspace) {
+		QueryStatement queryStatement = new QueryStatement();
+		queryStatement.setRepository(repository);
+		queryStatement.setWorkspace(workspace);
+		queryStatement.setQuery(query.getQuery());
+		queryStatement.setName(query.getName());
+		queryStatement.setLibrary(query.getLibrary());
+		return queryStatement;
+	}
+	
+	private void doCreateQueryStatement(QueryStatement query, HttpServletRequest request) 
+			throws WcmRepositoryException {
+		try {
+			String repositoryName = query.getRepository();
+			
+			try {
+				QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
+				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
+				QueryResult jcrResult = jcrQuery.execute();
+				String columnNames[] = jcrResult.getColumnNames();
+				query.setColumns(columnNames);
+			} catch (Exception e) {
+				logger.error("JCR Query Error.", e);
+				String message = (e instanceof InvalidQueryException) ? ((InvalidQueryException)e).getMessage() : "Invalid JCR Query";
+				throw new WcmRepositoryException(e, new WcmError(
+						SpringExceptionUtils.getMessage("com.bpwizard.modeshape.invalid_query", message), 
+						WcmErrors.INVALID_JCR_QUERY, 
+						null));
+			}
+			ObjectNode qJson = (ObjectNode) query.toJson();
+			// javax.jcr.query.qom.QueryObjectModel qom = null
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
+			
+			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
+			if (this.authoringEnabled) {
+				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			
+		} catch (WcmRepositoryException e ) {
+			logger.error(e);
+			throw e;
+		} catch (RepositoryException re) { 
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_QUERY_ERROR, null));
+	    } catch (Throwable t) {
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+		}	
+	}
+	
+	private String doGetQueryStatement(QueryStatement query, HttpServletRequest request) throws RepositoryException {
+		String baseUrl = RestHelper.repositoryUrl(request);
+		String queryAbsPath = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
+		RestNode queryNode = (RestNode) this.itemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
+				queryAbsPath, WcmConstants.READ_DEPTH_TWO_LEVEL);
+		String queryStatement = null;
+		for (RestNode node: queryNode.getChildren()) {
+			if (WcmConstants.WCM_ITEM_ELEMENTS.equals(node.getName())) {
+				for (RestProperty restProperty : node.getJcrProperties()) {
+					if ("query".equals(restProperty.getName())) {
+						queryStatement = restProperty.getValues().get(0);
+						break;
+					} 
+				}
+				break;
+			}
+		}
+		return queryStatement;
+	
+	}
+	
+	private ColumnValue getColumnValue(Value jcrValue) throws RepositoryException {
+		ColumnValue columnValue = new ColumnValue();
+		columnValue.setType(jcrValue.getType());
+		
+        switch (jcrValue.getType()) {
+            case PropertyType.STRING:
+            	columnValue.setValue(jcrValue.getString());
+            	break;
+            case PropertyType.BINARY:
+                columnValue.setValue(jcrValue.getBinary());
+            	break;
+            case PropertyType.BOOLEAN:
+            	columnValue.setValue(jcrValue.getBoolean());
+             	break;
+            case PropertyType.DOUBLE:
+            	columnValue.setValue(jcrValue.getDouble());
+             	break;
+            case PropertyType.LONG:
+            	columnValue.setValue(jcrValue.getLong());
+             	break;
+            case PropertyType.DECIMAL:
+            	columnValue.setValue(jcrValue.getDecimal());
+             	break;
+            case PropertyType.DATE:
+            case PropertyType.PATH:
+            case PropertyType.NAME:
+            case PropertyType.REFERENCE:
+            case PropertyType.WEAKREFERENCE:
+            case org.modeshape.jcr.api.PropertyType.SIMPLE_REFERENCE:
+            case PropertyType.URI:
+                columnValue.setValue(jcrValue.getString());
+                break;
+            default:
+                throw new SystemFailureException(JcrI18n.invalidPropertyType.text(jcrValue.getType()));
+        }
+        
+		return columnValue;
+	}
 }

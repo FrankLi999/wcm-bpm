@@ -1,0 +1,49 @@
+{
+	"library/mysite" : {
+        "jcr:primaryType":"bpw:system_libraryType"
+    },
+    "library/mysite/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:authoringTemplate": "/system/authoringTemplate/libraryType"
+    },
+    "library/mysite/elements" : {
+        "jcr:primaryType":"bpw:system_libraryType_ElementFolder",
+        "language": "en"
+    },
+    "library/mysite/asset" : {
+        "jcr:primaryType":"bpw:assetFolder"
+    },
+    "library/mysite/theme" : {
+        "jcr:primaryType":"bpw:themesFolder"
+    },
+    "library/mysite/siteConfig" : {
+        "jcr:primaryType":"bpw:siteConfigFolder"
+    },    
+    "library/mysite/contentAreaLayout" : {
+        "jcr:primaryType":"bpw:contentAreaLayoutFolder"
+    },
+    "library/mysite/renderTemplate" : {
+        "jcr:primaryType":"bpw:renderTemplateFolder"
+    },
+    "library/mysite/query" : {
+        "jcr:primaryType":"bpw:queryFolder"
+    },		
+    "library/mysite/workflow" : {
+        "jcr:primaryType":"bpw:workflowFolder"
+    },					
+	"library/mysite/category" : {
+        "jcr:primaryType":"bpw:categoryFolder"
+    },
+    "library/mysite/validationRule" : {
+        "jcr:primaryType":"bpw:validationRuleFolder"
+    },
+    "library/mysite/authoringTemplate" : {
+        "jcr:primaryType":"bpw:authoringTemplateFolder"
+    },
+    "library/mysite/form" : {
+        "jcr:primaryType":"bpw:formFolder"
+    },
+    "library/mysite/rootSiteArea" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    }
+}

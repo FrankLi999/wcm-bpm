@@ -7,6 +7,7 @@ public class ResourceViewer {
 	private String renderTemplate;
 	private String contentPath[];
 	private String title = "rv";
+	private String contentParameter;
 	private Map<String, String> parameterValues;
 	
 	public String getRenderTemplate() {
@@ -41,9 +42,18 @@ public class ResourceViewer {
 		this.parameterValues = parameterValues;
 	}
 
+	public String getContentParameter() {
+		return contentParameter;
+	}
+
+	public void setContentParameter(String contentParameter) {
+		this.contentParameter = contentParameter;
+	}
+
 	@Override
 	public String toString() {
 		return "ResourceViewer [renderTemplate=" + renderTemplate + ", contentPath=" + Arrays.toString(contentPath)
-				+ ", title=" + title + ", parameterValues=" + parameterValues + "]";
+				+ ", title=" + title + ", contentParameter=" + contentParameter + ", parameterValues=" + parameterValues
+				+ "]";
 	}
 }

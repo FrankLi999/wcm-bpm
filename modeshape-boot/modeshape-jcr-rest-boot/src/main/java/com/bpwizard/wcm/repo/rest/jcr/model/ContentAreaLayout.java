@@ -5,6 +5,7 @@ import java.util.Arrays;
 import javax.validation.Valid;
 
 import org.modeshape.jcr.api.JcrConstants;
+import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.modeshape.model.HasName;
@@ -135,6 +136,9 @@ public class ContentAreaLayout extends ResourceNode implements HasName, HasWcmAu
 				viewerNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:resourceViewer");
 				viewerNode.put("bpw:renderTemplateName", viewer.getRenderTemplate());
 				viewerNode.put("bpw:title", viewer.getTitle());
+				if (StringUtils.hasText(viewer.getContentParameter())) {
+					viewerNode.put("bpw:contentParameter", viewer.getContentParameter());
+				}
 				if (viewer.getContentPath() != null && viewer.getContentPath().length > 0) {
 					ArrayNode contentArray = JsonUtils.creatArrayNode();
 					for (String cp : viewer.getContentPath()) {

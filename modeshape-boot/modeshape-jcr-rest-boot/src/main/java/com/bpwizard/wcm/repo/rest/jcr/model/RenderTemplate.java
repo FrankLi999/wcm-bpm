@@ -184,6 +184,9 @@ public class RenderTemplate extends ResourceNode implements HasName, HasWcmAutho
 						elementNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:ResourceElementRender");
 						elementNode.put("bpw:name", element.getName());
 						elementNode.put("bpw:source", element.getSource());
+						if (StringUtils.hasText(element.getBody())) {
+							elementNode.put("bpw:body", element.getBody());
+						}
 					}				    
 				}
 			}

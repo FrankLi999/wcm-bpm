@@ -177,6 +177,7 @@ bpw:
     authorizedRedirectUris:
       - http://wcm-ui:3009/oauth2/redirect
       - http://bpm-ui:4009/oauth2/redirect
+      - http://mysite:6009/oauth2/redirect
       - http://gateway-ui:5009/oauth2/redirect
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
@@ -187,7 +188,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://wcm-ui:3009, http://bpm-ui:4009, http://gateway-ui:5009
+    allowed-origins: http://wcm-ui:3009, http://bpm-ui:4009, http://gateway-ui:5009, http://mysite:6009
 #    exposedHeaders: 
 #      - Cache-Control
 #      - Connection

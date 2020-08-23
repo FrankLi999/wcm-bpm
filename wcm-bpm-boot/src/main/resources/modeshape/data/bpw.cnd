@@ -404,6 +404,7 @@
 [bpw:ResourceElementRender]
 - bpw:name (STRING)
 - bpw:source (STRING)
+- bpw:body (STRING)
 
 [bpw:RenderTemplateLayoutColumn]
 - bpw:id (STRING)
@@ -431,7 +432,8 @@
 - bpw:title (STRING)
 - bpw:renderTemplateName (STRING)
 - bpw:contentPath (STRING) multiple
-+ bpw:parameterValues (bpw:properties)
+- bpw:contentParameter (STRING)
++ parameterValues (bpw:properties)
    
 [bpw:layoutColumn]
 - bpw:width (LONG)
@@ -787,5 +789,12 @@
 
 [bpw:design_MyLink_AT] > nt:folder, bpw:baseContentType
 + elements (bpw:design_MyLink_ElementFolder)
++ itemProperties (bpw:ContentItemproperties)
+
+[bpw:mysite_NewsItem_ElementFolder]  > bpw:ContentItemElementFolder
+- body (STRING)
+
+[bpw:mysite_NewsItem_AT] > nt:folder, bpw:baseContentType
++ elements (bpw:mysite_NewsItem_ElementFolder)
 + itemProperties (bpw:ContentItemproperties)
 

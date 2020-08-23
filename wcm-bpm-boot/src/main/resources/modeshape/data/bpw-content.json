@@ -8270,6 +8270,7 @@
         "hidden":"true",
         "position":"right"
     },
+    
     "library/design" : {
         "jcr:primaryType":"bpw:system_libraryType"
     },
@@ -9149,7 +9150,7 @@
         "bpw:description":"Information about deployed artifacts",
         "bpw:title":"Deployed"
     },
-    "library/design/renderTemplate/MyApplicationsRenderTemplate": {
+    "library/design/renderTemplate/RT_MyApplications": {
 		"jcr:primaryType": "bpw:renderTemplate",
 		"bpw:name": "RT_MyApplications",
 		"bpw:title": "My Applications Render Template",
@@ -9163,33 +9164,33 @@
 		"bpw:nodeType": "bpw:design_MyContent_AT",
 		"bpw:isQuery": "false"
 	},
-	"library/design/renderTemplate/MyApplicationsRenderTemplate/row1": {
+	"library/design/renderTemplate/RT_MyApplications/row1": {
 	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
 	},
-	"library/design/renderTemplate/MyApplicationsRenderTemplate/row1/column1": {
+	"library/design/renderTemplate/RT_MyApplications/row1/column1": {
 	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
 	    "bpw:id": "fieldgroup1",
 		"bpw:width": "100"
 	},
-	"library/design/renderTemplate/MyApplicationsRenderTemplate/row1/column1/title": {
+	"library/design/renderTemplate/RT_MyApplications/row1/column1/title": {
 	    "jcr:primaryType": "bpw:ResourceElementRender",
 	    "bpw:name": "title",
 	    "bpw:source": "property"
 	},
-	"library/design/renderTemplate/MyApplicationsRenderTemplate/row2": {
+	"library/design/renderTemplate/RT_MyApplications/row2": {
 	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
 	},
-	"library/design/renderTemplate/MyApplicationsRenderTemplate/row2/column1": {
+	"library/design/renderTemplate/RT_MyApplications/row2/column1": {
 	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
 	    "bpw:id": "fieldgroup1",
 		"bpw:width": "100"
 	},
-	"library/design/renderTemplate/MyApplicationsRenderTemplate/row2/column1/body": {
+	"library/design/renderTemplate/RT_MyApplications/row2/column1/body": {
 	    "jcr:primaryType": "bpw:ResourceElementRender",
 		"bpw:name": "body",
-		"bpw:source": "property"
+		"bpw:source": "element"
 	},
-	"library/design/renderTemplate/MyLinksRenderTemplate": {
+	"library/design/renderTemplate/RT_MyLinks": {
 		"jcr:primaryType": "bpw:renderTemplate",
 		"bpw:name": "RT_MyLinks",
 		"bpw:title": "My Links Render Template",
@@ -9203,33 +9204,33 @@
 		"bpw:nodeType": "bpw:design_MyContent_AT",
 		"bpw:isQuery": "false"
 	},
-	"library/design/renderTemplate/MyLinksRenderTemplate/row1": {
+	"library/design/renderTemplate/RT_MyLinks/row1": {
 	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
 	},
-	"library/design/renderTemplate/MyLinksRenderTemplate/row1/column1": {
+	"library/design/renderTemplate/RT_MyLinks/row1/column1": {
 	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
 	    "bpw:id": "fieldgroup1",
 		"bpw:width": "100"
 	},
-	"library/design/renderTemplate/MyLinksRenderTemplate/row1/column1/title": {
+	"library/design/renderTemplate/RT_MyLinks/row1/column1/title": {
 	    "jcr:primaryType": "bpw:ResourceElementRender",
 	    "bpw:name": "title",
 	    "bpw:source": "property"
 	},
-	"library/design/renderTemplate/MyLinksRenderTemplate/row2": {
+	"library/design/renderTemplate/RT_MyLinks/row2": {
 	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
 	},
-	"library/design/renderTemplate/MyLinksRenderTemplate/row2/column1": {
+	"library/design/renderTemplate/RT_MyLinks/row2/column1": {
 	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
 	    "bpw:id": "fieldgroup1",
 		"bpw:width": "100"
 	},
-	"library/design/renderTemplate/MyLinksRenderTemplate/row2/column1/body": {
+	"library/design/renderTemplate/RT_MyLinks/row2/column1/body": {
 	    "jcr:primaryType": "bpw:ResourceElementRender",
 		"bpw:name": "body",
-		"bpw:source": "property"
+		"bpw:source": "element"
 	},
-	"library/design/renderTemplate/UserProfileRenderTemplate": {
+	"library/design/renderTemplate/RT_UserProfile": {
 		"jcr:primaryType": "bpw:renderTemplate",
 		"bpw:name": "RT_UserProfile",
 		"bpw:title": "UserProfile Render Template",

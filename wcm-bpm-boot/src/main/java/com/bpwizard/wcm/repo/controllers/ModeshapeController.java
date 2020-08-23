@@ -122,8 +122,8 @@ public class ModeshapeController {
 		}
 		try {
 			String repositoryName = query.getRepository();
-			ObjectNode qJson = (ObjectNode) query.toJson();
-
+			// ObjectNode qJson = (ObjectNode) query.toJson();
+			ObjectNode qJson = JsonUtils.createObjectNode();
 			QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
 			javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
 			QueryResult jcrResult = jcrQuery.execute();
@@ -135,20 +135,34 @@ public class ModeshapeController {
 				}
 				qJson.set("bpw:columns", valueArray);	
 			}
+			ArrayNode rowNodes = JsonUtils.creatArrayNode();
+			qJson.set("bpw:rows", rowNodes);
 			RowIterator iterator = jcrResult.getRows();
 			while (iterator.hasNext()) {
 				Row row = iterator.nextRow();
-				System.out.println("==================================================");
-				System.out.println("element.jcr:path" + row.getValue("element.jcr:path"));
-				System.out.println("element.jcr:name" + row.getValue("element.jcr:name"));
-				System.out.println("element.bpw:value" + row.getValue("element.bpw:value"));
-				System.out.println("content.jcr:name" + row.getValue("content.jcr:name"));
-				System.out.println("content.jcr:path" + row.getValue("content.jcr:path"));
-				System.out.println("content.jcr:score" + row.getValue("content.jcr:score"));
-				System.out.println("element.jcr:score" + row.getValue("element.jcr:score"));
+				ObjectNode rowNode = JsonUtils.createObjectNode();
+				rowNodes.add(rowNode);
+				for (String columnName: columnNames) {
+					System.out.println("==================================================");
+					System.out.println("columnName:" + columnName + ", values:" + row.getValue(columnName));
+					System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+					// rowNode.set(columnName, JsonUtils.createTextNode(row.getValue(columnName).getString()));
+					if (null != row.getValue(columnName)) {
+						rowNode.put(columnName, row.getValue(columnName).getString());
+					}
+				}
+//				System.out.println("==================================================");
+//				System.out.println("element.jcr:path" + row.getValue("news.jcr:path"));
+//				System.out.println("element.jcr:name" + row.getValue("news.jcr:name"));
+//				System.out.println("element.bpw:value" + row.getValue("news.bpw:value"));
+//				System.out.println("content.jcr:name" + row.getValue("news.jcr:name"));
+//				System.out.println("content.jcr:path" + row.getValue("news.jcr:path"));
+//				System.out.println("content.jcr:score" + row.getValue("news.jcr:score"));
+//				System.out.println("element.jcr:score" + row.getValue("news.jcr:score"));
 				System.out.println("==================================================");
 			}
-			return ResponseEntity.status(HttpStatus.CREATED).build();
+			return ResponseEntity.ok(qJson);
+			//return ResponseEntity.status(HttpStatus.CREATED).build();
 	    } catch (Throwable t) {
 			logger.error(t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));

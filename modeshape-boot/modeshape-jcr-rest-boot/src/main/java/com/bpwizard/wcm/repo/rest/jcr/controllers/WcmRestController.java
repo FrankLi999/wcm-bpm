@@ -235,8 +235,8 @@ public class WcmRestController extends BaseWcmRestController {
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	};
-	
-	private boolean applyFilter(final RestNode node, WcmNavigatorFilter filter) {
+		
+    private boolean applyFilter(final RestNode node, WcmNavigatorFilter filter) {
 		return (filter == null || filter.getNodeTypes() == null) ?
 				node.getJcrProperties().stream()
 				.filter(property -> "jcr:primaryType".equals(property.getName()))

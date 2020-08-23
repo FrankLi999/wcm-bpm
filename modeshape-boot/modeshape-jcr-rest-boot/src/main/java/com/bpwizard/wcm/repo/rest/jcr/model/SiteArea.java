@@ -279,6 +279,9 @@ public class SiteArea implements HasName, HasWcmAuthority {
 			viewerNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:resourceViewer");
 			viewerNode.put("bpw:renderTemplateName", viewer.getRenderTemplate());
 			viewerNode.put("bpw:title", viewer.getTitle());
+			if (StringUtils.hasText(viewer.getContentParameter())) {
+				viewerNode.put("bpw:contentParameter", viewer.getContentParameter());
+			}
 			if (viewer.getContentPath() != null && viewer.getContentPath().length > 0) {
 				ArrayNode contentPathArray = JsonUtils.creatArrayNode();
 				for (String path : viewer.getContentPath()) {

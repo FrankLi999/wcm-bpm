@@ -1,5 +1,7 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1898,7 +1900,8 @@ public abstract class BaseWcmRestController {
 								for (RestProperty property : elementNode.getJcrProperties()) {
 									if ("bpw:source".equals(property.getName())) {
 										element.setSource(property.getValues().get(0));
-										break;
+									} else if ("bpw:body".equals(property.getName())) {
+										element.setBody(property.getValues().get(0));
 									}
 								}
 							}
@@ -2048,6 +2051,8 @@ public abstract class BaseWcmRestController {
 						viewer.setRenderTemplate(property.getValues().get(0));
 					} else if ("bpw:contentPath".equals(property.getName())) {
 						viewer.setContentPath(property.getValues().toArray(new String[property.getValues().size()]));
+					} else if ("bpw:contentParameter".equals(property.getName())) {
+						viewer.setContentParameter(property.getValues().get(0));
 					}
 				}
 				viewers.add(viewer);
@@ -2473,37 +2478,6 @@ public abstract class BaseWcmRestController {
 		return navigation;
 	}
 
-	protected QueryStatement[] doLoadQueryStatements(String repository, String workspace, HttpServletRequest request)
-			throws WcmRepositoryException {
-
-		String baseUrl = RestHelper.repositoryUrl(request);
-
-		QueryStatement[] queryStatements = this.getQueryLibraries(repository, workspace, baseUrl)
-				.flatMap(library -> this.doGetQueryStatements(library, baseUrl)).toArray(QueryStatement[]::new);
-
-		return queryStatements;
-	}
-
-	protected Stream<QueryStatement> getQueryLibraries(String repository, String workspace, String baseUrl)
-			throws WcmRepositoryException {
-		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
-					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
-			return bpwizardNode.getChildren().stream().filter(this::notSystemLibrary)
-					.map(node -> toQueryStatementWithLibrary(node, repository, workspace));
-		} catch (RepositoryException e) {
-			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
-		}
-	}
-
-	protected QueryStatement toQueryStatementWithLibrary(RestNode node, String repository, String workspace) {
-		QueryStatement queryStatementWithLibrary = new QueryStatement();
-		queryStatementWithLibrary.setRepository(repository);
-		queryStatementWithLibrary.setWorkspace(workspace);
-		queryStatementWithLibrary.setLibrary(node.getName());
-		return queryStatementWithLibrary;
-	}
-
 	protected Stream<QueryStatement> doGetQueryStatements(QueryStatement query, String baseUrl)
 			throws WcmRepositoryException {
 		String absPath = String.format(WcmConstants.NODE_QUERY_ROOT_PATH_PATTERN, query.getLibrary());
@@ -2548,6 +2522,37 @@ public abstract class BaseWcmRestController {
 		});
 		return queryStatement;
 	}
+	
+	protected QueryStatement[] doLoadQueryStatements(String repository, String workspace, HttpServletRequest request)
+			throws WcmRepositoryException {
+
+		String baseUrl = RestHelper.repositoryUrl(request);
+
+		QueryStatement[] queryStatements = this.getQueryLibraries(repository, workspace, baseUrl)
+				.flatMap(library -> this.doGetQueryStatements(library, baseUrl)).toArray(QueryStatement[]::new);
+
+		return queryStatements;
+	}
+
+	protected Stream<QueryStatement> getQueryLibraries(String repository, String workspace, String baseUrl)
+			throws WcmRepositoryException {
+		try {
+			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
+			return bpwizardNode.getChildren().stream().filter(this::notSystemLibrary)
+					.map(node -> toQueryStatementWithLibrary(node, repository, workspace));
+		} catch (RepositoryException e) {
+			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
+		}
+	}
+
+	protected QueryStatement toQueryStatementWithLibrary(RestNode node, String repository, String workspace) {
+		QueryStatement queryStatementWithLibrary = new QueryStatement();
+		queryStatementWithLibrary.setRepository(repository);
+		queryStatementWithLibrary.setWorkspace(workspace);
+		queryStatementWithLibrary.setLibrary(node.getName());
+		return queryStatementWithLibrary;
+	}
 
 	protected Stream<String> getLibraries(String repository, String workspace, String baseUrl)
 			throws WcmRepositoryException {
@@ -2569,7 +2574,7 @@ public abstract class BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-		String absPath = WcmUtils.nodePath(wcmPath);
+		String absPath = wcmPath.startsWith("/library")? wcmPath : WcmUtils.nodePath(wcmPath);
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			
@@ -2730,5 +2735,9 @@ public abstract class BaseWcmRestController {
 		}
 		workflowNode.setWorkflowStage(stage);
 	}
+	
+	protected <T> T readJson(InputStream requestBody, Class<T> valueType) throws IOException {
+        return new ObjectMapper().readValue(requestBody, valueType);
+    }
 }
 
