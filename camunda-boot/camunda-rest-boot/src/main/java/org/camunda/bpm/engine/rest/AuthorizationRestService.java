@@ -47,5 +47,13 @@ public interface AuthorizationRestService {
 //	@OPTIONS
 //	@Produces(MediaType.APPLICATION_JSON)
 	ResourceOptionsDto availableOperations();
+	
+	AuthorizationDto getAuthorization(String resourceId);
+
+	void deleteAuthorization(String resourceId);
+
+	void updateAuthorization(String resourceId, AuthorizationDto dto);
+
+	ResourceOptionsDto availableOperations(String resourceId);
 
 }

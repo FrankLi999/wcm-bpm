@@ -16,6 +16,9 @@
  */
 package org.camunda.bpm.engine.rest.controller;
 
+import static org.camunda.bpm.engine.authorization.Permissions.DELETE;
+import static org.camunda.bpm.engine.authorization.Permissions.UPDATE;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +48,12 @@ import org.camunda.bpm.engine.rest.util.ResourceUtil;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -172,7 +179,9 @@ public class AuthorizationRestController extends AbstractAuthorizedRestResource 
 	}
 
 	@PostMapping(path="/create", consumes= {MediaType.APPLICATION_JSON_VALUE}, produces= {MediaType.APPLICATION_JSON_VALUE})
-	public AuthorizationDto createAuthorization(HttpServletRequest request, AuthorizationCreateDto dto) {
+	public AuthorizationDto createAuthorization(
+			HttpServletRequest request, 
+			@RequestBody AuthorizationCreateDto dto) {
 		final AuthorizationService authorizationService = processEngine.getAuthorizationService();
 
 		Authorization newAuthorization = authorizationService.createNewAuthorization(dto.getType());
@@ -233,4 +242,51 @@ public class AuthorizationRestController extends AbstractAuthorizedRestResource 
 		return groupIds;
 	}
 
+	////////////////////////////////////
+	@GetMapping(path="/{resourceId}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public AuthorizationDto getAuthorization(@PathVariable("resourceId") String resourceId) {
+		return this.doGetAuthorization(resourceId);
+	}
+
+	@DeleteMapping(path="/{resourceId}")
+	public void deleteAuthorization(@PathVariable("resourceId") String resourceId) {
+		Authorization dbAuthorization = getDbAuthorization(resourceId);
+		this.authorizationService.deleteAuthorization(dbAuthorization.getId());
+	}
+
+	@PutMapping(path="/{resourceId}", consumes=MediaType.APPLICATION_JSON_VALUE)
+	public void updateAuthorization(@PathVariable("resourceId") String resourceId, @RequestBody AuthorizationDto dto) {
+		// get db auth
+		Authorization dbAuthorization = getDbAuthorization(resourceId);
+		// copy values from dto
+		AuthorizationDto.update(dto, dbAuthorization, processEngine.getProcessEngineConfiguration());
+		// save
+		this.authorizationService.saveAuthorization(dbAuthorization);
+	}
+
+	// @RequestMapping(path = "/", method = RequestMethod.OPTIONS, produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/{resourceId}/availableOperations", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResourceOptionsDto availableOperations(@PathVariable("resourceId") String resourceId) {
+
+		ResourceOptionsDto dto = new ResourceOptionsDto();
+
+		URI uri = UriComponentsBuilder.fromPath(this.rootResourcePath).path(AuthorizationRestService.PATH)
+				.path(resourceId).build().toUri();
+
+		dto.addReflexiveLink(uri, HttpMethod.GET.name(), "self");
+
+		if (this.isAuthorized(DELETE, Resources.AUTHORIZATION, resourceId)) {
+			dto.addReflexiveLink(uri, HttpMethod.DELETE.name(), "delete");
+		}
+		if (this.isAuthorized(UPDATE, Resources.AUTHORIZATION, resourceId)) {
+			dto.addReflexiveLink(uri, HttpMethod.PUT.name(), "update");
+		}
+
+		return dto;
+	}
+
+	// utils //////////////////////////////////////////////////
+//	protected org.camunda.bpm.engine.authorization.Resource getResource() {
+//		return Resources.AUTHORIZATION;
+//	}
 }

@@ -77,6 +77,7 @@ bpw:
       password: admin!
       rolename: 
         - admin
+        - camunda-admin
     -
       username: demo
       email: demo@example.com
