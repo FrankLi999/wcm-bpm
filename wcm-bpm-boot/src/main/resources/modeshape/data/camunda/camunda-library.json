@@ -1,0 +1,63 @@
+{
+	 "library/camunda" : {
+        "jcr:primaryType":"bpw:system_libraryType"
+    },
+    "library/camunda/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:authoringTemplate": "/system/authoringTemplate/libraryType"
+    },
+    "library/camunda/elements" : {
+        "jcr:primaryType":"bpw:system_libraryType_ElementFolder",
+        "language": "en"
+    },
+    "library/camunda/asset" : {
+        "jcr:primaryType":"bpw:assetFolder"
+    },
+    "library/camunda/theme" : {
+        "jcr:primaryType":"bpw:themesFolder"
+    },
+    "library/camunda/siteConfig" : {
+        "jcr:primaryType":"bpw:siteConfigFolder"
+    },
+    "library/camunda/contentAreaLayout" : {
+        "jcr:primaryType":"bpw:contentAreaLayoutFolder"
+    },
+    "library/camunda/renderTemplate" : {
+        "jcr:primaryType":"bpw:renderTemplateFolder"
+    },
+    "library/camunda/query" : {
+        "jcr:primaryType":"bpw:queryFolder"
+    },		
+    "library/camunda/workflow" : {
+        "jcr:primaryType":"bpw:workflowFolder"
+    },					
+	"library/camunda/category" : {
+        "jcr:primaryType":"bpw:categoryFolder"
+    },
+    "library/camunda/authoringTemplate" : {
+        "jcr:primaryType":"bpw:authoringTemplateFolder"
+    },
+    "library/camunda/form" : {
+        "jcr:primaryType":"bpw:formFolder"
+    },
+    "library/camunda/validationRule" : {
+        "jcr:primaryType":"bpw:validationRuleFolder"
+    },
+    "library/camunda/rootSiteArea" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"  
+    },
+    "library/camunda/rootSiteArea/itemProperties" : {
+    	"jcr:primaryType":"bpw:ContentItemproperties",
+    	"bpw:name":"site",
+        "bpw:title":"BPM"
+    },
+    "library/camunda/rootSiteArea/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "bpm",
+        "navigationType": "group",
+        "siteConfig": "bpm",        
+        "url": "/bpm",
+        "translate": "NAV.BPM.APPLICATIONS",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    }
+}

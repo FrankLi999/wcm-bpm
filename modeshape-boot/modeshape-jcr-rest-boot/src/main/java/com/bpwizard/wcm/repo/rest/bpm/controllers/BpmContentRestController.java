@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
@@ -22,6 +23,7 @@ import com.bpwizard.spring.boot.commons.service.repo.exception.ResourceNotFoundE
 import com.bpwizard.wcm.repo.annotations.CurrentUser;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
+import com.bpwizard.wcm.repo.rest.bpm.model.Resource;
 import com.bpwizard.wcm.repo.rest.bpm.model.BpmApplication;
 import com.bpwizard.wcm.repo.rest.bpm.model.BpmApplications;
 import com.bpwizard.wcm.repo.rest.bpm.model.BpmLink;
@@ -43,22 +45,24 @@ public class BpmContentRestController extends BaseWcmRestController {
 
 	public static final String BASE_URI = "/bpm/content";
 
-	public static final String SITE_AREA_PATTERN = "/camunda/rootSiteArea/%s";
+	// public static final String SITE_AREA_PATTERN = "/camunda/rootSiteArea/%s";
 	public static final String REPOSITITORY = "bpwizard";
 	public static final String WORKSPACE = "default";
     @Autowired
     private UserRepository userRepository;
     
 	@GetMapping(path = "/application", produces = MediaType.APPLICATION_JSON_VALUE)
-	public BpmApplications getBpmApplications(HttpServletRequest request) {
+	public BpmApplications getBpmApplications(
+			@RequestParam(name="wcmPath") final String wcmPath,
+			HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String siteAreaPath = String.format(SITE_AREA_PATTERN, "home/applications");
+			//String siteAreaPath = String.format(SITE_AREA_PATTERN, "home/applications");
 			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, REPOSITITORY, WORKSPACE,
-					WcmUtils.nodePath(siteAreaPath), WcmConstants.SITE_AREA_DEPTH);
+					WcmUtils.nodePath(wcmPath), WcmConstants.SITE_AREA_DEPTH);
 			BpmApplications bpmApplications = new BpmApplications();
 
 			for (RestNode childNode : saNode.getChildren()) {
@@ -88,15 +92,17 @@ public class BpmContentRestController extends BaseWcmRestController {
 	}
 
 	@GetMapping(path = "/link", produces = MediaType.APPLICATION_JSON_VALUE)
-	public BpmLinks getBpmLinks(HttpServletRequest request) {
+	public BpmLinks getBpmLinks(
+			@RequestParam(name="wcmPath") final String wcmPath,
+			HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			String siteAreaPath = String.format(SITE_AREA_PATTERN, "home/links");
+			// String siteAreaPath = String.format(SITE_AREA_PATTERN, "home/links");
 			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, REPOSITITORY, WORKSPACE,
-					WcmUtils.nodePath(siteAreaPath), WcmConstants.SITE_AREA_DEPTH);
+					WcmUtils.nodePath(wcmPath), WcmConstants.SITE_AREA_DEPTH);
 			BpmLinks bpmLinks = new BpmLinks();
 
 			for (RestNode childNode : saNode.getChildren()) {
@@ -136,6 +142,47 @@ public class BpmContentRestController extends BaseWcmRestController {
 		List<String> groups = user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
 		userProfile.setGroups(groups);
 		return userProfile;
+	}
+	
+	@GetMapping(path = "/resources", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Resource> getResources(
+			HttpServletRequest request) {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String baseUrl = RestHelper.repositoryUrl(request);
+			// String siteAreaPath = String.format(SITE_AREA_PATTERN, "home/links");
+			RestNode resourcesNode = (RestNode) this.itemHandler.item(baseUrl, REPOSITITORY, WORKSPACE,
+					WcmUtils.nodePath("/camunda/resources"), WcmConstants.SITE_AREA_DEPTH);
+			List<Resource> resources = resourcesNode.getChildren().stream()
+					.filter(node -> WcmUtils.checkNodeType(node, "bpw:camunda_resources"))
+					.map(this::toResource)
+					.collect(Collectors.toList());
+			
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return resources;
+		} catch (RepositoryException ex) {
+			logger.error(ex);
+			throw new WcmRepositoryException(ex, WcmError.createWcmError(ex.getMessage(), WcmErrors.GET_NODE_ERROR, null));
+		}
+	}
+	private Resource toResource(RestNode resourceNode) {
+		Resource resource = new Resource();
+		for (RestProperty property : resourceNode.getJcrProperties()) {
+			if ("bpw:name".equals(property.getName())) {
+				resource.setResource(property.getValues().get(0));
+			} else if ("bpw:resourceId".equals(property.getName())) {
+				resource.setResourceId(Integer.parseInt(property.getValues().get(0)));
+			} else if ("bpw:permissions".equals(property.getName())) {
+				resource.setPermissions(property.getValues());
+			} else if ("bpw:title".equals(property.getName())) {
+				resource.setTitle(property.getValues().get(0));
+			} 
+		}
+		return resource;
 	}
 	
 	// TODO: use bean utils to generalize it

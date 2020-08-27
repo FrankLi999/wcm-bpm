@@ -1,0 +1,64 @@
+{
+	"library/apigateway" : {
+        "jcr:primaryType":"bpw:system_libraryType"
+    },
+    "library/apigateway/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:authoringTemplate": "/system/authoringTemplate/libraryType"
+    },
+    "library/apigateway/elements" : {
+        "jcr:primaryType":"bpw:system_libraryType_ElementFolder",
+        "language": "en"
+    },
+    "library/apigateway/asset" : {
+        "jcr:primaryType":"bpw:assetFolder"
+    },
+    "library/apigateway/theme" : {
+        "jcr:primaryType":"bpw:themesFolder"
+    },
+    "library/apigateway/siteConfig" : {
+        "jcr:primaryType":"bpw:siteConfigFolder"
+    },
+    
+    "library/apigateway/contentAreaLayout" : {
+        "jcr:primaryType":"bpw:contentAreaLayoutFolder"
+    },
+    "library/apigateway/renderTemplate" : {
+        "jcr:primaryType":"bpw:renderTemplateFolder"
+    },
+    "library/apigateway/query" : {
+        "jcr:primaryType":"bpw:queryFolder"
+    },		
+    "library/apigateway/workflow" : {
+        "jcr:primaryType":"bpw:workflowFolder"
+    },					
+	"library/apigateway/category" : {
+        "jcr:primaryType":"bpw:categoryFolder"
+    },
+    "library/apigateway/validationRule" : {
+        "jcr:primaryType":"bpw:validationRuleFolder"
+    },
+    "library/apigateway/authoringTemplate" : {
+        "jcr:primaryType":"bpw:authoringTemplateFolder"
+    },
+    "library/apigateway/form" : {
+        "jcr:primaryType":"bpw:formFolder"
+    },
+    "library/apigateway/rootSiteArea" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+		"bpw:name":"site",
+        "bpw:title":"API GATEWAY"
+    },
+    "library/apigateway/rootSiteArea/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway",
+        "navigationType": "group",
+        "siteConfig": "apigateway", 
+        "url": "/api_gateway",
+        "translate": "NAV.API.APPLICATIONS",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    }
+}

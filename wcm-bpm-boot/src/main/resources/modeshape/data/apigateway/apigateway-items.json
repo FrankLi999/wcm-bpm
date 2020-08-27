@@ -1,0 +1,146 @@
+{
+	
+    "library/apigateway/rootSiteArea/home" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/home/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+		"bpw:name":"home",
+        "bpw:title":"Home"
+    },
+    "library/apigateway/rootSiteArea/home/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_home",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/bpm/home",
+        "translate": "NAV.API.HOME.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/tasklist" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/tasklist/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+		"bpw:name":"tasklist",
+        "bpw:title":"Task List"
+    },
+    "library/apigateway/rootSiteArea/tasklist/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_tasklist",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/bpm/tasklist",
+        "translate": "NAV.API.TASKLIST.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/modeler" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/modeler/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name":"modeler",
+        "bpw:title":"Modeler"
+    },
+    "library/apigateway/rootSiteArea/modeler/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_modeler",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/bpm/modeler",
+        "translate": "NAV.API.MODELER.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/dashboard" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/dashboard/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name":"dashboard",
+        "bpw:title":"Dashboard"
+    } ,
+    "library/apigateway/rootSiteArea/dashboard/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_dashboard",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/bpm/dashboard",
+        "translate": "NAV.API.DASHBOARD.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/monitor" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/monitor/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+         "bpw:name":"monitor",
+        "bpw:title":"Monitor"
+    } ,
+    "library/apigateway/rootSiteArea/monitor/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "bpm_monitor",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/bpm/monitor",
+        "translate": "NAV.API.MONITOR.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/siteConfig/apigateway" : {
+        "jcr:primaryType":"bpw:system_siteConfigType"
+    },
+    "library/apigateway/siteConfig/apigateway/properties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name":"apigateway"
+    },
+    "library/apigateway/siteConfig/apigateway/elements" : {
+        "jcr:primaryType":"bpw:system_siteConfigType_ElementFolder",
+        "colorTheme":"theme-default",
+        "rootSiteArea":"rootSiteArea",
+        "customScrollbars":"false"
+    },
+    "library/apigateway/siteConfig/apigateway/elements/layout" : {
+        "jcr:primaryType":"bpw:pageLayout",
+        "bpw:style":"horizontal-layout-1",
+        "bpw:width":"fullwidth"
+    },
+    "library/apigateway/siteConfig/apigateway/elements/layout/navbar" : {
+        "jcr:primaryType":"bpw:navbar",
+        "primaryBackground":"fuse-navy-700",
+        "secondaryBackground":"fuse-navy-900",
+        "hidden":"false",
+        "folded":"false",
+        "position":"top",
+        "variant":"vertical-style-1"
+    },
+    "library/apigateway/siteConfig/apigateway/elements/layout/toolbar" : {
+        "jcr:primaryType":"bpw:toolbar",
+        "customBackgroundColor":"false",
+        "background":"fuse-white-500",
+        "hidden":"false",
+        "position":"below"
+    },
+    "library/apigateway/siteConfig/apigateway/elements/layout/footer" : {
+        "jcr:primaryType":"bpw:footer",
+        "customBackgroundColor":"true",
+        "background":"fuse-navy-900",
+        "hidden":"true",
+        "position":"above-static"
+    },
+    "library/apigateway/siteConfig/apigateway/elements/layout/sidePanel" : {
+        "jcr:primaryType":"bpw:sidePanel",
+        "hidden":"true",
+        "position":"right"
+    },
+    "library/design/theme/apigateway" : {
+        "jcr:primaryType":"bpw:system_themeType"        
+    },
+    "library/design/theme/apigateway/properties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+		"bpw:name": "apigateway",
+        "bpw:title": "API Gateway"
+    },
+    "library/design/theme/apigateway/elements" : {
+        "jcr:primaryType":"bpw:system_themeType_ElementFolder",
+        "note": "API gateway theme"
+    }
+}

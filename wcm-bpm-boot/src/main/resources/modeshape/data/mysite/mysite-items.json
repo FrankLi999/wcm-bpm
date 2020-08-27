@@ -29,7 +29,64 @@
         "url": "/mysite/home",
         "translate": "NAV.MYSITE.HOME.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
-    },    
+    },
+    "library/mysite/rootSiteArea/home/MySidePaneContent" : {
+        "jcr:primaryType":"bpw:design_MySidePaneContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MySidePaneContent"    
+    },
+    "library/mysite/rootSiteArea/home/MySidePaneContent/elements" : {
+        "jcr:primaryType":"bpw:design_MySidePaneContent_ElementFolder",
+        "sidebody":"MySidePaneContent Body"
+    },
+    "library/mysite/rootSiteArea/home/MySidePaneContent/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/mysite/workflow/ContentItemWorkflow",
+        "bpw:description":"MySidePaneContent",
+        "bpw:title":"MySidePaneContent"
+    },
+    "library/mysite/rootSiteArea/home/MySidePaneContent1" : {
+        "jcr:primaryType":"bpw:design_MySidePaneContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MySidePaneContent"
+    },
+    "library/mysite/rootSiteArea/home/MySidePaneContent1/elements" : {
+        "jcr:primaryType":"bpw:design_MySidePaneContent_ElementFolder",
+        "sidebody":"MySidePaneContent1 Body"
+    },
+    "library/mysite/rootSiteArea/home/MySidePaneContent1/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/mysite/workflow/ContentItemWorkflow",
+        "bpw:description":"MySidePaneContent1",
+        "bpw:title":"MySidePaneContent1"
+    }, 
+    
+    "library/mysite/rootSiteArea/home/MyContent" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/mysite/rootSiteArea/home/MyContent/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "Content1 Body"
+    },
+    "library/mysite/rootSiteArea/home/MyContent/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/mysite/workflow/ContentItemWorkflow",
+        "bpw:description":"MyContent",
+        "bpw:title":"MyContent"
+    },
+    "library/mysite/rootSiteArea/home/MyContent1" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"    
+    },
+    "library/mysite/rootSiteArea/home/MyContent1/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "Content1 Body"
+    },
+    "library/mysite/rootSiteArea/home/MyContent1/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/mysite/workflow/ContentItemWorkflow",
+        "bpw:description":"MyContent1",
+        "bpw:title":"MyContent1"
+    },   
     "library/mysite/rootSiteArea/news" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
@@ -450,7 +507,7 @@
     },
     "library/mysite/rootSiteArea/home/MyHome/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:workflow": "/mysite/workflow/ContentItemWorkflow",
         "bpw:description":"My Site",
         "bpw:title":"My Site"
     },
@@ -464,7 +521,7 @@
     },
     "library/mysite/rootSiteArea/news/news1/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:workflow": "/mysite/workflow/ContentItemWorkflow",
         "bpw:categories": "/mysite/category/News/FeaturedNews,/mysite/category/News/TopNews",
         "bpw:description":"News 1",
         "bpw:title":"News 1"
@@ -479,7 +536,7 @@
     },
     "library/mysite/rootSiteArea/news/news2/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:workflow": "/mysite/workflow/ContentItemWorkflow",
         "bpw:description":"News 2",
         "bpw:title":"News 2"
     },
@@ -493,7 +550,7 @@
     },
     "library/mysite/rootSiteArea/news/news3/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:workflow": "/mysite/workflow/ContentItemWorkflow",
         "bpw:categories": "/mysite/category/News/FeaturedNews",
         "bpw:description":"News 3",
         "bpw:title":"News 3"
@@ -508,7 +565,7 @@
     },
     "library/mysite/rootSiteArea/news/news4/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:workflow": "/mysite/workflow/ContentItemWorkflow",
         "bpw:description":"News 4",
         "bpw:categories": "/mysite/category/News/TopNews",
         "bpw:title":"News 4"
@@ -523,7 +580,7 @@
     },
     "library/mysite/rootSiteArea/news/news5/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:workflow": "/mysite/workflow/ContentItemWorkflow",
         "bpw:categories": "/mysite/category/News/FeaturedNews,/mysite/category/News/TopNews",
         "bpw:description":"News 5",
         "bpw:title":"News 5"
@@ -668,5 +725,417 @@
     },
     "library/mysite/category/News/TopNews" : {
         "jcr:primaryType":"bpw:system_categoryType"
+    },
+    "library/mysite/workflow/ContentItemWorkflow" : {
+        "jcr:primaryType":"bpw:system_bpmnWorkflowType"
+    },
+    "library/mysite/workflow/ContentItemWorkflow/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name": "ContentItemWorkflow",
+        "bpw:title": "Content Item Workflow",
+        "bpw:description": "Content Item Workflow"
+    },
+    "library/mysite/workflow/ContentItemWorkflow/elements" : {
+        "jcr:primaryType":"bpw:system_bpmnWorkflowType_ElementFolder",
+        "bpmn": "Content Item Workflow"
+    },
+    "library/design/contentAreaLayout/MyLayout" : {
+        "jcr:primaryType":"bpw:contentAreaLayout",
+        "bpw:name": "sampleLayout",
+        "bpw:contentWidth": "80"
+    },
+    "library/design/contentAreaLayout/MyLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "20"
+    },
+    "library/design/contentAreaLayout/MyLayout/sidePane/viewer_s0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "MySidePaneRenderTemplate",
+        "bpw:renderTemplateName": "/design/renderTemplate/MySidePaneRenderTemplate",
+        "bpw:contentPath": "/mysite/rootSiteArea/home/MySidePaneContent"
+    },
+    "library/design/contentAreaLayout/MyLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/design/contentAreaLayout/MyLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/design/contentAreaLayout/MyLayout/row0/column0/viewer_c0_0_0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "MyRenderTemplate",
+        "bpw:renderTemplateName": "/design/renderTemplate/MyRenderTemplate",
+        "bpw:contentPath": "/mysite/rootSiteArea/home/MyContent"
+    },
+    "library/design/contentAreaLayout/MyLayout/row1" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/design/contentAreaLayout/MyLayout/row1/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/design/contentAreaLayout/MyLayout/row1/column0/viewer_c1_0_0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "MyRenderTemplate",
+        "bpw:renderTemplateName": "/design/renderTemplate/MyContentRenderLayout",
+        "bpw:contentPath": "/mysite/rootSiteArea/home/MyContent"
+    },
+    "library/design/renderTemplate/MySidePaneRenderTemplate": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "MySidePaneRenderTemplate",
+		"bpw:title": "MySidePaneRenderTemplate",
+		"bpw:description": "My Side Panel Render Template",
+		"bpw:code": "<render-element element='sidebody'></render-element>",
+		"bpw:preloop": "<div>preloop</div>",
+		"bpw:postloop": "<div>postloop</div>",
+		
+		"bpw:maxEntries": "10",
+		"bpw:note": "MySidePaneRenderTemplate note",
+		"bpw:resourceName": "/design/authoringTemplate/MySidePaneContent",
+		"bpw:nodeType": "bpw:design_MySidePaneContent_AT",
+		"bpw:isQuery": "false"
+	},
+	"library/design/renderTemplate/MyRenderTemplate": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "MyRenderTemplate",
+		"bpw:title": "MyRenderTemplate",
+		"bpw:description": "My Render Template",
+		"bpw:code": "<render-element element='body'></render-element>",
+		"bpw:preloop": "<div>preloop</div>",
+		"bpw:postloop": "<div>postloop</div>",
+		
+		"bpw:maxEntries": "10",
+		"bpw:note": "MyRenderTemplate note",
+		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
+		"bpw:isQuery": "false"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "MyContentRenderLayout",
+		"bpw:title": "MyContentRenderLayout",
+		"bpw:description": "MyContent Render Layout",
+		"bpw:preloop": "<div>preloop</div>",
+		"bpw:postloop": "<div>postloop</div>",
+		
+		"bpw:maxEntries": "10",
+		"bpw:note": "MyContentRenderLayout note",
+		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
+		"bpw:isQuery": "false"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row1/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "100"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row1/column1/name": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+	    "bpw:name": "name"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row2": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row2/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "50"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row2/column1/title": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+	    "bpw:name": "title"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row2/column2": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup2",
+		"bpw:width": "50"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row2/column2/description": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+	    "bpw:name": "description"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row3": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row3/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "100"
+	},
+	"library/design/renderTemplate/MyContentRenderLayout/row3/column1/body": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+		"bpw:name": "body"
+	},
+	"library/design/authoringTemplate/MySidePaneContent" : {
+        "jcr:primaryType": "bpw:authoringTemplate",
+        "bpw:baseType": "contentType",
+        "bpw:contentWorkflow": "bpmn:wcm_content_flow"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups" : {
+        "jcr:primaryType":"bpw:formGroupFoler"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/propertyRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 0
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/propertyRow/firstColumn" : {
+        "jcr:primaryType": "bpw:formColumn",
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description"]
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 1
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.sidebody"]
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/secondRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 2
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.categories"]
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/thirdRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 3
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elementGroups/rows/thirdRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.workflow"]
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties" : {
+        "jcr:primaryType": "bpw:propertyFolder"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/name" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/name/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Name"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/name/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/title" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/title/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Title"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/title/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/description" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:systemIndexed": "true"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/description/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Description"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/categories" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "wcm-categories",
+        "bpw:multiple": "true",
+        "bpw:dataType": "string",
+        "bpw:jcrDataType": "REFERENCE",
+        "bpw:userSearchable": "true"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/categories/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Category"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/workflow" : {
+        "jcr:primaryType": "bpw:FormControl",       
+        "bpw:controlType": "wcm-workflow",
+        "bpw:dataType": "string",
+        "bpw:jcrDataType": "REFERENCE",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/properties/workflow/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+         "bpw:title": "Workflow"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elements/sidebody" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elements/sidebody/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Body"
+    },
+    "library/design/authoringTemplate/MySidePaneContent/elements/sidebody/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
+    },
+    "library/design/authoringTemplate/MyContent" : {
+        "jcr:primaryType": "bpw:authoringTemplate",
+        "bpw:baseType": "contentType",
+        "bpw:contentWorkflow": "bpmn:wcm_content_flow"
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups" : {
+        "jcr:primaryType":"bpw:formGroupFoler"
+    },
+    "library/design/authoringTemplate/MyContent/elements" : {
+        "jcr:primaryType": "bpw:elementFolder"
+    },
+    "library/design/authoringTemplate/MyContent/properties" : {
+        "jcr:primaryType": "bpw:propertyFolder"
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows" : {
+        "jcr:primaryType":"bpw:formRows"
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/propertyRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 0
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/propertyRow/firstColumn" : {
+        "jcr:primaryType": "bpw:formColumn",
+        "bpw:fieldNames": ["properties.name", "properties.title", "properties.description"]
+    },    
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/firstRow" : {
+        "jcr:primaryType":"bpw:formRow",
+         "bpw:order": 1
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.body"]
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/secondRow" : {
+        "jcr:primaryType":"bpw:formRow",
+         "bpw:order": 2
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.categories"]
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/thirdRow" : {
+        "jcr:primaryType":"bpw:formRow",
+         "bpw:order": 3
+    },
+    "library/design/authoringTemplate/MyContent/elementGroups/rows/thirdRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["properties.workflow"]
+    },
+    "library/design/authoringTemplate/MyContent/properties/name" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MyContent/properties/name/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Name"
+    },
+    "library/design/authoringTemplate/MyContent/properties/name/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
+    },
+    "library/design/authoringTemplate/MyContent/properties/title" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MyContent/properties/title/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Title"
+    },
+    "library/design/authoringTemplate/MyContent/properties/title/stringConstraint": {
+        "jcr:primaryType": "bpw:StringConstraint",
+        "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
+    },
+    "library/design/authoringTemplate/MyContent/properties/description" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:systemIndexed": "true"
+    },
+    "library/design/authoringTemplate/MyContent/properties/description/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Description"
+    },
+    "library/design/authoringTemplate/MyContent/properties/categories" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "wcm-categories",
+        "bpw:jcrDataType": "REFERENCE",
+        "bpw:multiple": "true",
+        "bpw:dataType": "string",
+        "bpw:userSearchable": "true"
+    },
+    "library/design/authoringTemplate/MyContent/properties/categories/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Category"
+    },  
+    "library/design/authoringTemplate/MyContent/elements/body" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "textarea",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/design/authoringTemplate/MyContent/elements/body/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Body"
+    },
+    "library/design/authoringTemplate/MyContent/properties/workflow" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "wcm-workflow",
+        "bpw:dataType": "string",
+        "bpw:jcrDataType": "REFERENCE",
+        "bpw:mandatory": "false",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    }, 
+    "library/design/authoringTemplate/MyContent/properties/workflow/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+         "bpw:title": "Workflow"
     }
 }
