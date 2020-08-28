@@ -62,16 +62,17 @@ public abstract class SpringService
 
     private static final Logger log = LogManager.getLogger(SpringService.class);
     
-	private SpringProperties properties;
-	private PasswordEncoder passwordEncoder;
-    private MailSender mailSender;
-	private AbstractUserRepository<U, ID> userRepository;
-	private UserDetailsService userDetailsService;
-	private BlueTokenService blueTokenService;
-	private GreenTokenService greenTokenService;
-	private RoleRepository roleRepository;
-	private TenantRepository tenantRepository;
-	private Map<String, Role> preloadedRoles;
+//	protected SpringProperties properties;
+//	protected PasswordEncoder passwordEncoder;
+//	protected MailSender mailSender;
+	protected AbstractUserRepository<U, ID> userRepository;
+	protected UserDetailsService userDetailsService;
+//	protected BlueTokenService blueTokenService;
+//	protected GreenTokenService greenTokenService;
+	protected RoleRepository roleRepository;
+	protected TenantRepository tenantRepository;
+	protected Map<String, Role> preloadedRoles;
+	
 	
 	@Autowired
 	public void createSpringService(SpringProperties properties,
@@ -270,7 +271,8 @@ public abstract class SpringService
 	/**
 	 * Signs up a user.
 	 */
-	@Validated(UserUtils.SignUpValidation.class)
+	//TODO - validation, capcha
+	// @Validated(UserUtils.SignUpValidation.class)
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public void signup(@Valid U user) {
 		

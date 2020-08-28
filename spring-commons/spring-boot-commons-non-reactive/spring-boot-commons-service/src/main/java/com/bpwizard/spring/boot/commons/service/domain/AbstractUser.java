@@ -1,6 +1,7 @@
 package com.bpwizard.spring.boot.commons.service.domain;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -173,7 +174,7 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> impl
 
 
 	public Set<String> getRoleNames() {
-		return this.getRoles().stream().map(r -> r.getName()).collect(Collectors.toSet());
+		return this.getRoles().stream().filter(r -> r != null).map(r -> r.getName()).collect(Collectors.toSet());
 	}
 	/**
 	 * Makes a User DTO
@@ -197,11 +198,14 @@ public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> impl
 		// roles would be org.hibernate.collection.internal.PersistentSet,
 		// which is not in another microservices not having Hibernate.
 		// So, let's convert it to HashSet
-		Set<String> userRoles = this.roles.stream()
+		Set<String> userRoles = (this.roles == null || this.roles.size() == 0) ?
+				Collections.emptySet()
+				: this.getRoleNames();
+//				this.roles.stream();
 				//.map(role -> new SpringGrantedAuthority("ROLE_" + role))
-				.map(Role::getName)
-				.collect(Collectors.toCollection(() ->
-					new HashSet<String>(this.roles.size()))); 
+//				.map(Role::getName)
+//				.collect(Collectors.toCollection(() ->
+//					new HashSet<String>(this.roles.size()))); 
 		
 		userDto.setRoles(userRoles);
 		

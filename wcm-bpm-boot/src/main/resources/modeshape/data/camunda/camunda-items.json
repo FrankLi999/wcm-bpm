@@ -1046,12 +1046,12 @@
     "library/camunda/rootSiteArea/admin/users" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/users/elements" : {
+    "library/camunda/rootSiteArea/admin/users/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"Users",
          "bpw:title":"Users"
     },
-    "library/camunda/rootSiteArea/admin/users/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/users/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-users",
         "navigationType": "item",
@@ -1063,12 +1063,12 @@
     "library/camunda/rootSiteArea/admin/users/new" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/users/new/elements" : {
+    "library/camunda/rootSiteArea/admin/users/new/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"NewUser",
          "bpw:title":"New User"
     },
-    "library/camunda/rootSiteArea/admin/users/new/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/users/new/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-new-user",
         "navigationType": "item",
@@ -1080,12 +1080,12 @@
     "library/camunda/rootSiteArea/admin/users/list" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/users/list/elements" : {
+    "library/camunda/rootSiteArea/admin/users/list/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"ListUsers",
          "bpw:title":"List of users"
     },
-    "library/camunda/rootSiteArea/admin/users/list/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/users/list/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-list-users",
         "navigationType": "item",
@@ -1094,15 +1094,51 @@
         "translate": "NAV.BPM.LIST_USERS.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     },
+    "library/camunda/rootSiteArea/admin/users/list/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/camunda/rootSiteArea/admin/users/list/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/camunda/rootSiteArea/admin/users/list/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/camunda/rootSiteArea/admin/users/list/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/camunda/rootSiteArea/admin/users/list/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "My Applications Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
+        "bpw:contentPath": "/camunda/rootSiteArea/admin/users/list/UsersListApp"
+    },
+	"library/camunda/rootSiteArea/admin/users/list/UsersListApp" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/admin/users/list/UsersListApp/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<render-widget component=\"UserListComponent\" data=\\'{\"data\":\"test\"}\\'></render-widget>"
+    },
+    "library/camunda/rootSiteArea/admin/users/list/UsersListApp/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"List of users",
+        "bpw:title":"List of Users"
+    },
     "library/camunda/rootSiteArea/admin/users/profile" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/users/profile/elements" : {
+    "library/camunda/rootSiteArea/admin/users/profile/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"MyProfile",
          "bpw:title":"My Profile"
     },
-    "library/camunda/rootSiteArea/admin/users/profile/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/users/profile/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-my-profile",
         "navigationType": "item",
@@ -1117,7 +1153,7 @@
     },
     "library/camunda/rootSiteArea/admin/users/NewUser/elements" : {
         "jcr:primaryType":"bpw:design_MyApplication_ElementFolder",
-        "link": "/bpm/admin/users/new"
+        "link": "/auth/signup"
     },
     "library/camunda/rootSiteArea/admin/users/NewUser/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
@@ -1170,12 +1206,12 @@
     "library/camunda/rootSiteArea/admin/groups" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/groups/elements" : {
+    "library/camunda/rootSiteArea/admin/groups/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"Groups",
          "bpw:title":"Groups"
     },
-    "library/camunda/rootSiteArea/admin/groups/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/groups/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-groups",
         "navigationType": "item",
@@ -1187,12 +1223,12 @@
     "library/camunda/rootSiteArea/admin/groups/new" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/groups/new/elements" : {
+    "library/camunda/rootSiteArea/admin/groups/new/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"NewGroup",
          "bpw:title":"New Group"
     },
-    "library/camunda/rootSiteArea/admin/groups/new/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/groups/new/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-new-group",
         "navigationType": "item",
@@ -1204,12 +1240,12 @@
     "library/camunda/rootSiteArea/admin/groups/list" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/groups/list/elements" : {
+    "library/camunda/rootSiteArea/admin/groups/list/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"ListGroups",
          "bpw:title":"List of Groups"
     },
-    "library/camunda/rootSiteArea/admin/groups/list/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/groups/list/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-list-groups",
         "navigationType": "item",
@@ -1294,6 +1330,42 @@
         "translate": "NAV.BPM.MANAGE_AUTHORIZATIONS.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     },
+    "library/camunda/rootSiteArea/admin/authorizations/manage/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/camunda/rootSiteArea/admin/authorizations/manage/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/camunda/rootSiteArea/admin/authorizations/manage/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/camunda/rootSiteArea/admin/authorizations/manage/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/camunda/rootSiteArea/admin/authorizations/manage/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "My Applications Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
+        "bpw:contentPath": "/camunda/rootSiteArea/admin/authorizations/manage/ManageAuthorizationsApp"
+    },
+	"library/camunda/rootSiteArea/admin/authorizations/manage/ManageAuthorizationsApp" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/admin/authorizations/manage/ManageAuthorizationsApp/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<manage-authorizations></manage-authorizations>"
+    },
+    "library/camunda/rootSiteArea/admin/authorizations/manage/ManageAuthorizationsApp/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"Manage Authorizations",
+        "bpw:title":"Manage Authorizations"
+    },
     "library/camunda/rootSiteArea/admin/authorizations/ManageAuthorizations" : {
         "jcr:primaryType":"bpw:design_MyApplication_AT",
         "bpw:authoringTemplate":"/design/authoringTemplate/MyApplication"      
@@ -1325,12 +1397,12 @@
     "library/camunda/rootSiteArea/admin/tenants" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/tenants/elements" : {
+    "library/camunda/rootSiteArea/admin/tenants/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"Tenants",
          "bpw:title":"Tenants"
     },
-    "library/camunda/rootSiteArea/admin/tenants/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/tenants/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-tenants",
         "navigationType": "item",
@@ -1342,12 +1414,12 @@
     "library/camunda/rootSiteArea/admin/tenants/new" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/tenants/new/elements" : {
+    "library/camunda/rootSiteArea/admin/tenants/new/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"NewTenant",
          "bpw:title":"New Tenant"
     },
-    "library/camunda/rootSiteArea/admin/tenants/new/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/tenants/new/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-new-tenant",
         "navigationType": "item",
@@ -1359,12 +1431,12 @@
     "library/camunda/rootSiteArea/admin/tenants/list" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/tenants/list/elements" : {
+    "library/camunda/rootSiteArea/admin/tenants/list/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"ListTenants",
          "bpw:title":"List of Tenants"
     },
-    "library/camunda/rootSiteArea/admin/tenants/list/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/tenants/list/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-list-tenants",
         "navigationType": "item",
@@ -1379,7 +1451,7 @@
     },
     "library/camunda/rootSiteArea/admin/tenants/NewTenant/elements" : {
         "jcr:primaryType":"bpw:design_MyApplication_ElementFolder",
-        "link": "/bpm/admin/tenant/new"
+        "link": "/bpm/admin/tenants/new"
     },
     "library/camunda/rootSiteArea/admin/tenants/NewTenant/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
@@ -1393,7 +1465,7 @@
     },
     "library/camunda/rootSiteArea/admin/tenants/ListTenants/elements" : {
         "jcr:primaryType":"bpw:design_MyApplication_ElementFolder",
-        "link": "/bpm/admin/tenant/list"
+        "link": "/bpm/admin/tenants/list"
     },
     "library/camunda/rootSiteArea/admin/tenants/ListTenants/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
@@ -1418,12 +1490,12 @@
     "library/camunda/rootSiteArea/admin/system" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/system/elements" : {
+    "library/camunda/rootSiteArea/admin/system/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"System",
          "bpw:title":"System"
     },
-    "library/camunda/rootSiteArea/admin/system/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/system/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-system",
         "navigationType": "item",
@@ -1435,12 +1507,12 @@
     "library/camunda/rootSiteArea/admin/system/general" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/system/general/elements" : {
+    "library/camunda/rootSiteArea/admin/system/general/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"GeneralSystem",
          "bpw:title":"General"
     },
-    "library/camunda/rootSiteArea/admin/system/general/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/system/general/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-system-general",
         "navigationType": "item",
@@ -1452,17 +1524,17 @@
     "library/camunda/rootSiteArea/admin/system/metrics" : {
         "jcr:primaryType":"bpw:system_siteAreaType"   
     },
-    "library/camunda/rootSiteArea/admin/system/metrics/elements" : {
+    "library/camunda/rootSiteArea/admin/system/metrics/itemProperties" : {
          "jcr:primaryType":"bpw:ContentItemproperties",
          "bpw:name":"ExecutionMetrics",
          "bpw:title":"Execution Metrics"
     },
-    "library/camunda/rootSiteArea/admin/system/metrics/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/system/metrics/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "admin-execution-metrics",
         "navigationType": "item",
         "icon": "archive",
-        "url": "/bpm/adminsystem/metrics",
+        "url": "/bpm/admin/system/metrics",
         "translate": "NAV.BPM.SYSTEM_METRICS.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     }, 
@@ -1623,40 +1695,257 @@
         "bpw:resourceId": 20,
         "bpw:permissions": ["READ"]
     },
-    "library/camunda/rootSiteArea/admin/authorizations/manage/siteAreaLayout" : {
+        "library/camunda/rootSiteArea/admin/users/profile/siteAreaLayout" : {
         "jcr:primaryType":"bpw:siteAreaLayout",
         "bpw:contentWidth": "100"
     },
-    "library/camunda/rootSiteArea/admin/authorizations/manage/siteAreaLayout/sidePane" : {
+    "library/camunda/rootSiteArea/admin/users/profile/siteAreaLayout/sidePane" : {
         "jcr:primaryType":"bpw:contentAreaSidePanel",
         "bpw:isLeft": "true",
         "bpw:width": "0"
     },
-    "library/camunda/rootSiteArea/admin/authorizations/manage/siteAreaLayout/row0" : {
+    "library/camunda/rootSiteArea/admin/users/profile/siteAreaLayout/row0" : {
         "jcr:primaryType":"bpw:layoutRow"
     },
-    "library/camunda/rootSiteArea/admin/authorizations/manage/siteAreaLayout/row0/column0" : {
+    "library/camunda/rootSiteArea/admin/users/profile/siteAreaLayout/row0/column0" : {
         "jcr:primaryType":"bpw:layoutColumn",
         "bpw:width": "100"
     },
-    "library/camunda/rootSiteArea/admin/authorizations/manage/siteAreaLayout/row0/column0/viewer0" : {
+    "library/camunda/rootSiteArea/admin/users/profile/siteAreaLayout/row0/column0/viewer0" : {
         "jcr:primaryType":"bpw:resourceViewer",
         "bpw:title": "My Applications Render Template",
         "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
-        "bpw:contentPath": "/camunda/rootSiteArea/admin/authorizations/manage/ManageAuthorizationsApp"
+        "bpw:contentPath": "/camunda/rootSiteArea/admin/users/profile/UserProfileApp"
     },
-	"library/camunda/rootSiteArea/admin/authorizations/manage/ManageAuthorizationsApp" : {
+    "library/camunda/rootSiteArea/admin/users/profile/UserProfileApp" : {
         "jcr:primaryType":"bpw:design_MyContent_AT",
         "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
     },
-    "library/camunda/rootSiteArea/admin/authorizations/manage/ManageAuthorizationsApp/elements" : {
+    "library/camunda/rootSiteArea/admin/users/profile/UserProfileApp/elements" : {
         "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
-        "body": "<manage-authorizations></manage-authorizations>"
+        "body": "<render-widget component=\"EditUserComponent\" data=\\'{\"data\":\"test\"}\\'></render-widget>"
     },
-    "library/camunda/rootSiteArea/admin/authorizations/manage/ManageAuthorizationsApp/itemProperties" : {
+    "library/camunda/rootSiteArea/admin/users/profile/UserProfileApp/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
         "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
-        "bpw:description":"Manage Authorizations",
-        "bpw:title":"Manage Authorizations"
+        "bpw:description":"User profile",
+        "bpw:title":"User Profile"
+    },
+    
+    "library/camunda/rootSiteArea/admin/groups/new/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/camunda/rootSiteArea/admin/groups/new/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/camunda/rootSiteArea/admin/groups/new/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/camunda/rootSiteArea/admin/groups/new/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/camunda/rootSiteArea/admin/groups/new/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "My Applications Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
+        "bpw:contentPath": "/camunda/rootSiteArea/admin/groups/new/NewGroupApp"
+    },
+    "library/camunda/rootSiteArea/admin/groups/new/NewGroupApp" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/admin/groups/new/NewGroupApp/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<render-widget component=\"NewGroupComponent\" data=\\'{\"data\":\"test\"}\\'></render-widget>"
+    },
+    "library/camunda/rootSiteArea/admin/groups/new/NewGroupApp/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"New group",
+        "bpw:title":"New Group"
+    },
+    "library/camunda/rootSiteArea/admin/groups/list/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/camunda/rootSiteArea/admin/groups/list/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/camunda/rootSiteArea/admin/groups/list/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/camunda/rootSiteArea/admin/groups/list/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/camunda/rootSiteArea/admin/groups/list/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "My Applications Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
+        "bpw:contentPath": "/camunda/rootSiteArea/admin/groups/list/GroupListApp"
+    },
+    "library/camunda/rootSiteArea/admin/groups/list/GroupListApp" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/admin/groups/list/GroupListApp/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<render-widget component=\"GroupListComponent\" data=\\'{\"data\":\"test\"}\\'></render-widget>"
+    },
+    "library/camunda/rootSiteArea/admin/groups/list/GroupListApp/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"List of groups",
+        "bpw:title":"List of Groups"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/new/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/new/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/new/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/new/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/new/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "My Applications Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
+        "bpw:contentPath": "/camunda/rootSiteArea/admin/tenants/new/NewTenantApp"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/new/NewTenantApp" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/admin/tenants/new/NewTenantApp/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<render-widget component=\"NewTenantComponent\" data=\\'{\"data\":\"test\"}\\'></render-widget>"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/new/NewTenantApp/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"New tenant",
+        "bpw:title":"New Tenant"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/list/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/list/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/list/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/list/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/list/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "My Applications Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
+        "bpw:contentPath": "/camunda/rootSiteArea/admin/tenants/list/TenantListApp"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/list/TenantListApp" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/admin/tenants/list/TenantListApp/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<render-widget component=\"TenantListComponent\" data=\\'{\"data\":\"test\"}\\'></render-widget>"
+    },
+    "library/camunda/rootSiteArea/admin/tenants/list/TenantListApp/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"List of tenants",
+        "bpw:title":"List of Tenants"
+    },
+    "library/camunda/rootSiteArea/admin/system/general/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/camunda/rootSiteArea/admin/system/general/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/camunda/rootSiteArea/admin/system/general/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/camunda/rootSiteArea/admin/system/general/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/camunda/rootSiteArea/admin/system/general/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "My Applications Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
+        "bpw:contentPath": "/camunda/rootSiteArea/admin/system/general/GeneralSettingsApp"
+    },
+    "library/camunda/rootSiteArea/admin/system/general/GeneralSettingsApp" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/admin/system/general/GeneralSettingsApp/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<render-widget component=\"GeneralSettingsComponent\" data=\\'{\"data\":\"test\"}\\'></render-widget>"
+    },
+    "library/camunda/rootSiteArea/admin/system/general/GeneralSettingsApp/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"General settings",
+        "bpw:title":"General Settings"
+    },
+    "library/camunda/rootSiteArea/admin/system/metrics/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/camunda/rootSiteArea/admin/system/metrics/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/camunda/rootSiteArea/admin/system/metrics/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/camunda/rootSiteArea/admin/system/metrics/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/camunda/rootSiteArea/admin/system/metrics/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "My Applications Render Template",
+        "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
+        "bpw:contentPath": "/camunda/rootSiteArea/admin/system/metrics/ExecutionMetricsApp"
+    },
+    "library/camunda/rootSiteArea/admin/system/metrics/ExecutionMetricsApp" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/camunda/rootSiteArea/admin/system/metrics/ExecutionMetricsApp/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<render-widget component=\"ExecutionMetricsComponent\" data=\\'{\"data\":\"test\"}\\'></render-widget>"
+    },
+    "library/camunda/rootSiteArea/admin/system/metrics/ExecutionMetricsApp/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"Execution metrics",
+        "bpw:title":"Execution Metrics"
     }
 }

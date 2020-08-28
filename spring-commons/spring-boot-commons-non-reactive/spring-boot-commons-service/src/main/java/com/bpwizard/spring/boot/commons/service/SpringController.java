@@ -47,7 +47,7 @@ public abstract class SpringController
 	private static final Logger log = LogManager.getLogger(SpringController.class);
 
     private long jwtExpirationMillis;
-	private SpringService<U, ID> springService;
+	protected SpringService<U, ID> springService;
 	
 	@Autowired
 	public void createSpringController(
@@ -124,8 +124,8 @@ public abstract class SpringController
 	 */
 	@PostMapping("/users/{id}/verification")
 	public UserDto verifyUser(
-			@PathVariable ID id,
-			@RequestParam String code,
+			@PathVariable("id") ID id,
+			@RequestParam("code") String code,
 			HttpServletResponse response) {
 		
 		log.debug("Verifying user ...");		
@@ -140,7 +140,7 @@ public abstract class SpringController
 	 */
 	@PostMapping("/forgot-password")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void forgotPassword(@RequestParam String email) {
+	public void forgotPassword(@RequestParam("email") String email) {
 		
 		log.debug("Received forgot password request for: " + email);				
 		springService.forgotPassword(email);
@@ -166,7 +166,7 @@ public abstract class SpringController
 	 * Fetches a user by email
 	 */
 	@PostMapping("/users/fetch-by-email")
-	public U fetchUserByEmail(@RequestParam String email) {
+	public U fetchUserByEmail(@RequestParam("email") String email) {
 		
 		log.debug("Fetching user by email: " + email);						
 		return springService.fetchUserByEmail(email);
@@ -214,10 +214,12 @@ public abstract class SpringController
 	 */
 	@PostMapping("/users/{id}/password")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void changePassword(@PathVariable("id") U user,
+	public void changePassword(@PathVariable("id") String id,
 			@RequestBody ChangePasswordForm changePasswordForm,
 			HttpServletResponse response) {
 		
+		//TODO: what exception to throw
+		U user = this.springService.findUserById(id).orElseThrow(RuntimeException::new);
 		log.debug("Changing password ... ");				
 		String username = springService.changePassword(user, changePasswordForm);
 		
@@ -243,8 +245,8 @@ public abstract class SpringController
 	 */
 	@PostMapping("/users/{userId}/email")
 	public UserDto changeEmail(
-			@PathVariable ID userId,
-			@RequestParam String code,
+			@PathVariable("userId") ID userId,
+			@RequestParam("code") String code,
 			HttpServletResponse response) {
 		
 		log.debug("Changing email of user ...");		
@@ -260,8 +262,8 @@ public abstract class SpringController
 	 */
 	@PostMapping("/fetch-new-auth-token")
 	public Map<String, String> fetchNewToken(
-			@RequestParam Optional<Long> expirationMillis,
-			@RequestParam Optional<String> username,
+			@RequestParam(name="expirationMillis", required=false) Optional<Long> expirationMillis,
+			@RequestParam(name="username", required=false) Optional<String> username,
 			HttpServletResponse response) {
 		
 		log.debug("Fetching a new token ... ");

@@ -3,6 +3,7 @@ package com.bpwizard.spring.boot.commons.service;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -194,6 +195,11 @@ public class AutoConfiguration {
 		
         log.info("preloadedRoles");   //TODO, load in batch
         Map<String, Role> roles = new HashMap<>();
+        String[] roleNames = properties.getRolename();
+		for (String roleName: roleNames) {
+			//Optional<Role> role = 
+			roleRepository.findByName(roleName).ifPresent(role -> roles.put(roleName, role));
+		}
         return roles;	
 	}
 }

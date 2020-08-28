@@ -29,7 +29,7 @@ public abstract class AbstractSpringService
 	protected PasswordEncoder passwordEncoder;
 	protected SpringProperties properties;
 	protected BlueTokenService blueTokenService;
-	protected GreenTokenService greenTokenService;
+	protected GreenTokenService greenTokenService;	
 	@SuppressWarnings("rawtypes")
 	protected MailSender mailSender;
 
@@ -115,8 +115,8 @@ public abstract class AbstractSpringService
 					SecurityUtils.mapOf("email", user.getEmail()));
 
 			// make the link
-			String verifyLink = properties.getApplicationUrl()
-				+ "/users/" + user.getId() + "/verification?code=" + verificationCode;
+			String verifyLink = properties.getCoreAdminUIUrl()
+				+ "/auth/verification/" + user.getId() + "?code=" + verificationCode;
 
 			// send the mail
 			sendVerificationMail(user, verifyLink);
@@ -140,7 +140,7 @@ public abstract class AbstractSpringService
 		mailSender.send(SpringMailData.of(user.getEmail(),
 			SpringExceptionUtils.getMessage("com.bpwizard.spring.verifySubject"),
 			SpringExceptionUtils.getMessage(
-				"com.bpwizard.spring.spring.verifyEmail",	verifyLink)));
+				"com.bpwizard.spring.verifyEmail",	verifyLink)));
 	}	
 	
 	/**
@@ -157,8 +157,8 @@ public abstract class AbstractSpringService
 				user.getEmail(), properties.getJwt().getExpirationMillis());
 
 		// make the link
-		String forgotPasswordLink =	properties.getApplicationUrl()
-			    + "/reset-password?code=" + forgotPasswordCode;
+		String forgotPasswordLink =	properties.getCoreAdminUIUrl()
+			    + "/auth/reset-password?code=" + forgotPasswordCode;
 		
 		mailForgotPasswordLink(user, forgotPasswordLink);
 		

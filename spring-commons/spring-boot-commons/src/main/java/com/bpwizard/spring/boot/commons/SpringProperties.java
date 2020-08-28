@@ -58,8 +58,9 @@ public class SpringProperties {
 	 * Client web application's base URL.
 	 * Used in the verification link mailed to the users, etc.
 	 */
-    private String applicationUrl = "http://localhost:8080";
+    private String applicationUrl = "http://wcm-server.bpwizard.com:28080";
     
+    private String coreAdminUIUrl = "http://bpm-ui:4009";
 	/**
 	 * The default URL to redirect to after
 	 * a user logs in using OAuth2/OpenIDConnect

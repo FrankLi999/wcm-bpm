@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,19 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
-import com.bpwizard.spring.boot.commons.service.repo.domain.UserRepository;
-import com.bpwizard.spring.boot.commons.service.repo.exception.ResourceNotFoundException;
-import com.bpwizard.wcm.repo.annotations.CurrentUser;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
-import com.bpwizard.wcm.repo.rest.bpm.model.Resource;
 import com.bpwizard.wcm.repo.rest.bpm.model.BpmApplication;
 import com.bpwizard.wcm.repo.rest.bpm.model.BpmApplications;
 import com.bpwizard.wcm.repo.rest.bpm.model.BpmLink;
 import com.bpwizard.wcm.repo.rest.bpm.model.BpmLinks;
-import com.bpwizard.wcm.repo.rest.bpm.model.UserProfile;
+import com.bpwizard.wcm.repo.rest.bpm.model.Resource;
 import com.bpwizard.wcm.repo.rest.jcr.controllers.BaseWcmRestController;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
@@ -48,8 +41,6 @@ public class BpmContentRestController extends BaseWcmRestController {
 	// public static final String SITE_AREA_PATTERN = "/camunda/rootSiteArea/%s";
 	public static final String REPOSITITORY = "bpwizard";
 	public static final String WORKSPACE = "default";
-    @Autowired
-    private UserRepository userRepository;
     
 	@GetMapping(path = "/application", produces = MediaType.APPLICATION_JSON_VALUE)
 	public BpmApplications getBpmApplications(
@@ -131,19 +122,6 @@ public class BpmContentRestController extends BaseWcmRestController {
 		}
 	}
 
-	@GetMapping(path = "/user-profile", produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserProfile userProfile(@CurrentUser SpringPrincipal userPrincipal) {
-		UserProfile userProfile = new UserProfile();
-		// Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User user = userRepository.findByEmail(userPrincipal.currentUser().getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.currentUser().getId()));
-		userProfile.setName(user.getName());
-		userProfile.setEmail(user.getEmail());
-		List<String> groups = user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
-		userProfile.setGroups(groups);
-		return userProfile;
-	}
-	
 	@GetMapping(path = "/resources", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Resource> getResources(
 			HttpServletRequest request) {
