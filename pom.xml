@@ -23,6 +23,7 @@
 		<module>modeshape-boot</module>
 		<module>camunda-boot</module>
 		<module>wcm-bpm-boot</module>
+		<module>setup</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

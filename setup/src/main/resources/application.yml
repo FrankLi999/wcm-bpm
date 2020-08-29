@@ -1,0 +1,14 @@
+bpw:
+  mysqlUrl: "jdbc:mysql://localhost:3306"
+  mysqlAdminUser: root
+  mysqlAdminPassword: P@ssw0rd
+  mysqlUser: wcmbpm
+  mysqlPassword: P@ssw0rd
+  mysqlSchema: wcm_bpm
+  dropSchemaStatement: "DROP schema %s"
+  createSchemaStatement: "CREATE SCHEMA %s DEFAULT CHARACTER SET utf8 COLLATE utf8_bin"
+  dropUserStatement: "DROP USER %s"
+  createUserStatement: "CREATE USER '%s' IDENTIFIED BY '%s'"
+  grantStatement: "GRANT ALL ON *.* TO '%s'@'%s' WITH GRANT OPTION"
+  flushprivileges: "flush privileges"
+  mysqlScript: "classpath:wcm.sql"
