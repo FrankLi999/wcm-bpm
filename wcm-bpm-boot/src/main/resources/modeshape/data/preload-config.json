@@ -1,0 +1,56 @@
+[
+	{
+		"repository": "bpwizard",
+		"workspace": ["default", "draft", "expired"],
+		"preloadType": "CND",
+		"path": "classpath:/modeshape/data/mytypes.cnd"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default", "draft", "expired"],
+		"preloadType": "ITEMS",
+		"path": "classpath:/modeshape/data/bpw-content.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default", "draft", "expired"],
+		"preloadType": "LIBRARY",
+		"path": "classpath:/modeshape/data/mysite/mysite-library.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default"],
+		"preloadType": "QUERY",
+		"path": "classpath:/modeshape/data/queries.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default", "draft", "expired"],
+		"preloadType": "ITEMS",
+		"path": "classpath:/modeshape/data/mysite/mysite-items.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default", "draft", "expired"],
+		"preloadType": "LIBRARY",
+		"path": "classpath:/modeshape/data/camunda/camunda-library.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default", "draft", "expired"],
+		"preloadType": "ITEMS",
+		"path": "classpath:/modeshape/data/camunda/camunda-items.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default", "draft", "expired"],
+		"preloadType": "LIBRARY",
+		"path": "classpath:/modeshape/data/apigateway/apigateway-library.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default", "draft", "expired"],
+		"preloadType": "ITEMS",
+		"path": "classpath:/modeshape/data/apigateway/apigateway-items.json"
+	}
+]

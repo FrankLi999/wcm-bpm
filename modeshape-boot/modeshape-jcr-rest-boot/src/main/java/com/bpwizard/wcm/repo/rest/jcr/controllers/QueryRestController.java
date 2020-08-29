@@ -9,9 +9,7 @@ import java.util.Map;
 
 import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.jcr.Value;
-import javax.jcr.query.InvalidQueryException;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
@@ -40,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
@@ -211,74 +208,13 @@ public class QueryRestController extends BaseWcmRestController {
     		@RequestParam("file") MultipartFile file ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-    		com.bpwizard.wcm.repo.rest.jcr.model.Query[] queries = this.readJson(
-    				file.getInputStream(), 
-    				com.bpwizard.wcm.repo.rest.jcr.model.Query[].class);
-    		for (com.bpwizard.wcm.repo.rest.jcr.model.Query query: queries) {
-    			
-    			this.doCreateQueryStatement(toQueryStatement(query, repository, workspace), request);
-    		}
+    		this.doLoadQueries(request, repository, workspace, file.getInputStream());
 	    	logger.debug("Exiting ...");
 	    	return ResponseEntity.status(HttpStatus.CREATED).build();
     	} catch (Throwable t) {
     		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_ITEMS, null));
     	} 
     }
-	
-	private QueryStatement toQueryStatement(com.bpwizard.wcm.repo.rest.jcr.model.Query query, String repository, String workspace) {
-		QueryStatement queryStatement = new QueryStatement();
-		queryStatement.setRepository(repository);
-		queryStatement.setWorkspace(workspace);
-		queryStatement.setQuery(query.getQuery());
-		queryStatement.setName(query.getName());
-		queryStatement.setLibrary(query.getLibrary());
-		return queryStatement;
-	}
-	
-	private void doCreateQueryStatement(QueryStatement query, HttpServletRequest request) 
-			throws WcmRepositoryException {
-		try {
-			String repositoryName = query.getRepository();
-			
-			try {
-				QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
-				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
-				QueryResult jcrResult = jcrQuery.execute();
-				String columnNames[] = jcrResult.getColumnNames();
-				query.setColumns(columnNames);
-			} catch (Exception e) {
-				logger.error("JCR Query Error.", e);
-				String message = (e instanceof InvalidQueryException) ? ((InvalidQueryException)e).getMessage() : "Invalid JCR Query";
-				throw new WcmRepositoryException(e, new WcmError(
-						SpringExceptionUtils.getMessage("com.bpwizard.modeshape.invalid_query", message), 
-						WcmErrors.INVALID_JCR_QUERY, 
-						null));
-			}
-			ObjectNode qJson = (ObjectNode) query.toJson();
-			// javax.jcr.query.qom.QueryObjectModel qom = null
-			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
-			
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
-			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
-			}
-			if (logger.isDebugEnabled()) {
-				logger.traceExit();
-			}
-			
-		} catch (WcmRepositoryException e ) {
-			logger.error(e);
-			throw e;
-		} catch (RepositoryException re) { 
-			logger.error(re);
-			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_QUERY_ERROR, null));
-	    } catch (Throwable t) {
-	    	logger.error(t);
-			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
-		}	
-	}
 	
 	private String doGetQueryStatement(QueryStatement query, HttpServletRequest request) throws RepositoryException {
 		String baseUrl = RestHelper.repositoryUrl(request);

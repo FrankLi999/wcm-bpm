@@ -15,15 +15,20 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.query.InvalidQueryException;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modeshape.jcr.api.query.Query;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
+import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
@@ -2739,5 +2744,80 @@ public abstract class BaseWcmRestController {
 	protected <T> T readJson(InputStream requestBody, Class<T> valueType) throws IOException {
         return new ObjectMapper().readValue(requestBody, valueType);
     }
+	
+	protected void doLoadQueries( HttpServletRequest request,
+    		String repository,
+    		String workspace,
+    		InputStream inputStream) throws WcmRepositoryException {
+    	logger.debug("Entering ...");
+    	try {
+    		com.bpwizard.wcm.repo.rest.jcr.model.Query[] queries = this.readJson(
+    				inputStream, 
+    				com.bpwizard.wcm.repo.rest.jcr.model.Query[].class);
+    		for (com.bpwizard.wcm.repo.rest.jcr.model.Query query: queries) {
+    			
+    			this.doCreateQueryStatement(toQueryStatement(query, repository, workspace), request);
+    		}
+	    	logger.debug("Exiting ...");
+    	} catch (Throwable t) {
+    		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_ITEMS, null));
+    	} 
+    }
+	
+	protected void doCreateQueryStatement(QueryStatement query, HttpServletRequest request) 
+			throws WcmRepositoryException {
+		try {
+			String repositoryName = query.getRepository();
+			
+			try {
+				QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
+				javax.jcr.query.Query jcrQuery = qrm.createQuery(query.getQuery(), Query.JCR_SQL2);
+				QueryResult jcrResult = jcrQuery.execute();
+				String columnNames[] = jcrResult.getColumnNames();
+				query.setColumns(columnNames);
+			} catch (Exception e) {
+				logger.error("JCR Query Error.", e);
+				String message = (e instanceof InvalidQueryException) ? ((InvalidQueryException)e).getMessage() : "Invalid JCR Query";
+				throw new WcmRepositoryException(e, new WcmError(
+						SpringExceptionUtils.getMessage("com.bpwizard.modeshape.invalid_query", message), 
+						WcmErrors.INVALID_JCR_QUERY, 
+						null));
+			}
+			ObjectNode qJson = (ObjectNode) query.toJson();
+			// javax.jcr.query.qom.QueryObjectModel qom = null
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
+			
+			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
+			if (this.authoringEnabled) {
+				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
+				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			
+		} catch (WcmRepositoryException e ) {
+			logger.error(e);
+			throw e;
+		} catch (RepositoryException re) { 
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_QUERY_ERROR, null));
+	    } catch (Throwable t) {
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+		}	
+	}
+	
+	private QueryStatement toQueryStatement(com.bpwizard.wcm.repo.rest.jcr.model.Query query, String repository, String workspace) {
+		QueryStatement queryStatement = new QueryStatement();
+		queryStatement.setRepository(repository);
+		queryStatement.setWorkspace(workspace);
+		queryStatement.setQuery(query.getQuery());
+		queryStatement.setName(query.getName());
+		queryStatement.setLibrary(query.getLibrary());
+		return queryStatement;
+	}
+	
 }
 
