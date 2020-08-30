@@ -1,18 +1,11 @@
 package com.bpwizard.wcm_bpm.setup;
 
-import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Scanner;
 
-import org.apache.ibatis.jdbc.ScriptRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm_bpm.setup.config.MysqlConfiguration;

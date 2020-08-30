@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="task_assignment_definitions" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:process id="task_assignment" isExecutable="true" camunda:candidateStarterGroups="management">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_0mvd8uc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0mvd8uc" sourceRef="StartEvent_1" targetRef="Fill_Form" />
+    <bpmn:userTask id="Fill_Form" name="Fill up the form">
+      <bpmn:extensionElements>
+        <camunda:taskListener delegateExpression="${myAssignmentHandler}" event="create" />
+        <camunda:formData>
+          <camunda:formField id="firstname" label="First Name" type="string">
+            <camunda:validation>
+              <camunda:constraint name="maxlength" config="25" />
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="lastname" label="Last Name" type="string">
+            <camunda:validation>
+              <camunda:constraint name="maxlength" config="25" />
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="dateOfBirth" label="Date of Birth" type="date" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0mvd8uc</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0dox88e</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="EndEvent_0smwzns">
+      <bpmn:incoming>SequenceFlow_0pwon0s</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0dox88e" sourceRef="Fill_Form" targetRef="Pass-by" />
+    <bpmn:sequenceFlow id="SequenceFlow_14yra17" sourceRef="Pass-by" targetRef="Calculate-Sum" />
+    <bpmn:manualTask id="Pass-by" name="Pass by">
+      <bpmn:incoming>SequenceFlow_0dox88e</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_14yra17</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0pwon0s" sourceRef="Calculate-Sum" targetRef="EndEvent_0smwzns" />
+    <bpmn:scriptTask id="Calculate-Sum" name="Calculate Sum">
+      <bpmn:incoming>SequenceFlow_14yra17</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0pwon0s</bpmn:outgoing>
+      <bpmn:script>sum = 0
+for ( i in [1,2,3] ) {
+  sum += i
+}
+print "&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; sum: " + sum;
+execution.setVariable("sum", sum);</bpmn:script>
+    </bpmn:scriptTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="task_assignment">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0mvd8uc_di" bpmnElement="SequenceFlow_0mvd8uc">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0rfrn59_di" bpmnElement="Fill_Form">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0smwzns_di" bpmnElement="EndEvent_0smwzns">
+        <dc:Bounds x="742" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0dox88e_di" bpmnElement="SequenceFlow_0dox88e">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="430" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_14yra17_di" bpmnElement="SequenceFlow_14yra17">
+        <di:waypoint x="530" y="117" />
+        <di:waypoint x="580" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ManualTask_1bex683_di" bpmnElement="Pass-by">
+        <dc:Bounds x="430" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0pwon0s_di" bpmnElement="SequenceFlow_0pwon0s">
+        <di:waypoint x="680" y="117" />
+        <di:waypoint x="742" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_0ct289h_di" bpmnElement="Calculate-Sum">
+        <dc:Bounds x="580" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

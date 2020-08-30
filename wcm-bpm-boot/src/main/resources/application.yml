@@ -64,6 +64,7 @@ bpw:
   rolename: 
     - admin
     - wcm-viewer
+    - wcm-reviewer
     - user
     - readonly
     - readwrite
@@ -78,6 +79,8 @@ bpw:
       rolename: 
         - admin
         - camunda-admin
+        - wcm-reviewer
+        - wcm-viewer
     -
       username: demo
       email: demo@example.com
@@ -86,6 +89,7 @@ bpw:
         - admin 
         - readonly
         - wcm-viewer
+        - wcm-reviewer
         - camunda-admin
     # Spring Commons flags
     # enabled:

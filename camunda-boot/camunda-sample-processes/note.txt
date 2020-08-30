@@ -1,0 +1,15 @@
+1. playback zero: validating the process model 
+   model participants 
+   pool and lanes, milestones and flow objects
+   
+   model activities to create initial process 
+   model nested process and decompose
+   model intermediate timer events
+   event handling/error handling
+--------------------------------------------------
+2. playback 1: implementing the gateways
+3. playback 2: creating data model, building services, building coaches
+               
+4. playback 3: implementing message events
+5. playback 4: enhancing coaches
+6. playback 5: hardening a process.               

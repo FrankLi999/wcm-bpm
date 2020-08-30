@@ -372,4 +372,13 @@ ignite:
       updateQuery: "update MICROFLOW_ENTRIES set val=? where akey=?"
       insertQuery: "insert into MICROFLOW_ENTRIES (akey, val) values (?, ?)"
       deleteQuery: "delete from MICROFLOW_ENTRIES where akey=?"
-      
+
+#spring.datasource.url=jdbc:h2:./camunda-db-order;DB_CLOSE_ON_EXIT=false
+kafka:
+  bootstrapAddress: localhost:9092
+message:
+  topic:
+    name: flowing-retail
+  group: order
+#server:
+  #port: 8091      

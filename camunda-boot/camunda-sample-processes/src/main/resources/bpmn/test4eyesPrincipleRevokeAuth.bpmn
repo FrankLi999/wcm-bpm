@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_02mh5rf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.2.4">
+  <bpmn:process id="test4eyesPrincipleRevokeAuth" name="test4eyesPrincipleRevokeAuth" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_07bg4a5</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_07bg4a5" sourceRef="StartEvent_1" targetRef="Task_083fb64" />
+    <bpmn:sequenceFlow id="SequenceFlow_0mx4z85" sourceRef="Task_083fb64" targetRef="Task_1d6fep9" />
+    <bpmn:userTask id="Task_1d6fep9" name="Task B" camunda:candidateGroups="camunda-admin">
+      <bpmn:extensionElements>
+        <camunda:taskListener event="create">
+          <camunda:script scriptFormat="javascript">var auth = task.getExecution().getProcessEngineServices().getAuthorizationService().createNewAuthorization(2); // 2 for DENY permission type
+var permissions = Java.type('org.camunda.bpm.engine.authorization.Permissions'); // you need to create this object, it is an input param for #removePermission
+auth.removePermission(permissions.ALL);  // creating DENY permission type 
+auth.setResourceId(task.getId()); // choosing resource ID which is task id of this task
+auth.setUserId(task.getExecution().getVariable('fourEyesLastUser')); // setting user for who will be the permission created 
+auth.setResourceType(7); // setting resource type for task
+
+task.getExecution().getProcessEngineServices().getAuthorizationService().saveAuthorization(auth); // set the created authorization </camunda:script>
+        </camunda:taskListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0mx4z85</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0tztxmq</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_083fb64" name="Task A" camunda:candidateGroups="camunda-admin">
+      <bpmn:extensionElements>
+        <camunda:taskListener event="complete">
+          <camunda:script scriptFormat="javascript">task.getExecution().setVariable("fourEyesLastUser",task.getAssignee());</camunda:script>
+        </camunda:taskListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_07bg4a5</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0mx4z85</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="EndEvent_1ahin3y">
+      <bpmn:incoming>SequenceFlow_0tztxmq</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0tztxmq" sourceRef="Task_1d6fep9" targetRef="EndEvent_1ahin3y" />
+    <bpmn:textAnnotation id="TextAnnotation_12xuwjj">
+      <bpmn:text>Both task have candidate-group set to camunda-admin</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0t4uwu8" sourceRef="Task_1d6fep9" targetRef="TextAnnotation_12xuwjj" />
+    <bpmn:association id="Association_0tyk8m6" sourceRef="Task_083fb64" targetRef="TextAnnotation_12xuwjj" />
+    <bpmn:textAnnotation id="TextAnnotation_02u0mvs">
+      <bpmn:text>If you want to test this solution you will have to add a user into the camunda-admin group, or just set another group for both task here in the modeler.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_05x10g5">
+      <bpmn:text>There is a task listener on the complete event which will fill the variable called "fourEyesLastUser" with the user who has completed the task.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_19ac4ba" sourceRef="Task_083fb64" targetRef="TextAnnotation_05x10g5" />
+    <bpmn:textAnnotation id="TextAnnotation_1f1prgg">
+      <bpmn:text>There is a task listener on the create event which will do the following things:
+1) create an authorization obj
+2) set a permission for revoking the access
+3) get id of the task
+4) get id of the user
+5) set both ids to the auth object
+6) create a permission </bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0vxfpx3" sourceRef="Task_1d6fep9" targetRef="TextAnnotation_1f1prgg" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="test4eyesPrincipleRevokeAuth">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="158" y="152" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_07bg4a5_di" bpmnElement="SequenceFlow_07bg4a5">
+        <di:waypoint x="194" y="170" />
+        <di:waypoint x="276" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0mx4z85_di" bpmnElement="SequenceFlow_0mx4z85">
+        <di:waypoint x="376" y="170" />
+        <di:waypoint x="476" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1q7n0m7_di" bpmnElement="Task_1d6fep9">
+        <dc:Bounds x="476" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0d6eupm_di" bpmnElement="Task_083fb64">
+        <dc:Bounds x="276" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1ahin3y_di" bpmnElement="EndEvent_1ahin3y">
+        <dc:Bounds x="663" y="152" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0tztxmq_di" bpmnElement="SequenceFlow_0tztxmq">
+        <di:waypoint x="576" y="170" />
+        <di:waypoint x="663" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_12xuwjj_di" bpmnElement="TextAnnotation_12xuwjj">
+        <dc:Bounds x="335" y="19" width="188" height="49" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0t4uwu8_di" bpmnElement="Association_0t4uwu8">
+        <di:waypoint x="495" y="130" />
+        <di:waypoint x="447" y="68" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0tyk8m6_di" bpmnElement="Association_0tyk8m6">
+        <di:waypoint x="359" y="130" />
+        <di:waypoint x="409" y="68" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_02u0mvs_di" bpmnElement="TextAnnotation_02u0mvs">
+        <dc:Bounds x="31" y="28" width="188" height="82" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_05x10g5_di" bpmnElement="TextAnnotation_05x10g5">
+        <dc:Bounds x="80" y="253" width="212" height="82" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_19ac4ba_di" bpmnElement="Association_19ac4ba">
+        <di:waypoint x="282" y="209" />
+        <di:waypoint x="232" y="253" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_1f1prgg_di" bpmnElement="TextAnnotation_1f1prgg">
+        <dc:Bounds x="495" y="240" width="324" height="124" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0vxfpx3_di" bpmnElement="Association_0vxfpx3">
+        <di:waypoint x="566" y="210" />
+        <di:waypoint x="595" y="240" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

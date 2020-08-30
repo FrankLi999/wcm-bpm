@@ -1,0 +1,87 @@
+#spring.application.name: simpleApplication
+#server.port: 10100
+#spring:
+#  datasource:
+#    url: jdbc:h2:mem:camunda;MODE=Oracle;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    
+#spring.datasource.url=jdbc:h2:./camunda-db-order;DB_CLOSE_ON_EXIT=false
+spring:
+  jpa:
+    show-sql: true
+    # generate-ddl=true
+    hibernate:
+      ddl-auto: create
+      # ddl-auto: update, create-drop, create, none
+      # ddl-auto: none
+      #use-new-id-generator-mappings: false
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        # dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        #jdbc.lob.non_contextual_creation: true
+  datasource:
+    # url: jdbc:mysql://127.0.0.1:3306/camundaboot?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    url: jdbc:h2:file:./h2/camunda_boot/data;DB_CLOSE_ON_EXIT=FALSE
+    username: wcmbpm
+    password: P@ssw0rd
+    driver-class-name: org.h2.Driver
+    testOnBorrow: true
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 1
+    max-active: 15
+    max-idle: 10
+    max-wait: 8000
+    hikari: 
+      connectionTimeout: 30000
+      idleTimeout: 600000
+      maxLifetime: 1800000
+kafka:
+  bootstrapAddress: localhost:9092
+message:
+  topic:
+    name: flowing-retail
+  group: order
+server:
+  # port: 8091
+  port: ${PORT:9090}
+  #servlet:
+    #session:
+      #cookie:
+        #secure: true
+        #http-only: true # Not possible for versions before 2.0.3 
+camunda.bpm:
+  admin-user:
+    id: demo
+    password: demo
+    firstName: Demo
+  filter:
+    create: All tasks
+  authorization:
+    enabled: true 
+  database:
+      # schema-update: true, false, create, create-drop, drop-create, default: true
+      schema-update: create       
+#camunda:
+  #bpm:
+    #application:
+      #isDeleteUponUndeploy: false
+      #isScanForProcessDefinitions: false
+      #isDeployChangedOnly: true
+      #isResumePreviousVersions: true
+      #resumePreviousBy: a value
+    #job-execution:
+      #enabled: true
+    #metrics:
+      #enabled: false
+      #db-reporter-activate: false
+    #default-serialization-format: application/json
+    #authorization:
+      #enabled: true
+    #history-level: activity
+    #id-generator: simple
+    #admin-user:
+      #id: admin
+      #password: admin

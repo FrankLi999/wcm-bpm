@@ -1,0 +1,39 @@
+> Install and start Kafka on the standard port
+    
+    > Start zookeeper
+      cd C:\tools\kafka\kafka_2.12-2.1.0\bin\windows
+      zookeeper-server-start.bat ..\\..\\config\\zookeeper.properties 
+      
+    > Start the Kafka cluster locally
+      cd  C:\tools\kafka\kafka_2.12-2.1.0\bin\windows
+      kafka-server-start.bat ..\\..\\config\\server.properties 
+    
+> Create topic "flowing-retail"
+    cd  C:\tools\kafka\kafka_2.12-2.1.0\bin\windows
+    
+    
+    delete topic:
+    add "delete.topic.enable=true" to server.properties
+    kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic flowing-retail
+    
+>  Check & query all topics by:
+    
+    kafka-topics.bat --list --zookeeper localhost:2181
+    
+    kafka-topics --zookeeper localhost:2181 --delete --topic test
+> Run apps
+
+  	> mvn -f kafka-checkout spring-boot:run
+	> mvn -f kafka-camunda-order spring-boot:run
+	> mvn -f kafka-camunda-payment spring-boot:run
+	> mvn -f kafka-inventory spring-boot:run    
+	> mvn -f kafka-shipping spring-boot:run
+	> mvn -f kafka-monitor spring-boot:run
+    
+> Ports:
+
+    Place an order via http://localhost:8090
+    Inspect insided of Order via http://localhost:8091
+    Inspect insides of Payment via http://localhost:8092
+    Inspect all events going on via http://localhost:8095
+    

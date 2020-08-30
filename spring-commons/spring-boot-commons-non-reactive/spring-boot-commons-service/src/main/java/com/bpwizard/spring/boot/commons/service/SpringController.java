@@ -48,7 +48,7 @@ public abstract class SpringController
 
     private long jwtExpirationMillis;
 	protected SpringService<U, ID> springService;
-	
+    
 	@Autowired
 	public void createSpringController(
 			SpringProperties properties,
@@ -88,7 +88,6 @@ public abstract class SpringController
 		return context;
 	}
 	
-
 	/**
 	 * Signs up a user, and
 	 * returns current-user data and an Authorization token as a response header.

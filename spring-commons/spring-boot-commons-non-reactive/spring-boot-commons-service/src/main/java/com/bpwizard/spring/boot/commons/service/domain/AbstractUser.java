@@ -14,7 +14,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,6 +21,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.bpwizard.spring.boot.commons.domain.SpringUser;
 import com.bpwizard.spring.boot.commons.jpa.SpringEntity;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
@@ -31,7 +31,6 @@ import com.bpwizard.spring.boot.commons.service.validation.UniqueEmail;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.validation.Password;
 import com.bpwizard.spring.boot.commons.vlidation.Captcha;
-import com.bpwizard.spring.boot.commons.domain.SpringUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 

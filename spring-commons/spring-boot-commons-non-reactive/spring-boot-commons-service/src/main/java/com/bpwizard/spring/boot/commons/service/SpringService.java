@@ -73,7 +73,6 @@ public abstract class SpringService
 	protected TenantRepository tenantRepository;
 	protected Map<String, Role> preloadedRoles;
 	
-	
 	@Autowired
 	public void createSpringService(SpringProperties properties,
 			PasswordEncoder passwordEncoder,
@@ -266,7 +265,6 @@ public abstract class SpringService
 		
 		return context;	
 	}
-	
 	
 	/**
 	 * Signs up a user.
@@ -687,6 +685,7 @@ public abstract class SpringService
 	 * 
 	 * Override this method if you're using a different MailData
 	 */
+	@SuppressWarnings("unchecked")
 	protected void mailChangeEmailLink(U user, String changeEmailLink) {
 		
 		mailSender.send(SpringMailData.of(user.getNewEmail(),
