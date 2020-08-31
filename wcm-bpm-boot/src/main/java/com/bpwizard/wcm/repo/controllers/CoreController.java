@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,49 +13,37 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
 
-import com.bpwizard.spring.boot.commons.dto.AuthResponse;
-import com.bpwizard.spring.boot.commons.dto.LoginRequest;
+import com.bpwizard.spring.boot.commons.SpringProperties;
+import com.bpwizard.spring.boot.commons.security.AuthenticationRequest;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.service.SpringController;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
-import com.bpwizard.spring.boot.commons.service.repo.exception.ResourceNotFoundException;
-import com.bpwizard.spring.boot.commons.service.repo.service.DefaultSpringService;
 import com.bpwizard.wcm.repo.annotations.CurrentUser;
-import com.bpwizard.wcm.repo.rest.bpm.model.UserProfile;
+import com.bpwizard.wcm.repo.dto.AuthResponse;
+import com.bpwizard.wcm.repo.dto.UserProfile;
 
 @RestController
 @RequestMapping(CoreController.BASE_URI)
 public class CoreController extends SpringController<User, Long> {
 	
 	public static final String BASE_URI = "/core/api";
+	@Autowired
+	protected SpringProperties properties;
 	
 	@PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest authenticationRequest) {
 
-        AuthResponse authResponse = ((DefaultSpringService)this.springService).authenticateUser(loginRequest);
-        return ResponseEntity.ok(authResponse);
+        String shortLivedAuthToken = this.springService.authenticateUser(authenticationRequest);
+        User user = this.springService.fetchUserByEmail(authenticationRequest.getEmail());
+        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
+        return ResponseEntity.ok(UserProfile.fromUserAndToken(user, shortLivedAuthToken, properties.getJwt().getShortLivedMillis(), sessionId));
     }
 	
 	@GetMapping(path = "/user-profile", produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserProfile userProfile(@CurrentUser SpringPrincipal userPrincipal) {
-		UserProfile userProfile = new UserProfile();
+	public ResponseEntity<?> userProfile(@CurrentUser SpringPrincipal userPrincipal) {
 		User user = this.springService.fetchUserByEmail(userPrincipal.currentUser().getEmail());
-		if (user == null) {
-			throw new ResourceNotFoundException("User", "id", userPrincipal.currentUser().getId());
-		}
-		userProfile.setName(user.getName());
-		userProfile.setEmail(user.getEmail());
-		List<String> groups = user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
-		userProfile.setGroups(groups);
-		return userProfile;
+		return ResponseEntity.ok(UserProfile.fromUserAndToken(user));
 	}
-	
-	@GetMapping("/me")
-    // @PreAuthorize("hasRole('ROLE_admin') or hasRole('admin') or hasRole('user')")
-    public ResponseEntity<?> getCurrentUser(@CurrentUser SpringPrincipal userPrincipal) {
-		AuthResponse authResponse = ((DefaultSpringService)this.springService).getCurrentUser(userPrincipal);
-        return ResponseEntity.ok(authResponse);
-    }
-	
 }

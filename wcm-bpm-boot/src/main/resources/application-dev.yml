@@ -175,7 +175,7 @@ bpw:
     # redirectUri mentioned by the client in the /oauth2/authorize request.
     # We're not using cookies because they won't work well in mobile clients.
     authorizedRedirectUris:
-      - http://wcm-ui:3009/oauth2/redirect
+      - http://wcm-authoring:3009/oauth2/redirect
       - http://bpm-ui:4009/oauth2/redirect
       - http://mysite:6009/oauth2/redirect
       - http://gateway-ui:5009/oauth2/redirect
@@ -188,7 +188,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://wcm-ui:3009, http://bpm-ui:4009, http://gateway-ui:5009, http://mysite:6009
+    allowed-origins: http://wcm-authoring:3009, http://bpm-ui:4009, http://gateway-ui:5009, http://mysite:6009
 #    exposedHeaders: 
 #      - Cache-Control
 #      - Connection

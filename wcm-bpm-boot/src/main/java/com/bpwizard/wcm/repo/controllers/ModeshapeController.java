@@ -52,8 +52,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bpwizard.wcm.repo.payload.IndexColumn;
-import com.bpwizard.wcm.repo.payload.IndexModel;
+import com.bpwizard.wcm.repo.dto.IndexColumn;
+import com.bpwizard.wcm.repo.dto.IndexModel;
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;

@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.payload;
+package com.bpwizard.wcm.repo.dto;
 
 import java.util.Arrays;
 

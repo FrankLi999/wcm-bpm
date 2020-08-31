@@ -145,7 +145,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://wcm-ui:3009, http://bpm-ui:4009
+    allowed-origins: http://wcm-authoring:3009, http://bpm-ui:4009
     
   recaptcha:
     sitekey: 6LdwxRcUAAAAABkhOGWQXhl9FsR27D5YUJRuGzx0

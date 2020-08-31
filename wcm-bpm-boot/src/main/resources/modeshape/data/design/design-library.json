@@ -1,0 +1,46 @@
+{
+	"library/design" : {
+        "jcr:primaryType":"bpw:system_libraryType"
+    },
+    "library/design/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name": "design"
+    },
+    "library/design/elements" : {
+        "jcr:primaryType":"bpw:system_libraryType_ElementFolder",
+        "language": "en"
+    },
+    "library/design/asset" : {
+        "jcr:primaryType":"bpw:assetFolder"
+    },
+    "library/design/theme" : {
+        "jcr:primaryType":"bpw:themesFolder"
+    },
+    "library/design/siteConfig" : {
+        "jcr:primaryType":"bpw:siteConfigFolder"
+    },
+    "library/design/contentAreaLayout" : {
+        "jcr:primaryType":"bpw:contentAreaLayoutFolder"
+    },
+    "library/design/renderTemplate" : {
+        "jcr:primaryType":"bpw:renderTemplateFolder"
+    },
+    "library/design/query" : {
+        "jcr:primaryType":"bpw:queryFolder"
+    },		
+    "library/design/workflow" : {
+        "jcr:primaryType":"bpw:workflowFolder"
+    },					
+	"library/design/category" : {
+        "jcr:primaryType":"bpw:categoryFolder"
+    },
+    "library/design/validationRule" : {
+        "jcr:primaryType":"bpw:validationRuleFolder"
+    },
+    "library/design/authoringTemplate" : {
+        "jcr:primaryType":"bpw:authoringTemplateFolder"
+    },
+    "library/design/form" : {
+        "jcr:primaryType":"bpw:formFolder"
+    }
+}

@@ -19,6 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,6 +41,7 @@ import com.bpwizard.spring.boot.commons.mail.SpringMailData;
 import com.bpwizard.spring.boot.commons.security.BlueTokenService;
 import com.bpwizard.spring.boot.commons.security.GreenTokenService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
+import com.bpwizard.spring.boot.commons.security.AuthenticationRequest;
 import com.bpwizard.spring.boot.commons.security.UserEditPermission;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUserRepository;
@@ -72,7 +77,7 @@ public abstract class SpringService
 	protected RoleRepository roleRepository;
 	protected TenantRepository tenantRepository;
 	protected Map<String, Role> preloadedRoles;
-	
+    protected AuthenticationManager authenticationManager;
 	@Autowired
 	public void createSpringService(SpringProperties properties,
 			PasswordEncoder passwordEncoder,
@@ -83,7 +88,8 @@ public abstract class SpringService
 			GreenTokenService greenTokenService,
 			RoleRepository roleRepository,
 			TenantRepository tenantRepository,
-			Map<String, Role> preloadedRoles) {
+			Map<String, Role> preloadedRoles,
+			AuthenticationManager authenticationManager) {
 		
 		this.properties = properties;
 		this.passwordEncoder = passwordEncoder;
@@ -95,6 +101,7 @@ public abstract class SpringService
 		this.roleRepository = roleRepository;
 		this.tenantRepository = tenantRepository;
 		this.preloadedRoles = preloadedRoles;
+		this.authenticationManager = authenticationManager;
 		
 		log.info("Created");
 	}
@@ -266,7 +273,20 @@ public abstract class SpringService
 		return context;	
 	}
 	
-	/**
+	// TODO: refine it
+    public String authenticateUser(AuthenticationRequest authenticationRequest) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                		authenticationRequest.getEmail(),
+                		authenticationRequest.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return this.getShortLivedAuthToken(WebUtils.currentUser().getUsername());
+    }
+    
+    /**
 	 * Signs up a user.
 	 */
 	//TODO - validation, capcha
@@ -867,4 +887,13 @@ public abstract class SpringService
 	public Optional<U> findUserById(String id) {
 		return userRepository.findById(toId(id));
 	}
+	
+	 protected String getShortLivedAuthToken(String username) {
+        String shortLivedAuthToken = blueTokenService.createToken(
+				BlueTokenService.AUTH_AUDIENCE,
+				username,
+				(long) properties.getJwt().getShortLivedMillis());
+   
+        return shortLivedAuthToken;
+    }
 }

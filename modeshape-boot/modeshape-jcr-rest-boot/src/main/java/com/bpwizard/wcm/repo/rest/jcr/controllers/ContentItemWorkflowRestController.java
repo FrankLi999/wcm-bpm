@@ -887,7 +887,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	}
 	
 	protected String getContentReviewUrl(String wcmPath) {
-		return String.format("http://wcm-ui:3009/wcm-authoring/review?contentPath=%s",  wcmPath);
+		return String.format("http://wcm-authoring:3009/wcm-authoring/review?contentPath=%s",  wcmPath);
 	}
 	
 	protected String getAuthorizationToken(HttpServletRequest request) {

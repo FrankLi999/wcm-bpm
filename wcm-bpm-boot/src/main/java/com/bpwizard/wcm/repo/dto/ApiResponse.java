@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.payload;
+package com.bpwizard.wcm.repo.dto;
 
 public class ApiResponse {
     private boolean success;

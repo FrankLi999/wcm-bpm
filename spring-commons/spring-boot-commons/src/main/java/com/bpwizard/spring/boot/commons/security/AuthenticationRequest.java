@@ -1,9 +1,9 @@
-package com.bpwizard.spring.boot.commons.dto;
+package com.bpwizard.spring.boot.commons.security;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-public class LoginRequest {
+public class AuthenticationRequest {
     @NotBlank
     @Email
     private String email;

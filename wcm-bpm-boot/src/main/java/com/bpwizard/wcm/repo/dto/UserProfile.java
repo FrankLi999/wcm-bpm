@@ -1,11 +1,13 @@
-package com.bpwizard.spring.boot.commons.dto;
+package com.bpwizard.wcm.repo.dto;
 
 import java.util.Arrays;
 
 import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
-public class AuthResponse {
-    private String id;
+
+public class UserProfile {
+	
+	private String id;
 	private String email;
 	private String password;
 	private String name;
@@ -17,20 +19,22 @@ public class AuthResponse {
     private String tokenType = "Bearer";
     private String sessionId = "n/a";
     private long expireIn;
-    
-    public static AuthResponse fromUserAndToken(User user, String accessToken, long expireIn, String sessionId) {
-    	AuthResponse authResponse = new AuthResponse();
-    	authResponse.setAccessToken(accessToken);
-    	authResponse.setId(user.getId().toString());
-    	authResponse.setEmail(user.getEmail());
-    	authResponse.setImageUrl(user.getImageUrl());
-    	authResponse.setName(user.getName());
-    	authResponse.setFirstName(user.getFirstName());
-    	authResponse.setLastName(user.getLastName());
-    	authResponse.setExpireIn(expireIn);
-    	authResponse.setSessionId(sessionId);
-    	authResponse.setRoles(user.getRoles().stream().map(Role::getName).toArray(String[]::new));
-    	return authResponse;
+    public static UserProfile fromUserAndToken(User user) {
+    	return UserProfile.fromUserAndToken(user, null, 0, null);
+    }
+    public static UserProfile fromUserAndToken(User user, String accessToken, long expireIn, String sessionId) {
+    	UserProfile userProfile = new UserProfile();
+    	userProfile.setAccessToken(accessToken);
+    	userProfile.setId(user.getId().toString());
+    	userProfile.setEmail(user.getEmail());
+    	userProfile.setImageUrl(user.getImageUrl());
+    	userProfile.setName(user.getName());
+    	userProfile.setFirstName(user.getFirstName());
+    	userProfile.setLastName(user.getLastName());
+    	userProfile.setExpireIn(expireIn);
+    	userProfile.setSessionId(sessionId);
+    	userProfile.setRoles(user.getRoles().stream().map(Role::getName).toArray(String[]::new));
+    	return userProfile;
     }
 
 	public String getId() {

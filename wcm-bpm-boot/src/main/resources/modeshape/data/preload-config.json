@@ -15,6 +15,18 @@
 		"repository": "bpwizard",
 		"workspace": [ "default", "draft", "expired"],
 		"preloadType": "LIBRARY",
+		"path": "classpath:/modeshape/data/design/design-library.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default", "draft", "expired"],
+		"preloadType": "ITEMS",
+		"path": "classpath:/modeshape/data/design/design-items.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default", "draft", "expired"],
+		"preloadType": "LIBRARY",
 		"path": "classpath:/modeshape/data/mysite/mysite-library.json"
 	},
 	{
