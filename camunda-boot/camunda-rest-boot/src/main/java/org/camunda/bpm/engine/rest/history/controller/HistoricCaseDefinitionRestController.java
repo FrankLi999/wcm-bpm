@@ -70,7 +70,7 @@ public class HistoricCaseDefinitionRestController extends AbstractRestProcessEng
 			HttpServletRequest request,
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
-		CleanableHistoricCaseInstanceReportDto queryDto = new CleanableHistoricCaseInstanceReportDto(objectMapper,
+		CleanableHistoricCaseInstanceReportDto queryDto = new CleanableHistoricCaseInstanceReportDto(this.getObjectMapper(),
 				request.getParameterMap());
 		CleanableHistoricCaseInstanceReport query = queryDto.toQuery(processEngine);
 
@@ -87,9 +87,9 @@ public class HistoricCaseDefinitionRestController extends AbstractRestProcessEng
 	@Override
 	@GetMapping(path="/cleanable-case-instance-report/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getCleanableHistoricCaseInstanceReportCount(HttpServletRequest request) {
-		CleanableHistoricCaseInstanceReportDto queryDto = new CleanableHistoricCaseInstanceReportDto(objectMapper,
+		CleanableHistoricCaseInstanceReportDto queryDto = new CleanableHistoricCaseInstanceReportDto(this.getObjectMapper(),
 				request.getParameterMap());
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		CleanableHistoricCaseInstanceReport query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

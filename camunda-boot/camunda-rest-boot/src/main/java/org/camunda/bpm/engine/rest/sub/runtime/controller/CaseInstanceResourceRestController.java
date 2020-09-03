@@ -58,7 +58,7 @@ public class CaseInstanceResourceRestController extends AbstractRestProcessEngin
 //	ProcessEngine engine, String caseInstanceId, ObjectMapper objectMapper) {
 //		this.engine = engine;
 //		this.caseInstanceId = caseInstanceId;
-//		this.objectMapper = objectMapper;
+//		this.getObjectMapper() = objectMapper;
 //	}
 
 	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -184,10 +184,10 @@ public class CaseInstanceResourceRestController extends AbstractRestProcessEngin
 				TriggerVariableValueDto variableValue = variables.get(variableName);
 
 				if (variableValue.isLocal()) {
-					commandBuilder.setVariableLocal(variableName, variableValue.toTypedValue(this.processEngine, objectMapper));
+					commandBuilder.setVariableLocal(variableName, variableValue.toTypedValue(this.processEngine, this.getObjectMapper()));
 
 				} else {
-					commandBuilder.setVariable(variableName, variableValue.toTypedValue(this.processEngine, objectMapper));
+					commandBuilder.setVariable(variableName, variableValue.toTypedValue(this.processEngine, this.getObjectMapper()));
 				}
 
 			} catch (RestException e) {

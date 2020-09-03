@@ -54,7 +54,7 @@ public class JobRestController extends AbstractRestProcessEngineAware implements
 	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<JobDto> getJobs(HttpServletRequest request, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		JobQueryDto queryDto = new JobQueryDto(this.objectMapper, request.getParameterMap());
+		JobQueryDto queryDto = new JobQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryJobs(queryDto, firstResult, maxResults);
 	}
 

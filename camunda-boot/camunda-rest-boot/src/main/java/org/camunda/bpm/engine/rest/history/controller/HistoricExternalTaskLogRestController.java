@@ -52,7 +52,7 @@ public class HistoricExternalTaskLogRestController extends AbstractRestProcessEn
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		HistoricExternalTaskLogQueryDto queryDto = new HistoricExternalTaskLogQueryDto(objectMapper,
+		HistoricExternalTaskLogQueryDto queryDto = new HistoricExternalTaskLogQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricExternalTaskLogs(queryDto, firstResult, maxResults);
 	}
@@ -63,7 +63,7 @@ public class HistoricExternalTaskLogRestController extends AbstractRestProcessEn
 			@RequestBody HistoricExternalTaskLogQueryDto queryDto,
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricExternalTaskLogQuery query = queryDto.toQuery(processEngine);
 
 		List<HistoricExternalTaskLog> matchingHistoricExternalTaskLogs;
@@ -86,7 +86,7 @@ public class HistoricExternalTaskLogRestController extends AbstractRestProcessEn
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricExternalTaskLogsCount(HttpServletRequest request) {
-		HistoricExternalTaskLogQueryDto queryDto = new HistoricExternalTaskLogQueryDto(objectMapper,
+		HistoricExternalTaskLogQueryDto queryDto = new HistoricExternalTaskLogQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricExternalTaskLogsCount(queryDto);
 	}
@@ -95,7 +95,7 @@ public class HistoricExternalTaskLogRestController extends AbstractRestProcessEn
 	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryHistoricExternalTaskLogsCount(
 			@RequestBody HistoricExternalTaskLogQueryDto queryDto) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricExternalTaskLogQuery query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

@@ -64,7 +64,7 @@ public class MetricsRestController extends AbstractRestProcessEngineAware implem
 
 		List<MetricIntervalValue> metrics;
 		LongConverter longConverter = new LongConverter();
-		longConverter.setObjectMapper(objectMapper);
+		longConverter.setObjectMapper(this.getObjectMapper());
 		if (queryParameters.get(QUERY_PARAM_INTERVAL) != null) {
 			long interval = longConverter.convertQueryParameterToType(queryParameters.get(QUERY_PARAM_INTERVAL)[0]);
 			metrics = query.interval(interval);
@@ -78,7 +78,7 @@ public class MetricsRestController extends AbstractRestProcessEngineAware implem
 	protected void applyQueryParams(MetricsQuery query, Map<String, String[]> queryParameters) {
 
 		DateConverter dateConverter = new DateConverter();
-		dateConverter.setObjectMapper(objectMapper);
+		dateConverter.setObjectMapper(this.getObjectMapper());
 
 		if (queryParameters.get(QUERY_PARAM_START_DATE) != null) {
 			Date startDate = dateConverter
@@ -92,7 +92,7 @@ public class MetricsRestController extends AbstractRestProcessEngineAware implem
 		}
 
 		IntegerConverter intConverter = new IntegerConverter();
-		intConverter.setObjectMapper(objectMapper);
+		intConverter.setObjectMapper(this.getObjectMapper());
 
 		if (queryParameters.get(QUERY_PARAM_FIRST_RESULT) != null) {
 			int firstResult = intConverter

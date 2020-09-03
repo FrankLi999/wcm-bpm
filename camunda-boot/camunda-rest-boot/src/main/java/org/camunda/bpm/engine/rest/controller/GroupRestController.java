@@ -67,7 +67,7 @@ public class GroupRestController extends AbstractAuthorizedRestResource implemen
 	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<GroupDto> queryGroups(HttpServletRequest request, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		GroupQueryDto queryDto = new GroupQueryDto(this.objectMapper, request.getParameterMap());
+		GroupQueryDto queryDto = new GroupQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryGroups(queryDto, firstResult, maxResults);
 	}
 
@@ -75,7 +75,7 @@ public class GroupRestController extends AbstractAuthorizedRestResource implemen
 
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getGroupCount(HttpServletRequest request) {
-		GroupQueryDto queryDto = new GroupQueryDto(this.objectMapper, request.getParameterMap());
+		GroupQueryDto queryDto = new GroupQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return getGroupCount(queryDto);
 	}
 
@@ -128,7 +128,7 @@ public class GroupRestController extends AbstractAuthorizedRestResource implemen
 
 	protected List<GroupDto> queryGroups(GroupQueryDto queryDto, Integer firstResult, Integer maxResults) {
 
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		GroupQuery query = queryDto.toQuery(this.processEngine);
 
 		List<Group> resultList;

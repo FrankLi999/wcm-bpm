@@ -66,7 +66,7 @@ public class ExternalTaskRestController extends AbstractRestProcessEngineAware i
 	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<ExternalTaskDto> getExternalTasks(HttpServletRequest request, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		ExternalTaskQueryDto queryDto = new ExternalTaskQueryDto(this.objectMapper, request.getParameterMap());
+		ExternalTaskQueryDto queryDto = new ExternalTaskQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryExternalTasks(queryDto, firstResult, maxResults);
 	}
 
@@ -75,7 +75,7 @@ public class ExternalTaskRestController extends AbstractRestProcessEngineAware i
 	public List<ExternalTaskDto> queryExternalTasks(@RequestBody ExternalTaskQueryDto queryDto, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
 
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		ExternalTaskQuery query = queryDto.toQuery(this.processEngine);
 
 		List<ExternalTask> matchingTasks;
@@ -107,14 +107,14 @@ public class ExternalTaskRestController extends AbstractRestProcessEngineAware i
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getExternalTasksCount(HttpServletRequest request) {
-		ExternalTaskQueryDto queryDto = new ExternalTaskQueryDto(this.objectMapper, request.getParameterMap());
+		ExternalTaskQueryDto queryDto = new ExternalTaskQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryExternalTasksCount(queryDto);
 	}
 
 	@Override
 	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryExternalTasksCount(@RequestBody ExternalTaskQueryDto queryDto) {
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		ExternalTaskQuery query = queryDto.toQuery(this.processEngine);
 
 		long count = query.count();

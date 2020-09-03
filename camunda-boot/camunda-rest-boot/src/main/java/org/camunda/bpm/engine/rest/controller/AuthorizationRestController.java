@@ -142,13 +142,13 @@ public class AuthorizationRestController extends AbstractAuthorizedRestResource 
 	public List<AuthorizationDto> queryAuthorizations(HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
-		AuthorizationQueryDto queryDto = new AuthorizationQueryDto(this.objectMapper, request.getParameterMap());
+		AuthorizationQueryDto queryDto = new AuthorizationQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryAuthorizations(queryDto, firstResult, maxResults);
 	}
 
 	@GetMapping(path="/count", produces= {MediaType.APPLICATION_JSON_VALUE})
 	public CountResultDto getAuthorizationCount(HttpServletRequest request) {
-		AuthorizationQueryDto queryDto = new AuthorizationQueryDto(this.objectMapper, request.getParameterMap());
+		AuthorizationQueryDto queryDto = new AuthorizationQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return getAuthorizationCount(queryDto);
 	}
 	
@@ -195,7 +195,7 @@ public class AuthorizationRestController extends AbstractAuthorizedRestResource 
 	protected List<AuthorizationDto> queryAuthorizations(AuthorizationQueryDto queryDto, Integer firstResult,
 			Integer maxResults) {
 
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		AuthorizationQuery query = queryDto.toQuery(this.processEngine);
 
 		List<Authorization> resultList;

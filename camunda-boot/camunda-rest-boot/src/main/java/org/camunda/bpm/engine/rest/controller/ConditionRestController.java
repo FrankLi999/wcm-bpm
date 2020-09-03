@@ -58,7 +58,7 @@ public class ConditionRestController extends AbstractRestProcessEngineAware impl
 	protected ConditionEvaluationBuilder createConditionEvaluationBuilder(EvaluationConditionDto conditionDto) {
 		RuntimeService runtimeService = processEngine.getRuntimeService();
 
-		VariableMap variables = VariableValueDto.toMap(conditionDto.getVariables(), processEngine, objectMapper);
+		VariableMap variables = VariableValueDto.toMap(conditionDto.getVariables(), processEngine, this.getObjectMapper());
 
 		ConditionEvaluationBuilder builder = runtimeService.createConditionEvaluation();
 

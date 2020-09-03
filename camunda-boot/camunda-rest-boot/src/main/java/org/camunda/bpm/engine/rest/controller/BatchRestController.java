@@ -43,7 +43,7 @@ public class BatchRestController extends AbstractRestProcessEngineAware implemen
 	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<BatchDto> getBatches(HttpServletRequest request, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		BatchQueryDto queryDto = new BatchQueryDto(this.objectMapper, request.getParameterMap());
+		BatchQueryDto queryDto = new BatchQueryDto(this.getObjectMapper(), request.getParameterMap());
 		BatchQuery query = queryDto.toQuery(this.processEngine);
 
 		List<Batch> matchingBatches;
@@ -62,7 +62,7 @@ public class BatchRestController extends AbstractRestProcessEngineAware implemen
 
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getBatchesCount(HttpServletRequest request) {
-		BatchQueryDto queryDto = new BatchQueryDto(this.objectMapper, request.getParameterMap());
+		BatchQueryDto queryDto = new BatchQueryDto(this.getObjectMapper(), request.getParameterMap());
 		BatchQuery query = queryDto.toQuery(this.processEngine);
 
 		long count = query.count();
@@ -72,7 +72,7 @@ public class BatchRestController extends AbstractRestProcessEngineAware implemen
 	@GetMapping(path="/statistics", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<BatchStatisticsDto> getStatistics(HttpServletRequest request, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		BatchStatisticsQueryDto queryDto = new BatchStatisticsQueryDto(this.objectMapper, request.getParameterMap());
+		BatchStatisticsQueryDto queryDto = new BatchStatisticsQueryDto(this.getObjectMapper(), request.getParameterMap());
 		BatchStatisticsQuery query = queryDto.toQuery(this.processEngine);
 
 		List<BatchStatistics> batchStatisticsList;
@@ -91,7 +91,7 @@ public class BatchRestController extends AbstractRestProcessEngineAware implemen
 	}
 	@GetMapping(path="/statistics/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getStatisticsCount(HttpServletRequest request) {
-		BatchStatisticsQueryDto queryDto = new BatchStatisticsQueryDto(this.objectMapper, request.getParameterMap());
+		BatchStatisticsQueryDto queryDto = new BatchStatisticsQueryDto(this.getObjectMapper(), request.getParameterMap());
 		BatchStatisticsQuery query = queryDto.toQuery(this.processEngine);
 
 		long count = query.count();

@@ -48,7 +48,7 @@ public class HistoricVariableInstanceRestController extends AbstractRestProcessE
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults, 
 			@RequestParam(name=VariableResource.DESERIALIZE_VALUES_QUERY_PARAM, defaultValue="true") boolean deserializeObjectValues) {
-		HistoricVariableInstanceQueryDto queryDto = new HistoricVariableInstanceQueryDto(objectMapper,
+		HistoricVariableInstanceQueryDto queryDto = new HistoricVariableInstanceQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricVariableInstances(queryDto, firstResult, maxResults, deserializeObjectValues);
 	}
@@ -60,7 +60,7 @@ public class HistoricVariableInstanceRestController extends AbstractRestProcessE
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults, 
 			@RequestParam(name=VariableResource.DESERIALIZE_VALUES_QUERY_PARAM, defaultValue="true") boolean deserializeObjectValues) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricVariableInstanceQuery query = queryDto.toQuery(processEngine);
 		query.disableBinaryFetching();
 
@@ -87,7 +87,7 @@ public class HistoricVariableInstanceRestController extends AbstractRestProcessE
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricVariableInstancesCount(HttpServletRequest request) {
-		HistoricVariableInstanceQueryDto queryDto = new HistoricVariableInstanceQueryDto(objectMapper,
+		HistoricVariableInstanceQueryDto queryDto = new HistoricVariableInstanceQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricVariableInstancesCount(queryDto);
 	}
@@ -95,7 +95,7 @@ public class HistoricVariableInstanceRestController extends AbstractRestProcessE
 	@Override
 	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryHistoricVariableInstancesCount(@RequestBody HistoricVariableInstanceQueryDto queryDto) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricVariableInstanceQuery query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

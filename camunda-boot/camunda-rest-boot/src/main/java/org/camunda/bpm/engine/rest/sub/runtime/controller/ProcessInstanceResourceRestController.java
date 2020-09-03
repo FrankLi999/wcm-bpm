@@ -127,7 +127,7 @@ public class ProcessInstanceResourceRestController extends AbstractRestProcessEn
 			ProcessInstanceModificationBuilder modificationBuilder = this.processEngine.getRuntimeService()
 					.createProcessInstanceModification(processInstanceId);
 
-			dto.applyTo(modificationBuilder, this.processEngine, objectMapper);
+			dto.applyTo(modificationBuilder, this.processEngine, this.getObjectMapper());
 
 			modificationBuilder.execute(dto.isSkipCustomListeners(), dto.isSkipIoMappings());
 		}
@@ -141,7 +141,7 @@ public class ProcessInstanceResourceRestController extends AbstractRestProcessEn
 			ProcessInstanceModificationBuilder modificationBuilder = this.processEngine.getRuntimeService()
 					.createProcessInstanceModification(processInstanceId);
 
-			dto.applyTo(modificationBuilder, this.processEngine, objectMapper);
+			dto.applyTo(modificationBuilder, this.processEngine, this.getObjectMapper());
 
 			try {
 				batch = modificationBuilder.executeAsync(dto.isSkipCustomListeners(), dto.isSkipIoMappings());

@@ -3,7 +3,7 @@
   <bpmn:collaboration id="Collaboration_05shpxl">
     <bpmn:participant id="Participant_0358cr7" processRef="content-item-simple-flow" />
   </bpmn:collaboration>
-  <bpmn:process id="content-item-simple-flow" name="content-item-simple-flow" isExecutable="true" camunda:candidateStarterUsers="demo" camunda:versionTag="v1.0">
+  <bpmn:process id="content-item-simple-flow" name="content-item-simple-flow" isExecutable="true" camunda:candidateStarterUsers="demo@example.com" camunda:versionTag="v1.0">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_18a59t1</bpmn:outgoing>
     </bpmn:startEvent>
@@ -70,7 +70,7 @@ task.getExecution().getProcessEngineServices().getAuthorizationService().saveAut
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0wbesgp" sourceRef="save-draft" targetRef="review-content-item" />
     <bpmn:sequenceFlow id="SequenceFlow_18a59t1" sourceRef="StartEvent_1" targetRef="save-draft" />
-    <bpmn:serviceTask id="publish-content-item" name="Publish Content Item" camunda:class="com.bpwizard.bpm.task.content.ContentItemPublish">
+    <bpmn:serviceTask id="publish-content-item" name="Publish Content Item" camunda:class="com.bpwizard.bpm.demo.task.content.ContentItemPublish">
       <bpmn:incoming>cotent-item-approved2</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1hwsfgo</bpmn:outgoing>
     </bpmn:serviceTask>

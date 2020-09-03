@@ -48,7 +48,7 @@ public class HistoricActivityInstanceRestController extends AbstractRestProcessE
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
 		HistoricActivityInstanceQueryDto queryHistoricActivityInstanceDto = new HistoricActivityInstanceQueryDto(
-				objectMapper, request.getParameterMap());
+				this.getObjectMapper(), request.getParameterMap());
 		return queryHistoricActivityInstances(queryHistoricActivityInstanceDto, firstResult, maxResults);
 	}
 
@@ -58,7 +58,7 @@ public class HistoricActivityInstanceRestController extends AbstractRestProcessE
 			@RequestBody HistoricActivityInstanceQueryDto queryDto,
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricActivityInstanceQuery query = queryDto.toQuery(processEngine);
 
 		List<HistoricActivityInstance> matchingHistoricActivityInstances;
@@ -80,7 +80,7 @@ public class HistoricActivityInstanceRestController extends AbstractRestProcessE
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricActivityInstancesCount(HttpServletRequest request) {
-		HistoricActivityInstanceQueryDto queryDto = new HistoricActivityInstanceQueryDto(objectMapper,
+		HistoricActivityInstanceQueryDto queryDto = new HistoricActivityInstanceQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricActivityInstancesCount(queryDto);
 	}
@@ -88,7 +88,7 @@ public class HistoricActivityInstanceRestController extends AbstractRestProcessE
 	@Override
 	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryHistoricActivityInstancesCount(@RequestBody HistoricActivityInstanceQueryDto queryDto) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricActivityInstanceQuery query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

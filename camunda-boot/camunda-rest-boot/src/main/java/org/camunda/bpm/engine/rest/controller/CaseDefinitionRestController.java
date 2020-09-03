@@ -45,7 +45,7 @@ public class CaseDefinitionRestController extends AbstractRestProcessEngineAware
 	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<CaseDefinitionDto> getCaseDefinitions(HttpServletRequest request, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		CaseDefinitionQueryDto queryDto = new CaseDefinitionQueryDto(this.objectMapper, request.getParameterMap());
+		CaseDefinitionQueryDto queryDto = new CaseDefinitionQueryDto(this.getObjectMapper(), request.getParameterMap());
 		List<CaseDefinitionDto> definitions = new ArrayList<CaseDefinitionDto>();
 
 		CaseDefinitionQuery query = queryDto.toQuery(this.processEngine);
@@ -67,7 +67,7 @@ public class CaseDefinitionRestController extends AbstractRestProcessEngineAware
 
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getCaseDefinitionsCount(HttpServletRequest request) {
-		CaseDefinitionQueryDto queryDto = new CaseDefinitionQueryDto(this.objectMapper, request.getParameterMap());
+		CaseDefinitionQueryDto queryDto = new CaseDefinitionQueryDto(this.getObjectMapper(), request.getParameterMap());
 
 		CaseDefinitionQuery query = queryDto.toQuery(this.processEngine);
 

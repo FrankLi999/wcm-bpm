@@ -45,7 +45,7 @@ public class HistoricCaseInstanceRestController extends AbstractRestProcessEngin
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		HistoricCaseInstanceQueryDto queryHistoricCaseInstanceDto = new HistoricCaseInstanceQueryDto(objectMapper,
+		HistoricCaseInstanceQueryDto queryHistoricCaseInstanceDto = new HistoricCaseInstanceQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricCaseInstances(queryHistoricCaseInstanceDto, firstResult, maxResults);
 	}
@@ -75,7 +75,7 @@ public class HistoricCaseInstanceRestController extends AbstractRestProcessEngin
 
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricCaseInstancesCount(HttpServletRequest request) {
-		HistoricCaseInstanceQueryDto queryDto = new HistoricCaseInstanceQueryDto(objectMapper,
+		HistoricCaseInstanceQueryDto queryDto = new HistoricCaseInstanceQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricCaseInstancesCount(queryDto);
 	}

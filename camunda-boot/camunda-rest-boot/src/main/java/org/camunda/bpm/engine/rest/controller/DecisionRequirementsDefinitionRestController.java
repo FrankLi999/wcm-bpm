@@ -42,7 +42,7 @@ public class DecisionRequirementsDefinitionRestController extends AbstractRestPr
 	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<DecisionRequirementsDefinitionDto> getDecisionRequirementsDefinitions(HttpServletRequest request,
 			@RequestParam("firstResult") Integer firstResult, @RequestParam("maxResults") Integer maxResults) {
-		DecisionRequirementsDefinitionQueryDto queryDto = new DecisionRequirementsDefinitionQueryDto(this.objectMapper,
+		DecisionRequirementsDefinitionQueryDto queryDto = new DecisionRequirementsDefinitionQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		List<DecisionRequirementsDefinitionDto> dtos = new ArrayList<DecisionRequirementsDefinitionDto>();
 
@@ -67,7 +67,7 @@ public class DecisionRequirementsDefinitionRestController extends AbstractRestPr
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getDecisionRequirementsDefinitionsCount(HttpServletRequest request) {
-		DecisionRequirementsDefinitionQueryDto queryDto = new DecisionRequirementsDefinitionQueryDto(this.objectMapper,
+		DecisionRequirementsDefinitionQueryDto queryDto = new DecisionRequirementsDefinitionQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 
 		DecisionRequirementsDefinitionQuery query = queryDto.toQuery(this.processEngine);

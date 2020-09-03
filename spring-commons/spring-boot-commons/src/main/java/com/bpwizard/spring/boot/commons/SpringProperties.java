@@ -32,7 +32,7 @@ public class SpringProperties {
 	 * URL of the login endpoint 
 	 * e.g. POST /api/core/login
 	 */
-    private String loginUrl = "/api/core/login";
+    private String loginUrl = "/core/api/login";
 
     
 //    private final OAuth2 oauth2 = new OAuth2();
@@ -65,7 +65,7 @@ public class SpringProperties {
 	 * The default URL to redirect to after
 	 * a user logs in using OAuth2/OpenIDConnect
 	 */
-    private String oauth2AuthenticationSuccessUrl = "http://localhost:8080/social-login-success?token=";
+    private String oauth2AuthenticationSuccessUrl = "http://localhost:28080/social-login-success?token=";
 
     /**
 	 * Recaptcha related properties
@@ -215,7 +215,8 @@ public class SpringProperties {
 		 */
 		private String username;
 		private String email;
-		
+		private String firstName;
+		private String lastName;
 		/**
 		 * Password of the initial Admin user to be created 
 		 */		

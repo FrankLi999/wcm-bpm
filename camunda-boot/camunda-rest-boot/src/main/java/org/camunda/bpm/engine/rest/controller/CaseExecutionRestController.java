@@ -48,7 +48,7 @@ public class CaseExecutionRestController extends AbstractRestProcessEngineAware 
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
-		CaseExecutionQueryDto queryDto = new CaseExecutionQueryDto(this.objectMapper, request.getParameterMap());
+		CaseExecutionQueryDto queryDto = new CaseExecutionQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryCaseExecutions(queryDto, firstResult, maxResults);
 	}
 
@@ -58,7 +58,7 @@ public class CaseExecutionRestController extends AbstractRestProcessEngineAware 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("firstResult") Integer maxResults) {	
 
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		CaseExecutionQuery query = queryDto.toQuery(this.processEngine);
 
 		List<CaseExecution> matchingExecutions;
@@ -78,13 +78,13 @@ public class CaseExecutionRestController extends AbstractRestProcessEngineAware 
 
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getCaseExecutionsCount(HttpServletRequest request) {
-		CaseExecutionQueryDto queryDto = new CaseExecutionQueryDto(this.objectMapper, request.getParameterMap());
+		CaseExecutionQueryDto queryDto = new CaseExecutionQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryCaseExecutionsCount(queryDto);
 	}
 
 	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryCaseExecutionsCount(CaseExecutionQueryDto queryDto) {
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		CaseExecutionQuery query = queryDto.toQuery(this.processEngine);
 
 		long count = query.count();

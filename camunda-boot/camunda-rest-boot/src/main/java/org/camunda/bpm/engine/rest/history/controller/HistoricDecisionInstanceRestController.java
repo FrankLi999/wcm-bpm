@@ -56,14 +56,14 @@ public class HistoricDecisionInstanceRestController extends AbstractRestProcessE
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
 		HistoricDecisionInstanceQueryDto queryHistoricDecisionInstanceDto = new HistoricDecisionInstanceQueryDto(
-				objectMapper, request.getParameterMap());
+				this.getObjectMapper(), request.getParameterMap());
 		return queryHistoricDecisionInstances(queryHistoricDecisionInstanceDto, firstResult, maxResults);
 	}
 
 	
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricDecisionInstancesCount(HttpServletRequest request) {
-		HistoricDecisionInstanceQueryDto queryDto = new HistoricDecisionInstanceQueryDto(objectMapper,
+		HistoricDecisionInstanceQueryDto queryDto = new HistoricDecisionInstanceQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricDecisionInstancesCount(queryDto);
 	}

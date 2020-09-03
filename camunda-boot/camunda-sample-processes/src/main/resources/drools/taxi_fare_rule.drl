@@ -1,8 +1,8 @@
-import com.bpwizard.bpm.drools.model.TaxiRide;
-import com.bpwizard.bpm.drools.model.Fare;
+import com.bpwizard.bpm.demo.drools.model.TaxiRide;
+import com.bpwizard.bpm.demo.drools.model.Fare;
 import java.util.*;
 
-global com.bpwizard.bpm.drools.model.Fare rideFare;
+global com.bpwizard.bpm.demo.drools.model.Fare rideFare;
 dialect  "mvel"
 
 rule "Calculate Taxi Fare - Scenario 1"

@@ -59,7 +59,7 @@ public class HistoricBatchRestController extends AbstractRestProcessEngineAware 
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
-		HistoricBatchQueryDto queryDto = new HistoricBatchQueryDto(objectMapper, request.getParameterMap());
+		HistoricBatchQueryDto queryDto = new HistoricBatchQueryDto(this.getObjectMapper(), request.getParameterMap());
 		HistoricBatchQuery query = queryDto.toQuery(processEngine);
 
 		List<HistoricBatch> matchingBatches;
@@ -79,7 +79,7 @@ public class HistoricBatchRestController extends AbstractRestProcessEngineAware 
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricBatchesCount(HttpServletRequest request) {
-		HistoricBatchQueryDto queryDto = new HistoricBatchQueryDto(objectMapper, request.getParameterMap());
+		HistoricBatchQueryDto queryDto = new HistoricBatchQueryDto(this.getObjectMapper(), request.getParameterMap());
 		HistoricBatchQuery query = queryDto.toQuery(processEngine);
 
 		long count = query.count();
@@ -93,7 +93,7 @@ public class HistoricBatchRestController extends AbstractRestProcessEngineAware 
 			HttpServletRequest request,
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
-		CleanableHistoricBatchReportDto queryDto = new CleanableHistoricBatchReportDto(objectMapper,
+		CleanableHistoricBatchReportDto queryDto = new CleanableHistoricBatchReportDto(this.getObjectMapper(),
 				request.getParameterMap());
 		CleanableHistoricBatchReport query = queryDto.toQuery(processEngine);
 
@@ -111,9 +111,9 @@ public class HistoricBatchRestController extends AbstractRestProcessEngineAware 
 	@Override
 	@GetMapping(path="/cleanable-batch-report/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getCleanableHistoricBatchesReportCount(HttpServletRequest request) {
-		CleanableHistoricBatchReportDto queryDto = new CleanableHistoricBatchReportDto(objectMapper,
+		CleanableHistoricBatchReportDto queryDto = new CleanableHistoricBatchReportDto(this.getObjectMapper(),
 				request.getParameterMap());
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		CleanableHistoricBatchReport query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

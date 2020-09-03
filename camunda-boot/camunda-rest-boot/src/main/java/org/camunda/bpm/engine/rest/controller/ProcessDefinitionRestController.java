@@ -56,9 +56,9 @@ public class ProcessDefinitionRestController extends AbstractRestProcessEngineAw
 	@Override
 	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<ProcessDefinitionDto> getProcessDefinitions(HttpServletRequest request, 
-			@RequestParam("firstResult") Integer firstResult, 
-			@RequestParam("maxResults") Integer maxResults) {
-		ProcessDefinitionQueryDto queryDto = new ProcessDefinitionQueryDto(this.objectMapper,
+			@RequestParam(name="firstResult", required=false) Integer firstResult, 
+			@RequestParam(name="maxResults", required=false) Integer maxResults) {
+		ProcessDefinitionQueryDto queryDto = new ProcessDefinitionQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		List<ProcessDefinitionDto> definitions = new ArrayList<ProcessDefinitionDto>();
 
@@ -82,7 +82,7 @@ public class ProcessDefinitionRestController extends AbstractRestProcessEngineAw
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getProcessDefinitionsCount(HttpServletRequest request) {
-		ProcessDefinitionQueryDto queryDto = new ProcessDefinitionQueryDto(this.objectMapper,
+		ProcessDefinitionQueryDto queryDto = new ProcessDefinitionQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 
 		ProcessDefinitionQuery query = queryDto.toQuery(this.processEngine);

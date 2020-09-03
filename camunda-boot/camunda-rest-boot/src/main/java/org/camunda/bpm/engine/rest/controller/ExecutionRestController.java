@@ -43,7 +43,7 @@ public class ExecutionRestController extends AbstractRestProcessEngineAware impl
 	@GetMapping(path="/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<ExecutionDto> getExecutions(HttpServletRequest request, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		ExecutionQueryDto queryDto = new ExecutionQueryDto(this.objectMapper, request.getParameterMap());
+		ExecutionQueryDto queryDto = new ExecutionQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryExecutions(queryDto, firstResult, maxResults);
 	}
 
@@ -51,7 +51,7 @@ public class ExecutionRestController extends AbstractRestProcessEngineAware impl
 	@PostMapping(path="/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<ExecutionDto> queryExecutions(@RequestBody ExecutionQueryDto queryDto, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		ExecutionQuery query = queryDto.toQuery(this.processEngine);
 
 		List<Execution> matchingExecutions;
@@ -82,7 +82,7 @@ public class ExecutionRestController extends AbstractRestProcessEngineAware impl
 	@Override
 	@GetMapping(path="/count",produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getExecutionsCount(HttpServletRequest request) {
-		ExecutionQueryDto queryDto = new ExecutionQueryDto(this.objectMapper, request.getParameterMap());
+		ExecutionQueryDto queryDto = new ExecutionQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryExecutionsCount(queryDto);
 	}
 
@@ -90,7 +90,7 @@ public class ExecutionRestController extends AbstractRestProcessEngineAware impl
 	public @PostMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
 		CountResultDto queryExecutionsCount(@RequestBody ExecutionQueryDto queryDto) {
 		
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		ExecutionQuery query = queryDto.toQuery(this.processEngine);
 
 		long count = query.count();

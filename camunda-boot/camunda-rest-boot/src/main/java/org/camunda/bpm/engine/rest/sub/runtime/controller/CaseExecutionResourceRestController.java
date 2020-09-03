@@ -227,7 +227,7 @@ public class CaseExecutionResourceRestController extends AbstractRestProcessEngi
 		for (String variableName : variables.keySet()) {
 			try {
 				TriggerVariableValueDto variableValue = variables.get(variableName);
-				TypedValue typedValue = variableValue.toTypedValue(this.processEngine, this.objectMapper);
+				TypedValue typedValue = variableValue.toTypedValue(this.processEngine, this.getObjectMapper());
 
 				if (variableValue.isLocal()) {
 					commandBuilder.setVariableLocal(variableName, typedValue);

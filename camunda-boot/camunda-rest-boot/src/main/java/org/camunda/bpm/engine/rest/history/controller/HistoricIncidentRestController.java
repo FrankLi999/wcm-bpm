@@ -49,7 +49,7 @@ public class HistoricIncidentRestController extends AbstractRestProcessEngineAwa
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		HistoricIncidentQueryDto queryDto = new HistoricIncidentQueryDto(objectMapper, request.getParameterMap());
+		HistoricIncidentQueryDto queryDto = new HistoricIncidentQueryDto(this.getObjectMapper(), request.getParameterMap());
 		HistoricIncidentQuery query = queryDto.toQuery(processEngine);
 
 		List<HistoricIncident> queryResult;
@@ -71,7 +71,7 @@ public class HistoricIncidentRestController extends AbstractRestProcessEngineAwa
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricIncidentsCount(HttpServletRequest request) {
-		HistoricIncidentQueryDto queryDto = new HistoricIncidentQueryDto(objectMapper, request.getParameterMap());
+		HistoricIncidentQueryDto queryDto = new HistoricIncidentQueryDto(this.getObjectMapper(), request.getParameterMap());
 		HistoricIncidentQuery query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

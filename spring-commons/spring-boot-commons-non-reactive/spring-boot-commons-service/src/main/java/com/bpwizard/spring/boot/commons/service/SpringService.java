@@ -16,8 +16,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,10 +36,10 @@ import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.jpa.JpaUtils;
 import com.bpwizard.spring.boot.commons.mail.MailSender;
 import com.bpwizard.spring.boot.commons.mail.SpringMailData;
+import com.bpwizard.spring.boot.commons.security.AuthenticationRequest;
 import com.bpwizard.spring.boot.commons.security.BlueTokenService;
 import com.bpwizard.spring.boot.commons.security.GreenTokenService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
-import com.bpwizard.spring.boot.commons.security.AuthenticationRequest;
 import com.bpwizard.spring.boot.commons.security.UserEditPermission;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUserRepository;
@@ -113,20 +111,20 @@ public abstract class SpringService
      * 
      * @param event
      */
-    @EventListener
-    public void afterApplicationReady(ApplicationReadyEvent event) {
-    	
-    	log.info("Starting up Spring Commons ...");
-    	onStartup(); // delegate to onStartup()
-    	log.info("Spring Commons started");	
-    }
+//    @EventListener
+//    public void afterApplicationReady(ApplicationReadyEvent event) {
+//    	
+//    	log.info("Starting up Spring Commons ...");
+//    	onStartup(); // delegate to onStartup() -- todo - it bypassed spring annotations
+//    	log.info("Spring Commons started");	
+//    }
 
     
 	/**
 	 * Creates the initial Admin user, if not found.
 	 * Override this method if needed.
 	 */
-	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=false, timeout=60)
     public void onStartup() {
     	
 		try {
@@ -177,6 +175,12 @@ public abstract class SpringService
     	U newUser = newUser();
     	newUser.setName(user.getUsername());
     	newUser.setEmail(user.getEmail());
+    	if (StringUtils.isNotBlank(user.getFirstName())) {
+    		newUser.setFirstName(user.getFirstName());
+    	}
+    	if (StringUtils.isNotBlank(user.getLastName())) {
+    		newUser.setLastName(user.getLastName());
+    	}
     	newUser.setPassword(passwordEncoder.encode(
 				user.getPassword()));
     	if (tenants != null) {

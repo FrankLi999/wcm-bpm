@@ -48,13 +48,13 @@ public class HistoricCaseActivityInstanceRestConroller extends AbstractRestProce
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
 		HistoricCaseActivityInstanceQueryDto queryHistoricCaseActivityInstanceDto = new HistoricCaseActivityInstanceQueryDto(
-				objectMapper, request.getParameterMap());
+				this.getObjectMapper(), request.getParameterMap());
 		return queryHistoricCaseActivityInstances(queryHistoricCaseActivityInstanceDto, firstResult, maxResults);
 	}
 
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricCaseActivityInstancesCount(HttpServletRequest request) {
-		HistoricCaseActivityInstanceQueryDto queryDto = new HistoricCaseActivityInstanceQueryDto(objectMapper,
+		HistoricCaseActivityInstanceQueryDto queryDto = new HistoricCaseActivityInstanceQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricCaseActivityInstancesCount(queryDto);
 	}

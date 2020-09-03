@@ -50,7 +50,7 @@ public class HistoricJobLogRestController extends AbstractRestProcessEngineAware
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		HistoricJobLogQueryDto queryDto = new HistoricJobLogQueryDto(objectMapper, request.getParameterMap());
+		HistoricJobLogQueryDto queryDto = new HistoricJobLogQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryHistoricJobLogs(queryDto, firstResult, maxResults);
 	}
 
@@ -59,7 +59,7 @@ public class HistoricJobLogRestController extends AbstractRestProcessEngineAware
 			@RequestBody HistoricJobLogQueryDto queryDto, 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricJobLogQuery query = queryDto.toQuery(processEngine);
 
 		List<HistoricJobLog> matchingHistoricJobLogs;
@@ -80,13 +80,13 @@ public class HistoricJobLogRestController extends AbstractRestProcessEngineAware
 
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricJobLogsCount(HttpServletRequest request) {
-		HistoricJobLogQueryDto queryDto = new HistoricJobLogQueryDto(objectMapper, request.getParameterMap());
+		HistoricJobLogQueryDto queryDto = new HistoricJobLogQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryHistoricJobLogsCount(queryDto);
 	}
 
 	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryHistoricJobLogsCount(@RequestBody HistoricJobLogQueryDto queryDto) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricJobLogQuery query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

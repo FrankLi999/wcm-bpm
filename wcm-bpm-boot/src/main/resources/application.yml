@@ -68,9 +68,12 @@ bpw:
     - user
     - readonly
     - readwrite
-    - camunda-admin
     - UNVERIFIED
     - BLOCKED
+    - camunda-admin
+#    - accounting
+#    - management
+#    - sales
   user:
     -
       username: admin@example.com
@@ -81,20 +84,59 @@ bpw:
         - camunda-admin
         - wcm-reviewer
         - wcm-viewer
-    -
-      username: demo
-      email: demo@example.com
-      password: demo
-      rolename:
-        - admin 
-        - readonly
-        - wcm-viewer
-        - wcm-reviewer
-        - camunda-admin
+#    -
+#      username: demo
+#      email: demo@example.com
+#      password: demo
+#      rolename:
+#        - admin 
+#        - readonly
+#        - wcm-viewer
+#        - wcm-reviewer
+#        - camunda-admin
+#        - accounting
+#        - management
+#        - sales
+#    -
+#      username: john
+#      email: john@example.com
+#      password: john
+#      firstName: John
+#      lastName: Doe
+#      rolename:
+#        - admin 
+#        - readonly
+#        - wcm-viewer
+#        - wcm-reviewer
+#        - sales
+#    -
+#      username: mary
+#      email: mary@example.com
+#      password: mary
+#      firstName: Mary
+#      lastName: Anne
+#      rolename:
+#        - admin 
+#        - readonly
+#        - wcm-viewer
+#        - wcm-reviewer
+#        - accounting
+#    -
+#      username: peter
+#      email: petery@example.com
+#      password: peter
+#      firstName: Peter
+#      lastName: Meter
+#      rolename:
+#        - admin 
+#        - readonly
+#        - wcm-viewer
+#        - wcm-reviewer
+#        - management
     # Spring Commons flags
     # enabled:
       # json-prefix: false
-      
+    ###  
   # Properties to be passed to client
   shared:
     fooBar: 123...

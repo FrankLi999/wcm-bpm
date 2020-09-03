@@ -249,7 +249,7 @@ public class FilterResourceRestController extends AbstractAuthorizedRestResource
 		} else {
 			String resourceType = getDbFilter(resourceId).getResourceType();
 			AbstractQueryDto<?> queryDto = getQueryDtoForQuery(queryString, resourceType);
-			queryDto.setObjectMapper(this.objectMapper);
+			queryDto.setObjectMapper(this.getObjectMapper());
 			return queryDto.toQuery(processEngine);
 		}
 	}
@@ -317,7 +317,7 @@ public class FilterResourceRestController extends AbstractAuthorizedRestResource
 	protected AbstractQueryDto<?> getQueryDtoForQuery(String queryString, String resourceType) {
 		try {
 			if (EntityTypes.TASK.equals(resourceType)) {
-				return this.objectMapper.readValue(queryString, TaskQueryDto.class);
+				return this.getObjectMapper().readValue(queryString, TaskQueryDto.class);
 			} else {
 				throw new InvalidRequestException(HttpStatus.BAD_REQUEST,
 						"Queries for resource type '" + resourceType + "' are currently not supported by filters.");

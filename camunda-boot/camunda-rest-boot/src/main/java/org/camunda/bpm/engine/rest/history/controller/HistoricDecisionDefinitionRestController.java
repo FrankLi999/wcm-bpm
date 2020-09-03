@@ -44,7 +44,7 @@ public class HistoricDecisionDefinitionRestController extends AbstractRestProces
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
 		CleanableHistoricDecisionInstanceReportDto queryDto = new CleanableHistoricDecisionInstanceReportDto(
-				objectMapper, request.getParameterMap());
+				this.getObjectMapper(), request.getParameterMap());
 		CleanableHistoricDecisionInstanceReport query = queryDto.toQuery(processEngine);
 
 		List<CleanableHistoricDecisionInstanceReportResult> reportResult;
@@ -62,8 +62,8 @@ public class HistoricDecisionDefinitionRestController extends AbstractRestProces
 	public CountResultDto getCleanableHistoricDecisionInstanceReportCount(
 			HttpServletRequest request) {
 		CleanableHistoricDecisionInstanceReportDto queryDto = new CleanableHistoricDecisionInstanceReportDto(
-				objectMapper, request.getParameterMap());
-		queryDto.setObjectMapper(objectMapper);
+				this.getObjectMapper(), request.getParameterMap());
+		queryDto.setObjectMapper(this.getObjectMapper());
 		CleanableHistoricDecisionInstanceReport query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

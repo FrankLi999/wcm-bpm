@@ -65,7 +65,7 @@ public class ModificationRestController extends AbstractRestProcessEngineAware i
 				.createModification(dto.getProcessDefinitionId());
 
 		if (dto.getInstructions() != null && !dto.getInstructions().isEmpty()) {
-			dto.applyTo(builder, getProcessEngine(), objectMapper);
+			dto.applyTo(builder, getProcessEngine(), this.getObjectMapper());
 		}
 
 		List<String> processInstanceIds = dto.getProcessInstanceIds();

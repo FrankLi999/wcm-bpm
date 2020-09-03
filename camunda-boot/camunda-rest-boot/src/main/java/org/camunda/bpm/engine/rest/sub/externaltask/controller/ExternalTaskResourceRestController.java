@@ -106,8 +106,8 @@ public class ExternalTaskResourceRestController extends AbstractRestProcessEngin
 	public void complete(@PathVariable("externalTaskId") String externalTaskId, @RequestBody CompleteExternalTaskDto dto) {
 		ExternalTaskService externalTaskService = this.processEngine.getExternalTaskService();
 
-		VariableMap variables = VariableValueDto.toMap(dto.getVariables(), this.processEngine, objectMapper);
-		VariableMap localVariables = VariableValueDto.toMap(dto.getLocalVariables(), this.processEngine, objectMapper);
+		VariableMap variables = VariableValueDto.toMap(dto.getVariables(), this.processEngine, this.getObjectMapper());
+		VariableMap localVariables = VariableValueDto.toMap(dto.getLocalVariables(), this.processEngine, this.getObjectMapper());
 
 		try {
 			externalTaskService.complete(externalTaskId, dto.getWorkerId(), variables, localVariables);
@@ -139,7 +139,7 @@ public class ExternalTaskResourceRestController extends AbstractRestProcessEngin
 
 		try {
 			externalTaskService.handleBpmnError(externalTaskId, dto.getWorkerId(), dto.getErrorCode(),
-					dto.getErrorMessage(), VariableValueDto.toMap(dto.getVariables(), this.processEngine, objectMapper));
+					dto.getErrorMessage(), VariableValueDto.toMap(dto.getVariables(), this.processEngine, this.getObjectMapper()));
 		} catch (NotFoundException e) {
 			throw new RestException(HttpStatus.NOT_FOUND, e, "External task with id " + externalTaskId + " does not exist");
 		} catch (BadUserRequestException e) {

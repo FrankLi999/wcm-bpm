@@ -1,15 +1,15 @@
 > Install and start Kafka on the standard port
     
     > Start zookeeper
-      cd C:\tools\kafka\kafka_2.12-2.1.0\bin\windows
+      cd C:\tools\kafka\kafka_2.12-2.6.0\bin\windows
       zookeeper-server-start.bat ..\\..\\config\\zookeeper.properties 
       
     > Start the Kafka cluster locally
-      cd  C:\tools\kafka\kafka_2.12-2.1.0\bin\windows
+      cd C:\tools\kafka\kafka_2.12-2.6.0\bin\windows
       kafka-server-start.bat ..\\..\\config\\server.properties 
     
 > Create topic "flowing-retail"
-    cd  C:\tools\kafka\kafka_2.12-2.1.0\bin\windows
+    cd C:\tools\kafka\kafka_2.12-2.6.0\bin\windows
     
     
     delete topic:
@@ -37,3 +37,6 @@
     Inspect insides of Payment via http://localhost:8092
     Inspect all events going on via http://localhost:8095
     
+start fake smtp server:
+    cd C:\tools\FakeSMTP-2.0\target
+	java -jar fakeSMTP-2.0.jar -s -p 2525 -a 127.0.0.1

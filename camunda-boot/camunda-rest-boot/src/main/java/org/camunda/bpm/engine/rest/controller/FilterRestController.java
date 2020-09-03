@@ -160,7 +160,7 @@ public class FilterRestController extends AbstractAuthorizedRestResource impleme
 	}
 
 	protected FilterQuery getQueryFromQueryParameters(Map<String, String[]> queryParameters) {
-		FilterQueryDto queryDto = new FilterQueryDto(this.objectMapper, queryParameters);
+		FilterQueryDto queryDto = new FilterQueryDto(this.getObjectMapper(), queryParameters);
 		return queryDto.toQuery(this.processEngine);
 	}
 	

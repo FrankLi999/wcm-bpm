@@ -50,7 +50,7 @@ public class HistoricIdentityLinkLogRestController extends AbstractRestProcessEn
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		HistoricIdentityLinkLogQueryDto queryDto = new HistoricIdentityLinkLogQueryDto(objectMapper,
+		HistoricIdentityLinkLogQueryDto queryDto = new HistoricIdentityLinkLogQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		HistoricIdentityLinkLogQuery query = queryDto.toQuery(processEngine);
 
@@ -71,7 +71,7 @@ public class HistoricIdentityLinkLogRestController extends AbstractRestProcessEn
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricIdentityLinksCount(HttpServletRequest request) {
-		HistoricIdentityLinkLogQueryDto queryDto = new HistoricIdentityLinkLogQueryDto(objectMapper,
+		HistoricIdentityLinkLogQueryDto queryDto = new HistoricIdentityLinkLogQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		HistoricIdentityLinkLogQuery query = queryDto.toQuery(processEngine);
 

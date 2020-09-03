@@ -137,6 +137,7 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters<
 	 * @param key
 	 * @param value
 	 */
+	@SuppressWarnings("deprecation")
 	protected void setValueBasedOnAnnotation(String key, String value) {
 		List<Method> matchingMethods = findMatchingAnnotatedMethods(key);
 		for (Method method : matchingMethods) {

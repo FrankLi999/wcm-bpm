@@ -59,7 +59,7 @@ public class MetricsRestController extends AbstractRestProcessEngineAware implem
 		Map<String, String[]> queryParameters = request.getParameterMap();
 
 		DateConverter dateConverter = new DateConverter();
-		dateConverter.setObjectMapper(objectMapper);
+		dateConverter.setObjectMapper(this.getObjectMapper());
 
 		if ((queryParameters.get("startDate") != null) || (queryParameters.get("startDate")[0] != null)) {
 			Date startDate = dateConverter.convertQueryParameterToType(queryParameters.get("startDate")[0]);

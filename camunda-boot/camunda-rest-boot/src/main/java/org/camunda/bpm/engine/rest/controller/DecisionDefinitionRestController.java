@@ -44,7 +44,7 @@ public class DecisionDefinitionRestController extends AbstractRestProcessEngineA
 	public List<DecisionDefinitionDto> getDecisionDefinitions(HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		DecisionDefinitionQueryDto queryDto = new DecisionDefinitionQueryDto(this.objectMapper,
+		DecisionDefinitionQueryDto queryDto = new DecisionDefinitionQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		List<DecisionDefinitionDto> definitions = new ArrayList<DecisionDefinitionDto>();
 
@@ -68,7 +68,7 @@ public class DecisionDefinitionRestController extends AbstractRestProcessEngineA
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getDecisionDefinitionsCount(HttpServletRequest request) {
-		DecisionDefinitionQueryDto queryDto = new DecisionDefinitionQueryDto(this.objectMapper,
+		DecisionDefinitionQueryDto queryDto = new DecisionDefinitionQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 
 		DecisionDefinitionQuery query = queryDto.toQuery(this.processEngine);

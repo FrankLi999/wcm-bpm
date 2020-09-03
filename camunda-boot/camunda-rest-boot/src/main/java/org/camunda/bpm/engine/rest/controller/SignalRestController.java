@@ -62,7 +62,7 @@ public class SignalRestController extends AbstractRestProcessEngineAware impleme
 
 		Map<String, VariableValueDto> variablesDto = dto.getVariables();
 		if (variablesDto != null) {
-			Map<String, Object> variables = VariableValueDto.toMap(variablesDto, processEngine, objectMapper);
+			Map<String, Object> variables = VariableValueDto.toMap(variablesDto, processEngine, this.getObjectMapper());
 			signalEvent.setVariables(variables);
 		}
 

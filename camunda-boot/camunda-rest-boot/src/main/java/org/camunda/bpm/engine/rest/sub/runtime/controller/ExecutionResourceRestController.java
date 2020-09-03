@@ -63,7 +63,7 @@ public class ExecutionResourceRestController extends AbstractRestProcessEngineAw
 			@RequestBody ExecutionTriggerDto triggerDto) {
 		RuntimeService runtimeService = this.processEngine.getRuntimeService();
 		try {
-			VariableMap variables = VariableValueDto.toMap(triggerDto.getVariables(), this.processEngine, objectMapper);
+			VariableMap variables = VariableValueDto.toMap(triggerDto.getVariables(), this.processEngine, this.getObjectMapper());
 			runtimeService.signal(executionId, variables);
 
 		} catch (RestException e) {

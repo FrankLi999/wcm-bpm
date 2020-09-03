@@ -71,7 +71,7 @@ public class HistoricProcessInstanceRestController extends AbstractRestProcessEn
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
 		HistoricProcessInstanceQueryDto queryHistoriProcessInstanceDto = new HistoricProcessInstanceQueryDto(
-				objectMapper, request.getParameterMap());
+				this.getObjectMapper(), request.getParameterMap());
 		return queryHistoricProcessInstances(queryHistoriProcessInstanceDto, firstResult, maxResults);
 	}
 
@@ -82,7 +82,7 @@ public class HistoricProcessInstanceRestController extends AbstractRestProcessEn
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
 		
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricProcessInstanceQuery query = queryDto.toQuery(processEngine);
 
 		List<HistoricProcessInstance> matchingHistoricProcessInstances;
@@ -106,7 +106,7 @@ public class HistoricProcessInstanceRestController extends AbstractRestProcessEn
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricProcessInstancesCount(HttpServletRequest request) {
-		HistoricProcessInstanceQueryDto queryDto = new HistoricProcessInstanceQueryDto(objectMapper,
+		HistoricProcessInstanceQueryDto queryDto = new HistoricProcessInstanceQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricProcessInstancesCount(queryDto);
 	}
@@ -114,7 +114,7 @@ public class HistoricProcessInstanceRestController extends AbstractRestProcessEn
 	@Override
 	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryHistoricProcessInstancesCount(@RequestBody HistoricProcessInstanceQueryDto queryDto) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricProcessInstanceQuery query = queryDto.toQuery(processEngine);
 
 		long count = query.count();
@@ -233,7 +233,7 @@ public class HistoricProcessInstanceRestController extends AbstractRestProcessEn
 	
 	@SuppressWarnings("unchecked")
 	protected List<ReportResult> queryHistoricProcessInstanceReport(HttpServletRequest request) {
-		HistoricProcessInstanceReportDto reportDto = new HistoricProcessInstanceReportDto(objectMapper,
+		HistoricProcessInstanceReportDto reportDto = new HistoricProcessInstanceReportDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return (List<ReportResult>) reportDto.executeReport(processEngine);
 	}

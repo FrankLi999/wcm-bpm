@@ -53,7 +53,7 @@ public class HistoricDetailRestController extends AbstractRestProcessEngineAware
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults,
 			@RequestParam(name=VariableResource.DESERIALIZE_VALUES_QUERY_PARAM, defaultValue="true") boolean deserializeObjectValues) {
-		HistoricDetailQueryDto queryDto = new HistoricDetailQueryDto(objectMapper, request.getParameterMap());
+		HistoricDetailQueryDto queryDto = new HistoricDetailQueryDto(this.getObjectMapper(), request.getParameterMap());
 		HistoricDetailQuery query = queryDto.toQuery(processEngine);
 
 		return executeHistoricDetailQuery(query, firstResult, maxResults, deserializeObjectValues);
@@ -74,7 +74,7 @@ public class HistoricDetailRestController extends AbstractRestProcessEngineAware
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricDetailsCount(HttpServletRequest request) {
-		HistoricDetailQueryDto queryDto = new HistoricDetailQueryDto(objectMapper, request.getParameterMap());
+		HistoricDetailQueryDto queryDto = new HistoricDetailQueryDto(this.getObjectMapper(), request.getParameterMap());
 		HistoricDetailQuery query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

@@ -52,7 +52,7 @@ public class EventSubscriptionResourceRestController extends AbstractRestProcess
 		RuntimeService runtimeService = this.processEngine.getRuntimeService();
 
 		try {
-			VariableMap variables = VariableValueDto.toMap(triggerDto.getVariables(), this.processEngine, objectMapper);
+			VariableMap variables = VariableValueDto.toMap(triggerDto.getVariables(), this.processEngine, this.getObjectMapper());
 			runtimeService.messageEventReceived(messageName, executionId, variables);
 
 		} catch (AuthorizationException e) {

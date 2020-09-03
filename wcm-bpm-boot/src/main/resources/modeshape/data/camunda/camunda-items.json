@@ -2463,59 +2463,6 @@
         "bpw:description":"Decision Instance",
         "bpw:title":"Decision Instance"
     },
-    	"library/camunda/rootSiteArea/dashboard/incidents" : {
-        "jcr:primaryType":"bpw:system_siteAreaType"
-    },
-    "library/camunda/rootSiteArea/dashboard/incidents/itemProperties" : {
-        "jcr:primaryType":"bpw:ContentItemproperties",
-         "bpw:name":"incidents",
-         "bpw:title":"Incidents"
-    },
-    "library/camunda/rootSiteArea/dashboard/incidents/elements" : {
-        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
-        "navigationId": "bpm_dashboard_incidents",
-        "navigationType": "group",
-        "icon": "archive",
-        "url": "/bpm/dashboard/incidents",
-        "translate": "NAV.BPM.DASHBOARD_INCIDENTS.TITLE",
-        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
-    },
-    "library/camunda/rootSiteArea/dashboard/incidents/siteAreaLayout" : {
-        "jcr:primaryType":"bpw:siteAreaLayout",
-        "bpw:contentWidth": "100"
-    },
-	"library/camunda/rootSiteArea/dashboard/incidents/siteAreaLayout/sidePane" : {
-	    "jcr:primaryType":"bpw:contentAreaSidePanel",
-	    "bpw:isLeft": "true",
-	    "bpw:width": "0"
-	},
-	"library/camunda/rootSiteArea/dashboard/incidents/siteAreaLayout/row0" : {
-	    "jcr:primaryType":"bpw:layoutRow"
-	},
-	"library/camunda/rootSiteArea/dashboard/incidents/siteAreaLayout/row0/column0" : {
-	    "jcr:primaryType":"bpw:layoutColumn",
-	    "bpw:width": "100"
-	},
-	"library/camunda/rootSiteArea/dashboard/incidents/siteAreaLayout/row0/column0/viewer0" : {
-	    "jcr:primaryType":"bpw:resourceViewer",
-	    "bpw:title": "Incidents",
-	    "bpw:renderTemplateName": "/design/renderTemplate/RT_MyApplications",
-	    "bpw:contentPath": "/camunda/rootSiteArea/dashboard/incidents/IncidentsApp"
-	},
-	"library/camunda/rootSiteArea/dashboard/incidents/IncidentsApp" : {
-        "jcr:primaryType":"bpw:design_MyContent_AT",
-        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
-    },
-    "library/camunda/rootSiteArea/dashboard/incidents/IncidentsApp/elements" : {
-        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
-        "body": "<render-widget component=\"IncidentsComponent\"></render-widget>"
-    },
-    "library/camunda/rootSiteArea/dashboard/incidents/IncidentsApp/itemProperties" : {
-        "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
-        "bpw:description":"Incidents",
-        "bpw:title":"Incidents"
-    },
     "library/camunda/rootSiteArea/dashboard/tasks" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },

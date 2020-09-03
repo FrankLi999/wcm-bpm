@@ -72,7 +72,7 @@ public class DeploymentRestController extends AbstractRestProcessEngineAware imp
 	public List<DeploymentDto> getDeployments(HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
-		DeploymentQueryDto queryDto = new DeploymentQueryDto(this.objectMapper, request.getParameterMap());
+		DeploymentQueryDto queryDto = new DeploymentQueryDto(this.getObjectMapper(), request.getParameterMap());
 
 		DeploymentQuery query = queryDto.toQuery(this.processEngine);
 
@@ -122,7 +122,7 @@ public class DeploymentRestController extends AbstractRestProcessEngineAware imp
 
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getDeploymentsCount(HttpServletRequest request) {
-		DeploymentQueryDto queryDto = new DeploymentQueryDto(this.objectMapper, request.getParameterMap());
+		DeploymentQueryDto queryDto = new DeploymentQueryDto(this.getObjectMapper(), request.getParameterMap());
 
 		DeploymentQuery query = queryDto.toQuery(this.processEngine);
 

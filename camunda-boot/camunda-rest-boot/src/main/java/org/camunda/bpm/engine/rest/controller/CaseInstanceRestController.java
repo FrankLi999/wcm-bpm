@@ -50,14 +50,14 @@ public class CaseInstanceRestController extends AbstractRestProcessEngineAware i
 	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<CaseInstanceDto> getCaseInstances(HttpServletRequest request, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		CaseInstanceQueryDto queryDto = new CaseInstanceQueryDto(this.objectMapper, request.getParameterMap());
+		CaseInstanceQueryDto queryDto = new CaseInstanceQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryCaseInstances(queryDto, firstResult, maxResults);
 	}
 
 	@PostMapping(path="/", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<CaseInstanceDto> queryCaseInstances(@RequestBody CaseInstanceQueryDto queryDto, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		CaseInstanceQuery query = queryDto.toQuery(this.processEngine);
 
 		List<CaseInstance> matchingInstances;
@@ -77,13 +77,13 @@ public class CaseInstanceRestController extends AbstractRestProcessEngineAware i
 
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getCaseInstancesCount(HttpServletRequest request) {
-		CaseInstanceQueryDto queryDto = new CaseInstanceQueryDto(this.objectMapper, request.getParameterMap());
+		CaseInstanceQueryDto queryDto = new CaseInstanceQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryCaseInstancesCount(queryDto);
 	}
 
 	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryCaseInstancesCount(@RequestBody CaseInstanceQueryDto queryDto) {
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		CaseInstanceQuery query = queryDto.toQuery(this.processEngine);
 
 		long count = query.count();

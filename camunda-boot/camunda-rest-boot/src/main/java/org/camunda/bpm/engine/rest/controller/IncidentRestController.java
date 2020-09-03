@@ -46,7 +46,7 @@ public class IncidentRestController extends AbstractRestProcessEngineAware imple
 	public List<IncidentDto> getIncidents(HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
-		IncidentQueryDto queryDto = new IncidentQueryDto(this.objectMapper, request.getParameterMap());
+		IncidentQueryDto queryDto = new IncidentQueryDto(this.getObjectMapper(), request.getParameterMap());
 		IncidentQuery query = queryDto.toQuery(processEngine);
 
 		List<Incident> queryResult;
@@ -68,7 +68,7 @@ public class IncidentRestController extends AbstractRestProcessEngineAware imple
 	@Override
 	@GetMapping(path="/count", produces = MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getIncidentsCount(HttpServletRequest request) {
-		IncidentQueryDto queryDto = new IncidentQueryDto(this.objectMapper, request.getParameterMap());
+		IncidentQueryDto queryDto = new IncidentQueryDto(this.getObjectMapper(), request.getParameterMap());
 		IncidentQuery query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

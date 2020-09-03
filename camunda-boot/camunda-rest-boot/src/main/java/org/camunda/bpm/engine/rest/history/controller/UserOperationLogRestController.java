@@ -43,7 +43,7 @@ public class UserOperationLogRestController extends AbstractRestProcessEngineAwa
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryUserOperationCount(HttpServletRequest request) {
-		UserOperationLogQueryDto queryDto = new UserOperationLogQueryDto(objectMapper, request.getParameterMap());
+		UserOperationLogQueryDto queryDto = new UserOperationLogQueryDto(this.getObjectMapper(), request.getParameterMap());
 		UserOperationLogQuery query = queryDto.toQuery(processEngine);
 		return new CountResultDto(query.count());
 	}
@@ -54,7 +54,7 @@ public class UserOperationLogRestController extends AbstractRestProcessEngineAwa
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		UserOperationLogQueryDto queryDto = new UserOperationLogQueryDto(objectMapper, request.getParameterMap());
+		UserOperationLogQueryDto queryDto = new UserOperationLogQueryDto(this.getObjectMapper(), request.getParameterMap());
 		UserOperationLogQuery query = queryDto.toQuery(processEngine);
 
 		if (firstResult == null && maxResults == null) {

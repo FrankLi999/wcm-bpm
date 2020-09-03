@@ -85,7 +85,7 @@ public class HistoricProcessDefinitionRestController extends AbstractRestProcess
 		final Map<String, String[]> queryParameters = request.getParameterMap();
 
 		DateConverter dateConverter = new DateConverter();
-		dateConverter.setObjectMapper(objectMapper);
+		dateConverter.setObjectMapper(this.getObjectMapper());
 
 		if (queryParameters.get(QUERY_PARAM_STARTED_AFTER) != null) {
 			Date startedAfter = dateConverter
@@ -130,7 +130,7 @@ public class HistoricProcessDefinitionRestController extends AbstractRestProcess
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		CleanableHistoricProcessInstanceReportDto queryDto = new CleanableHistoricProcessInstanceReportDto(objectMapper,
+		CleanableHistoricProcessInstanceReportDto queryDto = new CleanableHistoricProcessInstanceReportDto(this.getObjectMapper(),
 				request.getParameterMap());
 		CleanableHistoricProcessInstanceReport query = queryDto.toQuery(processEngine);
 
@@ -148,9 +148,9 @@ public class HistoricProcessDefinitionRestController extends AbstractRestProcess
 	@GetMapping(path="/cleanable-process-instance-report/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getCleanableHistoricProcessInstanceReportCount(
 			HttpServletRequest request) {
-		CleanableHistoricProcessInstanceReportDto queryDto = new CleanableHistoricProcessInstanceReportDto(objectMapper,
+		CleanableHistoricProcessInstanceReportDto queryDto = new CleanableHistoricProcessInstanceReportDto(this.getObjectMapper(),
 				request.getParameterMap());
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		CleanableHistoricProcessInstanceReport query = queryDto.toQuery(processEngine);
 
 		long count = query.count();

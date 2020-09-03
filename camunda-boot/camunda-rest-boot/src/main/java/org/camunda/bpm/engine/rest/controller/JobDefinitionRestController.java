@@ -46,26 +46,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(JobDefinitionRestService.PATH)
 public class JobDefinitionRestController extends AbstractRestProcessEngineAware implements JobDefinitionRestService {
 
-	@GetMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path="", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<JobDefinitionDto> getJobDefinitions(HttpServletRequest request, @RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		JobDefinitionQueryDto queryDto = new JobDefinitionQueryDto(this.objectMapper, request.getParameterMap());
+		JobDefinitionQueryDto queryDto = new JobDefinitionQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryJobDefinitions(queryDto, firstResult, maxResults);
 
 	}
 
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getJobDefinitionsCount(HttpServletRequest request) {
-		JobDefinitionQueryDto queryDto = new JobDefinitionQueryDto(this.objectMapper, request.getParameterMap());
+		JobDefinitionQueryDto queryDto = new JobDefinitionQueryDto(this.getObjectMapper(), request.getParameterMap());
 		return queryJobDefinitionsCount(queryDto);
 	}
 
-	@PostMapping(path="/", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path="", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<JobDefinitionDto> queryJobDefinitions(
 			@RequestBody JobDefinitionQueryDto queryDto,
 			@RequestParam("firstResult") Integer firstResult, 
 			@RequestParam("maxResults") Integer maxResults) {
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		JobDefinitionQuery query = queryDto.toQuery(this.processEngine);
 
 		List<JobDefinition> matchingJobDefinitions;
@@ -86,7 +86,7 @@ public class JobDefinitionRestController extends AbstractRestProcessEngineAware 
 
 	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryJobDefinitionsCount(@RequestBody JobDefinitionQueryDto queryDto) {
-		queryDto.setObjectMapper(this.objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		JobDefinitionQuery query = queryDto.toQuery(this.processEngine);
 
 		long count = query.count();

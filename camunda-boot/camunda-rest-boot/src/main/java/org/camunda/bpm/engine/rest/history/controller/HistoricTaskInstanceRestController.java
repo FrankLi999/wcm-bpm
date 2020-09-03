@@ -60,7 +60,7 @@ public class HistoricTaskInstanceRestController extends AbstractRestProcessEngin
 			HttpServletRequest request, 
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		HistoricTaskInstanceQueryDto queryDto = new HistoricTaskInstanceQueryDto(objectMapper,
+		HistoricTaskInstanceQueryDto queryDto = new HistoricTaskInstanceQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricTaskInstances(queryDto, firstResult, maxResults);
 	}
@@ -71,7 +71,7 @@ public class HistoricTaskInstanceRestController extends AbstractRestProcessEngin
 			@RequestBody HistoricTaskInstanceQueryDto queryDto,
 			@RequestParam("firstResult") Integer firstResult,
 			@RequestParam("maxResults") Integer maxResults) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricTaskInstanceQuery query = queryDto.toQuery(processEngine);
 
 		List<HistoricTaskInstance> match;
@@ -92,7 +92,7 @@ public class HistoricTaskInstanceRestController extends AbstractRestProcessEngin
 	@Override
 	@GetMapping(path="/count", produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto getHistoricTaskInstancesCount(HttpServletRequest request) {
-		HistoricTaskInstanceQueryDto queryDto = new HistoricTaskInstanceQueryDto(objectMapper,
+		HistoricTaskInstanceQueryDto queryDto = new HistoricTaskInstanceQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		return queryHistoricTaskInstancesCount(queryDto);
 	}
@@ -100,7 +100,7 @@ public class HistoricTaskInstanceRestController extends AbstractRestProcessEngin
 	@Override
 	@PostMapping(path="/count", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public CountResultDto queryHistoricTaskInstancesCount(@RequestBody HistoricTaskInstanceQueryDto queryDto) {
-		queryDto.setObjectMapper(objectMapper);
+		queryDto.setObjectMapper(this.getObjectMapper());
 		HistoricTaskInstanceQuery query = queryDto.toQuery(processEngine);
 
 		long count = query.count();
@@ -113,7 +113,7 @@ public class HistoricTaskInstanceRestController extends AbstractRestProcessEngin
 	@Override
 	@GetMapping(path="/report", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getHistoricTaskInstanceReport(HttpServletRequest request) {
-		HistoricTaskInstanceReportQueryDto queryDto = new HistoricTaskInstanceReportQueryDto(objectMapper,
+		HistoricTaskInstanceReportQueryDto queryDto = new HistoricTaskInstanceReportQueryDto(this.getObjectMapper(),
 				request.getParameterMap());
 		ResponseEntity<?> response;
 

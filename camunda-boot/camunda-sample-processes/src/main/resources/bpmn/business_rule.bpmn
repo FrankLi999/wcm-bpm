@@ -17,7 +17,7 @@
       <bpmn2:incoming>SequenceFlow_0moyomu</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_1lag5tw</bpmn2:outgoing>
     </bpmn2:businessRuleTask>
-    <bpmn2:businessRuleTask id="Select_My_Dish_0b2lbkr" name="Select My Dish" camunda:class="com.bpwizard.bpm.task.business_rule.MyDishDelegate">
+    <bpmn2:businessRuleTask id="Select_My_Dish_0b2lbkr" name="Select My Dish" camunda:class="com.bpwizard.bpm.demo.task.business_rule.MyDishDelegate">
       <bpmn2:incoming>SequenceFlow_1f1oyyw</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_125geum</bpmn2:outgoing>
     </bpmn2:businessRuleTask>
