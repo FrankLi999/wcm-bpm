@@ -9,8 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,13 +19,14 @@ import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.mongo.CommonsMongoAutoConfiguration;
 import com.bpwizard.spring.boot.commons.reactive.service.domain.AbstractMongoUser;
 import com.bpwizard.spring.boot.commons.reactive.service.domain.AbstractMongoUserRepository;
+import com.bpwizard.spring.boot.commons.reactive.service.security.ReactiveOAuth2AuthenticationSuccessHandler;
 import com.bpwizard.spring.boot.commons.reactive.service.security.SpringReactiveSecurityConfig;
 import com.bpwizard.spring.boot.commons.reactive.service.security.SpringReactiveUserDetailsService;
-import com.bpwizard.spring.boot.commons.reactive.service.security.ReactiveOAuth2AuthenticationSuccessHandler;
 import com.bpwizard.spring.boot.commons.reactive.service.util.ReactiveServiceUtils;
 import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 
 @Configuration
+@EnableWebFluxSecurity
 @AutoConfigureBefore({
 	ReactiveUserDetailsServiceAutoConfiguration.class,
 	CommonsMongoAutoConfiguration.class})

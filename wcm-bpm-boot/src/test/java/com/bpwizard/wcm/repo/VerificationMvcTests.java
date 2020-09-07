@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import com.bpwizard.spring.boot.commons.security.GreenTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
 
@@ -21,12 +21,12 @@ public class VerificationMvcTests extends AbstractMvcTests {
 	private String verificationCode;
 	
 	@Autowired
-	private GreenTokenService greenTokenService;
+	private JSONWebEncryptionService jweTokenService;
 	
 	@Before
 	public void setUp() {
 		
-		verificationCode = greenTokenService.createToken(GreenTokenService.VERIFY_AUDIENCE,
+		verificationCode = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
 				Long.toString(UNVERIFIED_USER_ID), 60000L,
 				SecurityUtils.mapOf("email", UNVERIFIED_USER_EMAIL));
 	}
@@ -75,7 +75,7 @@ public class VerificationMvcTests extends AbstractMvcTests {
                 .andExpect(status().is(401));
 
 		// Wrong audience
-		String token = greenTokenService.createToken("wrong-audience",
+		String token = jweTokenService.createToken("wrong-audience",
 				Long.toString(UNVERIFIED_USER_ID), 60000L,
 				SecurityUtils.mapOf("email", UNVERIFIED_USER_EMAIL));
 		mvc.perform(post("/api/core/users/{userId}/verification", UNVERIFIED_USER_ID)
@@ -84,7 +84,7 @@ public class VerificationMvcTests extends AbstractMvcTests {
                 .andExpect(status().is(401));
 		
 		// Wrong email
-		token = greenTokenService.createToken(GreenTokenService.VERIFY_AUDIENCE,
+		token = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
 				Long.toString(UNVERIFIED_USER_ID), 60000L,
 				SecurityUtils.mapOf("email", "wrong.email@example.com"));
 		mvc.perform(post("/api/core/users/{userId}/verification", UNVERIFIED_USER_ID)
@@ -93,7 +93,7 @@ public class VerificationMvcTests extends AbstractMvcTests {
                 .andExpect(status().is(403));
 
 		// expired token
-		token = greenTokenService.createToken(GreenTokenService.VERIFY_AUDIENCE,
+		token = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
 				Long.toString(UNVERIFIED_USER_ID), 1L,
 				SecurityUtils.mapOf("email", UNVERIFIED_USER_EMAIL));	
 		// Thread.sleep(1001L);

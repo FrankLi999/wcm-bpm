@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import com.bpwizard.spring.boot.commons.domain.ResetPasswordForm;
-import com.bpwizard.spring.boot.commons.security.GreenTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -21,13 +21,13 @@ public class ResetPasswordMvcTests extends AbstractMvcTests {
 	private String forgotPasswordCode;
 	
 	@Autowired
-	private GreenTokenService greenTokenService;
+	private JSONWebEncryptionService jweTokenService;
 	
 	@Before
 	public void setUp() {
 		
-		forgotPasswordCode = greenTokenService.createToken(
-				GreenTokenService.FORGOT_PASSWORD_AUDIENCE,
+		forgotPasswordCode = jweTokenService.createToken(
+				JSONWebEncryptionService.FORGOT_PASSWORD_AUDIENCE,
 				ADMIN_EMAIL, 60000L);
 	}
 

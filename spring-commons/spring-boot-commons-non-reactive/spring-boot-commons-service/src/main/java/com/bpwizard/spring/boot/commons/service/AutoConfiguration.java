@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -45,7 +44,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Sanjay Patel
  */
 @Configuration
-@EnableWebFluxSecurity
 @EnableTransactionManagement
 // @EnableJpaAuditing
 @AutoConfigureBefore({CommonsJpaAutoConfiguration.class})
