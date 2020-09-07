@@ -125,7 +125,7 @@ public class SpringJpaSecurityConfig extends SpringWebSecurityConfig {
 	 */
 	protected void tokenAuthentication(HttpSecurity http) throws Exception {
 		
-		http.addFilterBefore(new SpringJpaTokenAuthenticationFilter(blueTokenService, userDetailsService),
+		http.addFilterBefore(new SpringJpaTokenAuthenticationFilter(jwsTokenService, userDetailsService),
 				UsernamePasswordAuthenticationFilter.class);
 	}
 }

@@ -30,7 +30,7 @@ import com.bpwizard.spring.boot.commons.service.repo.secureity.oauth2.AuthProvid
 import com.bpwizard.spring.boot.commons.service.validation.UniqueEmail;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.validation.Password;
-import com.bpwizard.spring.boot.commons.vlidation.Captcha;
+import com.bpwizard.spring.boot.commons.validation.Captcha;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 

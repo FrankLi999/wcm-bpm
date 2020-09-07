@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 import com.bpwizard.spring.boot.commons.reactive.demo.domain.User;
-import com.bpwizard.spring.boot.commons.security.GreenTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 public class ChangeEmailTests extends AbstractTests {
@@ -29,7 +29,7 @@ public class ChangeEmailTests extends AbstractTests {
 	private String changeEmailCode;
 	
 	@Autowired
-	private GreenTokenService greenTokenService;
+	private JSONWebEncryptionService jweTokenService;
 	
 	@Before
 	public void setUp() {
@@ -38,8 +38,8 @@ public class ChangeEmailTests extends AbstractTests {
 		user.setNewEmail(NEW_EMAIL);
 		mongoTemplate.save(user);
 		
-		changeEmailCode = greenTokenService.createToken(
-				GreenTokenService.CHANGE_EMAIL_AUDIENCE,
+		changeEmailCode = jweTokenService.createToken(
+				JSONWebEncryptionService.CHANGE_EMAIL_AUDIENCE,
 				UNVERIFIED_USER_ID.toString(), 60000L,
 				SecurityUtils.mapOf("newEmail", NEW_EMAIL));
 	}
@@ -71,7 +71,7 @@ public class ChangeEmailTests extends AbstractTests {
 			.expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
 
 		// Wrong audience
-		String code = greenTokenService.createToken(
+		String code = jweTokenService.createToken(
 				"", // blank audience
 				UNVERIFIED_USER_ID.toString(), 60000L,
 				SecurityUtils.mapOf("newEmail", NEW_EMAIL));
@@ -80,8 +80,8 @@ public class ChangeEmailTests extends AbstractTests {
 			.expectStatus().isUnauthorized();
 
 		// Wrong userId subject
-		code = greenTokenService.createToken(
-				GreenTokenService.CHANGE_EMAIL_AUDIENCE,
+		code = jweTokenService.createToken(
+				JSONWebEncryptionService.CHANGE_EMAIL_AUDIENCE,
 				ADMIN_ID.toString(), 60000L,
 				SecurityUtils.mapOf("newEmail", NEW_EMAIL));
 		
@@ -89,8 +89,8 @@ public class ChangeEmailTests extends AbstractTests {
 			.expectStatus().isForbidden();
 		
 		// Wrong new email
-		code = greenTokenService.createToken(
-				GreenTokenService.CHANGE_EMAIL_AUDIENCE,
+		code = jweTokenService.createToken(
+				JSONWebEncryptionService.CHANGE_EMAIL_AUDIENCE,
 				UNVERIFIED_USER_ID.toString(), 60000L,
 				SecurityUtils.mapOf("newEmail", "wrong.new.email@example.com"));
 		

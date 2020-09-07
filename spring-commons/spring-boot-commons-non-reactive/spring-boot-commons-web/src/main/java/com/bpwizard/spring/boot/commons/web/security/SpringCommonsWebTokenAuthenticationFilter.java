@@ -17,7 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
@@ -33,7 +33,7 @@ public class SpringCommonsWebTokenAuthenticationFilter extends OncePerRequestFil
 	
     private static final Logger log = LogManager.getLogger(SpringCommonsWebTokenAuthenticationFilter.class);
     
-    private BlueTokenService blueTokenService;
+    private JSONWebSignatureService jwsTokenService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -74,7 +74,7 @@ public class SpringCommonsWebTokenAuthenticationFilter extends OncePerRequestFil
 
 	protected Authentication createAuthToken(String token) {
 		
-		JWTClaimsSet claims = blueTokenService.parseToken(token, BlueTokenService.AUTH_AUDIENCE);
+		JWTClaimsSet claims = jwsTokenService.parseToken(token, JSONWebSignatureService.AUTH_AUDIENCE);
 		UserDto userDto = SecurityUtils.getUserDto(claims);
 		if (userDto == null)
 			userDto = fetchUserDto(claims);

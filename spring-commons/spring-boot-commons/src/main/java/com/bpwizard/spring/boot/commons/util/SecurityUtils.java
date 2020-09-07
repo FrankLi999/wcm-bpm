@@ -20,7 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -261,7 +261,7 @@ public class SecurityUtils {
 
 	public static UserDto getUserDto(JWTClaimsSet claims) {
 
-		Object userClaim = claims.getClaim(BlueTokenService.USER_CLAIM);
+		Object userClaim = claims.getClaim(JSONWebSignatureService.USER_CLAIM);
 		
 		if (userClaim == null)
 			return null;

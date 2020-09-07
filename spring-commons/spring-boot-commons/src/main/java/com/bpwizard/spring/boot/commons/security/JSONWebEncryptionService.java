@@ -1,6 +1,6 @@
 package com.bpwizard.spring.boot.commons.security;
 
-public interface GreenTokenService extends SpringTokenService {
+public interface JSONWebEncryptionService extends SpringTokenService {
 
 	String VERIFY_AUDIENCE = "verify";
 	String FORGOT_PASSWORD_AUDIENCE = "forgot-password";

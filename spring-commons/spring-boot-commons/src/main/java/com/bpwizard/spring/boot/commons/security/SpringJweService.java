@@ -3,8 +3,6 @@ package com.bpwizard.spring.boot.commons.security;
 import java.text.ParseException;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import com.nimbusds.jose.EncryptionMethod;
@@ -33,9 +31,9 @@ import com.nimbusds.jwt.proc.DefaultJWTProcessor;
  * https://connect2id.com/products/nimbus-jose-jwt/examples/jwe-with-shared-key
  * https://connect2id.com/products/nimbus-jose-jwt/examples/validating-jwt-access-tokens
  */
-public class SpringJweService extends AbstractJwtService implements GreenTokenService {
+public class SpringJweService extends AbstractJwtService implements JSONWebEncryptionService {
 	
-	private static final Logger log = LogManager.getLogger(SpringJweService.class);
+	// private static final Logger log = LogManager.getLogger(SpringJweService.class);
 	
 	private DirectEncrypter encrypter;
     private JWEHeader header = new JWEHeader(JWEAlgorithm.DIR, EncryptionMethod.A128CBC_HS256);

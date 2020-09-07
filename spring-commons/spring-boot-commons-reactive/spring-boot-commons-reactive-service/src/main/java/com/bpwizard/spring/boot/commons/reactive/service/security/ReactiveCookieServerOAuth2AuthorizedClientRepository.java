@@ -1,6 +1,5 @@
 package com.bpwizard.spring.boot.commons.reactive.service.security;
 
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -96,6 +95,23 @@ public class ReactiveCookieServerOAuth2AuthorizedClientRepository implements Ser
 		ReactiveServiceUtils.deleteCookies(exchange, SecurityUtils.AUTHORIZATION_REQUEST_COOKIE_NAME);
 		return Mono.empty();
 	}
+	
+//	public static void deleteCookies(ServerWebExchange exchange, String ...cookiesToDelete) {
+//		
+//		MultiValueMap<String, HttpCookie> cookies = exchange.getRequest().getCookies();
+//		MultiValueMap<String, ResponseCookie> responseCookies = exchange.getResponse().getCookies();
+//		
+//		for (int i = 0; i < cookiesToDelete.length; i++)
+//			if (cookies.getFirst(cookiesToDelete[i]) != null) {
+//				
+//				ResponseCookie cookie = ResponseCookie.from(cookiesToDelete[i], "")
+//					.path("/")
+//					.maxAge(0L)
+//					.build();
+//				
+//				responseCookies.put(cookiesToDelete[i], Collections.singletonList(cookie));
+//			}
+//	}
 	
 	private Mono<OAuth2AuthorizedClient> deserialize(HttpCookie cookie) {		
 		return Mono.just(SecurityUtils.deserialize(cookie.getValue()));

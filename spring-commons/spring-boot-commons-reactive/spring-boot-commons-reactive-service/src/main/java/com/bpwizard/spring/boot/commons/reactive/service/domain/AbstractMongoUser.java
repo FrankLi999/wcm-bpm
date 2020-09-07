@@ -17,7 +17,7 @@ import com.bpwizard.spring.boot.commons.reactive.service.validation.UniqueEmail;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.validation.Password;
-import com.bpwizard.spring.boot.commons.vlidation.Captcha;
+import com.bpwizard.spring.boot.commons.validation.Captcha;
 import com.bpwizard.wcm.repo.secureity.oauth2.AuthProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;

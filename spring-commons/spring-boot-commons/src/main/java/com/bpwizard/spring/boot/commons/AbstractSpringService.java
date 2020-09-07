@@ -16,8 +16,8 @@ import com.bpwizard.spring.boot.commons.SpringProperties.Admin;
 import com.bpwizard.spring.boot.commons.domain.SpringUser;
 import com.bpwizard.spring.boot.commons.mail.SpringMailData;
 import com.bpwizard.spring.boot.commons.mail.MailSender;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
-import com.bpwizard.spring.boot.commons.security.GreenTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
+import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
@@ -28,8 +28,8 @@ public abstract class AbstractSpringService
     private static final Log log = LogFactory.getLog(AbstractSpringService.class);
 	protected PasswordEncoder passwordEncoder;
 	protected SpringProperties properties;
-	protected BlueTokenService blueTokenService;
-	protected GreenTokenService greenTokenService;	
+	protected JSONWebSignatureService jwsTokenService;
+	protected JSONWebEncryptionService jweTokenService;	
 	@SuppressWarnings("rawtypes")
 	protected MailSender mailSender;
 
@@ -110,7 +110,7 @@ public abstract class AbstractSpringService
 			
 			log.debug("Sending verification mail to: " + user);
 			
-			String verificationCode = greenTokenService.createToken(GreenTokenService.VERIFY_AUDIENCE,
+			String verificationCode = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
 					user.getId().toString(), properties.getJwt().getExpirationMillis(),
 					SecurityUtils.mapOf("email", user.getEmail()));
 
@@ -152,8 +152,8 @@ public abstract class AbstractSpringService
 		
 		log.debug("Mailing forgot password link to user: " + user);
 
-		String forgotPasswordCode = greenTokenService.createToken(
-				GreenTokenService.FORGOT_PASSWORD_AUDIENCE,
+		String forgotPasswordCode = jweTokenService.createToken(
+				JSONWebEncryptionService.FORGOT_PASSWORD_AUDIENCE,
 				user.getEmail(), properties.getJwt().getExpirationMillis());
 
 		// make the link

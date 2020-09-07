@@ -3,7 +3,6 @@ package com.bpwizard.spring.boot.commons.service;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.domain.IdConverter;
 import com.bpwizard.spring.boot.commons.jpa.CommonsJpaAutoConfiguration;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUserRepository;
 import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
@@ -45,6 +45,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Sanjay Patel
  */
 @Configuration
+@EnableWebFluxSecurity
 @EnableTransactionManagement
 // @EnableJpaAuditing
 @AutoConfigureBefore({CommonsJpaAutoConfiguration.class})
@@ -81,10 +82,10 @@ public class AutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(OAuth2AuthenticationSuccessHandler.class)
 	public OAuth2AuthenticationSuccessHandler<?> oauth2AuthenticationSuccessHandler(
-			SpringProperties properties, BlueTokenService blueTokenService) {
+			SpringProperties properties, JSONWebSignatureService jwsTokenService) {
 		
         log.info("Configuring OAuth2AuthenticationSuccessHandler");       
-		return new OAuth2AuthenticationSuccessHandler<>(properties, blueTokenService);
+		return new OAuth2AuthenticationSuccessHandler<>(properties, jwsTokenService);
 	}
 	
 	/**
@@ -115,7 +116,7 @@ public class AutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(UserDetailsService.class)
 	public <U extends AbstractUser<ID>, ID extends Serializable>
-	SpringUserDetailsService userDetailService(AbstractUserRepository<U, ID> userRepository) {
+	SpringUserDetailsService<U, ID> userDetailService(AbstractUserRepository<U, ID> userRepository) {
 		
         log.info("Configuring SpringUserDetailsService");       
 		return new SpringUserDetailsService<U, ID>(userRepository);

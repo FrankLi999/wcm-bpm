@@ -27,7 +27,7 @@ import com.bpwizard.spring.boot.commons.reactive.service.SpringReactiveService;
 import com.bpwizard.spring.boot.commons.reactive.service.domain.AbstractMongoUser;
 import com.bpwizard.spring.boot.commons.reactive.service.domain.AbstractMongoUserRepository;
 import com.bpwizard.spring.boot.commons.reactive.service.util.ReactiveServiceUtils;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
@@ -49,7 +49,7 @@ public class ReactiveOAuth2AuthenticationSuccessHandler<U extends AbstractMongoU
 	private static final Log log = LogFactory.getLog(ReactiveOAuth2AuthenticationSuccessHandler.class);
 	private static final ServerRedirectStrategy redirectStrategy = new DefaultServerRedirectStrategy();
 
-	private BlueTokenService blueTokenService;
+	private JSONWebSignatureService jwsTokenService;
 	private AbstractMongoUserRepository<U, ID> userRepository;
 	private SpringReactiveUserDetailsService<U, ?> userDetailsService;
 	private SpringReactiveService<U, ?> springService;
@@ -122,8 +122,8 @@ public class ReactiveOAuth2AuthenticationSuccessHandler<U extends AbstractMongoU
 
 	private String getAuthToken(UserDto user) {
 		
-		String shortLivedAuthToken = blueTokenService.createToken(
-				BlueTokenService.AUTH_AUDIENCE,
+		String shortLivedAuthToken = jwsTokenService.createToken(
+				JSONWebSignatureService.AUTH_AUDIENCE,
 				user.getUsername(),
 				(long) properties.getJwt().getShortLivedMillis());
 		

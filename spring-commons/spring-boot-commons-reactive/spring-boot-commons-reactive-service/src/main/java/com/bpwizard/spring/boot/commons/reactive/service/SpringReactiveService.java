@@ -34,8 +34,8 @@ import com.bpwizard.spring.boot.commons.reactive.service.domain.AbstractMongoUse
 import com.bpwizard.spring.boot.commons.reactive.service.domain.AbstractMongoUserRepository;
 import com.bpwizard.spring.boot.commons.reactive.service.forms.EmailForm;
 import com.bpwizard.spring.boot.commons.reactive.service.util.ReactiveServiceUtils;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
-import com.bpwizard.spring.boot.commons.security.GreenTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
@@ -55,28 +55,29 @@ public abstract class SpringReactiveService
     
 	protected SpringProperties properties;
 	protected PasswordEncoder passwordEncoder;
+	@SuppressWarnings("rawtypes")
 	protected MailSender mailSender;
 	protected AbstractMongoUserRepository<U, ID> userRepository;
 	protected ReactiveUserDetailsService userDetailsService;
-	protected BlueTokenService blueTokenService;
-	protected GreenTokenService greenTokenService;
+	protected JSONWebSignatureService jwsTokenService;
+	protected JSONWebEncryptionService jweTokenService;
 
 	@Autowired
 	public void createSpringService(SpringProperties properties,
 			PasswordEncoder passwordEncoder,
-			MailSender mailSender,
+			@SuppressWarnings("rawtypes") MailSender mailSender,
 			AbstractMongoUserRepository<U, ID> userRepository,
 			ReactiveUserDetailsService userDetailsService,
-			BlueTokenService blueTokenService,
-			GreenTokenService greenTokenService) {
+			JSONWebSignatureService jwsTokenService,
+			JSONWebEncryptionService jweTokenService) {
 		
 		this.properties = properties;
 		this.passwordEncoder = passwordEncoder;
 		this.mailSender = mailSender;
 		this.userRepository = userRepository;
 		this.userDetailsService = userDetailsService;
-		this.blueTokenService = blueTokenService;
-		this.greenTokenService = greenTokenService;
+		this.jwsTokenService = jwsTokenService;
+		this.jweTokenService = jweTokenService;
 		
 		log.info("Created");
 	}
@@ -238,7 +239,7 @@ public abstract class SpringReactiveService
 			
 			log.debug("Sending verification mail to: " + user);
 			
-			String verificationCode = greenTokenService.createToken(GreenTokenService.VERIFY_AUDIENCE,
+			String verificationCode = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
 					user.getId().toString(), properties.getJwt().getExpirationMillis(),
 					SecurityUtils.mapOf("email", user.getEmail()));
 
@@ -262,6 +263,7 @@ public abstract class SpringReactiveService
 	 * Sends verification mail to a unverified user.
 	 * Override this method if you're using a different MailData
 	 */
+	@SuppressWarnings("unchecked")
 	protected void sendVerificationMail(final U user, String verifyLink) {
 		
 		// send the mail
@@ -332,8 +334,8 @@ public abstract class SpringReactiveService
 		SpringExceptionUtils.validate(user.hasRole(UserUtils.Role.UNVERIFIED),
 				"com.bpwizard.spring.alreadyVerified").go();	
 		
-		JWTClaimsSet claims = greenTokenService.parseToken(
-				verificationCode, GreenTokenService.VERIFY_AUDIENCE, user.getCredentialsUpdatedMillis());
+		JWTClaimsSet claims = jweTokenService.parseToken(
+				verificationCode, JSONWebEncryptionService.VERIFY_AUDIENCE, user.getCredentialsUpdatedMillis());
 		
 		SecurityUtils.ensureAuthority(
 				claims.getSubject().equals(user.getId().toString()) &&
@@ -369,8 +371,8 @@ public abstract class SpringReactiveService
 		
 		log.debug("Mailing forgot password link to user: " + user);
 
-		String forgotPasswordCode = greenTokenService.createToken(
-				GreenTokenService.FORGOT_PASSWORD_AUDIENCE,
+		String forgotPasswordCode = jweTokenService.createToken(
+				JSONWebEncryptionService.FORGOT_PASSWORD_AUDIENCE,
 				user.getEmail(), properties.getJwt().getExpirationMillis());
 
 		// make the link
@@ -388,6 +390,7 @@ public abstract class SpringReactiveService
 	 * 
 	 * Override this method if you're using a different MailData
 	 */
+	@SuppressWarnings("unchecked")
 	public void mailForgotPasswordLink(U user, String forgotPasswordLink) {
 		
 		// send the mail
@@ -404,8 +407,8 @@ public abstract class SpringReactiveService
 			
 			log.debug("Resetting password ...");
 
-			JWTClaimsSet claims = greenTokenService.parseToken(form.getCode(),
-					GreenTokenService.FORGOT_PASSWORD_AUDIENCE);
+			JWTClaimsSet claims = jweTokenService.parseToken(form.getCode(),
+					JSONWebEncryptionService.FORGOT_PASSWORD_AUDIENCE);
 			
 			String email = claims.getSubject();
 			
@@ -459,7 +462,7 @@ public abstract class SpringReactiveService
 		log.debug("Adding auth header for " + userDto.getUsername());
 		
 		response.getHeaders().add(SecurityUtils.TOKEN_RESPONSE_HEADER_NAME, SecurityUtils.TOKEN_PREFIX +
-				blueTokenService.createToken(BlueTokenService.AUTH_AUDIENCE, userDto.getUsername(), expirationMillis));
+				jwsTokenService.createToken(JSONWebSignatureService.AUTH_AUDIENCE, userDto.getUsername(), expirationMillis));
 	}
 
 
@@ -644,7 +647,7 @@ public abstract class SpringReactiveService
 	protected void requestEmailChange(Tuple3<U,U,EmailForm> tuple) {
 		
 		U user = tuple.getT1();
-		U loggedIn = tuple.getT2();
+		// U loggedIn = tuple.getT2();
 		EmailForm emailForm = tuple.getT3();
 		
 		log.debug("Requesting email change: " + user);
@@ -667,8 +670,8 @@ public abstract class SpringReactiveService
 	 */
 	protected void mailChangeEmailLink(U user) {
 		
-		String changeEmailCode = greenTokenService.createToken(
-				GreenTokenService.CHANGE_EMAIL_AUDIENCE,
+		String changeEmailCode = jweTokenService.createToken(
+				JSONWebEncryptionService.CHANGE_EMAIL_AUDIENCE,
 				user.getId().toString(), properties.getJwt().getExpirationMillis(),
 				SecurityUtils.mapOf("newEmail", user.getNewEmail()));
 		
@@ -698,6 +701,7 @@ public abstract class SpringReactiveService
 	 * 
 	 * Override this method if you're using a different MailData
 	 */
+	@SuppressWarnings("unchecked")
 	protected void mailChangeEmailLink(U user, String changeEmailLink) {
 		
 		mailSender.send(SpringMailData.of(user.getNewEmail(),
@@ -743,8 +747,8 @@ public abstract class SpringReactiveService
 		SpringExceptionUtils.validate(StringUtils.isNotBlank(user.getNewEmail()),
 				"com.bpwizard.spring.blank.newEmail").go();
 		
-		JWTClaimsSet claims = greenTokenService.parseToken(code,
-				GreenTokenService.CHANGE_EMAIL_AUDIENCE,
+		JWTClaimsSet claims = jweTokenService.parseToken(code,
+				JSONWebEncryptionService.CHANGE_EMAIL_AUDIENCE,
 				user.getCredentialsUpdatedMillis());
 		
 		SecurityUtils.ensureAuthority(
@@ -796,7 +800,7 @@ public abstract class SpringReactiveService
 					currentUser.isGoodAdmin(), "com.bpwizard.spring.notGoodAdminOrSameUser");
 			
 			return Collections.singletonMap("token", SecurityUtils.TOKEN_PREFIX +
-					blueTokenService.createToken(blueTokenService.AUTH_AUDIENCE, username, expirationMillis));			
+					jwsTokenService.createToken(JSONWebSignatureService.AUTH_AUDIENCE, username, expirationMillis));			
 		});
 	}
 	
@@ -804,18 +808,18 @@ public abstract class SpringReactiveService
 	@PreAuthorize("isAuthenticated()")
 	public Mono<Map<String, String>> fetchFullToken(String authHeader) {
 
-		SecurityUtils.ensureCredentials(blueTokenService.parseClaim(authHeader.substring(SecurityUtils.TOKEN_PREFIX_LENGTH),
-				BlueTokenService.USER_CLAIM) == null,	"com.bpwizard.spring.fullTokenNotAllowed");
+		SecurityUtils.ensureCredentials(jwsTokenService.parseClaim(authHeader.substring(SecurityUtils.TOKEN_PREFIX_LENGTH),
+				JSONWebSignatureService.USER_CLAIM) == null,	"com.bpwizard.spring.fullTokenNotAllowed");
 		
 		return ReactiveUtils.currentUser().map(optionalUser -> {
 			
 			UserDto currentUser = optionalUser.get();
 			
-			Map<String, Object> claimMap = Collections.singletonMap(BlueTokenService.USER_CLAIM,
+			Map<String, Object> claimMap = Collections.singletonMap(JSONWebSignatureService.USER_CLAIM,
 					SecurityUtils.serialize(currentUser)); // Not serializing converts it to a JsonNode
 			
 			Map<String, String> tokenMap = Collections.singletonMap("token", SecurityUtils.TOKEN_PREFIX +
-					blueTokenService.createToken(BlueTokenService.AUTH_AUDIENCE, currentUser.getUsername(),
+					jwsTokenService.createToken(JSONWebSignatureService.AUTH_AUDIENCE, currentUser.getUsername(),
 						Long.valueOf(properties.getJwt().getShortLivedMillis()),
 						claimMap));
 			

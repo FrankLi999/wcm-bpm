@@ -57,10 +57,10 @@ public class DefaultCamundaRuntimeDelegate extends AbstractCamundaRuntimeDelegat
 	 * @return
 	 */
 	protected List<String> getMappingFiles() {
-		List<CamundaRuntimePlugin> cockpitPlugins = pluginRegistry.getPlugins();
+		List<CamundaRuntimePlugin> camundaRuntimePlugins = pluginRegistry.getPlugins();
 
 		List<String> mappingFiles = new ArrayList<String>();
-		for (CamundaRuntimePlugin plugin : cockpitPlugins) {
+		for (CamundaRuntimePlugin plugin : camundaRuntimePlugins) {
 			mappingFiles.addAll(plugin.getMappingFiles());
 		}
 

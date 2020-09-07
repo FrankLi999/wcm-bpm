@@ -10,12 +10,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.WebFilterChainServerAuthenticationSuccessHandler;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
-import org.springframework.web.util.WebUtils;
 
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.reactive.service.domain.AbstractMongoUser;
 import com.bpwizard.spring.boot.commons.reactive.service.util.ReactiveServiceUtils;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.webflux.security.SpringCommonsReactiveSecurityConfig;
@@ -31,12 +30,12 @@ public class SpringReactiveSecurityConfig <U extends AbstractMongoUser<ID>, ID e
 	private SpringProperties properties;
 	private ReactiveOAuth2AuthenticationSuccessHandler<U,ID> reactiveOAuth2AuthenticationSuccessHandler;
 	
-	public SpringReactiveSecurityConfig(BlueTokenService blueTokenService,
+	public SpringReactiveSecurityConfig(JSONWebSignatureService jwsTokenService,
 			SpringReactiveUserDetailsService<U, ID> userDetailsService,
 			ReactiveOAuth2AuthenticationSuccessHandler<U,ID> reactiveOAuth2AuthenticationSuccessHandler,
 			SpringProperties properties) {
 		
-		super(blueTokenService);
+		super(jwsTokenService);
 		this.userDetailsService = userDetailsService;
 		this.reactiveOAuth2AuthenticationSuccessHandler = reactiveOAuth2AuthenticationSuccessHandler;
 		this.properties = properties;
@@ -75,6 +74,7 @@ public class SpringReactiveSecurityConfig <U extends AbstractMongoUser<ID>, ID e
 			.authorizedClientRepository(new ReactiveCookieServerOAuth2AuthorizedClientRepository(properties))
 			.authenticationSuccessHandler(reactiveOAuth2AuthenticationSuccessHandler)
 			.authenticationFailureHandler(this::onOauth2AuthenticationFailure);
+			
 	}
 	
 	@Override

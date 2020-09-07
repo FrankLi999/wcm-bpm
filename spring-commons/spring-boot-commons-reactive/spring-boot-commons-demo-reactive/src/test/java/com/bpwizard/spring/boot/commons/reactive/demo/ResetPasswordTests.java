@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 import com.bpwizard.spring.boot.commons.reactive.demo.dto.TestResetPasswordForm;
-import com.bpwizard.spring.boot.commons.security.GreenTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 import reactor.core.publisher.Mono;
@@ -23,13 +23,13 @@ public class ResetPasswordTests extends AbstractTests {
 	private String forgotPasswordCode;
 	
 	@Autowired
-	private GreenTokenService greenTokenService;
+	private JSONWebEncryptionService jweTokenService;
 	
 	@Before
 	public void setUp() {
 		
-		forgotPasswordCode = greenTokenService.createToken(
-				GreenTokenService.FORGOT_PASSWORD_AUDIENCE,
+		forgotPasswordCode = jweTokenService.createToken(
+				JSONWebEncryptionService.FORGOT_PASSWORD_AUDIENCE,
 				ADMIN_EMAIL, 60000L);
 	}
 	

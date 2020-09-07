@@ -2,7 +2,6 @@ package com.bpwizard.spring.boot.commons.webflux.security;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -10,15 +9,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
-import org.springframework.security.web.server.authentication.ServerAuthenticationFailureHandler;
-import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
@@ -32,7 +28,7 @@ public class SpringCommonsReactiveSecurityConfig { //extends ReactiveSecurityAut
 
 	private static final Logger log = LogManager.getLogger(SpringCommonsReactiveSecurityConfig.class);
 	
-	protected BlueTokenService blueTokenService;
+	protected JSONWebSignatureService jwsTokenService;
 
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 		
@@ -100,7 +96,7 @@ public class SpringCommonsReactiveSecurityConfig { //extends ReactiveSecurityAut
 
 			String token = (String) authentication.getCredentials();
 			
-			JWTClaimsSet claims = blueTokenService.parseToken(token, BlueTokenService.AUTH_AUDIENCE);
+			JWTClaimsSet claims = jwsTokenService.parseToken(token, JSONWebSignatureService.AUTH_AUDIENCE);
 			
 			UserDto userDto = SecurityUtils.getUserDto(claims);
 			

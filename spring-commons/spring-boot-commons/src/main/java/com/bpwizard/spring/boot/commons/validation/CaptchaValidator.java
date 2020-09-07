@@ -1,4 +1,5 @@
 package com.bpwizard.spring.boot.commons.validation;
+
 import java.util.Collection;
 
 import javax.validation.ConstraintValidator;
@@ -6,14 +7,15 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.bpwizard.spring.boot.commons.SpringProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Captcha validation constraint
@@ -27,7 +29,7 @@ import com.bpwizard.spring.boot.commons.SpringProperties;
  */
 public class CaptchaValidator implements ConstraintValidator<Captcha, String> {
 	
-	private static final Log log = LogFactory.getLog(CaptchaValidator.class);
+	private static final Logger log = LogManager.getLogger(CaptchaValidator.class);
 	
 	/**
 	 * A class to receive the response
@@ -59,10 +61,10 @@ public class CaptchaValidator implements ConstraintValidator<Captcha, String> {
 	private SpringProperties properties;
 	private RestTemplate restTemplate;
 	
-	public CaptchaValidator(SpringProperties properties) {
+	public CaptchaValidator(SpringProperties properties, RestTemplateBuilder restTemplateBuilder) {
 		
 		this.properties = properties;
-		this.restTemplate = new RestTemplate();
+		this.restTemplate = restTemplateBuilder.build();
 		log.info("Created");
 	}
 

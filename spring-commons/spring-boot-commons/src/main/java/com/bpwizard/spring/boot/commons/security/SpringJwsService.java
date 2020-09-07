@@ -21,14 +21,14 @@ import com.nimbusds.jwt.JWTClaimsSet;
  * 
  * Reference: https://connect2id.com/products/nimbus-jose-jwt/examples/jws-with-hmac
  */
-public class SpringJwsService extends AbstractJwtService implements BlueTokenService {
+public class SpringJwsService extends AbstractJwtService implements JSONWebSignatureService {
 
 	private JWSSigner signer;
 	private JWSVerifier verifier;
 
 	public SpringJwsService(String secret) throws JOSEException {
 		
-		byte[] secretKey = secret.getBytes();
+		// byte[] secretKey = secret.getBytes();
 		signer = new MACSigner(secret);
 		verifier = new MACVerifier(secret);
 	}

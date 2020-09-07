@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 
 /**
  * Security configuration class. Extend it in the
@@ -21,12 +21,12 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private static final Logger log = LogManager.getLogger(SpringWebSecurityConfig.class);
 
-	protected BlueTokenService blueTokenService;
+	protected JSONWebSignatureService jwsTokenService;
 	
 	@Autowired
-	public void createSpringWebSecurityConfig(BlueTokenService blueTokenService) {
+	public void createSpringWebSecurityConfig(JSONWebSignatureService jwsTokenService) {
 
-		this.blueTokenService = blueTokenService;		
+		this.jwsTokenService = jwsTokenService;		
 		log.info("Created");
 	}
 
@@ -89,7 +89,7 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	protected void tokenAuthentication(HttpSecurity http) throws Exception {
 		
-		http.addFilterBefore(new SpringCommonsWebTokenAuthenticationFilter(blueTokenService),
+		http.addFilterBefore(new SpringCommonsWebTokenAuthenticationFilter(jwsTokenService),
 				UsernamePasswordAuthenticationFilter.class);
 	}
 
@@ -99,6 +99,7 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	protected void csrf(HttpSecurity http) throws Exception {		
 		http.csrf().disable();
+		//http.csrf().csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
 	}
 
 	

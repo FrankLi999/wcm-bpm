@@ -6,13 +6,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.bpwizard.spring.boot.commons.SpringProperties;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
@@ -29,10 +27,10 @@ import lombok.AllArgsConstructor;
 public class OAuth2AuthenticationSuccessHandler<ID extends Serializable>
 	extends SimpleUrlAuthenticationSuccessHandler {
 	
-	private static final Logger log = LogManager.getLogger(OAuth2AuthenticationSuccessHandler.class);
+	// private static final Logger log = LogManager.getLogger(OAuth2AuthenticationSuccessHandler.class);
 
 	private SpringProperties properties;
-	private BlueTokenService blueTokenService;
+	private JSONWebSignatureService jwsTokenService;
 
 //	@Override
 //    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -47,8 +45,8 @@ public class OAuth2AuthenticationSuccessHandler<ID extends Serializable>
 		
 		UserDto currentUser = WebUtils.currentUser();
 		
-		String shortLivedAuthToken = blueTokenService.createToken(
-				BlueTokenService.AUTH_AUDIENCE,
+		String shortLivedAuthToken = jwsTokenService.createToken(
+				JSONWebSignatureService.AUTH_AUDIENCE,
 				currentUser.getUsername(),
 				(long) properties.getJwt().getShortLivedMillis());
 

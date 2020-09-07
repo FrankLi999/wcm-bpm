@@ -21,13 +21,13 @@ import com.bpwizard.spring.boot.commons.exceptions.handlers.BadCredentialsExcept
 import com.bpwizard.spring.boot.commons.mail.MailSender;
 import com.bpwizard.spring.boot.commons.mail.MockMailSender;
 import com.bpwizard.spring.boot.commons.mail.SmtpMailSender;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
-import com.bpwizard.spring.boot.commons.security.GreenTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
+import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
 import com.bpwizard.spring.boot.commons.security.SpringJweService;
 import com.bpwizard.spring.boot.commons.security.SpringJwsService;
 import com.bpwizard.spring.boot.commons.security.SpringPermissionEvaluator;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
-import com.bpwizard.spring.boot.commons.vlidation.CaptchaValidator;
+import com.bpwizard.spring.boot.commons.validation.CaptchaValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.KeyLengthException;
@@ -65,8 +65,8 @@ public class CommonsAutoConfiguration {
 	 * Configures AuthTokenService if missing
 	 */
 	@Bean
-	@ConditionalOnMissingBean(BlueTokenService.class)
-	public BlueTokenService blueTokenService(SpringProperties properties) throws JOSEException {
+	@ConditionalOnMissingBean(JSONWebSignatureService.class)
+	public JSONWebSignatureService jwsTokenService(SpringProperties properties) throws JOSEException {
 		
         log.info("Configuring AuthTokenService");       
 		return new SpringJwsService(properties.getJwt().getSecret());
@@ -77,8 +77,8 @@ public class CommonsAutoConfiguration {
 	 * Configures ExternalTokenService if missing
 	 */
 	@Bean
-	@ConditionalOnMissingBean(GreenTokenService.class)
-	public GreenTokenService greenTokenService(SpringProperties properties) throws KeyLengthException {
+	@ConditionalOnMissingBean(JSONWebEncryptionService.class)
+	public JSONWebEncryptionService jweTokenService(SpringProperties properties) throws KeyLengthException {
 		
         log.info("Configuring ExternalTokenService");       
 		return new SpringJweService(properties.getJwt().getSecret());

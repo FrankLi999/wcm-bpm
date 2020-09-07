@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 import com.bpwizard.spring.boot.commons.reactive.demo.dto.TestUserDto;
-import com.bpwizard.spring.boot.commons.security.GreenTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 public class VerificationTests extends AbstractTests {
@@ -25,12 +25,12 @@ public class VerificationTests extends AbstractTests {
 	private String verificationCode;
 	
 	@Autowired
-	private GreenTokenService greenTokenService;
+	private JSONWebEncryptionService jweTokenService;
 	
 	@Before
 	public void setUp() {
 		
-		verificationCode = greenTokenService.createToken(GreenTokenService.VERIFY_AUDIENCE,
+		verificationCode = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
 				UNVERIFIED_USER_ID.toString(), 60000L,
 				SecurityUtils.mapOf("email", UNVERIFIED_USER_EMAIL));
 	}
@@ -77,21 +77,21 @@ public class VerificationTests extends AbstractTests {
 		.expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
 
 		// Wrong audience
-		String token = greenTokenService.createToken("wrong-audience",
+		String token = jweTokenService.createToken("wrong-audience",
 				UNVERIFIED_USER_ID.toString(), 60000L,
 				SecurityUtils.mapOf("email", UNVERIFIED_USER_EMAIL));
 		emailVerification(UNVERIFIED_USER_ID, token)
 		.expectStatus().isUnauthorized();
 		
 		// Wrong email
-		token = greenTokenService.createToken(GreenTokenService.VERIFY_AUDIENCE,
+		token = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
 				UNVERIFIED_USER_ID.toString(), 60000L,
 				SecurityUtils.mapOf("email", "wrong.email@example.com"));
 		emailVerification(UNVERIFIED_USER_ID, token)
 		.expectStatus().isForbidden();
 
 		// expired token
-		token = greenTokenService.createToken(GreenTokenService.VERIFY_AUDIENCE,
+		token = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
 				UNVERIFIED_USER_ID.toString(), 1L,
 				SecurityUtils.mapOf("email", UNVERIFIED_USER_EMAIL));	
 		emailVerification(UNVERIFIED_USER_ID, token)

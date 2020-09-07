@@ -5,6 +5,3 @@ as well as secp256k1 used in Bitcoin and Ethereum
 
 Javascript Object Signing and Encryption (JOSE)
 https://connect2id.com/products/nimbus-jose-jwt
-
-blue token service - for jws
-green token service - for jwe

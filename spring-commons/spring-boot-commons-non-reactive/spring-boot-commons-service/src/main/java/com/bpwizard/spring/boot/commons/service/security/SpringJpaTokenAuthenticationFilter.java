@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
 import com.bpwizard.spring.boot.commons.service.util.ServiceUtils;
@@ -20,10 +20,10 @@ public class SpringJpaTokenAuthenticationFilter<U extends AbstractUser<ID>, ID e
 
     private SpringUserDetailsService<U, ID> userDetailsService;
 	
-	public SpringJpaTokenAuthenticationFilter(BlueTokenService blueTokenService,
+	public SpringJpaTokenAuthenticationFilter(JSONWebSignatureService jwsTokenService,
 			SpringUserDetailsService<U, ID> userDetailsService) {
 		
-		super(blueTokenService);
+		super(jwsTokenService);
 		this.userDetailsService = userDetailsService;
 		
 		log.info("Created");		

@@ -24,7 +24,7 @@ import com.bpwizard.spring.boot.commons.reactive.service.security.SpringReactive
 import com.bpwizard.spring.boot.commons.reactive.service.security.SpringReactiveUserDetailsService;
 import com.bpwizard.spring.boot.commons.reactive.service.security.ReactiveOAuth2AuthenticationSuccessHandler;
 import com.bpwizard.spring.boot.commons.reactive.service.util.ReactiveServiceUtils;
-import com.bpwizard.spring.boot.commons.security.BlueTokenService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 
 @Configuration
 @AutoConfigureBefore({
@@ -49,7 +49,7 @@ public class ReactiveAutoConfiguration {
 	@ConditionalOnMissingBean(ReactiveOAuth2AuthenticationSuccessHandler.class)
 	public <U extends AbstractMongoUser<ID>, ID extends Serializable>
 		ReactiveOAuth2AuthenticationSuccessHandler<U, ID> reactiveOAuth2AuthenticationSuccessHandler(
-				BlueTokenService blueTokenService,
+				JSONWebSignatureService jwsTokenService,
 				AbstractMongoUserRepository<U, ID> userRepository,
 				SpringReactiveUserDetailsService<U, ID> userDetailsService,
 				SpringReactiveService<U, ID> lemonService,
@@ -59,7 +59,7 @@ public class ReactiveAutoConfiguration {
 		log.info("Configuring ReactiveOAuth2AuthenticationSuccessHandler ...");
 
 		return new ReactiveOAuth2AuthenticationSuccessHandler<U,ID>(
-				blueTokenService,
+				jwsTokenService,
 				userRepository,
 				userDetailsService,
 				lemonService,
@@ -71,7 +71,7 @@ public class ReactiveAutoConfiguration {
 	@ConditionalOnMissingBean(SpringReactiveSecurityConfig.class)
 	public <U extends AbstractMongoUser<ID>, ID extends Serializable>
 		SpringReactiveSecurityConfig<U,ID> springReactiveSecurityConfig(
-				BlueTokenService blueTokenService,
+				JSONWebSignatureService jwsTokenService,
 				SpringReactiveUserDetailsService<U, ID> userDetailsService,
 				ReactiveOAuth2AuthenticationSuccessHandler<U,ID> reactiveOAuth2AuthenticationSuccessHandler,
 				SpringProperties properties) {
@@ -79,7 +79,7 @@ public class ReactiveAutoConfiguration {
 		log.info("Configuring SpringReactiveSecurityConfig ...");
 
 		return new SpringReactiveSecurityConfig<U,ID>(
-				blueTokenService, 
+				jwsTokenService, 
 				userDetailsService,
 				reactiveOAuth2AuthenticationSuccessHandler,
 				properties);

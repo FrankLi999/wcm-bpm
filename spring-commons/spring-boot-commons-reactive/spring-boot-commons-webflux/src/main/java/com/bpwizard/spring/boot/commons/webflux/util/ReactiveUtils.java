@@ -6,8 +6,6 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpCookie;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.web.server.ServerWebExchange;
@@ -26,7 +24,7 @@ import reactor.core.publisher.Mono;
  */
 public class ReactiveUtils {
 	
-	private static final Logger log = LogManager.getLogger(ReactiveUtils.class);
+	// private static final Logger log = LogManager.getLogger(ReactiveUtils.class);
 	
 	private static Mono<Object> NOT_FOUND_MONO;
 	
@@ -50,6 +48,7 @@ public class ReactiveUtils {
 			.defaultIfEmpty(Optional.empty());
 	}	
 		
+	@SuppressWarnings("unchecked")
 	public static <T> Mono<T> notFoundMono() {
 		return (Mono<T>) NOT_FOUND_MONO;
 	}
