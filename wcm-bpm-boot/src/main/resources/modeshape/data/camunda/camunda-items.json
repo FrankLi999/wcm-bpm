@@ -230,8 +230,8 @@
     },
     "library/camunda/siteConfig/bpm/elements/layout/navbar" : {
         "jcr:primaryType":"bpw:navbar",
-        "primaryBackground":"fuse-navy-700",
-        "secondaryBackground":"fuse-navy-900",
+        "primaryBackground":"wcm-navy-200",
+        "secondaryBackground":"wcm-navy-300",
         "hidden":"false",
         "folded":"false",
         "position":"top",
@@ -240,14 +240,14 @@
     "library/camunda/siteConfig/bpm/elements/layout/toolbar" : {
         "jcr:primaryType":"bpw:toolbar",
         "customBackgroundColor":"false",
-        "background":"fuse-white-500",
+        "background":"wcm-white-500",
         "hidden":"false",
         "position":"above"
     },
     "library/camunda/siteConfig/bpm/elements/layout/footer" : {
         "jcr:primaryType":"bpw:footer",
         "customBackgroundColor":"true",
-        "background":"fuse-navy-900",
+        "background":"wcm-navy-300",
         "hidden":"true",
         "position":"below-static"
     },
@@ -362,7 +362,7 @@
     },
     "library/camunda/rootSiteArea/dashboard/RightNow/elements" : {
         "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
-        "body": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Right Now</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"><div class=\"fuse-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Running Process Instances</div></div><camunda-running-instances></camunda-running-instances></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"34\"><div class=\"fuse-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Incidents</div></div><camunda-open-incidents></camunda-open-incidents></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"><div class=\"fuse-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Human Tasks</div></div><camunda-human-tasks></camunda-human-tasks></div></div></div><div></div>"
+        "body": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Right Now</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"><div class=\"wcm-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Running Process Instances</div></div><camunda-running-instances></camunda-running-instances></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"34\"><div class=\"wcm-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Incidents</div></div><camunda-open-incidents></camunda-open-incidents></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"><div class=\"wcm-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Human Tasks</div></div><camunda-human-tasks></camunda-human-tasks></div></div></div><div></div>"
     },
     "library/camunda/rootSiteArea/dashboard/RightNow/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
@@ -577,7 +577,7 @@
 		"bpw:name": "RT_DashboardRightNow",
 		"bpw:title": "Dashboard Right Now Render Template",
 		"bpw:description": "Dashboard Right Now Render Template",
-		"bpw:code": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Right Now</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"> <div class=\"fuse-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Running Process Instances</div></div><camunda-running-instances></camunda-running-instances></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"34\"><div class=\"fuse-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Incidents</div></div><camunda-open-incidents></camunda-open-incidents></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"><div class=\"fuse-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Human Tasks</div></div><camunda-human-tasks></camunda-human-tasks></div></div></div><div></div>",
+		"bpw:code": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Right Now</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"> <div class=\"wcm-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Running Process Instances</div></div><camunda-running-instances></camunda-running-instances></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"34\"><div class=\"wcm-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Incidents</div></div><camunda-open-incidents></camunda-open-incidents></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"><div class=\"wcm-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Human Tasks</div></div><camunda-human-tasks></camunda-human-tasks></div></div></div><div></div>",
 		"bpw:preloop": "",
 		"bpw:postloop": "",
 		"bpw:maxEntries": "1",
@@ -591,7 +591,7 @@
 		"bpw:name": "RT_DashboardDeployed",
 		"bpw:title": "Dashboard Deployed Render Template",
 		"bpw:description": "Dashboard Deployed Render Template",
-		"bpw:code": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Deployed</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><!-- process definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"fuse-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Process Definitions</div></div><camunda-process-definitions></camunda-process-definitions></div></div><!-- case definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"fuse-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Case Definitions</div></div><camunda-case-definitions></camunda-case-definitions></div></div><!-- decision definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"fuse-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Decision Definitions</div></div><camunda-decision-definitions></camunda-decision-definitions></div></div><!-- deployed widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"fuse-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Deployed</div></div><camunda-deployed></camunda-deployed></div></div></div><div></div>",
+		"bpw:code": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Deployed</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><!-- process definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"wcm-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Process Definitions</div></div><camunda-process-definitions></camunda-process-definitions></div></div><!-- case definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"wcm-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Case Definitions</div></div><camunda-case-definitions></camunda-case-definitions></div></div><!-- decision definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"wcm-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Decision Definitions</div></div><camunda-decision-definitions></camunda-decision-definitions></div></div><!-- deployed widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"wcm-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Deployed</div></div><camunda-deployed></camunda-deployed></div></div></div><div></div>",
 		"bpw:preloop": "",
 		"bpw:postloop": "",		
 		"bpw:maxEntries": "1",

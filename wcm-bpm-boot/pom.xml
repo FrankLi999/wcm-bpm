@@ -411,11 +411,13 @@
             <artifactId>camunda-sample-client</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 
         <dependency>
             <groupId>com.bpwizard.wcm-bpm</groupId>
             <artifactId>camunda-sample-processes</artifactId>
             <version>${project.version}</version>
         </dependency>
+        -->
 	</dependencies>
 
 	<build>
