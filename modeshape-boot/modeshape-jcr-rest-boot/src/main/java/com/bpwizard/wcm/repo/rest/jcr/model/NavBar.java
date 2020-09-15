@@ -9,10 +9,11 @@ public class NavBar {
 //	}
 	private String primaryBackground;
 	private String secondaryBackground;
-	private boolean hidden;
+	private boolean display;
 	private boolean folded;
     private String position;
     private String variant;
+    private String style;
 	public String getPrimaryBackground() {
 		return primaryBackground;
 	}
@@ -25,11 +26,11 @@ public class NavBar {
 	public void setSecondaryBackground(String secondaryBackground) {
 		this.secondaryBackground = secondaryBackground;
 	}
-	public boolean isHidden() {
-		return hidden;
+	public boolean isDisplay() {
+		return display;
 	}
-	public void setHidden(boolean hidden) {
-		this.hidden = hidden;
+	public void setDisplay(boolean display) {
+		this.display = display;
 	}
 	public boolean isFolded() {
 		return folded;
@@ -50,9 +51,16 @@ public class NavBar {
 		this.variant = variant;
 	}
 	
+	public String getStyle() {
+		return style;
+	}
+	public void setStyle(String style) {
+		this.style = style;
+	}
 	@Override
 	public String toString() {
 		return "NavBar [primaryBackground=" + primaryBackground + ", secondaryBackground=" + secondaryBackground
-				+ ", hidden=" + hidden + ", folded=" + folded + ", position=" + position + ", variant=" + variant + "]";
+				+ ", display=" + display + ", folded=" + folded + ", position=" + position + ", style=" + style 
+				+ ", variant=" + variant + "]";
 	}
 }

@@ -1,24 +1,32 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 public class PageLayout {
-    private String style = "vertical-layout-1";
-    private String width = "fullwidth";
-    
+    private String title = "vertical-layout-1";
+    // private String width = "fullwidth";
+    private String mode = "fullwidth"; //or container or boxed
+    private String scroll = "content";
 	private NavBar navbar;
 	private Toolbar toolbar;
 	private Footer footer;
-	private SidePanel sidePanel;
-	public String getStyle() {
-		return style;
+	private SidePanel leftSidePanel;
+	private SidePanel rightSidePanel;
+	public String getTitle() {
+		return title;
 	}
-	public void setStyle(String style) {
-		this.style = style;
+	public void setTitle(String title) {
+		this.title = title;
 	}
-	public String getWidth() {
-		return width;
+	public String getMode() {
+		return mode;
 	}
-	public void setWidth(String width) {
-		this.width = width;
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+	public String getScroll() {
+		return scroll;
+	}
+	public void setScroll(String scroll) {
+		this.scroll = scroll;
 	}
 	public NavBar getNavbar() {
 		return navbar;
@@ -38,15 +46,21 @@ public class PageLayout {
 	public void setFooter(Footer footer) {
 		this.footer = footer;
 	}
-	public SidePanel getSidePanel() {
-		return sidePanel;
+	public SidePanel getLeftSidePanel() {
+		return leftSidePanel;
 	}
-	public void setSidePanel(SidePanel sidePanel) {
-		this.sidePanel = sidePanel;
+	public void setLeftSidePanel(SidePanel leftSidePanel) {
+		this.leftSidePanel = leftSidePanel;
+	}
+	public SidePanel getRightSidePanel() {
+		return rightSidePanel;
+	}
+	public void setRightSidePanel(SidePanel rightSidePanel) {
+		this.rightSidePanel = rightSidePanel;
 	}
 	@Override
 	public String toString() {
-		return "PageLayout [style=" + style + ", width=" + width + ", navbar=" + navbar + ", toolbar=" + toolbar
-				+ ", Footer=" + footer + ", sidePanel=" + sidePanel + "]";
+		return "PageLayout [title=" + title + ", mode=" + mode+ ", scroll=" + scroll + ", navbar=" + navbar + ", toolbar=" + toolbar
+				+ ", Footer=" + footer + ", leftSidePanel=" + leftSidePanel + ", rightSidePanel=" + rightSidePanel + "]";
 	}
 }

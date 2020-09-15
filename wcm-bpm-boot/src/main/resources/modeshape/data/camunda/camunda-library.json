@@ -54,7 +54,7 @@
     "library/camunda/rootSiteArea/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "siteConfig": "bpm",        
         "url": "/bpm",
         "translate": "NAV.BPM.APPLICATIONS",

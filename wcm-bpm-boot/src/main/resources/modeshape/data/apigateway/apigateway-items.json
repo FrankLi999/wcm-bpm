@@ -94,42 +94,51 @@
     },
     "library/apigateway/siteConfig/apigateway/elements" : {
         "jcr:primaryType":"bpw:system_siteConfigType_ElementFolder",
-        "colorTheme":"theme-default",
         "rootSiteArea":"rootSiteArea",
         "customScrollbars":"false"
     },
+    "library/apigateway/siteConfig/apigateway/elements/themeColors" : {
+    	"jcr:primaryType":"bpw:themeColors",
+        "main":"theme-default"
+    },
     "library/apigateway/siteConfig/apigateway/elements/layout" : {
         "jcr:primaryType":"bpw:pageLayout",
-        "bpw:style":"horizontal-layout-1",
-        "bpw:width":"fullwidth"
+        "bpw:title":"horizontal-layout",
+        "bpw:mode":"fullwidth",
+        "bpw:scroll": "content"
     },
     "library/apigateway/siteConfig/apigateway/elements/layout/navbar" : {
         "jcr:primaryType":"bpw:navbar",
-        "primaryBackground":"fuse-navy-700",
-        "secondaryBackground":"fuse-navy-900",
-        "hidden":"false",
+        "primaryBackground":"wcm-light-200",
+        "secondaryBackground":"wcm-light-300",
+        "display":"true",
         "folded":"false",
         "position":"top",
-        "variant":"vertical-style-1"
+        "variant":"vertical"
     },
     "library/apigateway/siteConfig/apigateway/elements/layout/toolbar" : {
         "jcr:primaryType":"bpw:toolbar",
         "customBackgroundColor":"false",
-        "background":"fuse-white-500",
-        "hidden":"false",
-        "position":"below"
+        "background":"wcm-light-300",
+        "display":"true",
+        "position":"below",
+        "style": "fixed"
     },
     "library/apigateway/siteConfig/apigateway/elements/layout/footer" : {
         "jcr:primaryType":"bpw:footer",
         "customBackgroundColor":"true",
-        "background":"fuse-navy-900",
-        "hidden":"true",
-        "position":"above-static"
+        "background":"wcm-light-300",
+        "display":"false",
+        "position":"above-static",
+        "style": "fixed"
     },
-    "library/apigateway/siteConfig/apigateway/elements/layout/sidePanel" : {
+    "library/apigateway/siteConfig/apigateway/elements/layout/leftSidePanel" : {
         "jcr:primaryType":"bpw:sidePanel",
-        "hidden":"true",
-        "position":"right"
+        "display":"false"
+    },
+    "library/apigateway/siteConfig/apigateway/elements/layout/rightSidePanel": {
+        "jcr:primaryType":"bpw:sidePanel",
+        "display":"false"
     },
     "library/design/theme/apigateway" : {
         "jcr:primaryType":"bpw:system_themeType"        

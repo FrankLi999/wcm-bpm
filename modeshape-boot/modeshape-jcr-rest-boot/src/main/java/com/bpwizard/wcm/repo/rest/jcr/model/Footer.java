@@ -20,8 +20,9 @@ public class Footer {
 //	}
 	private boolean customBackgroundColor;
 	private String background;
-	private boolean hidden;
+	private boolean display;
 	private String position;
+	private String style;
 	public boolean isCustomBackgroundColor() {
 		return customBackgroundColor;
 	}
@@ -34,11 +35,11 @@ public class Footer {
 	public void setBackground(String background) {
 		this.background = background;
 	}
-	public boolean isHidden() {
-		return hidden;
+	public boolean isDisplay() {
+		return display;
 	}
-	public void setHidden(boolean hidden) {
-		this.hidden = hidden;
+	public void setDisplay(boolean display) {
+		this.display = display;
 	}
 	public String getPosition() {
 		return position;
@@ -46,9 +47,15 @@ public class Footer {
 	public void setPosition(String position) {
 		this.position = position;
 	}
+	public String getStyle() {
+		return style;
+	}
+	public void setStyle(String style) {
+		this.style = style;
+	}
 	@Override
 	public String toString() {
-		return "Footer [customBackgroundColor=" + customBackgroundColor + ", background=" + background + ", hidden="
-				+ hidden + ", position=" + position + "]";
+		return "Footer [customBackgroundColor=" + customBackgroundColor + ", background=" + background + ", display="
+				+ display + ", position=" + position + ", style=" + style + "]";
 	}
 }

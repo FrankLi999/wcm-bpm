@@ -65,7 +65,7 @@
     "library/camunda/rootSiteArea/tasklist/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_tasklist",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/tasklist",
         "translate": "NAV.BPM.TASKLIST.TITLE",
@@ -219,42 +219,51 @@
     },
     "library/camunda/siteConfig/bpm/elements" : {
         "jcr:primaryType":"bpw:system_siteConfigType_ElementFolder",
-        "colorTheme":"theme-default",
         "rootSiteArea":"rootSiteArea",
         "customScrollbars":"false"
     },
+    "library/camunda/siteConfig/bpm/elements/themeColors" : {
+    	"jcr:primaryType":"bpw:themeColors",
+        "main":"theme-default"
+    },
     "library/camunda/siteConfig/bpm/elements/layout" : {
         "jcr:primaryType":"bpw:pageLayout",
-        "bpw:style":"horizontal-layout-1",
-        "bpw:width":"fullwidth"
+        "bpw:title":"horizontal-layout",
+        "bpw:mode":"fullwidth",
+        "bpw:scroll": "content"
     },
     "library/camunda/siteConfig/bpm/elements/layout/navbar" : {
         "jcr:primaryType":"bpw:navbar",
-        "primaryBackground":"wcm-navy-200",
-        "secondaryBackground":"wcm-navy-300",
-        "hidden":"false",
+        "primaryBackground":"wcm-light-200",
+        "secondaryBackground":"wcm-light-300",
+        "display":"true",
         "folded":"false",
         "position":"top",
-        "variant":"vertical-style-1"
+        "variant":"vertical"
     },
     "library/camunda/siteConfig/bpm/elements/layout/toolbar" : {
         "jcr:primaryType":"bpw:toolbar",
         "customBackgroundColor":"false",
-        "background":"wcm-white-500",
-        "hidden":"false",
-        "position":"above"
+        "background":"wcm-light-300",
+        "display":"true",
+        "position":"above",
+        "style": "fixed"
     },
     "library/camunda/siteConfig/bpm/elements/layout/footer" : {
         "jcr:primaryType":"bpw:footer",
         "customBackgroundColor":"true",
-        "background":"wcm-navy-300",
-        "hidden":"true",
-        "position":"below-static"
+        "background":"wcm-light-300",
+        "display":"false",
+        "position":"below-static",
+        "style": "fixed"
     },
-    "library/camunda/siteConfig/bpm/elements/layout/sidePanel" : {
+    "library/camunda/siteConfig/bpm/elements/layout/leftSidePanel" : {
         "jcr:primaryType":"bpw:sidePanel",
-        "hidden":"true",
-        "position":"left"
+        "display":"false"
+    },
+    "library/camunda/siteConfig/bpm/elements/layout/rightSidePanel": {
+        "jcr:primaryType":"bpw:sidePanel",
+        "display":"false"
     },
     "library/camunda/category/Task" : {
         "jcr:primaryType":"bpw:system_categoryType"
@@ -577,7 +586,7 @@
 		"bpw:name": "RT_DashboardRightNow",
 		"bpw:title": "Dashboard Right Now Render Template",
 		"bpw:description": "Dashboard Right Now Render Template",
-		"bpw:code": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Right Now</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"> <div class=\"wcm-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Running Process Instances</div></div><camunda-running-instances></camunda-running-instances></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"34\"><div class=\"wcm-card auto-width mb-32\" [ngClass.gt-sm]=\"'mb-0 mr-32'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Incidents</div></div><camunda-open-incidents></camunda-open-incidents></div></div><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"33\"><div class=\"wcm-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Open Human Tasks</div></div><camunda-human-tasks></camunda-human-tasks></div></div></div><div></div>",
+		"bpw:code": "<div class=\"content\"><div class=\"dashboard-section-title\">Right Now</div><div class=\"dashboard-row\"><!--Running process instance --><div class=\"right-now-widget\"> <div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Running Process Instances</div><camunda-running-instances></camunda-running-instances></div></div><!-- open incidents --><div class=\"right-now-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Open Incidents</div><camunda-open-incidents></camunda-open-incidents></div></div><!-- open human tasks --><div class=\"right-now-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Open Human Tasks</div><camunda-human-tasks></camunda-human-tasks></div></div></div><div>",
 		"bpw:preloop": "",
 		"bpw:postloop": "",
 		"bpw:maxEntries": "1",
@@ -591,7 +600,7 @@
 		"bpw:name": "RT_DashboardDeployed",
 		"bpw:title": "Dashboard Deployed Render Template",
 		"bpw:description": "Dashboard Deployed Render Template",
-		"bpw:code": "<div class=\"content\"><div class=\"left mr-lg-32\"><div class=\"pb-24 font-size-18 font-weight-300\">Deployed</div><div fxLayout=\"column\" fxLayoutAlign=\"start\" fxLayout.gt-sm=\"row\" fxLayoutAlign.gt-sm=\"start start\"><!-- process definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"wcm-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Process Definitions</div></div><camunda-process-definitions></camunda-process-definitions></div></div><!-- case definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"wcm-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Case Definitions</div></div><camunda-case-definitions></camunda-case-definitions></div></div><!-- decision definitions widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"wcm-card auto-width mb-24\" [ngClass.gt-sm]=\"'mb-0 mr-24'\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Decision Definitions</div></div><camunda-decision-definitions></camunda-decision-definitions></div></div><!-- deployed widget --><div class=\"widget\" fxFlex=\"100\" fxFlex.gt-sm=\"25\"><div class=\"wcm-card auto-width\"><div class=\"p-16\"><div class=\"h1 font-weight-300\">Deployed</div></div><camunda-deployed></camunda-deployed></div></div></div><div></div>",
+		"bpw:code": "<div class=\"content\"><div class=\"dashboard-section-title\">Deployed</div><div class=\"dashboard-row\"><!-- process definitions widget --><div class=\"deployed-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Process Definitions</div><camunda-process-definitions></camunda-process-definitions></div></div><!-- case definitions widget --><div class=\"deployed-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Case Definitions</div><camunda-case-definitions></camunda-case-definitions></div></div><!-- decision definitions widget --><div class=\"deployed-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Decision Definitions</div><camunda-decision-definitions></camunda-decision-definitions></div></div><!-- deployed widget --><div class=\"deployed-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Deployed</div><camunda-deployed></camunda-deployed></div></div></div></div>",
 		"bpw:preloop": "",
 		"bpw:postloop": "",		
 		"bpw:maxEntries": "1",
@@ -1944,7 +1953,7 @@
     "library/camunda/rootSiteArea/dashboard/processes/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_processes",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/processes",
         "translate": "NAV.BPM.DASHBOARD_PROCESSES.TITLE",
@@ -1997,7 +2006,7 @@
     "library/camunda/rootSiteArea/dashboard/processes/processDefinitionRuntime/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_process_definition",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/processes/processDefinition",
         "translate": "NAV.BPM.DASHBOARD_PROCESS_DEFINITION.TITLE",
@@ -2050,7 +2059,7 @@
     "library/camunda/rootSiteArea/dashboard/processes/processinstance/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_process_instance",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/processes/processInstance",
         "translate": "NAV.BPM.DASHBOARD_PROCESS_INSTANCE.TITLE",
@@ -2103,7 +2112,7 @@
     "library/camunda/rootSiteArea/dashboard/deployments/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_deployments",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/deployments",
         "translate": "NAV.BPM.DASHBOARD_DEPLOYMENTS.TITLE",
@@ -2156,7 +2165,7 @@
     "library/camunda/rootSiteArea/dashboard/cases/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_cases",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/cases",
         "translate": "NAV.BPM.DASHBOARD_CASES.TITLE",
@@ -2209,7 +2218,7 @@
     "library/camunda/rootSiteArea/dashboard/cases/caseDefinitionRuntime/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_case_definition",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/cases/caseDefinition",
         "translate": "NAV.BPM.DASHBOARD_CASE_DEFINITION.TITLE",
@@ -2262,7 +2271,7 @@
     "library/camunda/rootSiteArea/dashboard/cases/caseinstance/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_case_instance",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/cases/caseInstance",
         "translate": "NAV.BPM.DASHBOARD_CASE_INSTANCE.TITLE",
@@ -2315,7 +2324,7 @@
     "library/camunda/rootSiteArea/dashboard/decisions/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_decisions",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/decisions",
         "translate": "NAV.BPM.DASHBOARD_DECISIONS.TITLE",
@@ -2368,7 +2377,7 @@
     "library/camunda/rootSiteArea/dashboard/decisions/decisionDefinitionRuntime/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_decision_definition",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/decisions/decisionDefinition",
         "translate": "NAV.BPM.DASHBOARD_DECISION_DEFINITION.TITLE",
@@ -2421,7 +2430,7 @@
     "library/camunda/rootSiteArea/dashboard/decisions/decisioninstance/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_decision_instance",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/decisions/decisionInstance",
         "translate": "NAV.BPM.DASHBOARD_DECISION_INSTANCE.TITLE",
@@ -2474,7 +2483,7 @@
     "library/camunda/rootSiteArea/dashboard/tasks/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "bpm_dashboard_tasks",
-        "navigationType": "group",
+        "navigationType": "collapsable",
         "icon": "archive",
         "url": "/bpm/dashboard/tasks",
         "translate": "NAV.BPM.DASHBOARD_TASKS.TITLE",

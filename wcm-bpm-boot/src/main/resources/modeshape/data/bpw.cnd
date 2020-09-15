@@ -450,34 +450,37 @@
 [bpw:navbar]
 - primaryBackground (STRING)
 - secondaryBackground (STRING)
-- hidden (BOOLEAN)
+- display (BOOLEAN)
 - folded (BOOLEAN)
 - position (STRING)
 - variant (STRING)
+- style (STRING)
 
 [bpw:toolbar]
 - customBackgroundColor (BOOLEAN)
 - background (STRING)
-- hidden (BOOLEAN)
+- display (BOOLEAN)
 - position (STRING)
+- style (STRING)
 
 [bpw:footer]
 - customBackgroundColor (BOOLEAN)
 - background (STRING)
-- hidden (BOOLEAN)
+- display (BOOLEAN)
 - position (STRING)
-
+- style (STRING)
 [bpw:sidePanel]
-- hidden (BOOLEAN)
-- position (STRING)
+- display (BOOLEAN)
 
 [bpw:pageLayout] orderable
-- bpw:style (STRING)
-- bpw:width (STRING)
+- bpw:title (STRING)
+- bpw:mode (STRING)
+- bpw:scroll (STRING)
 + navbar (bpw:navbar)
 + toolbar (bpw:toolbar)
 + footer (bpw:footer)
-+ sidePanel (bpw:sidePanel)
++ leftSidePanel (bpw:sidePanel)
++ rightSidePanel (bpw:sidePanel)
 
 [bpw:contentAreaLayout] > bpw:resourceNode
 - bpw:name (STRING)
@@ -713,10 +716,17 @@
 + elements (bpw:system_queryStatementType_ElementFolder)
 + itemProperties (bpw:ContentItemproperties)
 
+[bpw:themeColors]
+- main (STRING)
+- navbar (STRING)
+- toolbar (STRING)
+- footer (STRING)
+
 [bpw:system_siteConfigType_ElementFolder]  > bpw:ContentItemElementFolder
 - rootSiteArea (STRING)
-- colorTheme (STRING)
 - customScrollbars (BOOLEAN)
+- direction (STRING)
++ themeColors (bpw:themeColors)
 + layout (bpw:pageLayout)
 
 [bpw:system_siteConfigType] > nt:folder, bpw:baseContentType

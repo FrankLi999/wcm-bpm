@@ -1806,12 +1806,33 @@
     },
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/properties/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.rootSiteArea", "elements.colorTheme", "elements.customScrollbars"]
+        "bpw:fieldNames": ["elements.rootSiteArea", "elements.customScrollbars", "elements.direction"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/themeColors" : {
+        "jcr:primaryType": "bpw:formStep",
+        "bpw:stepName": "ThemeColors",
+        "bpw:order": 2
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/themeColors/firstRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 1
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/themeColors/firstRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.themeColors.main", "elements.themeColors.navbar"]
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/themeColors/secondRow" : {
+        "jcr:primaryType":"bpw:formRow",
+        "bpw:order": 2
+    },
+    "library/system/authoringTemplate/siteConfigType/elementGroups/steps/themeColors/secondRow/firstColumn" : {
+        "jcr:primaryType":"bpw:formColumn",
+        "bpw:fieldNames": ["elements.themeColors.toolbar", "elements.themeColors.footer"]
     },
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout" : {
         "jcr:primaryType": "bpw:formStep",
         "bpw:stepName": "Layout",
-        "bpw:order": 2
+        "bpw:order": 3
     },
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/firstRow" : {
         "jcr:primaryType":"bpw:formRow",
@@ -1819,7 +1840,7 @@
     },
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/firstRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout.style", "elements.layout.width"]
+        "bpw:fieldNames": ["elements.layout.title", "elements.layout.mode", "elements.layout.scroll"]
     },
     
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/secondRow" : {
@@ -1828,7 +1849,7 @@
     },
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/secondRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout.navbar.primaryBackground", "elements.layout.navbar.secondaryBackground", "elements.layout.navbar.hidden"]
+        "bpw:fieldNames": ["elements.layout.navbar.primaryBackground", "elements.layout.navbar.secondaryBackground", "elements.layout.navbar.display", "elements.layout.navbar.style"]
     },
      "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/thirdRow" : {
         "jcr:primaryType":"bpw:formRow",
@@ -1853,7 +1874,7 @@
     },
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/fifthRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout.toolbar.hidden", "elements.layout.toolbar.position"]
+        "bpw:fieldNames": ["elements.layout.toolbar.display", "elements.layout.toolbar.style", "elements.layout.toolbar.position"]
     },
     
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/sixthRow" : {
@@ -1871,7 +1892,7 @@
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/seventhRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
         "bpw:order": 2,
-        "bpw:fieldNames": ["elements.layout.footer.hidden", "elements.layout.footer.position"]
+        "bpw:fieldNames": ["elements.layout.footer.display", "elements.layout.footer.style", "elements.layout.footer.position"]
     },
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/eighthRow" : {
         "jcr:primaryType":"bpw:formRow",
@@ -1879,7 +1900,7 @@
     },
     "library/system/authoringTemplate/siteConfigType/elementGroups/steps/layout/eighthRow/firstColumn" : {
         "jcr:primaryType":"bpw:formColumn",
-        "bpw:fieldNames": ["elements.layout.sidePanel.hidden", "elements.layout.sidePanel.position"]
+        "bpw:fieldNames": ["elements.layout.leftSidePanel.display", "elements.layout.rightSidePanel.display"]
     },
     "library/system/authoringTemplate/siteConfigType/elements" : {
         "jcr:primaryType": "bpw:elementFolder"
@@ -1921,18 +1942,6 @@
         "jcr:primaryType": "bpw:StringConstraint",
         "bpw:pattern": "[a-zA-z]+([ '-][a-zA-Z]+)*"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/colorTheme" : {
-        "jcr:primaryType": "bpw:FormControl",        
-        "bpw:controlType": "text",
-        "bpw:dataType": "string",
-        "bpw:mandatory": "true",
-        "bpw:userSearchable": "true",
-        "bpw:systemIndexed": true
-    },
-    "library/system/authoringTemplate/siteConfigType/elements/colorTheme/formControlLayout": {
-        "jcr:primaryType": "bpw:FormControlLayout",
-        "bpw:title": "Color Theme"
-    },
     "library/system/authoringTemplate/siteConfigType/elements/customScrollbars" : {
         "jcr:primaryType": "bpw:FormControl",
         "bpw:controlType": "checkbox",
@@ -1944,6 +1953,80 @@
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Custom Scrollbars"
     },
+    "library/system/authoringTemplate/siteConfigType/elements/direction" : {
+        "jcr:primaryType": "bpw:FormControl",  
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/direction/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Direction (ltr or rtl)"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/themeColors" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "object",
+        "bpw:jcrDataType": "bpw:themeColors",
+        "bpw:dataType": "object",
+		"bpw:userSearchable": "true",
+        "bpw:systemIndexed": "true"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/themeColors/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Theme Colors"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/themeColors/main" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true",
+        "bpw:systemIndexed": true
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/themeColors/main/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Main"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/themeColors/navbar" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true",
+        "bpw:systemIndexed": true
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/themeColors/navbar/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Navbar"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/themeColors/toolbar" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true",
+        "bpw:systemIndexed": true
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/themeColors/toolbar/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Toolbar"
+    },
+        "library/system/authoringTemplate/siteConfigType/elements/themeColors/footer" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:mandatory": "true",
+        "bpw:userSearchable": "true",
+        "bpw:systemIndexed": true
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/themeColors/footer/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Footer"
+    },
+    
     "library/system/authoringTemplate/siteConfigType/elements/layout" : {
         "jcr:primaryType": "bpw:FormControl",
         "bpw:controlType": "object",
@@ -1956,7 +2039,7 @@
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Page Layout"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/style" : {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/title" : {
         "jcr:primaryType": "bpw:FormControl",       
         "bpw:controlType": "text",
         "bpw:dataType": "string",
@@ -1964,11 +2047,11 @@
         "bpw:userSearchable": "true",
         "bpw:showInList": "true"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/style/formControlLayout": {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/title/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
-        "bpw:title": "Layout Style"
+        "bpw:title": "Layout Style Title"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/width" : {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/mode" : {
         "jcr:primaryType": "bpw:FormControl",        
         "bpw:controlType": "text",
         "bpw:dataType": "string",
@@ -1976,9 +2059,21 @@
         "bpw:userSearchable": "true",
         "bpw:showInList": "true"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/width/formControlLayout": {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/mode/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
-        "bpw:title": "Layout Width"
+        "bpw:title": "Layout Mode"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/layout/scroll" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/layout/scroll/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Scroll"
     },
     "library/system/authoringTemplate/siteConfigType/elements/layout/navbar" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -2016,16 +2111,28 @@
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Navbar Secondary Background"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/navbar/hidden" : {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/navbar/display" : {
         "jcr:primaryType": "bpw:FormControl",        
         "bpw:controlType": "checkbox",
         "bpw:dataType": "boolean",
         "bpw:jcrDataType": "BOOLEAN",
         "bpw:systemIndexed": "true"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/navbar/hidden/formControlLayout": {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/navbar/display/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
-        "bpw:title": "Navbar Hidden"
+        "bpw:title": " Display Navbar"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/layout/navbar/style" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/layout/navbar/style/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Navbar Style"
     },
     "library/system/authoringTemplate/siteConfigType/elements/layout/navbar/folded" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -2099,16 +2206,28 @@
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Toolbar Background"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/toolbar/hidden" : {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/toolbar/display" : {
         "jcr:primaryType": "bpw:FormControl",        
         "bpw:controlType": "checkbox",
         "bpw:dataType": "boolean",
         "bpw:jcrDataType": "BOOLEAN",
         "bpw:systemIndexed": "true"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/toolbar/hidden/formControlLayout": {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/toolbar/display/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
-        "bpw:title": "Toolbar Hidden"
+        "bpw:title": "Display Toolbar"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/layout/toolbar/style" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/layout/toolbar/style/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Toobar Style"
     },
     "library/system/authoringTemplate/siteConfigType/elements/layout/toolbar/position" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -2159,16 +2278,28 @@
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Footer Background"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/footer/hidden" : {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/footer/display" : {
         "jcr:primaryType": "bpw:FormControl",       
         "bpw:controlType": "checkbox",
         "bpw:dataType": "boolean",
         "bpw:jcrDataType": "BOOLEAN",
         "bpw:systemIndexed": "true"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/footer/hidden/formControlLayout": {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/footer/display/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
-         "bpw:title": "Footer Hidden"
+         "bpw:title": "Display Footer"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/layout/footer/style" : {
+        "jcr:primaryType": "bpw:FormControl",        
+        "bpw:controlType": "text",
+        "bpw:dataType": "string",
+        "bpw:systemIndexed": "true",
+        "bpw:userSearchable": "true",
+        "bpw:showInList": "true"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/layout/footer/style/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Footer Position"
     },
     "library/system/authoringTemplate/siteConfigType/elements/layout/footer/position" : {
         "jcr:primaryType": "bpw:FormControl",        
@@ -2182,7 +2313,7 @@
         "jcr:primaryType": "bpw:FormControlLayout",
         "bpw:title": "Footer Position"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/sidePanel" : {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/leftSidePanel" : {
         "jcr:primaryType": "bpw:FormControl",        
         "bpw:controlType": "object",
         "bpw:jcrDataType": "bpw:sidePanel",
@@ -2190,32 +2321,43 @@
 		"bpw:userSearchable": "true",
         "bpw:systemIndexed": "true"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/sidePanel/formControlLayout": {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/leftSidePanel/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
-        "bpw:title": "Page Layout Side Panel"
+        "bpw:title": "Left Side Panel"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/sidePanel/hidden" : {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/leftSidePanel/display" : {
         "jcr:primaryType": "bpw:FormControl",
         "bpw:controlType": "checkbox",
         "bpw:dataType": "boolean",
         "bpw:jcrDataType": "BOOLEAN",
         "bpw:systemIndexed": "true"
     },    
-    "library/system/authoringTemplate/siteConfigType/elements/layout/sidePanel/hidden/formControlLayout": {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/leftSidePanel/display/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
-        "bpw:title": "Side Panel Hidden"
+        "bpw:title": "Hide Left Side Panel?"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/sidePanel/position" : {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/rightSidePanel" : {
         "jcr:primaryType": "bpw:FormControl",        
-        "bpw:controlType": "text",
-        "bpw:dataType": "string",
-        "bpw:systemIndexed": "true",
-        "bpw:userSearchable": "true",
-        "bpw:showInList": "true"
+        "bpw:controlType": "object",
+        "bpw:jcrDataType": "bpw:sidePanel",
+        "bpw:dataType": "object",
+		"bpw:userSearchable": "true",
+        "bpw:systemIndexed": "true"
     },
-    "library/system/authoringTemplate/siteConfigType/elements/layout/sidePanel/position/formControlLayout": {
+    "library/system/authoringTemplate/siteConfigType/elements/layout/rightSidePanel/formControlLayout": {
         "jcr:primaryType": "bpw:FormControlLayout",
-        "bpw:title": "Side Panel Position"
+        "bpw:title": "Left Side Panel"
+    },
+    "library/system/authoringTemplate/siteConfigType/elements/layout/rightSidePanel/display" : {
+        "jcr:primaryType": "bpw:FormControl",
+        "bpw:controlType": "checkbox",
+        "bpw:dataType": "boolean",
+        "bpw:jcrDataType": "BOOLEAN",
+        "bpw:systemIndexed": "true"
+    },    
+    "library/system/authoringTemplate/siteConfigType/elements/layout/rightSidePanel/display/formControlLayout": {
+        "jcr:primaryType": "bpw:FormControlLayout",
+        "bpw:title": "Hide Right Side Panel?"
     },
     "library/system/authoringTemplate/siteAreaType" : {
         "jcr:primaryType": "bpw:authoringTemplate",

@@ -86,6 +86,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteAreaLayout;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.StringConstraint;
+import com.bpwizard.wcm.repo.rest.jcr.model.ThemeColors;
 import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
 import com.bpwizard.wcm.repo.rest.jcr.model.VisbleCondition;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperties;
@@ -2171,26 +2172,45 @@ public abstract class BaseWcmRestController {
 		for (RestNode childNode : siteConfigNode.getChildren()) {
 			if (WcmConstants.WCM_ITEM_ELEMENTS.equals(childNode.getName())) {
 				for (RestProperty property : childNode.getJcrProperties()) {
-					if ("colorTheme".equals(property.getName())) {
-						siteConfig.setColorTheme(property.getValues().get(0));
-					} else if ("customScrollbars".equals(property.getName())) {
+//					if ("colorTheme".equals(property.getName())) {
+//						siteConfig.setColorTheme(property.getValues().get(0));
+//					} else 
+					if ("customScrollbars".equals(property.getName())) {
 						siteConfig.setCustomScrollbars(Boolean.parseBoolean(property.getValues().get(0)));
 					} else if ("rootSiteArea".equals(property.getName())) {
 						siteConfig.setRootSiteArea(property.getValues().get(0));
+					} else if ("direction".equals(property.getName())) {
+						siteConfig.setDirection(property.getValues().get(0));
 					}
 				}
-				for (RestNode layoutNode : childNode.getChildren()) {
-					if ("layout".equals(layoutNode.getName())) {
-						PageLayout layout = new PageLayout();
-						siteConfig.setLayout(layout);
-						for (RestProperty property : layoutNode.getJcrProperties()) {
-							if ("bpw:style".equals(property.getName())) {
-								layout.setStyle(property.getValues().get(0));
-							} else if ("bpw:width".equals(property.getName())) {
-								layout.setWidth(property.getValues().get(0));
+				for (RestNode grandsonNode : childNode.getChildren()) {
+					if ("themeColors".equals(grandsonNode.getName())) {
+						ThemeColors themeColors = new ThemeColors();
+						for (RestProperty property : grandsonNode.getJcrProperties()) {
+							if ("main".equals(property.getName())) {
+								themeColors.setMain(property.getValues().get(0));
+							} else if ("navbar".equals(property.getName())) {
+								themeColors.setNavbar(property.getValues().get(0));
+							} else if ("toolbar".equals(property.getName())) {
+								themeColors.setToolbar(property.getValues().get(0));
+							} else if ("footer".equals(property.getName())) {
+								themeColors.setFooter(property.getValues().get(0));
 							}
 						}
-						for (RestNode node : layoutNode.getChildren()) {
+						siteConfig.setThemeColors(themeColors);
+					} else if ("layout".equals(grandsonNode.getName())) {
+						PageLayout layout = new PageLayout();
+						siteConfig.setLayout(layout);
+						for (RestProperty property : grandsonNode.getJcrProperties()) {
+							if ("bpw:title".equals(property.getName())) {
+								layout.setTitle(property.getValues().get(0));
+							} else if ("bpw:mode".equals(property.getName())) {
+								layout.setMode(property.getValues().get(0));
+							} else if ("bpw:scroll".equals(property.getName())) {
+								layout.setScroll(property.getValues().get(0));
+							}
+						}
+						for (RestNode node : grandsonNode.getChildren()) {
 							if ("navbar".equals(node.getName())) {
 								NavBar navbar = new NavBar();
 								layout.setNavbar(navbar);
@@ -2205,8 +2225,10 @@ public abstract class BaseWcmRestController {
 										navbar.setVariant(property.getValues().get(0));
 									} else if ("position".equals(property.getName())) {
 										navbar.setPosition(property.getValues().get(0));
-									} else if ("hidden".equals(property.getName())) {
-										navbar.setHidden(Boolean.valueOf(property.getValues().get(0)));
+									} else if ("display".equals(property.getName())) {
+										navbar.setDisplay(Boolean.valueOf(property.getValues().get(0)));
+									} else if ("style".equals(property.getName())) {
+										navbar.setStyle(property.getValues().get(0));
 									}
 								}
 							} else if ("toolbar".equals(node.getName())) {
@@ -2219,8 +2241,10 @@ public abstract class BaseWcmRestController {
 										toolbar.setBackground(property.getValues().get(0));
 									} else if ("position".equals(property.getName())) {
 										toolbar.setPosition(property.getValues().get(0));
-									} else if ("hidden".equals(property.getName())) {
-										toolbar.setHidden(Boolean.valueOf(property.getValues().get(0)));
+									} else if ("style".equals(property.getName())) {
+										toolbar.setStyle(property.getValues().get(0));
+									} else if ("display".equals(property.getName())) {
+										toolbar.setDisplay(Boolean.valueOf(property.getValues().get(0)));
 									}
 								}
 							} else if ("footer".equals(node.getName())) {
@@ -2233,23 +2257,33 @@ public abstract class BaseWcmRestController {
 										footer.setBackground(property.getValues().get(0));
 									} else if ("position".equals(property.getName())) {
 										footer.setPosition(property.getValues().get(0));
-									} else if ("hidden".equals(property.getName())) {
-										footer.setHidden(Boolean.valueOf(property.getValues().get(0)));
-									}
+									} else if ("display".equals(property.getName())) {
+										footer.setDisplay(Boolean.valueOf(property.getValues().get(0)));
+									} else if ("style".equals(property.getName())) {
+										footer.setStyle(property.getValues().get(0));
+									} 
 								}
-							} else if ("sidePanel".equals(node.getName())) {
+							} else if ("leftSidePanel".equals(node.getName())) {
 								SidePanel sidePanel = new SidePanel();
-								layout.setSidePanel(sidePanel);
+								layout.setLeftSidePanel(sidePanel);
 								for (RestProperty property : node.getJcrProperties()) {
-									if ("position".equals(property.getName())) {
-										sidePanel.setPosition(property.getValues().get(0));
-									} else if ("hidden".equals(property.getName())) {
-										sidePanel.setHidden(Boolean.valueOf(property.getValues().get(0)));
+									if ("display".equals(property.getName())) {
+										sidePanel.setDisplay(Boolean.valueOf(property.getValues().get(0)));
 									}
+									break;
+								}
+							} else if ("rightSidePanel".equals(node.getName())) {
+								SidePanel sidePanel = new SidePanel();
+								layout.setRightSidePanel(sidePanel);
+								for (RestProperty property : node.getJcrProperties()) {
+									if ("display".equals(property.getName())) {
+										sidePanel.setDisplay(Boolean.valueOf(property.getValues().get(0)));
+									}
+									break;
 								}
 							}
 						}
-						break;
+						// break;
 					}
 				}
 			} else if (WcmConstants.WCM_ITEM_PROPERTIES.equals(childNode.getName())) {

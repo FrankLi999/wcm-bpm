@@ -1,6 +1,7 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import org.modeshape.jcr.api.JcrConstants;
+import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -15,7 +16,9 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 	private String rootSiteArea;
 	
 	private String name;
-	private String colorTheme;
+	// private String colorTheme;
+	private ThemeColors themeColors;
+	private String direction = "ltr";
     private boolean customScrollbars;
     
     private PageLayout layout;
@@ -46,14 +49,20 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getColorTheme() {
-		return colorTheme;
+	public ThemeColors getThemeColors() {
+		return themeColors;
 	}
-	public void setColorTheme(String colorTheme) {
-		this.colorTheme = colorTheme;
+	public void setThemeColors(ThemeColors themeColors) {
+		this.themeColors = themeColors;
 	}
 	public boolean isCustomScrollbars() {
 		return customScrollbars;
+	}
+	public String getDirection() {
+		return direction;
+	}
+	public void setDirection(String direction) {
+		this.direction = direction;
 	}
 	public void setCustomScrollbars(boolean customScrollbars) {
 		this.customScrollbars = customScrollbars;
@@ -104,9 +113,25 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 		elementsNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, elementsChildren);
 		
 		elementsNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:system_siteConfigType_ElementFolder");
-		elementsNode.put("colorTheme", this.getColorTheme());
+		// elementsNode.put("colorTheme", this.getColorTheme());
 		elementsNode.put("rootSiteArea", this.getRootSiteArea());
 		elementsNode.put("customScrollbars", this.isCustomScrollbars());
+		elementsNode.put("direction", StringUtils.hasText(this.direction) ? this.direction : "ltr");
+		ObjectNode themeColors = JsonUtils.createObjectNode();
+		elementsChildren.set("themeColors", themeColors);
+		themeColors.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:themeColors");
+		themeColors.put("main", this.themeColors.getMain());
+		if (StringUtils.hasText(this.themeColors.getNavbar())) {
+			themeColors.put("navbar", this.themeColors.getNavbar());
+		}
+		if (StringUtils.hasText(this.themeColors.getToolbar())) {
+			themeColors.put("toolbar", this.themeColors.getToolbar());
+		}
+		if (StringUtils.hasText(this.themeColors.getFooter())) {
+			themeColors.put("footer", this.themeColors.getFooter());
+		}
+		
+		
 		
 		ObjectNode layout = JsonUtils.createObjectNode();
 		elementsChildren.set("layout", layout);
@@ -114,9 +139,9 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 		layout.set(WcmConstants.JCR_JSON_NODE_CHILDREN, layoutChildren);
 		
 		layout.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:pageLayout");
-		layout.put("bpw:style", this.layout.getStyle());
-		layout.put("bpw:width", this.layout.getWidth());
-		
+		layout.put("bpw:title", this.layout.getTitle());
+		layout.put("bpw:mode", this.layout.getMode());
+		layout.put("bpw:scroll", this.layout.getScroll());
 		ObjectNode navbarNode = JsonUtils.createObjectNode();
 		layoutChildren.set("navbar", navbarNode);
 		navbarNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:navbar");
@@ -126,13 +151,17 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 		if (this.layout.getNavbar().getSecondaryBackground() != null) {
 			navbarNode.put("secondaryBackground", this.layout.getNavbar().getSecondaryBackground());
 		}
-		navbarNode.put("hidden", this.layout.getNavbar().isHidden());
+		navbarNode.put("display", this.layout.getNavbar().isDisplay());
 		navbarNode.put("folded", this.layout.getNavbar().isFolded());
 		if (this.layout.getNavbar().getPosition() != null) {
 			navbarNode.put("position", this.layout.getNavbar().getPosition());
 		}
 		if (this.layout.getNavbar().getVariant() != null) {
 			navbarNode.put("variant", this.layout.getNavbar().getVariant());
+		}
+		
+		if (this.layout.getNavbar().getStyle() != null) {
+			navbarNode.put("style", this.layout.getNavbar().getStyle());
 		}
 		
 		ObjectNode toolbarNode = JsonUtils.createObjectNode();
@@ -142,11 +171,13 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 		if (this.layout.getToolbar().getBackground() != null) {
 			toolbarNode.put("background", this.layout.getToolbar().getBackground());
 		}
-		toolbarNode.put("hidden", this.layout.getToolbar().isHidden());
+		toolbarNode.put("display", this.layout.getToolbar().isDisplay());
 		if (this.layout.getToolbar().getPosition() != null) {
 			toolbarNode.put("position", this.layout.getToolbar().getPosition());
 		}
-		
+		if (this.layout.getToolbar().getStyle() != null) {
+			toolbarNode.put("style", this.layout.getToolbar().getStyle());
+		}
 		ObjectNode footerNode = JsonUtils.createObjectNode();
 		layoutChildren.set("footer", footerNode);
 		footerNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:footer");
@@ -154,26 +185,33 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 		if (this.layout.getFooter().getBackground() != null) {
 			footerNode.put("background", this.layout.getFooter().getBackground());
 		}
-		footerNode.put("hidden", this.layout.getFooter().isHidden());
+		footerNode.put("display", this.layout.getFooter().isDisplay());
 		if (this.layout.getFooter().getPosition() != null) {
 			footerNode.put("position", this.layout.getFooter().getPosition());
 		}
-
-		ObjectNode sidePanelNode = JsonUtils.createObjectNode();
-		layoutChildren.set("sidePanel", sidePanelNode);
-		sidePanelNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:sidePanel");
-		sidePanelNode.put("hidden", this.layout.getSidePanel().isHidden());
-		if (this.layout.getSidePanel().getPosition() != null) {
-			sidePanelNode.put("position", this.layout.getSidePanel().getPosition());
+		if (this.layout.getFooter().getStyle() != null) {
+			footerNode.put("style", this.layout.getFooter().getStyle());
+		}
+		if (this.layout.getLeftSidePanel() != null) {
+			ObjectNode leftSidePanelNode = JsonUtils.createObjectNode();
+			layoutChildren.set("leftSidePanel", leftSidePanelNode);
+			leftSidePanelNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:sidePanel");
+			leftSidePanelNode.put("display", this.layout.getLeftSidePanel().isDisplay());
 		}
 
+		if (this.layout.getRightSidePanel() != null) {
+			ObjectNode rightSidePanelNode = JsonUtils.createObjectNode();
+			layoutChildren.set("rightSidePanel", rightSidePanelNode);
+			rightSidePanelNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:sidePanel");
+			rightSidePanelNode.put("display", this.layout.getRightSidePanel().isDisplay());
+		}
 		return jsonNode;
 	}
 	@Override
 	public String toString() {
 		return "SiteConfig [repository=" + repository + ", workspace=" + workspace + ", library=" + library
-				+ ", rootSiteArea=" + rootSiteArea + ", name=" + name + ", colorTheme=" + colorTheme
-				+ ", customScrollbars=" + customScrollbars + ", layout=" + layout + ", LockOwner=" + lockOwner 
-				 + ", wcmAuthority=" + wcmAuthority + "]";
+				+ ", rootSiteArea=" + rootSiteArea + ", name=" + name + ", themeColors=" + themeColors + ", direction="
+				+ direction + ", customScrollbars=" + customScrollbars + ", layout=" + layout + ", lockOwner="
+				+ lockOwner + ", wcmAuthority=" + wcmAuthority + "]";
 	}
 }
