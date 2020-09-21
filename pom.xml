@@ -18,6 +18,7 @@
 		<!-- <version>2.1.6.RELEASE</version>  -->
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<modules>
 	    <module>spring-commons</module>
 		<module>modeshape-boot</module>
@@ -55,6 +56,7 @@
 		<spring-cloud.version>Hoxton.RC2</spring-cloud.version>
 		<spring-cloud-kubernetes.version>1.1.1.RELEASE</spring-cloud-kubernetes.version>
 		<jaxb.api.version>2.3.1</jaxb.api.version>
+		<json-schema-validator.version>1.0.43</json-schema-validator.version>
 	</properties>
 
 	<dependencyManagement>
@@ -217,6 +219,11 @@
 				<groupId>org.mybatis.caches</groupId>
 				<artifactId>mybatis-ignite</artifactId>
 				<version>1.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.networknt</groupId>
+				<artifactId>json-schema-validator</artifactId>
+				<version>${json-schema-validator.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
