@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmSystem;
 
 public class UserProfile {
 	
@@ -19,10 +20,11 @@ public class UserProfile {
     private String tokenType = "Bearer";
     private String sessionId = "n/a";
     private long expireIn;
-    public static UserProfile fromUserAndToken(User user) {
-    	return UserProfile.fromUserAndToken(user, null, 0, null);
+    private WcmSystem settings;
+    public static UserProfile fromUserAndToken(User user, WcmSystem settings) {
+    	return UserProfile.fromUserAndToken(user, null, 0, null, settings);
     }
-    public static UserProfile fromUserAndToken(User user, String accessToken, long expireIn, String sessionId) {
+    public static UserProfile fromUserAndToken(User user, String accessToken, long expireIn, String sessionId, WcmSystem settings) {
     	UserProfile userProfile = new UserProfile();
     	userProfile.setAccessToken(accessToken);
     	userProfile.setId(user.getId().toString());
@@ -34,6 +36,7 @@ public class UserProfile {
     	userProfile.setExpireIn(expireIn);
     	userProfile.setSessionId(sessionId);
     	userProfile.setRoles(user.getRoles().stream().map(Role::getName).toArray(String[]::new));
+    	userProfile.setSettings(settings);
     	return userProfile;
     }
 
@@ -134,11 +137,17 @@ public class UserProfile {
 		this.sessionId = sessionId;
 	}
 	
+	public WcmSystem getSettings() {
+		return settings;
+	}
+	public void setSettings(WcmSystem settings) {
+		this.settings = settings;
+	}
 	@Override
 	public String toString() {
-		return "AuthResponse [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name
+		return "UserProfile [id=" + id + ", email=" + email + ", password=" + password + ", name=" + name
 				+ ", firstName=" + firstName + ", lastName=" + lastName + ", imageUrl=" + imageUrl + ", roles="
-				+ Arrays.toString(roles) + ", accessToken=" + accessToken + ", expireIn=" + expireIn + ", tokenType="
-				+ tokenType + ", sessionId=" + sessionId + "]";
+				+ Arrays.toString(roles) + ", accessToken=" + accessToken + ", tokenType=" + tokenType + ", sessionId="
+				+ sessionId + ", expireIn=" + expireIn + ", settings=" + settings + "]";
 	}
 }

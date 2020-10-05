@@ -68,8 +68,8 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api/contentItem";
 
-//	@Autowired
-//	private ReviewTaskService reviewTaskService;
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
 	
 	@Autowired
 	private EditTaskService editTaskService;
@@ -108,8 +108,8 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		String processInstanceId = null;
 		RestNode newNode = null;
 		try {
-			this.setWorkflowStage(contentItem, WcmConstants.WORKFLOW_STATGE_DRAFT);
-			at = this.doGetAuthoringTemplate(contentItem.getRepository(), WcmConstants.DRAFT_WS, 
+			this.wcmRequestHandler.setWorkflowStage(contentItem, WcmConstants.WORKFLOW_STATGE_DRAFT);
+			at = this.wcmRequestHandler.getAuthoringTemplate(contentItem.getRepository(), WcmConstants.DRAFT_WS, 
 					contentItem.getAuthoringTemplate(), request);
 			if (at.getContentItemAcl() != null && at.getContentItemAcl().getOnSaveDraftPermissions() != null) {
 				contentItem.setAcl(at.getContentItemAcl().getOnSaveDraftPermissions());
@@ -192,7 +192,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 					absPath, WcmConstants.CONTENT_ITEM_DEPATH);
 			DraftItem[] draftItems = saNode.getChildren().stream()
 					.filter(WcmUtils::isDraftContentItem)
-					.map(node -> this.toContentItem(node, repository, WcmConstants.DRAFT_WS, String.format("%s/%s", siteArea, node.getName()), request))
+					.map(node -> this.wcmRequestHandler.toContentItem(node, repository, WcmConstants.DRAFT_WS, String.format("%s/%s", siteArea, node.getName()), request))
 					.map(WcmUtils::toDraftItem)
 					.toArray(DraftItem[]::new);
 			if (logger.isDebugEnabled()) {
@@ -260,7 +260,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        workflowNode.setProperty("workflowStage", WcmConstants.WORKFLOW_STATGE_DRAFT);
 	        workflowNode.setProperty("processInstanceId", processInstanceId);
 	        String authoringTemplate = contentNode.getProperty("bpw:authoringTemplate").getString();
-	        AuthoringTemplate at = this.doGetAuthoringTemplate(draftRequest.getRepository(), WcmConstants.DRAFT_WS, 
+	        AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(draftRequest.getRepository(), WcmConstants.DRAFT_WS, 
 	        		authoringTemplate, request);
 			if (at.getContentItemAcl() != null && at.getContentItemAcl().getOnSaveDraftPermissions() != null) {
 				String repositoryName = draftRequest.getRepository();
@@ -392,7 +392,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        workflowNode.setProperty("reviewer", (String)null);
 	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
 	        String authorEmail = contentNode.getProperty("jcr:createdBy").getString();
-			AuthoringTemplate at = this.doGetAuthoringTemplate(rejectRequest.getRepository(), WcmConstants.DRAFT_WS, 
+			AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(rejectRequest.getRepository(), WcmConstants.DRAFT_WS, 
 					atPath, request);
 			if (at.getContentItemAcl() != null && at.getContentItemAcl().getOnReviewedDraftPermissions() != null) {
 				ModeshapeUtils.grantPermissions(session, absPath, at.getContentItemAcl().getOnReviewedDraftPermissions());
@@ -457,7 +457,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        Node workflowNode = contentNode.getNode("bpw:workflow");
 	        workflowNode.setProperty("reviewer", (String)null);
 	        String atPath = contentNode.getProperty("bpw:authoringTemplate").getString();
-			AuthoringTemplate at = this.doGetAuthoringTemplate(approvalRequest.getRepository(), WcmConstants.DRAFT_WS, 
+			AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(approvalRequest.getRepository(), WcmConstants.DRAFT_WS, 
 					atPath, request);
 			if (at.getContentItemAcl() != null && at.getContentItemAcl().getOnReviewedDraftPermissions() != null) {
 				ModeshapeUtils.grantPermissions(session, absPath, at.getContentItemAcl().getOnReviewedDraftPermissions());
@@ -512,7 +512,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String editor = contentItem.getWorkflow().getEditor();
 			contentItem.getWorkflow().setEditor(null);
-			AuthoringTemplate at = this.doGetAuthoringTemplate(
+			AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(
 					contentItem.getRepository(), 
 					WcmConstants.DRAFT_WS, 
 					contentItem.getAuthoringTemplate(), 
@@ -647,7 +647,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        workflowNode.setProperty("workflowStage", WcmConstants.WORKFLOW_STATGE_PUBLISHED);
 	        workflowNode.setProperty("processInstanceId", (String)null);
 	        String atPath = workflowNode.getParent().getProperty("bpw:authoringTemplate").getString();
-			AuthoringTemplate at = this.doGetAuthoringTemplate(publishRequest.getRepository(), WcmConstants.DRAFT_WS, 
+			AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(publishRequest.getRepository(), WcmConstants.DRAFT_WS, 
 					atPath, request);
 			if (at.getContentItemAcl() != null && at.getContentItemAcl().getOnPublishPermissions() != null) {
 				ModeshapeUtils.grantPermissions(session, absPath, at.getContentItemAcl().getOnPublishPermissions());

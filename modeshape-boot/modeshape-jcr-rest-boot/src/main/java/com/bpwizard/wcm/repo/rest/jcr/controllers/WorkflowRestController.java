@@ -12,6 +12,7 @@ import javax.validation.constraints.Min;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,8 @@ public class WorkflowRestController extends BaseWcmRestController {
 
 	public static final String BASE_URI = "/wcm/api/bpmnWorkflow";
 
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
 //	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 //	public BpmnWorkflow getBpmnWorkflow(
 //			@PathVariable("repository") String repository,
@@ -182,7 +185,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
 					String.format(WcmConstants.NODE_WORKFLOW_ROOT_PATH_PATTERN, at.getLibrary()), WcmConstants.BPMN_WORKFLOW_DEPTH);
 			
-			return atNode.getChildren().stream().filter(this::isBpmnWorkflow)
+			return atNode.getChildren().stream().filter(this.wcmRequestHandler::isBpmnWorkflow)
 					.map(node -> this.toBpmnWorkflow(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
 		} catch (RepositoryException re) {
 			logger.error(re);
@@ -196,7 +199,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream()
-					.filter(this::notSystemLibrary)
+					.filter(this.wcmRequestHandler::notSystemLibrary)
 					.map(node -> toBpmnWorkflowWithLibrary(node, repository, workspace));
 		} catch (RepositoryException re) {
 			logger.error(re);

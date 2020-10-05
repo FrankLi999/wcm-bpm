@@ -26,7 +26,9 @@ public class PreloadController extends BaseWcmRestController {
 	
 	@Autowired
 	ResourceLoader resourceLoader;
-
+	
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
 	
 	//TODO: failed scenario - all or nothing
 	@PostMapping(path= "/preload")
@@ -34,7 +36,7 @@ public class PreloadController extends BaseWcmRestController {
     	logger.debug("Entering ...");
     	
     	try {
-    		com.bpwizard.wcm.repo.rest.jcr.model.Preload[] preloads = this.readJson(
+    		com.bpwizard.wcm.repo.rest.jcr.model.Preload[] preloads = this.wcmRequestHandler.readJson(
     				resourceLoader.getResource("classpath:/modeshape/data/preload-config.json").getInputStream(), 
     				com.bpwizard.wcm.repo.rest.jcr.model.Preload[].class);
     		for (com.bpwizard.wcm.repo.rest.jcr.model.Preload preload: preloads) {
@@ -78,7 +80,7 @@ public class PreloadController extends BaseWcmRestController {
 	
 	protected void loadQueries(HttpServletRequest request, Preload preload) throws WcmRepositoryException {
 		try {
-			this.doLoadQueries(
+			this.wcmRequestHandler.loadQueries(
 				request,
 				preload.getRepository(),
 				preload.getWorkspace()[0], 

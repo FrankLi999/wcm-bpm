@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,9 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api/contentAreaLayout";
 	
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
+	
 	@GetMapping(path = "/list/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, ContentAreaLayout> getContentAreaLayouts(
 			@PathVariable("repository") String repository,
@@ -48,7 +52,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			Map<String, ContentAreaLayout> contentAreaLayouts = this.doGetContentAreaLayouts(repository, workspace, request);	
+			Map<String, ContentAreaLayout> contentAreaLayouts = this.wcmRequestHandler.getContentAreaLayouts(repository, workspace, request);	
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -77,7 +81,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			layout.setWorkspace(workspace);
 			String library = absPath.split("/")[2];
 			layout.setLibrary(library);
-			this.toContentAreaLayout(contentAreaLayoutNode, layout);
+			this.wcmRequestHandler.toContentAreaLayout(contentAreaLayoutNode, layout);
 			return layout;
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_CONTENT_AREA_LAYOUT_ERROR, new String[] {absPath}));
@@ -96,7 +100,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			this.doLock(repository, workspace, absPath);
+			this.wcmRequestHandler.lock(repository, workspace, absPath);
 			ContentAreaLayout contentAreaLayout = this.getContentAreaLayout(repository, workspace, absPath, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();

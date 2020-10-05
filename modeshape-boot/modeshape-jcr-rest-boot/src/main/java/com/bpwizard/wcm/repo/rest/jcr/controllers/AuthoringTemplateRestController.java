@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,8 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 	private static final Logger logger = LogManager.getLogger(AuthoringTemplateRestController.class);
 
 	public static final String BASE_URI = "/wcm/api/at";
-
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
 	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, AuthoringTemplate> getAuthoringTemplates(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
@@ -45,7 +47,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			Map<String, AuthoringTemplate> authoringTemplates = this.doGetAuthoringTemplates(repository, workspace, request);
+			Map<String, AuthoringTemplate> authoringTemplates = this.wcmRequestHandler.getAuthoringTemplates(repository, workspace, request);
 	
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -70,7 +72,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-		AuthoringTemplate at = this.doGetAuthoringTemplate(repository, workspace, atPath, request);
+		AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(repository, workspace, atPath, request);
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
 		}
@@ -89,7 +91,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			this.doLock(repository, workspace, absPath);
+			this.wcmRequestHandler.lock(repository, workspace, absPath);
 			AuthoringTemplate at = this.getAuthoringTemplate(repository, workspace, absPath, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();

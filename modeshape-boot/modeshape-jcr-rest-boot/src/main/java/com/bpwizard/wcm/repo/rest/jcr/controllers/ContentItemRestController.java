@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,8 @@ public class ContentItemRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api/contentItem";
 
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
 	@PostMapping(path = "/create-publish", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createAndPublishContentItem(
 			@RequestBody ContentItem contentItem, 
@@ -49,8 +52,8 @@ public class ContentItemRestController extends BaseWcmRestController {
 		}
 		try {
 			contentItem.getProperties().setAuthor(WcmUtils.getCurrentUsername());
-			this.setWorkflowStage(contentItem, WcmConstants.WORKFLOW_STATGE_PUBLISHED);
-			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
+			this.wcmRequestHandler.setWorkflowStage(contentItem, WcmConstants.WORKFLOW_STATGE_PUBLISHED);
+			AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
 					contentItem.getAuthoringTemplate(), request);
 			if (at.getContentItemAcl() != null) {
 			    contentItem.setAcl(at.getContentItemAcl().getOnPublishPermissions());
@@ -91,8 +94,8 @@ public class ContentItemRestController extends BaseWcmRestController {
 	public void updateContentItem(@RequestBody ContentItem contentItem, HttpServletRequest request) { 
 		String absPath = WcmUtils.nodePath(contentItem.getWcmPath());
 		try {
-			this.setWorkflowStage(contentItem, WcmConstants.WORKFLOW_STATGE_PUBLISHED);
-			AuthoringTemplate at = this.doGetAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
+			this.wcmRequestHandler.setWorkflowStage(contentItem, WcmConstants.WORKFLOW_STATGE_PUBLISHED);
+			AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(contentItem.getRepository(), contentItem.getWorkspace(), 
 					contentItem.getAuthoringTemplate(), request);
 			String baseUrl = RestHelper.repositoryUrl(request);
 			if (at.getContentItemAcl() != null) {
@@ -128,7 +131,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 		    HttpServletRequest request) 
 		    throws WcmRepositoryException {
 		
-		return this.doGetContentItem(repository, workspace, wcmPath, request);
+		return this.wcmRequestHandler.getContentItem(repository, workspace, wcmPath, request);
 	}
 	
 	@PutMapping(path = "/lock/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -142,7 +145,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			this.doLock(repository, workspace, absPath);
+			this.wcmRequestHandler.lock(repository, workspace, absPath);
 			ContentItem contentItem = this.getContentItem(repository, workspace, absPath, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();

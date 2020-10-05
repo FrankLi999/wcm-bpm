@@ -23,6 +23,7 @@ import org.apache.logging.log4j.Logger;
 import org.modeshape.common.SystemFailureException;
 import org.modeshape.jcr.JcrI18n;
 import org.modeshape.jcr.api.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +61,8 @@ public class QueryRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api/queryStatement";
 
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
 
 	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<QueryStatement[]> loadQueryStatements(
@@ -78,7 +81,7 @@ public class QueryRestController extends BaseWcmRestController {
 		}
 
 		try {
-			QueryStatement[] queryStatements = this.doLoadQueryStatements(repository, workspace, request);
+			QueryStatement[] queryStatements = this.wcmRequestHandler.loadQueryStatements(repository, workspace, request);
 			if ("asc".equals(sortDirection)) {
 				Arrays.sort(queryStatements);
 			} else if ("desc".equals(sortDirection)) {
@@ -145,7 +148,7 @@ public class QueryRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-		this.doCreateQueryStatement(query, request);
+		this.wcmRequestHandler.createQueryStatement(query, request);
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
@@ -208,7 +211,7 @@ public class QueryRestController extends BaseWcmRestController {
     		@RequestParam("file") MultipartFile file ) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
-    		this.doLoadQueries(request, repository, workspace, file.getInputStream());
+    		this.wcmRequestHandler.loadQueries(request, repository, workspace, file.getInputStream());
 	    	logger.debug("Exiting ...");
 	    	return ResponseEntity.status(HttpStatus.CREATED).build();
     	} catch (Throwable t) {

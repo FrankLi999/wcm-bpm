@@ -726,6 +726,7 @@
 - rootSiteArea (STRING)
 - customScrollbars (BOOLEAN)
 - direction (STRING)
+- animations (BOOLEAN)
 + themeColors (bpw:themeColors)
 + layout (bpw:pageLayout)
 

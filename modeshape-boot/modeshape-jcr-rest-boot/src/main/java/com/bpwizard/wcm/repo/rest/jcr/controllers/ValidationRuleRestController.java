@@ -12,6 +12,7 @@ import javax.validation.constraints.Min;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,10 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api/validationRule";
 	private static final Logger logger = LogManager.getLogger(ValidationRuleRestController.class);
+	
+
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
 	
 	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ValidationRule[]> loadValidationRules(
@@ -157,7 +162,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, rule.getRepository(), rule.getWorkspace(),
 					absPath, WcmConstants.VALIDATION_RULE_DEPTH);
 			
-			return atNode.getChildren().stream().filter(this::isValidationRule)
+			return atNode.getChildren().stream().filter(this.wcmRequestHandler::isValidationRule)
 					.map(node -> this.toValidationRule(node, rule.getRepository(), rule.getWorkspace(), rule.getLibrary()));
 		} catch (RepositoryException re) {;
 			logger.error(re);
@@ -171,7 +176,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream()
-					.filter(this::notSystemLibrary)
+					.filter(this.wcmRequestHandler::notSystemLibrary)
 					.map(node -> toValidationRuleWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
 			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));

@@ -611,7 +611,7 @@
 	},
 	"library/design/contentAreaLayout/CamundaHomeLayout" : {
         "jcr:primaryType":"bpw:contentAreaLayout",
-        "bpw:name": "Layout_CamundaHome",
+        "bpw:name": "CamundaHomeLayout",
         "bpw:contentWidth": "100"
     },
     "library/design/contentAreaLayout/CamundaHomeLayout/sidePane" : {

@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,9 @@ public class SiteConfigRestController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/siteConfig";
 	private static final Logger logger = LogManager.getLogger(SiteConfigRestController.class);
 
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
+	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createSiteConfig(@RequestBody SiteConfig siteConfig, HttpServletRequest request)
 			throws WcmRepositoryException {
@@ -98,8 +102,8 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH, library);
 			RestNode siteConfigFolder = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.SITE_CONFIG_DEPTH);
 			SiteConfig[] siteConfigs = siteConfigFolder.getChildren().stream()
-					.filter(node -> this.isSiteConfig(node))
-					.map(node -> this.toSiteConfig(repository, workspace, library, node))
+					.filter(node -> this.wcmRequestHandler.isSiteConfig(node))
+					.map(node -> this.wcmRequestHandler.toSiteConfig(repository, workspace, library, node))
 					.toArray(SiteConfig[]::new);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -124,8 +128,8 @@ public class SiteConfigRestController extends BaseWcmRestController {
 		}
 		try {
 			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH_PATTERN, library, siteConfigName);
-			this.doLock(repository, workspace, absPath);
-			SiteConfig siteConfig = this.doGetSiteConfig(request, repository, workspace, library, siteConfigName);
+			this.wcmRequestHandler.lock(repository, workspace, absPath);
+			SiteConfig siteConfig = this.wcmRequestHandler.getSiteConfig(request, repository, workspace, library, siteConfigName);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -152,10 +156,10 @@ public class SiteConfigRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			PageConfig pageConfig = new PageConfig();
-			SiteConfig siteConfig = this.doGetSiteConfig(request, repository, workspace, library, siteConfigName);
+			SiteConfig siteConfig = this.wcmRequestHandler.getSiteConfig(request, repository, workspace, library, siteConfigName);
 			pageConfig.setSiteConfig(siteConfig);
 			pageConfig.setNavigations(
-					this.getNavigations(baseUrl, repository, workspace, library, siteConfig.getRootSiteArea()));
+					this.wcmRequestHandler.getNavigations(baseUrl, repository, workspace, library, siteConfig.getRootSiteArea()));
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}

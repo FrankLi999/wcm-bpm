@@ -16,7 +16,7 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 	private String rootSiteArea;
 	
 	private String name;
-	// private String colorTheme;
+	private boolean animations;
 	private ThemeColors themeColors;
 	private String direction = "ltr";
     private boolean customScrollbars;
@@ -63,6 +63,13 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 	}
 	public void setDirection(String direction) {
 		this.direction = direction;
+	}
+	
+	public boolean isAnimations() {
+		return animations;
+	}
+	public void setAnimations(boolean animations) {
+		this.animations = animations;
 	}
 	public void setCustomScrollbars(boolean customScrollbars) {
 		this.customScrollbars = customScrollbars;
@@ -116,6 +123,7 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 		// elementsNode.put("colorTheme", this.getColorTheme());
 		elementsNode.put("rootSiteArea", this.getRootSiteArea());
 		elementsNode.put("customScrollbars", this.isCustomScrollbars());
+		elementsNode.put("animations", this.isAnimations());
 		elementsNode.put("direction", StringUtils.hasText(this.direction) ? this.direction : "ltr");
 		ObjectNode themeColors = JsonUtils.createObjectNode();
 		elementsChildren.set("themeColors", themeColors);
@@ -209,7 +217,7 @@ public class SiteConfig extends ResourceNode implements HasWcmAuthority {
 	}
 	@Override
 	public String toString() {
-		return "SiteConfig [repository=" + repository + ", workspace=" + workspace + ", library=" + library
+		return "SiteConfig [animations=" + animations + ", repository=" + repository + ", workspace=" + workspace + ", library=" + library
 				+ ", rootSiteArea=" + rootSiteArea + ", name=" + name + ", themeColors=" + themeColors + ", direction="
 				+ direction + ", customScrollbars=" + customScrollbars + ", layout=" + layout + ", lockOwner="
 				+ lockOwner + ", wcmAuthority=" + wcmAuthority + "]";

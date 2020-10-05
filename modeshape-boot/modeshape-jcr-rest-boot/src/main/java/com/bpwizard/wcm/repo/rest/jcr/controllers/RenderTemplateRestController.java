@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,9 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api/rt";
 
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
+	
 	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, RenderTemplate> getRenderTemplates(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
@@ -47,7 +51,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			Map<String, RenderTemplate> renderTemplates = this.doGetRenderTemplates(repository, workspace, request);
+			Map<String, RenderTemplate> renderTemplates = this.wcmRequestHandler.getRenderTemplates(repository, workspace, request);
 	
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -79,7 +83,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			RestNode rtNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
 					rtPath, WcmConstants.RENDER_TEMPLATE_DEPATH);
 			
-			RenderTemplate rt = this.toRenderTemplate(rtNode, repository, workspace, library, request);
+			RenderTemplate rt = this.wcmRequestHandler.toRenderTemplate(rtNode, repository, workspace, library, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -104,7 +108,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			this.doLock(repository, workspace, absPath);
+			this.wcmRequestHandler.lock(repository, workspace, absPath);
 			RenderTemplate renderTemplate = this.getRenderTemplate(repository, workspace, absPath, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -135,7 +139,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 		try {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			AuthoringTemplate at = rt.isQuery() ? null : this.doGetAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
+			AuthoringTemplate at = rt.isQuery() ? null : this.wcmRequestHandler.getAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
 			this.itemHandler.addItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, rt.toJson(at));
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
@@ -168,7 +172,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 		try {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			AuthoringTemplate at = this.doGetAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
+			AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
 			JsonNode rtJson = rt.toJson(at);
 			this.itemHandler.updateItem(baseUrl, repositoryName, rt.getWorkspace(), absPath, rtJson);
 			if (this.authoringEnabled) {

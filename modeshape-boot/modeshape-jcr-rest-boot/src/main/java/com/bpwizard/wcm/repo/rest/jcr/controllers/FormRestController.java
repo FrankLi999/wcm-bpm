@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,9 @@ public class FormRestController extends BaseWcmRestController {
 
 	public static final String BASE_URI = "/wcm/api/form";
 	
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
+	
 	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Form> getForms(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
@@ -45,7 +49,7 @@ public class FormRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			Map<String, Form> forms = this.doGetForms(repository, workspace, request);
+			Map<String, Form> forms = this.wcmRequestHandler.getForms(repository, workspace, request);
 	
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -71,7 +75,7 @@ public class FormRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			Form form = this.doGetForm(repository, workspace, formPath, request);
+			Form form = this.wcmRequestHandler.getForm(repository, workspace, formPath, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}

@@ -27,7 +27,7 @@ import com.bpwizard.spring.boot.commons.mail.MailSender;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.service.repo.domain.UserRepository;
 
-@RunWith(SpringRunner.class)
+// @RunWith(SpringRunner.class)
 @SpringBootTest({
 	"log4j.configurationFile=log4j2-test.xml",
 	"bpw.recaptcha.sitekey="
@@ -48,7 +48,7 @@ public abstract class AbstractMvcTests {
 	protected static final String ADMIN_EMAIL = "admin@example.com";
 	protected static final String ADMIN_PASSWORD = "admin!";
 	
-	protected static final String USER_PASSWORD = "Sanjay99!";
+	protected static final String USER_PASSWORD = "test99!";
 	protected static final String UNVERIFIED_USER_EMAIL = "unverifieduser@example.com";
 	
 	protected Map<Long, String> tokens = new HashMap<>(6);

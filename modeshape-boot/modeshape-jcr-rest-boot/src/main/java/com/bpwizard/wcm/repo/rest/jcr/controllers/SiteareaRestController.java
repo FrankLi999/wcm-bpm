@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,9 @@ public class SiteareaRestController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/sitearea";
 	private static final Logger logger = LogManager.getLogger(SiteareaRestController.class);
 
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
+	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createSiteArea(@RequestBody SiteArea sa, HttpServletRequest request)
 			throws WcmRepositoryException {
@@ -114,7 +118,7 @@ public class SiteareaRestController extends BaseWcmRestController {
 			sa.setWorkspace(workspace);
 			sa.setWcmPath(wcmPath);
 			sa.setWcmAuthority(WcmUtils.getWcmAuthority(wcmPath));
-			this.loadSiteArea(saNode, sa);
+			this.wcmRequestHandler.loadSiteArea(saNode, sa);
 
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -138,7 +142,7 @@ public class SiteareaRestController extends BaseWcmRestController {
 		}
 		String absPath = WcmUtils.nodePath(wcmPath);
 		try {
-			this.doLock(repository, workspace, absPath);
+			this.wcmRequestHandler.lock(repository, workspace, absPath);
 			SiteArea siteArea = this.getSiteArea(repository, workspace, absPath, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,9 @@ public class WcmRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api";
 	
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
+	
 	@GetMapping(path = "/jsonform/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, JsonForm[]> getAuthoringTemplateAsJsonForm(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
@@ -56,7 +60,7 @@ public class WcmRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			Map<String, JsonForm[]> jsonForms = this.doGetSystemAuthoringTemplateAsJsonForm(repository, workspace, request);
+			Map<String, JsonForm[]> jsonForms = this.wcmRequestHandler.getSystemAuthoringTemplateAsJsonForm(repository, workspace, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -78,7 +82,7 @@ public class WcmRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		try {
-			ControlField[] ControlFileds = this.doGetControlField(repository, workspace, request);
+			ControlField[] ControlFileds = this.wcmRequestHandler.getControlField(repository, workspace, request);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -157,7 +161,7 @@ public class WcmRestController extends BaseWcmRestController {
 		}
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
-  			this.doPurgeWcmItem(repository, workspace, absPath);
+  			this.wcmRequestHandler.purgeWcmItem(repository, workspace, absPath);
   	  		if (logger.isDebugEnabled()) {
   				logger.traceExit();
   			}

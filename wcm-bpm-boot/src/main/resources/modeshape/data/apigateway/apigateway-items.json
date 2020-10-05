@@ -13,76 +13,282 @@
         "navigationId": "apigateway_home",
         "navigationType": "item",
         "icon": "archive",
-        "url": "/bpm/home",
+        "url": "/apigateway/home",
         "translate": "NAV.API.HOME.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     },
-    "library/apigateway/rootSiteArea/tasklist" : {
+    "library/apigateway/rootSiteArea/home/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/apigateway/rootSiteArea/home/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/apigateway/rootSiteArea/home/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/apigateway/rootSiteArea/home/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/apigateway/rootSiteArea/home/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "API Gateway",
+        "bpw:renderTemplateName": "/design/renderTemplate/MyContentRenderLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/home/welcome"
+    },
+    "library/apigateway/rootSiteArea/home/welcome" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/home/welcome/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<ApiGatewayWelcome message=\"APIGATEWAY_WELCOME\"></ApiGatewayWelcome>"
+    },
+    "library/apigateway/rootSiteArea/home/welcome/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:description":"This is API Gateway admin UI",
+        "bpw:title":"API Gateway"
+    },
+    "library/apigateway/rootSiteArea/handlers" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/tasklist/itemProperties" : {
+    "library/apigateway/rootSiteArea/handlers/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-		"bpw:name":"tasklist",
-        "bpw:title":"Task List"
+		"bpw:name":"handlers",
+        "bpw:title":"Handlers"
     },
-    "library/apigateway/rootSiteArea/tasklist/elements" : {
+    "library/apigateway/rootSiteArea/handlers/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
-        "navigationId": "apigateway_tasklist",
-        "navigationType": "item",
+        "navigationId": "apigateway_handlers",
+        "navigationType": "group",
         "icon": "archive",
-        "url": "/bpm/tasklist",
-        "translate": "NAV.API.TASKLIST.TITLE",
+        "url": "/apigateway/handlers",
+        "translate": "NAV.API.HANDLERS.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     },
-    "library/apigateway/rootSiteArea/modeler" : {
+    "library/apigateway/rootSiteArea/handlers/firewall" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/modeler/itemProperties" : {
+    "library/apigateway/rootSiteArea/handlers/firewall/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:name":"modeler",
-        "bpw:title":"Modeler"
+        "bpw:name":"fireware",
+        "bpw:title":"Firewall"
     },
-    "library/apigateway/rootSiteArea/modeler/elements" : {
+    "library/apigateway/rootSiteArea/handlers/firewall/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
-        "navigationId": "apigateway_modeler",
+        "navigationId": "apigateway_handlers_firewall",
         "navigationType": "item",
         "icon": "archive",
-        "url": "/bpm/modeler",
-        "translate": "NAV.API.MODELER.TITLE",
+        "url": "/apigateway/handlers/firewall",
+        "translate": "NAV.API.HANDLERS_FIREWALL.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     },
-    "library/apigateway/rootSiteArea/dashboard" : {
+    "library/apigateway/rootSiteArea/handlers/sign" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/dashboard/itemProperties" : {
+    "library/apigateway/rootSiteArea/handlers/sign/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:name":"dashboard",
-        "bpw:title":"Dashboard"
+        "bpw:name":"sign",
+        "bpw:title":"Sign"
     } ,
-    "library/apigateway/rootSiteArea/dashboard/elements" : {
+    "library/apigateway/rootSiteArea/handlers/sign/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
-        "navigationId": "apigateway_dashboard",
+        "navigationId": "apigateway_handlers_sign",
         "navigationType": "item",
         "icon": "archive",
-        "url": "/bpm/dashboard",
-        "translate": "NAV.API.DASHBOARD.TITLE",
+        "url": "/apigateway/handlers/sign",
+        "translate": "NAV.API.HANDLERS_SIGN.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     },
-    "library/apigateway/rootSiteArea/monitor" : {
+    "library/apigateway/rootSiteArea/handlers/monitor" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/monitor/itemProperties" : {
+    "library/apigateway/rootSiteArea/handlers/monitor/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-         "bpw:name":"monitor",
+        "bpw:name":"monitor",
         "bpw:title":"Monitor"
     } ,
-    "library/apigateway/rootSiteArea/monitor/elements" : {
+    "library/apigateway/rootSiteArea/handlers/monitor/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
-        "navigationId": "bpm_monitor",
+        "navigationId": "apigateway_handlers_monitor",
         "navigationType": "item",
         "icon": "archive",
-        "url": "/bpm/monitor",
-        "translate": "NAV.API.MONITOR.TITLE",
+        "url": "/apigateway/handlers/monitor",
+        "translate": "NAV.API.HANDLERS_MONITOR.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/handlers/rewrite" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/handlers/rewrite/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name":"rewrite",
+        "bpw:title":"Rewrite"
+    } ,
+    "library/apigateway/rootSiteArea/handlers/rewrite/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_handlers_rewrite",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/apigateway/handlers/rewrite",
+        "translate": "NAV.API.HANDLERS_REWRITE.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/handlers/rate_limiter" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/handlers/rate_limiter/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name":"rate_limiter",
+        "bpw:title":"Rate Limiter"
+    } ,
+    "library/apigateway/rootSiteArea/handlers/rate_limiter/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_handlers_rate_limiter",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/apigateway/handlers/rate_limiter",
+        "translate": "NAV.API.HANDLERS_RATE_LIMITER.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/handlers/divide" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/handlers/divide/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name":"divide",
+        "bpw:title":"Divide"
+    } ,
+    "library/apigateway/rootSiteArea/handlers/divide/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_handlers/divide",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/apigateway/handlers/divide",
+        "translate": "NAV.API.HANDLERS_DIVIDE.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name":"springCloud",
+        "bpw:title":"Spring Cloud"
+    } ,
+    "library/apigateway/rootSiteArea/handlers/springCloud/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_handlers_springCloud",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/apigateway/handlers/springCloud",
+        "translate": "NAV.API.HANDLERS_SPRING_CLOUD.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/handlers/hystrix" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/handlers/hystrix/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name":"hystrix",
+        "bpw:title":"Hystrix"
+    } ,
+    "library/apigateway/rootSiteArea/handlers/hystrix/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_handlers_hystrix",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/apigateway/handlers/hystrix",
+        "translate": "NAV.API.HANDLERS_HYSTRIX.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/system" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/system/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+         "bpw:name":"system",
+        "bpw:title":"System"
+    } ,
+    "library/apigateway/rootSiteArea/system/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_system",
+        "navigationType": "group",
+        "icon": "archive",
+        "url": "/apigateway/system",
+        "translate": "NAV.API.SYSTEM.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/system/metadata" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/system/metadata/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+         "bpw:name":"metadata",
+        "bpw:title":"Metadata"
+    } ,
+    "library/apigateway/rootSiteArea/system/metadata/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_system_metadata",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/apigateway/system/metadata",
+        "translate": "NAV.API.SYSTEM_METADATA.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/system/handlers" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/system/handlers/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+         "bpw:name":"handlers",
+        "bpw:title":"Handlers"
+    } ,
+    "library/apigateway/rootSiteArea/system/handlers/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_system_handlers",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/apigateway/system/handlers",
+        "translate": "NAV.API.SYSTEM_HANDLERS.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/system/certificate" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/system/certificate/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+         "bpw:name":"certificate",
+        "bpw:title":"Certificate"
+    },
+    "library/apigateway/rootSiteArea/system/certificate/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_system_certificate",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/apigateway/system/certificate",
+        "translate": "NAV.API.SYSTEM_CERTIFICATE.TITLE",
+        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/system/account" : {
+        "jcr:primaryType":"bpw:system_siteAreaType"
+    },
+    "library/apigateway/rootSiteArea/system/account/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+         "bpw:name":"account",
+        "bpw:title":"Account"
+    },
+    "library/apigateway/rootSiteArea/system/account/elements" : {
+        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+        "navigationId": "apigateway_certificate",
+        "navigationType": "item",
+        "icon": "archive",
+        "url": "/apigateway/system/account",
+        "translate": "NAV.API.SYSTEM_ACCOUNT.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     },
     "library/apigateway/siteConfig/apigateway" : {
@@ -95,41 +301,35 @@
     "library/apigateway/siteConfig/apigateway/elements" : {
         "jcr:primaryType":"bpw:system_siteConfigType_ElementFolder",
         "rootSiteArea":"rootSiteArea",
-        "customScrollbars":"false"
+        "customScrollbars":"true",
+        "animations":"true",
+        "direction": "ltr"
     },
     "library/apigateway/siteConfig/apigateway/elements/themeColors" : {
     	"jcr:primaryType":"bpw:themeColors",
-        "main":"theme-default"
+        "main":"default",
+        "navbar":"default",
+        "toolbar":"default",
+        "footer":"default"
     },
     "library/apigateway/siteConfig/apigateway/elements/layout" : {
         "jcr:primaryType":"bpw:pageLayout",
-        "bpw:title":"horizontal-layout",
+        "bpw:title":"horizontal",
         "bpw:mode":"fullwidth",
         "bpw:scroll": "content"
     },
     "library/apigateway/siteConfig/apigateway/elements/layout/navbar" : {
         "jcr:primaryType":"bpw:navbar",
-        "primaryBackground":"wcm-light-200",
-        "secondaryBackground":"wcm-light-300",
-        "display":"true",
-        "folded":"false",
-        "position":"top",
-        "variant":"vertical"
+        "display":"true"
     },
     "library/apigateway/siteConfig/apigateway/elements/layout/toolbar" : {
         "jcr:primaryType":"bpw:toolbar",
-        "customBackgroundColor":"false",
-        "background":"wcm-light-300",
         "display":"true",
-        "position":"below",
-        "style": "fixed"
+        "position":"above"
     },
     "library/apigateway/siteConfig/apigateway/elements/layout/footer" : {
         "jcr:primaryType":"bpw:footer",
-        "customBackgroundColor":"true",
-        "background":"wcm-light-300",
         "display":"false",
-        "position":"above-static",
         "style": "fixed"
     },
     "library/apigateway/siteConfig/apigateway/elements/layout/leftSidePanel" : {

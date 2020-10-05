@@ -12,6 +12,7 @@ import javax.validation.constraints.Min;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,8 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/library";
 	private static final Logger logger = LogManager.getLogger(ResourceLibraryRestController.class);
 	
+	@Autowired
+	private WcmRequestHandler wcmRequestHandler;
 	@GetMapping(path = "/{repository}/{workspace}", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Library[]> getLibraries(			
@@ -70,10 +73,10 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 			RestNode libraryParentNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_TWO_LEVEL);
 			Library[] libraries = libraryParentNode.getChildren().stream()
-					.filter(this::isLibrary)
-					.filter(this::notSystemLibrary)
+					.filter(this.wcmRequestHandler::isLibrary)
+					.filter(this.wcmRequestHandler::notSystemLibrary)
 					.map(node -> toLibrary(node, repository, workspace))
-					.filter(library -> this.filterLibrary(library, filter))
+					.filter(library -> this.wcmRequestHandler.filterLibrary(library, filter))
 					.toArray(Library[]::new);
 			if ("asc".equals(sortDirection)) {
 				Arrays.sort(libraries);
@@ -184,7 +187,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		}
 		String absPath = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName()); 
 		try {
-			this.doPurgeWcmItem(
+			this.wcmRequestHandler.purgeWcmItem(
 					library.getRepository(), 
 					library.getWorkspace(), 
 					absPath);

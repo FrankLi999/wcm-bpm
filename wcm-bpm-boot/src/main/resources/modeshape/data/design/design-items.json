@@ -5,7 +5,7 @@
     "library/design/rootSiteArea/itemProperties" : {
     	"jcr:primaryType":"bpw:ContentItemproperties",
     	"bpw:name":"site",
-        "bpw:title":"Design"
+        "bpw:title":"Design"  
     },
     "library/design/rootSiteArea/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
@@ -255,18 +255,13 @@
     },
     "library/design/contentAreaLayout/MyLayout" : {
         "jcr:primaryType":"bpw:contentAreaLayout",
-        "bpw:name": "sampleLayout",
-        "bpw:contentWidth": "80"
+        "bpw:name": "MyLayout",
+        "bpw:contentWidth": "100"
     },
     "library/design/contentAreaLayout/MyLayout/sidePane" : {
         "jcr:primaryType":"bpw:contentAreaSidePanel",
         "bpw:isLeft": "true",
-        "bpw:width": "20"
-    },
-    "library/design/contentAreaLayout/MyLayout/sidePane/viewer_s0" : {
-        "jcr:primaryType":"bpw:resourceViewer",
-        "bpw:title": "MySidePaneRenderTemplate",
-        "bpw:renderTemplateName": "/design/renderTemplate/MySidePaneRenderTemplate"
+        "bpw:width": "0"
     },
     "library/design/contentAreaLayout/MyLayout/row0" : {
         "jcr:primaryType":"bpw:layoutRow"
@@ -280,17 +275,32 @@
         "bpw:title": "MyRenderTemplate",
         "bpw:renderTemplateName": "/design/renderTemplate/MyRenderTemplate"
     },
-    "library/design/contentAreaLayout/MyLayout/row1" : {
+    "library/design/contentAreaLayout/MyLayoutWithSidePane" : {
+        "jcr:primaryType":"bpw:contentAreaLayout",
+        "bpw:name": "MyLayoutWithSidePane",
+        "bpw:contentWidth": "80"
+    },
+    "library/design/contentAreaLayout/MyLayoutWithSidePane/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "20"
+    },
+    "library/design/contentAreaLayout/MyLayoutWithSidePane/sidePane/viewer_s0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "MySidePaneRenderTemplate",
+        "bpw:renderTemplateName": "/design/renderTemplate/MySidePaneRenderTemplate"
+    },
+    "library/design/contentAreaLayout/MyLayoutWithSidePane/row0" : {
         "jcr:primaryType":"bpw:layoutRow"
     },
-    "library/design/contentAreaLayout/MyLayout/row1/column0" : {
+    "library/design/contentAreaLayout/MyLayoutWithSidePane/row0/column0" : {
         "jcr:primaryType":"bpw:layoutColumn",
         "bpw:width": "100"
     },
-    "library/design/contentAreaLayout/MyLayout/row1/column0/viewer_c1_0_0" : {
+    "library/design/contentAreaLayout/MyLayoutWithSidePane/row0/column0/viewer_c0_0_0" : {
         "jcr:primaryType":"bpw:resourceViewer",
         "bpw:title": "MyRenderTemplate",
-        "bpw:renderTemplateName": "/design/renderTemplate/MyContentRenderLayout"
+        "bpw:renderTemplateName": "/design/renderTemplate/MyRenderTemplate"
     },
     "library/design/renderTemplate/MySidePaneRenderTemplate": {
 		"jcr:primaryType": "bpw:renderTemplate",
@@ -327,10 +337,9 @@
 		"bpw:name": "MyContentRenderLayout",
 		"bpw:title": "MyContentRenderLayout",
 		"bpw:description": "MyContent Render Layout",
-		"bpw:preloop": "<div>preloop</div>",
-		"bpw:postloop": "<div>postloop</div>",
-		
-		"bpw:maxEntries": "10",
+		"bpw:preloop": "",
+		"bpw:postloop": "",
+		"bpw:maxEntries": "1",
 		"bpw:note": "MyContentRenderLayout note",
 		"bpw:resourceName": "/design/authoringTemplate/MyContent",
 		"bpw:nodeType": "bpw:design_MyContent_AT",
