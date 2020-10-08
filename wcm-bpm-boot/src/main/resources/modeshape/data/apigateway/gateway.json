@@ -1,0 +1,62 @@
+{
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "40"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "SpringCloud Selectors",
+        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/springCloud/selectors"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column1" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "60"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column1/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "SpringCloud Selector Rules",
+        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/springCloud/selectorRules"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectors" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectors/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<SpringCloudSelectors></SpringCloudSelectors>"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectors/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+        "bpw:description":"SpringCloud selectors management",
+        "bpw:title":"SpringCloud Selectors"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectorRules" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectorRules/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<SpringCloudSelectorRules></SpringCloudSelectorRules>"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectorRules/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+        "bpw:description":"SpringCloud selector rules management",
+        "bpw:title":"SpringCloud Selectors"
+    }
+}

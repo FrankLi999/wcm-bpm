@@ -49,7 +49,7 @@
     },
     "library/apigateway/rootSiteArea/home/welcome/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-        "bpw:workflow": "/camunda/workflow/ContentItemWorkflow",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
         "bpw:description":"This is API Gateway admin UI",
         "bpw:title":"API Gateway"
     },
@@ -86,6 +86,66 @@
         "url": "/apigateway/handlers/firewall",
         "translate": "NAV.API.HANDLERS_FIREWALL.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "40"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "Firewall Selectors",
+        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/firewall/selectors"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/row0/column1" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "60"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/row0/column1/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "Firewall Selector Rules",
+        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/firewall/selectorRules"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/selectors" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/selectors/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<FirewallSelectors></FirewallSelectors>"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/selectors/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+        "bpw:description":"Firewall selectors management",
+        "bpw:title":"Firewall Selectors"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/selectorRules" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/selectorRules/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<FirewallSelectorRules></FirewallSelectorRules>"
+    },
+    "library/apigateway/rootSiteArea/handlers/firewall/selectorRules/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+        "bpw:description":"Firewall selector rules management",
+        "bpw:title":"Firewall Selectors"
     },
     "library/apigateway/rootSiteArea/handlers/sign" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
@@ -188,6 +248,66 @@
         "url": "/apigateway/handlers/springCloud",
         "translate": "NAV.API.HANDLERS_SPRING_CLOUD.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "40"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "SpringCloud Selectors",
+        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/springCloud/selectors"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column1" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "60"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column1/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "SpringCloud Selector Rules",
+        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/springCloud/selectorRules"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectors" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectors/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<SpringCloudSelectors></SpringCloudSelectors>"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectors/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+        "bpw:description":"SpringCloud selectors management",
+        "bpw:title":"SpringCloud Selectors"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectorRules" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectorRules/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<SpringCloudSelectorRules></SpringCloudSelectorRules>"
+    },
+    "library/apigateway/rootSiteArea/handlers/springCloud/selectorRules/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+        "bpw:description":"SpringCloud selector rules management",
+        "bpw:title":"SpringCloud Selectors"
     },
     "library/apigateway/rootSiteArea/handlers/hystrix" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
@@ -340,6 +460,19 @@
         "jcr:primaryType":"bpw:sidePanel",
         "display":"false"
     },
+    "library/apigateway/workflow/ContentItemWorkflow" : {
+        "jcr:primaryType":"bpw:system_bpmnWorkflowType"
+    },
+    "library/apigateway/workflow/ContentItemWorkflow/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:name": "ContentItemWorkflow",
+        "bpw:title": "Content Item Workflow",
+        "bpw:description": "Content Item Workflow"
+    },
+    "library/apigateway/workflow/ContentItemWorkflow/elements" : {
+        "jcr:primaryType":"bpw:system_bpmnWorkflowType_ElementFolder",
+        "bpmn": "Content Item Workflow"
+    },
     "library/design/theme/apigateway" : {
         "jcr:primaryType":"bpw:system_themeType"        
     },
@@ -351,5 +484,30 @@
     "library/design/theme/apigateway/elements" : {
         "jcr:primaryType":"bpw:system_themeType_ElementFolder",
         "note": "API gateway theme"
-    }
+    },
+    "library/apigateway/renderTemplate/HandlerLayout": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "HandlerLayout",
+		"bpw:title": "HandlerLayout",
+		"bpw:description": "Handler Layout",
+		"bpw:preloop": "",
+		"bpw:postloop": "",
+		"bpw:maxEntries": "1",
+		"bpw:note": "HandlerLayout note",
+		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
+		"bpw:isQuery": "false"
+	},
+	"library/apigateway/renderTemplate/HandlerLayout/row1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"library/apigateway/renderTemplate/HandlerLayout/row1/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "100"
+	},
+	"library/apigateway/renderTemplate/HandlerLayout/row1/column1/body": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+		"bpw:name": "body"
+	}
 }
