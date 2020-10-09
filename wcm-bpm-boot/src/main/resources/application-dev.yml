@@ -381,4 +381,25 @@ message:
     name: flowing-retail
   group: order
 #server:
-  #port: 8091      
+  #port: 8091    
+  
+#mybatis:
+#  config-location: classpath:/mybatis/mybatis-config.xml
+#  mapper-locations: classpath:/mappers/*.xml
+
+
+gateway:
+  sync:
+    websocket:
+        enabled : true
+#    http:
+#      enabled: true
+
+#logging:
+#  level:
+#    root: info
+#    org.springframework.boot: info
+#    org.apache.ibatis: info
+#    com.bpwizard.gateway.bonuspoint: info
+#    com.bpwizard.gateway.lottery: info
+#    com.bpwizard.gateway: info

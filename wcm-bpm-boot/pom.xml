@@ -158,6 +158,13 @@
 			<artifactId>modeshape-jcr-rest-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- 
+		<dependency>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>gateway-admin</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -197,7 +204,6 @@
 		<dependency>
 			<groupId>com.lmax</groupId>
 			<artifactId>disruptor</artifactId>
-			<version>3.4.2</version>
 		</dependency>
 		<!-- camunda-rest is jersey base and has Tomcat dependency -->
 		<!--

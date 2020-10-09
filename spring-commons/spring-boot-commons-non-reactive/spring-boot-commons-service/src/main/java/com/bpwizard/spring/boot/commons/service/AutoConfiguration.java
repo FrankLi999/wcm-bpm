@@ -195,10 +195,12 @@ public class AutoConfiguration {
         log.info("preloadedRoles");   //TODO, load in batch
         Map<String, Role> roles = new HashMap<>();
         String[] roleNames = properties.getRolename();
-		for (String roleName: roleNames) {
-			//Optional<Role> role = 
-			roleRepository.findByName(roleName).ifPresent(role -> roles.put(roleName, role));
-		}
+        if (null != roleNames) {
+			for (String roleName: roleNames) {
+				//Optional<Role> role = 
+				roleRepository.findByName(roleName).ifPresent(role -> roles.put(roleName, role));
+			}
+        }
         return roles;	
 	}
 }

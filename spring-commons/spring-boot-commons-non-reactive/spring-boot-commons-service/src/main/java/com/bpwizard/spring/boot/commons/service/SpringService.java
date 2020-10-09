@@ -121,32 +121,35 @@ public abstract class SpringService
 	 */
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false, timeout=60)
     public void onStartup() {
-    	
-		try {
-			
-			// Check if the user already exists
-			userDetailsService
-				.loadUserByUsername(properties.getUser()[0].getUsername());
-			
-		} catch (UsernameNotFoundException e) {
-			//TODO: batch mode		
-			// Doesn't exist. So, create it.
-//			Tenant tenant = new Tenant();
-//			tenant.setName("default");
-//			tenantRepository.save(tenant);
-			Set<Tenant> tenants = null;
-			String[] roleNames = properties.getRolename();
-			for (String roleName: roleNames) {
-				Role role = createRole(roleName, tenants);
-				this.preloadedRoles.put(roleName, role);
+    	if (null != properties.getUser() && properties.getUser().length > 0) {
+			try {
 				
+				// Check if the user already exists
+				userDetailsService
+					.loadUserByUsername(properties.getUser()[0].getUsername());
+				
+			} catch (UsernameNotFoundException e) {
+				//TODO: batch mode		
+				// Doesn't exist. So, create it.
+	//			Tenant tenant = new Tenant();
+	//			tenant.setName("default");
+	//			tenantRepository.save(tenant);
+				Set<Tenant> tenants = null;
+				String[] roleNames = properties.getRolename();
+				if (null != roleNames) {
+					for (String roleName: roleNames) {
+						Role role = createRole(roleName, tenants);
+						this.preloadedRoles.put(roleName, role);
+						
+					}
+				}
+				
+				SpringProperties.User[] users = properties.getUser();
+				for (SpringProperties.User user: users) {
+					createUser(user, this.preloadedRoles, tenants);
+				}
 			}
-			
-			SpringProperties.User[] users = properties.getUser();
-			for (SpringProperties.User user: users) {
-				createUser(user, this.preloadedRoles, tenants);
-			}
-		}
+    	}
 	}
 
 	protected Role createRole(String roleName, Set<Tenant> tenants) {
