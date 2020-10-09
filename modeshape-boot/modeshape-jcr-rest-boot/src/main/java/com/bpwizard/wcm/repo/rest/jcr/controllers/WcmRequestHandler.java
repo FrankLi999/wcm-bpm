@@ -2911,7 +2911,7 @@ public class WcmRequestHandler {
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
-	protected ContentItem toContentItem(RestNode contentItemNode, String repository, 
+	public ContentItem toContentItem(RestNode contentItemNode, String repository, 
 			String workspace, String wcmPath, HttpServletRequest request) {
 	    
 		ContentItem contentItem = new ContentItem(); 

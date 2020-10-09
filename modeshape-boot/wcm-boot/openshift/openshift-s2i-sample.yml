@@ -1,0 +1,46 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  # 1
+  name: "ruby-sample-build" 
+spec:
+  # 2: The runPolicy field controls whether builds created from this build 
+  # configuration can be run simultaneously. The default value is Serial, 
+  # which means new builds run sequentially, not simultaneously.
+  runPolicy: "Serial"
+  # 3: specify a list of triggers, which cause a new build to be created.
+  triggers: 
+    -
+      type: "GitHub"
+      github:
+        secret: "secret101"
+    - type: "Generic"
+      generic:
+        secret: "secret101"
+    - type: "ImageChange"
+  # 4: he source section defines the source of the build. The source type determines 
+  # the primary source of input, and can be either Git, to point to a code repository
+  # location, Dockerfile, to build from an inline Dockerfile, or Binary, to accept 
+  # binary payloads. It is possible to have multiple sources at once. Refer to the 
+  # documentation for each source type for details.
+  source: 
+    git:
+      uri: "https://github.com/openshift/ruby-hello-world"
+  # 5: The strategy section describes the build strategy used to execute the build. 
+  # You can specify a Source , Docker, or Custom strategy here. This example uses 
+  # the ruby-20-centos7 container image that Source-To-Image uses for the application 
+  # build.
+  strategy: 
+    sourceStrategy:
+      from:
+        kind: "ImageStreamTag"
+        name: "ruby-20-centos7:latest"
+  # 6: After the container image is successfully built, it is pushed into the 
+  # repository described in the output section.
+  output: 
+    to:
+      kind: "ImageStreamTag"
+      name: "origin-ruby-sample:latest"
+  # 7: The postCommit section defines an optional build hook.
+  postCommit: 
+      script: "bundle exec rake test"

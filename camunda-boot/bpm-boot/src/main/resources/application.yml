@@ -1,0 +1,145 @@
+## Spring Commons properties
+## Actutator properties
+management:
+  endpoints:
+    #shutdown:
+    #  enabled: true
+    #health:
+    #  show-details: always
+    web:
+      exposure:
+        include: "*"
+  #endpoint:        
+    #metrics:
+      #enabled: true
+    #prometheus:
+      #enabled: true
+  #metrics:
+    #export:
+      #prometheus:
+        #enabled: true
+#management.endpoint.metrics.enabled=true
+#management.endpoints.web.exposure.include=*
+#management.endpoints.web.exposure.include=health,info,metrics,prometheus
+#management.endpoint.prometheus.enabled=true
+#management.metrics.export.prometheus.enabled=true   
+
+# Spring related properties
+spring:
+  application:
+    name: bpm-boot
+  #resources.static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,classpath:/webui/
+  # Active profile
+  # profiles.active: dev
+  # JSON serialization settings
+  jackson:
+    default-property-inclusion: NON_NULL
+    serialization:
+      write-null-map-values: false 
+    deserialization:
+      accept-single-value-as-array: true
+  devtools:
+    # Comment this if you want the app to restart
+    # when source code changes
+    restart.enabled: false
+    livereload.enabled: false
+    
+  # https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.1-Release-Notes#bean-overriding
+  main.allow-bean-definition-overriding: true
+
+springfox:
+    documentation:
+      swagger:
+        v2:
+          path: /api-docs
+server:
+  contextPath: /
+  # servlet.session.persistent: false
+  # port: 19090
+  port: ${BPM_PORT:28081}
+  # port: 8080
+# Spring Commons related properties
+bpw:
+  # prepopulate Users and Roles
+  rolename: 
+    - admin
+    - wcm-viewer
+    - wcm-reviewer
+    - user
+    - readonly
+    - readwrite
+    - UNVERIFIED
+    - BLOCKED
+    - camunda-admin
+#    - accounting
+#    - management
+#    - sales
+  user:
+    -
+      username: admin@example.com
+      email: admin@example.com
+      password: admin!
+      rolename: 
+        - admin
+        - camunda-admin
+        - wcm-reviewer
+        - wcm-viewer
+#    -
+#      username: demo
+#      email: demo@example.com
+#      password: demo
+#      rolename:
+#        - admin 
+#        - readonly
+#        - wcm-viewer
+#        - wcm-reviewer
+#        - camunda-admin
+#        - accounting
+#        - management
+#        - sales
+#    -
+#      username: john
+#      email: john@example.com
+#      password: john
+#      firstName: John
+#      lastName: Doe
+#      rolename:
+#        - admin 
+#        - readonly
+#        - wcm-viewer
+#        - wcm-reviewer
+#        - sales
+#    -
+#      username: mary
+#      email: mary@example.com
+#      password: mary
+#      firstName: Mary
+#      lastName: Anne
+#      rolename:
+#        - admin 
+#        - readonly
+#        - wcm-viewer
+#        - wcm-reviewer
+#        - accounting
+#    -
+#      username: peter
+#      email: petery@example.com
+#      password: peter
+#      firstName: Peter
+#      lastName: Meter
+#      rolename:
+#        - admin 
+#        - readonly
+#        - wcm-viewer
+#        - wcm-reviewer
+#        - management
+    # Spring Commons flags
+    # enabled:
+      # json-prefix: false
+    ###  
+  # Properties to be passed to client
+  shared:
+    fooBar: 123...
+#jasypt:
+#  encryptor:
+#    password: password

@@ -1,0 +1,53 @@
+{
+    "name" : "bpwizard",
+    "jndiName" : "",
+    "monitoring" : {
+        "enabled" : true
+    },
+    "storage" : {
+        "transactionManagerLookup" : {
+            "name" : "com.bpwizard.wcm.repo.jcr.ModeshapeTransactionManagerLookup"
+        },
+        "persistence" : {
+            "type" : "db",
+            "connectionUrl": "jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
+            "driver": "com.mysql.jdbc.Driver",
+            "createOnStart" : false,
+            "dropOnExit" : false,
+            "username": "wcmbpm",
+            "password": "P@ssw0rd"
+        },
+        "binaryStorage" : {
+            "type"  : "database",
+            "driverClass" : "com.mysql.jdbc.Driver",
+            "url" : "jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
+            "username" : "wcmbpm",
+            "password" : "P@ssw0rd"
+        }
+    },
+    "sequencing" : {
+        "sequencers" : {
+            "Images sequencer" : {
+                "classname" : "ImageSequencer",
+                "pathExpression" : "default://imagesContainer[@image] => default:/sequenced/images"
+            }
+        }
+    },
+    "workspaces" : {
+        "predefined" : ["draft", "expired"],
+        "default" : "default",
+        "allowCreation" : true
+    },
+    "security" : {
+        "anonymous" : {
+            "roles" : ["readonly","readwrite","admin"],
+            "useOnFailedLogin" : false
+        },
+        "providers" : [
+            {
+                "name" : "Spring Security",
+                "classname" : "com.bpwizard.wcm.repo.jcr.security.SpringSecurityProvider"
+            }
+        ]
+    }
+}

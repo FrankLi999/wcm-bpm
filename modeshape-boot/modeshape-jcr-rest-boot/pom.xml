@@ -125,10 +125,5 @@
 		    <version>${project.version}</version>
 		</dependency>
 		
-		<!-- camunda dependencies -->
-	    <dependency>
-	      	<groupId>org.camunda.bpm</groupId>
-	      	<artifactId>camunda-engine</artifactId>
-	    </dependency>
 	</dependencies>
 </project>

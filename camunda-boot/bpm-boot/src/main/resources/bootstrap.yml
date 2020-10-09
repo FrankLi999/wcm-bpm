@@ -1,0 +1,42 @@
+# Startup configuration of Spring-cloud-kubernetes
+#spring:
+  #application:
+    #name: wcm-bpm
+  # cloud:
+    #kubernetes:
+      # reload:
+        # Enable live reload on ConfigMap change (disabled for Secrets by default)
+        # enabled: true
+        # refresh is the default, can also be restart_context, shutdown
+        # strategy: refresh
+      # secrets:
+        # paths: /etc/secrets/wcm-bpm-config
+#    vault:
+#      scheme: https
+#      port: 8200
+#      host: 192.168.0.168
+#      connection-timeout: 5000
+#      read-timeout: 15000
+#      authentication: TOKEN
+#      token: s.wekXqQdqmi6banjmsdaipGGK
+#      # uri: http://192.168.0.168:8200
+#      # uri: https://192.168.0.168:8200
+#      ssl:
+#        trust-store: classpath:/jks/vault.jks
+#        trust-store-password: changeit
+#      generic:
+#        enabled: true        
+#        application-name: wcm_bpm
+#      kv:
+#        enabled: true
+#      #  backend: kv
+#      #  backend: secret
+#      #  profile-separator: '/'
+#      #  default-context: application
+#        application-name: wcm_bpm
+##      database:
+##        enabled: false
+##        role: wcmbpm-accounts-admin
+##        backend: database
+##        username-property: spring.datasource.username
+##        password-property: spring.datasource.password

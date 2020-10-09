@@ -49,7 +49,7 @@ public class ExternalWorker {
 		HttpEntity<String> entity = new HttpEntity<String>(//
 				mapper.writeValueAsString(root), // here is the JSON body
 				headers);
-		String result = new RestTemplate().postForObject("http://localhost:8080/rest/external-task/fetchAndLock",
+		String result = new RestTemplate().postForObject("http://localhost:28081/rest/external-task/fetchAndLock",
 				entity, String.class);
 
 		JsonNode answer = mapper.readTree(result);
@@ -73,7 +73,7 @@ public class ExternalWorker {
 				System.out.println(String.format("duration is %s, release the task %s", duration, taskId));
 				entity = new HttpEntity<String>("", headers);
 				ResponseEntity<Object> unlockResponse = new RestTemplate().postForEntity(
-						"http://localhost:8080/rest/external-task/" + taskId + "/unlock", entity, null);
+						"http://localhost:28081/rest/external-task/" + taskId + "/unlock", entity, null);
 				LOGGER.info("status code for unlock: {}", unlockResponse.getStatusCodeValue());
 				System.out.println(String.format("status code for unlock: %s", unlockResponse.getStatusCodeValue()));
 			} else if (duration % 7 == 0) {
@@ -89,7 +89,7 @@ public class ExternalWorker {
 
 				entity = new HttpEntity<String>(mapper.writeValueAsString(failureRoot), headers);
 				ResponseEntity<Object> failureResponse = new RestTemplate().postForEntity(
-						"http://localhost:8080/rest/task/" + taskId + "/failure", entity, null);
+						"http://localhost:28081/rest/task/" + taskId + "/failure", entity, null);
 				LOGGER.info("status code for failure: {}", failureResponse.getStatusCodeValue());
 				System.out.println(String.format("status code for failure: %s", failureResponse.getStatusCodeValue()));
 			} else {
@@ -111,7 +111,7 @@ public class ExternalWorker {
 
 				entity = new HttpEntity<String>(mapper.writeValueAsString(completeRoot), headers);
 				ResponseEntity<Object> completeResponse = new RestTemplate().postForEntity(
-						"http://localhost:8080/rest/external-task/" + taskId + "/complete", entity, null);
+						"http://localhost:28081/rest/external-task/" + taskId + "/complete", entity, null);
 				LOGGER.info("status code for completion: {}", completeResponse.getStatusCodeValue());
 				System.out.println(String.format("status code for completion: %s", completeResponse.getStatusCodeValue()));
 			}

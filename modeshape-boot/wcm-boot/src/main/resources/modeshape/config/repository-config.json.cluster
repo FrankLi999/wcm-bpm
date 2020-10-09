@@ -1,0 +1,109 @@
+{
+    "name" : "bpwizard",
+    "jndiName" : "",
+    "monitoring" : {
+        "enabled" : true
+    },
+    "node-types": ["modeshape/data/bpw.cnd"],
+    "storage" : {
+        "transactionManagerLookup" : {
+            "name" : "com.bpwizard.wcm.repo.jcr.ModeshapeTransactionManagerLookup"
+        },
+        "persistence" : {
+            "type" : "db",
+            "connectionUrl": "jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
+            "driver": "com.mysql.jdbc.Driver",
+            "createOnStart" : true,
+            "dropOnExit" : false,
+            "username": "wcmbpm",
+            "password": "P@ssw0rd"
+        },
+        "binaryStorage" : {
+            "type"  : "database",
+            "driverClass" : "com.mysql.jdbc.Driver",
+            "url" : "jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
+            "username" : "wcmbpm",
+            "password" : "P@ssw0rd"
+        }
+    },
+    "indexProviders" : {
+        "elasticsearch" : {
+           "classname" : "org.modeshape.jcr.index.elasticsearch.EsIndexProvider",
+           "host" : "localhost",
+           "port" : 9200
+        },
+        "local" : {
+            "classname" : "org.modeshape.jcr.index.local.LocalIndexProvider",
+            "directory" : "target/indexes"
+        }
+    },    
+    "indexes" : {
+        "indexWithContentName" : {
+            "kind" : "value",
+            "provider" : "local",
+            "synchronous" : true,
+            "nodeType" : "bpw:ContentItemproperties",
+            "columns" : "bpw:name(STRING)"
+        },
+        "indexWithContentTitleAndDescription" : {
+            "kind" : "value",
+            "provider" : "elasticsearch",
+            "synchronous" : true,
+            "nodeType" : "bpw:ContentItemproperties",
+            "columns" : "bpw:title(STRING), bpw:description(STRING)"
+        },
+        "indexWithContentAuthor" : {
+            "kind" : "value",
+            "provider" : "local",
+            "synchronous" : true,
+            "nodeType" : "bpw:ContentItemproperties",
+            "columns" : "bpw:author(STRING)"
+        }
+    },
+    "clustering": {
+        "clusterName": "wcm-bpm",
+        "configuration": "jgroups/jgroups-config.xml",
+        "description": "wcm-bpm cluster",
+        "locking" : "db"
+    },
+    "sequencing" : {
+        "sequencers" : {
+            "Images sequencer" : {
+                "classname" : "ImageSequencer",
+                "pathExpression" : "default://imagesContainer[@image] => default:/sequenced/images"
+            }
+        }
+    },
+    "textExtraction": {
+	    "extractors" : {
+	        "tikaExtractor":{
+	            "name" : "Tika content-based extractor",
+	            "classname" : "org.modeshape.extractor.tika.TikaTextExtractor"
+	        }
+	    }
+	},
+    "workspaces" : {
+        "predefined" : ["draft", "expired"],
+        "default" : "default",
+        "allowCreation" : true
+    },
+    "security" : {
+        "anonymous" : {
+            "roles" : ["readonly","readwrite","admin"],
+            "useOnFailedLogin" : false
+        },
+        "providers" : [
+            {
+                "name" : "Spring Security",
+                "classname" : "com.bpwizard.wcm.repo.jcr.security.SpringSecurityProvider"
+            }
+        ]
+    },
+    "journaling" : {
+        "location" : "/var/modeshape/journal",
+        "maxDaysToKeepRecords" : -1,
+        "asyncWritesEnabled" : false,
+        "threadPool" : "modeshape-journaling-gc",
+        "enabled" : true
+	}
+}

@@ -1,0 +1,64 @@
+{
+    "name" : "bpwizard",
+    "jndiName" : "",
+    "monitoring" : {
+        "enabled" : true
+    },
+    "storage" : {
+        "transactionManagerLookup" : {
+            "name" : "com.bpwizard.wcm.repo.jcr.ModeshapeTransactionManagerLookup"
+        },
+        "persistence" : {
+            "type" : "db",
+            "connectionUrl": "jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true",
+            "driver": "com.mysql.jdbc.Driver",
+            "createOnStart" : true,
+            "dropOnExit" : false,
+            "username": "wcmbpm",
+            "password": "P@ssw0rd"
+        },
+        "binaryStorage" : {
+            "type"  : "database",
+            "driverClass" : "com.mysql.jdbc.Driver",
+			"connectionUrl": "jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true",
+            "username": "wcmbpm",
+            "password": "P@ssw0rd"
+        }
+    },
+    "sequencing" : {
+        "sequencers" : {
+            "Images sequencer" : {
+                "classname" : "ImageSequencer",
+                "pathExpression" : "default://imagesContainer[@image] => default:/sequenced/images"
+            }
+        }
+    },
+    "clustering": {
+        "clusterName": "wcm-bpm",
+        "configuration": "jgroups/jgroups-config.xml",
+        "description": "wcm-bpm cluster",
+        "locking" : "db"
+    },
+    "workspaces" : {
+        "predefined" : ["draft", "expired"],
+        "default" : "default",
+        "allowCreation" : true    
+    },
+    "security" : {
+        "providers" : [
+            {
+                "name" : "Spring Security",
+                "classname" : "com.bpwizard.wcm.repo.jcr.security.SpringSecurityProvider"
+            }
+        ]
+    },
+    "journaling" : {
+        "location" : "/var/modeshape/journal",
+        "maxDaysToKeepRecords" : 15,
+        "asyncWritesEnabled" : false,
+        "threadPool" : "modeshape-journaling-gc",
+        "initialTime" : "04:01",
+        "intervalInHours" : 5,
+        "enabled" : true
+	}
+}

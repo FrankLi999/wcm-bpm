@@ -1,0 +1,73 @@
+spec:
+  template:
+    spec:
+      serviceAccountName: "wcm-bpm"
+      volumes:
+        - name: "wcm-bpm-config"
+          secret:
+            # The secret must be created before deploying this application
+            secretName: "wcm-bpm-config"
+      containers:
+        - env:
+          - name: JAVA_OPTIONS
+            value: "-Dspring.profiles.active=openshift -Djasypt.encryptor.password=password -DROOT_LOG_LEVEL=TRACE -DAPP_LOG_LEVEL=TRACE -Dlog.root.dir=/var/spring-logs/wcm-bpm-boot"
+          #- name: jasypt.encryptor.password
+          #  value: password
+          #- name: ROOT_LOG_LEVEL
+          #  value: value
+          #- name: APP_LOG_LEVEL
+          #  value: TRACE
+          #- name: log.root.dir
+          #  value: "/var/spring-logs/wcm-bpm-boot"
+          #- name: spring.profiles.active
+          #  value: openshift
+          - name: DB_HOST_PORT
+            value: "mysql:3306"
+          - name: DB_DATABASE
+            value: wcm_bpm
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: wcm-bpm-database-secret
+                key: user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: wcm-bpm-database-secret
+                key: password
+          image: "wcm-bpm:latest"
+          imagePullPolicy: IfNotPresent
+          #livenessProbe:
+          #  httpGet:
+          #    path: /actuator/health
+          #    port: 8080
+          #    scheme: HTTP
+          #  initialDelaySeconds: 180
+          #readinessProbe:
+          #  httpGet:
+          #    path: /actuator/health
+          #    port: 8080
+          #    scheme: HTTP
+          #  initialDelaySeconds: 20
+          volumeMounts:
+            - name: "wcm-bpm-log-directory"
+              mountPath: "/var/spring-logs/wcm-bpm-boot"
+            - name: "wcm-bpm-config"
+              readOnly: true
+              # Mount the secret where spring-cloud-kubernetes is configured to read it
+              # see src/main/resources/bootstrap.yml
+              mountPath: "/etc/secrets/wcm-bpm-config"
+          # resources:
+#            # requests:
+#              # cpu: "0.2"
+#              # memory: 256Mi
+#            # limits:
+#              # cpu: "1.0"
+#              # memory: 256Mi
+      volumes:
+        - name: "wcm-bpm-log-directory"
+          emptyDir: {}
+        - name: "wcm-bpm-config"
+          secret:
+            # The secret must be created before deploying this application
+            secretName: "wcm-bpm-database-secret"

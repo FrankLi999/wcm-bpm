@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: ${project.artifactId}
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+           - name: JAVA_OPTIONS
+             value: "-Dspring.profiles.active=openshift"
+          #- name: SPRING_PROFILES_ACTIVE
+          #  value: openshift
+          - name: DB_HOST_PORT
+            value: "mysql:3306"
+          - name: DB_DATABASE
+            value: wcm_bpm
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: wcm-bpm-database-secret
+                key: user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: wcm-bpm-database-secret
+                key: password
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 180
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
