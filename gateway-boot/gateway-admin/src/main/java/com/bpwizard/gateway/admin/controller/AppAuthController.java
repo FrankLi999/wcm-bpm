@@ -46,7 +46,7 @@ import java.util.List;
  * this is application authority controller.
  */
 @RestController
-@RequestMapping("/appAuth")
+@RequestMapping("/gateway-admin/api/appAuth")
 public class AppAuthController {
 
     private final AppAuthService appAuthService;

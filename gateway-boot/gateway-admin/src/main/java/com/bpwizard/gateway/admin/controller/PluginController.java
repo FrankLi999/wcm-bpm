@@ -47,7 +47,7 @@ import java.util.Objects;
  * this is plugin controller.
  */
 @RestController
-@RequestMapping("/plugin")
+@RequestMapping("/gateway-admin/api/plugin")
 public class PluginController {
 
     private final PluginService pluginService;

@@ -43,7 +43,7 @@ import java.util.List;
  * The type Meta data controller.
  */
 @RestController
-@RequestMapping("/meta-data")
+@RequestMapping("/gateway-admin/api/meta-data")
 public class MetaDataController {
 
     private final MetaDataService metaDataService;

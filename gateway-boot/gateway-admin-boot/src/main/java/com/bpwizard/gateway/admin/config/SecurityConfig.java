@@ -76,14 +76,13 @@ public class SecurityConfig extends SpringJpaSecurityConfig {
                 .permitAll()
             .antMatchers("/auth/**", "/oauth2/**", "/login/**")
                 .permitAll()
-            .antMatchers("/gateway-admin/api/**", "/core/api/**")
+            .antMatchers("/core/api/**")
                 .permitAll()
+//            .antMatchers("/gateway-admin/api/**")
+//                .permitAll()
             .antMatchers("/gateway-websocket/**") 
                 .permitAll()
-//            .antMatchers("/camunda/api/**", "/camunda/rest/**", "/content/server/**", "/rest/**")
-//            	.permitAll()
             .anyRequest()
-            	//.permitAll();
                 .authenticated();
 	}
 }

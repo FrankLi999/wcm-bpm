@@ -30,7 +30,7 @@ import com.bpwizard.gateway.admin.service.GatewayClientRegisterService;
  * The type Gateway client controller.
  */
 @RestController
-@RequestMapping("/gateway-client")
+@RequestMapping("/gateway-admin/api/gateway-client")
 public class GatewayClientController {
     
     private final GatewayClientRegisterService gatewayClientRegisterService;

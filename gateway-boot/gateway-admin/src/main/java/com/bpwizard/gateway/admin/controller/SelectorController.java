@@ -43,7 +43,7 @@ import java.util.Objects;
  * this is selector controller.
  */
 @RestController
-@RequestMapping("/selector")
+@RequestMapping("/gateway-admin/api/selector")
 public class SelectorController {
 
     private final SelectorService selectorService;

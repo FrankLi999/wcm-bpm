@@ -720,6 +720,42 @@
         "translate": "NAV.API.SYSTEM_METADATA.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     },
+    "library/apigateway/rootSiteArea/system/metadata/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/apigateway/rootSiteArea/system/metadata/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/apigateway/rootSiteArea/system/metadata/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/apigateway/rootSiteArea/system/metadata/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/apigateway/rootSiteArea/system/metadata/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "Metadata",
+        "bpw:renderTemplateName": "/apigateway/renderTemplate/AdminLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/system/metadata/metadata"
+    },
+    "library/apigateway/rootSiteArea/system/metadata/metadata" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/system/metadata/metadata/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<Metadata></Metadata>"
+    },
+    "library/apigateway/rootSiteArea/system/metadata/metadata/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+        "bpw:description":"Metadata Management",
+        "bpw:title":"Metadata"
+    },
     "library/apigateway/rootSiteArea/system/handlers" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
@@ -737,22 +773,94 @@
         "translate": "NAV.API.SYSTEM_HANDLERS.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
     },
-    "library/apigateway/rootSiteArea/system/certificate" : {
+        "library/apigateway/rootSiteArea/system/handlers/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/apigateway/rootSiteArea/system/handlers/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/apigateway/rootSiteArea/system/handlers/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/apigateway/rootSiteArea/system/handlers/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/apigateway/rootSiteArea/system/handlers/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "Handlers",
+        "bpw:renderTemplateName": "/apigateway/renderTemplate/AdminLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/system/handlers/handlers"
+    },
+    "library/apigateway/rootSiteArea/system/handlers/handlers" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/system/handlers/handlers/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<RequestHandlers></RequestHandlers>"
+    },
+    "library/apigateway/rootSiteArea/system/handlers/handlers/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+        "bpw:description":"Handlers management",
+        "bpw:title":"Handlers"
+    },    
+        "library/apigateway/rootSiteArea/system/appAuth" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
     },
-    "library/apigateway/rootSiteArea/system/certificate/itemProperties" : {
+    "library/apigateway/rootSiteArea/system/appAuth/itemProperties" : {
         "jcr:primaryType":"bpw:ContentItemproperties",
-         "bpw:name":"certificate",
-        "bpw:title":"Certificate"
+        "bpw:name":"appAuth",
+        "bpw:title":"Authentication Management"
     },
-    "library/apigateway/rootSiteArea/system/certificate/elements" : {
+    "library/apigateway/rootSiteArea/system/appAuth/elements" : {
         "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
         "navigationId": "apigateway_system_certificate",
         "navigationType": "item",
         "icon": "archive",
-        "url": "/apigateway/system/certificate",
-        "translate": "NAV.API.SYSTEM_CERTIFICATE.TITLE",
+        "url": "/apigateway/system/appAuth",
+        "translate": "NAV.API.SYSTEM_APP_AUTH.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/system/appAuth/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/apigateway/rootSiteArea/system/appAuth/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/apigateway/rootSiteArea/system/appAuth/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/apigateway/rootSiteArea/system/appAuth/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/apigateway/rootSiteArea/system/appAuth/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "Authentication management",
+        "bpw:renderTemplateName": "/apigateway/renderTemplate/AdminLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/system/appAuth/appAuth"
+    },
+    "library/apigateway/rootSiteArea/system/appAuth/appAuth" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/system/appAuth/appAuth/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<AppAuth></AppAuth>"
+    },
+    "library/apigateway/rootSiteArea/system/appAuth/appAuth/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+        "bpw:description":"Authentication Management",
+        "bpw:title":"AppAuth"
     },
     "library/apigateway/rootSiteArea/system/account" : {
         "jcr:primaryType":"bpw:system_siteAreaType"
@@ -770,6 +878,42 @@
         "url": "/apigateway/system/account",
         "translate": "NAV.API.SYSTEM_ACCOUNT.TITLE",
         "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+    },
+    "library/apigateway/rootSiteArea/system/account/siteAreaLayout" : {
+        "jcr:primaryType":"bpw:siteAreaLayout",
+        "bpw:contentWidth": "100"
+    },
+    "library/apigateway/rootSiteArea/system/account/siteAreaLayout/sidePane" : {
+        "jcr:primaryType":"bpw:contentAreaSidePanel",
+        "bpw:isLeft": "true",
+        "bpw:width": "0"
+    },
+    "library/apigateway/rootSiteArea/system/account/siteAreaLayout/row0" : {
+        "jcr:primaryType":"bpw:layoutRow"
+    },
+    "library/apigateway/rootSiteArea/system/account/siteAreaLayout/row0/column0" : {
+        "jcr:primaryType":"bpw:layoutColumn",
+        "bpw:width": "100"
+    },
+    "library/apigateway/rootSiteArea/system/account/siteAreaLayout/row0/column0/viewer0" : {
+        "jcr:primaryType":"bpw:resourceViewer",
+        "bpw:title": "Account",
+        "bpw:renderTemplateName": "/apigateway/renderTemplate/AdminLayout",
+        "bpw:contentPath": "/apigateway/rootSiteArea/system/account/account"
+    },
+    "library/apigateway/rootSiteArea/system/account/account" : {
+        "jcr:primaryType":"bpw:design_MyContent_AT",
+        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+    },
+    "library/apigateway/rootSiteArea/system/account/account/elements" : {
+        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+        "body": "<AccountManagement></AccountManagement>"
+    },
+    "library/apigateway/rootSiteArea/system/account/account/itemProperties" : {
+        "jcr:primaryType":"bpw:ContentItemproperties",
+        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+        "bpw:description":"Account Management",
+        "bpw:title":"Account"
     },
     "library/apigateway/siteConfig/apigateway" : {
         "jcr:primaryType":"bpw:system_siteConfigType"
@@ -867,6 +1011,31 @@
 		"bpw:width": "100"
 	},
 	"library/apigateway/renderTemplate/HandlerLayout/row1/column1/body": {
+	    "jcr:primaryType": "bpw:ResourceElementRender",
+		"bpw:name": "body"
+	},
+	"library/apigateway/renderTemplate/AdminLayout": {
+		"jcr:primaryType": "bpw:renderTemplate",
+		"bpw:name": "AdminLayout",
+		"bpw:title": "AdminLayout",
+		"bpw:description": "Admin Layout",
+		"bpw:preloop": "",
+		"bpw:postloop": "",
+		"bpw:maxEntries": "1",
+		"bpw:note": "AdminLayout note",
+		"bpw:resourceName": "/design/authoringTemplate/MyContent",
+		"bpw:nodeType": "bpw:design_MyContent_AT",
+		"bpw:isQuery": "false"
+	},
+	"library/apigateway/renderTemplate/AdminLayout/row1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+	},
+	"library/apigateway/renderTemplate/AdminLayout/row1/column1": {
+	    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+	    "bpw:id": "fieldgroup1",
+		"bpw:width": "100"
+	},
+	"library/apigateway/renderTemplate/AdminLayout/row1/column1/body": {
 	    "jcr:primaryType": "bpw:ResourceElementRender",
 		"bpw:name": "body"
 	}

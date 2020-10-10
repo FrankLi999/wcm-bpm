@@ -43,7 +43,7 @@ import java.util.Objects;
  * this is dashboard user controller.
  */
 @RestController
-@RequestMapping("/dashboardUser")
+@RequestMapping("/gateway-admin/api/dashboardUser")
 public class DashboardUserController {
 
     private final DashboardUserService dashboardUserService;

@@ -43,7 +43,7 @@ import java.util.Objects;
  * this is rule controller.
  */
 @RestController
-@RequestMapping("/rule")
+@RequestMapping("/gateway-admin/api/rule")
 public class RuleController {
 
     private final RuleService ruleService;

@@ -32,7 +32,7 @@ import com.bpwizard.gateway.admin.vo.DashboardUserVO;
  * this is platform controller.
  */
 @RestController
-@RequestMapping("/platform")
+@RequestMapping("/gateway-admin/api/platform")
 public class PlatformController {
 
     private final DashboardUserService dashboardUserService;

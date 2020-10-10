@@ -41,7 +41,7 @@ import java.util.Map;
  */
 @ConditionalOnBean(HttpLongPollingDataChangedListener.class)
 @RestController
-@RequestMapping("/configs")
+@RequestMapping("/gateway-admin/api/configs")
 @Slf4j
 public class ConfigController {
 
