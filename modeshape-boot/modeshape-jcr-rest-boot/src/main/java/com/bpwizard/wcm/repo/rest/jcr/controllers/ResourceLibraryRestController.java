@@ -1,7 +1,9 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -32,6 +34,7 @@ import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Library;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -122,6 +125,15 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
 				// session.save();
 			}
+			if (this.syndicationEnabled) {
+				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, library.getWorkspace(), path, WcmConstants.READ_DEPTH_TWO_LEVEL);
+				syndicationUtils.addNewItemEvent(
+						restNode, 
+						repositoryName, 
+						library.getWorkspace(), 
+						path,
+						WcmEvent.WcmItemType.library);
+			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -148,6 +160,11 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 			String repositoryName = library.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName());
+			List<String> currentDescendants = new ArrayList<String>();		
+			if (this.syndicationEnabled) {
+				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, library.getWorkspace(), path, WcmConstants.READ_DEPTH_TWO_LEVEL);
+				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
+			}
 			JsonNode jsonItem = library.toJson();
 			this.itemHandler.updateItem(
 					baseUrl, 
@@ -162,6 +179,17 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 						library.getWorkspace(),
 						path, 
 						jsonItem);
+			}
+			if (this.syndicationEnabled) {
+				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, library.getWorkspace(), path, WcmConstants.READ_DEPTH_TWO_LEVEL);
+				
+				syndicationUtils.addUpdateItemEvent(
+						restNode, 
+						repositoryName, 
+						library.getWorkspace(),  
+						path,
+						WcmEvent.WcmItemType.library,
+						currentDescendants);
 			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -185,12 +213,30 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
+		String baseUrl = RestHelper.repositoryUrl(request);
 		String absPath = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName()); 
 		try {
+			String nodeId = null;
+			if (this.syndicationEnabled) {
+				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, library.getRepository(), 
+						library.getWorkspace(), 
+						absPath, WcmConstants.READ_DEPTH_TWO_LEVEL);
+				nodeId = restNode.getId();
+			}
 			this.wcmRequestHandler.purgeWcmItem(
 					library.getRepository(), 
 					library.getWorkspace(), 
 					absPath);
+			
+			if (this.syndicationEnabled) {
+				syndicationUtils.addDeleteItemEvent(
+						nodeId, 
+						library.getRepository(), 
+						library.getWorkspace(), 
+						absPath,
+						WcmEvent.WcmItemType.library,
+						null);
+			}
 		} catch (WcmRepositoryException e) {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;

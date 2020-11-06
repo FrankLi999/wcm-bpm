@@ -55,7 +55,7 @@ public class WcmConstants {
 	public  static final String FOLDER_NODE_TYPE = "nt:folder";
 	public  static final String WCM_NODE_TYPE_PREFIX = "bpw:";
 	
-	
+	public static final int FULL_SUB_DEPTH = -1;
 	public static final int AT_JSON_FORM_DEPATH = -1;
 	public static final int FORM_JSON_FORM_DEPATH = -1;
 	public static final int CONTENT_ITEM_DEPATH = -1;

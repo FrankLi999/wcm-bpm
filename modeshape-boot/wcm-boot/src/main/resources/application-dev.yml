@@ -161,6 +161,8 @@ bpw:
   modeshape:
     authoring:
       enabled: true
+    syndication:
+      enabled: true
     datasource:
       url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       driver-class-name: com.mysql.jdbc.Driver

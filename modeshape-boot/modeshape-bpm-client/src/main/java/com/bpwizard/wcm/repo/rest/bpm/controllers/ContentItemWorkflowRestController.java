@@ -1,7 +1,9 @@
 package com.bpwizard.wcm.repo.rest.bpm.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -57,6 +59,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.DraftItem;
 import com.bpwizard.wcm.repo.rest.jcr.model.DraftItemRequest;
 import com.bpwizard.wcm.repo.rest.jcr.model.EditAsDraftRequest;
 import com.bpwizard.wcm.repo.rest.jcr.model.PublishItemRequest;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.bpwizard.wcm.repo.rest.jcr.model.WorkflowNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -657,10 +660,56 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			// this.wcmUtils.unlock(publishRequest.getRepository(), WcmConstants.DRAFT_WS, publishRequest.getWcmPath());
 			versionManager.checkin(absPath);
 			session.save();
+			
+			String baseUrl = RestHelper.repositoryUrl(request);
+			boolean newItem = false;
+			
+			List<String> currentDescendants = new ArrayList<String>();		
+			if (this.syndicationEnabled) {
+				try {
+					RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, publishRequest.getRepository(),  WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
+					if (restNode == null) {
+						newItem = true;
+					} else {
+						
+					}
+					syndicationUtils.populateDescendantIds(restNode, currentDescendants);
+				} catch (Throwable t) {
+					//TODO: 
+					logger.error("");
+					newItem = true;
+				}
+				
+				
+			}	
+			
 	        Session defaultSession = this.repositoryManager.getSession(publishRequest.getRepository(), WcmConstants.DEFAULT_WS);
+	        
+	        
 	        defaultSession.getWorkspace().clone(WcmConstants.DRAFT_WS, absPath, absPath, true);
 	        // defaultSession.save();
-			if (logger.isDebugEnabled()) {
+			
+	        if (this.syndicationEnabled) {
+				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, publishRequest.getRepository(), WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
+				if (newItem) {
+					syndicationUtils.addNewItemEvent(
+							restNode, 
+							publishRequest.getRepository(), 
+							WcmConstants.DEFAULT_WS, 
+							absPath,
+							WcmEvent.WcmItemType.contentItem);
+				} else {
+					syndicationUtils.addUpdateItemEvent(
+						restNode, 
+						publishRequest.getRepository(), 
+						WcmConstants.DEFAULT_WS, 
+						absPath,
+						WcmEvent.WcmItemType.contentItem,
+						currentDescendants);
+				}
+			}
+	        
+	        if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -680,11 +729,21 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
   	public void expireContentItem(
   			@PathVariable("repository") String repository,
 		    @PathVariable("workspace") String workspace,
-  			@RequestParam("path") String absPath) { 
+  			@RequestParam("path") String absPath,
+  			HttpServletRequest request) { 
     	if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
   		try {
+  			String baseUrl = RestHelper.repositoryUrl(request);
+  			List<String> currentDescendants = new ArrayList<String>();	
+  			String nodeId = null;
+			if (this.syndicationEnabled) {
+				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repository,  WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
+				nodeId = restNode.getId();
+				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
+			}
+			
   			Session session = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
   			Node node = session.getNode(absPath);
   			String workflowState = node.getProperty("bpw:currentLifecycleState").getValue().getString();
@@ -697,6 +756,17 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	            	node.setProperty("bpw:currentLifecycleState", WcmConstants.EXPIRED_WS);
 	            	session.save();
             	}
+            	
+            	if (this.syndicationEnabled) {
+    				syndicationUtils.addDeleteItemEvent(
+    						nodeId, 
+    						repository, 
+    						WcmConstants.DEFAULT_WS, 
+    						absPath,
+    						WcmEvent.WcmItemType.category,
+    						currentDescendants);
+    			}
+      			
             }
 		} catch (WcmRepositoryException e ) {
 			logger.error(e);

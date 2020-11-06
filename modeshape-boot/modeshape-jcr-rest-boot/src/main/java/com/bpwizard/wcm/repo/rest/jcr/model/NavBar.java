@@ -11,6 +11,7 @@ public class NavBar {
 	private String secondaryBackground;
 	private boolean display;
 	private boolean folded;
+	//for flutter, the value can be drawer, bottom
     private String position;
     private String variant;
     private String style;
@@ -60,7 +61,7 @@ public class NavBar {
 	@Override
 	public String toString() {
 		return "NavBar [primaryBackground=" + primaryBackground + ", secondaryBackground=" + secondaryBackground
-				+ ", display=" + display + ", folded=" + folded + ", position=" + position + ", style=" + style 
-				+ ", variant=" + variant + "]";
+				+ ", display=" + display + ", folded=" + folded + ", position=" + position + ", variant=" + variant
+				+ ", style=" + style + "]";
 	}
 }

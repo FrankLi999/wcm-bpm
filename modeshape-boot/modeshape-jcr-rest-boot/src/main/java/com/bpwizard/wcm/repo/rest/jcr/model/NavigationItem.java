@@ -15,6 +15,8 @@ public class NavigationItem {
 	private boolean externalUrl;
 	private boolean openInNewTab;
 	private String function;
+	//exptected roles
+	private String auth[];
 	private NavigationBadge badge;
 	private NavigationItem children[];
 	
@@ -66,6 +68,12 @@ public class NavigationItem {
 	public void setClasses(String classes) {
 		this.classes = classes;
 	}
+	public String[] getAuth() {
+		return auth;
+	}
+	public void setAuth(String[] auth) {
+		this.auth = auth;
+	}
 	public boolean isExactMatch() {
 		return exactMatch;
 	}
@@ -107,6 +115,7 @@ public class NavigationItem {
 		return "NavigationItem [id=" + id + ", title=" + title + ", type=" + type + ", translate=" + translate
 				+ ", icon=" + icon + ", hidden=" + hidden + ", url=" + url + ", classes=" + classes + ", exactMatch="
 				+ exactMatch + ", externalUrl=" + externalUrl + ", openInNewTab=" + openInNewTab + ", function="
-				+ function + ", badge=" + badge + ", children=" + Arrays.toString(children) + "]";
+				+ function + ", auth=" + Arrays.toString(auth) + ", badge=" + badge + ", children="
+				+ Arrays.toString(children) + "]";
 	}
 }
