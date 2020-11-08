@@ -167,11 +167,7 @@ public class QueryRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			String repositoryName = query.getRepository();
-			List<String> currentDescendants = new ArrayList<String>();		
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, query.getWorkspace(), path, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
+			
 			ObjectNode qJson = (ObjectNode) query.toJson();
 			try {
 				QueryManager qrm = this.repositoryManager.getSession(repositoryName, WcmConstants.DEFAULT_WS).getWorkspace().getQueryManager();
@@ -188,21 +184,8 @@ public class QueryRestController extends BaseWcmRestController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
-			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, qJson);
-			}
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, query.getWorkspace(), path, WcmConstants.FULL_SUB_DEPTH);
-				
-				syndicationUtils.addUpdateItemEvent(
-						restNode, 
-						repositoryName, 
-						query.getWorkspace(),  
-						path,
-						WcmEvent.WcmItemType.query,
-						currentDescendants);
-			}
+			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.query, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
+			
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -249,24 +232,8 @@ public class QueryRestController extends BaseWcmRestController {
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
-	  		List<String> currentDescendants = new ArrayList<String>();	
-	  		String nodeId = null;
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.FULL_SUB_DEPTH);
-				nodeId = restNode.getId();
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
-		
-  			this.wcmRequestHandler.purgeWcmItem(repository, workspace, absPath);
-  			if (this.syndicationEnabled) {
-				syndicationUtils.addDeleteItemEvent(
-						nodeId, 
-						repository, 
-						workspace, 
-						wcmPath,
-						WcmEvent.WcmItemType.query,
-						currentDescendants);
-			}
+	  		
+  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.query, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.traceExit();
@@ -286,7 +253,7 @@ public class QueryRestController extends BaseWcmRestController {
 	private String doGetQueryStatement(QueryStatement query, HttpServletRequest request) throws RepositoryException {
 		String baseUrl = RestHelper.repositoryUrl(request);
 		String queryAbsPath = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
-		RestNode queryNode = (RestNode) this.itemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
+		RestNode queryNode = (RestNode) this.wcmItemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
 				queryAbsPath, WcmConstants.READ_DEPTH_TWO_LEVEL);
 		String queryStatement = null;
 		for (RestNode node: queryNode.getChildren()) {

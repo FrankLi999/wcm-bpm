@@ -1,5 +1,8 @@
 package com.bpwizard.wcm.repo.rest;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +27,10 @@ public class JsonUtils {
 	
 	public static JsonNode readTree(String fromValue) {
         return mapper.convertValue(fromValue, JsonNode.class);
+    }
+	
+	public static JsonNode inputStreamToJsonNode(InputStream is) throws IOException {
+        return mapper.readTree(is);
     }
 	
 	public static ArrayNode readTree(String fromValues[]) throws JsonProcessingException {

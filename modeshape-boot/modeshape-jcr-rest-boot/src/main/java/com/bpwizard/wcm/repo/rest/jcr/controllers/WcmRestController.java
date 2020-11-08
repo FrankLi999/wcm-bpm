@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -151,30 +149,30 @@ public class WcmRestController extends BaseWcmRestController {
 		}
   	}
 
-    @DeleteMapping("/wcmItem/purge/{repository}/{workspace}")
-  	public ResponseEntity<?> purgeWcmItem(
-  			@PathVariable("repository") String repository,
-		    @PathVariable("workspace") String workspace,
-  			@RequestParam("path") String wcmPath) { 
-  		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
-		}
-  		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
-  		try {
-  			this.wcmRequestHandler.purgeWcmItem(repository, workspace, absPath);
-  	  		if (logger.isDebugEnabled()) {
-  				logger.traceExit();
-  			}
-  			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-		} catch (WcmRepositoryException e ) {
-			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
-			throw e;
-	    } catch (Throwable t) {
-	    	logger.error(t);
-			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
-		}
-
-  	};
+//    @DeleteMapping("/wcmItem/purge/{repository}/{workspace}")
+//  	public ResponseEntity<?> purgeWcmItem(
+//  			@PathVariable("repository") String repository,
+//		    @PathVariable("workspace") String workspace,
+//  			@RequestParam("path") String wcmPath) { 
+//  		if (logger.isDebugEnabled()) {
+//			logger.traceEntry();
+//		}
+//  		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
+//  		try {
+//  			this.wcmRequestHandler.purgeWcmItem(repository, workspace, absPath);
+//  	  		if (logger.isDebugEnabled()) {
+//  				logger.traceExit();
+//  			}
+//  			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+//		} catch (WcmRepositoryException e ) {
+//			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
+//			throw e;
+//	    } catch (Throwable t) {
+//	    	logger.error(t);
+//			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+//		}
+//
+//  	};
 
   	@DeleteMapping("/wcmItem/delete/{repository}/{workspace}")
   	public void deleteWcmItem(
@@ -217,7 +215,7 @@ public class WcmRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String absPath = WcmUtils.nodePath(filter.getWcmPath());
-			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.READ_DEPTH_THREE_LEVEL);
+			RestNode saNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.READ_DEPTH_THREE_LEVEL);
 			
 			WcmNode[] wcmNodes = saNode.getChildren().stream()
 			    .filter(node -> this.applyFilter(node, filter))

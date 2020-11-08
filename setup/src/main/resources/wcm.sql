@@ -1599,7 +1599,9 @@ CREATE TABLE IF NOT EXISTS `auth_path`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
-/*plugin*/
+-- ----------------------------
+-- plugin
+-- ----------------------------
 INSERT IGNORE INTO `plugin` (`id`, `name`,`role`, `enabled`, `date_created`, `date_updated`) VALUES ('1', 'sign','0', '0', '2018-06-14 10:17:35', '2018-06-14 10:17:35');
 INSERT IGNORE INTO `plugin` (`id`, `name`,`role`,`config`,`enabled`, `date_created`, `date_updated`) VALUES ('2', 'waf', '0','{"model":"black"}','0', '2018-06-23 10:26:30', '2018-06-13 15:43:10');
 INSERT IGNORE INTO `plugin` (`id`, `name`,`role`, `enabled`, `date_created`, `date_updated`) VALUES ('3', 'rewrite', '0','0', '2018-06-23 10:26:34', '2018-06-25 13:59:31');
@@ -1610,34 +1612,38 @@ INSERT IGNORE INTO `plugin` (`id`, `name`,`role`,`config`,`enabled`, `date_creat
 INSERT IGNORE INTO `plugin` (`id`, `name`,`role`, `enabled`, `date_created`, `date_updated`) VALUES ('8', 'springCloud','0', '0', '2018-06-25 13:47:57', '2018-06-25 13:47:57');
 INSERT IGNORE INTO `plugin` (`id`, `name`,`role`, `enabled`, `date_created`, `date_updated`) VALUES ('9', 'hystrix', '0','0', '2020-01-15 10:19:10', '2020-01-15 10:19:10');
 
-/**user**/
+-- ----------------------------
+-- user
+-- ----------------------------
 INSERT IGNORE INTO `dashboard_user` (`id`, `user_name`, `password`, `role`, `enabled`, `date_created`, `date_updated`) VALUES ('1', 'admin', '123456', '1', '1', '2018-06-23 15:12:22', '2018-06-23 15:12:23');
 
-/** wcm syndication table */
-CREATE TABLE `SYN_WCM_SERVER` (
+-- ----------------------------
+-- wcm syndication table
+-- ----------------------------
+CREATE TABLE  IF NOT EXISTS  `SYN_WCM_SERVER` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `HOST` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `PORT` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `SYN_SYNDICATION` (
+CREATE TABLE IF NOT EXISTS `SYN_SYNDICATION` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `COLLECTOR_ID` int(11) DEFAULT NULL,
   `LAST_SYNDICATION` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
   CONSTRAINT `SYN_SYNDICATION_COLLECTOR_ID` FOREIGN KEY (`COLLECTOR_ID`) REFERENCES `SYN_WCM_SERVER` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `SYN_COLLECTOR` (
+CREATE TABLE IF NOT EXISTS `SYN_COLLECTOR` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `SYNDICATOR_ID` int(11) DEFAULT NULL,
   `LAST_SYNDICATION` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
   CONSTRAINT `SYN_COLLECTOR_SYNDICATOR_ID` FOREIGN KEY (`SYNDICATOR_ID`) REFERENCES `SYN_WCM_SERVER` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `SYN_WCM_EVENT` (
+CREATE TABLE IF NOT EXISTS `SYN_WCM_EVENT` (
   `ID` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `WCM_APTH` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `REPOSITORY` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -1645,7 +1651,6 @@ CREATE TABLE `SYN_WCM_EVENT` (
   `OPERATION` varchar(32) COLLATE utf8_bin DEFAULT NULL,
   `ITEMTYPE` varchar(32) COLLATE utf8_bin DEFAULT NULL,
   `TIME_CREATED` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `DESCENDENTS` text COLLATE utf8_bin,
-  `REMOVED_DESCENDENTS` text COLLATE utf8_bin,	
+  `CONTENT` longblob NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

@@ -132,7 +132,7 @@ public class BpmContentRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			// String siteAreaPath = String.format(SITE_AREA_PATTERN, "home/links");
 			RestNode resourcesNode = (RestNode) this.itemHandler.item(baseUrl, REPOSITITORY, WORKSPACE,
-					WcmUtils.nodePath("/camunda/resources"), WcmConstants.SITE_AREA_DEPTH);
+					WcmUtils.nodePath("/camunda/asset/resources"), WcmConstants.SITE_AREA_DEPTH);
 			List<Resource> resources = resourcesNode.getChildren().stream()
 					.filter(node -> WcmUtils.checkNodeType(node, "bpw:camunda_resources"))
 					.map(this::toResource)

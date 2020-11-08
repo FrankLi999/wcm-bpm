@@ -1,11 +1,8 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +27,6 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Form;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
-import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -103,22 +99,7 @@ public class FormRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_FORM_PATH_PATTERN, form.getLibrary(), form.getName());
 			String repositoryName = form.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, form.toJson());
-			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
-			}
-			
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, form.getWorkspace(), path, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.addNewItemEvent(
-						restNode, 
-						repositoryName, 
-						form.getWorkspace(), 
-						path,
-						WcmEvent.WcmItemType.form);
-			}
-			
+			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.form, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, form.toJson());
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -146,27 +127,10 @@ public class FormRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_FORM_PATH_PATTERN, form.getLibrary(), form.getName());
 			String repositoryName = form.getRepository();
-			List<String> currentDescendants = new ArrayList<String>();		
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, form.getWorkspace(), path, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
-			JsonNode formJson = form.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, formJson);
-			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, formJson);
-			}
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, form.getWorkspace(), path, WcmConstants.FULL_SUB_DEPTH);
 				
-				syndicationUtils.addUpdateItemEvent(
-						restNode, 
-						repositoryName, 
-						form.getWorkspace(),  
-						path,
-						WcmEvent.WcmItemType.form,
-						currentDescendants);
-			}
+			JsonNode formJson = form.toJson();
+			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.form, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, formJson);
+			
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -195,24 +159,8 @@ public class FormRestController extends BaseWcmRestController {
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
-	  		List<String> currentDescendants = new ArrayList<String>();	
-	  		String nodeId = null;
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.FULL_SUB_DEPTH);
-				nodeId = restNode.getId();
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
-		
-  			this.wcmRequestHandler.purgeWcmItem(repository, workspace, absPath);
-  			if (this.syndicationEnabled) {
-				syndicationUtils.addDeleteItemEvent(
-						nodeId, 
-						repository, 
-						workspace, 
-						wcmPath,
-						WcmEvent.WcmItemType.form,
-						currentDescendants);
-			}
+	  		
+  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.form, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.traceExit();

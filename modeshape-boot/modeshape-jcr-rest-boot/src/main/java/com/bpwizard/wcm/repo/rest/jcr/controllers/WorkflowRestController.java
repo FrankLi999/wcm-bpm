@@ -1,9 +1,7 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Stream;
 
 import javax.jcr.RepositoryException;
@@ -65,7 +63,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 //		}
 //		try {
 //			String baseUrl = RestHelper.repositoryUrl(request);
-//			RestNode workflowNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+//			RestNode workflowNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 //					nodePath, 2);
 //			BpmnWorkflow bpmnWorkflow = this.toBpmnWorkflow(workflowNode);
 //			bpmnWorkflow.setRepository(repository);
@@ -132,16 +130,8 @@ public class WorkflowRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String repositoryName = bpmnWorkflow.getRepository();
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, category.getWorkspace(), absPath, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.addNewItemEvent(
-						restNode, 
-						repositoryName, 
-						bpmnWorkflow.getWorkspace(), 
-						absPath,
-						WcmEvent.WcmItemType.workflow);
-			}
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, bpmnWorkflow.toJson());
+			
+			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.workflow, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, bpmnWorkflow.toJson());
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
 				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, absPath, absPath, true);
@@ -172,27 +162,10 @@ public class WorkflowRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);			
 			String repositoryName = bpmnWorkflow.getRepository();
-			List<String> currentDescendants = new ArrayList<String>();		
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, bpmnWorkflow.getWorkspace(), absPath, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
+			
 			JsonNode atJson = bpmnWorkflow.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
-			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, absPath, atJson);
-			}
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, bpmnWorkflow.getWorkspace(), absPath, WcmConstants.FULL_SUB_DEPTH);
-				
-				syndicationUtils.addUpdateItemEvent(
-						restNode, 
-						repositoryName, 
-						bpmnWorkflow.getWorkspace(), 
-						absPath,
-						WcmEvent.WcmItemType.workflow,
-						currentDescendants);
-			}
+			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.workflow, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
+			
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -220,24 +193,8 @@ public class WorkflowRestController extends BaseWcmRestController {
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
-	  		List<String> currentDescendants = new ArrayList<String>();	
-	  		String nodeId = null;
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.FULL_SUB_DEPTH);
-				nodeId = restNode.getId();
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
-		
-  			this.wcmRequestHandler.purgeWcmItem(repository, workspace, absPath);
-  			if (this.syndicationEnabled) {
-				syndicationUtils.addDeleteItemEvent(
-						nodeId, 
-						repository, 
-						workspace, 
-						wcmPath,
-						WcmEvent.WcmItemType.workflow,
-						currentDescendants);
-			}
+	  		
+  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.workflow, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.traceExit();
@@ -256,7 +213,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 	protected Stream<BpmnWorkflow> doGetBpmnWorkflows(BpmnWorkflow at, String baseUrl)
 			throws WcmRepositoryException {
 		try {
-			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
+			RestNode atNode = (RestNode) this.wcmItemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
 					String.format(WcmConstants.NODE_WORKFLOW_ROOT_PATH_PATTERN, at.getLibrary()), WcmConstants.BPMN_WORKFLOW_DEPTH);
 			
 			return atNode.getChildren().stream().filter(this.wcmRequestHandler::isBpmnWorkflow)
@@ -270,7 +227,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 	protected Stream<BpmnWorkflow> getBpmnWorkflowLibraries(String repository, String workspace,
 			String baseUrl) throws WcmRepositoryException {
 		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode bpwizardNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream()
 					.filter(this.wcmRequestHandler::notSystemLibrary)

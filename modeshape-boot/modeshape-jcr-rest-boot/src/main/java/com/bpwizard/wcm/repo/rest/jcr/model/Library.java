@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 
 import org.modeshape.jcr.api.JcrConstants;
+import org.springframework.util.StringUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -37,6 +38,7 @@ public class Library implements HasWcmAuthority, Serializable, Comparable<Librar
 	@ValidateString(acceptedValues={"en", "fr", "zh"}, message="Language must be en, fr or zh")
 	private String language;
 	
+	private String rootContentAreaLayout;//  =  WcmConstants.DEFAULT_SA_LAYOUT;
 	private WcmAuthority wcmAuthority;
 	
 	public String getRepository() {
@@ -81,6 +83,12 @@ public class Library implements HasWcmAuthority, Serializable, Comparable<Librar
 	}
 	public void setWcmAuthority(WcmAuthority wcmAuthority) {
 		this.wcmAuthority = wcmAuthority;
+	}
+	public String getRootContentAreaLayout() {
+		return rootContentAreaLayout;
+	}
+	public void setRootContentAreaLayout(String rootContentAreaLayout) {
+		this.rootContentAreaLayout = rootContentAreaLayout;
 	}
 	public JsonNode toJson() {
 		ObjectNode jsonNode = JsonUtils.createObjectNode();
@@ -144,6 +152,17 @@ public class Library implements HasWcmAuthority, Serializable, Comparable<Librar
 		children.set("validationRule", validationRuleNode);
 		validationRuleNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:validationRuleFolder");
 		
+		
+		ObjectNode configurationNode = JsonUtils.createObjectNode();
+		children.set("configuration", configurationNode);
+		configurationNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:configurationFolder");
+		
+		ObjectNode controlFieldNode = JsonUtils.createObjectNode();
+		children.set("controlField", controlFieldNode);
+		controlFieldNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:controlFieldFolder");
+		
+		
+		
 		SiteArea rootSiteArea = new SiteArea();
 		ResourceMixin rootSiteAreaProperties = new ResourceMixin();
 		rootSiteArea.setProperties(rootSiteAreaProperties);
@@ -158,7 +177,9 @@ public class Library implements HasWcmAuthority, Serializable, Comparable<Librar
 		rootSiteAreaElements.put("siteConfig", this.getName());
 		rootSiteAreaElements.put("url", String.format("/%s", this.getName()));
 		rootSiteAreaElements.put("translate", String.format("NAV.%s.APPLICATIONS", this.getName().toUpperCase()));
-		rootSiteAreaElements.put("contentAreaLayout", WcmConstants.DEFAULT_SA_LAYOUT);
+		if (StringUtils.hasText(this.rootContentAreaLayout)) {
+			rootSiteAreaElements.put("contentAreaLayout", this.rootContentAreaLayout);
+		}
 		
 		children.set("rootSiteArea", rootSiteArea.toJson());
         return jsonNode;
@@ -167,7 +188,8 @@ public class Library implements HasWcmAuthority, Serializable, Comparable<Librar
 	@Override
 	public String toString() {
 		return "Library [repository=" + repository + ", workspace=" + workspace + ", name=" + name + ", title=" + title
-				+ ", description=" + description + ", language=" + language + ", wcmAuthority=" + wcmAuthority + "]";
+				+ ", description=" + description + ", language=" + language + ", rootContentAreaLayout=" + rootContentAreaLayout 
+				+ ", wcmAuthority=" + wcmAuthority + "]";
 	}
 	
 	@Override

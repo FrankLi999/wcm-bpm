@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
 
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
-import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
+import com.bpwizard.wcm.repo.rest.handler.RestWcmItemHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ArrayConstraint;
@@ -72,7 +72,7 @@ public class WcmUtils {
 	private static final Logger logger = LogManager.getLogger(WcmUtils.class);
 	
 	@Autowired
-	private RestItemHandler itemHandler;
+	private RestWcmItemHandler wcmItemHandler;
 	
 	@Autowired
 	protected RepositoryManager repositoryManager;
@@ -393,7 +393,7 @@ public class WcmUtils {
 		String absPath = WcmUtils.nodePath(wcmAtPath);
 		try {
 			String library = WcmUtils.library(wcmAtPath);			
-			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode atNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					absPath, WcmConstants.AT_JSON_FORM_DEPATH);
 			
 			AuthoringTemplate at = this.toAuthoringTemplate(atNode, repository, workspace, library);
@@ -425,7 +425,7 @@ public class WcmUtils {
 		String absPath = WcmUtils.nodePath(wcmAtPath);
 		try {
 			String library = WcmUtils.library(wcmAtPath);			
-			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode atNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					absPath, WcmConstants.FORM_JSON_FORM_DEPATH);
 			
 			Form form = this.toForm(atNode, repository, workspace, library);

@@ -1,11 +1,8 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +27,6 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
-import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -126,24 +122,12 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_AT_PATH_PATTERN, at.getLibrary(), at.getName());
 			String repositoryName = at.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, at.toJson());
+			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.authoringTemplate, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, at.toJson());
 			this.wcmUtils.registerNodeType(at.getWorkspace(), at);
-			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
+			if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(at.getWorkspace())) {
 				this.wcmUtils.registerNodeType(WcmConstants.DRAFT_WS, at);
+				this.wcmUtils.registerNodeType(WcmConstants.EXPIRED_WS, at);
 			}
-			
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode) this.itemHandler.item(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.addNewItemEvent(
-						restNode, 
-						repositoryName, 
-						WcmConstants.DEFAULT_WS, 
-						path,
-						WcmEvent.WcmItemType.authoringTemplate);
-			}
-			
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -171,28 +155,15 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_AT_PATH_PATTERN, at.getLibrary(), at.getName());
 			String repositoryName = at.getRepository();
-			List<String> currentDescendants = new ArrayList<String>();		
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
+			
 			JsonNode atJson = at.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, atJson);
+			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.authoringTemplate, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, atJson);
 			this.wcmUtils.registerNodeType(at.getWorkspace(), at);
-			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, atJson);
+			if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(at.getWorkspace())) {
+				this.wcmUtils.registerNodeType(WcmConstants.DRAFT_WS, at);
+				this.wcmUtils.registerNodeType(WcmConstants.EXPIRED_WS, at);
 			}
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, WcmConstants.FULL_SUB_DEPTH);
-				
-				syndicationUtils.addUpdateItemEvent(
-						restNode, 
-						repositoryName, 
-						WcmConstants.DEFAULT_WS,  
-						path,
-						WcmEvent.WcmItemType.authoringTemplate,
-						currentDescendants);
-			}
+			
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -221,25 +192,15 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
-	  		List<String> currentDescendants = new ArrayList<String>();	
-	  		String nodeId = null;
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.FULL_SUB_DEPTH);
-				nodeId = restNode.getId();
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
-		
-  			this.wcmRequestHandler.purgeWcmItem(repository, workspace, absPath);
-  			if (this.syndicationEnabled) {
-				syndicationUtils.addDeleteItemEvent(
-						nodeId, 
-						repository, 
-						workspace, 
-						wcmPath,
-						WcmEvent.WcmItemType.authoringTemplate,
-						currentDescendants);
-			}
+	  		this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.authoringTemplate, baseUrl, repository, workspace, absPath);
   			
+	  		if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(workspace)) {
+//	  			this.wcmUtils.deleteNodeType(WcmConstants.DEFAULT_WS, wcmPath);
+//				this.wcmUtils.deleteNodeType(WcmConstants.DRAFT_WS, wcmPath);
+//				this.wcmUtils.deleteNodeType(WcmConstants.EXPIRED_WS, wcmPath);
+			}
+	  		
+  			//TODO: delete the corresponding JCR type also.
   	  		if (logger.isDebugEnabled()) {
   				logger.traceExit();
   			}

@@ -17,7 +17,7 @@ public class WcmEventHandler extends AbstractHandler {
 	@Qualifier("modeshapeJdbcTemplate")
 	protected JdbcTemplate jdbcTemplate;
 
-	public static void clearWcmEventBefore(Timestamp timestamp) {
+	public void clearWcmEventBefore(Timestamp timestamp) {
 
 	}
 

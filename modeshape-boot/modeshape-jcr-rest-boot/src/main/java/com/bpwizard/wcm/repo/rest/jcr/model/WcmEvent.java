@@ -10,6 +10,8 @@ public class WcmEvent {
 	}
 	
 	public enum WcmItemType {
+		libraryFolder, // done,
+		opertionsFolder, //done,
 		library, //done
 		authoringTemplateFolder,
 		categoryFolder,
@@ -22,6 +24,8 @@ public class WcmEvent {
 		validationRuleFolder,
 		workflowFolder,
 		assetFolder,
+		configurationFolder,
+		controlFieldFolder,
 		
 
 		
@@ -31,18 +35,22 @@ public class WcmEvent {
 		contentItem, // done
 		siteArea, // done
 		form, // done
-		// siteAreaLayout,
+		formType, // done
 		query, //done
 		renderTemplate, //done
 		siteConfig, //done
 		theme, // done
-		validationRule,
-		workflow,
-		
+		validationRule, // done
+		workflow, // done
+		supportedOpertions, //done
+		supportedOpertion, //done
+		folder, 
 		file,
 		image,
-		
+		cnd,
 		jcrType,
+		controlField, //dome
+		camunda_resources //done
 		
 	}
 	

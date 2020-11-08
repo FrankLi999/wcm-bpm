@@ -1,9 +1,5 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
@@ -54,22 +50,8 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			String repositoryName = siteConfig.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH_PATTERN, siteConfig.getLibrary(), siteConfig.getName());
-			this.itemHandler.addItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, siteConfig.toJson());
-			if (this.authoringEnabled) {
-				Session session = repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, absPath, absPath, true);
-			}
+			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.siteConfig, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, siteConfig.toJson());
 			
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, 
-						absPath, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.addNewItemEvent(
-						restNode, 
-						repositoryName, 
-						WcmConstants.DEFAULT_WS, 
-						absPath,
-						WcmEvent.WcmItemType.siteConfig);
-			}
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -91,28 +73,9 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH_PATTERN, siteConfig.getLibrary(), siteConfig.getName());
 			String repositoryName = siteConfig.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			List<String> currentDescendants = new ArrayList<String>();		
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}
 			
 			JsonNode jsonItem = siteConfig.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, jsonItem);
-			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, absPath, jsonItem);
-			}
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
-				
-				syndicationUtils.addUpdateItemEvent(
-						restNode, 
-						repositoryName, 
-						WcmConstants.DEFAULT_WS,
-						absPath,
-						WcmEvent.WcmItemType.category,
-						currentDescendants);
-			}
+			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.siteConfig, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, jsonItem);
 		} catch (WcmRepositoryException e) {
 			logger.error(e);
 			throw e;
@@ -134,7 +97,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH, library);
-			RestNode siteConfigFolder = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.SITE_CONFIG_DEPTH);
+			RestNode siteConfigFolder = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.SITE_CONFIG_DEPTH);
 			SiteConfig[] siteConfigs = siteConfigFolder.getChildren().stream()
 					.filter(node -> this.wcmRequestHandler.isSiteConfig(node))
 					.map(node -> this.wcmRequestHandler.toSiteConfig(repository, workspace, library, node))
@@ -219,24 +182,8 @@ public class SiteConfigRestController extends BaseWcmRestController {
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
-	  		List<String> currentDescendants = new ArrayList<String>();	
-	  		String nodeId = null;
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.FULL_SUB_DEPTH);
-				nodeId = restNode.getId();
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
-		
-  			this.wcmRequestHandler.purgeWcmItem(repository, workspace, absPath);
-  			if (this.syndicationEnabled) {
-				syndicationUtils.addDeleteItemEvent(
-						nodeId, 
-						repository, 
-						workspace, 
-						wcmPath,
-						WcmEvent.WcmItemType.siteConfig,
-						currentDescendants);
-			}
+	  		
+  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.siteConfig, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.traceExit();

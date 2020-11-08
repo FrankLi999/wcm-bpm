@@ -763,7 +763,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
     						repository, 
     						WcmConstants.DEFAULT_WS, 
     						absPath,
-    						WcmEvent.WcmItemType.category,
+    						WcmEvent.WcmItemType.contentItem,
     						currentDescendants);
     			}
       			

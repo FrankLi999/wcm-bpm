@@ -36,13 +36,19 @@ public class SydicatorController extends BaseWcmRestController {
 			@RequestBody SyndicationRequest syndicationRequest,
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
-		
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
 		int pageSize = 20;
 		int pageIndex = 0;
 		List<WcmEvent> wcmEvents = null;
 		do {
 			wcmEvents = wcmEventHandler.getWcmEventAfter(syndicationRequest.getStartTime(), new Timestamp(System.currentTimeMillis()), pageIndex, pageSize);
 		} while (wcmEvents.size() < pageSize);	
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
+
 		return null;
 	}
 }

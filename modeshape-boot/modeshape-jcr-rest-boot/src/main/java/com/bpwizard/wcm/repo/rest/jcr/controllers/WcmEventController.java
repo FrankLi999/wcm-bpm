@@ -32,7 +32,14 @@ public class WcmEventController extends BaseWcmRestController {
 			@RequestBody ClearWcmEventRequest syndicationRequest,
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		
 		wcmEventHandler.clearWcmEventBefore(syndicationRequest.getTimestampBefore());
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
 		return null;
 	}
 }

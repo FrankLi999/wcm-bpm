@@ -1,12 +1,9 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -54,6 +51,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 	
 	@Autowired
 	private WcmRequestHandler wcmRequestHandler;
+	
 	@GetMapping(path = "/{repository}/{workspace}", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Library[]> getLibraries(			
@@ -73,7 +71,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			RestNode libraryParentNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode libraryParentNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_TWO_LEVEL);
 			Library[] libraries = libraryParentNode.getChildren().stream()
 					.filter(this.wcmRequestHandler::isLibrary)
@@ -110,42 +108,12 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();
 		}
-		try {
-			String repositoryName = library.getRepository();
-			String baseUrl = RestHelper.repositoryUrl(request);
-			String path = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName());
-			this.itemHandler.addItem(
-					baseUrl, 
-					repositoryName,
-					library.getWorkspace(),
-					path, 
-					library.toJson());
-			if (this.authoringEnabled) {
-				Session session = repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
-				// session.save();
-			}
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, library.getWorkspace(), path, WcmConstants.READ_DEPTH_TWO_LEVEL);
-				syndicationUtils.addNewItemEvent(
-						restNode, 
-						repositoryName, 
-						library.getWorkspace(), 
-						path,
-						WcmEvent.WcmItemType.library);
-			}
-			if (logger.isDebugEnabled()) {
-				logger.traceExit();
-			}
-	
-			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (WcmRepositoryException e ) {
-			logger.error(e);
-			throw e;
-		} catch (Throwable t) {
-			logger.error(t);
-			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
-		}	
+		
+		wcmRequestHandler.createLibrary(library, request, this.authoringEnabled, WcmConstants.DEFAULT_WS.equals(library.getWorkspace()));
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}	
 	
 	@PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -160,37 +128,16 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 			String repositoryName = library.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName());
-			List<String> currentDescendants = new ArrayList<String>();		
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, library.getWorkspace(), path, WcmConstants.READ_DEPTH_TWO_LEVEL);
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}
+			
 			JsonNode jsonItem = library.toJson();
-			this.itemHandler.updateItem(
+			this.wcmItemHandler.updateItem(
+					WcmEvent.WcmItemType.library,
 					baseUrl, 
 					repositoryName,
 					library.getWorkspace(),
 					path, 
 					jsonItem);
-			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(
-						baseUrl, 
-						repositoryName,
-						library.getWorkspace(),
-						path, 
-						jsonItem);
-			}
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, library.getWorkspace(), path, WcmConstants.READ_DEPTH_TWO_LEVEL);
-				
-				syndicationUtils.addUpdateItemEvent(
-						restNode, 
-						repositoryName, 
-						library.getWorkspace(),  
-						path,
-						WcmEvent.WcmItemType.library,
-						currentDescendants);
-			}
+			
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -216,27 +163,13 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		String baseUrl = RestHelper.repositoryUrl(request);
 		String absPath = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName()); 
 		try {
-			String nodeId = null;
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, library.getRepository(), 
-						library.getWorkspace(), 
-						absPath, WcmConstants.READ_DEPTH_TWO_LEVEL);
-				nodeId = restNode.getId();
-			}
-			this.wcmRequestHandler.purgeWcmItem(
+			this.wcmItemHandler.deleteItem(
+					WcmEvent.WcmItemType.library,
+					baseUrl,
 					library.getRepository(), 
 					library.getWorkspace(), 
 					absPath);
 			
-			if (this.syndicationEnabled) {
-				syndicationUtils.addDeleteItemEvent(
-						nodeId, 
-						library.getRepository(), 
-						library.getWorkspace(), 
-						absPath,
-						WcmEvent.WcmItemType.library,
-						null);
-			}
 		} catch (WcmRepositoryException e) {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;

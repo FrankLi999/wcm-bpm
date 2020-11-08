@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bpwizard.wcm.repo.rest.handler.WcmEventHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Collector;
 import com.bpwizard.wcm.repo.rest.jcr.model.UpdateCollectorRequest;
@@ -32,8 +30,8 @@ public class CollectorController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/collector";
 	private static final Logger logger = LogManager.getLogger(CollectorController.class);
 	
-	@Autowired
-	private WcmEventHandler wcmEventHandler;
+//	@Autowired
+//	private WcmEventHandler wcmEventHandler;
 	
 	@PostMapping(path = "/collect", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> collectItems(
@@ -49,6 +47,12 @@ public class CollectorController extends BaseWcmRestController {
 	
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	Collector getCollector(@PathVariable("id") int id) {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		if (logger.isDebugEnabled()) {
+			logger.traceExit();
+		}
 		return null;
 	}
 	

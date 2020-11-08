@@ -3,7 +3,6 @@ import java.security.Principal;
 import java.security.acl.Group;
 import java.util.Enumeration;
 
-@SuppressWarnings("removal")
 public class WcmGroup implements Group {
 	java.util.Vector<Principal> members = new java.util.Vector<>();
     private String group;

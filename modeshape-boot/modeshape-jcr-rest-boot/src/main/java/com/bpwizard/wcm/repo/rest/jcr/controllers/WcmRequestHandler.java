@@ -11,10 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.jcr.query.InvalidQueryException;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -33,11 +30,12 @@ import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
+import com.bpwizard.wcm.repo.rest.SyndicationUtils;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
-import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
+import com.bpwizard.wcm.repo.rest.handler.RestWcmItemHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AccessControlEntry;
@@ -91,6 +89,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.Theme;
 import com.bpwizard.wcm.repo.rest.jcr.model.ThemeColors;
 import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
 import com.bpwizard.wcm.repo.rest.jcr.model.VisbleCondition;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmLibrary;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmOperation;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperties;
@@ -105,8 +104,8 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestNodeType;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestPropertyType;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories;
-import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories.Repository;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces.Workspace;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
@@ -122,8 +121,10 @@ public class WcmRequestHandler {
 	@Value("${bpw.modeshape.authoring.enabled:true}")
 	protected boolean authoringEnabled = true;
 
+	@Value("${bpw.modeshape.syndication.enabled:true}")
+	protected boolean syndicationEnabled = true;
 	@Autowired
-	protected RestItemHandler itemHandler;
+	protected RestWcmItemHandler wcmItemHandler;
 
 	@Autowired
 	protected RepositoryManager repositoryManager;
@@ -139,6 +140,9 @@ public class WcmRequestHandler {
 
 	@Autowired
 	protected WcmUtils wcmUtils;
+	
+	@Autowired
+	protected SyndicationUtils syndicationUtils;
 
 	protected ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -234,7 +238,7 @@ public class WcmRequestHandler {
 		}
 		
 		String baseUrl = RestHelper.repositoryUrl(request);
-		RestNode operationsNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+		RestNode operationsNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 				String.format(WcmConstants.NODE_ROOT_REL_PATH_PATTERN, WcmConstants.OPERATION_REL_PATH), WcmConstants.OPERATION_DEFAULT);
 		Map<String, WcmOperation[]> wcmOperationMap = operationsNode.getChildren().stream()
 				.filter(node -> WcmUtils.checkNodeType(node, "bpw:supportedOpertions"))
@@ -267,7 +271,7 @@ public class WcmRequestHandler {
 	private Stream<Theme> getThemeLibraries(String repository, String workspace, String baseUrl)
 			throws WcmRepositoryException {
 		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode bpwizardNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toThemeWithLibrary(node, repository, workspace));
@@ -279,7 +283,7 @@ public class WcmRequestHandler {
 
 	private Stream<Theme> getThemes(Theme theme, String baseUrl) throws WcmRepositoryException {
 		try {
-			RestNode themeNode = (RestNode) this.itemHandler.item(baseUrl, theme.getRepositoryName(), theme.getWorkspace(),
+			RestNode themeNode = (RestNode) this.wcmItemHandler.item(baseUrl, theme.getRepositoryName(), theme.getWorkspace(),
 					String.format(WcmConstants.NODE_THEME_ROOT_PATH_PATTERN, theme.getLibrary()), WcmConstants.READ_DEPTH_DEFAULT);
 			return themeNode.getChildren().stream().filter(this::isTheme).map(node -> this.toTheme(node, theme));
 		} catch (RepositoryException e) {
@@ -349,7 +353,7 @@ public class WcmRequestHandler {
 	private WcmLibrary[] getWcmLibraries(String repository, String workspace,
 			String baseUrl) throws WcmRepositoryException {
 		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode bpwizardNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> {
@@ -495,43 +499,6 @@ public class WcmRequestHandler {
 		return WcmUtils.checkNodeType(node, "bpw:system_validationRuleType");
 	}
 
-	public void purgeWcmItem(String repository, String workspace, String absPath) {
-
-		absPath = (absPath.startsWith("/")) ? absPath : String.format("/%s", absPath);
-		try {
-			if (this.authoringEnabled) {
-				try {
-					Session draftSession = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS);
-					Node draftNode = draftSession.getNode(absPath);
-					draftNode.remove();
-					draftSession.save();
-				} catch (Exception e) {
-					logger.warn(String.format("Failed to delete item %s from draft repository", absPath), e);
-				}
-				try {
-					Session expiredSession = this.repositoryManager.getSession(repository, WcmConstants.EXPIRED_WS);
-					Node expiredNode = expiredSession.getNode(absPath);
-					expiredNode.remove();
-					expiredSession.save();
-				} catch (Exception e) {
-					logger.warn(String.format("Failed to delete item %s from expired repository", absPath), e);
-				}
-			}
-			Session session = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
-			Node node = session.getNode(absPath);
-			node.remove();
-			session.save();
-		} catch (PathNotFoundException ex) {
-			throw new WcmRepositoryException(ex, new WcmError(ex.getMessage(), WcmErrors.PURGE_ITEM_ERROR, new String[] {absPath}));
-		} catch (WcmRepositoryException e) {
-			throw e;
-		} catch (RepositoryException re) {
-			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.PURGE_ITEM_ERROR, null));
-		} catch (Throwable t) {
-			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
-		}
-	}
-
 	public boolean filterLibrary(Library library, String filter) {
 		return StringUtils.hasText(filter) ? library.getName().startsWith(filter) : true;
 	}
@@ -599,7 +566,7 @@ public class WcmRequestHandler {
 	protected Stream<AuthoringTemplate> getAuthoringTemplateLibraries(String repository, String workspace,
 			String baseUrl) throws WcmRepositoryException {
 		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode bpwizardNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
 					.map(node -> toAuthoringTemplateWithLibrary(node, repository, workspace));
@@ -611,7 +578,7 @@ public class WcmRequestHandler {
 	protected Stream<Form> getFormLibraries(String repository, String workspace, String baseUrl)
 			throws WcmRepositoryException {
 		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode bpwizardNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary)
 					.map(node -> toFormWithLibrary(node, repository, workspace));
@@ -2116,7 +2083,7 @@ public class WcmRequestHandler {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			
-			RestNode themeNode = (RestNode) this.itemHandler.item(baseUrl, rt.getRepository(), rt.getWorkspace(),
+			RestNode themeNode = (RestNode) this.wcmItemHandler.item(baseUrl, rt.getRepository(), rt.getWorkspace(),
 					 absPath, WcmConstants.RENDER_TEMPLATE_DEPATH);
 			return themeNode.getChildren().stream().filter(this::isRenderTemplate)
 					.map(node -> this.toRenderTemplate(node, rt.getRepository(), rt.getWorkspace(), rt.getLibrary(), request));
@@ -2226,7 +2193,7 @@ public class WcmRequestHandler {
 			HttpServletRequest request) throws WcmRepositoryException {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, "/library",
+			RestNode bpwizardNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace, "/library",
 					WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toRenderTemplateWithLibrary(node, repository, workspace));
@@ -2250,7 +2217,7 @@ public class WcmRequestHandler {
 	protected Stream<ContentAreaLayout> getContentAreaLayoutLibraries(String repository, String workspace,
 			String baseUrl) throws WcmRepositoryException {
 		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, "/library",
+			RestNode bpwizardNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace, "/library",
 					WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toContentAreaLayoutWithLibrary(node, repository, workspace));
@@ -2263,7 +2230,7 @@ public class WcmRequestHandler {
 			throws WcmRepositoryException {
 		String absPath = "/library/" + contentAreaLayout.getLibrary() + "/contentAreaLayout";
 		try {
-			RestNode contentAreaLayoutNode = (RestNode) this.itemHandler.item(baseUrl,
+			RestNode contentAreaLayoutNode = (RestNode) this.wcmItemHandler.item(baseUrl,
 					contentAreaLayout.getRepository(), contentAreaLayout.getWorkspace(),
 					absPath,
 					WcmConstants.CONTENT_AREA_LAYOUT_DEPTH);
@@ -2380,7 +2347,7 @@ public class WcmRequestHandler {
 			throws WcmRepositoryException {
 		String absPath = String.format(WcmConstants.NODE_AT_ROOT_PATH_PATTERN, at.getLibrary());
 		try {
-			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
+			RestNode atNode = (RestNode) this.wcmItemHandler.item(baseUrl, at.getRepository(), at.getWorkspace(),
 					absPath,
 					WcmConstants.AT_JSON_FORM_DEPATH);
 
@@ -2406,7 +2373,7 @@ public class WcmRequestHandler {
 	protected Stream<Form> getForms(Form form, String baseUrl) throws WcmRepositoryException {
 		String absPath = String.format(WcmConstants.NODE_FORM_ROOT_PATH_PATTERN, form.getLibrary());
 		try {
-			RestNode formFolderNode = (RestNode) this.itemHandler.item(baseUrl, form.getRepository(), form.getWorkspace(),
+			RestNode formFolderNode = (RestNode) this.wcmItemHandler.item(baseUrl, form.getRepository(), form.getWorkspace(),
 					absPath,
 					WcmConstants.FORM_JSON_FORM_DEPATH);
 
@@ -2422,7 +2389,7 @@ public class WcmRequestHandler {
 		String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH_PATTERN, library, siteConfigName);
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
-			RestNode siteConfigNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace, absPath,
+			RestNode siteConfigNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace, absPath,
 					WcmConstants.SITE_CONFIG_DEPTH);
 			SiteConfig siteConfig = this.toSiteConfig(repository, workspace, library, siteConfigNode);
 			siteConfig.setRepository(repository);
@@ -2573,7 +2540,7 @@ public class WcmRequestHandler {
 
 	protected Map<String, SiteArea> getSiteAreas(String repository, String workspace, String library,
 			String rootSiteArea, String baseUrl) throws RepositoryException {
-		RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+		RestNode saNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 				String.format(WcmConstants.NODE_REL_PATH_PATTERN, library, rootSiteArea), WcmConstants.SITE_AREA_DEPTH);
 		Map<String, SiteArea> siteAreas = new HashMap<>();
 		for (RestNode node : saNode.getChildren()) {
@@ -2700,7 +2667,7 @@ public class WcmRequestHandler {
 
 	public Navigation[] getNavigations(String baseUrl, String repository, String workspace, String library,
 			String rootSiteArea) throws RepositoryException {
-		RestNode siteArea = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+		RestNode siteArea = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 				String.format(WcmConstants.NODE_REL_PATH_PATTERN, library, rootSiteArea),
 				WcmConstants.NAVIGATION_DEPTH);
 
@@ -2712,7 +2679,7 @@ public class WcmRequestHandler {
 	public ControlField[] getControlField(String repository, String workspace, HttpServletRequest request)
 			throws RepositoryException {
 		String baseUrl = RestHelper.repositoryUrl(request);
-		RestNode controlFieldFolder = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+		RestNode controlFieldFolder = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 				WcmConstants.NODE_CONTROL_FIELD_ROOT, WcmConstants.CONTROL_FIELD_DEPTH);
 		ControlField[] ControlFileds = controlFieldFolder.getChildren().stream().filter(this::isControlField)
 				.map(this::toControlField).toArray(ControlField[]::new);
@@ -2799,7 +2766,7 @@ public class WcmRequestHandler {
 			throws WcmRepositoryException {
 		String absPath = String.format(WcmConstants.NODE_QUERY_ROOT_PATH_PATTERN, query.getLibrary());
 		try {
-			RestNode queryStatementNode = (RestNode) this.itemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
+			RestNode queryStatementNode = (RestNode) this.wcmItemHandler.item(baseUrl, query.getRepository(), query.getWorkspace(),
 					absPath,
 					WcmConstants.QUERY_STMT_DEPTH);
 
@@ -2854,7 +2821,7 @@ public class WcmRequestHandler {
 	protected Stream<QueryStatement> getQueryLibraries(String repository, String workspace, String baseUrl)
 			throws WcmRepositoryException {
 		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode bpwizardNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::notSystemLibrary)
 					.map(node -> toQueryStatementWithLibrary(node, repository, workspace));
@@ -2874,7 +2841,7 @@ public class WcmRequestHandler {
 	protected Stream<String> getLibraries(String repository, String workspace, String baseUrl)
 			throws WcmRepositoryException {
 		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode bpwizardNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream().filter(this::notSystemLibrary).map(RestNode::getName);
 		} catch (RepositoryException e) {
@@ -2895,7 +2862,7 @@ public class WcmRequestHandler {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			
-			RestNode contentItemNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode contentItemNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					absPath, WcmConstants.CONTENT_ITEM_DEPATH);
 			
 			ContentItem contentItem = this.toContentItem(contentItemNode, repository, workspace, wcmPath, request);
@@ -3057,6 +3024,39 @@ public class WcmRequestHandler {
         return new ObjectMapper().readValue(requestBody, valueType);
     }
 	
+	public void createLibrary(
+			Library library, 
+			HttpServletRequest request,
+			boolean authoringEnabled,
+			boolean syndicationEnabled) 
+			throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			String repositoryName = library.getRepository();
+			String baseUrl = RestHelper.repositoryUrl(request);
+			String path = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName());
+			this.wcmItemHandler.addItem(
+					WcmEvent.WcmItemType.library,
+					baseUrl, 
+					repositoryName,
+					library.getWorkspace(),
+					path, 
+					library.toJson());
+			
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+	
+		} catch (WcmRepositoryException e ) {
+			logger.error(e);
+			throw e;
+		} catch (Throwable t) {
+			logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+		}	
+	}
 	public void loadQueries( HttpServletRequest request,
     		String repository,
     		String workspace,
@@ -3075,6 +3075,7 @@ public class WcmRequestHandler {
     		throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.MODESHAPE_POST_ITEMS, null));
     	} 
     }
+	
 	
 	public void createQueryStatement(QueryStatement query, HttpServletRequest request) 
 			throws WcmRepositoryException {
@@ -3100,11 +3101,7 @@ public class WcmRequestHandler {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
-			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
-			}
+			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.query, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}

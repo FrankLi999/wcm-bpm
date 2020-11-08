@@ -56,10 +56,11 @@ import com.bpwizard.wcm.repo.dto.IndexColumn;
 import com.bpwizard.wcm.repo.dto.IndexModel;
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
-import com.bpwizard.wcm.repo.rest.handler.RestItemHandler;
+import com.bpwizard.wcm.repo.rest.handler.RestWcmItemHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -73,7 +74,7 @@ public class ModeshapeController {
 	@Autowired
 	private RepositoryManager repositoryManager;
 	@Autowired
-	private RestItemHandler itemHandler;
+	private RestWcmItemHandler wcmItemHandler;
 	
 	@PostMapping(path = "/execQuery", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> execQueryStatement(
@@ -184,7 +185,7 @@ public class ModeshapeController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
+			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.query, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -215,7 +216,7 @@ public class ModeshapeController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
+			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.query, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 
 			Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
 			session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);

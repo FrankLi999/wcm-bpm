@@ -1,13 +1,10 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Stream;
 
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -108,20 +105,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			
 			String repositoryName = validationRule.getRepository();
-			this.itemHandler.addItem(baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, validationRule.toJson());
-			if (this.authoringEnabled) {
-				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
-				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, absPath, absPath, true);
-			}
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, validationRule.getWorkspace(), absPath, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.addNewItemEvent(
-						restNode, 
-						repositoryName, 
-						validationRule.getWorkspace(),
-						absPath,
-						WcmEvent.WcmItemType.validationRule);
-			}
+			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.validationRule, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, validationRule.toJson());
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -149,26 +133,10 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String repositoryName = validationRule.getRepository();
-			List<String> currentDescendants = new ArrayList<String>();		
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, validationRule.getWorkspace(), absPath, WcmConstants.FULL_SUB_DEPTH);
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
-			JsonNode atJson = validationRule.toJson();
-			this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
-			if (this.authoringEnabled) {
-				this.itemHandler.updateItem(baseUrl, repositoryName, WcmConstants.DRAFT_WS, absPath, atJson);
-			}
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repositoryName, validationRule.getWorkspace(), absPath, WcmConstants.FULL_SUB_DEPTH);
 				
-				syndicationUtils.addUpdateItemEvent(
-						restNode, 
-						repositoryName, 
-						validationRule.getWorkspace(), absPath,
-						WcmEvent.WcmItemType.validationRule,
-						currentDescendants);
-			}
+			JsonNode atJson = validationRule.toJson();
+			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.validationRule, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
+			
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
 			}
@@ -187,7 +155,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		String absPath = String.format(WcmConstants.NODE_VALIDATION_RULE_ROOT_PATH_PATTERN, rule.getLibrary());
 		try {
-			RestNode atNode = (RestNode) this.itemHandler.item(baseUrl, rule.getRepository(), rule.getWorkspace(),
+			RestNode atNode = (RestNode) this.wcmItemHandler.item(baseUrl, rule.getRepository(), rule.getWorkspace(),
 					absPath, WcmConstants.VALIDATION_RULE_DEPTH);
 			
 			return atNode.getChildren().stream().filter(this.wcmRequestHandler::isValidationRule)
@@ -201,7 +169,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 	protected Stream<ValidationRule> getValidationRuleLibraries(String repository, String workspace,
 			String baseUrl) throws WcmRepositoryException {
 		try {
-			RestNode bpwizardNode = (RestNode) this.itemHandler.item(baseUrl, repository, workspace,
+			RestNode bpwizardNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, workspace,
 					WcmConstants.NODE_ROOT_PATH, WcmConstants.READ_DEPTH_DEFAULT);
 			return bpwizardNode.getChildren().stream()
 					.filter(this.wcmRequestHandler::notSystemLibrary)
@@ -273,24 +241,8 @@ public class ValidationRuleRestController extends BaseWcmRestController {
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
-	  		List<String> currentDescendants = new ArrayList<String>();	
-	  		String nodeId = null;
-			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repository, workspace, absPath, WcmConstants.FULL_SUB_DEPTH);
-				nodeId = restNode.getId();
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
-			}	
-		
-  			this.wcmRequestHandler.purgeWcmItem(repository, workspace, absPath);
-  			if (this.syndicationEnabled) {
-				syndicationUtils.addDeleteItemEvent(
-						nodeId, 
-						repository, 
-						workspace, 
-						wcmPath,
-						WcmEvent.WcmItemType.validationRule,
-						currentDescendants);
-			}
+	  		
+  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.validationRule, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.traceExit();
