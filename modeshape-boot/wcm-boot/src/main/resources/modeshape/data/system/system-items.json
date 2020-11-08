@@ -93,7 +93,7 @@
     }, {
       	"operation": "create",
       	"itemType": "supportedOpertion",
-      	"wcmPath": "library/system/configuration/operations/jcrFile/remove",
+      	"wcmPath": "library/system/configuration/operations/bpwFile/remove",
       	"content": {
 	      	"library/system/configuration/operations/bpwFile/remove" : {
 		        "jcr:primaryType":"bpw:supportedOpertion",

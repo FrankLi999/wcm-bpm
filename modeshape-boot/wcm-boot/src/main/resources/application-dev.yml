@@ -160,9 +160,9 @@ spring:
 bpw:
   modeshape:
     authoring:
-      enabled: false
+      enabled: true
     syndication:
-      enabled: false
+      enabled: true
     datasource:
       url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       driver-class-name: com.mysql.jdbc.Driver

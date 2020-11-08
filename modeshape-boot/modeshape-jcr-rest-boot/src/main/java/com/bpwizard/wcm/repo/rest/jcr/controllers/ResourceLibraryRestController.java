@@ -109,7 +109,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 			logger.traceEntry();
 		}
 		
-		wcmRequestHandler.createLibrary(library, request, this.authoringEnabled, WcmConstants.DEFAULT_WS.equals(library.getWorkspace()));
+		wcmRequestHandler.createLibrary(library, request);
 		if (logger.isDebugEnabled()) {
 			logger.traceExit();
 		}

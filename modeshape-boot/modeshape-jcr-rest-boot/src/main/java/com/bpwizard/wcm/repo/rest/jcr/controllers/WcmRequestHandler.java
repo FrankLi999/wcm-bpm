@@ -3026,9 +3026,7 @@ public class WcmRequestHandler {
 	
 	public void createLibrary(
 			Library library, 
-			HttpServletRequest request,
-			boolean authoringEnabled,
-			boolean syndicationEnabled) 
+			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
 			logger.traceEntry();

@@ -223,9 +223,7 @@ public class WcmImportController extends BaseWcmRestController {
     			library.setWorkspace(workspace);
     			this.wcmRequestHandler.createLibrary(
     					library, 
-    					request, 
-    					false, 
-    					WcmConstants.DEFAULT_WS.equals(library.getWorkspace()));
+    					request);
     		}
 	    	logger.debug("Exiting ...");
     	} catch (Throwable t) {
