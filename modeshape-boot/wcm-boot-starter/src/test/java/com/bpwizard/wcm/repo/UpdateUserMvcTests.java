@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.IOException;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -75,10 +75,10 @@ public class UpdateUserMvcTests extends AbstractMvcTests {
 		User user = userRepository.findById(UNVERIFIED_USER_ID).get();
 		
 		// Ensure that data changed properly
-		Assertions.assertEquals(UNVERIFIED_USER_EMAIL, user.getEmail());
-		Assertions.assertEquals(1, user.getRoles().size());
-		Assertions.assertTrue(user.getRoles().contains(UserUtils.Role.UNVERIFIED));
-		Assertions.assertEquals(2L, user.getVersion().longValue());
+		Assert.assertEquals(UNVERIFIED_USER_EMAIL, user.getEmail());
+		Assert.assertEquals(1, user.getRoles().size());
+		Assert.assertTrue(user.getRoles().contains(UserUtils.Role.UNVERIFIED));
+		Assert.assertEquals(2L, user.getVersion().longValue());
 		
 		// Version mismatch
 		mvc.perform(patch("/api/core/users/{id}", UNVERIFIED_USER_ID)
@@ -113,9 +113,9 @@ public class UpdateUserMvcTests extends AbstractMvcTests {
 		User user = userRepository.findById(UNVERIFIED_USER_ID).get();
     	
 		// Ensure that data changed properly
-		Assertions.assertEquals(UNVERIFIED_USER_EMAIL, user.getEmail());
-		Assertions.assertEquals(1, user.getRoles().size());
-		Assertions.assertTrue(user.getRoles().contains(UserUtils.Role.ADMIN));
+		Assert.assertEquals(UNVERIFIED_USER_EMAIL, user.getEmail());
+		Assert.assertEquals(1, user.getRoles().size());
+		Assert.assertTrue(user.getRoles().contains(UserUtils.Role.ADMIN));
     }
 	
 	/**

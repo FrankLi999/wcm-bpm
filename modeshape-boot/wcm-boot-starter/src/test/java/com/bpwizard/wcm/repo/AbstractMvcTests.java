@@ -8,8 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.jupiter.api.BeforeEach;
-// import org.junit.runner.RunWith;
+import org.junit.Before;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -74,7 +74,7 @@ public abstract class AbstractMvcTests {
         return result.getResponse().getHeader(SecurityUtils.TOKEN_RESPONSE_HEADER_NAME);
     }
     
-    @BeforeEach
+    @Before
     public void baseSetUp() throws Exception {
     	
 		tokens.put(ADMIN_ID, login(ADMIN_EMAIL, ADMIN_PASSWORD));

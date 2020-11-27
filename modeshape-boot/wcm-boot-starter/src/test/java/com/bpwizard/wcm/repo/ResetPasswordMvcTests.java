@@ -6,8 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
@@ -23,7 +23,7 @@ public class ResetPasswordMvcTests extends AbstractMvcTests {
 	@Autowired
 	private JSONWebEncryptionService jweTokenService;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		
 		forgotPasswordCode = jweTokenService.createToken(

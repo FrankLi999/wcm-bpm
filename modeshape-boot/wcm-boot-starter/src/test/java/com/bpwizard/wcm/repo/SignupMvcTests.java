@@ -11,8 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -63,7 +63,7 @@ public class SignupMvcTests extends AbstractMvcTests {
 		verify(mailSender).send(any());
 
 		// Ensure that password got encrypted
-		Assertions.assertNotEquals("user123", userRepository.findByEmail("user.foo@example.com").get().getPassword());
+		Assert.assertNotEquals("user123", userRepository.findByEmail("user.foo@example.com").get().getPassword());
 	}
 	
 	@Test

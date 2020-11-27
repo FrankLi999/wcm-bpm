@@ -6,9 +6,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,7 +26,7 @@ public class ChangeEmailMvcTests extends AbstractMvcTests {
 	@Autowired
 	private JSONWebEncryptionService jweTokenService;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		
 		User user = userRepository.findById(UNVERIFIED_USER_ID).get();
@@ -51,8 +51,8 @@ public class ChangeEmailMvcTests extends AbstractMvcTests {
 				.andExpect(jsonPath("$.id").value(UNVERIFIED_USER_ID));
 		
 		User updatedUser = userRepository.findById(UNVERIFIED_USER_ID).get();
-		Assertions.assertNull(updatedUser.getNewEmail());
-		Assertions.assertEquals(NEW_EMAIL, updatedUser.getEmail());
+		Assert.assertNull(updatedUser.getNewEmail());
+		Assert.assertEquals(NEW_EMAIL, updatedUser.getEmail());
 		
 		// Shouldn't be able to login with old token
 		mvc.perform(post("/api/core/users/{id}/email", UNVERIFIED_USER_ID)

@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -43,8 +43,8 @@ public class RequestEmailChangeMvcTests extends AbstractMvcTests {
 		verify(mailSender).send(any());
 		
 		User updatedUser = userRepository.findById(UNVERIFIED_USER_ID).get();
-		Assertions.assertEquals(NEW_EMAIL, updatedUser.getNewEmail());
-		Assertions.assertEquals(UNVERIFIED_USER_EMAIL, updatedUser.getEmail());
+		Assert.assertEquals(NEW_EMAIL, updatedUser.getNewEmail());
+		Assert.assertEquals(UNVERIFIED_USER_EMAIL, updatedUser.getEmail());
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class RequestEmailChangeMvcTests extends AbstractMvcTests {
 				.andExpect(status().is(204));
 		
 		User updatedUser = userRepository.findById(UNVERIFIED_USER_ID).get();
-		Assertions.assertEquals(NEW_EMAIL, updatedUser.getNewEmail());
+		Assert.assertEquals(NEW_EMAIL, updatedUser.getNewEmail());
 	}	
 	
 	/**
@@ -94,7 +94,7 @@ public class RequestEmailChangeMvcTests extends AbstractMvcTests {
 		verify(mailSender, never()).send(any());
 
 		User updatedUser = userRepository.findById(UNVERIFIED_USER_ID).get();
-		Assertions.assertNull(updatedUser.getNewEmail());
+		Assert.assertNull(updatedUser.getNewEmail());
 	}
 	
 	/**

@@ -1,7 +1,0 @@
-apiVersion: operators.coreos.com/v1
-## Create an Operator Group object for the Elasticsearch operator
-kind: OperatorGroup
-metadata:
-  name: openshift-operators-redhat
-  namespace: openshift-operators-redhat 
-spec: {}
