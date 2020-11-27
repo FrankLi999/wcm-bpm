@@ -141,7 +141,11 @@
 			<groupId>com.lmax</groupId>
 			<artifactId>disruptor</artifactId>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -162,6 +166,7 @@
 			<artifactId>tomcat-embed-programmatic</artifactId>
 			<version>${tomcat.version}</version>
 		</dependency>
+		-->
 		<!--SpringFox dependencies -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -180,6 +185,7 @@
 		</dependency>
 		
 		<!-- modeshape dependencies -->
+		<!-- 
 		<dependency>
 			<groupId>org.modeshape</groupId>
 			<artifactId>modeshape-jcr-api</artifactId>
@@ -209,6 +215,7 @@
 			<groupId>org.modeshape</groupId>
 	        <artifactId>modeshape-extractor-tika</artifactId>
         </dependency>
+        -->
 		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>javax.servlet-api</artifactId>
