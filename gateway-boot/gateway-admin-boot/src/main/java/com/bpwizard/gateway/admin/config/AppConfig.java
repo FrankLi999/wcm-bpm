@@ -17,7 +17,7 @@ import com.bpwizard.spring.boot.commons.web.filter.LocaleFilter;
 @EntityScan(basePackages= {"com.bpwizard.spring.boot.commons.service.repo"})
 @EnableJpaRepositories({"com.bpwizard.spring.boot.commons.service.repo"})
 // @ComponentScan(basePackages={"com.bpwizard.spring.boot.commons.service.repo"})
-@ComponentScan(basePackages={"com.bpwizard.spring.boot.commons"})
+@ComponentScan(basePackages={"com.bpwizard.wcm_bpm", "com.bpwizard.spring.boot.commons"})
 public class AppConfig {
 
 	@Bean

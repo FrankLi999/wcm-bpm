@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons.security;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
@@ -49,20 +49,22 @@ public class SpringJwtServiceTests {
 		JWTClaimsSet claims = service.parseToken(token, "auth");
 		
 		log.info("Parsed token.");
-		Assert.assertEquals("subject", claims.getSubject());
-		Assert.assertEquals("abc@example.com", claims.getClaim("username"));
+		Assertions.assertEquals("subject", claims.getSubject());
+		Assertions.assertEquals("abc@example.com", claims.getClaim("username"));
 	}
 
-	@Test(expected = BadCredentialsException.class)
+	@Test
 	public void testParseJweTokenWrongAudience() {
-		
-		testParseTokenWrongAudience(jweService1);
+		Assertions.assertThrows(BadCredentialsException.class, () -> {
+		    testParseTokenWrongAudience(jweService1);
+		});
 	}
 	
-	@Test(expected = BadCredentialsException.class)
+	@Test
 	public void testParseJwsTokenWrongAudience() {
-		
-		testParseTokenWrongAudience(jwsService1);		
+		Assertions.assertThrows(BadCredentialsException.class, () -> {
+		    testParseTokenWrongAudience(jwsService1);
+		});			
 	}
 	
 
@@ -72,16 +74,18 @@ public class SpringJwtServiceTests {
 		service.parseToken(token, "auth2");
 	}
 
-	@Test(expected = BadCredentialsException.class)
+	@Test
 	public void testParseJweTokenExpired() throws InterruptedException {
-		
-		testParseTokenExpired(jweService1);
-	}
+		Assertions.assertThrows(BadCredentialsException.class, () -> {
+		    testParseTokenExpired(jweService1);
+		});
+			}
 	
-	@Test(expected = BadCredentialsException.class)
+	@Test
 	public void testParseJwsTokenExpired() throws InterruptedException {
-		
-		testParseTokenExpired(jwsService1);
+		Assertions.assertThrows(BadCredentialsException.class, () -> {
+		    testParseTokenExpired(jwsService1);
+		});
 	}
 
 	private void testParseTokenExpired(SpringTokenService service) throws InterruptedException {
@@ -91,16 +95,18 @@ public class SpringJwtServiceTests {
 		service.parseToken(token, "auth");
 	}
 
-	@Test(expected = BadCredentialsException.class)
+	@Test
 	public void testParseJweTokenWrongSecret() {
-		
-		testParseTokenWrongSecret(jweService1, jweService2);
+		Assertions.assertThrows(BadCredentialsException.class, () -> {
+		    testParseTokenWrongSecret(jweService1, jweService2);
+		});		
 	}
 
-	@Test(expected = BadCredentialsException.class)
+	@Test
 	public void testParseJwsTokenWrongSecret() {
-		
-		testParseTokenWrongSecret(jwsService1, jwsService2);
+		Assertions.assertThrows(BadCredentialsException.class, () -> {
+		    testParseTokenWrongSecret(jwsService1, jwsService2);
+		});		
 	}
 
 	private void testParseTokenWrongSecret(SpringTokenService service1, SpringTokenService service2) {
@@ -109,16 +115,18 @@ public class SpringJwtServiceTests {
 		service2.parseToken(token, "auth");
 	}
 
-	@Test(expected = BadCredentialsException.class)
+	@Test
 	public void testParseJweTokenCutoffTime() throws InterruptedException {
-
-		testParseTokenCutoffTime(jweService1);
+		Assertions.assertThrows(BadCredentialsException.class, () -> {
+		    testParseTokenCutoffTime(jweService1);
+		});		
 	}
 
-	@Test(expected = BadCredentialsException.class)
+	@Test
 	public void testParseJwsTokenCutoffTime() throws InterruptedException {
-
-		testParseTokenCutoffTime(jwsService1);
+		Assertions.assertThrows(BadCredentialsException.class, () -> {
+		    testParseTokenCutoffTime(jwsService1);
+		});		
 	}
 
 

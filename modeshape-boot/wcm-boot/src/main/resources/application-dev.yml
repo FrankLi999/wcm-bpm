@@ -52,6 +52,7 @@ spring:
     # generate-ddl=true
     hibernate:
       ddl-auto: update
+      #ddl-auto: update
       # ddl-auto: update, create-drop, create, none
       # ddl-auto: none
       # use-new-id-generator-mappings: false
@@ -165,7 +166,9 @@ bpw:
       enabled: true
     datasource:
       url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+      # url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
       driver-class-name: com.mysql.jdbc.Driver
+      # driver-class-name: org.h2.Driver
       username: wcmbpm
       password: P@ssw0rd
   # auth:
@@ -190,7 +193,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://wcm-authoring:3009, http://bpm-ui:4009, http://gateway-ui:5009, http://mysite:6009
+    allowed-origins: http://wcm-authoring:3009, http://wcm-authoring:4200, http://bpm-ui:4009, http://gateway-ui:5009, http://mysite:6009
 #    exposedHeaders: 
 #      - Cache-Control
 #      - Connection

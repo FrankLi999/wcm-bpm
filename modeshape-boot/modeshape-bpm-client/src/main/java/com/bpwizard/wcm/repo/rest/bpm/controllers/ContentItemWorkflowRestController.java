@@ -119,7 +119,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			if (at.getContentItemAcl() != null && at.getContentItemAcl().getOnSaveDraftPermissions() != null) {
 				contentItem.setAcl(at.getContentItemAcl().getOnSaveDraftPermissions());
 			}
-			newNode = (RestNode)this.itemHandler.addItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at)).getBody();
+			newNode = (RestNode)this.wcmItemHandler.addItem(WcmEvent.WcmItemType.contentItem, baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at)).getBody();
 			if (at.getContentItemAcl() != null && at.getContentItemAcl().getOnSaveDraftPermissions() != null) {
 				String repositoryName = contentItem.getRepository();
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
@@ -161,7 +161,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 				contentItem.setWorkflow(workflowNode);
 			}
 			workflowNode.setProcessInstanceId(processInstanceId);
-			this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at));
+			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.contentItem, baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at));
 			//TODO: prepare for web socket push of reviewing tasks.
 			if (logger.isDebugEnabled()) {
 				logger.traceExit();
@@ -193,7 +193,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			
-			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, repository, WcmConstants.DRAFT_WS,
+			RestNode saNode = (RestNode) this.wcmItemHandler.item(baseUrl, repository, WcmConstants.DRAFT_WS,
 					absPath, WcmConstants.CONTENT_ITEM_DEPATH);
 			DraftItem[] draftItems = saNode.getChildren().stream()
 					.filter(WcmUtils::isDraftContentItem)
@@ -522,7 +522,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 					WcmConstants.DRAFT_WS, 
 					contentItem.getAuthoringTemplate(), 
 					request);
-			this.itemHandler.updateItem(baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at));
+			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.contentItem, baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at));
 			if (contentItem.getAcl() != null) {
 				String repositoryName = contentItem.getRepository();
 				String workspaceName = contentItem.getWorkspace();
@@ -667,7 +667,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			List<String> currentDescendants = new ArrayList<String>();		
 			if (this.syndicationEnabled) {
 				try {
-					RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, publishRequest.getRepository(),  WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
+					RestNode restNode = (RestNode)this.wcmItemHandler.item(baseUrl, publishRequest.getRepository(),  WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
 					if (restNode == null) {
 						newItem = true;
 					} else {
@@ -690,7 +690,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        // defaultSession.save();
 			
 	        if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, publishRequest.getRepository(), WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
+				RestNode restNode = (RestNode)this.wcmItemHandler.item(baseUrl, publishRequest.getRepository(), WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
 				if (newItem) {
 					syndicationUtils.addNewItemEvent(
 							restNode, 
@@ -739,7 +739,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
   			List<String> currentDescendants = new ArrayList<String>();	
   			String nodeId = null;
 			if (this.syndicationEnabled) {
-				RestNode restNode = (RestNode)this.itemHandler.item(baseUrl, repository,  WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
+				RestNode restNode = (RestNode)this.wcmItemHandler.item(baseUrl, repository,  WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
 				nodeId = restNode.getId();
 				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
 			}
@@ -878,17 +878,6 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
         		new String[] {authorEmail},
         		"<h1>Draft you created was rejected.</h1>. The content path is " + rejectRequest.getWcmPath());
     }
-	
-//	protected String reviewContentItem(@RequestBody ReviewContentItemRequest reviewContentItemRequest) {
-//		UserDetails principal = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String username = principal.getUsername();
-//		
-//		//@CurrentUser SpringPrincipal userPrincipal, 
-//		return this.reviewTaskService.claimTask(
-//				reviewContentItemRequest.getContentId(),
-//				reviewContentItemRequest.getTaskName(), 
-//				username);
-//	}
 	
 	protected String completeReview(@RequestBody CompleteReviewRequest completeReviewRequest) {
 		return this.reviewTaskService.completeReview(

@@ -1,0 +1,114 @@
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    fabric8.io/git-commit: 00ec1473bbab7695923ef0321e844cc1008314e4
+    fabric8.io/git-branch: master
+    fabric8.io/git-url: https://github.com/FrankLi999/wcm-bpm.git
+    fabric8.io/scm-url: https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/openshift-demo
+    fabric8.io/scm-tag: HEAD
+  labels:
+    app: openshift-demo
+    provider: fabric8
+    version: 0.0.1-SNAPSHOT
+    group: com.bpwizard.openshift
+  name: openshift-demo
+  namespace: wcm-bpm
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    app: openshift-demo
+    provider: fabric8
+    group: com.bpwizard.openshift
+  strategy:
+    rollingParams:
+      timeoutSeconds: 3600
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        fabric8.io/git-commit: 00ec1473bbab7695923ef0321e844cc1008314e4
+        fabric8.io/git-branch: master
+        fabric8.io/scm-tag: HEAD
+        fabric8.io/git-url: https://github.com/FrankLi999/wcm-bpm.git
+        fabric8.io/scm-url: https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/openshift-demo
+      labels:
+        app: openshift-demo
+        provider: fabric8
+        version: 0.0.1-SNAPSHOT
+        group: com.bpwizard.openshift
+      namespace: wcm-bpm
+    spec:
+      containers:
+      - env:
+        - name: JAVA_OPTIONS
+          value: -Dspring.profiles.active=openshift -Djasypt.encryptor.password=password
+            -DROOT_LOG_LEVEL=WARN -DAPP_LOG_LEVEL=DEBUG -Dlog.root.dir=/var/spring-logs/openshift-demo-boot
+        - name: DB_HOST_PORT
+          value: mysql:3306
+        - name: DB_DATABASE
+          value: wcm_bpm
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: wcm-bpm-database-secret
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: wcm-bpm-database-secret
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        image: "openshift-demo:latest"
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: spring-boot
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9779
+          name: prometheus
+          protocol: TCP
+        - containerPort: 8778
+          name: jolokia
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        securityContext:
+          privileged: false
+        volumeMounts:
+        - mountPath: /var/spring-logs/openshift-demo-boot
+          name: openshift-demo-log-directory
+        - mountPath: /etc/secrets/openshift-demo-config
+          name: openshift-demo-config
+          readOnly: true
+      serviceAccountName: openshift-demo
+      volumes:
+      - emptyDir: {}
+        name: openshift-demo-log-directory
+      - name: openshift-demo-config
+        secret:
+          secretName: wcm-bpm-database-secret
+  triggers:
+  - type: ConfigChange

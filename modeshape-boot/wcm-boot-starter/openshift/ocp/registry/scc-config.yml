@@ -1,0 +1,56 @@
+# Security Context Constraint template.
+#
+# This defines customized scc and service account to run some of the docker images wherever the 'default' service account privileges are not sufficient.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: scc-config-template
+  namespace: wcm-bpm
+  annotations:
+    description: This template defines the scc objects
+    tags: 'scc'
+    openshift.io/display-name: scc-config-template
+    openshift.io/long-description: 'This template provides the scc objects'
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: scc-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    readOnly: true
+    displayName: '*** PLEASE DO NOT CHANGE THIS ***'
+objects:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: ${SVC_ID}
+  - apiVersion: v1
+    kind: SecurityContextConstraints
+    metadata:
+      name: jhipster-scc
+      annotations:
+        kubernetes.io/description: 'This provides all features of the restricted SCC but allows users to run with any UID and any GID.
+          This mostly inherits anyuid scc.'
+    runAsUser:
+      type: RunAsAny
+    seLinuxContext:
+      type: MustRunAs
+    fsGroup:
+      type: RunAsAny
+    supplementalGroups:
+      type: RunAsAny
+    users:
+      - system:serviceaccount:wcm-bpm:${SVC_ID}
+    volumes:
+      - configMap
+      - downwardAPI
+      - emptyDir
+      - persistentVolumeClaim
+      - secret
+      - hostPath
+      - nfs
+    priority: 1

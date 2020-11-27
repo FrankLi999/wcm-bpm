@@ -1,0 +1,59 @@
+# ConfigMap template.
+#
+# This is centralized/externalized configuration service from OpenShift. Pls note wherever displayName says
+# *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: application-config-template
+  namespace: wcm-bpm
+  annotations:
+    description: This template defines the config objects
+    tags: 'config, key/value'
+    openshift.io/display-name: application-config-template
+    openshift.io/long-description: 'This template provides the config objects'
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: application-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: application-config
+    description: Name of the resource
+    required: true
+    displayName: '*** PLEASE DO NOT CHANGE THIS ***'
+objects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: ${APPLICATION_NAME}
+    #common configuration shared between all applications
+    data:
+      application.yml: |-
+        configserver:
+          name:  JHipster Registry
+          status: Connected to the JHipster Registry running in OpenShift
+        eureka:
+          client:
+            initial-instance-info-replication-interval-seconds: 15
+            instance-info-replication-interval-seconds: 15
+            registry-fetch-interval-seconds: 15
+            fetch-registry: true
+            register-with-eureka: true
+            eureka-service-url-poll-interval-seconds: 15
+          instance:
+            lease-renewal-interval-in-seconds: 10
+            registry-default-open-for-traffic-count: 0
+        jhipster:
+          security:
+            authentication:
+              jwt:
+                base64-secret: MzA5ODA5YjRjNWU1YjRhN2I4N2ZmNmY3MmJlYzJhYzNjMjE4MTQ0YzJjYWM0OWU0NzRlNjZiZWIyYmU5NWUxYTZkOTUzY2MxMzI4ZTIwYjgxZjgyMDc3MmExZDMwNDExNTZmYTJjNzkyYTM4NDVkMDQxMTViZmMwZjllZjk5YTA=
+      # app specific configuration
+      jhipster-registry.yml: |-
+        eureka:
+          client:
+            service-url:
+              # This must contain a list of all Eureka server replicas for registry HA to work correctly
+              defaultZone: http://admin:${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-0.jhipster-registry:8761/eureka/,http://admin:${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-1.jhipster-registry:8761/eureka/

@@ -87,6 +87,11 @@
         </dependency>
         <dependency>
 			<groupId>com.bpwizard.spring</groupId>
+			<artifactId>wcm-bpm-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+        <dependency>
+			<groupId>com.bpwizard.spring</groupId>
 			<artifactId>spring-boot-commons-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>

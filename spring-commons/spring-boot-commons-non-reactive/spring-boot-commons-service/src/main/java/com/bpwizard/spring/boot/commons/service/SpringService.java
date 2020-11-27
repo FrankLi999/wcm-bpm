@@ -52,11 +52,7 @@ import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
-/**
- * The Spring Commons Service class
- * 
- * @author Sanjay Patel
- */
+
 @Validated
 @Transactional(propagation=Propagation.SUPPORTS, readOnly=true)
 public abstract class SpringService

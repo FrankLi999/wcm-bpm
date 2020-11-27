@@ -13,7 +13,7 @@
 	    <groupId>com.bpwizard.wcm-bpm</groupId>
 	    <artifactId>modeshape-boot</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../</relativePath>
+		<relativePath/>
 	</parent>
 	<properties>
 	    <!-- <jgroups.version>4.1.8.Final</jgroups.version>  -->
@@ -27,6 +27,18 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
         </dependency>
+        <dependency>
+			<groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>wcm-boot-starter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>bpm-boot-starter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		-->
 	    <dependency>
             <groupId>com.bpwizard.wcm-bpm</groupId>
             <artifactId>modeshape-spring</artifactId>
@@ -91,6 +103,11 @@
         <dependency>
 			<groupId>com.bpwizard.spring</groupId>
 			<artifactId>spring-boot-commons-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bpwizard.spring</groupId>
+			<artifactId>wcm-bpm-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
         <dependency>
@@ -282,16 +299,19 @@
 		    <groupId>io.micrometer</groupId>
 		    <artifactId>micrometer-core</artifactId>
 		</dependency>
+		<!-- 
 		<dependency>
           <groupId>com.h2database</groupId>
           <artifactId>h2</artifactId>
           <scope>test</scope>
         </dependency>
+        -->
+        <!--
         <dependency>
 		    <groupId>mysql</groupId>
 		    <artifactId>mysql-connector-java</artifactId>
 		</dependency>
-		
+		-->
 		<!-- ignite caching -->
 		<dependency>
             <groupId>org.apache.ignite</groupId>

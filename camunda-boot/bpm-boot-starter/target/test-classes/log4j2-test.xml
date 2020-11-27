@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    
+    <Properties>
+        <Property name="ROOT_LOG_LEVEL">METRIC</Property>
+        <Property name="APP_LOG_LEVEL">WARN</Property>
+        <Property name="LOG_PATTERN">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} %-5p ${hostName} --- [%15.15t] [%X{requestID}]  %-40.40c{1.} : %m%n%ex
+        </Property>
+    </Properties>
+
+	<CustomLevels>
+	    <CustomLevel name="AUDIT" intLevel="351" />
+	    <CustomLevel name="METRIC" intLevel="352" />
+	</CustomLevels>
+  
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <Async name="ROOT-ASYNC" bufferSize="512" includeLocation="true">
+	        <AppenderRef ref="CONSOLE" />
+	    </Async>
+	    <Async name="APP-ASYNC" bufferSize="512" includeLocation="true">
+	        <AppenderRef ref="CONSOLE" />
+	    </Async>
+    </Appenders>
+    
+    <Loggers>
+        <Logger name="org.bpwizard" level="DEBUG">
+            <AppenderRef ref="APP-ASYNC" />
+        </Logger>
+        
+        <Root level="DEBUG">
+            <AppenderRef ref="ROOT-ASYNC"/>
+        </Root>
+    </Loggers>
+</Configuration>

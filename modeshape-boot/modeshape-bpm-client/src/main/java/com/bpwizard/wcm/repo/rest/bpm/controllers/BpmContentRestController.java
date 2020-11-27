@@ -52,7 +52,7 @@ public class BpmContentRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			//String siteAreaPath = String.format(SITE_AREA_PATTERN, "home/applications");
-			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, REPOSITITORY, WORKSPACE,
+			RestNode saNode = (RestNode) this.wcmItemHandler.item(baseUrl, REPOSITITORY, WORKSPACE,
 					WcmUtils.nodePath(wcmPath), WcmConstants.SITE_AREA_DEPTH);
 			BpmApplications bpmApplications = new BpmApplications();
 
@@ -92,7 +92,7 @@ public class BpmContentRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			// String siteAreaPath = String.format(SITE_AREA_PATTERN, "home/links");
-			RestNode saNode = (RestNode) this.itemHandler.item(baseUrl, REPOSITITORY, WORKSPACE,
+			RestNode saNode = (RestNode) this.wcmItemHandler.item(baseUrl, REPOSITITORY, WORKSPACE,
 					WcmUtils.nodePath(wcmPath), WcmConstants.SITE_AREA_DEPTH);
 			BpmLinks bpmLinks = new BpmLinks();
 
@@ -131,7 +131,7 @@ public class BpmContentRestController extends BaseWcmRestController {
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			// String siteAreaPath = String.format(SITE_AREA_PATTERN, "home/links");
-			RestNode resourcesNode = (RestNode) this.itemHandler.item(baseUrl, REPOSITITORY, WORKSPACE,
+			RestNode resourcesNode = (RestNode) this.wcmItemHandler.item(baseUrl, REPOSITITORY, WORKSPACE,
 					WcmUtils.nodePath("/camunda/asset/resources"), WcmConstants.SITE_AREA_DEPTH);
 			List<Resource> resources = resourcesNode.getChildren().stream()
 					.filter(node -> WcmUtils.checkNodeType(node, "bpw:camunda_resources"))

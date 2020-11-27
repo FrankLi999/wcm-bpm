@@ -74,6 +74,12 @@
   			<artifactId>camunda-engine-feel-juel</artifactId>
 	    </dependency>
 
+        <dependency>
+			<groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>bpm-boot-starter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>camunda-rest-boot</artifactId>
@@ -287,16 +293,19 @@
 		    <groupId>io.micrometer</groupId>
 		    <artifactId>micrometer-core</artifactId>
 		</dependency>
+		<!-- 
 		<dependency>
           <groupId>com.h2database</groupId>
           <artifactId>h2</artifactId>
           <scope>test</scope>
         </dependency>
+        -->
+        <!--
         <dependency>
 		    <groupId>mysql</groupId>
 		    <artifactId>mysql-connector-java</artifactId>
 		</dependency>
-		
+		-->
 		<!-- ignite caching -->
 		<dependency>
             <groupId>org.apache.ignite</groupId>
@@ -322,6 +331,7 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.197</version>
+            <!-- <scope>test</scope>  -->
         </dependency>
         <!--
         <dependency>

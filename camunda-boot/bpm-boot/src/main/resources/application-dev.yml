@@ -52,13 +52,14 @@ spring:
     # generate-ddl=true
     hibernate:
       ddl-auto: update
+      # ddl-auto: create-drop
       # ddl-auto: update, create-drop, create, none
       # ddl-auto: none
       # use-new-id-generator-mappings: false
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
       hibernate:
-        # dialect: org.hibernate.dialect.H2Dialect
+        #dialect: org.hibernate.dialect.H2Dialect
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         id:
           new_generator_mappings: false
@@ -78,7 +79,7 @@ spring:
     username: wcmbpm
     password: P@ssw0rd
     driver-class-name: com.mysql.jdbc.Driver
-    
+    #driver-class-name: org.h2.Driver
     testOnBorrow: true
     testWhileIdle: true
     timeBetweenEvictionRunsMillis: 60000
@@ -206,7 +207,9 @@ camunda:
       enabled: false
     authorization:
       enabled: true
-    # database:
+    #database:
+      # schema-update: true
+      # schema-update: create-drop
       # schema-update: true, false, create, create-drop, drop-create, default: true
       # schema-update: create
     admin-user:

@@ -1,0 +1,10 @@
+apiVersion: v1
+## create ns for elasticsearch operator
+kind: Namespace
+metadata:
+  name: openshift-operators-redhat 
+  annotations:
+    openshift.io/node-selector: ""
+  labels:
+    openshift.io/cluster-logging: "true"
+    openshift.io/cluster-monitoring: "true"
