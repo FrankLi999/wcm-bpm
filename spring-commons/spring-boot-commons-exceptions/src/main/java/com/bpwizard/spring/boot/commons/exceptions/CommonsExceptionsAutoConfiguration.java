@@ -10,16 +10,18 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.bpwizard.spring.boot.commons.exceptions.handlers.AbstractExceptionHandler;
+import com.bpwizard.spring.boot.commons.exceptions.handlers.ConstraintViolationExceptionHandler;
+import com.bpwizard.spring.boot.commons.exceptions.handlers.MultiErrorExceptionHandler;
+import com.bpwizard.spring.boot.commons.exceptions.handlers.WebExchangeBindExceptionHandler;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 
 @Configuration
 @AutoConfigureBefore({ValidationAutoConfiguration.class})
-@ComponentScan(basePackageClasses=AbstractExceptionHandler.class)
+// @ComponentScan(basePackageClasses=AbstractExceptionHandler.class)
 public class CommonsExceptionsAutoConfiguration {
 
 	private static final Log log = LogFactory.getLog(CommonsExceptionsAutoConfiguration.class);
@@ -70,5 +72,23 @@ public class CommonsExceptionsAutoConfiguration {
 
         log.info("Configuring SpringExceptionUtils");       		
 		return new SpringExceptionUtils(messageSource, validator, exceptionIdMaker);
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(ConstraintViolationExceptionHandler.class)
+	public ConstraintViolationExceptionHandler constraintViolationExceptionHandler() {
+		return new ConstraintViolationExceptionHandler();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(MultiErrorExceptionHandler.class)
+	public MultiErrorExceptionHandler multiErrorExceptionHandler() {
+		return new MultiErrorExceptionHandler();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(WebExchangeBindExceptionHandler.class)
+	public WebExchangeBindExceptionHandler WebExchangeBindExceptionHandler() {
+		return new WebExchangeBindExceptionHandler();
 	}
 }

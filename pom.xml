@@ -18,8 +18,7 @@
 		<!-- <version>2.1.6.RELEASE</version>  -->
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-
-	<modules>
+    <modules>
 	    <module>spring-commons</module>
 		<module>modeshape-boot</module>
 		<module>camunda-boot</module>

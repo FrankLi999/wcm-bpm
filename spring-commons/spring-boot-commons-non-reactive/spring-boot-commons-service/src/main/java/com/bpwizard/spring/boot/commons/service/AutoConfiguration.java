@@ -8,15 +8,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
 import com.bpwizard.spring.boot.commons.SpringProperties;
@@ -46,8 +48,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Sanjay Patel
  */
 @Configuration
-@EnableTransactionManagement
-// @EnableJpaAuditing
 @AutoConfigureBefore({CommonsJpaAutoConfiguration.class})
 public class AutoConfiguration {
 	
@@ -211,4 +211,10 @@ public class AutoConfiguration {
         }
         return roles;	
 	}
+	
+//	@Bean
+//	@ConditionalOnMissingBean(SpringService.class)
+//	public SpringService springService() {
+//		return new DefaultSpringService();
+//	}
 }

@@ -46,19 +46,23 @@ public abstract class SpringController
 
 	private static final Logger log = LogManager.getLogger(SpringController.class);
 
-    private long jwtExpirationMillis;
+    // private long jwtExpirationMillis;
+    
+    @Autowired
 	protected SpringService<U, ID> springService;
     
-	@Autowired
-	public void createSpringController(
-			SpringProperties properties,
-			SpringService<U, ID> springService) {
-		
-		this.jwtExpirationMillis = properties.getJwt().getExpirationMillis();
-		this.springService = springService;
-		
-		log.info("Created");
-	}
+    @Autowired
+    SpringProperties properties;
+	
+//    @Autowired
+//	public void createSpringController(
+//			SpringProperties properties,
+//			SpringService<U, ID> springService) {
+//		this.jwtExpirationMillis = properties.getJwt().getExpirationMillis();
+//		this.springService = springService;
+//		
+//		log.info("Created");
+//	}
 
 
 	/**
@@ -222,7 +226,7 @@ public abstract class SpringController
 		log.debug("Changing password ... ");				
 		String username = springService.changePassword(user, changePasswordForm);
 		
-		springService.addAuthHeader(response, username, jwtExpirationMillis);
+		springService.addAuthHeader(response, username, properties.getJwt().getExpirationMillis());
 	}
 
 
@@ -287,7 +291,7 @@ public abstract class SpringController
 	protected UserDto userWithToken(HttpServletResponse response) {
 		
 		UserDto currentUser = WebUtils.currentUser();
-		springService.addAuthHeader(response, currentUser.getUsername(), jwtExpirationMillis);
+		springService.addAuthHeader(response, currentUser.getUsername(), properties.getJwt().getExpirationMillis());
 		return currentUser;
 	}
 }
