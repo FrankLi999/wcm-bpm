@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 	<version>0.3.3-SNAPSHOT</version>
 
-	<name>Camunda BPM Process Test Coverage - Parent</name>
+	<name>camunda-bpm-process-test-coverage-parent</name>
 	<description>Helper library to visualize and assert which parts of a BPMN process have been covered by a unit test.</description>
 
 	<modules>

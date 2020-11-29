@@ -1517,7 +1517,8 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
 			dto.delegationState = taskQuery.getDelegationState().toString();
 		}
 
-		if (taskQuery.isTenantIdSet()) {
+		//if (taskQuery.isTenantIdSet()) {
+		if (taskQuery.isWithoutTenantId()) {
 			if (taskQuery.getTenantIds() != null) {
 				dto.tenantIdIn = taskQuery.getTenantIds();
 			} else {

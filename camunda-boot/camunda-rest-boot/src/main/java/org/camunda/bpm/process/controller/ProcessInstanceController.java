@@ -140,7 +140,7 @@ public class ProcessInstanceController extends BaseProcessRestController {
 			parameter.setHistoryEnabled(false);
 		}
 
-		parameter.initQueryVariableValues(processEngineConfiguration.getVariableSerializers());
+		parameter.initQueryVariableValues(processEngineConfiguration.getVariableSerializers(), processEngineConfiguration.getDatabaseType());
 	}
 
 	protected void configureExecutionQuery(ProcessInstanceQueryDto query) {

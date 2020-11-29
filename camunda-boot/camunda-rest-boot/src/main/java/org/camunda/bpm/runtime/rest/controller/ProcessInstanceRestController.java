@@ -124,7 +124,7 @@ public class ProcessInstanceRestController extends AbstractRuntimePluginRestCont
 			parameter.setHistoryEnabled(false);
 		}
 
-		parameter.initQueryVariableValues(processEngineConfiguration.getVariableSerializers());
+		parameter.initQueryVariableValues(processEngineConfiguration.getVariableSerializers(), processEngineConfiguration.getDatabaseType());
 	}
 
 	protected void configureExecutionQuery(ProcessInstanceQueryDto query) {

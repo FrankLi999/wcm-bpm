@@ -15,15 +15,13 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	
+
 	<modules>
         <module>camunda-db-identity-plugin</module>	
 	    <module>camunda-rest-boot</module>
 		<module>camunda-sample-processes</module>	
 		<module>camunda-sample-client</module>	
-
 		<module>bpm-boot</module>	
 		<module>bpm-boot-starter</module>	
 	</modules>    
-	
 </project>	
