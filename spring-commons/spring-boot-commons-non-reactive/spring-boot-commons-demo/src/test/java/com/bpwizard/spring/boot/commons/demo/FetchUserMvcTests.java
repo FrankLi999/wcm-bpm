@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo;
+package com.bpwizard.spring.boot.commons.demo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

@@ -46,7 +46,7 @@ import lombok.ToString;
  */
 @Getter @Setter
 @MappedSuperclass
-public class AbstractUser<ID extends Serializable> extends SpringEntity<ID> implements SpringUser<ID> {
+public abstract class AbstractUser<ID extends Serializable> extends SpringEntity<ID> implements SpringUser<ID> {
     public static final int NAME_MIN = 1;
     public static final int NAME_MAX = 50;
     

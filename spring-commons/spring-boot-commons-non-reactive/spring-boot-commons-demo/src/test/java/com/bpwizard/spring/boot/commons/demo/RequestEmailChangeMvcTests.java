@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo;
+package com.bpwizard.spring.boot.commons.demo;
 
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class RequestEmailChangeMvcTests extends AbstractMvcTests {

@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo;
+package com.bpwizard.spring.boot.commons.demo;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItems;
@@ -13,12 +13,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
-import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 @Sql({"/test-data/initialize.sql", "/test-data/finalize.sql"})
 public class SignupMvcTests extends AbstractMvcTests {
@@ -26,7 +25,7 @@ public class SignupMvcTests extends AbstractMvcTests {
 	@Test
 	public void testSignupWithInvalidData() throws Exception {
 		
-		User invalidUser = new User("abc", "user1", null, "fn", "ln");
+		User invalidUser = new User("abc@example.com", "abc", "abc", "user1", "ln");
 
 		mvc.perform(post("/api/core/users")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -34,15 +33,24 @@ public class SignupMvcTests extends AbstractMvcTests {
 				.andExpect(status().is(422))
 				.andExpect(jsonPath("$.errors[*].field").value(hasSize(4)))
 				.andExpect(jsonPath("$.errors[*].field").value(hasItems(
-					"user.email", "user.password", "user.name")));
-		
+					"user.email", "user.password", "user.name")))
+				.andExpect(jsonPath("$.errors[*].code").value(hasItems(
+					"{com.naturalprogrammer.spring.invalid.email}",
+					"{blank.name}",
+					"{com.naturalprogrammer.spring.invalid.email.size}",
+					"{com.naturalprogrammer.spring.invalid.password.size}")))
+				.andExpect(jsonPath("$.errors[*].message").value(hasItems(
+						"Not a well formed email address",
+						"Name required",
+						"Email must be between 4 and 250 characters",
+						"Password must be between 6 and 50 characters")));
 		verify(mailSender, never()).send(any());
 	}
 
 	@Test
 	public void testSignup() throws Exception {
 		
-		User user = new User("user.foo@example.com", "user123", "User Foo", "fn", "ln");
+		User user = new User("user.foo@example.com", "user", "user123", "User", "Foo");
 
 		mvc.perform(post("/api/core/users")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +78,7 @@ public class SignupMvcTests extends AbstractMvcTests {
 	@Test
 	public void testSignupDuplicateEmail() throws Exception {
 		
-		User user = new User("user@example.com", "user123", "User", "fn", "ln");
+		User user = new User("user@example.com", "user", "user123", "User", "User");
 
 		mvc.perform(post("/api/core/users")
 				.contentType(MediaType.APPLICATION_JSON)

@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo;
+package com.bpwizard.spring.boot.commons.demo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,11 +27,12 @@ import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 // @RunWith(SpringRunner.class)
 @SpringBootTest({
-	"log4j.configurationFile=log4j2-test.xml",
+	"logging.level.com.bpw=ERROR", // logging.level.root=ERROR does not work: https://stackoverflow.com/questions/49048298/springboottest-not-overriding-logging-level
+	"logging.level.org.springframework=ERROR",
 	"bpw.recaptcha.sitekey="
 })
 @AutoConfigureMockMvc
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.HSQL)
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @Sql({"/test-data/initialize.sql", "/test-data/finalize.sql"})
 public abstract class AbstractMvcTests {
 	
@@ -46,7 +47,7 @@ public abstract class AbstractMvcTests {
 	protected static final String ADMIN_EMAIL = "admin@example.com";
 	protected static final String ADMIN_PASSWORD = "admin!";
 	
-	protected static final String USER_PASSWORD = "test99!";
+	protected static final String USER_PASSWORD = "Sanjay99!";
 	protected static final String UNVERIFIED_USER_EMAIL = "unverifieduser@example.com";
 	
 	protected Map<Long, String> tokens = new HashMap<>(6);

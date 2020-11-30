@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo;
+package com.bpwizard.spring.boot.commons.demo;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
@@ -17,9 +17,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
+import com.bpwizard.spring.boot.commons.service.repo.domain.User;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
 
 @Sql({"/test-data/initialize.sql", "/test-data/finalize.sql"})
 public class UpdateUserMvcTests extends AbstractMvcTests {

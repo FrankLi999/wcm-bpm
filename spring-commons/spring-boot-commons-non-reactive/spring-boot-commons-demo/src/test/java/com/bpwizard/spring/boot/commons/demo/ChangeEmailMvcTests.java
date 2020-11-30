@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo;
+package com.bpwizard.spring.boot.commons.demo;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -14,8 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
-import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 public class ChangeEmailMvcTests extends AbstractMvcTests {
 	

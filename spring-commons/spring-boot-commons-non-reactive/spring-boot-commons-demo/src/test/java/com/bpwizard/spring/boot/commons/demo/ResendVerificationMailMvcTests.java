@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo;
+package com.bpwizard.spring.boot.commons.demo;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
