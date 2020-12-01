@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>wcm-workflow-client</artifactId>
+	<packaging>jar</packaging>
+	<name>wcm-workflow-client</name>
+	<description>Spring Boot Camunda</description>
+
+	<parent>
+	    <groupId>com.bpwizard.wcm-bpm</groupId>
+	    <artifactId>modeshape-boot</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+	<properties>
+	    <!-- <jgroups.version>4.1.8.Final</jgroups.version>  -->
+	    <jgroups.version>3.6.10.Final</jgroups.version>
+	    <jgroups-raft.version>0.5.1.Final</jgroups-raft.version>
+        <commons-cli.version>1.4</commons-cli.version>
+        <opentracing-spring-jaeger-cloud.version>2.0.3</opentracing-spring-jaeger-cloud.version>
+    </properties>
+	<dependencies>
+		<dependency>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>bpm-wcm-client-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>modeshape-jcr-rest-boot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>		
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Java Mail -->
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>1.5.0-b01</version>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>javax.jcr</groupId>
+		    <artifactId>jcr</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>

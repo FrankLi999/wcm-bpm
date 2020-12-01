@@ -1,4 +1,7 @@
 C:\projects\wcm-bpm\camunda-boot\bpm-boot-starter\src\main\java\com\bpwizard\bpm\config\CamundaConfig.java
 C:\projects\wcm-bpm\camunda-boot\bpm-boot-starter\src\main\java\com\bpwizard\bpm\LoggerDelegate.java
 C:\projects\wcm-bpm\camunda-boot\bpm-boot-starter\src\main\java\com\bpwizard\bpm\config\BpmAppConfig.java
+C:\projects\wcm-bpm\camunda-boot\bpm-boot-starter\src\main\java\com\bpwizard\bpm\config\MailConfig.java
 C:\projects\wcm-bpm\camunda-boot\bpm-boot-starter\src\main\java\com\bpwizard\bpm\rest\filter\StatelessUserAuthenticationFilter.java
+C:\projects\wcm-bpm\camunda-boot\bpm-boot-starter\src\main\java\com\bpwizard\bpm\config\SwaggerConfig.java
+C:\projects\wcm-bpm\camunda-boot\bpm-boot-starter\src\main\java\com\bpwizard\bpm\config\AppSecurityConfig.java

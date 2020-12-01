@@ -23,17 +23,6 @@
         <opentracing-spring-jaeger-cloud.version>2.0.3</opentracing-spring-jaeger-cloud.version>
     </properties>
 	<dependencies>
-	    <!-- 
-		<dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-        </dependency>
-        -->
-        <dependency>
-			<groupId>com.bpwizard.spring</groupId>
-			<artifactId>wcm-bpm-commons</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<!-- <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>  --> 
 		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>

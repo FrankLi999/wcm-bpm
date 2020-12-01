@@ -1,0 +1,12 @@
+com\bpwizard\bpm\wcm\service\TestEventDelegate.class
+com\bpwizard\bpm\wcm\service\ContentReviewTaskEndListener.class
+com\bpwizard\bpm\wcm\service\ReviewTaskService.class
+com\bpwizard\bpm\wcm\service\WcmFlowService.class
+com\bpwizard\bpm\wcm\service\ContentReviewTaskStartListener.class
+com\bpwizard\bpm\wcm\service\ContentTaskService.class
+com\bpwizard\bpm\wcm\service\PublishContentItemDelegate.class
+com\bpwizard\bpm\wcm\config\CamundaTaskConfig.class
+com\bpwizard\bpm\wcm\service\ContentServerUtils.class
+com\bpwizard\bpm\wcm\service\EditTaskService.class
+com\bpwizard\bpm\wcm\controllers\ContentItemWorkflowRestController.class
+com\bpwizard\bpm\wcm\service\ContentTaskRepo.class

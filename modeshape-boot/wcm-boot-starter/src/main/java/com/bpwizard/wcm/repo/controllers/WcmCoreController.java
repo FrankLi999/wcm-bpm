@@ -12,22 +12,20 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.security.AuthenticationRequest;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.service.SpringController;
+import com.bpwizard.spring.boot.commons.service.repo.annotations.CurrentUser;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
 import com.bpwizard.wcm.repo.dto.WcmUserProfile;
 import com.bpwizard.wcm.repo.rest.jcr.controllers.WcmRequestHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmSystem;
-import com.bpwizard.wcm_bpm.annotations.CurrentUser;
 
 // @RestController
 // @RequestMapping(WcmCoreController.BASE_URI)

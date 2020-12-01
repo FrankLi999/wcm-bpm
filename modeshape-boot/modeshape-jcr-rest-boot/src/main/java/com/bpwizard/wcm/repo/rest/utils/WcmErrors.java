@@ -39,6 +39,7 @@ public class WcmErrors {
 	public static final String LOCK_CONTENT_ITEM_ERROR = "com.bpwizard.modeshape.lock_content_item_error";
 	public static final String EXPIRE_CONTENT_ITEM_ERROR = "com.bpwizard.modeshape.expire_content_item_error";
 	public static final String UPDATE_CONTENT_ITEM_WORKFLOW_ERROR = "com.bpwizard.modeshape.update_content_item_workflow_error";
+	public static final String CONTENT_ITEM_WORKFLOW_ERROR = "com.bpwizard.modeshape.content_item_workflow_error";
 	
 	public static final String GET_FORM_ERROR = "com.bpwizard.modeshape.get_form_error";
 	public static final String CREATE_FORM_ERROR = "com.bpwizard.modeshape.create_form_error";

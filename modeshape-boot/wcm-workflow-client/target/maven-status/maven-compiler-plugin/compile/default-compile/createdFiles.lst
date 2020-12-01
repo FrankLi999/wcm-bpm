@@ -1,0 +1,5 @@
+com\bpwizard\bpm\wcm\service\MailService.class
+com\bpwizard\bpm\wcm\service\BpmService.class
+com\bpwizard\bpm\wcm\service\ContentServerUtils.class
+com\bpwizard\bpm\wcm\controllers\ContentItemWorkflowRestController.class
+com\bpwizard\bpm\wcm\service\ContentTaskRepo.class

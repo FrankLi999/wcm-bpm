@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.repo.dto.UserProfile;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmSystem;
-import com.bpwizard.wcm_bpm.dto.UserProfile;
 public class WcmUserProfile extends UserProfile {
 	
     private WcmSystem settings;
