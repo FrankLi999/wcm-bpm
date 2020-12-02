@@ -1,7 +1,0 @@
-com\bpwizard\bpm\config\MailConfig.class
-com\bpwizard\bpm\config\SwaggerConfig.class
-com\bpwizard\bpm\config\AppSecurityConfig.class
-com\bpwizard\bpm\config\BpmAppConfig.class
-com\bpwizard\bpm\LoggerDelegate.class
-com\bpwizard\bpm\rest\filter\StatelessUserAuthenticationFilter.class
-com\bpwizard\bpm\config\CamundaConfig.class
