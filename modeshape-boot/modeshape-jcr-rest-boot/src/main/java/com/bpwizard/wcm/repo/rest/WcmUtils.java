@@ -462,7 +462,7 @@ public class WcmUtils {
 				at.setNodeType(property.getValues().get(0));
 			} 
 		}
-		if (StringUtils.isEmpty(at.getNodeType())) {
+		if (!StringUtils.hasText(at.getNodeType())) {
 			at.setNodeType(WcmUtils.getContentType(at.getLibrary(), at.getName()));
 		}
 		this.populateAuthoringTemplate(at, node);

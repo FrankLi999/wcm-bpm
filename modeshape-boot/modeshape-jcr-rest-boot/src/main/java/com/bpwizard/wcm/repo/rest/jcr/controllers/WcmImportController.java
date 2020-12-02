@@ -123,7 +123,7 @@ public class WcmImportController extends BaseWcmRestController {
     		String baseUrl = RestHelper.repositoryUrl(request);
 	    	ResponseEntity<?> response = this.nodeTypeHandler.importCND(baseUrl, repositoryName, workspaceName, allowUpdate, file.getInputStream());
 	    	if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(workspaceName)) {
-    			syndicationUtils.addCNDEvent(repositoryName, workspaceName, file.getInputStream(), WcmEvent.WcmItemType.cnd);
+    			wcmEventService.addCNDEvent(repositoryName, workspaceName, file.getInputStream(), WcmEvent.WcmItemType.cnd);
     		}
 	    	logger.debug("Exiting ...");
 	    	return response;
@@ -145,7 +145,7 @@ public class WcmImportController extends BaseWcmRestController {
         				resourceLoader.getResource(preload.getPath()).getInputStream());
     		}
     		if (this.syndicationEnabled) {
-    			syndicationUtils.addCNDEvent(preload.getRepository(), WcmConstants.DEFAULT_WS, resourceLoader.getResource(preload.getPath()).getInputStream(), WcmEvent.WcmItemType.cnd);
+    			wcmEventService.addCNDEvent(preload.getRepository(), WcmConstants.DEFAULT_WS, resourceLoader.getResource(preload.getPath()).getInputStream(), WcmEvent.WcmItemType.cnd);
     		}
 	        logger.debug("Exiting ...");
     	} catch (Throwable t) {

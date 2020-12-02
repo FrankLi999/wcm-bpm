@@ -30,9 +30,6 @@ public class CollectorController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/collector";
 	private static final Logger logger = LogManager.getLogger(CollectorController.class);
 	
-//	@Autowired
-//	private WcmEventHandler wcmEventHandler;
-	
 	@PostMapping(path = "/collect", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> collectItems(
 			@RequestBody List<WcmEvent> wcmItems,  HttpServletRequest request) 

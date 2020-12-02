@@ -2,10 +2,24 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.sql.Timestamp;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedBy;
+
 public class Syndication {
+	@Id
 	private Long id;
 	private WcmServer collector;
 	private Timestamp lastSyndication;
+	@CreatedBy
+	private String createdBy;
+	@LastModifiedBy
+	private String updatedBy;
+	@CreatedDate
+	private Timestamp createdAt;
+	@LastModifiedBy
+	private Timestamp updatedAt;
 	
 	public Long getId() {
 		return id;
@@ -31,10 +45,42 @@ public class Syndication {
 		this.lastSyndication = lastSyndication;
 	}
 
-	@Override
-	public String toString() {
-		return "Syndication [id=" + id + ", collector=" + collector
-				+ ", lastSyndication=" + lastSyndication + "]";
+	public String getCreatedBy() {
+		return createdBy;
 	}
 
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	@Override
+	public String toString() {
+		return "Syndication [id=" + id + ", collector=" + collector + ", lastSyndication=" + lastSyndication
+				+ ", createdBy=" + createdBy + ", updatedBy=" + updatedBy + ", createdAt=" + createdAt + ", updatedAt="
+				+ updatedAt + "]";
+	}
 }

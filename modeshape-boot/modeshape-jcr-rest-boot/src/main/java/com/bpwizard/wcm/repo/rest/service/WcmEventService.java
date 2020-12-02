@@ -1,4 +1,5 @@
-package com.bpwizard.wcm.repo.rest;
+package com.bpwizard.wcm.repo.rest.service;
+
 
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -8,15 +9,18 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bpwizard.wcm.repo.rest.handler.WcmEventHandler;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
-@Component
-public class SyndicationUtils {
-	private static final Logger logger = LogManager.getLogger(SyndicationUtils.class);
+
+@Service
+public class WcmEventService {
+	private static final Logger logger = LogManager.getLogger(SyndicationService.class);
 	
 
 	@Autowired
@@ -35,43 +39,26 @@ public class SyndicationUtils {
 		}
 	}
 	
+	@Transactional
 	public void addCNDEvent(
 			String repositoryName,
 			String workspace,
 			InputStream is,
 			WcmEvent.WcmItemType itemType) {
 		
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		Long timestamp = System.currentTimeMillis();
+		parameters.addValue("ID", String.format("cnd_%s", timestamp));
+		parameters.addValue("REPOSITORY", repositoryName);
+		parameters.addValue("WORKSPACE", workspace);
+	    parameters.addValue("ITEMTYPE", itemType);
+	    parameters.addValue("OPERATION", WcmEvent.Operation.create.name());
+	    parameters.addValue("timeCreated", new Timestamp(timestamp));
+	    parameters.addValue("CONTENT", is);
+	    wcmEventHandler.insertWcmEvent(parameters);
 	}
 	
-	public WcmEvent createNewItemEvent(
-			RestNode restNode, 
-			String repositoryName,
-			String workspace,
-			String path,
-			WcmEvent.WcmItemType itemType) {
-		
-		WcmEvent event = new WcmEvent();
-		
-		event.setRepository(repositoryName);
-		event.setWorkspace(workspace);
-		event.setWcmPath(path);
-		event.setOperation(WcmEvent.Operation.create);
-		event.setItemType(itemType);
-		
-		event.setId(restNode.getId());
-		for (RestProperty prop: restNode.getJcrProperties()) {
-		    if ("jcr:lastModified".equals(prop.getName())) {
-		    	event.setTimeCreated(Timestamp.valueOf(prop.getValues().get(0)));
-		    }
-		}
-		
-		List<String> descendants = new ArrayList<String>();
-		this.populateDescendantIds(restNode, descendants);
-		event.setDescendants(descendants);
-		return event;
-	}
-	
-	
+	@Transactional
 	public void addNewItemEvent(
 			RestNode restNode, 
 			String repositoryName,
@@ -88,15 +75,86 @@ public class SyndicationUtils {
 		wcmEventHandler.addWcmEvent(event);
 	}
 	
-	public void addNewItemEvents(List<WcmEvent> events) {
+	@Transactional
+	public int[] addNewItemEvents(List<WcmEvent> events) {
+		return wcmEventHandler.batchInsert(events);
 	}
 	
-	public void addUpdateItemEvents(List<WcmEvent> events) {
+	@Transactional
+	public int[] addUpdateItemEvents(List<WcmEvent> events) {
+		return wcmEventHandler.batchInsert(events);
 	}
 	
-	public void addDeleteItemEvents(List<WcmEvent> events) {
+	@Transactional
+	public int[] addDeleteItemEvents(List<WcmEvent> events) {
+		return wcmEventHandler.batchInsert(events);
 	}
+	
+	@Transactional
+	public void addUpdateItemEvent(
+			RestNode restNode, 
+			String repositoryName,
+			String workspace,
+			String path,
+			WcmEvent.WcmItemType itemType,
+			List<String> previousDescendants) {
+		
+		WcmEvent event = this.createUpdateItemEvent(
+				restNode, 
+				repositoryName, 
+				workspace, path, 
+				itemType, 
+				previousDescendants);
+		wcmEventHandler.updateWcmEvent(event);
+	}
+	
+	@Transactional
+	public void addDeleteItemEvent(
+			String nodeId, 
+			String repositoryName,
+			String workspace,
+			String path,
+			WcmEvent.WcmItemType itemType,
+			List<String> previousDescendants) {
+		
+		WcmEvent event = this.createDeleteItemEvent(
+				nodeId, 
+				repositoryName, 
+				workspace, 
+				path, 
+				itemType, 
+				previousDescendants);
+		wcmEventHandler.updateWcmEvent(event);
+	}
+	
+	public WcmEvent createNewItemEvent(
+			RestNode restNode, 
+			String repositoryName,
+			String workspace,
+			String path,
+			WcmEvent.WcmItemType itemType) {
+		
+		WcmEvent event = new WcmEvent();
+		event.setId(restNode.getId());
+		event.setRepository(repositoryName);
+		event.setWorkspace(workspace);
+		event.setWcmPath(path);
+		event.setOperation(WcmEvent.Operation.create);
+		event.setItemType(itemType);
+		
 
+		for (RestProperty prop: restNode.getJcrProperties()) {
+		    if ("jcr:lastModified".equals(prop.getName())) {
+		    	event.setTimeCreated(Timestamp.valueOf(prop.getValues().get(0)));
+		    }
+		}
+		
+		List<String> descendants = new ArrayList<String>();
+		this.populateDescendantIds(restNode, descendants);
+		event.setDescendants(descendants);
+		return event;
+	}
+	
 	public WcmEvent createUpdateItemEvent(
 			RestNode restNode, 
 			String repositoryName,
@@ -106,14 +164,13 @@ public class SyndicationUtils {
 			List<String> previousDescendants) {
 		
 		WcmEvent event = new WcmEvent();
-		
+		event.setId(restNode.getId());
 		event.setRepository(repositoryName);
 		event.setWorkspace(workspace);
 		event.setWcmPath(path);
 		event.setOperation(WcmEvent.Operation.update);
 		event.setItemType(itemType);
 		
-		event.setId(restNode.getId());
 		for (RestProperty prop: restNode.getJcrProperties()) {
 		    if ("jcr:lastModified".equals(prop.getName())) {
 		    	event.setTimeCreated(Timestamp.valueOf(prop.getValues().get(0)));
@@ -133,23 +190,6 @@ public class SyndicationUtils {
 		}
 		event.setRemovedDescendants(removedDescendants);
 		return event;
-	}
-	
-	public void addUpdateItemEvent(
-			RestNode restNode, 
-			String repositoryName,
-			String workspace,
-			String path,
-			WcmEvent.WcmItemType itemType,
-			List<String> previousDescendants) {
-		
-		WcmEvent event = this.createUpdateItemEvent(
-				restNode, 
-				repositoryName, 
-				workspace, path, 
-				itemType, 
-				previousDescendants);
-		wcmEventHandler.updateWcmEvent(event);
 	}
 	
 	public WcmEvent createDeleteItemEvent(
@@ -172,23 +212,5 @@ public class SyndicationUtils {
 		event.setDescendants(null);
 		event.setRemovedDescendants(previousDescendants);
 		return event;
-	}
-	
-	public void addDeleteItemEvent(
-			String nodeId, 
-			String repositoryName,
-			String workspace,
-			String path,
-			WcmEvent.WcmItemType itemType,
-			List<String> previousDescendants) {
-		
-		WcmEvent event = this.createDeleteItemEvent(
-				nodeId, 
-				repositoryName, 
-				workspace, 
-				path, 
-				itemType, 
-				previousDescendants);
-		wcmEventHandler.updateWcmEvent(event);
 	}
 }

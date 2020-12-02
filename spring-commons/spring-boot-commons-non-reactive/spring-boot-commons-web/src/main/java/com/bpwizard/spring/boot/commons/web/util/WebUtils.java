@@ -62,5 +62,10 @@ public class WebUtils {
 		
 		return SecurityUtils.currentUser(SecurityContextHolder.getContext());
 	}
+	
+	public static String currentUserId() {
+		UserDto currentUser = currentUser();
+		return (currentUser == null) ? null : currentUser.getId(); 
+	}
 
 }

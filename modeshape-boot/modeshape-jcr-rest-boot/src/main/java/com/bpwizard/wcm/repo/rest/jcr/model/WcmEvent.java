@@ -117,11 +117,10 @@ public class WcmEvent {
 	public void setRemovedDescendants(List<String> removedDescendants) {
 		this.removedDescendants = removedDescendants;
 	}
-	
 	@Override
 	public String toString() {
-		return "WcmEvent [id=" + id + ", wcmPath=" + wcmPath + ", repository=" + repository + ", workspace=" + workspace
-				+ ", operation=" + operation + ", itemType=" + itemType + ", timeCreated="
+		return "WcmEvent [id=" + id + ", wcmPath=" + wcmPath + ", repository=" + repository
+				+ ", workspace=" + workspace + ", operation=" + operation + ", itemType=" + itemType + ", timeCreated="
 				+ timeCreated + ", descendants=" + descendants + ", removedDescendants=" + removedDescendants + "]";
 	}
 }

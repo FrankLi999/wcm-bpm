@@ -24,11 +24,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.wcm.repo.rest.SyndicationUtils;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestItem;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
+import com.bpwizard.wcm.repo.rest.service.WcmEventService;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -47,7 +47,7 @@ public final class RestWcmItemHandler extends ItemHandler {
 	protected boolean syndicationEnabled = true;
 	
 	@Autowired	
-	protected SyndicationUtils syndicationUtils;
+	protected WcmEventService wcmEventService;
 
 	@Autowired	
 	protected WcmUtils wcmUtils;
@@ -123,7 +123,7 @@ public final class RestWcmItemHandler extends ItemHandler {
         if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(workspaceName)) {
         	int depth = WcmEvent.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
 			RestNode restNewNode = (RestNode)createRestItem(baseUrl, depth, session, newNode);
-			syndicationUtils.addNewItemEvent(
+			wcmEventService.addNewItemEvent(
 					(RestNode) restNewNode, 
 					repositoryName, 
 					WcmConstants.DEFAULT_WS, 
@@ -190,7 +190,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     	List<String> currentDescendants = new ArrayList<String>();		
     	if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(rawWorkspaceName)) {
 			RestNode restNode = (RestNode)this.item(baseUrl, rawRepositoryName, WcmConstants.DEFAULT_WS, path, WcmConstants.FULL_SUB_DEPTH);
-			syndicationUtils.populateDescendantIds(restNode, currentDescendants);
+			wcmEventService.populateDescendantIds(restNode, currentDescendants);
 		}
         Session session = getSession(rawRepositoryName, rawWorkspaceName);
         Item item = itemAtPath(path, session);
@@ -201,7 +201,7 @@ public final class RestWcmItemHandler extends ItemHandler {
         	int depth = WcmEvent.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
 			// RestNode restNode = (RestNode)this.item(baseUrl, rawRepositoryName, WcmConstants.DEFAULT_WS, path, depth);
         	RestNode restNode = (RestNode)createRestItem(baseUrl, depth, session, item);
-			syndicationUtils.addUpdateItemEvent(
+			wcmEventService.addUpdateItemEvent(
 					restNode, 
 					rawRepositoryName, 
 					WcmConstants.DEFAULT_WS,  
@@ -231,7 +231,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     	List<String> currentDescendants = new ArrayList<String>();		
     	if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(rawWorkspaceName)) {
 			RestNode restNode = (RestNode)this.item(baseUrl, rawRepositoryName, WcmConstants.DEFAULT_WS, path, WcmConstants.FULL_SUB_DEPTH);
-			syndicationUtils.populateDescendantIds(restNode, currentDescendants);
+			wcmEventService.populateDescendantIds(restNode, currentDescendants);
 		}	
 		
 		Session session = getSession(rawRepositoryName, rawWorkspaceName);
@@ -241,7 +241,7 @@ public final class RestWcmItemHandler extends ItemHandler {
         	int depth = WcmEvent.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
 			// RestNode restNode = (RestNode)this.item(baseUrl, rawRepositoryName, WcmConstants.DEFAULT_WS, path, depth);
         	RestNode restNode = (RestNode)createRestItem(baseUrl, depth, session, item);
-			syndicationUtils.addUpdateItemEvent(
+			wcmEventService.addUpdateItemEvent(
 					restNode, 
 					rawRepositoryName, 
 					WcmConstants.DEFAULT_WS,  
@@ -378,7 +378,7 @@ public final class RestWcmItemHandler extends ItemHandler {
 		Session expiredSession = this.repositoryManager.getSession(repository, WcmConstants.EXPIRED_WS);
 		this.doDelete(path, itemType, baseUrl, repository, workspace, session, draftSession, expiredSession, wcmEvents);
 		if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(session.getWorkspace().getName())) {
-			syndicationUtils.addDeleteItemEvents(wcmEvents);
+			wcmEventService.addDeleteItemEvents(wcmEvents);
 		}
 		if (WcmConstants.DEFAULT_WS.equals(workspace)) {
 	        draftSession.save();
@@ -406,7 +406,7 @@ public final class RestWcmItemHandler extends ItemHandler {
 			int depth = WcmEvent.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
 			RestNode restNode = (RestNode)this.item(baseUrl, repository, workspace, path, depth);
 			nodeId = restNode.getId();
-			syndicationUtils.populateDescendantIds(restNode, currentDescendants);
+			wcmEventService.populateDescendantIds(restNode, currentDescendants);
 		}	
 		if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(workspace)) {
 			try {
@@ -426,7 +426,7 @@ public final class RestWcmItemHandler extends ItemHandler {
 		Node node = session.getNode(path);
 		node.remove();
 		if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(workspace)) {
-			wcmEvents.add(syndicationUtils.createDeleteItemEvent(
+			wcmEvents.add(wcmEventService.createDeleteItemEvent(
 					nodeId, 
 					repository, 
 					workspace, 
@@ -482,7 +482,7 @@ public final class RestWcmItemHandler extends ItemHandler {
             }
         }
         if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(session.getWorkspace().getName())) {
-			syndicationUtils.addDeleteItemEvents(wcmEvents);
+			wcmEventService.addDeleteItemEvents(wcmEvents);
 		}
         if (WcmConstants.DEFAULT_WS.equals(workspace)) {
 	        draftSession.save();
@@ -510,7 +510,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     					WcmConstants.DEFAULT_WS, 
     					nodePath, 
     					WcmConstants.FULL_SUB_DEPTH);
-    			syndicationUtils.populateDescendantIds(restNode, currentDescendants);
+    			wcmEventService.populateDescendantIds(restNode, currentDescendants);
     		}	
         	// Node newNode = addNode(parentNode, newNodeName, jsonNode.get("content"));
             TreeMap<String, JsonNode> jcrNodesByPath = createJcrNodesByPathMap(jsonNode.get("content"));
@@ -522,7 +522,7 @@ public final class RestWcmItemHandler extends ItemHandler {
             	int depth = WcmEvent.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
     			RestNode restNode = (RestNode)this.item(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, nodePath, depth);
             	// RestNode restNode = (RestNode)createRestItem(baseUrl, depth, session, item);
-    			wcmEvents.add(syndicationUtils.createUpdateItemEvent(
+    			wcmEvents.add(wcmEventService.createUpdateItemEvent(
     					restNode, 
     					repositoryName, 
     					WcmConstants.DEFAULT_WS,  
@@ -532,7 +532,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     		}
         }
         
-        syndicationUtils.addUpdateItemEvents( wcmEvents);
+        wcmEventService.addUpdateItemEvents( wcmEvents);
         session.save();
         if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(session.getWorkspace().getName())) {
         	Session drafrSession = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
@@ -604,7 +604,7 @@ public final class RestWcmItemHandler extends ItemHandler {
             	int depth = WcmEvent.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
     			RestNode restNode = (RestNode)this.item(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, nodePath, depth);
             	// RestNode restNode = (RestNode)createRestItem(baseUrl, depth, session, newNode);
-            	 wcmEvents.add(syndicationUtils.createNewItemEvent(
+            	 wcmEvents.add(wcmEventService.createNewItemEvent(
     					restNode,
     					repositoryName,
     					WcmConstants.DEFAULT_WS, 
@@ -613,7 +613,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     		}
             
         }
-        syndicationUtils.addNewItemEvents( wcmEvents);
+        wcmEventService.addNewItemEvents( wcmEvents);
         session.save();
         if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(session.getWorkspace().getName())) {
         	Session drafrSession = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);

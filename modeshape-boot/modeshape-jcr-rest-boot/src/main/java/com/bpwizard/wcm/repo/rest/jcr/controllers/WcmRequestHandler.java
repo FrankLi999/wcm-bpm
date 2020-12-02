@@ -30,7 +30,6 @@ import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
-import com.bpwizard.wcm.repo.rest.SyndicationUtils;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
@@ -107,6 +106,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories.Repository;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces.Workspace;
+import com.bpwizard.wcm.repo.rest.service.SyndicationService;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -142,7 +142,7 @@ public class WcmRequestHandler {
 	protected WcmUtils wcmUtils;
 	
 	@Autowired
-	protected SyndicationUtils syndicationUtils;
+	protected SyndicationService syndicationUtils;
 
 	protected ObjectMapper objectMapper = new ObjectMapper();
 	

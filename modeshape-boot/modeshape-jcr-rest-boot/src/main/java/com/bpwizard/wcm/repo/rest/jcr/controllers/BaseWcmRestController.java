@@ -4,12 +4,12 @@ import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.bpwizard.wcm.repo.rest.SyndicationUtils;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestWcmItemHandler;
+import com.bpwizard.wcm.repo.rest.service.WcmEventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class BaseWcmRestController {
@@ -38,7 +38,7 @@ public abstract class BaseWcmRestController {
 	protected WcmUtils wcmUtils;
 	
 	@Autowired
-	protected SyndicationUtils syndicationUtils;
+	protected WcmEventService wcmEventService;
 
 	protected ObjectMapper objectMapper = new ObjectMapper();
 }

@@ -29,9 +29,6 @@ public class SyndicationController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/syndication";
 	private static final Logger logger = LogManager.getLogger(SyndicationController.class);
 	
-//	@Autowired
-//	private WcmEventHandler wcmEventHandler;
-	
 	@GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
 	List<Syndication> getSyndications() {
 		return null;
