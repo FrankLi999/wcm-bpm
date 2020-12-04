@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.jcr.model.JcrNode;
@@ -16,6 +17,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.base.Charsets;
 
 @Component
 public class WcmEventKafkaPublisher {
@@ -30,21 +32,22 @@ public class WcmEventKafkaPublisher {
 	
 	public void syndicateCndTypes(WcmEvent wcmEvent) throws IOException {
 		this.sendMessage(wcmEventTopic, "cnd-types", cndToJsonString(wcmEvent).getBytes());
-		this.sendMessage(wcmEventTopic, "cnd-types-datum", wcmEvent.getContent().readAllBytes());
 	}
 	
 	public void syndicate(WcmEvent wcmEvent) throws IOException {
-		this.sendMessage(wcmEventTopic, String.format("start-of-wcm-item-%s", wcmEvent.getId()), eventToJsonString(wcmEvent).getBytes());
+		// Split large messages into 1 KB segments with the producing client, using partition keys to 
+		// ensure that all segments are sent to the same Kafka partition in the correct order. 
+		// The consuming client can then reconstruct the original large message. 
+		
 		List<String> descendantIds = getDescendantIds(wcmEvent);
 		for (String id : descendantIds) {
 			JcrNode jcrNode = jcrNodeService.getJcrNode(id);
-			this.sendMessage(wcmEventTopic, String.format("element-%s-%s", wcmEvent.getId(), id), jcrNodeToJsonString(jcrNode).getBytes());
-			this.sendContent(String.format("element-content-%s-%s", wcmEvent.getId(), id), jcrNode.getContent());
+			this.sendMessage(wcmEventTopic, String.format("wcm-element-%s-%s", wcmEvent.getId(), id), jcrNodeToJsonString(jcrNode).getBytes());
+			this.sendContent(String.format("wcm-element-%s-%s", wcmEvent.getId(), id), jcrNode.getContent());
 		}
-		
 		JcrNode jcrNode = jcrNodeService.getJcrNode(wcmEvent.getId());
-		this.sendMessage(wcmEventTopic, String.format("end-of-wcm-item-%s", wcmEvent.getId()), jcrNodeToJsonString(jcrNode).getBytes());
-		this.sendContent(String.format("wcm-item-content-%s", wcmEvent.getId()), jcrNode.getContent());
+		this.sendMessage(wcmEventTopic, String.format("wcm-item-%s", wcmEvent.getId()), eventToJsonString(wcmEvent, jcrNode).getBytes());
+		this.sendContent(String.format("wcm-item-%s", wcmEvent.getId()), jcrNode.getContent());
 	}
 	
 	private String cndToJsonString(WcmEvent wcmEvent) throws JsonProcessingException, IOException {
@@ -57,13 +60,14 @@ public class WcmEventKafkaPublisher {
 		
 		objectNode.put("itemType", wcmEvent.getItemType().name());
 		objectNode.put("operation", wcmEvent.getOperation().name());
-		objectNode.put("timeCreated", wcmEvent.getTimeCreated().getTime());
-		
+		objectNode.put("timestamp", wcmEvent.getTimeCreated().getTime());
+		objectNode.put("content", StreamUtils.copyToString(wcmEvent.getContent(), Charsets.UTF_8));
 		return JsonUtils.writeValueAsString(objectNode);
 	}
 	
 	private void sendContent(String key, InputStream content) throws IOException {
-		int blockSize=10240;
+		
+		int blockSize = 10240; //best chunk size is 10240
 		
 		for (byte[] dataChunk = content.readNBytes(blockSize); dataChunk.length > 0; dataChunk = content.readNBytes(blockSize)) {
 			if (dataChunk.length > 0) {
@@ -73,9 +77,9 @@ public class WcmEventKafkaPublisher {
 		this.sendMessage(wcmEventTopic, key, null);
 	}
 		
-	private String eventToJsonString(WcmEvent wcmEvent) throws JsonProcessingException, IOException {
+	private String eventToJsonString(WcmEvent wcmEvent, JcrNode jcrNode) throws JsonProcessingException, IOException {
 		ObjectNode objectNode = JsonUtils.createObjectNode();
-		objectNode.put("id", wcmEvent.getId());
+		objectNode.put("id", jcrNode.getId());
 		objectNode.put("repository", wcmEvent.getRepository());
 		objectNode.put("workspace", wcmEvent.getWorkspace());
 		objectNode.put("library", wcmEvent.getLibrary());
@@ -83,9 +87,8 @@ public class WcmEventKafkaPublisher {
 		
 		objectNode.put("itemType", wcmEvent.getItemType().name());
 		objectNode.put("operation", wcmEvent.getOperation().name());
-		objectNode.put("timeCreated", wcmEvent.getTimeCreated().getTime());
+		objectNode.put("timestamp", jcrNode.getLastUpdated().getTime());
 
-		
 		ObjectNode contentNode = (ObjectNode) JsonUtils.inputStreamToJsonNode(wcmEvent.getContent());
 		ArrayNode descendants = (ArrayNode) contentNode.get("descendants");
 		if (descendants != null && descendants.size() > 0) {
@@ -101,6 +104,7 @@ public class WcmEventKafkaPublisher {
 	}
 	
 	private String jcrNodeToJsonString(JcrNode jcrNode) throws JsonProcessingException, IOException {
+		
 		ObjectNode objectNode = JsonUtils.createObjectNode();
 		objectNode.put("id", jcrNode.getId());
 		objectNode.put("lastUpdated", jcrNode.getLastUpdated().getTime());
