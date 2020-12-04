@@ -7,9 +7,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedBy;
 
-public class Syndication {
+public class Syndicator {
 	@Id
 	private Long id;
+	private String repository;
+	private String workspace;
+	private String library;
 	private WcmServer collector;
 	private Timestamp lastSyndication;
 	@CreatedBy
@@ -27,6 +30,30 @@ public class Syndication {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getRepository() {
+		return repository;
+	}
+
+	public void setRepository(String repository) {
+		this.repository = repository;
+	}
+
+	public String getWorkspace() {
+		return workspace;
+	}
+
+	public void setWorkspace(String workspace) {
+		this.workspace = workspace;
+	}
+
+	public String getLibrary() {
+		return library;
+	}
+
+	public void setLibrary(String library) {
+		this.library = library;
 	}
 
 	public WcmServer getCollector() {
@@ -79,8 +106,11 @@ public class Syndication {
 
 	@Override
 	public String toString() {
-		return "Syndication [id=" + id + ", collector=" + collector + ", lastSyndication=" + lastSyndication
-				+ ", createdBy=" + createdBy + ", updatedBy=" + updatedBy + ", createdAt=" + createdAt + ", updatedAt="
-				+ updatedAt + "]";
+		return "Syndicator [id=" + id + ", repository=" + repository + ", workspace=" + workspace + ", library="
+				+ library + ", collector=" + collector + ", lastSyndication=" + lastSyndication + ", createdBy="
+				+ createdBy + ", updatedBy=" + updatedBy + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+				+ "]";
 	}
+
+	
 }

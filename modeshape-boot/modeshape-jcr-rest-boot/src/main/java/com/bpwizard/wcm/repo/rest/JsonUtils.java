@@ -44,4 +44,8 @@ public class JsonUtils {
 	public static String writeValueAsString(JsonNode jsonNode) throws JsonProcessingException {
         return mapper.writeValueAsString(jsonNode);
     }
+	
+	public static String objectAsJsonString(Object value) throws JsonProcessingException {
+        return mapper.writeValueAsString(value);
+    }
 }

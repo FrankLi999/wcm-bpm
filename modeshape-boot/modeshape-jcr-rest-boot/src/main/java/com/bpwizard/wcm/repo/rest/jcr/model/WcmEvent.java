@@ -1,6 +1,6 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
+import java.io.InputStream;
 import java.sql.Timestamp;
-import java.util.List;
 
 public class WcmEvent {
 	public enum Operation {
@@ -55,25 +55,31 @@ public class WcmEvent {
 	}
 	
 	private String id;
-	private String wcmPath;
 	private String repository;
 	private String workspace;
+	private String library;
+	private String nodePath;
 	private Operation operation;
 	private WcmItemType itemType;
 	private Timestamp timeCreated;
-	private List<String> descendants;
-	private List<String> removedDescendants;
+	private InputStream content;
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getWcmPath() {
-		return wcmPath;
+	public String getLibrary() {
+		return library;
 	}
-	public void setWcmPath(String wcmPath) {
-		this.wcmPath = wcmPath;
+	public void setLibrary(String library) {
+		this.library = library;
+	}
+	public String getNodePath() {
+		return nodePath;
+	}
+	public void setNodePath(String nodePath) {
+		this.nodePath = nodePath;
 	}
 	public String getRepository() {
 		return repository;
@@ -105,22 +111,18 @@ public class WcmEvent {
 	public void setTimeCreated(Timestamp timeCreated) {
 		this.timeCreated = timeCreated;
 	}
-	public List<String> getDescendants() {
-		return descendants;
+
+	public InputStream getContent() {
+		return content;
 	}
-	public void setDescendants(List<String> descendants) {
-		this.descendants = descendants;
+	public void setContent(InputStream content) {
+		this.content = content;
 	}
-	public List<String> getRemovedDescendants() {
-		return removedDescendants;
-	}
-	public void setRemovedDescendants(List<String> removedDescendants) {
-		this.removedDescendants = removedDescendants;
-	}
+	
 	@Override
 	public String toString() {
-		return "WcmEvent [id=" + id + ", wcmPath=" + wcmPath + ", repository=" + repository
-				+ ", workspace=" + workspace + ", operation=" + operation + ", itemType=" + itemType + ", timeCreated="
-				+ timeCreated + ", descendants=" + descendants + ", removedDescendants=" + removedDescendants + "]";
+		return "WcmEvent [id=" + id + ", nodePath=" + nodePath + ", repository=" + repository
+				+ ", workspace=" + workspace + ", library=" + library + ", operation=" + operation + ", itemType=" + itemType + ", timeCreated="
+				+ timeCreated + "]";
 	}
 }

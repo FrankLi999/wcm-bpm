@@ -106,7 +106,7 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestRepositories.Repository;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestWorkspaces.Workspace;
-import com.bpwizard.wcm.repo.rest.service.SyndicationService;
+import com.bpwizard.wcm.repo.rest.service.SyndicatorService;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -142,7 +142,7 @@ public class WcmRequestHandler {
 	protected WcmUtils wcmUtils;
 	
 	@Autowired
-	protected SyndicationService syndicationUtils;
+	protected SyndicatorService syndicationUtils;
 
 	protected ObjectMapper objectMapper = new ObjectMapper();
 	

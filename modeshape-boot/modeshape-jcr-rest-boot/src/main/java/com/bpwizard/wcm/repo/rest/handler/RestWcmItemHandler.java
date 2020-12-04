@@ -5,9 +5,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -28,7 +30,6 @@ import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestItem;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
-import com.bpwizard.wcm.repo.rest.service.WcmEventService;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -47,7 +48,7 @@ public final class RestWcmItemHandler extends ItemHandler {
 	protected boolean syndicationEnabled = true;
 	
 	@Autowired	
-	protected WcmEventService wcmEventService;
+	protected WcmEventHandler wcmEventService;
 
 	@Autowired	
 	protected WcmUtils wcmUtils;
@@ -187,10 +188,10 @@ public final class RestWcmItemHandler extends ItemHandler {
             String rawWorkspaceName,
             String path,
             String requestContent ) throws IOException, RepositoryException {
-    	List<String> currentDescendants = new ArrayList<String>();		
+    	Set<String> previousDescendants = new HashSet<String>();		
     	if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(rawWorkspaceName)) {
 			RestNode restNode = (RestNode)this.item(baseUrl, rawRepositoryName, WcmConstants.DEFAULT_WS, path, WcmConstants.FULL_SUB_DEPTH);
-			wcmEventService.populateDescendantIds(restNode, currentDescendants);
+			wcmEventService.populateDescendantIds(restNode, previousDescendants);
 		}
         Session session = getSession(rawRepositoryName, rawWorkspaceName);
         Item item = itemAtPath(path, session);
@@ -207,7 +208,7 @@ public final class RestWcmItemHandler extends ItemHandler {
 					WcmConstants.DEFAULT_WS,  
 					path,
 					itemType,
-					currentDescendants);
+					previousDescendants);
 		}
         session.save();
         
@@ -228,10 +229,10 @@ public final class RestWcmItemHandler extends ItemHandler {
             String path,
             JsonNode jsonItem ) throws IOException, RepositoryException {
     	
-    	List<String> currentDescendants = new ArrayList<String>();		
+    	Set<String> previousDescendants = new HashSet<String>();		
     	if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(rawWorkspaceName)) {
 			RestNode restNode = (RestNode)this.item(baseUrl, rawRepositoryName, WcmConstants.DEFAULT_WS, path, WcmConstants.FULL_SUB_DEPTH);
-			wcmEventService.populateDescendantIds(restNode, currentDescendants);
+			wcmEventService.populateDescendantIds(restNode, previousDescendants);
 		}	
 		
 		Session session = getSession(rawRepositoryName, rawWorkspaceName);
@@ -247,7 +248,7 @@ public final class RestWcmItemHandler extends ItemHandler {
 					WcmConstants.DEFAULT_WS,  
 					path,
 					itemType,
-					currentDescendants);
+					previousDescendants);
 		}
 		session.save();
 		if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(rawWorkspaceName)) {
@@ -399,14 +400,14 @@ public final class RestWcmItemHandler extends ItemHandler {
             Session expiredSession,
             List<WcmEvent> wcmEvents) throws RepositoryException {
     	//TODO: only delete from all three workspaces when it is deleting from WcmConstants.DEFAULT_WS
-    	List<String> currentDescendants = new ArrayList<String>();	
+    	Set<String> previousDescendants = new HashSet<String>();	
   		String nodeId = null;
 
 		if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(workspace)) {
 			int depth = WcmEvent.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
 			RestNode restNode = (RestNode)this.item(baseUrl, repository, workspace, path, depth);
 			nodeId = restNode.getId();
-			wcmEventService.populateDescendantIds(restNode, currentDescendants);
+			wcmEventService.populateDescendantIds(restNode, previousDescendants);
 		}	
 		if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(workspace)) {
 			try {
@@ -432,7 +433,7 @@ public final class RestWcmItemHandler extends ItemHandler {
 					workspace, 
 					path,
 					itemType,
-					currentDescendants));
+					previousDescendants));
 		}
 		
     }
@@ -502,7 +503,7 @@ public final class RestWcmItemHandler extends ItemHandler {
         List<WcmEvent> wcmEvents = new ArrayList<WcmEvent>();
         for (String nodePath : wcmNodesByPath.keySet()) {
         	JsonNode jsonNode = wcmNodesByPath.get(nodePath);
-        	List<String> currentDescendants = new ArrayList<String>();		
+        	Set<String> previousDescendants = new HashSet<String>();		
         	if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(session.getWorkspace().getName())) {
     			RestNode restNode = (RestNode)this.item(
     					baseUrl, 
@@ -510,7 +511,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     					WcmConstants.DEFAULT_WS, 
     					nodePath, 
     					WcmConstants.FULL_SUB_DEPTH);
-    			wcmEventService.populateDescendantIds(restNode, currentDescendants);
+    			wcmEventService.populateDescendantIds(restNode, previousDescendants);
     		}	
         	// Node newNode = addNode(parentNode, newNodeName, jsonNode.get("content"));
             TreeMap<String, JsonNode> jcrNodesByPath = createJcrNodesByPathMap(jsonNode.get("content"));
@@ -528,7 +529,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     					WcmConstants.DEFAULT_WS,  
     					nodePath,
     					itemType,
-    					currentDescendants));
+    					previousDescendants));
     		}
         }
         

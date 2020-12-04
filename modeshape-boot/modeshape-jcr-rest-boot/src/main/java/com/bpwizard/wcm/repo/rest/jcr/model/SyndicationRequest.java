@@ -3,9 +3,8 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 import java.sql.Timestamp;
 
 public class SyndicationRequest {
-	
 	private long syndicationId;
-	private Timestamp startTime;
+	private Timestamp endTime;
 	
 	public long getSyndicationId() {
 		return syndicationId;
@@ -15,16 +14,15 @@ public class SyndicationRequest {
 		this.syndicationId = syndicationId;
 	}
 	
-	public Timestamp getStartTime() {
-		return startTime;
+	public Timestamp getEndTime() {
+		return endTime;
 	}
 	
 	public void setStartTime(Timestamp startTime) {
-		this.startTime = startTime;
+		this.endTime = startTime;
 	}
-
 	@Override
 	public String toString() {
-		return "SyndicationRequest [syndicationId=" + syndicationId + ", startTime=" + startTime + "]";
+		return "SyndicationRequest [syndicationId=" + syndicationId + ", endTime=" + endTime + "]";
 	}
 }

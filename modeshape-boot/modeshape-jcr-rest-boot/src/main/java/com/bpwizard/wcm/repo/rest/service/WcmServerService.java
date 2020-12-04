@@ -51,7 +51,7 @@ public class WcmServerService {
 	
 	public WcmServer getWcmServer(Long id) {
 		// return wcmServerRepo.findById(id);
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", 1);
+		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", id);
 		WcmServer wcmServer = jdbcTemplate.queryForObject(
 				selectByIdSql, new WcmServerRowMapper(), namedParameters);
 

@@ -50,7 +50,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 
-// @SuppressWarnings("removal")
+@SuppressWarnings("removal")
 @RestController
 @RequestMapping(WcmAclRestController.BASE_URI)
 @Validated

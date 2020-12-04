@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Collector;
-import com.bpwizard.wcm.repo.rest.jcr.model.UpdateSyndicationRequest;
+import com.bpwizard.wcm.repo.rest.jcr.model.UpdateCollectorRequest;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmServer;
 
 @Service
@@ -53,7 +53,7 @@ public class CollectorService {
 	}
 	
 	public Collector getCollector(Long id) {
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", 1);
+		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", id);
 		Collector collector = jdbcTemplate.queryForObject(
 				selectByIdSql, new CollectorRowMapper(), namedParameters);
 
@@ -69,9 +69,9 @@ public class CollectorService {
 	}
 	
 	public int updateColelctor(
-			UpdateSyndicationRequest syndicationRequest) 
+			UpdateCollectorRequest syndicationRequest) 
 			throws WcmRepositoryException {
-		Object[] params = { syndicationRequest.getLastSyndication(), syndicationRequest.getSyndicationId(), WebUtils.currentUserId(), new Timestamp(System.currentTimeMillis())};
+		Object[] params = { syndicationRequest.getLastSyndication(), syndicationRequest.getCollectorId(), WebUtils.currentUserId(), new Timestamp(System.currentTimeMillis())};
 	    int[] types = {Types.TIMESTAMP, Types.BIGINT, Types.VARCHAR, Types.TIMESTAMP};
 	    return jdbcTemplate.update(updateSql, params, types);
 	}
