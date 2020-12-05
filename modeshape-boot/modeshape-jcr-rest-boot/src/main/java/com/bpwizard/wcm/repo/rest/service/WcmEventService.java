@@ -164,8 +164,4 @@ public class WcmEventService extends AbstractHandler {
 	    	return wcmEvent;
 	    }
 	}
-
-	
-	
-
 }

@@ -110,6 +110,36 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 		}	
 	}
 	
+	@PostMapping(path = "/{repository}/{workspace}/jcrTpe", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createAuthoringTemplateJcrType(
+			@PathVariable("repository") String repository,
+			@PathVariable("workspace") String workspace, 
+			@RequestParam("path") String atPath, 
+			HttpServletRequest request) 
+			throws WcmRepositoryException {
+
+		if (logger.isDebugEnabled()) {
+			logger.traceEntry();
+		}
+		try {
+			AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(repository, workspace, atPath, request);
+			this.wcmUtils.registerNodeType(at.getWorkspace(), at);
+			if (logger.isDebugEnabled()) {
+				logger.traceExit();
+			}
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (WcmRepositoryException e ) {
+			logger.error(e);
+			throw e;
+		} catch (RepositoryException re) { 
+			logger.error(re);
+			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_ITEM_ERROR, null));
+	    } catch (Throwable t) {
+	    	logger.error(t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+		}	
+	}
+	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createAuthoringTemplate(
 			@RequestBody AuthoringTemplate at, HttpServletRequest request) 

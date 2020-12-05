@@ -7,7 +7,7 @@
   <groupId>com.bpwizard.wcm_bpm</groupId>
   <artifactId>camel-syndicator</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.0.1-SNAPSHOT</version>
 
   <name>camel-syndicator</name>
 
@@ -82,7 +82,20 @@
         <groupId>org.apache.camel.springboot</groupId>
         <artifactId>camel-jackson-starter</artifactId>
     </dependency>
-    
+    <dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-jdbc</artifactId>
+	</dependency>
+    <dependency>
+		<groupId>com.bpwizard.spring</groupId>
+		<artifactId>spring-boot-commons-service</artifactId>
+		<version>${project.version}</version>
+	</dependency>
+    <dependency>
+	    <groupId>mysql</groupId>
+	    <artifactId>mysql-connector-java</artifactId>
+	</dependency>
+		
     <!-- Test -->
     <dependency>
       <groupId>org.springframework.boot</groupId>

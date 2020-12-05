@@ -1,0 +1,15 @@
+1. Syndication
+
+   syndication table:
+	   	Syndication id
+	   	Syndication name
+	   	authoring database url
+	   	authoring db user
+	   	
+	   	authoring db password
+	   	
+	   	rendering database url
+	   	rendering db user
+	   	rendering db password
+	   	
+   		lastSyndication
