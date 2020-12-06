@@ -40,7 +40,7 @@ public class SyndicatorController extends BaseWcmRestController {
 	@Autowired
 	private  WcmEventHandler  wcmEventService;
 	
-	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/syndicate", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> syndicate(
 			@RequestBody SyndicationRequest syndicationRequest,
 			HttpServletRequest request) 
