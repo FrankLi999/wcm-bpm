@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.stereotype.Service;
 
-import com.bpwizard.spring.boot.commons.jpa.JpaUtils;
+import com.bpwizard.spring.boot.commons.jdbc.JdbcUtils;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.service.SpringService;
 import com.bpwizard.spring.boot.commons.service.repo.domain.User;
@@ -25,7 +25,7 @@ public class DefaultSpringService extends SpringService<User, Long> {
 
         user.setName(updatedUser.getName());
 
-        JpaUtils.afterCommit(() -> {
+        JdbcUtils.afterCommit(() -> {
             if (currentUser.getId().equals(user.getId().toString()))
                 currentUser.setTag(user.toTag());
         });

@@ -7,7 +7,7 @@
     <packaging>jar</packaging>
 
     <name>spring-boot-commons-service</name>
-    <description>Helper library for Spring Boot JPA Web Applications</description>
+    <description>Helper library for Spring Boot JDBC Web Applications</description>
 
     <parent>
 		<groupId>com.bpwizard.spring</groupId>
@@ -20,7 +20,7 @@
     
 		<dependency>
 			<groupId>com.bpwizard.spring</groupId>
-			<artifactId>spring-boot-commons-jpa</artifactId>
+			<artifactId>spring-boot-commons-jdbc</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

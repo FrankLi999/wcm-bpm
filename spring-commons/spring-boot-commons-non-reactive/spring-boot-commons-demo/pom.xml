@@ -8,7 +8,7 @@
 	<packaging>jar</packaging>
 
 	<name>spring-boot-commons-demo</name>
-	<description>Demo project for Spring Commons JPA</description>
+	<description>Demo project for Spring Commons JDBC</description>
 
 	<parent>
 		<groupId>com.bpwizard.spring</groupId>

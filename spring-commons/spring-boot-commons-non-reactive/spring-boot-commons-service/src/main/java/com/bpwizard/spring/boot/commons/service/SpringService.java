@@ -33,7 +33,7 @@ import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.domain.ChangePasswordForm;
 import com.bpwizard.spring.boot.commons.domain.ResetPasswordForm;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
-import com.bpwizard.spring.boot.commons.jpa.JpaUtils;
+import com.bpwizard.spring.boot.commons.jdbc.JdbcUtils;
 import com.bpwizard.spring.boot.commons.mail.MailSender;
 import com.bpwizard.spring.boot.commons.mail.SpringMailData;
 import com.bpwizard.spring.boot.commons.security.AuthenticationRequest;
@@ -42,11 +42,11 @@ import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.security.UserEditPermission;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUserRepository;
+import com.bpwizard.spring.boot.commons.service.domain.AbstractUserService;
 import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
-import com.bpwizard.spring.boot.commons.service.repo.domain.RoleRepository;
+import com.bpwizard.spring.boot.commons.service.repo.domain.RoleSeervice;
 import com.bpwizard.spring.boot.commons.service.repo.domain.Tenant;
-import com.bpwizard.spring.boot.commons.service.repo.domain.TenantRepository;
+import com.bpwizard.spring.boot.commons.service.repo.domain.TenantService;
 import com.bpwizard.spring.boot.commons.service.util.ServiceUtils;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
@@ -61,34 +61,34 @@ public abstract class SpringService
 
     private static final Logger log = LogManager.getLogger(SpringService.class);
     
-	protected AbstractUserRepository<U, ID> userRepository;
+	protected AbstractUserService<U, ID> userService;
 	protected UserDetailsService userDetailsService;
-	protected RoleRepository roleRepository;
-	protected TenantRepository tenantRepository;
+	protected RoleSeervice roleService;
+	protected TenantService tenantService;
 	protected Map<String, Role> preloadedRoles;
     protected AuthenticationManager authenticationManager;
 	@Autowired
 	public void createSpringService(SpringProperties properties,
 			PasswordEncoder passwordEncoder,
 			MailSender<?> mailSender,
-			AbstractUserRepository<U, ID> userRepository,
+			AbstractUserService<U, ID> userService,
 			UserDetailsService userDetailsService,
 			JSONWebSignatureService jwsTokenService,
 			JSONWebEncryptionService jweTokenService,
-			RoleRepository roleRepository,
-			TenantRepository tenantRepository,
+			RoleSeervice roleService,
+			TenantService tenantService,
 			Map<String, Role> preloadedRoles,
 			AuthenticationManager authenticationManager) {
 		
 		this.properties = properties;
 		this.passwordEncoder = passwordEncoder;
 		this.mailSender = mailSender;
-		this.userRepository = userRepository;
+		this.userService = userService;
 		this.userDetailsService = userDetailsService;
 		this.jwsTokenService = jwsTokenService;
 		this.jweTokenService = jweTokenService;
-		this.roleRepository = roleRepository;
-		this.tenantRepository = tenantRepository;
+		this.roleService = roleService;
+		this.tenantService = tenantService;
 		this.preloadedRoles = preloadedRoles;
 		this.authenticationManager = authenticationManager;
 		
@@ -129,7 +129,7 @@ public abstract class SpringService
 				// Doesn't exist. So, create it.
 	//			Tenant tenant = new Tenant();
 	//			tenant.setName("default");
-	//			tenantRepository.save(tenant);
+	//			tenantService.save(tenant);
 				Set<Tenant> tenants = null;
 				String[] roleNames = properties.getRolename();
 				if (null != roleNames) {
@@ -154,7 +154,7 @@ public abstract class SpringService
 		if (tenants != null) {
 			role.setTenants(tenants);
 		}
-    	roleRepository.save(role);
+    	roleService.save(role);
 		return role;
 	}
 
@@ -185,7 +185,7 @@ public abstract class SpringService
 				newUser.getRoles().add(roles.get(rolename));
 			}
 		}
-		userRepository.save(newUser);	
+		userService.save(newUser);	
 		return newUser;
 	}
     
@@ -295,10 +295,10 @@ public abstract class SpringService
 		log.debug("Signing up user: " + user);
 
 		initUser(user); // sets right all fields of the user
-		userRepository.save(user);
+		userService.save(user);
 		
 		// if successfully committed
-		JpaUtils.afterCommit(() -> {
+		JdbcUtils.afterCommit(() -> {
 		
 			ServiceUtils.login(user); // log the user in
 			log.debug("Signed up user: " + user);
@@ -326,7 +326,7 @@ public abstract class SpringService
 		
 		user.getRoles().add(this.preloadedRoles.get(UserUtils.Role.UNVERIFIED));
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		JpaUtils.afterCommit(() -> sendVerificationMail(user)); // send a verification mail to the user
+		JdbcUtils.afterCommit(() -> sendVerificationMail(user)); // send a verification mail to the user
 	}
 	
 	
@@ -354,7 +354,7 @@ public abstract class SpringService
 	public U fetchUserByEmail(@Valid @Email @NotBlank String email) {
 		
 		log.debug("Fetching user by email: " + email);
-		return processUser(userRepository.findByEmail(email).orElse(null));
+		return processUser(userService.findByEmail(email).orElse(null));
 	}
 
 	
@@ -383,7 +383,7 @@ public abstract class SpringService
 		
 		log.debug("Verifying user ...");
 
-		U user = userRepository.findById(userId).orElseThrow(SpringExceptionUtils.notFoundSupplier());
+		U user = userService.findById(userId).orElseThrow(SpringExceptionUtils.notFoundSupplier());
 		
 		// ensure that he is unverified
 		SpringExceptionUtils.validate(user.hasRole(UserUtils.Role.UNVERIFIED),
@@ -399,10 +399,10 @@ public abstract class SpringService
 		
 		user.removeRole(UserUtils.Role.UNVERIFIED); // make him verified
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		userRepository.save(user);
+		userService.save(user);
 		
 		// after successful commit,
-		JpaUtils.afterCommit(() -> {
+		JdbcUtils.afterCommit(() -> {
 			
 			// Re-login the user, so that the UNVERIFIED role is removed
 			ServiceUtils.login(user);
@@ -422,7 +422,7 @@ public abstract class SpringService
 		log.debug("Processing forgot password for email: " + email);
 		
 		// fetch the user record from database
-		U user = userRepository.findByEmail(email)
+		U user = userService.findByEmail(email)
 				.orElseThrow(SpringExceptionUtils.notFoundSupplier());
 
 		mailForgotPasswordLink(user);
@@ -443,7 +443,7 @@ public abstract class SpringService
 		String email = claims.getSubject();
 		
 		// fetch the user
-		U user = userRepository.findByEmail(email).orElseThrow(SpringExceptionUtils.notFoundSupplier());
+		U user = userService.findByEmail(email).orElseThrow(SpringExceptionUtils.notFoundSupplier());
 		ServiceUtils.ensureCredentialsUpToDate(claims, user);
 		
 		// sets the password
@@ -451,10 +451,10 @@ public abstract class SpringService
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 		//user.setForgotPasswordCode(null);
 		
-		userRepository.save(user);
+		userService.save(user);
 		
 		// after successful commit,
-		JpaUtils.afterCommit(() -> {
+		JdbcUtils.afterCommit(() -> {
 			
 			// Login the user
 			ServiceUtils.login(user);
@@ -475,11 +475,11 @@ public abstract class SpringService
 		log.debug("Updating user: " + user);
 
 		// checks
-		JpaUtils.ensureCorrectVersion(user, updatedUser);
+		JdbcUtils.ensureCorrectVersion(user, updatedUser);
 
 		// delegates to updateUserFields
 		updateUserFields(user, updatedUser, WebUtils.currentUser());
-		userRepository.save(user);
+		userService.save(user);
 		
 		log.debug("Updated user: " + user);
 		
@@ -500,7 +500,7 @@ public abstract class SpringService
 		
 		// Get the old password of the logged in user (logged in user may be an ADMIN)
 		UserDto currentUser = WebUtils.currentUser();
-		U loggedIn = userRepository.findById(toId(currentUser.getId())).get();
+		U loggedIn = userService.findById(toId(currentUser.getId())).get();
 		String oldPassword = loggedIn.getPassword();
 
 		// checks
@@ -513,7 +513,7 @@ public abstract class SpringService
 		// sets the password
 		user.setPassword(passwordEncoder.encode(changePasswordForm.getPassword()));
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		userRepository.save(user);
+		userService.save(user);
 
 		log.debug("Changed password for user: " + user);
 		return user.toUserDto().getUsername();
@@ -578,10 +578,10 @@ public abstract class SpringService
 		// preserves the new email id
 		user.setNewEmail(updatedUser.getNewEmail());
 		//user.setChangeEmailCode(BpwUtils.uid());
-		userRepository.save(user);
+		userService.save(user);
 		
 		// after successful commit, mails a link to the user
-		JpaUtils.afterCommit(() -> mailChangeEmailLink(user));
+		JdbcUtils.afterCommit(() -> mailChangeEmailLink(user));
 		
 		log.debug("Requested email change: " + user);		
 	}
@@ -650,7 +650,7 @@ public abstract class SpringService
 		SpringExceptionUtils.validate(userId.equals(toId(currentUser.getId())),
 			"com.bpwizard.spring.wrong.login").go();
 		
-		U user = userRepository.findById(userId).orElseThrow(SpringExceptionUtils.notFoundSupplier());
+		U user = userService.findById(userId).orElseThrow(SpringExceptionUtils.notFoundSupplier());
 		
 		SpringExceptionUtils.validate(StringUtils.isNotBlank(user.getNewEmail()),
 				"com.bpwizard.spring.blank.newEmail").go();
@@ -666,7 +666,7 @@ public abstract class SpringService
 		
 		// Ensure that the email would be unique 
 		SpringExceptionUtils.validate(
-				!userRepository.findByEmail(user.getNewEmail()).isPresent(),
+				!userService.findByEmail(user.getNewEmail()).isPresent(),
 				"com.bpwizard.spring.duplicate.email").go();	
 		
 		// update the fields
@@ -679,10 +679,10 @@ public abstract class SpringService
 		if (user.hasRole(UserUtils.Role.UNVERIFIED))
 			user.removeRole(UserUtils.Role.UNVERIFIED);
 		
-		userRepository.save(user);
+		userService.save(user);
 		
 		// after successful commit,
-		JpaUtils.afterCommit(() -> {
+		JdbcUtils.afterCommit(() -> {
 			
 			// Login the user
 			ServiceUtils.login(user);
@@ -754,7 +754,7 @@ public abstract class SpringService
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public void save(U user) {
 		
-		userRepository.save(user);
+		userService.save(user);
 	}
 	
 	
@@ -803,7 +803,7 @@ public abstract class SpringService
 	
 	
 	public Optional<U> findUserById(String id) {
-		return userRepository.findById(toId(id));
+		return userService.findById(toId(id));
 	}
 	
 	 protected String getShortLivedAuthToken(String username) {

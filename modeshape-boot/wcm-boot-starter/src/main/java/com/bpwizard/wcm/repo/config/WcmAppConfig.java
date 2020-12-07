@@ -1,11 +1,10 @@
 package com.bpwizard.wcm.repo.config;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+// import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 import com.bpwizard.spring.boot.commons.web.filter.LocaleFilter;
@@ -13,8 +12,8 @@ import com.bpwizard.wcm.repo.rest.filter.CleanupFilter;
 import com.bpwizard.wcm.repo.rest.filter.LoggingFilter;
 
 @Configuration
-@EntityScan(basePackages= {"com.bpwizard.spring.boot.commons.service.repo"})
-@EnableJpaRepositories({"com.bpwizard.spring.boot.commons.service.repo"})
+// @EntityScan(basePackages= {"com.bpwizard.spring.boot.commons.service.repo"})
+// @EnableJpaRepositories({"com.bpwizard.spring.boot.commons.service.repo"})
 @ComponentScan(basePackages={"com.bpwizard.wcm.repo", "com.bpwizard.wcm_bpm", "com.bpwizard.spring.boot.commons"})
 @AutoConfigureBefore({ModeshapeAppConfig.class, ModeshapeConfig.class})
 public class WcmAppConfig {

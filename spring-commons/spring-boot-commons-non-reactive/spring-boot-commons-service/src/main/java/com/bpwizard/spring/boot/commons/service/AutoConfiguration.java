@@ -8,13 +8,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -23,12 +20,12 @@ import org.springframework.web.client.RestTemplate;
 
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.domain.IdConverter;
-import com.bpwizard.spring.boot.commons.jpa.CommonsJpaAutoConfiguration;
+import com.bpwizard.spring.boot.commons.jdbc.CommonsJdbcAutoConfiguration;
 import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUserRepository;
+import com.bpwizard.spring.boot.commons.service.domain.AbstractUserService;
 import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
-import com.bpwizard.spring.boot.commons.service.repo.domain.RoleRepository;
+import com.bpwizard.spring.boot.commons.service.repo.domain.RoleSeervice;
 import com.bpwizard.spring.boot.commons.service.security.OAuth2AuthenticationFailureHandler;
 import com.bpwizard.spring.boot.commons.service.security.OAuth2AuthenticationSuccessHandler;
 import com.bpwizard.spring.boot.commons.service.security.SpringAuthenticationSuccessHandler;
@@ -44,11 +41,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Spring Commons Auto Configuration
- * 
- * @author Sanjay Patel
  */
 @Configuration
-@AutoConfigureBefore({CommonsJpaAutoConfiguration.class})
+@AutoConfigureBefore({CommonsJdbcAutoConfiguration.class})
 public class AutoConfiguration {
 	
 	private static final Logger log = LogManager.getLogger(AutoConfiguration.class);
@@ -122,10 +117,10 @@ public class AutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(UserDetailsService.class)
 	public <U extends AbstractUser<ID>, ID extends Serializable>
-	SpringUserDetailsService<U, ID> userDetailService(AbstractUserRepository<U, ID> userRepository) {
+	SpringUserDetailsService<U, ID> userDetailService(AbstractUserService<U, ID> userService) {
 		
         log.info("Configuring SpringUserDetailsService");       
-		return new SpringUserDetailsService<U, ID>(userRepository);
+		return new SpringUserDetailsService<U, ID>(userService);
 	}
 
 	/**
@@ -191,14 +186,14 @@ public class AutoConfiguration {
 	 * Configures UniqueEmailValidator if missing
 	 */
 	@Bean
-	public UniqueEmailValidator uniqueEmailValidator(AbstractUserRepository<?, ?> userRepository) {
+	public UniqueEmailValidator uniqueEmailValidator(AbstractUserService<?, ?> userService) {
 		
         log.info("Configuring UniqueEmailValidator");       
-		return new UniqueEmailValidator(userRepository);		
+		return new UniqueEmailValidator(userService);		
 	}
 	
 	@Bean
-	public Map<String, Role> preloadedRoles(RoleRepository roleRepository, SpringProperties properties) {
+	public Map<String, Role> preloadedRoles(RoleSeervice roleService, SpringProperties properties) {
 		
         log.info("preloadedRoles");   //TODO, load in batch
         Map<String, Role> roles = new HashMap<>();
@@ -206,7 +201,7 @@ public class AutoConfiguration {
         if (null != roleNames) {
 			for (String roleName: roleNames) {
 				//Optional<Role> role = 
-				roleRepository.findByName(roleName).ifPresent(role -> roles.put(roleName, role));
+				roleService.findByName(roleName).ifPresent(role -> roles.put(roleName, role));
 			}
         }
         return roles;	

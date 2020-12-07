@@ -15,8 +15,6 @@ import com.bpwizard.spring.boot.commons.web.security.SpringWebSecurityConfig;
  * Security configuration class. Extend it in the
  * application, and make a configuration class. Override
  * protected methods, if you need any customization.
- * 
- * @author Sanjay Patel
  */
 public class SpringJpaSecurityConfig extends SpringWebSecurityConfig {
 	
@@ -123,6 +121,7 @@ public class SpringJpaSecurityConfig extends SpringWebSecurityConfig {
 	/**
 	 * Configuring token authentication filter
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void tokenAuthentication(HttpSecurity http) throws Exception {
 		
 		http.addFilterBefore(new SpringJpaTokenAuthenticationFilter(jwsTokenService, userDetailsService),

@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUserRepository;
+import com.bpwizard.spring.boot.commons.service.domain.AbstractUserService;
 
 /**
  * UserDetailsService, as required by Spring Security.
@@ -24,11 +24,11 @@ implements UserDetailsService {
 
 	private static final Logger log = LogManager.getLogger(SpringUserDetailsService.class);
 
-	private final AbstractUserRepository<U,ID> userRepository;
+	private final AbstractUserService<U,ID> userService;
 	
-	public SpringUserDetailsService(AbstractUserRepository<U, ID> userRepository) {
+	public SpringUserDetailsService(AbstractUserService<U, ID> userService) {
 		
-		this.userRepository = userRepository;
+		this.userService = userService;
 		log.info("Created");
 	}
 	
@@ -53,7 +53,7 @@ implements UserDetailsService {
 	 * if you aren't using email as the username.
 	 */
 	public Optional<U> findUserByUsername(String username) {
-		return userRepository.findByEmail(username);
+		return userService.findByEmail(username);
 	}
 	
 	/**
@@ -61,6 +61,6 @@ implements UserDetailsService {
 	 * if you aren't using email as the username.
 	 */
 	public Optional<U> findUserByEmail(String email) {
-		return userRepository.findByEmail(email);
+		return userService.findByEmail(email);
 	}
 }
