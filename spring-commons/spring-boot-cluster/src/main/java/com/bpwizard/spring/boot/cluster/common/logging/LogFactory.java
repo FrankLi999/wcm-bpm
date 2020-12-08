@@ -16,8 +16,8 @@
 package com.bpwizard.spring.boot.cluster.common.logging;
 
 import com.bpwizard.spring.boot.cluster.common.CommonI18n;
-import com.bpwizard.spring.boot.cluster.common.logging.jdk.JdkLoggerFactory;
-import com.bpwizard.spring.boot.cluster.common.logging.log4j.Log4jLoggerFactory;
+// import com.bpwizard.spring.boot.cluster.common.logging.jdk.JdkLoggerFactory;
+// import com.bpwizard.spring.boot.cluster.common.logging.log4j.Log4jLoggerFactory;
 import com.bpwizard.spring.boot.cluster.common.logging.slf4j.SLF4JLoggerFactory;
 
 /**
@@ -53,86 +53,87 @@ public abstract class LogFactory {
 
     static {
         Throwable customLoggingError = null;
-        boolean customLogging = false;
-        boolean slf4jLogging = false;
-        boolean log4jLogging = false;
+        // boolean customLogging = false;
+        // boolean slf4jLogging = false;
+        // boolean log4jLogging = false;
 
-        if (isCustomLoggerAvailable()) {
-            try {
-                @SuppressWarnings( "unchecked" )
-                Class<LogFactory> customClass = (Class<LogFactory>)Class.forName(CUSTOM_LOG_FACTORY_CLASSNAME);
-                LOGFACTORY = customClass.newInstance();
-                customLogging = true;
-            } catch (Throwable throwable) {
-                customLoggingError = throwable;
-            }
-        }
+//        if (isCustomLoggerAvailable()) {
+//            try {
+//                @SuppressWarnings( "unchecked" )
+//                Class<LogFactory> customClass = (Class<LogFactory>)Class.forName(CUSTOM_LOG_FACTORY_CLASSNAME);
+//                LOGFACTORY = customClass.newInstance();
+//                customLogging = true;
+//            } catch (Throwable throwable) {
+//                customLoggingError = throwable;
+//            }
+//        }
 
         if (LOGFACTORY == null) {
-            if (isSLF4JAvailable()) {
-                LOGFACTORY = new SLF4JLoggerFactory();
-                slf4jLogging = true;
-            } else if (isLog4jAvailable()) {
-                LOGFACTORY = new Log4jLoggerFactory();
-                log4jLogging = true;
-            } else {
-                LOGFACTORY = new JdkLoggerFactory();
-            }
+        	LOGFACTORY = new SLF4JLoggerFactory();
+//            if (isSLF4JAvailable()) {
+//                LOGFACTORY = new SLF4JLoggerFactory();
+//                slf4jLogging = true;
+//            } else if (isLog4jAvailable()) {
+//                LOGFACTORY = new Log4jLoggerFactory();
+//                log4jLogging = true;
+//            } else {
+//                LOGFACTORY = new JdkLoggerFactory();
+//            }
         }
 
         Logger logger = LOGFACTORY.getLogger(LogFactory.class.getName());
 
-        if (customLogging) {
-            logger.info(CommonI18n.customLoggingAvailable, CUSTOM_LOG_FACTORY_CLASSNAME);
-        } else if (slf4jLogging) {
-            logger.info(CommonI18n.slf4jAvailable);
-        } else if (log4jLogging) {
-            logger.info(CommonI18n.log4jAvailable);
-        } else {
-            logger.info(CommonI18n.jdkFallback);
-        }
+//        if (customLogging) {
+//            logger.info(CommonI18n.customLoggingAvailable, CUSTOM_LOG_FACTORY_CLASSNAME);
+//        } else if (slf4jLogging) {
+        logger.info(CommonI18n.slf4jAvailable);
+//        } else if (log4jLogging) {
+//            logger.info(CommonI18n.log4jAvailable);
+//        } else {
+//            logger.info(CommonI18n.jdkFallback);
+//        }
 
-        if (customLoggingError != null) {
-            // log the problem related to the custom logger
-            logger.warn(customLoggingError,
-                        CommonI18n.errorInitializingCustomLoggerFactory,
-                        CUSTOM_LOG_FACTORY_CLASSNAME);
-        }
+//        if (customLoggingError != null) {
+//            // log the problem related to the custom logger
+//            logger.warn(customLoggingError,
+//                        CommonI18n.errorInitializingCustomLoggerFactory,
+//                        CUSTOM_LOG_FACTORY_CLASSNAME);
+//        }
     }
 
-    private static boolean isSLF4JAvailable() {
-        try {
-            // check if the api is in the classpath and initialize the classes
-            Class.forName("org.slf4j.Logger");
-            Class.forName("org.slf4j.LoggerFactory");
+//    private static boolean isSLF4JAvailable() {
+//        try {
+//            // check if the api is in the classpath and initialize the classes
+//            Class.forName("org.slf4j.Logger");
+//            Class.forName("org.slf4j.LoggerFactory");
+//
+//            // check if there's at least one implementation and initialize the classes
+//            Class.forName("org.slf4j.impl.StaticLoggerBinder");
+//            return true;
+//        } catch (ClassNotFoundException e) {
+//            return false;
+//        }
+//    }
 
-            // check if there's at least one implementation and initialize the classes
-            Class.forName("org.slf4j.impl.StaticLoggerBinder");
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
-    private static boolean isLog4jAvailable() {
-        try {
-            // Check if the Log4J main interface is in the classpath and initialize the class
-            Class.forName("org.apache.log4j.Logger");
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
-    private static boolean isCustomLoggerAvailable() {
-        try {
-            // Check if a custom log factory implementation is in the classpath and initialize the class
-            Class.forName(CUSTOM_LOG_FACTORY_CLASSNAME);
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
+//    private static boolean isLog4jAvailable() {
+//        try {
+//            // Check if the Log4J main interface is in the classpath and initialize the class
+//            Class.forName("org.apache.log4j.Logger");
+//            return true;
+//        } catch (ClassNotFoundException e) {
+//            return false;
+//        }
+//    }
+//
+//    private static boolean isCustomLoggerAvailable() {
+//        try {
+//            // Check if a custom log factory implementation is in the classpath and initialize the class
+//            Class.forName(CUSTOM_LOG_FACTORY_CLASSNAME);
+//            return true;
+//        } catch (ClassNotFoundException e) {
+//            return false;
+//        }
+//    }
 
     static LogFactory getLogFactory() {
         return LOGFACTORY;

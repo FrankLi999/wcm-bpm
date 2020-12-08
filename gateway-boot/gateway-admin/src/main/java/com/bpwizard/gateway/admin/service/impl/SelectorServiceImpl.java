@@ -22,12 +22,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.bpwizard.gateway.admin.dto.SelectorConditionDTO;
 import com.bpwizard.gateway.admin.dto.SelectorDTO;
@@ -94,7 +95,7 @@ public class SelectorServiceImpl implements SelectorService {
     public String register(final SelectorDTO selectorDTO) {
         SelectorDO selectorDO = SelectorDO.buildSelectorDO(selectorDTO);
         List<SelectorConditionDTO> selectorConditionDTOs = selectorDTO.getSelectorConditions();
-        if (StringUtils.isEmpty(selectorDTO.getId())) {
+        if (!StringUtils.hasText(selectorDTO.getId())) {
             selectorMapper.insertSelective(selectorDO);
             selectorConditionDTOs.forEach(selectorConditionDTO -> {
                 selectorConditionDTO.setSelectorId(selectorDO.getId());
@@ -117,7 +118,7 @@ public class SelectorServiceImpl implements SelectorService {
         int selectorCount;
         SelectorDO selectorDO = SelectorDO.buildSelectorDO(selectorDTO);
         List<SelectorConditionDTO> selectorConditionDTOs = selectorDTO.getSelectorConditions();
-        if (StringUtils.isEmpty(selectorDTO.getId())) {
+        if (!StringUtils.hasText(selectorDTO.getId())) {
             selectorCount = selectorMapper.insertSelective(selectorDO);
             selectorConditionDTOs.forEach(selectorConditionDTO -> {
                 selectorConditionDTO.setSelectorId(selectorDO.getId());
@@ -170,7 +171,7 @@ public class SelectorServiceImpl implements SelectorService {
     
             //清除规则与规则条件
             final List<RuleDO> ruleDOList = ruleMapper.selectByQuery(new RuleQuery(id, null));
-            if (CollectionUtils.isNotEmpty(ruleDOList)) {
+            if (!CollectionUtils.isEmpty(ruleDOList)) {
                 for (RuleDO ruleDO : ruleDOList) {
                     ruleMapper.delete(ruleDO.getId());
                     ruleConditionMapper.deleteByQuery(new RuleConditionQuery(ruleDO.getId()));

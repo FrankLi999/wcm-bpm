@@ -35,7 +35,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import javax.jcr.RepositoryException;
 import org.jgroups.Address;
 // import org.jgroups.Channel;
 import org.jgroups.ChannelListener;
@@ -59,8 +58,6 @@ import com.bpwizard.spring.boot.cluster.common.util.StringUtil;
 /**
  * ModeShape service which handles sending/receiving messages in a cluster via JGroups. This service is also a
  * {@link org.modeshape.jcr.locking.LockingService} when running in a cluster, relying on JGroups' {@link CENTRAL_LOCK} protocol.
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 @ThreadSafe
 public abstract class ClusteringService {
@@ -488,7 +485,7 @@ public abstract class ClusteringService {
                 try {
                     stream = new FileInputStream(jgroupsConfig);
                 } catch (FileNotFoundException e) {
-                    throw new RepositoryException(ClusteringI18n.missingConfigurationFile.text(jgroupsConfig));
+                    throw new ClusterException(ClusteringI18n.missingConfigurationFile.text(jgroupsConfig));
                 }                 
             }
             try {
@@ -513,7 +510,7 @@ public abstract class ClusteringService {
             }
 
             if (configurator == null) {
-                throw new RepositoryException(ClusteringI18n.channelConfigurationError.text(jgroupsConfig));
+                throw new ClusterException(ClusteringI18n.channelConfigurationError.text(jgroupsConfig));
             }
             return new JChannel(configurator);
         }

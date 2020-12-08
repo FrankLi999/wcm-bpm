@@ -28,7 +28,7 @@ import com.bpwizard.gateway.common.dto.SelectorData;
 import com.bpwizard.gateway.common.dto.WebsocketData;
 import com.bpwizard.gateway.common.enums.ConfigGroupEnum;
 import com.bpwizard.gateway.common.enums.DataEventTypeEnum;
-import com.bpwizard.gateway.common.utils.GsonUtils;
+import com.bpwizard.gateway.common.utils.JsonUtils;
 
 /**
  * The type Websocket data changed listener.
@@ -39,35 +39,35 @@ public class WebsocketDataChangedListener implements DataChangedListener {
     public void onPluginChanged(final List<PluginData> pluginDataList, final DataEventTypeEnum eventType) {
         WebsocketData<PluginData> websocketData =
                 new WebsocketData<>(ConfigGroupEnum.PLUGIN.name(), eventType.name(), pluginDataList);
-        WebsocketCollector.send(GsonUtils.getInstance().toJson(websocketData), eventType);
+        WebsocketCollector.send(JsonUtils.toJson(websocketData), eventType);
     }
     
     @Override
     public void onSelectorChanged(final List<SelectorData> selectorDataList, final DataEventTypeEnum eventType) {
         WebsocketData<SelectorData> websocketData =
                 new WebsocketData<>(ConfigGroupEnum.SELECTOR.name(), eventType.name(), selectorDataList);
-        WebsocketCollector.send(GsonUtils.getInstance().toJson(websocketData), eventType);
+        WebsocketCollector.send(JsonUtils.toJson(websocketData), eventType);
     }
 
     @Override
     public void onRuleChanged(final List<RuleData> ruleDataList, final DataEventTypeEnum eventType) {
         WebsocketData<RuleData> configData =
                 new WebsocketData<>(ConfigGroupEnum.RULE.name(), eventType.name(), ruleDataList);
-        WebsocketCollector.send(GsonUtils.getInstance().toJson(configData), eventType);
+        WebsocketCollector.send(JsonUtils.toJson(configData), eventType);
     }
 
     @Override
     public void onAppAuthChanged(final List<AppAuthData> appAuthDataList, final DataEventTypeEnum eventType) {
         WebsocketData<AppAuthData> configData =
                 new WebsocketData<>(ConfigGroupEnum.APP_AUTH.name(), eventType.name(), appAuthDataList);
-        WebsocketCollector.send(GsonUtils.getInstance().toJson(configData), eventType);
+        WebsocketCollector.send(JsonUtils.toJson(configData), eventType);
     }
 
     @Override
     public void onMetaDataChanged(final List<MetaData> metaDataList, final DataEventTypeEnum eventType) {
         WebsocketData<MetaData> configData =
                 new WebsocketData<>(ConfigGroupEnum.META_DATA.name(), eventType.name(), metaDataList);
-        WebsocketCollector.send(GsonUtils.getInstance().toJson(configData), eventType);
+        WebsocketCollector.send(JsonUtils.toJson(configData), eventType);
     }
 
 }

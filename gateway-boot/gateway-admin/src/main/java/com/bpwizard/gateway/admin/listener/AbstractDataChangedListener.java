@@ -17,6 +17,23 @@
 
 package com.bpwizard.gateway.admin.listener;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.CollectionUtils;
+
+import com.bpwizard.gateway.admin.service.AppAuthService;
+import com.bpwizard.gateway.admin.service.MetaDataService;
+import com.bpwizard.gateway.admin.service.PluginService;
+import com.bpwizard.gateway.admin.service.RuleService;
+import com.bpwizard.gateway.admin.service.SelectorService;
 import com.bpwizard.gateway.common.dto.AppAuthData;
 import com.bpwizard.gateway.common.dto.ConfigData;
 import com.bpwizard.gateway.common.dto.MetaData;
@@ -25,23 +42,9 @@ import com.bpwizard.gateway.common.dto.RuleData;
 import com.bpwizard.gateway.common.dto.SelectorData;
 import com.bpwizard.gateway.common.enums.ConfigGroupEnum;
 import com.bpwizard.gateway.common.enums.DataEventTypeEnum;
-import com.bpwizard.gateway.common.utils.GsonUtils;
+import com.bpwizard.gateway.common.utils.JsonUtils;
+// import com.bpwizard.gateway.common.utils.GsonUtils;
 import com.bpwizard.gateway.common.utils.Md5Utils;
-import com.google.gson.reflect.TypeToken;
-import org.apache.commons.collections4.CollectionUtils;
-import com.bpwizard.gateway.admin.service.AppAuthService;
-import com.bpwizard.gateway.admin.service.MetaDataService;
-import com.bpwizard.gateway.admin.service.PluginService;
-import com.bpwizard.gateway.admin.service.RuleService;
-import com.bpwizard.gateway.admin.service.SelectorService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 
 /**
@@ -92,30 +95,27 @@ public abstract class AbstractDataChangedListener implements DataChangedListener
      */
     public ConfigData<?> fetchConfig(final ConfigGroupEnum groupKey) {
         ConfigDataCache config = CACHE.get(groupKey.name());
+      
         switch (groupKey) {
             case APP_AUTH:
-                List<AppAuthData> appAuthList = GsonUtils.getGson().fromJson(config.getJson(), new TypeToken<List<AppAuthData>>() {
-                }.getType());
+            	List<AppAuthData> appAuthList = Arrays.asList(JsonUtils.fromJson(config.getJson(), AppAuthData[].class));
                 return new ConfigData<>(config.getMd5(), config.getLastModifyTime(), appAuthList);
             case PLUGIN:
-                List<PluginData> pluginList = GsonUtils.getGson().fromJson(config.getJson(), new TypeToken<List<PluginData>>() {
-                }.getType());
+            	List<PluginData> pluginList = Arrays.asList(JsonUtils.fromJson(config.getJson(), PluginData[].class));
                 return new ConfigData<>(config.getMd5(), config.getLastModifyTime(), pluginList);
             case RULE:
-                List<RuleData> ruleList = GsonUtils.getGson().fromJson(config.getJson(), new TypeToken<List<RuleData>>() {
-                }.getType());
+                List<RuleData> ruleList = Arrays.asList(JsonUtils.fromJson(config.getJson(), RuleData[].class));
                 return new ConfigData<>(config.getMd5(), config.getLastModifyTime(), ruleList);
             case SELECTOR:
-                List<SelectorData> selectorList = GsonUtils.getGson().fromJson(config.getJson(), new TypeToken<List<SelectorData>>() {
-                }.getType());
+                List<SelectorData> selectorList = Arrays.asList(JsonUtils.fromJson(config.getJson(), SelectorData[].class));
                 return new ConfigData<>(config.getMd5(), config.getLastModifyTime(), selectorList);
             case META_DATA:
-                List<MetaData> metaList = GsonUtils.getGson().fromJson(config.getJson(), new TypeToken<List<MetaData>>() {
-                }.getType());
+                List<MetaData> metaList = Arrays.asList(JsonUtils.fromJson(config.getJson(), MetaData[].class));
                 return new ConfigData<>(config.getMd5(), config.getLastModifyTime(), metaList);
             default:
                 throw new IllegalStateException("Unexpected groupKey: " + groupKey);
         }
+       
     }
     
     @Override
@@ -226,7 +226,8 @@ public abstract class AbstractDataChangedListener implements DataChangedListener
      * @param data the new config data
      */
     protected <T> void updateCache(final ConfigGroupEnum group, final List<T> data) {
-        String json = GsonUtils.getInstance().toJson(data);
+        // String json = GsonUtils.getInstance().toJson(data);
+    	String json = JsonUtils.toJson(data);
         ConfigDataCache newVal = new ConfigDataCache(group.name(), json, Md5Utils.md5(json), System.currentTimeMillis());
         ConfigDataCache oldVal = CACHE.put(newVal.getGroup(), newVal);
         LOGGER.info("update config cache[{}], old:{}, updated:{}", group, oldVal, newVal);

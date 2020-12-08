@@ -19,32 +19,6 @@
 
 package com.bpwizard.gateway.admin.listener.http;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import com.bpwizard.gateway.admin.result.GatewayAdminResult;
-import com.bpwizard.gateway.common.concurrent.GatewayThreadFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
-
-import com.bpwizard.gateway.admin.config.HttpSyncProperties;
-import com.bpwizard.gateway.admin.listener.AbstractDataChangedListener;
-import com.bpwizard.gateway.admin.listener.ConfigDataCache;
-import com.bpwizard.gateway.common.constant.HttpConstants;
-import com.bpwizard.gateway.common.dto.AppAuthData;
-import com.bpwizard.gateway.common.dto.MetaData;
-import com.bpwizard.gateway.common.dto.PluginData;
-import com.bpwizard.gateway.common.dto.RuleData;
-import com.bpwizard.gateway.common.dto.SelectorData;
-import com.bpwizard.gateway.common.enums.ConfigGroupEnum;
-import com.bpwizard.gateway.common.enums.DataEventTypeEnum;
-import com.bpwizard.gateway.common.exception.GatewayException;
-import com.bpwizard.gateway.common.utils.GsonUtils;
-
-import javax.servlet.AsyncContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,6 +31,33 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+
+import javax.servlet.AsyncContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.util.CollectionUtils;
+
+import com.bpwizard.gateway.admin.config.HttpSyncProperties;
+import com.bpwizard.gateway.admin.listener.AbstractDataChangedListener;
+import com.bpwizard.gateway.admin.listener.ConfigDataCache;
+import com.bpwizard.gateway.admin.result.GatewayAdminResult;
+import com.bpwizard.gateway.common.concurrent.GatewayThreadFactory;
+import com.bpwizard.gateway.common.constant.HttpConstants;
+import com.bpwizard.gateway.common.dto.AppAuthData;
+import com.bpwizard.gateway.common.dto.MetaData;
+import com.bpwizard.gateway.common.dto.PluginData;
+import com.bpwizard.gateway.common.dto.RuleData;
+import com.bpwizard.gateway.common.dto.SelectorData;
+import com.bpwizard.gateway.common.enums.ConfigGroupEnum;
+import com.bpwizard.gateway.common.enums.DataEventTypeEnum;
+import com.bpwizard.gateway.common.exception.GatewayException;
+import com.bpwizard.gateway.common.utils.JsonUtils;
 
 /**
  * HTTP long polling, which blocks the client's request thread
@@ -136,7 +137,7 @@ public class HttpLongPollingDataChangedListener extends AbstractDataChangedListe
         String clientIp = getRemoteIp(request);
 
         // response immediately.
-        if (CollectionUtils.isNotEmpty(changedGroup)) {
+        if (!CollectionUtils.isEmpty(changedGroup)) {
             this.generateResponse(response, changedGroup);
             LOGGER.info("send response with the changed group, ip={}, group={}", clientIp, changedGroup);
             return;
@@ -261,7 +262,7 @@ public class HttpLongPollingDataChangedListener extends AbstractDataChangedListe
             response.setHeader("Cache-Control", "no-cache,no-store");
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println(GsonUtils.getInstance().toJson(GatewayAdminResult.success("success", changedGroups)));
+            response.getWriter().println(JsonUtils.toJson(GatewayAdminResult.success("success", changedGroups)));
         } catch (IOException ex) {
             LOGGER.error("Sending response failed.", ex);
         }

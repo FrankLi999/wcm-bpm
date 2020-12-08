@@ -19,6 +19,24 @@
 
 package com.bpwizard.gateway.admin.service.impl;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
 import com.bpwizard.gateway.admin.dto.MetaDataDTO;
 import com.bpwizard.gateway.admin.entity.MetaDataDO;
 import com.bpwizard.gateway.admin.listener.DataChangedEvent;
@@ -34,22 +52,6 @@ import com.bpwizard.gateway.common.dto.MetaData;
 import com.bpwizard.gateway.common.enums.ConfigGroupEnum;
 import com.bpwizard.gateway.common.enums.DataEventTypeEnum;
 import com.bpwizard.gateway.common.utils.UUIDUtils;
-import com.google.common.collect.Lists;
-import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The type Meta data service.
@@ -106,7 +108,7 @@ public class MetaDataServiceImpl implements MetaDataService {
     @Transactional
     public int delete(final List<String> ids) {
         int count = 0;
-        List<MetaData> metaDataList = Lists.newArrayList();
+        List<MetaData> metaDataList = new ArrayList<>();
         for (String id : ids) {
             MetaDataDO metaDataDO = metaDataMapper.selectById(id);
             count += metaDataMapper.delete(id);
@@ -119,7 +121,7 @@ public class MetaDataServiceImpl implements MetaDataService {
     
     @Override
     public String enabled(final List<String> ids, final Boolean enabled) {
-        List<MetaData> metaDataList = Lists.newArrayList();
+        List<MetaData> metaDataList = new ArrayList<>();
         for (String id : ids) {
             MetaDataDO metaDataDO = metaDataMapper.selectById(id);
             if (Objects.isNull(metaDataDO)) {
@@ -138,7 +140,7 @@ public class MetaDataServiceImpl implements MetaDataService {
     @Override
     public void syncData() {
         List<MetaDataDO> all = metaDataMapper.findAll();
-        if (CollectionUtils.isNotEmpty(all)) {
+        if (!CollectionUtils.isEmpty(all)) {
             eventPublisher.publishEvent(new DataChangedEvent(ConfigGroupEnum.META_DATA, DataEventTypeEnum.REFRESH, MetaDataTransfer.INSTANCE.mapToDataAll(all)));
         }
     }

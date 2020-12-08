@@ -17,15 +17,16 @@
 
 package com.bpwizard.gateway.common.dto;
 
+import java.io.Serializable;
+import java.util.List;
+
+import com.bpwizard.gateway.common.utils.JsonUtils;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.util.List;
-
-import com.bpwizard.gateway.common.utils.GsonUtils;
 
 /**
  * Data set, including {@link AppAuthData}、{@link ConditionData}、{@link PluginData}、{@link RuleData}、{@link SelectorData}.
@@ -46,6 +47,6 @@ public class ConfigData<T> implements Serializable {
 
     @Override
     public String toString() {
-        return GsonUtils.getInstance().toJson(this);
+        return JsonUtils.toJson(this);
     }
 }

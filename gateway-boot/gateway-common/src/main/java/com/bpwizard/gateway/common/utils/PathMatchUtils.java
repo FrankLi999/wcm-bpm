@@ -19,8 +19,11 @@
 
 package com.bpwizard.gateway.common.utils;
 
-import com.google.common.base.Splitter;
+import java.util.Arrays;
+
+//import com.google.common.base.Splitter;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.StringUtils;
 
 /**
  * The type Path match utils.
@@ -37,7 +40,9 @@ public class PathMatchUtils {
      * @return the boolean
      */
     public static boolean match(final String matchUrls, final String path) {
-        return Splitter.on(",").omitEmptyStrings().trimResults().splitToList(matchUrls).stream().anyMatch(url -> reg(url, path));
+    	// new StringTokenizer(matchUrls, ",");
+        // return Splitter.on(",").omitEmptyStrings().trimResults().splitToList(matchUrls).stream().anyMatch(url -> reg(url, path));
+    	return Arrays.stream(matchUrls.split(",")).filter(StringUtils::hasText).anyMatch(url -> reg(url, path));
     }
     
     private static boolean reg(final String pattern, final String path) {

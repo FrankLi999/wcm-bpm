@@ -21,10 +21,11 @@ package com.bpwizard.gateway.admin.service.sync;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.commons.collections4.CollectionUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.bpwizard.gateway.admin.listener.DataChangedEvent;
 import com.bpwizard.gateway.admin.service.AppAuthService;
@@ -112,7 +113,7 @@ public class SyncDataServiceImpl implements SyncDataService {
         eventPublisher.publishEvent(new DataChangedEvent(ConfigGroupEnum.PLUGIN, DataEventTypeEnum.UPDATE,
                 Collections.singletonList(PluginTransfer.INSTANCE.mapDataTOVO(pluginVO))));
         List<SelectorData> selectorDataList = selectorService.findByPluginId(pluginId);
-        if (CollectionUtils.isNotEmpty(selectorDataList)) {
+        if (!CollectionUtils.isEmpty(selectorDataList)) {
             eventPublisher.publishEvent(new DataChangedEvent(ConfigGroupEnum.SELECTOR, DataEventTypeEnum.REFRESH, selectorDataList));
             List<RuleData> allRuleDataList = new ArrayList<>();
             for (SelectorData selectData : selectorDataList) {

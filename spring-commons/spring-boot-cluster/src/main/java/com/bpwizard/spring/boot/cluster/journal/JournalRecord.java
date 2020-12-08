@@ -107,7 +107,7 @@ public final class JournalRecord implements Serializable, Iterable<Change> {
      * @see com.bpwizard.spring.boot.cluster.change.ChangeSet#getTimestamp()
      */
     public long getChangeTimeMillis() {
-        return content.getTimestamp().getMillisecondsInUtc();
+        return content.getTimestamp().getTime();// .getMillisecondsInUtc();
     }
 
     /**

@@ -18,8 +18,23 @@
 
 package com.bpwizard.gateway.common.utils;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -31,16 +46,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 /**
  * JsonUtils.
@@ -87,7 +92,26 @@ public final class JsonUtils {
             return "{}";
         }
     }
-
+    
+    public static <T> T fromJson(String content, Class<T> valueType) {
+	    try {
+	    	return mapper.readValue(content, valueType);
+	    } catch (JsonMappingException e) {
+	    	throw new IllegalStateException("Json mapping error: " + e);
+	    } catch (JsonProcessingException e) {
+	     	throw new IllegalStateException("Json processing error: " + e);
+	    } 
+    }
+    
+    public static <T> List<T> fromList(String content, Class<T[]> valueType) {
+    	try {
+    		return Arrays.asList(mapper.readValue(content, valueType));
+    	} catch (JsonMappingException e) {
+        	throw new IllegalStateException("Json mapping error: " + e);
+        } catch (JsonProcessingException e) {
+         	throw new IllegalStateException("Json processing error: " + e);
+        } 
+    }
     /**
      * Remove class object.
      *

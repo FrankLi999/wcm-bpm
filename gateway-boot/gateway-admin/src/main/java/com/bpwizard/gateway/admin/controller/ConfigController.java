@@ -17,12 +17,13 @@
 
 package com.bpwizard.gateway.admin.controller;
 
-import com.bpwizard.gateway.admin.listener.http.HttpLongPollingDataChangedListener;
-import com.bpwizard.gateway.admin.result.GatewayAdminResult;
-import com.bpwizard.gateway.common.dto.ConfigData;
-import com.bpwizard.gateway.common.enums.ConfigGroupEnum;
-import com.google.common.collect.Maps;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,11 +31,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
-import java.util.Map;
+import com.bpwizard.gateway.admin.listener.http.HttpLongPollingDataChangedListener;
+import com.bpwizard.gateway.admin.result.GatewayAdminResult;
+import com.bpwizard.gateway.common.dto.ConfigData;
+import com.bpwizard.gateway.common.enums.ConfigGroupEnum;
+// import com.esotericsoftware.kryo.NotNull;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This Controller only when HttpLongPollingDataChangedListener exist, will take effect.
@@ -56,7 +58,7 @@ public class ConfigController {
      */
     @GetMapping("/fetch")
     public GatewayAdminResult fetchConfigs(@NotNull final String[] groupKeys) {
-        Map<String, ConfigData<?>> result = Maps.newHashMap();
+        Map<String, ConfigData<?>> result = new HashMap<>();//Maps.newHashMap();
         for (String groupKey : groupKeys) {
             ConfigData<?> data = longPollingListener.fetchConfig(ConfigGroupEnum.valueOf(groupKey));
             result.put(groupKey, data);

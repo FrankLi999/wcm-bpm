@@ -16,10 +16,9 @@
 package com.bpwizard.spring.boot.cluster.change;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Set;
-
-import org.modeshape.jcr.api.value.DateTime;
 
 /**
  * A set of internal repository changes.
@@ -59,7 +58,8 @@ public interface ChangeSet extends Iterable<Change>, Serializable {
      * 
      * @return a {@code DateTime} instance; never {@code null}
      */
-    public DateTime getTimestamp();
+    // public DateTime getTimestamp();
+    public Timestamp getTimestamp();
 
     /**
      * Get the key of the process in which the changes were made.

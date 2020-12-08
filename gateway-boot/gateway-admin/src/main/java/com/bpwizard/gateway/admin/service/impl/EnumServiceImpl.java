@@ -18,6 +18,14 @@
 
 package com.bpwizard.gateway.admin.service.impl;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import com.bpwizard.gateway.admin.service.EnumService;
 import com.bpwizard.gateway.admin.vo.EnumVO;
 import com.bpwizard.gateway.common.enums.HttpMethodEnum;
@@ -33,14 +41,7 @@ import com.bpwizard.gateway.common.enums.RpcTypeEnum;
 import com.bpwizard.gateway.common.enums.SelectorTypeEnum;
 import com.bpwizard.gateway.common.enums.SerializeEnum;
 import com.bpwizard.gateway.common.enums.WafEnum;
-import com.google.common.collect.Maps;
-
-import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+// import com.google.common.collect.Maps;
 
 /**
  * EnumServiceImpl.
@@ -104,7 +105,7 @@ public class EnumServiceImpl implements EnumService {
         List<EnumVO> hystrixIsolationModeEnums = Arrays.stream(HystrixIsolationModeEnum.values())
                 .map(hystrixIsolationModeEnum -> new EnumVO(hystrixIsolationModeEnum.getCode(), hystrixIsolationModeEnum.getName(), true))
                 .collect(Collectors.toList());
-        Map<String, List<EnumVO>> enums = Maps.newHashMap();
+        Map<String, List<EnumVO>> enums = new HashMap<>();
         enums.put("httpMethodEnums", httpMethodEnums);
         enums.put("loadBalanceEnums", loadBalanceEnums);
         enums.put("matchModeEnums", matchModeEnums);

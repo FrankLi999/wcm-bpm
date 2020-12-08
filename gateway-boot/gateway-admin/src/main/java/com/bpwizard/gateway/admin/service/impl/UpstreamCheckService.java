@@ -17,32 +17,37 @@
 
 package com.bpwizard.gateway.admin.service.impl;
 
-import com.bpwizard.gateway.admin.entity.SelectorDO;
-import com.bpwizard.gateway.admin.listener.DataChangedEvent;
-import com.bpwizard.gateway.admin.mapper.SelectorMapper;
-import com.bpwizard.gateway.admin.service.SelectorService;
-import com.bpwizard.gateway.common.dto.SelectorData;
-import com.bpwizard.gateway.common.dto.convert.DivideUpstream;
-import com.bpwizard.gateway.common.enums.ConfigGroupEnum;
-import com.bpwizard.gateway.common.enums.DataEventTypeEnum;
-import com.bpwizard.gateway.common.utils.GsonUtils;
-import com.bpwizard.gateway.common.utils.UpstreamCheckUtils;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import javax.annotation.PostConstruct;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
-import com.bpwizard.gateway.common.concurrent.GatewayThreadFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import com.bpwizard.gateway.admin.entity.SelectorDO;
+import com.bpwizard.gateway.admin.listener.DataChangedEvent;
+import com.bpwizard.gateway.admin.mapper.SelectorMapper;
+import com.bpwizard.gateway.admin.service.SelectorService;
+import com.bpwizard.gateway.common.concurrent.GatewayThreadFactory;
+import com.bpwizard.gateway.common.dto.SelectorData;
+import com.bpwizard.gateway.common.dto.convert.DivideUpstream;
+import com.bpwizard.gateway.common.enums.ConfigGroupEnum;
+import com.bpwizard.gateway.common.enums.DataEventTypeEnum;
+import com.bpwizard.gateway.common.utils.JsonUtils;
+import com.bpwizard.gateway.common.utils.UpstreamCheckUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * this is divide  http url upstream.
@@ -51,7 +56,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UpstreamCheckService {
     
-    private static final Map<String, List<DivideUpstream>> UPSTREAM_MAP = Maps.newConcurrentMap();
+    private static final Map<String, List<DivideUpstream>> UPSTREAM_MAP = new ConcurrentHashMap<>();
     
     @Value("${gateway.upstream.check:true}")
     private boolean check;
@@ -89,8 +94,8 @@ public class UpstreamCheckService {
     public void setup() {
         List<SelectorDO> selectorDOList = selectorMapper.findByPluginId("5");
         for (SelectorDO selectorDO : selectorDOList) {
-            List<DivideUpstream> divideUpstreams = GsonUtils.getInstance().fromList(selectorDO.getHandle(), DivideUpstream.class);
-            if (CollectionUtils.isNotEmpty(divideUpstreams)) {
+            List<DivideUpstream> divideUpstreams = JsonUtils.fromList(selectorDO.getHandle(), DivideUpstream[].class);
+            if (!CollectionUtils.isEmpty(divideUpstreams)) {
                 UPSTREAM_MAP.put(selectorDO.getName(), divideUpstreams);
             }
         }
@@ -119,7 +124,7 @@ public class UpstreamCheckService {
         if (UPSTREAM_MAP.containsKey(selectorName)) {
             UPSTREAM_MAP.get(selectorName).add(divideUpstream);
         } else {
-            UPSTREAM_MAP.put(selectorName, Lists.newArrayList(divideUpstream));
+            UPSTREAM_MAP.put(selectorName, Arrays.asList(divideUpstream));
         }
         
     }
@@ -131,7 +136,7 @@ public class UpstreamCheckService {
     }
     
     private void check(final String selectorName, final List<DivideUpstream> upstreamList) {
-        List<DivideUpstream> successList = Lists.newArrayListWithCapacity(upstreamList.size());
+        List<DivideUpstream> successList = new ArrayList<>(upstreamList.size());
         for (DivideUpstream divideUpstream : upstreamList) {
             final boolean pass = UpstreamCheckUtils.checkUrl(divideUpstream.getUpstreamUrl());
             if (pass) {
@@ -158,7 +163,7 @@ public class UpstreamCheckService {
                 selector.setHandle("");
                 selectorData.setHandle("");
             } else {
-                String handler = GsonUtils.getInstance().toJson(upstreams);
+                String handler = JsonUtils.toJson(upstreams);
                 selector.setHandle(handler);
                 selectorData.setHandle(handler);
             }

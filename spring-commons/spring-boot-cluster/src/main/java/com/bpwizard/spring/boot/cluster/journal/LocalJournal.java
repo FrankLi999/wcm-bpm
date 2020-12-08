@@ -20,23 +20,18 @@ import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.NavigableMap;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import javax.jcr.RepositoryException;
 
 import org.mapdb.Atomic;
 import org.mapdb.BTreeKeySerializer;
 import org.mapdb.BTreeMap;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
-import org.springframework.data.repository.config.RepositoryConfiguration;
 
+import com.bpwizard.spring.boot.cluster.ClusterException;
 import com.bpwizard.spring.boot.cluster.change.ChangeSet;
 import com.bpwizard.spring.boot.cluster.common.annotation.ThreadSafe;
 import com.bpwizard.spring.boot.cluster.common.logging.Logger;
@@ -109,7 +104,7 @@ public class LocalJournal implements ChangeJournal {
 
     @SuppressWarnings( "rawtypes" )
     @Override
-    public synchronized void start() throws RepositoryException {
+    public synchronized void start() throws ClusterException {
         if (!stopped) {
             return;
         }
@@ -150,7 +145,7 @@ public class LocalJournal implements ChangeJournal {
             this.journalId = journalAtomic.get();
             this.stopped = false;
         } catch (Exception e) {
-            throw new RepositoryException(I18nMessages.cannotStartJournal.text(), e);
+            throw new ClusterException(I18nMessages.cannotStartJournal.text(), e);
         } 
     }
 

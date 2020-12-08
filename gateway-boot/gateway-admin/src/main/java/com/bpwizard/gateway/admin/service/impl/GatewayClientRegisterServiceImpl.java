@@ -57,7 +57,6 @@ import com.bpwizard.gateway.common.enums.OperatorEnum;
 import com.bpwizard.gateway.common.enums.ParamTypeEnum;
 import com.bpwizard.gateway.common.enums.RpcTypeEnum;
 import com.bpwizard.gateway.common.enums.SelectorTypeEnum;
-import com.bpwizard.gateway.common.utils.GsonUtils;
 import com.bpwizard.gateway.common.utils.JsonUtils;
 import com.bpwizard.gateway.common.utils.UUIDUtils;
 
@@ -169,6 +168,7 @@ public class GatewayClientRegisterServiceImpl implements GatewayClientRegisterSe
 //    }
     
     private String handlerSpringMvcSelector(final SpringMvcRegisterDTO dto) {
+
         String contextPath = dto.getContext();
         SelectorDO selectorDO = selectorService.findByName(contextPath);
         String selectorId;
@@ -183,16 +183,16 @@ public class GatewayClientRegisterServiceImpl implements GatewayClientRegisterSe
             DivideUpstream addDivideUpstream = buildDivideUpstream(uri);
             SelectorData selectorData = selectorService.buildByName(contextPath);
             if (StringUtils.isBlank(handle)) {
-                handleAdd = GsonUtils.getInstance().toJson(Collections.singletonList(addDivideUpstream));
+                handleAdd = JsonUtils.toJson(Collections.singletonList(addDivideUpstream));
             } else {
-                List<DivideUpstream> exist = GsonUtils.getInstance().fromList(handle, DivideUpstream.class);
+                List<DivideUpstream> exist = JsonUtils.fromList(handle, DivideUpstream[].class);
                 for (DivideUpstream upstream : exist) {
                     if (upstream.getUpstreamUrl().equals(addDivideUpstream.getUpstreamUrl())) {
                         return selectorId;
                     }
                 }
                 exist.add(addDivideUpstream);
-                handleAdd = GsonUtils.getInstance().toJson(exist);
+                handleAdd = JsonUtils.toJson(exist);
             }
             selectorDO.setHandle(handleAdd);
             selectorData.setHandle(handleAdd);
@@ -247,7 +247,7 @@ public class GatewayClientRegisterServiceImpl implements GatewayClientRegisterSe
         } else {
             //is divide
             DivideUpstream divideUpstream = buildDivideUpstream(uri);
-            String handler = GsonUtils.getInstance().toJson(Collections.singletonList(divideUpstream));
+            String handler = JsonUtils.toJson(Collections.singletonList(divideUpstream));
             selectorDTO.setHandle(handler);
             selectorDTO.setPluginId("5");
             upstreamCheckService.submit(selectorDTO.getName(), divideUpstream);

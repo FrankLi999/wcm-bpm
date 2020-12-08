@@ -4,7 +4,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.bpwizard.wcm_bpm</groupId>
+  <groupId>com.bpwizard.wcm-bpm</groupId>
   <artifactId>camel-syndicator</artifactId>
   <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
