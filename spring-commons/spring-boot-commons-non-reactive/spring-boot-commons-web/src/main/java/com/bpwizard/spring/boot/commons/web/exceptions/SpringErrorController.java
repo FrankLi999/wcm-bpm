@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -23,14 +23,14 @@ import org.springframework.http.ResponseEntity;
  */
 public class SpringErrorController extends BasicErrorController {
 	
-    private static final Logger log = LogManager.getLogger(SpringErrorController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringErrorController.class);
 
     public SpringErrorController(ErrorAttributes errorAttributes,
 			ServerProperties serverProperties,
 			List<ErrorViewResolver> errorViewResolvers) {
 		
 		super(errorAttributes, serverProperties.getError(), errorViewResolvers);
-		log.info("Created");
+		logger.info("Created");
 	}
 
     /**

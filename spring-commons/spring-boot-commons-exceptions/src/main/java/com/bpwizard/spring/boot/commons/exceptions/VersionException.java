@@ -8,8 +8,6 @@ import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 /**
  * Version exception, to be thrown when concurrent
  * updates of an entity is noticed. 
- * 
- * @author Sanjay Patel
  */
 @ResponseStatus(HttpStatus.CONFLICT) // ResponseStatus doesn't work in reactive project! 
 public class VersionException extends RuntimeException {

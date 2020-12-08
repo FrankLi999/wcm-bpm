@@ -2,9 +2,9 @@ package com.bpwizard.spring.boot.commons.webflux;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -48,10 +48,10 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 @ComponentScan(basePackageClasses=VersionExceptionHandler.class)
 public class CommonsReactiveAutoConfiguration {
 	
-	private static final Logger log = LogManager.getLogger(CommonsReactiveAutoConfiguration.class);
+	private static final Logger logger = LoggerFactory.getLogger(CommonsReactiveAutoConfiguration.class);
 	
 	public CommonsReactiveAutoConfiguration() {
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	
@@ -63,7 +63,7 @@ public class CommonsReactiveAutoConfiguration {
 	public <T extends Throwable>
 	ErrorAttributes errorAttributes(ErrorResponseComposer<T> errorResponseComposer) {
 		
-        log.info("Configuring SpringErrorAttributes");       
+		logger.info("Configuring SpringErrorAttributes");       
 		return new SpringReactiveErrorAttributes<T>(errorResponseComposer);
 	}
 
@@ -72,7 +72,7 @@ public class CommonsReactiveAutoConfiguration {
 	@ConditionalOnMissingBean(SpringCommonsReactiveSecurityConfig.class)
 	public SpringCommonsReactiveSecurityConfig springReactiveSecurityConfig(JSONWebSignatureService jwsTokenService) {
 		
-		log.info("Configuring SpringCommonsReactiveSecurityConfig ...");
+		logger.info("Configuring SpringCommonsReactiveSecurityConfig ...");
 		return new SpringCommonsReactiveSecurityConfig(jwsTokenService);
 	}
 	
@@ -87,7 +87,7 @@ public class CommonsReactiveAutoConfiguration {
 			AbstractSecurityExpressionHandler<?> expressionHandler,
 			PermissionEvaluator permissionEvaluator) {
 		
-		log.info("Configuring SecurityWebFilterChain ...");
+		logger.info("Configuring SecurityWebFilterChain ...");
 		expressionHandler.setPermissionEvaluator(permissionEvaluator);
 		return securityConfig.springSecurityFilterChain(http);
 	}
@@ -101,7 +101,7 @@ public class CommonsReactiveAutoConfiguration {
 	@ConditionalOnMissingBean(CorsConfigurationSource.class)
 	public SpringCorsConfigurationSource corsConfigurationSource(SpringProperties properties) {
 		
-        log.info("Configuring SpringCorsConfigurationSource");       
+		logger.info("Configuring SpringCorsConfigurationSource");       
 		return new SpringCorsConfigurationSource(properties);		
 	}
 
@@ -124,7 +124,7 @@ public class CommonsReactiveAutoConfiguration {
 	public <ID extends Serializable>
 	AuditorAware<ID> auditorAware() {
 		
-        log.info("Configuring SpringAuditorAware");       
+		logger.info("Configuring SpringAuditorAware");       
 		return new SpringReactiveAuditorAware<ID>();
 	}
 
@@ -135,7 +135,7 @@ public class CommonsReactiveAutoConfiguration {
 	@Bean
 	public ReactiveUtils reactiveUtils(SpringExceptionUtils lexUtils) {
 
-        log.info("Configuring LecrUtils");
+		logger.info("Configuring LecrUtils");
 		return new ReactiveUtils();
 	}
 }

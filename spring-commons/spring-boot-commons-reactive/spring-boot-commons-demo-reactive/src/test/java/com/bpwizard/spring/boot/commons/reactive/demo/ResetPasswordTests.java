@@ -5,8 +5,8 @@ import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.ADMIN_I
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.CLIENT;
 import static com.bpwizard.spring.boot.commons.reactive.demo.controllers.MyController.BASE_URI;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +25,7 @@ public class ResetPasswordTests extends AbstractTests {
 	@Autowired
 	private JSONWebEncryptionService jweTokenService;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		
 		forgotPasswordCode = jweTokenService.createToken(

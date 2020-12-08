@@ -9,9 +9,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
-import org.apache.commons.lang3.SerializationUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.security.access.AccessDeniedException;
@@ -33,12 +32,9 @@ import com.nimbusds.jwt.JWTClaimsSet;
 
 /**
  * Useful helper methods
- * 
- * @author Sanjay Patel
  */
 public class SecurityUtils {
-	
-	private static final Logger log = LogManager.getLogger(SecurityUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(SecurityUtils.class);
 	
 //	public static final String AUTHORIZATION_REQUEST_COOKIE_NAME = "spring_oauth2_authorization_request";
 //	public static final String BPW_REDIRECT_URI_COOKIE_PARAM_NAME = "spring_redirect_uri";
@@ -65,7 +61,7 @@ public class SecurityUtils {
 		SecurityUtils.applicationContext = applicationContext;
 		SecurityUtils.objectMapper = objectMapper;
 		
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	

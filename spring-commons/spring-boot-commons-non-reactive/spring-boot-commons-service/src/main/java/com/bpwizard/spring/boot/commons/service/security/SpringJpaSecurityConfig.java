@@ -1,7 +1,7 @@
 package com.bpwizard.spring.boot.commons.service.security;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 // import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +18,7 @@ import com.bpwizard.spring.boot.commons.web.security.SpringWebSecurityConfig;
  */
 public class SpringJpaSecurityConfig extends SpringWebSecurityConfig {
 	
-	private static final Logger log = LogManager.getLogger(SpringJpaSecurityConfig.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringJpaSecurityConfig.class);
 
 	private SpringProperties properties;
 	private SpringUserDetailsService<?, ?> userDetailsService;
@@ -45,7 +45,7 @@ public class SpringJpaSecurityConfig extends SpringWebSecurityConfig {
 		this.oauth2AuthenticationSuccessHandler = oauth2AuthenticationSuccessHandler;
 		this.oauth2AuthenticationFailureHandler = oauth2AuthenticationFailureHandler;
 		//this.passwordEncoder = passwordEncoder;
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	/**

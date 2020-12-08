@@ -4,14 +4,14 @@ import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.CLIENT;
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.UNVERIFIED_USER_EMAIL;
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.UNVERIFIED_USER_ID;
 import static com.bpwizard.spring.boot.commons.reactive.demo.controllers.MyController.BASE_URI;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
 import static org.springframework.web.reactive.function.BodyInserters.fromFormData;
 
 import org.bson.types.ObjectId;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
@@ -27,7 +27,7 @@ public class VerificationTests extends AbstractTests {
 	@Autowired
 	private JSONWebEncryptionService jweTokenService;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		
 		verificationCode = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
@@ -46,10 +46,10 @@ public class VerificationTests extends AbstractTests {
 			
 			TestUserDto userDto = result.getResponseBody();
 			
-			assertEquals(UNVERIFIED_USER_ID, userDto.getId());
-			assertEquals(0, userDto.getRoles().size());
-			assertTrue(userDto.isGoodUser());
-			assertFalse(userDto.isUnverified());
+			Assertions.assertEquals(UNVERIFIED_USER_ID, userDto.getId());
+			Assertions.assertEquals(0, userDto.getRoles().size());
+			Assertions.assertTrue(userDto.isGoodUser());
+			Assertions.assertFalse(userDto.isUnverified());
 		});		
 
 		// Already verified

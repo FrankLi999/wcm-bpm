@@ -5,14 +5,14 @@ import java.util.List;
 
 import javax.validation.Validator;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
-// import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
+
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
@@ -21,7 +21,6 @@ import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
-// import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -52,7 +51,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
         prePostEnabled = true
 )
 @AutoConfigureBefore({
-	// ValidationAutoConfiguration.class,
 	WebMvcAutoConfiguration.class,
 	ErrorMvcAutoConfiguration.class,
 	SecurityAutoConfiguration.class,
@@ -68,10 +66,10 @@ public class CommonsWebAutoConfiguration {
 	 */
 	public final static String JSON_PREFIX = ")]}',\n";
 
-	private static final Logger log = LogManager.getLogger(CommonsWebAutoConfiguration.class);
+	private static final Logger logger = LoggerFactory.getLogger(CommonsWebAutoConfiguration.class);
 	
 	public CommonsWebAutoConfiguration() {
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	/**
@@ -84,7 +82,7 @@ public class CommonsWebAutoConfiguration {
 	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(
 			ObjectMapper objectMapper) {
 		
-        log.info("Configuring JSON vulnerability prefix");       
+        logger.info("Configuring JSON vulnerability prefix");       
 
         MappingJackson2HttpMessageConverter converter =
         		new MappingJackson2HttpMessageConverter(objectMapper);
@@ -102,7 +100,7 @@ public class CommonsWebAutoConfiguration {
 	DefaultExceptionHandlerControllerAdvice<T> defaultExceptionHandlerControllerAdvice(
     		ErrorResponseComposer<T> errorResponseComposer) {
 		
-        log.info("Configuring DefaultExceptionHandlerControllerAdvice");       
+        logger.info("Configuring DefaultExceptionHandlerControllerAdvice");       
 		return new DefaultExceptionHandlerControllerAdvice<T>(errorResponseComposer);
 	}
 	
@@ -114,7 +112,7 @@ public class CommonsWebAutoConfiguration {
 	public <T extends Throwable>
 	ErrorAttributes errorAttributes(ErrorResponseComposer<T> errorResponseComposer) {
 		
-        log.info("Configuring SpringErrorAttributes");       
+        logger.info("Configuring SpringErrorAttributes");       
 		return new SpringErrorAttributes<T>(errorResponseComposer);
 	}
 	
@@ -127,7 +125,7 @@ public class CommonsWebAutoConfiguration {
 			ServerProperties serverProperties,
 			List<ErrorViewResolver> errorViewResolvers) {
 		
-        log.info("Configuring SpringErrorController");       
+        logger.info("Configuring SpringErrorController");       
 		return new SpringErrorController(errorAttributes, serverProperties, errorViewResolvers);	
 	}	
 
@@ -139,7 +137,7 @@ public class CommonsWebAutoConfiguration {
 	@ConditionalOnMissingBean(CorsConfigurationSource.class)
 	public SpringCorsConfigurationSource corsConfigurationSource(SpringProperties properties) {
 		
-        log.info("Configuring SpringCorsConfigurationSource");       
+        logger.info("Configuring SpringCorsConfigurationSource");       
 		return new SpringCorsConfigurationSource(properties);		
 	}
 	
@@ -150,7 +148,7 @@ public class CommonsWebAutoConfiguration {
 	@ConditionalOnMissingBean(SpringWebSecurityConfig.class)	
 	public SpringWebSecurityConfig springSecurityConfig() {
 		
-        log.info("Configuring SpringWebSecurityConfig");       
+        logger.info("Configuring SpringWebSecurityConfig");       
 		return new SpringWebSecurityConfig();
 	}
 	
@@ -162,7 +160,7 @@ public class CommonsWebAutoConfiguration {
 	public <ID extends Serializable>
 	AuditorAware<ID> auditorAware() {
 		
-        log.info("Configuring SpringAuditorAware");       
+        logger.info("Configuring SpringAuditorAware");       
 		return new SpringWebAuditorAware<ID>();
 	}
 
@@ -173,7 +171,7 @@ public class CommonsWebAutoConfiguration {
 	public WebUtils webUtils(ApplicationContext applicationContext,
 			ObjectMapper objectMapper) {
 
-        log.info("Configuring WebUtils");       		
+        logger.info("Configuring WebUtils");       		
 		return new WebUtils();
 	}
 	

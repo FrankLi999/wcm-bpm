@@ -4,12 +4,8 @@ import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.ADMIN_E
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.CLIENT;
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.UNVERIFIED_USER_ID;
 import static com.bpwizard.spring.boot.commons.reactive.demo.controllers.MyController.BASE_URI;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -20,7 +16,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
@@ -45,23 +40,23 @@ public class SignupTests extends AbstractTests {
 		.expectBody(TestUserDto.class)
 		.consumeWith(result -> {			
 			TestUserDto userDto = result.getResponseBody();
-			assertNotNull(userDto.getId());
-			assertNull(userDto.getPassword());
-			assertEquals("user.foo@example.com", userDto.getUsername());
-			assertEquals(1, userDto.getRoles().size());
-			assertTrue(userDto.getRoles().contains("UNVERIFIED"));
-			assertEquals("User Foo", userDto.getTag().getName());
-			assertTrue(userDto.isUnverified());
-			assertFalse(userDto.isBlocked());
-			assertFalse(userDto.isAdmin());
-			assertFalse(userDto.isGoodUser());
-			assertFalse(userDto.isGoodAdmin());
+			Assertions.assertNotNull(userDto.getId());
+			Assertions.assertNull(userDto.getPassword());
+			Assertions.assertEquals("user.foo@example.com", userDto.getUsername());
+			Assertions.assertEquals(1, userDto.getRoles().size());
+			Assertions.assertTrue(userDto.getRoles().contains("UNVERIFIED"));
+			Assertions.assertEquals("User Foo", userDto.getTag().getName());
+			Assertions.assertTrue(userDto.isUnverified());
+			Assertions.assertFalse(userDto.isBlocked());
+			Assertions.assertFalse(userDto.isAdmin());
+			Assertions.assertFalse(userDto.isGoodUser());
+			Assertions.assertFalse(userDto.isGoodAdmin());
 		});
 				
 		verify(mailSender).send(any());
 
 		// Ensure that password got encrypted
-		assertNotEquals("user123",
+		Assertions.assertNotEquals("user123",
 			mongoTemplate.findOne(query(where("email").is("user.foo@example.com")),
 					User.class).getPassword());
 	}
@@ -79,14 +74,14 @@ public class SignupTests extends AbstractTests {
 						"userMono.password",
 						"userMono.name");
 				Collection<TestSpringFieldError> errors = errorResponseResult.getResponseBody().getErrors();
-				assertTrue(errors.stream()
+				Assertions.assertTrue(errors.stream()
 						.map(TestSpringFieldError::getCode).collect(Collectors.toSet())
 						.containsAll(Arrays.asList(
 								"NotBlank",
 								"Size",
 								"Email")));
 				
-				assertTrue(errors.stream()
+				Assertions.assertTrue(errors.stream()
 						.map(TestSpringFieldError::getMessage).collect(Collectors.toSet())
 						.containsAll(Arrays.asList(
 								"Not a well formed email address",

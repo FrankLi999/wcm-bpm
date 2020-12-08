@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.nimbusds.jose.Payload;
@@ -16,7 +16,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
  */
 public abstract class AbstractJwtService implements SpringTokenService {
 	
-	private static final Logger log = LogManager.getLogger(AbstractJwtService.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractJwtService.class);
 	
 	protected Payload createPayload(String aud, String subject, Long expirationMillis, Map<String, Object> claimMap) {
 		
@@ -55,7 +55,7 @@ public abstract class AbstractJwtService implements SpringTokenService {
 		long expirationTime = claims.getExpirationTime().getTime();
 		long currentTime = System.currentTimeMillis();
 		
-		log.debug("Parsing JWT. Expiration time = " + expirationTime
+		logger.debug("Parsing JWT. Expiration time = " + expirationTime
 				+ ". Current time = " + currentTime);
 		
 		SecurityUtils.ensureCredentials(expirationTime >= currentTime,

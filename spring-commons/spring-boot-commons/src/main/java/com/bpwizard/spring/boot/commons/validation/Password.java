@@ -15,8 +15,6 @@ import com.bpwizard.spring.boot.commons.util.UserUtils;
  * Annotation for password constraint
  * 
  * @see <a href="http://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#example-composed-constraint">Composed constraint example</a>
- *  
- * @author Sanjay Patel
  *
  */
 @NotBlank(message="{com.bpwizard.spring.blank.password}")

@@ -71,9 +71,9 @@ public class LoginMvcTests extends AbstractMvcTests {
 		
 		// credentials updated
 		// Thread.sleep(1001L);		
-		User user = userRepository.findById(ADMIN_ID).get();
+		User user = userService.findById(ADMIN_ID).get();
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		userRepository.save(user);
+		userService.save(user);
 		
 		mvc.perform(get("/api/core/ping")
 				.header(HttpHeaders.AUTHORIZATION, tokens.get(ADMIN_ID)))

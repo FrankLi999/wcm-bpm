@@ -3,8 +3,8 @@ package com.bpwizard.spring.boot.commons.reactive.service.util;
 import java.io.Serializable;
 import java.util.Collections;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.util.MultiValueMap;
@@ -17,12 +17,10 @@ import com.nimbusds.jwt.JWTClaimsSet;
 
 /**
  * Useful helper methods
- * 
- * @author Sanjay Patel
  */
 public class ReactiveServiceUtils {
 	
-	private static final Logger log = LogManager.getLogger(ReactiveServiceUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReactiveServiceUtils.class);
 	
 	/**
 	 * Throws BadCredentialsException if 
@@ -33,7 +31,7 @@ public class ReactiveServiceUtils {
 		
 		long issueTime = (long) claims.getClaim(SpringTokenService.BPW_IAT);
 
-		log.debug("Ensuring credentials up to date. Issue time = "
+		logger.debug("Ensuring credentials up to date. Issue time = "
 				+ issueTime + ". User's credentials updated at" + user.getCredentialsUpdatedMillis());
 		
 		SecurityUtils.ensureCredentials(issueTime >= user.getCredentialsUpdatedMillis(),

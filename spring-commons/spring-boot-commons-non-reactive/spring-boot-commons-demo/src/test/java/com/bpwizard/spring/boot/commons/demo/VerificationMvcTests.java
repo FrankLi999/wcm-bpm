@@ -108,9 +108,9 @@ public class VerificationMvcTests extends AbstractMvcTests {
 		
 		// Credentials updated after the verification token is issued
 		Thread.sleep(1L);
-		User user = userRepository.findById(UNVERIFIED_USER_ID).get();
+		User user = userService.findById(UNVERIFIED_USER_ID).get();
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		userRepository.save(user);
+		userService.save(user);
 		
 		mvc.perform(post("/api/core/users/{userId}/verification", UNVERIFIED_USER_ID)
                 .param("code", verificationCode)

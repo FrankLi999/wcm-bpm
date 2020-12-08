@@ -12,7 +12,7 @@ import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.USER_PA
 import static com.bpwizard.spring.boot.commons.reactive.demo.controllers.MyController.BASE_URI;
 
 import org.bson.types.ObjectId;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons.webflux.exceptions;
 
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
 import org.springframework.web.reactive.function.server.ServerRequest;
 
@@ -12,7 +12,7 @@ import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 
 public class SpringReactiveErrorAttributes<T extends Throwable> extends DefaultErrorAttributes {
 	
-	private static final Logger log = LogManager.getLogger(SpringReactiveErrorAttributes.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringReactiveErrorAttributes.class);
 
 	/**
 	 * Component that actually builds the error response
@@ -22,7 +22,7 @@ public class SpringReactiveErrorAttributes<T extends Throwable> extends DefaultE
     public SpringReactiveErrorAttributes(ErrorResponseComposer<T> errorResponseComposer) {
 
 		this.errorResponseComposer = errorResponseComposer;
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	@Override

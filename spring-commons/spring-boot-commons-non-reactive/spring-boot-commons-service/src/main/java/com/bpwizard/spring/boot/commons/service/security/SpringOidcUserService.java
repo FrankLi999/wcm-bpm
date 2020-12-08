@@ -1,7 +1,7 @@
 package com.bpwizard.spring.boot.commons.service.security;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -14,14 +14,14 @@ import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
  */
 public class SpringOidcUserService extends OidcUserService {
 	
-	private static final Logger log = LogManager.getLogger(SpringOidcUserService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringOidcUserService.class);
 
 	private SpringOAuth2UserService<?, ?> oauth2UserService;
 
 	public SpringOidcUserService(SpringOAuth2UserService<?, ?> oauth2UserService) {
 
 		this.oauth2UserService = oauth2UserService;
-		log.debug("Created");
+		logger.debug("Created");
 	}
 
 	@Override

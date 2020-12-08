@@ -7,8 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SpringCommonsWebTokenAuthenticationFilter extends OncePerRequestFilter {
 	
-    private static final Logger log = LogManager.getLogger(SpringCommonsWebTokenAuthenticationFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringCommonsWebTokenAuthenticationFilter.class);
     
     private JSONWebSignatureService jwsTokenService;
 
@@ -39,13 +39,13 @@ public class SpringCommonsWebTokenAuthenticationFilter extends OncePerRequestFil
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		log.debug("Inside SpringTokenAuthenticationFilter ...");
+		logger.debug("Inside SpringTokenAuthenticationFilter ...");
 		
 		String header = request.getHeader(HttpHeaders.AUTHORIZATION);				
 		
     	if (header != null && header.startsWith(SecurityUtils.TOKEN_PREFIX)) { // token present
 			
-			log.debug("Found a token");			
+			logger.debug("Found a token");			
 		    String token = header.substring(7);
 		    
 		    try {
@@ -53,11 +53,11 @@ public class SpringCommonsWebTokenAuthenticationFilter extends OncePerRequestFil
 		    	Authentication auth = createAuthToken(token);
 		    	SecurityContextHolder.getContext().setAuthentication(auth);
 		    	
-				log.debug("Token authentication successful");
+				logger.debug("Token authentication successful");
 				    		    	
 		    } catch (Exception e) {
 		    	
-				log.debug("Token authentication failed - " + e.getMessage());
+				logger.debug("Token authentication failed - " + e.getMessage());
 				
 		    	response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
 						"Authentication Failed: " + e.getMessage());
@@ -67,7 +67,7 @@ public class SpringCommonsWebTokenAuthenticationFilter extends OncePerRequestFil
 		    
 		} else
 		
-			log.debug("Token authentication skipped");
+			logger.debug("Token authentication skipped");
 		
 		filterChain.doFilter(request, response);
 	}

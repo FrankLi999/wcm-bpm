@@ -5,16 +5,16 @@ import java.util.Collection;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.bpwizard.spring.boot.commons.SpringProperties;
+import com.bpwizard.spring.boot.commons.exceptions.util.ExceptionUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -24,18 +24,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *   http://www.captaindebug.com/2011/07/writng-jsr-303-custom-constraint_26.html#.VIVhqjGUd8E
  *   http://www.captechconsulting.com/blog/jens-alm/versioned-validated-and-secured-rest-services-spring-40-2?_ga=1.71504976.2113127005.1416833905
  * 
- * @author Sanjay Patel
- *
  */
+@SuppressWarnings("unused")
 public class CaptchaValidator implements ConstraintValidator<Captcha, String> {
 	
-	private static final Logger log = LogManager.getLogger(CaptchaValidator.class);
+	private static final Logger logger = LoggerFactory.getLogger(CaptchaValidator.class);
 	
 	/**
 	 * A class to receive the response
 	 * from Google 
-	 * 
-	 * @author Sanjay Patel
 	 */
 	private static class ResponseData {
 		
@@ -65,7 +62,7 @@ public class CaptchaValidator implements ConstraintValidator<Captcha, String> {
 		
 		this.properties = properties;
 		this.restTemplate = restTemplateBuilder.build();
-		log.info("Created");
+		logger.info("Created");
 	}
 
 
@@ -80,13 +77,13 @@ public class CaptchaValidator implements ConstraintValidator<Captcha, String> {
 		// If reCAPTCHA site key is not given as a property,
 		// e.g. while testing or getting started,
 		// no need to validate.
-		if (StringUtils.isBlank(properties.getRecaptcha().getSitekey())) { // 
-			log.debug("Captcha validation not done, as it is disabled in application properties.");
+		if (!StringUtils.hasText(properties.getRecaptcha().getSitekey())) { // 
+			logger.debug("Captcha validation not done, as it is disabled in application properties.");
 			return true;
 		}
 		
 		// Ensure user hasn't submitted a blank captcha response
-		if (StringUtils.isBlank(captchaResponse))
+		if (!StringUtils.hasText(captchaResponse))
 	         return false;
 	        
 		// Prepare the form data for sending to google
@@ -108,15 +105,15 @@ public class CaptchaValidator implements ConstraintValidator<Captcha, String> {
 			   formData, ResponseData.class);
 
 			if (responseData.success) { // Verified by google
-				log.debug("Captcha validation succeeded.");
+				logger.debug("Captcha validation succeeded.");
 				return true;
 			}
 			
-			log.info("Captcha validation failed.");
+			logger.info("Captcha validation failed.");
 			return false;
 			
 		} catch (Throwable t) {
-			log.error(ExceptionUtils.getStackTrace(t));
+			logger.error(ExceptionUtils.getStackTrace(t));
 			return false;
 		}
 	}

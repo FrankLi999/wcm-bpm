@@ -1,7 +1,7 @@
 package com.bpwizard.spring.boot.commons.webflux.security;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -26,13 +26,13 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class SpringCommonsReactiveSecurityConfig { //extends ReactiveSecurityAutoConfiguration {
 
-	private static final Logger log = LogManager.getLogger(SpringCommonsReactiveSecurityConfig.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringCommonsReactiveSecurityConfig.class);
 	
 	protected JSONWebSignatureService jwsTokenService;
 
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 		
-		log.info("Configuring SecurityWebFilterChain ...");
+		logger.info("Configuring SecurityWebFilterChain ...");
 		
 		formLogin(http); // Configure form login
 		authorizeExchange(http); // configure authorization
@@ -92,7 +92,7 @@ public class SpringCommonsReactiveSecurityConfig { //extends ReactiveSecurityAut
 		
 		return authentication -> {
 			
-			log.debug("Authenticating with token ...");
+			logger.debug("Authenticating with token ...");
 
 			String token = (String) authentication.getCredentials();
 			

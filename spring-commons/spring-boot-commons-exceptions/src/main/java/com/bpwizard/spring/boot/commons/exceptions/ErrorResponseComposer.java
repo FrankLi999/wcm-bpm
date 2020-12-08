@@ -6,8 +6,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import com.bpwizard.spring.boot.commons.exceptions.handlers.AbstractExceptionHandler;
@@ -17,7 +17,7 @@ import com.bpwizard.spring.boot.commons.exceptions.handlers.AbstractExceptionHan
  */
 public class ErrorResponseComposer<T extends Throwable> {
 	
-    private static final Logger log = LogManager.getLogger(ErrorResponseComposer.class);
+	private static final Logger logger = LoggerFactory.getLogger(ErrorResponseComposer.class);
 	
 	private final Map<Class<?>, AbstractExceptionHandler<T>> handlers;
 	
@@ -32,7 +32,7 @@ public class ErrorResponseComposer<T extends Throwable> {
 	            					handler1 : handler2;
 	            		}));
 		
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class ErrorResponseComposer<T extends Throwable> {
         
         if (handler != null) // a handler is found    	
 			return Optional.of(handler.getErrorResponse(ex));
-		log.warn("Unable to find the handler for the exception", ex);
+		logger.warn("Unable to find the handler for the exception", ex);
         return Optional.empty();
 	}
 }

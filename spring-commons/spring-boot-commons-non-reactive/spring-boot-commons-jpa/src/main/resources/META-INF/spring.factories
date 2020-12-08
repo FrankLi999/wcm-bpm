@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.bpwizard.spring.boot.commons.jpa.CommonsJpaAutoConfiguration

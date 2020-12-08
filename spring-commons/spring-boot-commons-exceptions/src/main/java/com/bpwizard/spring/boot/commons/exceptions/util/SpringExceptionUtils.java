@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 import javax.annotation.PostConstruct;
 import javax.validation.ConstraintViolationException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -16,12 +16,10 @@ import com.bpwizard.spring.boot.commons.exceptions.MultiErrorException;
 
 /**
  * Useful helper methods
- * 
- * @author Sanjay Patel
  */
 public class SpringExceptionUtils {
 	
-	private static final Logger log = LogManager.getLogger(SpringExceptionUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringExceptionUtils.class);
 
 	private static MessageSource messageSource;
 	private static LocalValidatorFactoryBean validator;
@@ -40,7 +38,7 @@ public class SpringExceptionUtils {
 		SpringExceptionUtils.validator = validator;
 		SpringExceptionUtils.exceptionIdMaker = exceptionIdMaker;
 		
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	
@@ -51,7 +49,7 @@ public class SpringExceptionUtils {
 			.httpStatus(HttpStatus.NOT_FOUND)
 			.validate(false, "com.bpwizard.spring.notFound");
 		
-		log.info("NOT_FOUND_EXCEPTION built");		
+		logger.info("NOT_FOUND_EXCEPTION built");		
 	}
 
 	

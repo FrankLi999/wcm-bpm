@@ -11,10 +11,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,19 +24,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import com.bpwizard.spring.boot.commons.AbstractSpringService;
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.domain.ChangePasswordForm;
 import com.bpwizard.spring.boot.commons.domain.ResetPasswordForm;
+import com.bpwizard.spring.boot.commons.exceptions.util.ExceptionUtils;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.jdbc.JdbcUtils;
 import com.bpwizard.spring.boot.commons.mail.MailSender;
 import com.bpwizard.spring.boot.commons.mail.SpringMailData;
 import com.bpwizard.spring.boot.commons.security.AuthenticationRequest;
-import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.security.UserEditPermission;
 import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
@@ -59,7 +59,7 @@ public abstract class SpringService
 	<U extends AbstractUser<ID>, ID extends Serializable>
     extends AbstractSpringService<U, ID> {
 
-    private static final Logger log = LogManager.getLogger(SpringService.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringService.class);
     
 	protected AbstractUserService<U, ID> userService;
 	protected UserDetailsService userDetailsService;
@@ -92,7 +92,7 @@ public abstract class SpringService
 		this.preloadedRoles = preloadedRoles;
 		this.authenticationManager = authenticationManager;
 		
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	
@@ -105,9 +105,9 @@ public abstract class SpringService
 //    @EventListener
 //    public void afterApplicationReady(ApplicationReadyEvent event) {
 //    	
-//    	log.info("Starting up Spring Commons ...");
+//    	logger.info("Starting up Spring Commons ...");
 //    	onStartup(); // delegate to onStartup() -- todo - it bypassed spring annotations
-//    	log.info("Spring Commons started");	
+//    	logger.info("Spring Commons started");	
 //    }
 
     
@@ -163,16 +163,16 @@ public abstract class SpringService
 	 * Override this if needed.
 	 */
 	protected U createUser(SpringProperties.User user, Map<String, Role> roles, Set<Tenant> tenants) {
-    	log.info("Creating the initial user: " + user.getUsername());
+    	logger.info("Creating the initial user: " + user.getUsername());
 
     	// create the user
     	U newUser = newUser();
     	newUser.setName(user.getUsername());
     	newUser.setEmail(user.getEmail());
-    	if (StringUtils.isNotBlank(user.getFirstName())) {
+    	if (StringUtils.hasText(user.getFirstName())) {
     		newUser.setFirstName(user.getFirstName());
     	}
-    	if (StringUtils.isNotBlank(user.getLastName())) {
+    	if (StringUtils.hasText(user.getLastName())) {
     		newUser.setLastName(user.getLastName());
     	}
     	newUser.setPassword(passwordEncoder.encode(
@@ -198,7 +198,7 @@ public abstract class SpringService
 //    	// fetch data about the user to be created
 //    	Admin initialAdmin = properties.getAdmin();
 //    	
-//    	log.info("Creating the first admin user: " + initialAdmin.getUsername());
+//    	logger.info("Creating the first admin user: " + initialAdmin.getUsername());
 //
 //    	// create the user
 //    	U user = newUser();
@@ -243,7 +243,7 @@ public abstract class SpringService
 	 */
 	public Map<String, Object> getContext(Optional<Long> expirationMillis, HttpServletResponse response) {
 		
-		log.debug("Getting context ...");
+		logger.debug("Getting context ...");
 
 		// make the context
 //		Map<String, Object> sharedProperties = new HashMap<String, Object>(2);
@@ -292,7 +292,7 @@ public abstract class SpringService
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public void signup(@Valid U user) {
 		
-		log.debug("Signing up user: " + user);
+		logger.debug("Signing up user: " + user);
 
 		initUser(user); // sets right all fields of the user
 		userService.save(user);
@@ -301,7 +301,7 @@ public abstract class SpringService
 		JdbcUtils.afterCommit(() -> {
 		
 			ServiceUtils.login(user); // log the user in
-			log.debug("Signed up user: " + user);
+			logger.debug("Signed up user: " + user);
 		});
 	}
 	
@@ -312,7 +312,7 @@ public abstract class SpringService
 	 */
 	protected void initUser(U user) {
 		
-		log.debug("Initializing user: " + user);
+		logger.debug("Initializing user: " + user);
 
 		user.setPassword(passwordEncoder.encode(user.getPassword())); // encode the password
 		makeUnverified(user); // make the user unverified
@@ -353,7 +353,7 @@ public abstract class SpringService
 	 */
 	public U fetchUserByEmail(@Valid @Email @NotBlank String email) {
 		
-		log.debug("Fetching user by email: " + email);
+		logger.debug("Fetching user by email: " + email);
 		return processUser(userService.findByEmail(email).orElse(null));
 	}
 
@@ -363,7 +363,7 @@ public abstract class SpringService
 	 */
 	public U processUser(U user) {
 		
-		log.debug("Fetching user: " + user);
+		logger.debug("Fetching user: " + user);
 
 		// ensure that the user exists
 		SpringExceptionUtils.ensureFound(user);
@@ -381,7 +381,7 @@ public abstract class SpringService
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public void verifyUser(ID userId, String verificationCode) {
 		
-		log.debug("Verifying user ...");
+		logger.debug("Verifying user ...");
 
 		U user = userService.findById(userId).orElseThrow(SpringExceptionUtils.notFoundSupplier());
 		
@@ -406,10 +406,10 @@ public abstract class SpringService
 			
 			// Re-login the user, so that the UNVERIFIED role is removed
 			ServiceUtils.login(user);
-			log.debug("Re-logged-in the user for removing UNVERIFIED role.");		
+			logger.debug("Re-logged-in the user for removing UNVERIFIED role.");		
 		});
 		
-		log.debug("Verified user: " + user);		
+		logger.debug("Verified user: " + user);		
 	}
 
 	
@@ -419,7 +419,7 @@ public abstract class SpringService
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public void forgotPassword(@Valid @Email @NotBlank String email) {
 		
-		log.debug("Processing forgot password for email: " + email);
+		logger.debug("Processing forgot password for email: " + email);
 		
 		// fetch the user record from database
 		U user = userService.findByEmail(email)
@@ -435,7 +435,7 @@ public abstract class SpringService
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public void resetPassword(@Valid ResetPasswordForm form) {
 		
-		log.debug("Resetting password ...");
+		logger.debug("Resetting password ...");
 
 		JWTClaimsSet claims = jweTokenService.parseToken(form.getCode(),
 				JSONWebEncryptionService.FORGOT_PASSWORD_AUDIENCE);
@@ -460,7 +460,7 @@ public abstract class SpringService
 			ServiceUtils.login(user);
 		});
 		
-		log.debug("Password reset.");		
+		logger.debug("Password reset.");		
 	}
 
 	
@@ -472,7 +472,7 @@ public abstract class SpringService
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public UserDto updateUser(U user, @Valid U updatedUser) {
 		
-		log.debug("Updating user: " + user);
+		logger.debug("Updating user: " + user);
 
 		// checks
 		JdbcUtils.ensureCorrectVersion(user, updatedUser);
@@ -481,7 +481,7 @@ public abstract class SpringService
 		updateUserFields(user, updatedUser, WebUtils.currentUser());
 		userService.save(user);
 		
-		log.debug("Updated user: " + user);
+		logger.debug("Updated user: " + user);
 		
 		UserDto userDto = user.toUserDto();
 		userDto.setPassword(null);
@@ -496,7 +496,7 @@ public abstract class SpringService
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public String changePassword(U user, @Valid ChangePasswordForm changePasswordForm) {
 		
-		log.debug("Changing password for user: " + user);
+		logger.debug("Changing password for user: " + user);
 		
 		// Get the old password of the logged in user (logged in user may be an ADMIN)
 		UserDto currentUser = WebUtils.currentUser();
@@ -515,7 +515,7 @@ public abstract class SpringService
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 		userService.save(user);
 
-		log.debug("Changed password for user: " + user);
+		logger.debug("Changed password for user: " + user);
 		return user.toUserDto().getUsername();
 	}
 
@@ -527,13 +527,13 @@ public abstract class SpringService
 	 */
 	protected void updateUserFields(U user, U updatedUser, UserDto currentUser) {
 
-		log.debug("Updating user fields for user: " + user);
+		logger.debug("Updating user fields for user: " + user);
 
 		// Another good admin must be logged in to edit roles
 		if (currentUser.isGoodAdmin() &&
 		   !currentUser.getId().equals(user.getId().toString())) { 
 			
-			log.debug("Updating roles for user: " + user);
+			logger.debug("Updating roles for user: " + user);
 
 			// update the roles
 			
@@ -566,7 +566,7 @@ public abstract class SpringService
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public void requestEmailChange(U user, @Valid U updatedUser) {
 		
-		log.debug("Requesting email change: " + user);
+		logger.debug("Requesting email change: " + user);
 
 		// checks
 		SpringExceptionUtils.ensureFound(user);	
@@ -583,7 +583,7 @@ public abstract class SpringService
 		// after successful commit, mails a link to the user
 		JdbcUtils.afterCommit(() -> mailChangeEmailLink(user));
 		
-		log.debug("Requested email change: " + user);		
+		logger.debug("Requested email change: " + user);		
 	}
 
 	
@@ -599,7 +599,7 @@ public abstract class SpringService
 		
 		try {
 			
-			log.debug("Mailing change email link to user: " + user);
+			logger.debug("Mailing change email link to user: " + user);
 
 			// make the link
 			String changeEmailLink = properties.getApplicationUrl()
@@ -609,11 +609,11 @@ public abstract class SpringService
 			// mail it
 			mailChangeEmailLink(user, changeEmailLink);
 			
-			log.debug("Change email link mail queued.");
+			logger.debug("Change email link mail queued.");
 			
 		} catch (Throwable e) {
 			// In case of exception, just log the error and keep silent			
-			log.error(ExceptionUtils.getStackTrace(e));
+			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 
@@ -642,7 +642,7 @@ public abstract class SpringService
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
 	public void changeEmail(ID userId, @Valid @NotBlank String changeEmailCode) {
 		
-		log.debug("Changing email of current user ...");
+		logger.debug("Changing email of current user ...");
 
 		// fetch the current-user
 		UserDto currentUser = WebUtils.currentUser();
@@ -652,7 +652,7 @@ public abstract class SpringService
 		
 		U user = userService.findById(userId).orElseThrow(SpringExceptionUtils.notFoundSupplier());
 		
-		SpringExceptionUtils.validate(StringUtils.isNotBlank(user.getNewEmail()),
+		SpringExceptionUtils.validate(StringUtils.hasText(user.getNewEmail()),
 				"com.bpwizard.spring.blank.newEmail").go();
 		
 		JWTClaimsSet claims = jweTokenService.parseToken(changeEmailCode,
@@ -688,7 +688,7 @@ public abstract class SpringService
 			ServiceUtils.login(user);
 		});
 		
-		log.debug("Changed email of user: " + user);
+		logger.debug("Changed email of user: " + user);
 	}
 
 
@@ -768,7 +768,7 @@ public abstract class SpringService
 		if (!user.hasPermission(WebUtils.currentUser(), UserUtils.Permission.EDIT))
 			user.setEmail(null);
 		
-		log.debug("Hid confidential fields for user: " + user);
+		logger.debug("Hid confidential fields for user: " + user);
 	}
 
 	

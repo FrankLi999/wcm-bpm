@@ -4,10 +4,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
@@ -61,7 +61,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
 		response.addCookie(cookie);
 		
 		String springRedirectUri = request.getParameter(SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME);
-		if (StringUtils.isNotBlank(springRedirectUri)) {
+		if (StringUtils.hasText(springRedirectUri)) {
 			cookie = new Cookie(SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME, springRedirectUri);
 			cookie.setPath("/");
 			cookie.setHttpOnly(true);

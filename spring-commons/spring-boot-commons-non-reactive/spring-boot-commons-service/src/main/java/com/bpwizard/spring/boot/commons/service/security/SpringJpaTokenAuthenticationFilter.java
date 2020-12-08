@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons.service.security;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
@@ -16,7 +16,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 public class SpringJpaTokenAuthenticationFilter<U extends AbstractUser<ID>, ID extends Serializable>
 	extends SpringCommonsWebTokenAuthenticationFilter {
 
-    private static final Logger log = LogManager.getLogger(SpringJpaTokenAuthenticationFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringJpaTokenAuthenticationFilter.class);
 
     private SpringUserDetailsService<U, ID> userDetailsService;
 	
@@ -26,7 +26,7 @@ public class SpringJpaTokenAuthenticationFilter<U extends AbstractUser<ID>, ID e
 		super(jwsTokenService);
 		this.userDetailsService = userDetailsService;
 		
-		log.info("Created");		
+		logger.info("Created");		
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class SpringJpaTokenAuthenticationFilter<U extends AbstractUser<ID>, ID e
         U user = userDetailsService.findUserByUsername(username)
         		.orElseThrow(() -> new UsernameNotFoundException(username));
 
-        log.debug("User found ...");
+        logger.debug("User found ...");
 
         ServiceUtils.ensureCredentialsUpToDate(claims, user);
         UserDto userDto = user.toUserDto();

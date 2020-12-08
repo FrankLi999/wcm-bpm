@@ -27,8 +27,6 @@ import com.bpwizard.spring.boot.cluster.common.collection.ring.WaitStrategy;
  * An extension to the {@link RingBufferBuilder} which adds functionality required by the repository.
  * @param <T> the type of entries stored in the buffer
  * @param <C> the type of consumer
-
- * @author Horia Chiorean (hchiorea@redhat.com)
  * @see RingBufferBuilder
  */
 public final class RepositoryRingBufferBuilder<T,C> extends RingBufferBuilder<T,C> {

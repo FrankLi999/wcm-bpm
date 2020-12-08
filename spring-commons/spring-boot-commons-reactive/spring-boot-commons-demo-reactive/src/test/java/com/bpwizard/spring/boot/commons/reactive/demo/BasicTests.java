@@ -5,8 +5,7 @@ import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.CLIENT;
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.TOKENS;
 import static com.bpwizard.spring.boot.commons.reactive.demo.controllers.MyController.BASE_URI;
 
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 public class BasicTests extends AbstractTests {

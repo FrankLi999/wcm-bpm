@@ -42,8 +42,6 @@ import com.bpwizard.spring.boot.cluster.i18n.I18nMessages;
 
 /**
  * An append only journal implementation which stores each {@link ChangeSet} (either local or remove) on the local FS.
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 @ThreadSafe
 public class LocalJournal implements ChangeJournal {
@@ -116,7 +114,8 @@ public class LocalJournal implements ChangeJournal {
             }
 
             /**
-             * TODO author=Horia Chiorean date=1/14/14 description=The following should be enabled when append only files are available
+            TODO 
+            original date=1/14/14 description=The following should be enabled when append only files are available
             DBMaker dbMaker = DBMaker.newAppendFileDB(new File(journalFileLocation, RECORDS_FIELD))
                                      .compressionEnable()
                                      .checksumEnable()

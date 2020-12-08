@@ -2,22 +2,24 @@ package com.bpwizard.spring.boot.commons.exceptions.handlers;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.spring.boot.commons.exceptions.SpringFieldError;
 import com.bpwizard.spring.boot.commons.exceptions.MultiErrorException;
+import com.bpwizard.spring.boot.commons.exceptions.SpringFieldError;
 
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class MultiErrorExceptionHandler extends AbstractExceptionHandler<MultiErrorException> {
-
+	protected static final Logger logger = LoggerFactory.getLogger(MultiErrorExceptionHandler.class);
+	
 	public MultiErrorExceptionHandler() {
-		
 		super(MultiErrorException.class);
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	@Override

@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,7 +28,7 @@ import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 @Component
 public class MyTestUtils {
 	
-	private static Logger log = LogManager.getLogger(MyTestUtils.class);
+	private static Logger log = LoggerFactory.getLogger(MyTestUtils.class);
 
 	public static final ObjectId ADMIN_ID = ObjectId.get();
 	public static final ObjectId UNVERIFIED_ADMIN_ID = ObjectId.get();
@@ -41,7 +41,7 @@ public class MyTestUtils {
 	public static final String ADMIN_EMAIL = "admin@example.com";
 	public static final String ADMIN_PASSWORD = "admin!";
 
-	public static final String USER_PASSWORD = "Sanjay99!";
+	public static final String USER_PASSWORD = "User99!";
 	public static final String UNVERIFIED_USER_EMAIL = "unverifieduser@example.com";
 
 	public static final Map<ObjectId, String> TOKENS = new HashMap<>(6);
@@ -123,7 +123,7 @@ public class MyTestUtils {
 		user.setPassword(passwordEncoder.encode(password));
 		user.setName(name);
 		user.setCredentialsUpdatedMillis(0L);
-		user.setRoles(new HashSet<String>(Arrays.asList(roles)));
+		user.setRoleNames(new HashSet<String>(Arrays.asList(roles)));
 		
 		mongoTemplate.insert(user);
 		TOKENS.put(user.getId(), login(user.getEmail(), password));

@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons.webflux.security;
 
 import java.util.Arrays;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.server.ServerWebExchange;
@@ -16,14 +16,14 @@ import com.bpwizard.spring.boot.commons.SpringProperties.Cors;
  */
 public class SpringCorsConfigurationSource implements CorsConfigurationSource {
 
-	private static final Logger log = LogManager.getLogger(SpringCorsConfigurationSource.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringCorsConfigurationSource.class);
 
 	private Cors cors;
 
 	public SpringCorsConfigurationSource(SpringProperties properties) {
 
 		this.cors = properties.getCors();
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	@Override

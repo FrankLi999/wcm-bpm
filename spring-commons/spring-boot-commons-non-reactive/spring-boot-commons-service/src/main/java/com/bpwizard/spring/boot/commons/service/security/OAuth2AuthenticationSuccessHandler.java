@@ -20,8 +20,6 @@ import lombok.AllArgsConstructor;
 /**
  * Authentication success handler for redirecting the
  * OAuth2 signed in user to a URL with a short lived auth token
- * 
- * @author Sanjay Patel
  */
 @AllArgsConstructor
 public class OAuth2AuthenticationSuccessHandler<ID extends Serializable>

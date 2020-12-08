@@ -3,8 +3,8 @@ package com.bpwizard.spring.boot.commons.exceptions;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
@@ -21,11 +21,9 @@ import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 
 @Configuration
 @AutoConfigureBefore({ValidationAutoConfiguration.class})
-// @ComponentScan(basePackageClasses=AbstractExceptionHandler.class)
 public class CommonsExceptionsAutoConfiguration {
 
-	private static final Log log = LogFactory.getLog(CommonsExceptionsAutoConfiguration.class);
-
+	private static final Logger log = LoggerFactory.getLogger(CommonsExceptionsAutoConfiguration.class);
 	public CommonsExceptionsAutoConfiguration() {
 		log.info("Created");
 	}

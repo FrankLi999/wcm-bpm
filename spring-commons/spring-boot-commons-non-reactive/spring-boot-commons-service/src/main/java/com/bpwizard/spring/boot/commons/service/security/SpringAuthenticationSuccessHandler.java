@@ -6,8 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -21,13 +21,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Authentication success handler for sending the response
  * to the client after successful authentication.
- * 
- * @author Sanjay Patel
  */
 public class SpringAuthenticationSuccessHandler
 	extends SimpleUrlAuthenticationSuccessHandler {
 	
-	private static final Logger log = LogManager.getLogger(SpringAuthenticationSuccessHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringAuthenticationSuccessHandler.class);
 	
     private ObjectMapper objectMapper;    
     private SpringService<?, ?> springService;
@@ -39,7 +37,7 @@ public class SpringAuthenticationSuccessHandler
 		this.springService = springService;
 		this.defaultExpirationMillis = properties.getJwt().getExpirationMillis();
 		
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	
@@ -70,6 +68,6 @@ public class SpringAuthenticationSuccessHandler
     	// as done in the base class
     	clearAuthenticationAttributes(request);
         
-        log.debug("Authentication succeeded for user: " + currentUser);        
+        logger.debug("Authentication succeeded for user: " + currentUser);        
     }
 }

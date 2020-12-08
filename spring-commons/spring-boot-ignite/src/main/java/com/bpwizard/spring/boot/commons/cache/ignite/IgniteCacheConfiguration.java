@@ -16,8 +16,8 @@ import org.apache.ignite.spi.communication.tcp.TcpCommunicationSpi;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
 import org.apache.ignite.springdata.repository.config.EnableIgniteRepositories;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.CacheManager;
@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableIgniteRepositories
 @ConditionalOnProperty(name = "ignite.enabled", havingValue = "true")
 public class IgniteCacheConfiguration {
-	private static final Logger log = LogManager.getLogger(IgniteCacheConfiguration.class);
+	private static final Logger logger = LoggerFactory.getLogger(IgniteCacheConfiguration.class);
     // https://github.com/Romeh/spring-boot-ignite/blob/master/src/main/java/com/romeh/ignitemanager/config/AlertManagerConfiguration.java
 	@Bean
 	@ConfigurationProperties(prefix = "ignite")
@@ -52,7 +52,7 @@ public class IgniteCacheConfiguration {
 	@Bean
 	public CacheManager cacheManager(IgniteProperties igniteProperties) {
     // public CacheManager cacheManager(Ignite ignite) {
-		log.debug("Starting Ignite CacheManager");
+		logger.debug("Starting Ignite CacheManager");
         //BpwCacheManager cacheManager = new BpwCacheManager();
 		SpringCacheManager cacheManager = new SpringCacheManager();
         cacheManager.setConfiguration(igniteConfiguration(igniteProperties));

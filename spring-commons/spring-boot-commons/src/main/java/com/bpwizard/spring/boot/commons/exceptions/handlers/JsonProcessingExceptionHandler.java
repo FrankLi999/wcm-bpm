@@ -4,7 +4,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.spring.boot.commons.exceptions.handlers.AbstractBadRequestExceptionHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Component
@@ -14,6 +13,6 @@ public class JsonProcessingExceptionHandler extends AbstractBadRequestExceptionH
 	public JsonProcessingExceptionHandler() {
 		
 		super(JsonProcessingException.class);
-		log.info("Created");
+		logger.info("Created");
 	}
 }

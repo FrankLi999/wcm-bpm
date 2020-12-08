@@ -3,8 +3,8 @@ package com.bpwizard.spring.boot.commons.service.security;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -15,35 +15,33 @@ import com.bpwizard.spring.boot.commons.service.domain.AbstractUserService;
 
 /**
  * UserDetailsService, as required by Spring Security.
- * 
- * @author Sanjay Patel
  */
 public class SpringUserDetailsService
 	<U extends AbstractUser<ID>, ID extends Serializable>
 implements UserDetailsService {
 
-	private static final Logger log = LogManager.getLogger(SpringUserDetailsService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringUserDetailsService.class);
 
 	private final AbstractUserService<U,ID> userService;
 	
 	public SpringUserDetailsService(AbstractUserService<U, ID> userService) {
 		
 		this.userService = userService;
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	@Override
 	public SpringPrincipal loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		
-		log.debug("Loading user having username: " + username);
+		logger.debug("Loading user having username: " + username);
 		
 		// delegates to findUserByUsername
 		U user = findUserByUsername(username)
 			.orElseThrow(() -> new UsernameNotFoundException(
 				SpringExceptionUtils.getMessage("com.bpwizard.spring.userNotFound", username)));
 
-		log.debug("Loaded user having username: " + username);
+		logger.debug("Loaded user having username: " + username);
 
 		return new SpringPrincipal(user.toUserDto());
 	}

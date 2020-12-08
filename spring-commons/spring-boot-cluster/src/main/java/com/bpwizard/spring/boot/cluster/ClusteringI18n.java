@@ -20,8 +20,6 @@ import com.bpwizard.spring.boot.cluster.common.i18n.I18n;
 
 /**
  * Class which holds i18n messages for {@link ClusteringService}
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public class ClusteringI18n {
     public static I18n channelNotConnected;

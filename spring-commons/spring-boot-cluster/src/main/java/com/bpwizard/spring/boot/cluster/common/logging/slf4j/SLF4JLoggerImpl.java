@@ -22,7 +22,7 @@ import com.bpwizard.spring.boot.cluster.common.logging.Logger;
 import com.bpwizard.spring.boot.cluster.common.util.StringUtil;
 
 /**
- * Logger that delivers messages to a Log4J logger
+ * Logger that delivers messages to a SLF4J logger
  * 
  * @since 2.5
  */

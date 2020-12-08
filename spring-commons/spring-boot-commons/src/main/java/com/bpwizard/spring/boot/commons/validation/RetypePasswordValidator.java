@@ -5,21 +5,18 @@ import java.util.Objects;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Validator for RetypePassword constraint
  * 
  * @see <a href="http://docs.jboss.org/hibernate/validator/4.1/reference/en-US/html/validator-usingvalidator.html#d0e326">Hibernate Validator</a>
  * @see <a href="http://docs.jboss.org/hibernate/validator/4.1/reference/en-US/html/validator-customconstraints.html#validator-customconstraints-validator">Custom constraints</a>
- * 
- * @author Sanjay Patel
  */
-public class RetypePasswordValidator
-implements ConstraintValidator<RetypePassword, RetypePasswordForm> {
+public class RetypePasswordValidator implements ConstraintValidator<RetypePassword, RetypePasswordForm> {
 	
-	private static final Logger log = LogManager.getLogger(RetypePasswordValidator.class);
+	private static final Logger logger = LoggerFactory.getLogger(RetypePasswordValidator.class);
 
 	@Override
 	public boolean isValid(RetypePasswordForm retypePasswordForm,
@@ -28,7 +25,7 @@ implements ConstraintValidator<RetypePassword, RetypePasswordForm> {
 		if (!Objects.equals(retypePasswordForm.getPassword(),
 				            retypePasswordForm.getRetypePassword())) {
 			
-			log.debug("Retype password validation failed.");
+			logger.debug("Retype password validation failed.");
 			
 			// Moving the error from form-level to
 			// field-level properties: password, retypePassword
@@ -43,7 +40,7 @@ implements ConstraintValidator<RetypePassword, RetypePasswordForm> {
 			return false;	
 		}
 		
-		log.debug("Retype password validation succeeded.");		
+		logger.debug("Retype password validation succeeded.");		
 		return true;
 	}
 }

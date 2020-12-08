@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons.web.exceptions;
 
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.web.context.request.WebRequest;
 
@@ -17,7 +17,7 @@ import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
  */
 public class SpringErrorAttributes<T extends Throwable> extends DefaultErrorAttributes {
 	
-    private static final Logger log = LogManager.getLogger(SpringErrorAttributes.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringErrorAttributes.class);
 
 	static final String HTTP_STATUS_KEY = "httpStatus";
 	
@@ -26,7 +26,7 @@ public class SpringErrorAttributes<T extends Throwable> extends DefaultErrorAttr
     public SpringErrorAttributes(ErrorResponseComposer<T> errorResponseComposer) {
 
 		this.errorResponseComposer = errorResponseComposer;
-		log.info("Created");
+		logger.info("Created");
 	}
 	
     /**

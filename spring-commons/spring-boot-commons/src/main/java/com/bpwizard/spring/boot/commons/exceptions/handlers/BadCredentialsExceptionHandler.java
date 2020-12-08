@@ -6,8 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
-import com.bpwizard.spring.boot.commons.exceptions.handlers.AbstractExceptionHandler;
-
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class BadCredentialsExceptionHandler extends AbstractExceptionHandler<BadCredentialsException> {
@@ -15,7 +13,7 @@ public class BadCredentialsExceptionHandler extends AbstractExceptionHandler<Bad
 	public BadCredentialsExceptionHandler() {
 		
 		super(BadCredentialsException.class);
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 package com.bpwizard.spring.boot.commons;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -47,10 +47,10 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 	CommonsExceptionsAutoConfiguration.class})
 public class CommonsAutoConfiguration {
 
-	private static final Logger log = LogManager.getLogger(CommonsAutoConfiguration.class);
+	private static final Logger logger = LoggerFactory.getLogger(CommonsAutoConfiguration.class);
 	
 	public CommonsAutoConfiguration() {
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	
@@ -60,7 +60,7 @@ public class CommonsAutoConfiguration {
 	@Bean
 	public SpringProperties springProperties() {
 		
-        log.info("Configuring SpringProperties");       
+        logger.info("Configuring SpringProperties");       
 		return new SpringProperties();
 	}
 	
@@ -72,7 +72,7 @@ public class CommonsAutoConfiguration {
 	@ConditionalOnMissingBean(JSONWebSignatureService.class)
 	public JSONWebSignatureService jwsTokenService(SpringProperties properties) throws JOSEException {
 		
-        log.info("Configuring AuthTokenService");       
+        logger.info("Configuring AuthTokenService");       
 		return new SpringJwsService(properties.getJwt().getSecret());
 	}
 
@@ -84,7 +84,7 @@ public class CommonsAutoConfiguration {
 	@ConditionalOnMissingBean(JSONWebEncryptionService.class)
 	public JSONWebEncryptionService jweTokenService(SpringProperties properties) throws KeyLengthException {
 		
-        log.info("Configuring ExternalTokenService");       
+        logger.info("Configuring ExternalTokenService");       
 		return new SpringJweService(properties.getJwt().getSecret());
 	}
 
@@ -96,7 +96,7 @@ public class CommonsAutoConfiguration {
 	@ConditionalOnMissingBean(PasswordEncoder.class)
     public PasswordEncoder passwordEncoder() {
 	
-		log.info("Configuring PasswordEncoder");		
+		logger.info("Configuring PasswordEncoder");		
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 	
@@ -108,7 +108,7 @@ public class CommonsAutoConfiguration {
 	@ConditionalOnMissingBean(PermissionEvaluator.class)
 	public PermissionEvaluator permissionEvaluator() {
 		
-        log.info("Configuring SpringPermissionEvaluator");       
+        logger.info("Configuring SpringPermissionEvaluator");       
 		return new SpringPermissionEvaluator();
 	}
 
@@ -122,7 +122,7 @@ public class CommonsAutoConfiguration {
 	@ConditionalOnProperty(name="spring.mail.host", havingValue="foo", matchIfMissing=true)
 	public MailSender<?> mockMailSender() {
 
-        log.info("Configuring MockMailSender");       
+        logger.info("Configuring MockMailSender");       
         return new MockMailSender();
 	}
 
@@ -136,7 +136,7 @@ public class CommonsAutoConfiguration {
 	@ConditionalOnProperty("spring.mail.host")
 	public MailSender<?> smtpMailSender(JavaMailSender javaMailSender) {
 		
-        log.info("Configuring SmtpMailSender");       
+        logger.info("Configuring SmtpMailSender");       
 		return new SmtpMailSender(javaMailSender);
 	}
 	
@@ -158,7 +158,7 @@ public class CommonsAutoConfiguration {
 	@ConditionalOnMissingBean(CaptchaValidator.class)
 	public CaptchaValidator captchaValidator(SpringProperties properties, RestTemplateBuilder restTemplateBuilder) {
 		
-        log.info("Configuring SpringUserDetailsService");       
+        logger.info("Configuring SpringUserDetailsService");       
 		return new CaptchaValidator(properties, restTemplateBuilder);
 	}
 	

@@ -7,10 +7,10 @@ import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.TOKENS;
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.UNVERIFIED_USER_EMAIL;
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.UNVERIFIED_USER_ID;
 import static com.bpwizard.spring.boot.commons.reactive.demo.controllers.MyController.BASE_URI;
-import static org.junit.Assert.assertNotNull;
 import static org.springframework.web.reactive.function.BodyInserters.fromFormData;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
@@ -92,7 +92,7 @@ public class FetchNewTokenTests extends AbstractTests {
 	private void ensureTokenWorks(EntityExchangeResult<TestToken> result) {
 		
 		TestToken token = result.getResponseBody();
-		assertNotNull(token.getToken());
+		Assertions.assertNotNull(token.getToken());
 
 		testUtils.contextResponse(token.getToken())
 			.expectBody()

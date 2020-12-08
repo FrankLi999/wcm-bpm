@@ -17,8 +17,6 @@ import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 
 /**
  * OAuth2 Authentication failure handler for removing oauth2 related cookies
- * 
- * @author Sanjay Patel
  */
 public class OAuth2AuthenticationFailureHandler
 	extends SimpleUrlAuthenticationFailureHandler {

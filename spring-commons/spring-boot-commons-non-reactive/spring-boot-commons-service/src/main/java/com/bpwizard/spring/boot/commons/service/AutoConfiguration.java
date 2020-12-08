@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -46,10 +46,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureBefore({CommonsJdbcAutoConfiguration.class})
 public class AutoConfiguration {
 	
-	private static final Logger log = LogManager.getLogger(AutoConfiguration.class);
+	private static final Logger logger = LoggerFactory.getLogger(AutoConfiguration.class);
 	
 	public AutoConfiguration() {
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	@Bean
@@ -73,7 +73,7 @@ public class AutoConfiguration {
 	public SpringAuthenticationSuccessHandler authenticationSuccessHandler(
 			ObjectMapper objectMapper, SpringService<?, ?> springService, SpringProperties properties) {
 		
-        log.info("Configuring AuthenticationSuccessHandler");       
+        logger.info("Configuring AuthenticationSuccessHandler");       
 		return new SpringAuthenticationSuccessHandler(objectMapper, springService, properties);
 	}
 	
@@ -85,7 +85,7 @@ public class AutoConfiguration {
 	public OAuth2AuthenticationSuccessHandler<?> oauth2AuthenticationSuccessHandler(
 			SpringProperties properties, JSONWebSignatureService jwsTokenService) {
 		
-        log.info("Configuring OAuth2AuthenticationSuccessHandler");       
+        logger.info("Configuring OAuth2AuthenticationSuccessHandler");       
 		return new OAuth2AuthenticationSuccessHandler<>(properties, jwsTokenService);
 	}
 	
@@ -96,7 +96,7 @@ public class AutoConfiguration {
 	@ConditionalOnMissingBean(OAuth2AuthenticationFailureHandler.class)
 	public OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler() {
 		
-        log.info("Configuring OAuth2AuthenticationFailureHandler");       
+        logger.info("Configuring OAuth2AuthenticationFailureHandler");       
 		return new OAuth2AuthenticationFailureHandler();
 	}
 
@@ -107,7 +107,7 @@ public class AutoConfiguration {
 	@ConditionalOnMissingBean(AuthenticationFailureHandler.class)
     public AuthenticationFailureHandler authenticationFailureHandler() {
 		
-        log.info("Configuring SimpleUrlAuthenticationFailureHandler");       
+        logger.info("Configuring SimpleUrlAuthenticationFailureHandler");       
     	return new SimpleUrlAuthenticationFailureHandler();
     }	
 
@@ -119,7 +119,7 @@ public class AutoConfiguration {
 	public <U extends AbstractUser<ID>, ID extends Serializable>
 	SpringUserDetailsService<U, ID> userDetailService(AbstractUserService<U, ID> userService) {
 		
-        log.info("Configuring SpringUserDetailsService");       
+        logger.info("Configuring SpringUserDetailsService");       
 		return new SpringUserDetailsService<U, ID>(userService);
 	}
 
@@ -130,7 +130,7 @@ public class AutoConfiguration {
 	@ConditionalOnMissingBean(SpringOidcUserService.class)	
 	public SpringOidcUserService springOidcUserService(SpringOAuth2UserService<?, ?> springOAuth2UserService) {
 		
-        log.info("Configuring SpringOidcUserService");       
+        logger.info("Configuring SpringOidcUserService");       
 		return new SpringOidcUserService(springOAuth2UserService);
 	}
 
@@ -145,7 +145,7 @@ public class AutoConfiguration {
 			SpringService<U, ?> springService,
 			PasswordEncoder passwordEncoder) {
 		
-        log.info("Configuring SpringOAuth2UserService");       
+        logger.info("Configuring SpringOAuth2UserService");       
 		return new SpringOAuth2UserService<U,ID>(userDetailsService, springService, passwordEncoder);
 	}
 
@@ -156,7 +156,7 @@ public class AutoConfiguration {
 	@ConditionalOnMissingBean(SpringWebSecurityConfig.class)	
 	public SpringWebSecurityConfig springSecurityConfig() {
 		
-        log.info("Configuring SpringJpaSecurityConfig");       
+        logger.info("Configuring SpringJpaSecurityConfig");       
 		return new SpringJpaSecurityConfig();
 	}
 	
@@ -167,7 +167,7 @@ public class AutoConfiguration {
 	public ServiceUtils serviceUtils(ApplicationContext applicationContext,
 			ObjectMapper objectMapper) {
 
-        log.info("Configuring ServiceUtils");       		
+        logger.info("Configuring ServiceUtils");       		
 		return new ServiceUtils();
 	}
 	
@@ -178,7 +178,7 @@ public class AutoConfiguration {
 	@ConditionalOnMissingBean(RetypePasswordValidator.class)
 	public RetypePasswordValidator retypePasswordValidator() {
 		
-        log.info("Configuring RetypePasswordValidator");       
+        logger.info("Configuring RetypePasswordValidator");       
 		return new RetypePasswordValidator();
 	}
 	
@@ -188,14 +188,14 @@ public class AutoConfiguration {
 	@Bean
 	public UniqueEmailValidator uniqueEmailValidator(AbstractUserService<?, ?> userService) {
 		
-        log.info("Configuring UniqueEmailValidator");       
+        logger.info("Configuring UniqueEmailValidator");       
 		return new UniqueEmailValidator(userService);		
 	}
 	
 	@Bean
 	public Map<String, Role> preloadedRoles(RoleSeervice roleService, SpringProperties properties) {
 		
-        log.info("preloadedRoles");   //TODO, load in batch
+        logger.info("preloadedRoles");   //TODO, load in batch
         Map<String, Role> roles = new HashMap<>();
         String[] roleNames = properties.getRolename();
         if (null != roleNames) {

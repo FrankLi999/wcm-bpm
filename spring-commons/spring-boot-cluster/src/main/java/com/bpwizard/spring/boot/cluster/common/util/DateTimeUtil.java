@@ -30,8 +30,6 @@ import java.time.temporal.TemporalAccessor;
 
 /**
  * Utility for interacting with various date and time objects.
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class DateTimeUtil {
 

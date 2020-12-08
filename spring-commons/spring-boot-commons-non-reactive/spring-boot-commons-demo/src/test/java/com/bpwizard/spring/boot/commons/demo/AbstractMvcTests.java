@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.bpwizard.spring.boot.commons.mail.MailSender;
-import com.bpwizard.spring.boot.commons.service.repo.domain.UserRepository;
+import com.bpwizard.spring.boot.commons.service.repo.domain.UserService;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 // @RunWith(SpringRunner.class)
@@ -47,7 +47,7 @@ public abstract class AbstractMvcTests {
 	protected static final String ADMIN_EMAIL = "admin@example.com";
 	protected static final String ADMIN_PASSWORD = "admin!";
 	
-	protected static final String USER_PASSWORD = "Sanjay99!";
+	protected static final String USER_PASSWORD = "user99!";
 	protected static final String UNVERIFIED_USER_EMAIL = "unverifieduser@example.com";
 	
 	protected Map<Long, String> tokens = new HashMap<>(6);
@@ -56,7 +56,7 @@ public abstract class AbstractMvcTests {
     protected MockMvc mvc;
     
     @Autowired
-    protected UserRepository userRepository;
+    protected UserService userService;
     
     @SpyBean
     protected MailSender<?> mailSender;

@@ -19,8 +19,6 @@ import reactor.core.publisher.Mono;
 
 /**
  * Useful helper methods
- * 
- * @author Sanjay Patel
  */
 public class ReactiveUtils {
 	

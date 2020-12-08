@@ -6,10 +6,11 @@ import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.support.WebExchangeBindException;
+
+import com.bpwizard.spring.boot.commons.exceptions.util.StringUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,8 +18,6 @@ import lombok.ToString;
 
 /**
  * Holds a field or form error
- * 
- * @author Sanjay Patel
  */
 @Getter @AllArgsConstructor @ToString
 public class SpringFieldError {

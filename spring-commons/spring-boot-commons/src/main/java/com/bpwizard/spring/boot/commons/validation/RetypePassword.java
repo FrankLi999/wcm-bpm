@@ -7,8 +7,6 @@ import javax.validation.Constraint;
 
 /**
  * Annotation for retype password constraint
- * 
- * @author Sanjay Patel
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy=RetypePasswordValidator.class)

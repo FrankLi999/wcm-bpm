@@ -14,8 +14,6 @@ import com.bpwizard.spring.boot.commons.util.UserUtils;
  * Annotation for unique-email constraint,
  * ensuring that the given email id is not already
  * used by a user.  
- * 
- * @author Sanjay Patel
  */
 @NotBlank(message = "{com.bpwizard.spring.blank.email}")
 @Size(min=UserUtils.EMAIL_MIN, max=UserUtils.EMAIL_MAX,

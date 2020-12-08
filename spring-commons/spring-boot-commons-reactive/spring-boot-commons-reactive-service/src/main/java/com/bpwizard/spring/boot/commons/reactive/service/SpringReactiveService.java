@@ -6,10 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -19,6 +17,7 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.bpwizard.spring.boot.commons.AbstractSpringService;
@@ -26,6 +25,7 @@ import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.SpringProperties.Admin;
 import com.bpwizard.spring.boot.commons.domain.ChangePasswordForm;
 import com.bpwizard.spring.boot.commons.domain.ResetPasswordForm;
+import com.bpwizard.spring.boot.commons.exceptions.util.ExceptionUtils;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.mail.MailSender;
 import com.bpwizard.spring.boot.commons.mail.SpringMailData;
@@ -51,7 +51,7 @@ public abstract class SpringReactiveService
 	<U extends AbstractMongoUser<ID>, ID extends Serializable>
     extends AbstractSpringService<U, ID> {
 
-    private static final Logger log = LogManager.getLogger(SpringReactiveService.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringReactiveService.class);
     
 	protected SpringProperties properties;
 	protected PasswordEncoder passwordEncoder;
@@ -79,7 +79,7 @@ public abstract class SpringReactiveService
 		this.jwsTokenService = jwsTokenService;
 		this.jweTokenService = jweTokenService;
 		
-		log.info("Created");
+		logger.info("Created");
 	}
 
 
@@ -92,9 +92,9 @@ public abstract class SpringReactiveService
     @EventListener
     public void afterApplicationReady(ApplicationReadyEvent event) {
     	
-    	log.info("Starting up Spring Commons ...");
+    	logger.info("Starting up Spring Commons ...");
     	onStartup(); // delegate to onStartup()
-    	log.info("Spring Commons started");	
+    	logger.info("Spring Commons started");	
     }
 
     
@@ -104,12 +104,12 @@ public abstract class SpringReactiveService
 			.findByUsername(properties.getAdmin().getUsername()) // Check if the user already exists
 			.doOnError(e -> e instanceof UsernameNotFoundException, e -> {
 				// Doesn't exist. So, create it.
-				log.debug("Creating first admin ... ");
+				logger.debug("Creating first admin ... ");
 		    	U user = createAdminUser();
 		    	userRepository.insert(user).doOnError(err -> {
-		    		log.warn("Error creating initial admin " + err);
+		    		logger.warn("Error creating initial admin " + err);
 		    	}).subscribe();
-				log.debug("Created first admin.");		    	
+				logger.debug("Created first admin.");		    	
 			}).subscribe();
 	}
 
@@ -123,7 +123,7 @@ public abstract class SpringReactiveService
     	// fetch data about the user to be created
     	Admin initialAdmin = properties.getAdmin();
     	
-    	log.info("Creating the first admin user: " + initialAdmin.getUsername());
+    	logger.info("Creating the first admin user: " + initialAdmin.getUsername());
 
     	// create the user
     	U user = newUser();
@@ -165,7 +165,7 @@ public abstract class SpringReactiveService
 	 */
 	public Mono<Map<String, Object>> getContext(Optional<Long> expirationMillis, ServerHttpResponse response) {
 		
-		log.debug("Getting context ...");
+		logger.debug("Getting context ...");
 
 		Mono<Optional<UserDto>> userDtoMono = ReactiveUtils.currentUser();
 		return userDtoMono.map(optionalUser -> {
@@ -201,7 +201,7 @@ public abstract class SpringReactiveService
 	 */
 	public Mono<UserDto> signup(Mono<U> user) {
 		
-		log.debug("Signing up user: " + user);
+		logger.debug("Signing up user: " + user);
 		
 		return user
 			.doOnNext(this::initUser)
@@ -214,7 +214,7 @@ public abstract class SpringReactiveService
 	
 	protected void initUser(U user) {
 		
-		log.debug("Initializing user: " + user);
+		logger.debug("Initializing user: " + user);
 
 		user.setPassword(passwordEncoder.encode(user.getPassword())); // encode the password
 		makeUnverified(user); // make the user unverified
@@ -237,7 +237,7 @@ public abstract class SpringReactiveService
 	protected void sendVerificationMail(final U user) {
 		try {
 			
-			log.debug("Sending verification mail to: " + user);
+			logger.debug("Sending verification mail to: " + user);
 			
 			String verificationCode = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
 					user.getId().toString(), properties.getJwt().getExpirationMillis(),
@@ -250,11 +250,11 @@ public abstract class SpringReactiveService
 			// send the mail
 			sendVerificationMail(user, verifyLink);
 
-			log.debug("Verification mail to " + user.getEmail() + " queued.");
+			logger.debug("Verification mail to " + user.getEmail() + " queued.");
 			
 		} catch (Throwable e) {
 			// In case of exception, just log the error and keep silent
-			log.error(ExceptionUtils.getStackTrace(e));
+			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}	
 
@@ -311,7 +311,7 @@ public abstract class SpringReactiveService
 
 	public Mono<UserDto> verifyUser(ID userId, Mono<MultiValueMap<String, String>> formData) {
 		
-		log.debug("Verifying user ...");
+		logger.debug("Verifying user ...");
 
 		return Mono.zip(findUserById(userId), formData)
 				.map(this::verifyUser)
@@ -322,12 +322,12 @@ public abstract class SpringReactiveService
 	
 	public U verifyUser(Tuple2<U, MultiValueMap<String,String>> tuple) {
 		
-		log.debug("Verifying user ...");
+		logger.debug("Verifying user ...");
 		
 		U user = tuple.getT1();
 		String verificationCode = tuple.getT2().getFirst("code");
 
-		SpringExceptionUtils.validate(StringUtils.isNotBlank(verificationCode),
+		SpringExceptionUtils.validate(StringUtils.hasText(verificationCode),
 				"com.bpwizard.spring.blank", "code").go();
 
 		// ensure that he is unverified
@@ -353,7 +353,7 @@ public abstract class SpringReactiveService
 		
 		return formData.map(data -> {			
 			String email = data.getFirst("email");
-			SpringExceptionUtils.validate(StringUtils.isNotBlank(email),
+			SpringExceptionUtils.validate(StringUtils.hasText(email),
 					"com.bpwizard.spring.blank", "email").go();
 			return email;
 		}).flatMap(this::findUserByEmail)
@@ -369,7 +369,7 @@ public abstract class SpringReactiveService
 	 */
 	public void mailForgotPasswordLink(U user) {
 		
-		log.debug("Mailing forgot password link to user: " + user);
+		logger.debug("Mailing forgot password link to user: " + user);
 
 		String forgotPasswordCode = jweTokenService.createToken(
 				JSONWebEncryptionService.FORGOT_PASSWORD_AUDIENCE,
@@ -381,7 +381,7 @@ public abstract class SpringReactiveService
 		
 		mailForgotPasswordLink(user, forgotPasswordLink);
 		
-		log.debug("Forgot password link mail queued.");
+		logger.debug("Forgot password link mail queued.");
 	}
 
 	
@@ -405,7 +405,7 @@ public abstract class SpringReactiveService
 		
 		return resetPasswordForm.map(form -> {
 			
-			log.debug("Resetting password ...");
+			logger.debug("Resetting password ...");
 
 			JWTClaimsSet claims = jweTokenService.parseToken(form.getCode(),
 					JSONWebEncryptionService.FORGOT_PASSWORD_AUDIENCE);
@@ -427,7 +427,7 @@ public abstract class SpringReactiveService
 	
 	public U resetPassword(Tuple3<U, JWTClaimsSet, String> tuple) {
 		
-		log.debug("Resetting password ...");
+		logger.debug("Resetting password ...");
 
 		U user = tuple.getT1();
 		JWTClaimsSet claims = tuple.getT2();
@@ -439,7 +439,7 @@ public abstract class SpringReactiveService
 		user.setPassword(passwordEncoder.encode(newPassword));
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 		
-		log.debug("Password reset.");
+		logger.debug("Password reset.");
 		
 		return user;
 	}
@@ -451,7 +451,7 @@ public abstract class SpringReactiveService
 			ServerHttpResponse response, long expirationMillis) {
 
 		return userDto.doOnNext(user -> {
-			log.debug("Adding auth header for " + user.getUsername());
+			logger.debug("Adding auth header for " + user.getUsername());
 			addAuthHeader(response, user, expirationMillis);
 		});
 	}
@@ -459,7 +459,7 @@ public abstract class SpringReactiveService
 	
 	protected void addAuthHeader(ServerHttpResponse response, UserDto userDto, long expirationMillis) {
 		
-		log.debug("Adding auth header for " + userDto.getUsername());
+		logger.debug("Adding auth header for " + userDto.getUsername());
 		
 		response.getHeaders().add(SecurityUtils.TOKEN_RESPONSE_HEADER_NAME, SecurityUtils.TOKEN_PREFIX +
 				jwsTokenService.createToken(JSONWebSignatureService.AUTH_AUDIENCE, userDto.getUsername(), expirationMillis));
@@ -474,7 +474,7 @@ public abstract class SpringReactiveService
 					
 					String email = data.getFirst("email");
 					
-					SpringExceptionUtils.validate(StringUtils.isNotBlank(email),
+					SpringExceptionUtils.validate(StringUtils.hasText(email),
 							"com.bpwizard.spring.blank", "email").go();
 					
 					return email;
@@ -512,7 +512,7 @@ public abstract class SpringReactiveService
 
 	protected U updateUser(U user, Optional<UserDto> currentUser, String patch) {
 		
-		log.debug("Updating user: " + user);
+		logger.debug("Updating user: " + user);
 
 		U updatedUser = ReactiveUtils.applyPatch(user, patch); // create a patched form
 		SpringExceptionUtils.validateBean("updatedUser", updatedUser, UserUtils.UpdateValidation.class).go();
@@ -520,7 +520,7 @@ public abstract class SpringReactiveService
 		
 		updateUserFields(user, updatedUser, currentUser.get());
 
-		log.debug("Updated user: " + user);
+		logger.debug("Updated user: " + user);
 		return user;
 	}
 	
@@ -530,13 +530,13 @@ public abstract class SpringReactiveService
 	 */
 	protected void updateUserFields(U user, U updatedUser, UserDto currentUser) {
 
-		log.debug("Updating user fields for user: " + user);
+		logger.debug("Updating user fields for user: " + user);
 
 		// Another good admin must be logged in to edit roles
 		if (currentUser.isGoodAdmin() &&
 		   !currentUser.getId().equals(user.getId().toString())) { 
 			
-			log.debug("Updating roles for user: " + user);
+			logger.debug("Updating roles for user: " + user);
 
 			// update the roles
 			
@@ -587,7 +587,7 @@ public abstract class SpringReactiveService
 		if (!user.hasPermission(tuple.getT2().orElse(null), UserUtils.Permission.EDIT))
 			user.setEmail(null);
 		
-		log.debug("Hid confidential fields for user: " + user);
+		logger.debug("Hid confidential fields for user: " + user);
 	}
 
 
@@ -611,7 +611,7 @@ public abstract class SpringReactiveService
 		U loggedIn = tuple.getT2();
 		ChangePasswordForm changePasswordForm = tuple.getT3();
 		
-		log.debug("Changing password for user: " + user);
+		logger.debug("Changing password for user: " + user);
 		
 		String oldPassword = loggedIn.getPassword();
 
@@ -623,7 +623,7 @@ public abstract class SpringReactiveService
 		// sets the password
 		user.setPassword(passwordEncoder.encode(changePasswordForm.getPassword()));
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		log.debug("Changed password for user: " + user);
+		logger.debug("Changed password for user: " + user);
 	}
 
 
@@ -650,7 +650,7 @@ public abstract class SpringReactiveService
 		// U loggedIn = tuple.getT2();
 		EmailForm emailForm = tuple.getT3();
 		
-		log.debug("Requesting email change: " + user);
+		logger.debug("Requesting email change: " + user);
 		
 		// checks
 		SpringExceptionUtils.validateField("emailFormMono.password",
@@ -661,7 +661,7 @@ public abstract class SpringReactiveService
 		// preserves the new email id
 		user.setNewEmail(emailForm.getNewEmail());
 
-		log.debug("Requested email change: " + user);		
+		logger.debug("Requested email change: " + user);		
 	}
 	
 	
@@ -677,7 +677,7 @@ public abstract class SpringReactiveService
 		
 		try {
 			
-			log.debug("Mailing change email link to user: " + user);
+			logger.debug("Mailing change email link to user: " + user);
 
 			// make the link
 			String changeEmailLink = properties.getApplicationUrl()
@@ -687,11 +687,11 @@ public abstract class SpringReactiveService
 			// mail it
 			mailChangeEmailLink(user, changeEmailLink);
 			
-			log.debug("Change email link mail queued.");
+			logger.debug("Change email link mail queued.");
 			
 		} catch (Throwable e) {
 			// In case of exception, just log the error and keep silent			
-			log.error(ExceptionUtils.getStackTrace(e));
+			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}
 	
@@ -716,7 +716,7 @@ public abstract class SpringReactiveService
 	@PreAuthorize("isAuthenticated()")
 	public Mono<UserDto> changeEmail(ID userId, Mono<MultiValueMap<String, String>> formData) {
 		
-		log.debug("Changing email of current user ...");
+		logger.debug("Changing email of current user ...");
 		
 		return ReactiveUtils.currentUser()
 			.doOnNext(currentUser -> {				
@@ -741,10 +741,10 @@ public abstract class SpringReactiveService
 		U user = tuple.getT1();
 		String code = tuple.getT2().getFirst("code");
 				
-		SpringExceptionUtils.validate(StringUtils.isNotBlank(code),
+		SpringExceptionUtils.validate(StringUtils.hasText(code),
 				"com.bpwizard.spring.blank", "code").go();
 
-		SpringExceptionUtils.validate(StringUtils.isNotBlank(user.getNewEmail()),
+		SpringExceptionUtils.validate(StringUtils.hasText(user.getNewEmail()),
 				"com.bpwizard.spring.blank.newEmail").go();
 		
 		JWTClaimsSet claims = jweTokenService.parseToken(code,
@@ -791,7 +791,7 @@ public abstract class SpringReactiveService
 			UserDto currentUser = (UserDto) tuple.getT1().get();
 			
 			String username = tuple.getT2().getFirst("username");
-			if (StringUtils.isBlank(username))
+			if (!StringUtils.hasText(username))
 				username = currentUser.getUsername();
 			
 			long expirationMillis = getExpirationMillis(tuple.getT2());
@@ -832,7 +832,7 @@ public abstract class SpringReactiveService
 		
 		long expirationMillis = properties.getJwt().getExpirationMillis();
 		String expirationMillisStr = formData.getFirst("expirationMillis");
-		if (StringUtils.isNotBlank(expirationMillisStr))
+		if (StringUtils.hasText(expirationMillisStr))
 			expirationMillis = Long.parseLong(expirationMillisStr);
 		
 		return expirationMillis;

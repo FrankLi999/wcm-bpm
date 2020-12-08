@@ -30,8 +30,6 @@ import lombok.ToString;
 
 /**
  * Base class for User entity
- * 
- * @author Sanjay Patel
  */
 @Getter @Setter
 // @MappedSuperclass

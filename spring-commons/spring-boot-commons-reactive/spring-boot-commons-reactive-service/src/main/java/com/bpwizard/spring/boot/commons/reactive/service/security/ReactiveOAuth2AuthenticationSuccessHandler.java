@@ -5,9 +5,8 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.Map;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -22,6 +21,7 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.web.server.ServerWebExchange;
 
 import com.bpwizard.spring.boot.commons.SpringProperties;
+import com.bpwizard.spring.boot.commons.exceptions.util.ExceptionUtils;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.reactive.service.SpringReactiveService;
 import com.bpwizard.spring.boot.commons.reactive.service.domain.AbstractMongoUser;
@@ -39,14 +39,12 @@ import reactor.core.publisher.Mono;
 /**
  * Authentication success handler for redirecting the
  * OAuth2 signed in user to a URL with a short lived auth token
- * 
- * @author Sanjay Patel
  */
 @AllArgsConstructor
 public class ReactiveOAuth2AuthenticationSuccessHandler<U extends AbstractMongoUser<ID>, ID extends Serializable>
 	implements ServerAuthenticationSuccessHandler {
 	
-	private static final Log log = LogFactory.getLog(ReactiveOAuth2AuthenticationSuccessHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReactiveOAuth2AuthenticationSuccessHandler.class);
 	private static final ServerRedirectStrategy redirectStrategy = new DefaultServerRedirectStrategy();
 
 	private JSONWebSignatureService jwsTokenService;
@@ -115,7 +113,7 @@ public class ReactiveOAuth2AuthenticationSuccessHandler<U extends AbstractMongoU
 			} catch (Throwable e) {
 				
 				// In case of exception, just log the error and keep silent			
-				log.error(ExceptionUtils.getStackTrace(e));
+				logger.error(ExceptionUtils.getStackTrace(e));
 			}
 		});
 	}

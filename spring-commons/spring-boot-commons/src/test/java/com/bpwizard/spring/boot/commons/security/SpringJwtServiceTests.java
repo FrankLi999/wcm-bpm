@@ -1,9 +1,9 @@
 package com.bpwizard.spring.boot.commons.security;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
@@ -12,7 +12,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 
 public class SpringJwtServiceTests {
 	
-	private static final Logger log = LogManager.getLogger(SpringJwtServiceTests.class);	
+	private static final Logger log = LoggerFactory.getLogger(SpringJwtServiceTests.class);	
 
 	// An aes-128-cbc key generated at https://asecuritysite.com/encryption/keygen (take the "key" field)
 	private static final String SECRET1 = "926D96C90030DD58429D2751AC1BDBBC";

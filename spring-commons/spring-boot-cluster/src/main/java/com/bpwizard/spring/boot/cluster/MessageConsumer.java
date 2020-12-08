@@ -21,8 +21,6 @@ import java.io.Serializable;
 /**
  * Interface allowing participants in a cluster to communicate to each other using different messages.
  *
- * @author Horia Chiorean (hchiorea@redhat.com)
- *
  * @see ClusteringService#sendMessage(java.io.Serializable)
  * @param <T> the payload type that this consumer expects
  */

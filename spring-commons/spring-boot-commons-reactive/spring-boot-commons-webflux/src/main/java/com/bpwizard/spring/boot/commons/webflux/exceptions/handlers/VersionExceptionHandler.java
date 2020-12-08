@@ -15,7 +15,7 @@ public class VersionExceptionHandler extends AbstractExceptionHandler<VersionExc
 	public VersionExceptionHandler() {
 		
 		super(VersionException.class);
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	@Override

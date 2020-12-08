@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons.service.util;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,16 +16,14 @@ import com.nimbusds.jwt.JWTClaimsSet;
 
 /**
  * Useful helper methods
- * 
- * @author Sanjay Patel
  */
 public class ServiceUtils {
 	
-	private static final Logger log = LogManager.getLogger(ServiceUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(ServiceUtils.class);
 
 	public ServiceUtils() {
 		
-		log.info("Created");
+		logger.info("Created");
 	}
 
 

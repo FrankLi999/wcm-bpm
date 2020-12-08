@@ -20,8 +20,6 @@ import com.bpwizard.spring.boot.cluster.change.Observable;
 
 /**
  * A generic interface for an event bus which handles changes.
- *
- * @author Horia Chiorean
  */
 public interface ChangeBus extends ChangeSetListener, Observable {
 

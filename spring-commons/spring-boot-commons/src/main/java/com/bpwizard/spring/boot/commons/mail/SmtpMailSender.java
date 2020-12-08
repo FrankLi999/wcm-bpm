@@ -3,8 +3,8 @@ package com.bpwizard.spring.boot.commons.mail;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -13,20 +13,18 @@ import org.springframework.scheduling.annotation.Async;
 /**
  * An SMTP mail sender, which sends mails
  * using an injected JavaMailSender.
- * 
- * @author Sanjay Patel
  *
  */
 public class SmtpMailSender implements MailSender<SpringMailData> {
 	
-	private static final Logger log = LogManager.getLogger(SmtpMailSender.class);
+	private static final Logger logger = LoggerFactory.getLogger(SmtpMailSender.class);
 
 	private final JavaMailSender javaMailSender;
 	
 	public SmtpMailSender(JavaMailSender javaMailSender) {
 		
 		this.javaMailSender = javaMailSender;
-		log.info("Created");
+		logger.info("Created");
 	}
 
 
@@ -37,7 +35,7 @@ public class SmtpMailSender implements MailSender<SpringMailData> {
 	@Async
 	public void send(SpringMailData mail) {
 		
-		log.info("Sending SMTP mail from thread " + Thread.currentThread().getName()); // toString gives more info    	
+		logger.info("Sending SMTP mail from thread " + Thread.currentThread().getName()); // toString gives more info    	
 
 		// create a mime-message
 		MimeMessage message = javaMailSender.createMimeMessage();
@@ -60,7 +58,7 @@ public class SmtpMailSender implements MailSender<SpringMailData> {
 		
 		//send the mail
 		javaMailSender.send(message);		
-		log.info("Sent SMTP mail from thread " + Thread.currentThread().getName());    	
+		logger.info("Sent SMTP mail from thread " + Thread.currentThread().getName());    	
 	}
 
 }

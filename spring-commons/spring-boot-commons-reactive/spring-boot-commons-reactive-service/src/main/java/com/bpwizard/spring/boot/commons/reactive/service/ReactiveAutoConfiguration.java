@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons.reactive.service;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration;
@@ -32,10 +32,10 @@ import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 	CommonsMongoAutoConfiguration.class})
 public class ReactiveAutoConfiguration {
 	
-	private static final Logger log = LogManager.getLogger(ReactiveAutoConfiguration.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReactiveAutoConfiguration.class);
 	
 	public ReactiveAutoConfiguration() {
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	@Bean
@@ -56,7 +56,7 @@ public class ReactiveAutoConfiguration {
 				PasswordEncoder passwordEncoder,
 				SpringProperties properties) {
 		
-		log.info("Configuring ReactiveOAuth2AuthenticationSuccessHandler ...");
+		logger.info("Configuring ReactiveOAuth2AuthenticationSuccessHandler ...");
 
 		return new ReactiveOAuth2AuthenticationSuccessHandler<U,ID>(
 				jwsTokenService,
@@ -76,7 +76,7 @@ public class ReactiveAutoConfiguration {
 				ReactiveOAuth2AuthenticationSuccessHandler<U,ID> reactiveOAuth2AuthenticationSuccessHandler,
 				SpringProperties properties) {
 		
-		log.info("Configuring SpringReactiveSecurityConfig ...");
+		logger.info("Configuring SpringReactiveSecurityConfig ...");
 
 		return new SpringReactiveSecurityConfig<U,ID>(
 				jwsTokenService, 
@@ -94,14 +94,14 @@ public class ReactiveAutoConfiguration {
 	public <U extends AbstractMongoUser<ID>, ID extends Serializable>
 	SpringReactiveUserDetailsService<U, ID> userDetailService(AbstractMongoUserRepository<U, ID> userRepository) {
 		
-        log.info("Configuring SpringUserDetailsService");       
+        logger.info("Configuring SpringUserDetailsService");       
 		return new SpringReactiveUserDetailsService<U, ID>(userRepository);
 	}
 
 //	@Bean	
 //	@ConditionalOnMissingBean(ReactiveAuthenticationManager.class)
 //	public <U extends AbstractMongoUser<ID>, ID extends Serializable> ReactiveAuthenticationManager ReactiveAuthenticationManager(SpringReactiveUserDetailsService<U, ID> userDetailsService) {
-//		log.info("Configuring ReactiveAuthenticationManager");     
+//		logger.info("Configuring ReactiveAuthenticationManager");     
 //		return new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
 //	}
 	
@@ -111,7 +111,7 @@ public class ReactiveAutoConfiguration {
 	@Bean
 	public ReactiveServiceUtils reactiveServiceUtils(SpringExceptionUtils lexUtils) {
 
-        log.info("Configuring ReactiveServiceUtils");
+        logger.info("Configuring ReactiveServiceUtils");
 		return new ReactiveServiceUtils();
 	}
 }

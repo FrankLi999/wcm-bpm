@@ -30,9 +30,6 @@ import com.bpwizard.spring.boot.cluster.common.logging.Logger;
 
 /**
  * Change bus implementation around a {@link com.bpwizard.spring.boot.cluster.common.collection.ring.RingBuffer}
- * 
- * @author Randall Hauch (rhauch@redhat.com)
- * @author Horia Chiorean (hchiorean@redhat.com)
  */
 public final class RepositoryChangeBus implements ChangeBus {
 

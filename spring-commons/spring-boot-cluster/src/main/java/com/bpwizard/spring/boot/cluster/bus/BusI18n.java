@@ -20,8 +20,6 @@ import com.bpwizard.spring.boot.cluster.common.i18n.I18n;
 
 /**
  * The internationalized string constants for the <code>org.modeshape.repository.event.*</code> packages.
- * 
- * @author Horia Chiorean
  */
 @Immutable
 public final class BusI18n {

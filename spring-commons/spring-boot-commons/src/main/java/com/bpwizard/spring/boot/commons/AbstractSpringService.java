@@ -4,9 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,18 +13,19 @@ import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 
 import com.bpwizard.spring.boot.commons.SpringProperties.Admin;
 import com.bpwizard.spring.boot.commons.domain.SpringUser;
-import com.bpwizard.spring.boot.commons.mail.SpringMailData;
+import com.bpwizard.spring.boot.commons.exceptions.util.ExceptionUtils;
+import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.mail.MailSender;
-import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
+import com.bpwizard.spring.boot.commons.mail.SpringMailData;
 import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
+import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
-import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 
 public abstract class AbstractSpringService
 	<U extends SpringUser<ID>, ID extends Serializable> {
 
-    private static final Log log = LogFactory.getLog(AbstractSpringService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractSpringService.class);
 	protected PasswordEncoder passwordEncoder;
 	protected SpringProperties properties;
 	protected JSONWebSignatureService jwsTokenService;
@@ -42,9 +42,9 @@ public abstract class AbstractSpringService
     @EventListener
     public void afterApplicationReady(ApplicationReadyEvent event) {
     	
-    	log.info("Starting up Spring Lemon ...");
+    	logger.info("Starting up Spring Lemon ...");
     	onStartup(); // delegate to onStartup()
-    	log.info("Spring Lemon started");	
+    	logger.info("Spring Lemon started");	
     }
 
 	protected abstract void onStartup();
@@ -58,7 +58,7 @@ public abstract class AbstractSpringService
     	// fetch data about the user to be created
     	Admin initialAdmin = properties.getAdmin();
     	
-    	log.info("Creating the first admin user: " + initialAdmin.getUsername());
+    	logger.info("Creating the first admin user: " + initialAdmin.getUsername());
 
     	// create the user
     	U user = newUser();
@@ -87,7 +87,7 @@ public abstract class AbstractSpringService
 	
 	protected void initUser(U user) {
 		
-		log.debug("Initializing user: " + user);
+		logger.debug("Initializing user: " + user);
 
 		user.setPassword(passwordEncoder.encode(user.getPassword())); // encode the password
 		makeUnverified(user); // make the user unverified
@@ -108,7 +108,7 @@ public abstract class AbstractSpringService
 	protected void sendVerificationMail(final U user) {
 		try {
 			
-			log.debug("Sending verification mail to: " + user);
+			logger.debug("Sending verification mail to: " + user);
 			
 			String verificationCode = jweTokenService.createToken(JSONWebEncryptionService.VERIFY_AUDIENCE,
 					user.getId().toString(), properties.getJwt().getExpirationMillis(),
@@ -121,11 +121,11 @@ public abstract class AbstractSpringService
 			// send the mail
 			sendVerificationMail(user, verifyLink);
 
-			log.debug("Verification mail to " + user.getEmail() + " queued.");
+			logger.debug("Verification mail to " + user.getEmail() + " queued.");
 			
 		} catch (Throwable e) {
 			// In case of exception, just log the error and keep silent
-			log.error(ExceptionUtils.getStackTrace(e));
+			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 	}	
 	
@@ -150,7 +150,7 @@ public abstract class AbstractSpringService
 	 */
 	public void mailForgotPasswordLink(U user) {
 		
-		log.debug("Mailing forgot password link to user: " + user);
+		logger.debug("Mailing forgot password link to user: " + user);
 
 		String forgotPasswordCode = jweTokenService.createToken(
 				JSONWebEncryptionService.FORGOT_PASSWORD_AUDIENCE,
@@ -162,7 +162,7 @@ public abstract class AbstractSpringService
 		
 		mailForgotPasswordLink(user, forgotPasswordLink);
 		
-		log.debug("Forgot password link mail queued.");
+		logger.debug("Forgot password link mail queued.");
 	}
 
 	

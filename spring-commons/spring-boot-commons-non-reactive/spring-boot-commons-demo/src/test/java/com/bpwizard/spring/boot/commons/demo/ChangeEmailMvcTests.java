@@ -29,9 +29,9 @@ public class ChangeEmailMvcTests extends AbstractMvcTests {
 	@BeforeEach
 	public void setUp() {
 		
-		User user = userRepository.findById(UNVERIFIED_USER_ID).get();
+		User user = userService.findById(UNVERIFIED_USER_ID).get();
 		user.setNewEmail(NEW_EMAIL);
-		userRepository.save(user);
+		userService.save(user);
 		
 		changeEmailCode = jweTokenService.createToken(
 				JSONWebEncryptionService.CHANGE_EMAIL_AUDIENCE,
@@ -50,7 +50,7 @@ public class ChangeEmailMvcTests extends AbstractMvcTests {
 				.andExpect(header().string(SecurityUtils.TOKEN_RESPONSE_HEADER_NAME, containsString(".")))
 				.andExpect(jsonPath("$.id").value(UNVERIFIED_USER_ID));
 		
-		User updatedUser = userRepository.findById(UNVERIFIED_USER_ID).get();
+		User updatedUser = userService.findById(UNVERIFIED_USER_ID).get();
 		Assertions.assertNull(updatedUser.getNewEmail());
 		Assertions.assertEquals(NEW_EMAIL, updatedUser.getEmail());
 		
@@ -120,9 +120,9 @@ public class ChangeEmailMvcTests extends AbstractMvcTests {
 
 		// credentials updated after the request for email change was made
 		Thread.sleep(1L);
-		User user = userRepository.findById(UNVERIFIED_USER_ID).get();
+		User user = userService.findById(UNVERIFIED_USER_ID).get();
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		userRepository.save(user);
+		userService.save(user);
 		
 		// A new auth token is needed, because old one would be obsolete!
 		String authToken = login(UNVERIFIED_USER_EMAIL, USER_PASSWORD);
@@ -157,9 +157,9 @@ public class ChangeEmailMvcTests extends AbstractMvcTests {
 	public void testChangeEmailNonUniqueEmail() throws Exception {
 		
 		// Some other user changed to the same email
-		User user = userRepository.findById(ADMIN_ID).get();
+		User user = userService.findById(ADMIN_ID).get();
 		user.setEmail(NEW_EMAIL);
-		userRepository.save(user);
+		userService.save(user);
 		
 		mvc.perform(post("/api/core/users/{id}/email", UNVERIFIED_USER_ID)
                 .param("code", changeEmailCode)

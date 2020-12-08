@@ -10,7 +10,8 @@ import static com.bpwizard.spring.boot.commons.reactive.demo.controllers.MyContr
 import static org.springframework.web.reactive.function.BodyInserters.fromFormData;
 
 import org.bson.types.ObjectId;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

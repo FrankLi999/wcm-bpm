@@ -6,13 +6,11 @@ import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.ADMIN_P
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.CLIENT;
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.TOKENS;
 import static com.bpwizard.spring.boot.commons.reactive.demo.controllers.MyController.BASE_URI;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+
 import static org.springframework.web.reactive.function.BodyInserters.fromFormData;
 
-import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 
 import com.bpwizard.spring.boot.commons.reactive.demo.domain.User;
@@ -31,17 +29,17 @@ public class LoginTests extends AbstractTests {
 				
 				TestUserDto user = result.getResponseBody();
 				
-				assertEquals(ADMIN_ID, user.getId());
-				assertNull(user.getPassword());
-				assertEquals("admin@example.com", user.getUsername());
-				assertEquals(1, user.getRoles().size());
-				assertTrue(user.getRoles().contains("ADMIN"));
-				assertEquals("Admin 1", user.getTag().getName());
-				assertFalse(user.isUnverified());
-				assertFalse(user.isBlocked());
-				assertTrue(user.isAdmin());
-				assertTrue(user.isGoodUser());
-				assertTrue(user.isGoodAdmin());				
+				Assertions.assertEquals(ADMIN_ID, user.getId());
+				Assertions.assertNull(user.getPassword());
+				Assertions.assertEquals("admin@example.com", user.getUsername());
+				Assertions.assertEquals(1, user.getRoles().size());
+				Assertions.assertTrue(user.getRoles().contains("ADMIN"));
+				Assertions.assertEquals("Admin 1", user.getTag().getName());
+				Assertions.assertFalse(user.isUnverified());
+				Assertions.assertFalse(user.isBlocked());
+				Assertions.assertTrue(user.isAdmin());
+				Assertions.assertTrue(user.isGoodUser());
+				Assertions.assertTrue(user.isGoodAdmin());				
 			});
 	}
 	

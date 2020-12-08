@@ -1,13 +1,13 @@
 package com.bpwizard.spring.boot.commons.util;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bpwizard.spring.boot.commons.security.UserDto;
 
 public class UserUtils {
 
-	private static final Logger log = LogManager.getLogger(UserUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserUtils.class);
 
 	public static final int EMAIL_MIN = 4;
 	public static final int EMAIL_MAX = 250;
@@ -49,7 +49,7 @@ public class UserUtils {
 
 	public static <ID> boolean hasPermission(ID id, UserDto currentUser, String permission) {
 
-		log.debug("Computing " + permission + " permission for User " + id + "\n  Logged in user: " + currentUser);
+		logger.debug("Computing " + permission + " permission for User " + id + "\n  Logged in user: " + currentUser);
 
 		if (permission.equals("edit")) {
 

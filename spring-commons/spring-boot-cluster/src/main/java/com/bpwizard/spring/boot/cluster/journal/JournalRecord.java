@@ -26,8 +26,6 @@ import com.bpwizard.spring.boot.cluster.change.ChangeSet;
 
 /**
  * A record stored by the {@link LocalJournal}
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class JournalRecord implements Serializable, Iterable<Change> {
 

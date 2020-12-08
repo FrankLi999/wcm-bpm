@@ -9,8 +9,6 @@ import reactor.core.publisher.Mono;
 
 /**
  * Abstract UserRepository interface
- *
- * @author Sanjay Patel
  */
 @NoRepositoryBean
 public interface AbstractMongoUserRepository

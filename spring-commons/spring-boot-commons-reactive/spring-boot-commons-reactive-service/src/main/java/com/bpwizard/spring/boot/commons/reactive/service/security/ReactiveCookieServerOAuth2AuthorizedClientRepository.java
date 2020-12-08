@@ -1,8 +1,7 @@
 package com.bpwizard.spring.boot.commons.reactive.service.security;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -10,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.bpwizard.spring.boot.commons.SpringProperties;
@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 
 public class ReactiveCookieServerOAuth2AuthorizedClientRepository implements ServerOAuth2AuthorizedClientRepository {
 
-	private static final Log log = LogFactory.getLog(ReactiveCookieServerOAuth2AuthorizedClientRepository.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReactiveCookieServerOAuth2AuthorizedClientRepository.class);
 
 	private long cookieExpirySecs;
 	
@@ -34,7 +34,7 @@ public class ReactiveCookieServerOAuth2AuthorizedClientRepository implements Ser
 	public Mono<OAuth2AuthorizedClient> loadAuthorizedClient(String clientRegistrationId,
 			Authentication principal, ServerWebExchange exchange) {
 		
-		log.debug("Loading authorized client for clientRegistrationId " + clientRegistrationId
+		logger.debug("Loading authorized client for clientRegistrationId " + clientRegistrationId
 				+ ", principal " + principal + ", and exchange " + exchange);
 		
 		return ReactiveUtils.fetchCookie(exchange, SecurityUtils.AUTHORIZATION_REQUEST_COOKIE_NAME)
@@ -46,7 +46,7 @@ public class ReactiveCookieServerOAuth2AuthorizedClientRepository implements Ser
 	public Mono<Void> saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal,
 			ServerWebExchange exchange) {
 		
-		log.debug("Saving authorized client " + authorizedClient
+		logger.debug("Saving authorized client " + authorizedClient
 				+ " for principal " + principal + ", and exchange " + exchange);
 
 		ServerHttpResponse response = exchange.getResponse();
@@ -70,7 +70,7 @@ public class ReactiveCookieServerOAuth2AuthorizedClientRepository implements Ser
 		String lemonRedirectUri = exchange.getRequest()
 				.getQueryParams().getFirst(SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME);
 		
-		if (StringUtils.isNotBlank(lemonRedirectUri)) {
+		if (StringUtils.hasText(lemonRedirectUri)) {
 			
 			cookie = ResponseCookie
 					.from(SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME, lemonRedirectUri)
@@ -89,7 +89,7 @@ public class ReactiveCookieServerOAuth2AuthorizedClientRepository implements Ser
 	public Mono<Void> removeAuthorizedClient(String clientRegistrationId, Authentication principal,
 			ServerWebExchange exchange) {
 		
-		log.debug("Deleting authorized client for clientRegistrationId " + clientRegistrationId
+		logger.debug("Deleting authorized client for clientRegistrationId " + clientRegistrationId
 				+ ", principal " + principal + ", and exchange " + exchange);
 
 		ReactiveServiceUtils.deleteCookies(exchange, SecurityUtils.AUTHORIZATION_REQUEST_COOKIE_NAME);

@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons.exceptions.handlers;
 
 import java.util.Collection;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
 import com.bpwizard.spring.boot.commons.exceptions.ErrorResponse;
@@ -15,7 +15,7 @@ import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
  */
 public abstract class AbstractExceptionHandler<T extends Throwable> {
 	
-	protected final Logger log = LogManager.getLogger(this.getClass());
+	protected static Logger logger = LoggerFactory.getLogger(AbstractExceptionHandler.class);
 	
 	private Class<?> exceptionClass;
 	

@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons.security;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 
@@ -12,15 +12,13 @@ import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 /**
  * Needed to check the permission for the service methods
  * annotated with @PreAuthorize("hasPermission(...
- * 
- * @author Sanjay Patel
  */
 public class SpringPermissionEvaluator implements PermissionEvaluator {
 
-	private static final Logger log = LogManager.getLogger(SpringPermissionEvaluator.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringPermissionEvaluator.class);
 
 	public SpringPermissionEvaluator() {
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	/**
@@ -35,7 +33,7 @@ public class SpringPermissionEvaluator implements PermissionEvaluator {
 	public boolean hasPermission(Authentication auth,
 			Object targetDomainObject, Object permission) {
 		
-		log.debug("Checking whether " + auth
+		logger.debug("Checking whether " + auth
 			+ "\n  has " + permission + " permission for "
 			+ targetDomainObject);
 		

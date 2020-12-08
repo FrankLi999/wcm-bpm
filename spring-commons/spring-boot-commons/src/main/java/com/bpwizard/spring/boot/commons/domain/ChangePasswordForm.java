@@ -11,8 +11,6 @@ import lombok.Setter;
 
 /**
  * Change password form.
- * 
- * @author Sanjay Patel
  */
 @RetypePassword
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor

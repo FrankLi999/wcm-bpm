@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons;
 
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
@@ -15,17 +15,15 @@ import lombok.Setter;
 
 /**
  * Spring Properties
- * 
- * @author Sanjay Patel
  */
 @Validated
 @ConfigurationProperties(prefix="bpw")
 @Getter @Setter
 public class SpringProperties {
 	
-    private static final Logger log = LogManager.getLogger(SpringProperties.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringProperties.class);
     public SpringProperties() {
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	/**
@@ -227,8 +225,6 @@ public class SpringProperties {
 	
 	/**
 	 * Properties related to JWT token generation
-	 * 
-	 * @author Sanjay Patel
 	 */
 	@Getter @Setter
 	public static class Jwt {

@@ -7,8 +7,8 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,13 +38,11 @@ import com.github.fge.jsonpatch.JsonPatchException;
  * The Spring Commons API. See the
  * <a href="https://github.com/bpwizard/spring-commons#documentation-and-resources">
  * API documentation</a> for details.
- * 
- * @author Sanjay Patel
  */
 public abstract class SpringController
 	<U extends AbstractUser<ID>, ID extends Serializable> {
 
-	private static final Logger log = LogManager.getLogger(SpringController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringController.class);
 
     // private long jwtExpirationMillis;
     
@@ -61,7 +59,7 @@ public abstract class SpringController
 //		this.jwtExpirationMillis = properties.getJwt().getExpirationMillis();
 //		this.springService = springService;
 //		
-//		log.info("Created");
+//		logger.info("Created");
 //	}
 
 
@@ -72,7 +70,7 @@ public abstract class SpringController
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void ping() {
 		
-		log.debug("Received a ping");
+		logger.debug("Received a ping");
 	}
 	
 	
@@ -85,9 +83,9 @@ public abstract class SpringController
 			@RequestParam Optional<Long> expirationMillis,
 			HttpServletResponse response) {
 
-		log.debug("Getting context ");
+		logger.debug("Getting context ");
 		Map<String, Object> context = springService.getContext(expirationMillis, response);
-		log.debug("Returning context: " + context);
+		logger.debug("Returning context: " + context);
 
 		return context;
 	}
@@ -101,9 +99,9 @@ public abstract class SpringController
 	public UserDto signup(@RequestBody @JsonView(UserUtils.SignupInput.class) U user,
 			HttpServletResponse response) {
 		
-		log.debug("Signing up: " + user);
+		logger.debug("Signing up: " + user);
 		springService.signup(user);
-		log.debug("Signed up: " + user);
+		logger.debug("Signed up: " + user);
 
 		return userWithToken(response);
 	}
@@ -116,9 +114,9 @@ public abstract class SpringController
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void resendVerificationMail(@PathVariable("id") U user) {
 		
-		log.debug("Resending verification mail for: " + user);
+		logger.debug("Resending verification mail for: " + user);
 		springService.resendVerificationMail(user);
-		log.debug("Resent verification mail for: " + user);
+		logger.debug("Resent verification mail for: " + user);
 	}	
 
 
@@ -131,7 +129,7 @@ public abstract class SpringController
 			@RequestParam("code") String code,
 			HttpServletResponse response) {
 		
-		log.debug("Verifying user ...");		
+		logger.debug("Verifying user ...");		
 		springService.verifyUser(id, code);
 		
 		return userWithToken(response);
@@ -145,7 +143,7 @@ public abstract class SpringController
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void forgotPassword(@RequestParam("email") String email) {
 		
-		log.debug("Received forgot password request for: " + email);				
+		logger.debug("Received forgot password request for: " + email);				
 		springService.forgotPassword(email);
 	}
 	
@@ -158,7 +156,7 @@ public abstract class SpringController
 			@RequestBody ResetPasswordForm form,
 			HttpServletResponse response) {
 		
-		log.debug("Resetting password ... ");				
+		logger.debug("Resetting password ... ");				
 		springService.resetPassword(form);
 		
 		return userWithToken(response);
@@ -171,7 +169,7 @@ public abstract class SpringController
 	@PostMapping("/users/fetch-by-email")
 	public U fetchUserByEmail(@RequestParam("email") String email) {
 		
-		log.debug("Fetching user by email: " + email);						
+		logger.debug("Fetching user by email: " + email);						
 		return springService.fetchUserByEmail(email);
 	}
 
@@ -182,7 +180,7 @@ public abstract class SpringController
 	@GetMapping("/users/{id}")
 	public U fetchUserById(@PathVariable("id") U user) {
 		
-		log.debug("Fetching user: " + user);				
+		logger.debug("Fetching user: " + user);				
 		return springService.processUser(user);
 	}
 
@@ -197,7 +195,7 @@ public abstract class SpringController
 			HttpServletResponse response)
 			throws JsonProcessingException, IOException, JsonPatchException {
 		
-		log.debug("Updating user ... ");
+		logger.debug("Updating user ... ");
 		
 		// ensure that the user exists
 		SpringExceptionUtils.ensureFound(user);
@@ -223,7 +221,7 @@ public abstract class SpringController
 		
 		//TODO: what exception to throw
 		U user = this.springService.findUserById(id).orElseThrow(RuntimeException::new);
-		log.debug("Changing password ... ");				
+		logger.debug("Changing password ... ");				
 		String username = springService.changePassword(user, changePasswordForm);
 		
 		springService.addAuthHeader(response, username, properties.getJwt().getExpirationMillis());
@@ -238,7 +236,7 @@ public abstract class SpringController
 	public void requestEmailChange(@PathVariable("id") U user,
 								   @RequestBody U updatedUser) {
 		
-		log.debug("Requesting email change ... ");				
+		logger.debug("Requesting email change ... ");				
 		springService.requestEmailChange(user, updatedUser);
 	}
 
@@ -252,7 +250,7 @@ public abstract class SpringController
 			@RequestParam("code") String code,
 			HttpServletResponse response) {
 		
-		log.debug("Changing email of user ...");		
+		logger.debug("Changing email of user ...");		
 		springService.changeEmail(userId, code);
 		
 		// return the currently logged in user with new email
@@ -269,7 +267,7 @@ public abstract class SpringController
 			@RequestParam(name="username", required=false) Optional<String> username,
 			HttpServletResponse response) {
 		
-		log.debug("Fetching a new token ... ");
+		logger.debug("Fetching a new token ... ");
 		return SecurityUtils.mapOf("token", springService.fetchNewToken(expirationMillis, username));
 	}
 
@@ -280,7 +278,7 @@ public abstract class SpringController
 	@GetMapping("/fetch-full-token")
 	public Map<String, String> fetchFullToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
 		
-		log.debug("Fetching a micro token");
+		logger.debug("Fetching a micro token");
 		return springService.fetchFullToken(authHeader);
 	}	
 

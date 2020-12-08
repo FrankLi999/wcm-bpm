@@ -15,8 +15,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import org.bson.types.ObjectId;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -56,8 +57,8 @@ public class RequestEmailChangeTests extends AbstractTests {
 		verify(mailSender).send(any());
 		
 		User updatedUser = mongoTemplate.findById(UNVERIFIED_USER_ID, User.class);
-		Assert.assertEquals(NEW_EMAIL, updatedUser.getNewEmail());
-		Assert.assertEquals(UNVERIFIED_USER_EMAIL, updatedUser.getEmail());
+		Assertions.assertEquals(NEW_EMAIL, updatedUser.getNewEmail());
+		Assertions.assertEquals(UNVERIFIED_USER_EMAIL, updatedUser.getEmail());
 	}
 	
 	
@@ -75,7 +76,7 @@ public class RequestEmailChangeTests extends AbstractTests {
 			.expectStatus().isNoContent();
 
 		User updatedUser = mongoTemplate.findById(UNVERIFIED_USER_ID, User.class);
-		Assert.assertEquals(NEW_EMAIL, updatedUser.getNewEmail());
+		Assertions.assertEquals(NEW_EMAIL, updatedUser.getNewEmail());
 	}	
 
 
@@ -224,6 +225,6 @@ public class RequestEmailChangeTests extends AbstractTests {
 	
 	private void assertNotChanged() {
 		User updatedUser = mongoTemplate.findById(UNVERIFIED_USER_ID, User.class);
-		Assert.assertNull(updatedUser.getNewEmail());
+		Assertions.assertNull(updatedUser.getNewEmail());
 	}
 }

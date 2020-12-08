@@ -8,11 +8,11 @@ import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.UNVERIF
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.UNVERIFIED_USER_EMAIL;
 import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.UNVERIFIED_USER_ID;
 import static com.bpwizard.spring.boot.commons.reactive.demo.controllers.MyController.BASE_URI;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.bson.types.ObjectId;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -60,20 +60,20 @@ public class UpdateUserTests extends AbstractTests {
 				
 				TestUserDto userDto = result.getResponseBody();
 				
-				assertEquals(UNVERIFIED_USER_ID, userDto.getId());
-				assertEquals(UNVERIFIED_USER_EMAIL, userDto.getUsername());
-				assertEquals(UPDATED_NAME, userDto.getTag().getName());
-				assertEquals(1, userDto.getRoles().size());
-				assertTrue(userDto.getRoles().contains(UserUtils.Role.UNVERIFIED));
+				Assertions.assertEquals(UNVERIFIED_USER_ID, userDto.getId());
+				Assertions.assertEquals(UNVERIFIED_USER_EMAIL, userDto.getUsername());
+				Assertions.assertEquals(UPDATED_NAME, userDto.getTag().getName());
+				Assertions.assertEquals(1, userDto.getRoles().size());
+				Assertions.assertTrue(userDto.getRoles().contains(UserUtils.Role.UNVERIFIED));
 			});
 		
 		User user = mongoTemplate.findById(UNVERIFIED_USER_ID, User.class);
 		
 		// Ensure that data changed properly
-		assertEquals(UNVERIFIED_USER_EMAIL, user.getEmail());
-		assertEquals(1, user.getRoles().size());
-		assertTrue(user.getRoles().contains(UserUtils.Role.UNVERIFIED));
-		assertEquals(1L, user.getVersion().longValue());
+		Assertions.assertEquals(UNVERIFIED_USER_EMAIL, user.getEmail());
+		Assertions.assertEquals(1, user.getRoleNames().size());
+		Assertions.assertTrue(user.getRoleNames().contains(UserUtils.Role.UNVERIFIED));
+		Assertions.assertEquals(1L, user.getVersion().longValue());
 		
 		// Version mismatch
 		updateUser(UNVERIFIED_USER_ID, UNVERIFIED_USER_ID, userPatch)
@@ -99,19 +99,19 @@ public class UpdateUserTests extends AbstractTests {
 				
 				TestUserDto userDto = result.getResponseBody();
 				
-				assertEquals(UNVERIFIED_USER_ID, userDto.getId());
-				assertEquals(UNVERIFIED_USER_EMAIL, userDto.getUsername());
-				assertEquals(UPDATED_NAME, userDto.getTag().getName());
-				assertEquals(1, userDto.getRoles().size());
-				assertTrue(userDto.getRoles().contains(UserUtils.Role.ADMIN));
+				Assertions.assertEquals(UNVERIFIED_USER_ID, userDto.getId());
+				Assertions.assertEquals(UNVERIFIED_USER_EMAIL, userDto.getUsername());
+				Assertions.assertEquals(UPDATED_NAME, userDto.getTag().getName());
+				Assertions.assertEquals(1, userDto.getRoles().size());
+				Assertions.assertTrue(userDto.getRoles().contains(UserUtils.Role.ADMIN));
 			});
 		
 		User user = mongoTemplate.findById(UNVERIFIED_USER_ID, User.class);
 		
 		// Ensure that data changed properly
-		assertEquals(UNVERIFIED_USER_EMAIL, user.getEmail());
-		assertEquals(1, user.getRoles().size());
-		assertTrue(user.getRoles().contains(UserUtils.Role.ADMIN));
+		Assertions.assertEquals(UNVERIFIED_USER_EMAIL, user.getEmail());
+		Assertions.assertEquals(1, user.getRoleNames().size());
+		Assertions.assertTrue(user.getRoleNames().contains(UserUtils.Role.ADMIN));
     }
 
 	/**
@@ -164,14 +164,14 @@ public class UpdateUserTests extends AbstractTests {
 				
 				TestUserDto userDto = result.getResponseBody();
 				
-				assertEquals(UPDATED_NAME, userDto.getTag().getName());
-				assertEquals(1, userDto.getRoles().size());
-				assertTrue(userDto.getRoles().contains(UserUtils.Role.ADMIN));
+				Assertions.assertEquals(UPDATED_NAME, userDto.getTag().getName());
+				Assertions.assertEquals(1, userDto.getRoles().size());
+				Assertions.assertTrue(userDto.getRoles().contains(UserUtils.Role.ADMIN));
 			});
 		
 		User user = mongoTemplate.findById(ADMIN_ID, User.class);
 		
-		assertEquals(1, user.getRoles().size());
+		Assertions.assertEquals(1, user.getRoleNames().size());
     }
 
 	/**

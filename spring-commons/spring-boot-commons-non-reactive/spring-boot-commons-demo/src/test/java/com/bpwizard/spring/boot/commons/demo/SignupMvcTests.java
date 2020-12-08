@@ -72,7 +72,7 @@ public class SignupMvcTests extends AbstractMvcTests {
 		verify(mailSender).send(any());
 
 		// Ensure that password got encrypted
-		Assertions.assertNotEquals("user123", userRepository.findByEmail("user.foo@example.com").get().getPassword());
+		Assertions.assertNotEquals("user123", userService.findByEmail("user.foo@example.com").get().getPassword());
 	}
 	
 	@Test

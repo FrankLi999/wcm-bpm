@@ -7,9 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -23,6 +22,7 @@ import org.springframework.util.MimeType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import com.bpwizard.spring.boot.commons.exceptions.util.ExceptionUtils;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.security.UserDto;
@@ -40,7 +40,7 @@ import com.bpwizard.spring.boot.commons.util.UserUtils;
  */
 public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Serializable> extends DefaultOAuth2UserService {
 
-	private static final Logger log = LogManager.getLogger(SpringOAuth2UserService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringOAuth2UserService.class);
 
 	private SpringUserDetailsService<U, ?> userDetailsService;
 	private SpringService<U, ?> springService;
@@ -56,7 +56,7 @@ public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Seri
 		this.passwordEncoder = passwordEncoder;
 		
 		replaceRestOperarions();
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	protected void replaceRestOperarions() {
@@ -66,12 +66,12 @@ public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Seri
 		restTemplate.setMessageConverters(makeMessageConverters());
 		setRestOperations(restTemplate);
 		
-		log.info("Rest Operations replaced");
+		logger.info("Rest Operations replaced");
 	}
 
 	protected List<HttpMessageConverter<?>> makeMessageConverters() {
 		
-		log.info("Making message converters");
+		logger.info("Making message converters");
 
 		MappingJackson2HttpMessageConverter converter =	new MappingJackson2HttpMessageConverter();
 
@@ -114,7 +114,7 @@ public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Seri
 				springService.mailForgotPasswordLink(newUser);
 			} catch (Throwable e) {
 				// In case of exception, just log the error and keep silent			
-				log.error(ExceptionUtils.getStackTrace(e));
+				logger.error(ExceptionUtils.getStackTrace(e));
 			}
             return newUser;		
     	});

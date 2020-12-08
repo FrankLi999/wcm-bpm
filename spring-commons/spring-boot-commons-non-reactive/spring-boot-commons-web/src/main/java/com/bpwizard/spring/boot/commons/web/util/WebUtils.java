@@ -1,14 +1,15 @@
 package com.bpwizard.spring.boot.commons.web.util;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.bpwizard.spring.boot.commons.security.UserDto;
@@ -16,11 +17,11 @@ import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 public class WebUtils {
 
-	private static final Logger log = LogManager.getLogger(WebUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(WebUtils.class);
 
 	public WebUtils() {
 		
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	/**
@@ -44,9 +45,10 @@ public class WebUtils {
 	public static void deleteCookies(HttpServletRequest request, HttpServletResponse response, String... cookiesToDelete) {
 		
 		Cookie[] cookies = request.getCookies();
+		List<String> deletecookies = Arrays.asList(cookiesToDelete);
 		if (cookies != null && cookies.length > 0) {
 			for (int i = 0; i < cookies.length; i++)
-				if (ArrayUtils.contains(cookiesToDelete, cookies[i].getName())) {					
+				if (deletecookies.contains(cookies[i].getName())) {				
 					cookies[i].setValue("");
 					cookies[i].setPath("/");
 					cookies[i].setMaxAge(0);

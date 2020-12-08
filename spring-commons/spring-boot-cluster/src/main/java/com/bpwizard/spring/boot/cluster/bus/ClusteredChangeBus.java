@@ -31,8 +31,6 @@ import com.bpwizard.spring.boot.cluster.common.util.CheckArg;
  * cluster, and JGroups will do this for us as long as we push all local changes into the channel and receive all local/remote
  * changes from the channel.
  * </p>
- * 
- * @author Horia Chiorean
  */
 @ThreadSafe
 public final class ClusteredChangeBus extends MessageConsumer<ChangeSet> implements ChangeBus {

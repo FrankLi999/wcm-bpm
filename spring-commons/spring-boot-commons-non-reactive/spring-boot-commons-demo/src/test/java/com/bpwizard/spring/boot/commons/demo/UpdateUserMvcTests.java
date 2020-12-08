@@ -72,7 +72,7 @@ public class UpdateUserMvcTests extends AbstractMvcTests {
 				.andExpect(jsonPath("$.roles[0]").value("UNVERIFIED"))
 				.andExpect(jsonPath("$.username").value(UNVERIFIED_USER_EMAIL));
 		
-		User user = userRepository.findById(UNVERIFIED_USER_ID).get();
+		User user = userService.findById(UNVERIFIED_USER_ID).get();
 		
 		// Ensure that data changed properly
 		Assertions.assertEquals(UNVERIFIED_USER_EMAIL, user.getEmail());
@@ -110,7 +110,7 @@ public class UpdateUserMvcTests extends AbstractMvcTests {
 				.andExpect(jsonPath("$.roles[0]").value("ADMIN"))
 				.andExpect(jsonPath("$.username").value(UNVERIFIED_USER_EMAIL));
 		
-		User user = userRepository.findById(UNVERIFIED_USER_ID).get();
+		User user = userService.findById(UNVERIFIED_USER_ID).get();
     	
 		// Ensure that data changed properly
 		Assertions.assertEquals(UNVERIFIED_USER_EMAIL, user.getEmail());

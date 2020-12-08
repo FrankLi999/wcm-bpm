@@ -2,8 +2,8 @@ package com.bpwizard.spring.boot.commons.reactive.service.security;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,7 +24,7 @@ import reactor.core.publisher.Mono;
 
 public class SpringReactiveSecurityConfig <U extends AbstractMongoUser<ID>, ID extends Serializable> extends SpringCommonsReactiveSecurityConfig {
 
-	private static final Logger log = LogManager.getLogger(SpringReactiveSecurityConfig.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringReactiveSecurityConfig.class);
 	
 	protected SpringReactiveUserDetailsService<U, ID> userDetailsService;
 	private SpringProperties properties;
@@ -39,7 +39,7 @@ public class SpringReactiveSecurityConfig <U extends AbstractMongoUser<ID>, ID e
 		this.userDetailsService = userDetailsService;
 		this.reactiveOAuth2AuthenticationSuccessHandler = reactiveOAuth2AuthenticationSuccessHandler;
 		this.properties = properties;
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class SpringReactiveSecurityConfig <U extends AbstractMongoUser<ID>, ID e
 		return userDetailsService.findUserByUsername(username)
 			.switchIfEmpty(Mono.defer(() -> Mono.error(new UsernameNotFoundException(username))))
 			.doOnNext(user -> {
-		        log.debug("User found ...");
+		        logger.debug("User found ...");
 		        ReactiveServiceUtils.ensureCredentialsUpToDate(claims, user);
 			}).map(AbstractMongoUser::toUserDto);
 	}

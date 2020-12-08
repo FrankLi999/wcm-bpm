@@ -3,8 +3,8 @@ package com.bpwizard.spring.boot.commons.service.repo.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ import com.bpwizard.spring.boot.commons.service.repo.dto.UserProfile;
 @RestController
 @RequestMapping(CoreController.BASE_URI)
 public class CoreController extends SpringController<User, Long> {
-	private static final Logger logger = LogManager.getLogger(CoreController.class);
+	private static final Logger logger = LoggerFactory.getLogger(CoreController.class);
 	public static final String BASE_URI = "/core/api";
 	@Autowired
 	protected SpringProperties properties;
@@ -37,13 +37,13 @@ public class CoreController extends SpringController<User, Long> {
     		HttpServletRequest request,
     		@Valid @RequestBody AuthenticationRequest authenticationRequest) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entering");
 		}
         String shortLivedAuthToken = this.springService.authenticateUser(authenticationRequest);
         User user = this.springService.fetchUserByEmail(authenticationRequest.getEmail());
         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exiting");
 		}
         return ResponseEntity.ok(UserProfile.fromUserAndToken(user, shortLivedAuthToken, properties.getJwt().getShortLivedMillis(), sessionId));
     }

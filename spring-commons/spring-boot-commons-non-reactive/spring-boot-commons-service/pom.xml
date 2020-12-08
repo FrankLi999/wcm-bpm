@@ -23,11 +23,6 @@
 			<artifactId>spring-boot-commons-jdbc</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-        <dependency>
-	        <groupId>javax.xml.bind</groupId>
-	        <artifactId>jaxb-api</artifactId>
-	    </dependency>
 	
 		<!--SpringFox dependencies -->
 		<dependency>

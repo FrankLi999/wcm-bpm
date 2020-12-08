@@ -10,9 +10,9 @@ import static com.bpwizard.spring.boot.commons.reactive.demo.MyTestUtils.USER_PA
 import static com.bpwizard.spring.boot.commons.reactive.demo.controllers.MyController.BASE_URI;
 import static org.springframework.web.reactive.function.BodyInserters.fromFormData;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class ChangeEmailTests extends AbstractTests {
 	@Autowired
 	private JSONWebEncryptionService jweTokenService;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		
 		User user = mongoTemplate.findById(UNVERIFIED_USER_ID, User.class);
@@ -53,8 +53,8 @@ public class ChangeEmailTests extends AbstractTests {
         	.expectBody().jsonPath("$.id").isEqualTo(UNVERIFIED_USER_ID.toString());
 
 		User updatedUser = mongoTemplate.findById(UNVERIFIED_USER_ID, User.class);
-		Assert.assertNull(updatedUser.getNewEmail());
-		Assert.assertEquals(NEW_EMAIL, updatedUser.getEmail());
+		Assertions.assertNull(updatedUser.getNewEmail());
+		Assertions.assertEquals(NEW_EMAIL, updatedUser.getEmail());
 		
 		changeEmailResponse(changeEmailCode)
     		.expectStatus().isUnauthorized();

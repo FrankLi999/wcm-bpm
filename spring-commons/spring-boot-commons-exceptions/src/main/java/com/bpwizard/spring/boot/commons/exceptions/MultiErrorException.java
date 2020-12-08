@@ -17,8 +17,6 @@ import lombok.Getter;
 /**
  * An exception class which can contain multiple errors.
  * Used for validation, in service classes.
- * 
- * @author Sanjay Patel
  */
 @Getter
 public class MultiErrorException extends RuntimeException {

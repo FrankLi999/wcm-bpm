@@ -25,8 +25,6 @@ import com.bpwizard.spring.boot.cluster.change.ChangeSetListener;
 
 /**
  * An entity which records all changes which occur in a repository via {@code ChangeSet} instances.
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public interface ChangeJournal extends ChangeSetListener {
 

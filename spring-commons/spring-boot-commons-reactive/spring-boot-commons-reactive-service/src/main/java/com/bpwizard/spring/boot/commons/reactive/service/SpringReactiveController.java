@@ -7,8 +7,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,13 +41,11 @@ import reactor.util.function.Tuple2;
  * The Spring Commons Mongo API. See the
  * <a href="https://github.com/bpwizard/spring-commons#documentation-and-resources">
  * API documentation</a> for details.
- * 
- * @author Sanjay Patel
  */
 public class SpringReactiveController
 	<U extends AbstractMongoUser<ID>, ID extends Serializable> {
 
-	private static final Logger log = LogManager.getLogger(SpringReactiveController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpringReactiveController.class);
 
     protected long jwtExpirationMillis;
 	protected SpringReactiveService<U, ID> springReactiveService;	
@@ -60,7 +58,7 @@ public class SpringReactiveController
 		this.jwtExpirationMillis = properties.getJwt().getExpirationMillis();
 		this.springReactiveService = springReactiveService;		
 
-		log.info("Created");
+		logger.info("Created");
 	}
 
 	
@@ -70,7 +68,7 @@ public class SpringReactiveController
 	@PostMapping("/login")
 	public Mono<UserDto> login(ServerWebExchange exchange) {
 		
-		log.debug("Returning current user ... ");
+		logger.debug("Returning current user ... ");
 		
 		return ReactiveSecurityContextHolder.getContext()
 				.map(SecurityContext::getAuthentication)
@@ -94,7 +92,7 @@ public class SpringReactiveController
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public Mono<Void> ping() {
 		
-		log.debug("Received a ping");
+		logger.debug("Received a ping");
 		return Mono.empty();
 	}
 
@@ -108,12 +106,12 @@ public class SpringReactiveController
 			@RequestParam Optional<Long> expirationMillis,
 			ServerHttpResponse response) {
 
-		log.debug("Getting context ");
+		logger.debug("Getting context ");
 		
 		return springReactiveService
 			.getContext(expirationMillis, response)
 			.doOnNext(context -> {
-				log.debug("Returning context " + context);
+				logger.debug("Returning context " + context);
 			});
 	}
 
@@ -126,7 +124,7 @@ public class SpringReactiveController
 	@ResponseStatus(HttpStatus.CREATED)
 	protected Mono<UserDto> signup(Mono<U> user, ServerHttpResponse response) {
 		
-		log.debug("Signing up: " + user);
+		logger.debug("Signing up: " + user);
 		
 		return userWithToken(springReactiveService.signup(user), response);
 	}
@@ -139,7 +137,7 @@ public class SpringReactiveController
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public Mono<Void> resendVerificationMail(@PathVariable("id") ID userId) {
 		
-		log.debug("Resending verification mail for user " + userId);
+		logger.debug("Resending verification mail for user " + userId);
 		
 		return springReactiveService.resendVerificationMail(userId);
 	}	
@@ -153,7 +151,7 @@ public class SpringReactiveController
 			@PathVariable ID id,
 			ServerWebExchange exchange) {
 		
-		log.debug("Verifying user ...");		
+		logger.debug("Verifying user ...");		
 		return userWithToken(springReactiveService.verifyUser(id, exchange.getFormData()),
 				exchange.getResponse());
 	}
@@ -166,7 +164,7 @@ public class SpringReactiveController
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public Mono<Void> forgotPassword(ServerWebExchange exchange) {
 		
-		log.debug("Received forgot password request ... " );				
+		logger.debug("Received forgot password request ... " );				
 		return springReactiveService.forgotPassword(exchange.getFormData());
 	}
 
@@ -179,7 +177,7 @@ public class SpringReactiveController
 			@RequestBody @Valid Mono<ResetPasswordForm> form,
 		    ServerHttpResponse response) {
 		
-		log.debug("Resetting password ... ");				
+		logger.debug("Resetting password ... ");				
 		return userWithToken(springReactiveService.resetPassword(form), response);
 	}
 
@@ -190,7 +188,7 @@ public class SpringReactiveController
 	@PostMapping("/users/fetch-by-email")
 	public Mono<U> fetchUserByEmail(ServerWebExchange exchange) {
 		
-		log.debug("Fetching user by email ... ");						
+		logger.debug("Fetching user by email ... ");						
 		return springReactiveService.fetchUserByEmail(exchange.getFormData());
 	}
 
@@ -201,7 +199,7 @@ public class SpringReactiveController
 	@GetMapping("/users/{id}")
 	public Mono<U> fetchUserById(@PathVariable ID id) {
 		
-		log.debug("Fetching user: " + id);				
+		logger.debug("Fetching user: " + id);				
 		return springReactiveService.fetchUserById(id);
 	}
 
@@ -215,7 +213,7 @@ public class SpringReactiveController
 			@RequestBody @NotBlank Mono<String> patch,
 			ServerHttpResponse response) {
 		
-		log.debug("Updating user ... ");
+		logger.debug("Updating user ... ");
 		return userWithToken(springReactiveService.updateUser(id, patch), response);
 	}
 
@@ -229,7 +227,7 @@ public class SpringReactiveController
 			@RequestBody @Valid Mono<ChangePasswordForm> changePasswordForm,
 			ServerHttpResponse response) {
 		
-		log.debug("Changing password ... ");
+		logger.debug("Changing password ... ");
 		return userWithToken(springReactiveService.changePassword(id, changePasswordForm), response).then();
 	}
 
@@ -242,7 +240,7 @@ public class SpringReactiveController
 	public Mono<Void> requestEmailChange(@PathVariable ID id,
 			@RequestBody @Valid	Mono<EmailForm> emailForm) {
 		
-		log.debug("Requesting email change ... ");				
+		logger.debug("Requesting email change ... ");				
 		return springReactiveService.requestEmailChange(id, emailForm);
 	}	
 
@@ -255,7 +253,7 @@ public class SpringReactiveController
 			@PathVariable ID userId,
 			ServerWebExchange exchange) {
 		
-		log.debug("Changing email of user ...");
+		logger.debug("Changing email of user ...");
 		return userWithToken(springReactiveService.changeEmail(
 				userId,
 				exchange.getFormData()),
@@ -269,7 +267,7 @@ public class SpringReactiveController
 	@PostMapping("/fetch-new-auth-token")
 	public Mono<Map<String, String>> fetchNewToken(ServerWebExchange exchange) {
 		
-		log.debug("Fetching a new token ... ");
+		logger.debug("Fetching a new token ... ");
 		
 		return springReactiveService.fetchNewToken(exchange);
 		
@@ -283,7 +281,7 @@ public class SpringReactiveController
 	@GetMapping("/fetch-full-token")
 	public Mono<Map<String, String>> fetchFullToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
 		
-		log.debug("Fetching a micro token");
+		logger.debug("Fetching a micro token");
 		return springReactiveService.fetchFullToken(authHeader);
 	}	
 

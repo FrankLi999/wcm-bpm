@@ -1,7 +1,7 @@
 package com.bpwizard.spring.boot.commons.web.exceptions;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,7 +17,7 @@ import com.bpwizard.spring.boot.commons.exceptions.ErrorResponseComposer;
 @RestControllerAdvice
 public class DefaultExceptionHandlerControllerAdvice<T extends Throwable> {
 	
-	private static final Logger log = LogManager.getLogger(DefaultExceptionHandlerControllerAdvice.class);
+	private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionHandlerControllerAdvice.class);
 
 	/**
 	 * Component that actually builds the error response
@@ -27,7 +27,7 @@ public class DefaultExceptionHandlerControllerAdvice<T extends Throwable> {
     public DefaultExceptionHandlerControllerAdvice(ErrorResponseComposer<T> errorResponseComposer) {
 
 		this.errorResponseComposer = errorResponseComposer;
-		log.info("Created");
+		logger.info("Created");
 	}
 
 
@@ -43,7 +43,7 @@ public class DefaultExceptionHandlerControllerAdvice<T extends Throwable> {
 		if (errorResponse.incomplete()) {
     		throw ex;
 	    }
-		log.warn("Handling exception", ex);
+		logger.warn("Handling exception", ex);
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
     }
 }

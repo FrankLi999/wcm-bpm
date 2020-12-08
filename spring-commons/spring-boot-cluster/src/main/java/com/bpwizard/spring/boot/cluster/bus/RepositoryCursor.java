@@ -20,8 +20,6 @@ import com.bpwizard.spring.boot.cluster.common.collection.ring.WaitStrategy;
 
 /**
  * An extension to the {@link SingleProducerCursor} cursor which adds some functionality required by the repository.
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class RepositoryCursor extends SingleProducerCursor {
 
