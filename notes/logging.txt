@@ -1,0 +1,176 @@
+1. has switched to the default logback from log4j2
+
+2. Logback log levels: TRACE DEBUG INFO WARN ERROR OFF
+
+    java -jar target/spring-boot-logging-0.0.1-SNAPSHOT.jar --trace
+	
+	or --debug etc
+
+	default: INFO
+	
+	-Dlogging.level.org.springframework=TRACE 
+	-Dlogging.level.com.baeldung=TRACE
+	
+	
+	mvn spring-boot:run -Dspring-boot.run.arguments=--logging.level.org.springframework=TRACE,--logging.level.com.baeldung=TRACE
+	
+	./gradlew bootRun -Pargs=--logging.level.org.springframework=TRACE,--logging.level.com.baeldung=TRACE
+	
+	
+	If we want to change the verbosity permanently, we can do so in the application.properties file as described here:
+
+		logging.level.root=WARN
+		logging.level.com.baeldung=TRACE
+	
+	Finally, we can change the logging level permanently by using our logging framework configuration file.
+		<logger name="org.springframework" level="INFO" />
+		<logger name="com.baeldung" level="INFO" />
+		
+	When a file in the classpath has one of the following names, Spring Boot will automatically load it over the default configuration:
+
+		logback-spring.xml
+		logback.xml
+		logback-spring.groovy
+		logback.groovy
+		Spring recommends using the -spring variant over the plain ones whenever possible
+		
+		
+		
+		<?xml version="1.0" encoding="UTF-8"?>
+			<configuration>
+
+				<property name="LOGS" value="./logs" />
+
+				<appender name="Console"
+					class="ch.qos.logback.core.ConsoleAppender">
+					<layout class="ch.qos.logback.classic.PatternLayout">
+						<Pattern>
+							%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+						</Pattern>
+					</layout>
+				</appender>
+
+				<appender name="RollingFile"
+					class="ch.qos.logback.core.rolling.RollingFileAppender">
+					<file>${LOGS}/spring-boot-logger.log</file>
+					<encoder
+						class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+						<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+					</encoder>
+
+					<rollingPolicy
+						class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+						<!-- rollover daily and when the file reaches 10 MegaBytes -->
+						<fileNamePattern>${LOGS}/archived/spring-boot-logger-%d{yyyy-MM-dd}.%i.log
+						</fileNamePattern>
+						<timeBasedFileNamingAndTriggeringPolicy
+							class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+							<maxFileSize>10MB</maxFileSize>
+						</timeBasedFileNamingAndTriggeringPolicy>
+					</rollingPolicy>
+				</appender>
+				
+				<!-- LOG everything at INFO level -->
+				<root level="info">
+					<appender-ref ref="RollingFile" />
+					<appender-ref ref="Console" />
+				</root>
+
+				<!-- LOG "com.baeldung*" at TRACE level -->
+				<logger name="com.baeldung" level="trace" additivity="false">
+					<appender-ref ref="RollingFile" />
+					<appender-ref ref="Console" />
+				</logger>
+
+			</configuration>
+			
+			
+@Slf4j
+	 add the right logger instance into our class: org.slf4j.Logger for SLF4J
+	 
+		RestController
+		@Slf4j
+		public class LombokLoggingController {
+		 
+			@RequestMapping("/lombok")
+			public String index() {
+				log.trace("A TRACE Message");
+				log.debug("A DEBUG Message");
+				log.info("An INFO Message");
+				log.warn("A WARN Message");
+				log.error("An ERROR Message");
+		 
+				return "Howdy! Check out the Logs to see the output...";
+			}
+		}
+		
+		
+
+		Level	Color
+		FATAL   Red
+
+		ERROR   Red
+
+		WARN    Yellow
+
+		INFO    Green
+
+		DEBUG   Green
+
+		TRACE   Green		
+		
+		
+		The following colors and styles are supported:  %clr(%5p)
+
+			blue
+
+			cyan
+
+			faint
+
+			green
+
+			magenta
+
+			red
+
+			yellow
+			
+			
+		You can force Spring Boot to use a particular logging system by using the org.springframework.boot.logging.LoggingSystem system property. 
+		The value can be:
+		
+		
+			Logback                   ----  logback-spring.xml, logback.xml
+		
+			Log4j2                    ----  log4j2-spring.xml or log4j2.xml
+			
+			JDK (Java Util Logging)   ---- logging.properties
+			
+			
+ Profile-specific Configuration
+
+	The <springProfile> tag lets you optionally include or exclude sections of configuration based on the active Spring profiles. 
+	Profile sections are supported anywhere within the <configuration> element.
+	
+	<springProfile name="staging">
+		<!-- configuration to be enabled when the "staging" profile is active -->
+	</springProfile>
+
+	<springProfile name="dev | staging">
+		<!-- configuration to be enabled when the "dev" or "staging" profiles are active -->
+	</springProfile>
+
+	<springProfile name="!production">
+		<!-- configuration to be enabled when the "production" profile is not active -->
+	</springProfile>
+	
+env:
+	The <springProperty> tag lets you expose properties from the Spring Environment for use within Logback. 
+		<springProperty scope="context" name="fluentHost" source="myapp.fluentd.host"
+			defaultValue="localhost"/>
+		<appender name="FLUENT" class="ch.qos.logback.more.appenders.DataFluentAppender">
+			<remoteHost>${fluentHost}</remoteHost>
+			...
+		</appender>
+			

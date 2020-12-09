@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,7 +37,7 @@ import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 @RequestMapping(ContentItemWorkflowRestController.BASE_URI)
 @Validated
 public class ContentItemWorkflowRestController { //extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(ContentItemWorkflowRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ContentItemWorkflowRestController.class);
 	
 	public static final String BASE_URI = "/bpm/api/contentItem";
 
@@ -55,12 +55,12 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 			@RequestBody StartFlowRequest startFlowRequest, 
 			HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 
 		String processInstanceId = this.startContentFlow(startFlowRequest);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.ok(processInstanceId);
 	}
@@ -71,7 +71,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 			HttpServletRequest request) {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 		DeleteDraftRequest deleteDraftRequest = DeleteDraftRequest.createDeleteDraftRequest(
@@ -92,7 +92,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 		}
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 		
@@ -104,7 +104,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 			HttpServletRequest request) {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 		String reviewTaskId = this.reviewTaskService.getReviewTaskId(
@@ -117,7 +117,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
         		"http://wcm-server.bpwizard.com:28080/wcm/api/contentItem/publish");
         this.completeReview(completeReviewRequest, request);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).build();		
 	}
@@ -128,7 +128,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 			HttpServletRequest request) {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 		String reviewTaskId = this.reviewTaskService.getReviewTaskId(
@@ -142,7 +142,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
         this.completeReview(completeReviewRequest, request);
 
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 		
@@ -153,7 +153,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 			@RequestBody UpdateDraftRequest updateDraftRequest, 
 			HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 
@@ -164,7 +164,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 			
 	        
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 		
@@ -176,7 +176,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 			HttpServletRequest request) {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String taskId = this.reviewTaskService.claimTask(
 				claimRequest.getContentId(), 
@@ -184,7 +184,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 				WebUtils.currentUser().getUsername());
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.ok(taskId);
 		
@@ -196,14 +196,14 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 			HttpServletRequest request) {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String editTaskId = this.editTaskService.claimTask(
 				editRequest.getContentId(), 
 				"edit-task", 
 				WebUtils.currentUser().getUsername());
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.ok(editTaskId);
 	}
@@ -217,7 +217,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 	}
 	
 	protected String startContentFlow(StartFlowRequest startFlowRequest) {
-		logger.traceEntry();
+		logger.debug("Entry");
 		
 		String processInstanceId = wcmFlowService.startContentFlow(
 				startFlowRequest.getAuthor(),
@@ -228,7 +228,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
 				startFlowRequest.getBaseUrl(),
 				startFlowRequest.getWorkflow());
 
-	    logger.traceExit();
+	    logger.debug("Exit");
 		return processInstanceId;
 	}
 	

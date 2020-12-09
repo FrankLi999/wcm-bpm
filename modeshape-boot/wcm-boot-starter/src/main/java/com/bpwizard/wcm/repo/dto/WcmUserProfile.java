@@ -23,7 +23,7 @@ public class WcmUserProfile extends UserProfile {
     	userProfile.setLastName(user.getLastName());
     	userProfile.setExpireIn(expireIn);
     	userProfile.setSessionId(sessionId);
-    	userProfile.setRoles(user.getRoles().stream().map(Role::getName).toArray(String[]::new));
+    	userProfile.setRoles(user.getRoles().stream().toArray(String[]::new));
     	userProfile.setSettings(settings);
     	return userProfile;
     }

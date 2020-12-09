@@ -4,8 +4,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +26,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmSystem;
 @RequestMapping(WcmSystemRestController.BASE_URI)
 @Validated
 public class WcmSystemRestController {
-	private static final Logger logger = LogManager.getLogger(WcmSystemRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WcmSystemRestController.class);
 
 	public static final String BASE_URI = "/wcm/api";
 
@@ -43,19 +43,19 @@ public class WcmSystemRestController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			WcmSystem wcmSystem = this.wcmRequestHandler.getWcmSystem(repository, workspace, library, siteConfigName, authoring, request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return wcmSystem;
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get WcmSystem", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get WcmSystem", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -63,19 +63,19 @@ public class WcmSystemRestController {
 	@GetMapping(path = "/wcmRepository/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public WcmRepository[] getWcmRepositories(HttpServletRequest request) throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			WcmRepository[] wcmRepositories = this.wcmRequestHandler.getWcmRepositories(request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return wcmRepositories;
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get WcmRepositories", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get WcmRepositories", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -84,19 +84,19 @@ public class WcmSystemRestController {
 	public Map<String, WcmOperation[]> getWcmOperations(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			Map<String, WcmOperation[]> wcmOperationMap = this.wcmRequestHandler.getWcmOperations(repository, workspace, request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return wcmOperationMap;
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get Wcm operations", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get Wcm operations", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -105,13 +105,13 @@ public class WcmSystemRestController {
 	public Theme[] getTheme(@PathVariable("repository") String repository, @PathVariable("workspace") String workspace,
 			HttpServletRequest request) throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 		Theme[] themes = this.wcmRequestHandler.getTheme(repository, workspace, request);
 
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return themes;
 	}

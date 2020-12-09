@@ -48,8 +48,6 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestQueryResult;
 
 /**
  * A REST handler used for executing queries against a repository and returning REST representations of the query results.
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 @Component
 public final class RestQueryHandler extends AbstractHandler {

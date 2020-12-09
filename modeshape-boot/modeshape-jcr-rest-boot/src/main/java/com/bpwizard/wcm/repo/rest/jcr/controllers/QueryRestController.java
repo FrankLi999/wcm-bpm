@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.modeshape.common.SystemFailureException;
 import org.modeshape.jcr.JcrI18n;
 import org.modeshape.jcr.api.query.Query;
@@ -59,7 +59,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @RequestMapping(QueryRestController.BASE_URI)
 @Validated
 public class QueryRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(QueryRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(QueryRestController.class);
 	
 	public static final String BASE_URI = "/wcm/api/queryStatement";
 
@@ -79,7 +79,7 @@ public class QueryRestController extends BaseWcmRestController {
 			HttpServletRequest request) throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 
 		try {
@@ -90,11 +90,11 @@ public class QueryRestController extends BaseWcmRestController {
 				Arrays.sort(queryStatements, Collections.reverseOrder());
 			}
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(queryStatements);
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to load query", e);
 			throw e;
 		}
 	}
@@ -104,7 +104,7 @@ public class QueryRestController extends BaseWcmRestController {
 			@RequestBody QueryStatement query, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String repositoryName = query.getRepository();
 		try {
@@ -131,14 +131,14 @@ public class QueryRestController extends BaseWcmRestController {
 				}
 			}
 			if (logger.isDebugEnabled()) {
-				logger.traceEntry();
+				logger.debug("Entry");
 			}
 			return ResponseEntity.ok(result);
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to execute query", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_QUERY_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to save query", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -148,11 +148,11 @@ public class QueryRestController extends BaseWcmRestController {
 			@RequestBody QueryStatement query, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		this.wcmRequestHandler.createQueryStatement(query, request);
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -161,7 +161,7 @@ public class QueryRestController extends BaseWcmRestController {
 	public void saveQuery(@RequestBody QueryStatement query, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -187,16 +187,16 @@ public class QueryRestController extends BaseWcmRestController {
 			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.query, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to save query", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to save query", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_QUERY_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to save query", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -227,7 +227,7 @@ public class QueryRestController extends BaseWcmRestController {
   			@RequestParam("path") String wcmPath,
   			HttpServletRequest request) { 
   		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
@@ -236,7 +236,7 @@ public class QueryRestController extends BaseWcmRestController {
   			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.query, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
-  				logger.traceExit();
+  				logger.debug("Exit");
   			}
   	  		
   			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -244,8 +244,8 @@ public class QueryRestController extends BaseWcmRestController {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
 	    } catch (Throwable t) {
-	    	logger.error(t);
-			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+	    	logger.error("Failed to purge query",t);
+	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 
   	};

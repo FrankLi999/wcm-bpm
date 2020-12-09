@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.authorization.Groups;
@@ -21,6 +19,8 @@ import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.spring.boot.starter.event.PreUndeployEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -32,23 +32,25 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bpwizard.spring.boot.commons.service.repo.domain.RoleRepository;
-import com.bpwizard.spring.boot.commons.service.repo.domain.UserRepository;
+import com.bpwizard.spring.boot.commons.service.domain.Role;
+import com.bpwizard.spring.boot.commons.service.domain.RoleService;
+import com.bpwizard.spring.boot.commons.service.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.UserService;
 
 @Component
 @Order(20)
 public class InvoiceDemoStartup implements ApplicationListener<ApplicationReadyEvent> {
 
-	private static final Logger LOGGER = LogManager.getLogger(InvoiceDemoStartup.class);
+	private static final Logger logger = LoggerFactory.getLogger(InvoiceDemoStartup.class);
 
 	@Autowired
 	ProcessEngine processEngine;
 
 	@Autowired
-	protected RoleRepository roleRepository;
+	protected RoleService<Role, Long> roleService;
 
 	@Autowired
-	protected UserRepository userRepository;
+	protected UserService<User<Long>, Long> userService;
 
 	@Autowired
 	protected PasswordEncoder passwordEncoder;
@@ -68,7 +70,7 @@ public class InvoiceDemoStartup implements ApplicationListener<ApplicationReadyE
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false, timeout = 60)
 	public void onApplicationEvent(final ApplicationReadyEvent event) {
-		LOGGER.traceEntry();
+		logger.debug("Entry");
 		boolean created = createUsers(processEngine);
 		if (!created) {
 			return;
@@ -92,7 +94,7 @@ public class InvoiceDemoStartup implements ApplicationListener<ApplicationReadyE
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		LOGGER.traceExit();
+		logger.debug("Exit");
 	}
 
 	// public void createDeployment(String processArchiveName, DeploymentBuilder
@@ -152,7 +154,7 @@ public class InvoiceDemoStartup implements ApplicationListener<ApplicationReadyE
 
 		if (numberOfRunningProcessInstances == 0) { // start three process instances
 
-			LOGGER.info("Start 3 instances of " + processDefinition.getName() + ", version "
+			logger.info("Start 3 instances of " + processDefinition.getName() + ", version "
 					+ processDefinition.getVersion());
 			// process instance 1
 			processEngine.getRuntimeService().startProcessInstanceById(processDefinition.getId(), createVariables()
@@ -240,7 +242,7 @@ public class InvoiceDemoStartup implements ApplicationListener<ApplicationReadyE
 				processEngine.getIdentityService().clearAuthentication();
 			}
 		} else {
-			LOGGER.info(
+			logger.info(
 					"No new instances of " + processDefinition.getName() + " version " + processDefinition.getVersion()
 							+ " started, there are " + numberOfRunningProcessInstances + " instances running");
 		}
@@ -248,6 +250,6 @@ public class InvoiceDemoStartup implements ApplicationListener<ApplicationReadyE
 
 	private boolean createUsers(ProcessEngine processEngine) {
 		// create demo users
-		return new DemoDataGenerator(roleRepository, userRepository, passwordEncoder).createUsers(processEngine);
+		return new DemoDataGenerator(roleService, userService, passwordEncoder).createUsers(processEngine);
 	}
 }

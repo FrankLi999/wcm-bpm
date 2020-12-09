@@ -16,9 +16,10 @@
 
 package com.bpwizard.wcm.repo.jcr.security;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.modeshape.jcr.security.SecurityContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -27,7 +28,7 @@ import org.springframework.security.core.GrantedAuthority;
  */
 public class SpringSecurityContext implements SecurityContext {
 
-    final static Logger logger = LogManager.getLogger(SpringSecurityContext.class);
+    final static Logger logger = LoggerFactory.getLogger(SpringSecurityContext.class);
 
     private Authentication auth;
 

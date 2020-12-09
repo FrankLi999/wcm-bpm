@@ -21,8 +21,6 @@ import org.modeshape.common.i18n.I18n;
 
 /**
  * The internationalized string constants for the <code>org.modeshape.web.jcr*</code> packages.
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 @Immutable
 public class WebJcrI18n {

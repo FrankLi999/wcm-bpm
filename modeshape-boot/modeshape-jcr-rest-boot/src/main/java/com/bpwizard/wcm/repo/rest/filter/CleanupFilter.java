@@ -33,8 +33,6 @@ import org.modeshape.web.jcr.WebLogger;
 /**
  * {@link ContainerResponseFilter} implementation which will always close an active {@link Session} instance, if such an instance
  * has been opened during a request.
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public class CleanupFilter implements Filter {
 

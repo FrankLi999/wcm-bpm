@@ -11,8 +11,8 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -43,7 +43,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 @RequestMapping(WcmRestController.BASE_URI)
 @Validated
 public class WcmRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(WcmRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WcmRestController.class);
 	
 	public static final String BASE_URI = "/wcm/api";
 	
@@ -55,19 +55,19 @@ public class WcmRestController extends BaseWcmRestController {
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			Map<String, JsonForm[]> jsonForms = this.wcmRequestHandler.getSystemAuthoringTemplateAsJsonForm(repository, workspace, request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return jsonForms;
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to get  json form from AT", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get  json form from AT", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -77,22 +77,22 @@ public class WcmRestController extends BaseWcmRestController {
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			ControlField[] ControlFileds = this.wcmRequestHandler.getControlField(repository, workspace, request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ControlFileds;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to get control field", re);
 			throw new WcmRepositoryException(re, WcmError.createWcmError(re.getMessage(), WcmErrors.GET_CONTROL_ERROR, null));
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to get control field", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get control field", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -103,19 +103,19 @@ public class WcmRestController extends BaseWcmRestController {
 		    @PathVariable("workspace") String workspace,
 			@RequestParam("path") String absPath) { 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			this.wcmUtils.unlock(repository, workspace, absPath);
     	} catch (RepositoryException re) { 
-    		logger.error(re);
+    		logger.error("Failed to unlock wcm item", re);
 			throw new WcmRepositoryException(re, WcmError.createWcmError(re.getMessage(), WcmErrors.UNLOCK_ITEM_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to unlock wcm item", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 	};
 
@@ -126,7 +126,7 @@ public class WcmRestController extends BaseWcmRestController {
   			@RequestParam("path") String absPath, 
   			@RequestParam("version") String version) {
     	if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
     	try {
 	    	javax.jcr.Workspace ws = this.repositoryManager.getSession(repository, workspace).getWorkspace();
@@ -138,14 +138,14 @@ public class WcmRestController extends BaseWcmRestController {
 				lm.unlock(absPath);
 			} 
     	} catch (RepositoryException re) { 
-    		logger.error(re);
+    		logger.error("Restore failed", re);
 			throw new WcmRepositoryException(re, WcmError.createWcmError(re.getMessage(), WcmErrors.RESTORE_ITEM_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Restore failed", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
     	if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
   	}
 
@@ -155,13 +155,13 @@ public class WcmRestController extends BaseWcmRestController {
 //		    @PathVariable("workspace") String workspace,
 //  			@RequestParam("path") String wcmPath) { 
 //  		if (logger.isDebugEnabled()) {
-//			logger.traceEntry();
+//			logger.debug("Entry");
 //		}
 //  		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
 //  		try {
 //  			this.wcmRequestHandler.purgeWcmItem(repository, workspace, absPath);
 //  	  		if (logger.isDebugEnabled()) {
-//  				logger.traceExit();
+//  				logger.debug("Exit");
 //  			}
 //  			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 //		} catch (WcmRepositoryException e ) {
@@ -192,13 +192,13 @@ public class WcmRestController extends BaseWcmRestController {
 	            session.save();
             }
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to delete wcm item", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to delete wcm item", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.PURGE_ITEM_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to delete wcm item", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
   	};
@@ -210,7 +210,7 @@ public class WcmRestController extends BaseWcmRestController {
 			@RequestBody final WcmNavigatorFilter filter,
 			HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -223,17 +223,17 @@ public class WcmRestController extends BaseWcmRestController {
 			    .toArray(WcmNode[]::new);
 
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return wcmNodes; 
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to get wcm nodes", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to get wcm nodes", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 	    } catch (Throwable t) {
-			logger.error(t);
+	    	logger.error("Failed to get wcm nodes", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	};

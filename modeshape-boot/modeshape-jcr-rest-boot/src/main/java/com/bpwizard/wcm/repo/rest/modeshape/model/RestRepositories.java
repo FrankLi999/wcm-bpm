@@ -28,8 +28,6 @@ import java.util.TreeMap;
 
 /**
  * A REST representation of a collection of {@link Repository repositories}
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class RestRepositories { //implements JSONAble {
 

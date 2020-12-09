@@ -2,8 +2,8 @@ package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 @RequestMapping(CategoryRestController.BASE_URI)
 @Validated
 public class CategoryRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(CategoryRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(CategoryRestController.class);
 	
 	public static final String BASE_URI = "/wcm/api/category";
 	
@@ -41,7 +41,7 @@ public class CategoryRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String repositoryName = category.getRepository();
@@ -57,15 +57,15 @@ public class CategoryRestController extends BaseWcmRestController {
 					path, 
 					category.toJson());
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to create category", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to create category", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}	
@@ -76,7 +76,7 @@ public class CategoryRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String repositoryName = category.getRepository();
@@ -92,14 +92,14 @@ public class CategoryRestController extends BaseWcmRestController {
 			}
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to update category", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to update category", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -111,14 +111,14 @@ public class CategoryRestController extends BaseWcmRestController {
   			@RequestParam("path") String wcmPath,
   			HttpServletRequest request) { 
   		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
 	  		this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.category, baseUrl, repository, workspace, absPath);
   			if (logger.isDebugEnabled()) {
-  				logger.traceExit();
+  				logger.debug("Exit");
   			}
   	  		
   			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -126,7 +126,7 @@ public class CategoryRestController extends BaseWcmRestController {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to purge category", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 

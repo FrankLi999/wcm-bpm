@@ -24,8 +24,6 @@ import org.modeshape.common.logging.Logger;
  * {@link org.modeshape.common.logging.Logger} implementation, using pass-through {@link TextI18n} objects.
  *
  * This should be used in ModeShape's server-side web modules.
- *
- * @author Horia Chiorean
  */
 public final class WebLogger implements org.modeshape.jcr.api.Logger {
 

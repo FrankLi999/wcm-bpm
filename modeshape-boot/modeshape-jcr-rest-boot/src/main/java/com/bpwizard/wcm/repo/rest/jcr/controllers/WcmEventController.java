@@ -2,8 +2,8 @@ package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import com.bpwizard.wcm.repo.rest.service.WcmEventService;
 @Validated
 public class WcmEventController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/wcm_events";
-	private static final Logger logger = LogManager.getLogger(WcmEventController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WcmEventController.class);
 	
 	@Autowired
 	private WcmEventService wcmEventHandler;
@@ -33,12 +33,12 @@ public class WcmEventController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 		wcmEventHandler.clearWcmEventBefore(syndicationRequest.getTimestampBefore());
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return null;
 	}

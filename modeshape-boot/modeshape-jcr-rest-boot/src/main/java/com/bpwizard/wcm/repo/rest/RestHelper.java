@@ -34,8 +34,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Utility class for the rest services and supporting classes.
- * 
- * @author Horia Chiorean
  */
 public final class RestHelper {
 

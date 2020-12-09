@@ -8,15 +8,15 @@ import java.util.Map;
 
 import javax.jcr.RepositoryException;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Component
 public class WcmEventKafkaListener {
-	private static final Logger logger = LogManager.getLogger(WcmEventKafkaListener.class);
+	private static final Logger logger = LoggerFactory.getLogger(WcmEventKafkaListener.class);
 	
 	@Autowired
 	protected RestNodeTypeHandler nodeTypeHandler;
@@ -45,7 +45,7 @@ public class WcmEventKafkaListener {
 			@Header(name=KafkaHeaders.RECEIVED_MESSAGE_KEY, required=true) String key, 
 			@Payload byte message[]) throws RepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 		try {
@@ -130,7 +130,7 @@ public class WcmEventKafkaListener {
 			//TODO
 		}
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 	}
 	

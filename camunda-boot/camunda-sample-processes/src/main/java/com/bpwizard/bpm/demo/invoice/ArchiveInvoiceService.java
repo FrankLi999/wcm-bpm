@@ -16,12 +16,12 @@
  */
 package com.bpwizard.bpm.demo.invoice;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.variable.value.FileValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -31,7 +31,7 @@ import org.camunda.bpm.engine.variable.value.FileValue;
  */
 public class ArchiveInvoiceService implements JavaDelegate {
 
-	private static final Logger logger = LogManager.getLogger(ArchiveInvoiceService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ArchiveInvoiceService.class);
 
 	public void execute(DelegateExecution execution) throws Exception {
 

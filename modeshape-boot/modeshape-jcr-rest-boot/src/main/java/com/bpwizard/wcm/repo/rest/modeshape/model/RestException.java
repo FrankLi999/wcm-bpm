@@ -22,8 +22,6 @@ import java.io.StringWriter;
 /**
  * A representation of an {@link Exception} which is used by the REST service to signal clients that a server-side exception
  * has occurred.
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class RestException { //implements JSONAble {
     private final String message;

@@ -3,8 +3,8 @@ package com.bpwizard.wcm.repo.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmSystem;
 // @RestController
 // @RequestMapping(WcmCoreController.BASE_URI)
 public class WcmCoreController extends SpringController<User<Long>, Long> {
-	private static final Logger logger = LogManager.getLogger(WcmCoreController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WcmCoreController.class);
 	public static final String BASE_URI = "/core/api/wcm";
 	@Autowired
 	protected SpringProperties properties;
@@ -55,10 +55,10 @@ public class WcmCoreController extends SpringController<User<Long>, Long> {
         	try {
         		settings = this.wcmRequestHandler.getWcmSystem(repository, workspace, library, siteConfigName, false, request);
         	} catch (WcmRepositoryException e ) {
-    			logger.error(e);
+    			logger.error("Failed to authenticate user", e);
     			throw e;
     		} catch (Throwable t) {
-    			logger.error(t);
+    			logger.error("Failed to authenticate user", t);
     			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
     		}	
         }
@@ -79,10 +79,10 @@ public class WcmCoreController extends SpringController<User<Long>, Long> {
         	try {
         		settings = this.wcmRequestHandler.getWcmSystem(repository, workspace, library, siteConfigName, false, request);
         	} catch (WcmRepositoryException e ) {
-    			logger.error(e);
+        		logger.error("Failed to resolve user profile", e);
     			throw e;
     		} catch (Throwable t) {
-    			logger.error(t);
+    			logger.error("Failed to resolve user profile", t);
     			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
     		}	
         }

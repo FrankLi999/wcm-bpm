@@ -14,48 +14,15 @@
 		<jasypt.version>2.1.1</jasypt.version>
 	</properties>
 	<dependencies>
-	    <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 		<dependency>
-	      	<groupId>org.camunda.bpm</groupId>
-	      	<artifactId>camunda-engine</artifactId>
-	    </dependency>
-		
-    	<!-- Add Log4j2 Dependency -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j2</artifactId>
+				<groupId>org.camunda.bpm</groupId>
+				<artifactId>camunda-engine</artifactId>
 		</dependency>
-		<!-- Needed for Async Logging with Log4j 2 -->
-		<dependency>
-			<groupId>com.lmax</groupId>
-			<artifactId>disruptor</artifactId>
-			<version>3.4.2</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>org.camunda.bpm.springboot</groupId>
-			<artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
-			<version>${camunda.spring-boot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.camunda.bpm.springboot</groupId>
-			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
-			<version>${camunda.spring-boot.version}</version>
-		</dependency>
-		 -->
 		<dependency>
 		  	<groupId>org.camunda.bpm.extension.batch</groupId>
 		  	<artifactId>camunda-bpm-custom-batch-core</artifactId>
@@ -70,13 +37,6 @@
 		    <groupId>org.camunda.bpm</groupId>
 		    <artifactId>camunda-engine-plugin-spin</artifactId>
 		</dependency>
- 		<!-- 
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		-->
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>

@@ -26,8 +26,6 @@ import org.modeshape.common.util.StringUtil;
 
 /**
  * A REST representation of a {@link javax.jcr.query.QueryResult}
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class RestQueryResult { //implements JSONAble {
     private final Map<String, String> columns;

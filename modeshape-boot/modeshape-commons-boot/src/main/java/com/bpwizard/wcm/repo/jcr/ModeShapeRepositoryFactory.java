@@ -21,8 +21,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.jcr.Repository;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.modeshape.jcr.ModeShapeEngine;
 import org.modeshape.jcr.RepositoryConfiguration;
 import org.springframework.beans.factory.FactoryBean;
@@ -30,12 +30,10 @@ import org.springframework.core.io.Resource;
 
 /**
  * {@link FactoryBean} which uses ModeShape to provide {@link Repository} instances
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public class ModeShapeRepositoryFactory implements FactoryBean<Repository> {
 
-    private static final Logger LOG = LogManager.getLogger(ModeShapeRepositoryFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModeShapeRepositoryFactory.class);
     private static final ModeShapeEngine ENGINE = new ModeShapeEngine();
 
     private Resource configuration;
@@ -62,7 +60,7 @@ public class ModeShapeRepositoryFactory implements FactoryBean<Repository> {
 //        
         Future<Boolean> future = ENGINE.shutdown();
         if ( future.get() ) {  // blocks until the engine is shutdown
-        	LOG.info("Shutdown successful");
+        	logger.info("Shutdown successful");
         }
     }
 

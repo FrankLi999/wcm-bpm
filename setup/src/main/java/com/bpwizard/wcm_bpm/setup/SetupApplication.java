@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,8 +22,7 @@ import com.bpwizard.wcm_bpm.setup.config.MysqlConfiguration;
 
 @SpringBootApplication
 public class SetupApplication implements CommandLineRunner {
-//    private static Logger LOG = LoggerFactory
-//    	      .getLogger(SetupApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(SetupApplication.class);
 	@Autowired
 	MysqlConfiguration mysqlConfiguration;
 	
@@ -31,7 +32,7 @@ public class SetupApplication implements CommandLineRunner {
 
 	@Override
     public void run(String... args) {
-        // LOG.info("EXECUTING : command line runner");
+		logger.info("EXECUTING : command line runner");
         
 		String adminUser = mysqlConfiguration.getMysqlAdminUser();
 		String adminPwd = mysqlConfiguration.getMysqlAdminPassword();
@@ -40,31 +41,31 @@ public class SetupApplication implements CommandLineRunner {
 		String mysqlSchema = mysqlConfiguration.getMysqlSchema();
 		
 		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.print(String.format("Enter MYSQL admin user name (%s): ", adminUser));
+			System.out.println(String.format("Enter MYSQL admin user name (%s): ", adminUser));
 			String input = scanner.nextLine();
 			adminUser = StringUtils.hasText(input) ? input : adminUser;
 			
-			System.out.print(String.format("Enter MYSQL admin user password (%s): ", adminPwd));
+			System.out.println(String.format("Enter MYSQL admin user password (%s): ", adminPwd));
 			input = scanner.nextLine();
 			adminPwd = StringUtils.hasText(input) ? input : adminPwd;
 			
-			System.out.print(String.format("Enter MYSQL application user name (%s): ", mysqlUser));
+			System.out.println(String.format("Enter MYSQL application user name (%s): ", mysqlUser));
 			input = scanner.nextLine();
 			mysqlUser = StringUtils.hasText(input) ? input : mysqlUser;
 			
-			System.out.print(String.format("Enter MYSQL application user password (%s): ", mysqlPwd));
+			System.out.println(String.format("Enter MYSQL application user password (%s): ", mysqlPwd));
 			input = scanner.nextLine();
 			mysqlPwd = StringUtils.hasText(input) ? input : mysqlPwd;
 			
-			System.out.print(String.format("Enter MYSQL application schema (%s): ", mysqlSchema));
+			System.out.println(String.format("Enter MYSQL application schema (%s): ", mysqlSchema));
 			input = scanner.nextLine();
 			mysqlSchema = StringUtils.hasText(input) ? input : mysqlSchema;
 		}
-		System.out.println("adminUser:" + adminUser);
-		System.out.println("adminPwd:" + adminPwd);
-		System.out.println("mysqlUser:" + mysqlUser);
-		System.out.println("mysqlPwd:" + mysqlPwd);
-		System.out.println("mysqlSchema:" + mysqlSchema);
+		logger.info("adminUser:" + adminUser);
+		logger.info("adminPwd:" + adminPwd);
+		logger.info("mysqlUser:" + mysqlUser);
+		logger.info("mysqlPwd:" + mysqlPwd);
+		logger.info("mysqlSchema:" + mysqlSchema);
         String mysqlDriverUrl = String.format(
         		"%s/?user=%s&password=%s", 
         		mysqlConfiguration.getMysqlUrl(),
@@ -79,7 +80,7 @@ public class SetupApplication implements CommandLineRunner {
         	} catch (SQLException e) {
         		e.printStackTrace();
         	}
-        	System.out.println("create schema:" + String.format(mysqlConfiguration.getCreateSchemaStatement(), mysqlSchema));
+        	logger.info("create schema:" + String.format(mysqlConfiguration.getCreateSchemaStatement(), mysqlSchema));
         	s.executeUpdate(String.format(mysqlConfiguration.getCreateSchemaStatement(), mysqlSchema));
         	
         	s.executeUpdate(String.format(mysqlConfiguration.getDropUserStatement(), mysqlUser));
@@ -88,6 +89,7 @@ public class SetupApplication implements CommandLineRunner {
         	s.executeUpdate(String.format(mysqlConfiguration.getGrantStatement(), mysqlUser, "%"));
         	s.executeUpdate(mysqlConfiguration.getFlushprivileges());
         } catch (Throwable t) {
+        	logger.error("Error set up wcm database,", t);
         	t.printStackTrace();
         } 
         
@@ -98,19 +100,20 @@ public class SetupApplication implements CommandLineRunner {
         		mysqlUser,
         		mysqlPwd);
         
-        System.out.println("mysqlSchemaDriverUrl:" + mysqlSchemaDriverUrl);
+        logger.info("mysqlSchemaDriverUrl:" + mysqlSchemaDriverUrl);
         try (Connection conn = DriverManager.getConnection(
         		mysqlSchemaDriverUrl);
         		Statement s = conn.createStatement()) {
         	
-        	System.out.println("mysqlSchemaDriverUrl:" + mysqlSchemaDriverUrl);
+        	logger.info("mysqlSchemaDriverUrl:" + mysqlSchemaDriverUrl);
         	ScriptRunner sr = new ScriptRunner(conn);
-        	System.out.println("ScriptRunner:" + sr);
+        	logger.info("ScriptRunner:" + sr);
         	
         	sr.runScript(new FileReader(ResourceUtils.getFile(mysqlConfiguration.getMysqlScript())));
         } catch (Throwable t) {
+        	logger.error("Error set up wcm database,", t);
         	t.printStackTrace();
         } 
-        System.out.println("Done!");
+        logger.info("Done!");
     }
 }

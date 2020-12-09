@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -57,7 +57,7 @@ import com.bpwizard.wcm.repo.validation.ValidateString;
 @Validated
 public class WcmAclRestController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/acl";
-	private static final Logger logger = LogManager.getLogger(WcmAclRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WcmAclRestController.class);
 
 	private static String PRINCIPAL_TYPE_GROUP = "group";
 	private static String PRINCIPAL_TYPE_USER = "user";
@@ -100,19 +100,22 @@ public class WcmAclRestController extends BaseWcmRestController {
 			@RequestBody Grant grant, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			this.grantAcl(grant, repository, workspace);
 			if (this.authoringEnabled) {
 				grantAcl(grant, repository, WcmConstants.DRAFT_WS);
 			}
+			if (logger.isDebugEnabled()) {
+				logger.debug("Exit");
+			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to update grant", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to update grant", t);
 			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.UPDATE_GRANTS_ERROR, null));
 		}	
 	}
@@ -126,18 +129,21 @@ public class WcmAclRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			Session session = this.repositoryManager.getSession(repository, workspace);
 			AccessControlManager acm = session.getAccessControlManager();
 			Grant grant = this.doGetAcl(session, acm, wcmPath);
+			if (logger.isDebugEnabled()) {
+				logger.debug("Exit");
+			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(grant);
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get acl", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get acl", t);
 			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GET_ACL_ERROR, null));
 		}		
 	}
@@ -151,7 +157,7 @@ public class WcmAclRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			Map<String, Grant> libraryGrants = new HashMap<>();
@@ -165,19 +171,22 @@ public class WcmAclRestController extends BaseWcmRestController {
 			libraryGrants.put("contentAreaLayout", this.doGetAcl(session, acm, String.format("%s/contentAreaLayout", wcmPath)));
 			libraryGrants.put("category", this.doGetAcl(session, acm, String.format("%s/category", wcmPath)));
 			libraryGrants.put("workflow", this.doGetAcl(session, acm, String.format("%s/workflow", wcmPath)));
+			if (logger.isDebugEnabled()) {
+				logger.debug("Exit");
+			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(libraryGrants);
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get library acl", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get library acl", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
 	
 	@GetMapping(path = "/groups", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String[]> getUGroups(
+	public ResponseEntity<String[]> getGroups(
 			@RequestParam(name="filter", defaultValue = "") String filter,
 		    @RequestParam(name="sort", defaultValue = "asc") 
 			@ValidateString(acceptedValues={"asc", "desc"}, message="Sort order can only be asc or desc")
@@ -186,20 +195,22 @@ public class WcmAclRestController extends BaseWcmRestController {
 		    @RequestParam(name="pageSize", defaultValue = "10") @Min(3) @Max(100) int pageSize,
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
-		
+		if (logger.isDebugEnabled()) {
+			logger.debug("Entry");
+		}
 		try {
 			Sort sort = "asc".equals(sortDirection) ? Sort.by("name").ascending() : Sort.by("name").descending();
 			Pageable pageable = (pageIndex < 0) ? pageable = UnpagedSort.of(sort) : PageRequest.of(pageIndex, pageSize, sort); 
 			String roles[] = this.roleService.findAllRoleNames(pageable).stream().toArray(String[]::new);
 			if (logger.isDebugEnabled()) {
-				logger.traceEntry();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(roles);
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get grroup", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get grroup", t);
 			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GET_GROUPS_ERROR, null));
 		}	
 	}
@@ -216,7 +227,7 @@ public class WcmAclRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {	
 			String users[] = null;
@@ -224,15 +235,15 @@ public class WcmAclRestController extends BaseWcmRestController {
 			Pageable pageable = (pageIndex < 0) ? pageable = UnpagedSort.of(sort) : PageRequest.of(pageIndex, pageSize, sort);
 			this.userService.findAllNames(pageable).stream().toArray(String[]::new);
 			if (logger.isDebugEnabled()) {
-				logger.traceEntry();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(users);
 				
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get user", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get user", t);
 			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GET_USERS_ERROR, null));
 		}	
 	}

@@ -1,10 +1,10 @@
 package com.bpwizard.bpm.wcm.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import com.bpwizard.bpm.wcm.client.model.PublishItemRequest;
 
 public class PublishContentItemDelegate implements JavaDelegate {
-	private static final Logger logger = LogManager.getLogger(PublishContentItemDelegate.class);
+	private static final Logger logger = LoggerFactory.getLogger(PublishContentItemDelegate.class);
 	
 	@Autowired
 	RestTemplate restTemplate;
@@ -23,7 +23,7 @@ public class PublishContentItemDelegate implements JavaDelegate {
 	@Override
 	public void execute(DelegateExecution delegate) throws Exception {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String repository = (String) delegate.getVariable("repository");
@@ -41,7 +41,7 @@ public class PublishContentItemDelegate implements JavaDelegate {
 				throw new BpmnError("WCM_ERROR_PUBLISH");
 			}
 	        if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 		} catch (BpmnError e) {
 			logger.error("WCM_ERROR_PUBLISH", e);

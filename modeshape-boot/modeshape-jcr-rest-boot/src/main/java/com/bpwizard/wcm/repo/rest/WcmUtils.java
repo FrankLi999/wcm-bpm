@@ -20,8 +20,8 @@ import javax.jcr.nodetype.NodeTypeTemplate;
 import javax.jcr.nodetype.PropertyDefinitionTemplate;
 import javax.jcr.version.OnParentVersionAction;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -69,7 +69,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 @Component
 public class WcmUtils {
-	private static final Logger logger = LogManager.getLogger(WcmUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(WcmUtils.class);
 	
 	@Autowired
 	private RestWcmItemHandler wcmItemHandler;
@@ -388,7 +388,7 @@ public class WcmUtils {
 			String baseUrl) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String absPath = WcmUtils.nodePath(wcmAtPath);
 		try {
@@ -398,17 +398,17 @@ public class WcmUtils {
 			
 			AuthoringTemplate at = this.toAuthoringTemplate(atNode, repository, workspace, library);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return at;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to get AT", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_AT_ERROR, new String[] {absPath}));
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to get AT", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get AT", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -420,7 +420,7 @@ public class WcmUtils {
 			String baseUrl) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String absPath = WcmUtils.nodePath(wcmAtPath);
 		try {
@@ -430,17 +430,17 @@ public class WcmUtils {
 			
 			Form form = this.toForm(atNode, repository, workspace, library);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return form;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to get Form", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_FORM_ERROR, new String[] {absPath}));
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to get Form", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get Form", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}

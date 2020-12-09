@@ -23,8 +23,6 @@ import com.bpwizard.wcm.repo.rest.RestHelper;
 
 /**
  * A REST representation of a collection of {@link Workspace workspaces}
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class RestWorkspaces { //implements JSONAble {
 

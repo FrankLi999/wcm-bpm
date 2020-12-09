@@ -4,8 +4,8 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 @RequestMapping(ContentItemRestController.BASE_URI)
 @Validated
 public class ContentItemRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(ContentItemRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ContentItemRestController.class);
 	
 	public static final String BASE_URI = "/wcm/api/contentItem";
 
@@ -50,7 +50,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			contentItem.getProperties().setAuthor(WcmUtils.getCurrentUsername());
@@ -70,18 +70,18 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to create content item", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to create content item", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_PUBLISH_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to create content item", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -108,13 +108,13 @@ public class ContentItemRestController extends BaseWcmRestController {
 			this.wcmUtils.unlock(contentItem.getRepository(), contentItem.getWorkspace(), absPath);
 			
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to update content item", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to update content item", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_CONTENT_ITEM_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to update content item", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -138,23 +138,23 @@ public class ContentItemRestController extends BaseWcmRestController {
 		    HttpServletRequest request) 
 		    throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			this.wcmRequestHandler.lock(repository, workspace, absPath);
 			ContentItem contentItem = this.getContentItem(repository, workspace, absPath, request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return contentItem;
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to lock content item", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to lock content item", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to lock content item", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -166,7 +166,7 @@ public class ContentItemRestController extends BaseWcmRestController {
   			@RequestParam("path") String wcmPath,
   			HttpServletRequest request) { 
   		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
@@ -175,7 +175,7 @@ public class ContentItemRestController extends BaseWcmRestController {
   			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.contentItem, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
-  				logger.traceExit();
+  				logger.debug("Exit");
   			}
   	  		
   			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -183,7 +183,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to purge content item", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 

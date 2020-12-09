@@ -5,8 +5,8 @@ import java.io.InputStream;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 @RestController
 @RequestMapping(WcmImportController.BASE_URI)
 public class WcmImportController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(WcmSystemRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WcmSystemRestController.class);
 	public static final String BASE_URI = "/wcm/api/import";
 	
 	@Autowired

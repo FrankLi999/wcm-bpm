@@ -17,8 +17,8 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.modeshape.jcr.api.query.Query;
 import org.modeshape.web.jcr.RepositoryManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +117,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Component
 public class WcmRequestHandler {
-	private static final Logger logger = LogManager.getLogger(WcmRequestHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(WcmRequestHandler.class);
 	@Value("${bpw.modeshape.authoring.enabled:true}")
 	protected boolean authoringEnabled = true;
 
@@ -156,7 +156,7 @@ public class WcmRequestHandler {
 			throws RepositoryException, WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 		WcmSystem wcmSystem = new WcmSystem();
@@ -204,7 +204,7 @@ public class WcmRequestHandler {
 		wcmSystem.setSiteAreas(siteAreas);
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return wcmSystem;
 		
@@ -212,7 +212,7 @@ public class WcmRequestHandler {
 	
 	public WcmRepository[] getWcmRepositories(HttpServletRequest request) throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 
 		String baseUrl = RestHelper.repositoryUrl(request);
@@ -223,7 +223,7 @@ public class WcmRequestHandler {
 				.toArray(WcmRepository[]::new);
 
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return wcmRepositories;
 		
@@ -234,7 +234,7 @@ public class WcmRequestHandler {
 			String workspace, 
 			HttpServletRequest request) throws RepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 		String baseUrl = RestHelper.repositoryUrl(request);
@@ -245,7 +245,7 @@ public class WcmRequestHandler {
 				.map(this::supportedOpertionsToWcmOperation)
 				.collect(Collectors.toMap(wcmOperations -> wcmOperations[0].getJcrType(), Function.identity()));
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return wcmOperationMap;
 		
@@ -256,14 +256,14 @@ public class WcmRequestHandler {
 			String workspace,
 			HttpServletRequest request) throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String baseUrl = RestHelper.repositoryUrl(request);
 		Theme[] themes = this.getThemeLibraries(repository, workspace, baseUrl)
 				.flatMap(theme -> this.getThemes(theme, baseUrl)).toArray(Theme[]::new);
 
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return themes;
 	}
@@ -276,7 +276,7 @@ public class WcmRequestHandler {
 			return bpwizardNode.getChildren().stream().filter(this::isLibrary).filter(this::notSystemLibrary)
 					.map(node -> toThemeWithLibrary(node, repository, workspace));
 		} catch (RepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get theme", e);
 			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
@@ -287,7 +287,7 @@ public class WcmRequestHandler {
 					String.format(WcmConstants.NODE_THEME_ROOT_PATH_PATTERN, theme.getLibrary()), WcmConstants.READ_DEPTH_DEFAULT);
 			return themeNode.getChildren().stream().filter(this::isTheme).map(node -> this.toTheme(node, theme));
 		} catch (RepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get theme", e);
 			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_THEME_ERROR, null));
 
 		}
@@ -338,7 +338,7 @@ public class WcmRequestHandler {
 			wcmRepository.setWorkspaces(wcmWorkspaces);
 			return wcmRepository;
 		} catch (RepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get repository", e);
 			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_REPO_ERROR, null));
 		}		
 	}
@@ -362,7 +362,7 @@ public class WcmRequestHandler {
 						 return wcmLibrary;
 					}).toArray(WcmLibrary[]::new);
 		} catch (RepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get library", e);
 			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_LIBS_ERROR, null));
 
 		}
@@ -413,12 +413,12 @@ public class WcmRequestHandler {
 	public AuthoringTemplate getAuthoringTemplate(String repository, String workspace, String atPath,
 			HttpServletRequest request) throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String baseUrl = RestHelper.repositoryUrl(request);
 		AuthoringTemplate at = this.wcmUtils.getAuthoringTemplate(repository, workspace, atPath, baseUrl);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return at;
 	}
@@ -2856,7 +2856,7 @@ public class WcmRequestHandler {
 		    HttpServletRequest request) 
 		    throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String absPath = wcmPath.startsWith("/library")? wcmPath : WcmUtils.nodePath(wcmPath);
 		try {
@@ -2867,14 +2867,14 @@ public class WcmRequestHandler {
 			
 			ContentItem contentItem = this.toContentItem(contentItemNode, repository, workspace, wcmPath, request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return contentItem;
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to get content item", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get content item", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -2953,7 +2953,7 @@ public class WcmRequestHandler {
 							try {
 							elements.put(property.getName(), JsonUtils.readTree(values));
 							} catch(JsonProcessingException e) {
-								logger.error(e);
+								logger.error("Failed to retrieve content item", e);
 								throw new WcmRepositoryException(WcmError.WCM_ERROR);
 							}
 						} else {
@@ -3029,7 +3029,7 @@ public class WcmRequestHandler {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String repositoryName = library.getRepository();
@@ -3044,14 +3044,14 @@ public class WcmRequestHandler {
 					library.toJson());
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 	
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to create library", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to create library", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -3101,17 +3101,17 @@ public class WcmRequestHandler {
 			
 			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.query, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to create query statement", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to create query statement", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_QUERY_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to create query statement", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}

@@ -32,7 +32,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.camunda.bpm.engine.AuthorizationService;
 import org.camunda.bpm.engine.FilterService;
@@ -46,13 +45,15 @@ import org.camunda.bpm.engine.authorization.Resources;
 import org.camunda.bpm.engine.filter.Filter;
 import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity;
 import org.camunda.bpm.engine.task.TaskQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
-import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
-import com.bpwizard.spring.boot.commons.service.repo.domain.RoleRepository;
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
-import com.bpwizard.spring.boot.commons.service.repo.domain.UserRepository;
+import com.bpwizard.spring.boot.commons.service.domain.Role;
+import com.bpwizard.spring.boot.commons.service.domain.RoleService;
+import com.bpwizard.spring.boot.commons.service.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.UserService;
 
 /**
  * Creates demo credentials to be used in the invoice showcase.
@@ -61,49 +62,49 @@ import com.bpwizard.spring.boot.commons.service.repo.domain.UserRepository;
  */
 public class DemoDataGenerator {
 
-	private final static Logger LOGGER = Logger.getLogger(DemoDataGenerator.class.getName());
+	private final static Logger logger = LoggerFactory.getLogger(DemoDataGenerator.class.getName());
 
-	private RoleRepository roleRepository;
-	private UserRepository userRepository;
+	private RoleService<Role, Long> roleService;
+	private UserService<User<Long>, Long> userService;
 	private PasswordEncoder passwordEncoder;
 
-	public DemoDataGenerator(RoleRepository roleRepository, UserRepository userRepository,
+	public DemoDataGenerator(RoleService<Role, Long> roleService, UserService<User<Long>, Long> userService,
 			PasswordEncoder passwordEncoder) {
-		this.roleRepository = roleRepository;
-		this.userRepository = userRepository;
+		this.roleService = roleService;
+		this.userService = userService;
 		this.passwordEncoder = passwordEncoder;
 	}
 
 	public boolean createUsers(ProcessEngine engine) {
 
-		if (this.userRepository.findByEmail("demo@example.com").isPresent()) {
-			LOGGER.info("Demo users have been created");
+		if (this.userService.findByEmail("demo@example.com").isPresent()) {
+			logger.info("Demo users have been created");
 			return false;
 		}
-		LOGGER.info("Generating demo data for invoice showcase");
+		logger.info("Generating demo data for invoice showcase");
 		Map<String, Role> roles = new HashMap<>();
 		roles.put("sales", this.createRole("sales"));
 		roles.put("accounting", this.createRole("accounting"));
 		roles.put("management", this.createRole("management"));
 
-		Role adminRole = roleRepository.findByName(Groups.CAMUNDA_ADMIN).get();
+		Role adminRole = roleService.findByName(Groups.CAMUNDA_ADMIN).get();
 		if (adminRole == null) {
 			adminRole = this.createRole(Groups.CAMUNDA_ADMIN);
 		}
 		roles.put(Groups.CAMUNDA_ADMIN, adminRole);
-		Role viewerRole = roleRepository.findByName("wcm-viewer").get();
+		Role viewerRole = roleService.findByName("wcm-viewer").get();
 		if (viewerRole == null) {
 			viewerRole = this.createRole("wcm-viewer");
 		}
 		roles.put("wcm-viewer", viewerRole);
 		
-		Role reviewerRole = roleRepository.findByName("wcm-reviewer").get();
+		Role reviewerRole = roleService.findByName("wcm-reviewer").get();
 		if (reviewerRole == null) {
 			reviewerRole = this.createRole("wcm-reviewer");
 		}
 		roles.put("wcm-reviewer", reviewerRole);
 
-		Role admin = roleRepository.findByName("admin").get();
+		Role admin = roleService.findByName("admin").get();
 		if (admin == null) {
 			admin = this.createRole("admin");
 		}
@@ -358,12 +359,12 @@ public class DemoDataGenerator {
 		variables.add(variable);
 	}
 
-	protected User createUser(String email, String name, String firstName, String lastName, String password,
+	protected User<Long> createUser(String email, String name, String firstName, String lastName, String password,
 			String[] roleNames, Map<String, Role> roles) {
-		LOGGER.info("Creating the initial user: " + name);
+		logger.info("Creating the initial user: " + name);
 
 		// create the user
-		User newUser = new User();
+		User<Long> newUser = new User<Long>();
 		newUser.setName(name);
 		newUser.setEmail(email);
 		if (StringUtils.hasText(firstName)) {
@@ -376,10 +377,10 @@ public class DemoDataGenerator {
 
 		for (String rolename : roleNames) {
 			if (null != roles.get(rolename)) {
-				newUser.getRoles().add(roles.get(rolename));
+				newUser.getRoles().add(roles.get(rolename).getName());
 			}
 		}
-		userRepository.save(newUser);
+		userService.create(newUser);
 		return newUser;
 	}
 
@@ -387,7 +388,7 @@ public class DemoDataGenerator {
 		Role role = new Role();
 		role.setName(roleName);
 		// role =
-		roleRepository.save(role);
+		roleService.save(role);
 		return role;
 	}
 }

@@ -42,8 +42,6 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 
 /**
  * Class which handles incoming requests related to {@link Binary binary values}
- *
- * @author Horia Chiorean
  */
 @Component
 public final class RestBinaryHandler extends AbstractHandler {

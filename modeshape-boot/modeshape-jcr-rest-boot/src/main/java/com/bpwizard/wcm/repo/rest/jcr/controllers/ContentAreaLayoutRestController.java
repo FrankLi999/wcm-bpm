@@ -5,8 +5,8 @@ import java.util.Map;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 @RequestMapping(ContentAreaLayoutRestController.BASE_URI)
 @Validated
 public class ContentAreaLayoutRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(ContentAreaLayoutRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ContentAreaLayoutRestController.class);
 	
 	public static final String BASE_URI = "/wcm/api/contentAreaLayout";
 	
@@ -50,12 +50,12 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			Map<String, ContentAreaLayout> contentAreaLayouts = this.wcmRequestHandler.getContentAreaLayouts(repository, workspace, request);	
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return contentAreaLayouts;
 		} catch (WcmRepositoryException e ) {
@@ -98,13 +98,13 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			this.wcmRequestHandler.lock(repository, workspace, absPath);
 			ContentAreaLayout contentAreaLayout = this.getContentAreaLayout(repository, workspace, absPath, request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return contentAreaLayout;
 		} catch (WcmRepositoryException e ) {
@@ -122,7 +122,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			HttpServletRequest request)
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 
@@ -131,7 +131,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			String path = String.format( WcmConstants.NODE_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
 			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.contentAreaLayout, baseUrl, repositoryName, pageLayout.getWorkspace(), path, pageLayout.toJson());
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -148,7 +148,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			HttpServletRequest request)
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String absPath = String.format( WcmConstants.NODE_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
 		try {
@@ -159,7 +159,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.contentAreaLayout, baseUrl, repositoryName, pageLayout.getWorkspace(), absPath, layoutJson);
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 		} catch (WcmRepositoryException e ) {
 			throw e;
@@ -177,7 +177,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
   			@RequestParam("path") String wcmPath,
   			HttpServletRequest request) { 
   		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+  			logger.debug("Entry");
 		}
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
@@ -186,7 +186,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
   			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.contentAreaLayout, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
-  				logger.traceExit();
+  	  		logger.debug("Exit");
   			}
   	  		
   			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -194,7 +194,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to purge content", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 

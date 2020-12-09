@@ -6,8 +6,8 @@ import java.util.List;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -40,7 +40,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 @Validated
 public class CollectorController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/collector";
-	private static final Logger logger = LogManager.getLogger(CollectorController.class);
+	private static final Logger logger = LoggerFactory.getLogger(CollectorController.class);
 	
 	@Autowired
 	private CollectorService collectorService;
@@ -52,7 +52,7 @@ public class CollectorController extends BaseWcmRestController {
 	private WcmRequestHandler wcmRequestHandler;
 	
 	@PostMapping(path = "/{repository}/{workspace}/element", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<?> colelctElement(
+	public ResponseEntity<?> collectElement(
 			@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace,
     		@RequestParam(name="id", required=true) String id,
@@ -61,7 +61,7 @@ public class CollectorController extends BaseWcmRestController {
     		@RequestParam("content") MultipartFile content,
 			HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			JcrNode jcrNode = new JcrNode();
@@ -75,11 +75,11 @@ public class CollectorController extends BaseWcmRestController {
 			}
 			
 		} catch (Throwable t) {
-	    	logger.error(t);
+			logger.error("Failed to collect element",t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -101,7 +101,7 @@ public class CollectorController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			for (String removed: removedDescendants) {
@@ -123,14 +123,14 @@ public class CollectorController extends BaseWcmRestController {
 				this.wcmUtils.registerNodeType(at.getWorkspace(), at);
 			}
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to collect items", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to collect items", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -138,11 +138,11 @@ public class CollectorController extends BaseWcmRestController {
 	@GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Collector>> getCollectors() {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		List<Collector> collectors = collectorService.getCollectors();
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.ok(collectors);
 	}
@@ -150,11 +150,11 @@ public class CollectorController extends BaseWcmRestController {
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Collector> getCollector(@PathVariable("id") long id) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		Collector collector = collectorService.getCollector(id);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.ok(collector);
 	}
@@ -165,11 +165,11 @@ public class CollectorController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		collectorService.createCollector(collector);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -180,11 +180,11 @@ public class CollectorController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		collectorService.updateColelctor(updateCollectorRequest);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.accepted().build();
 	}
@@ -195,11 +195,11 @@ public class CollectorController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		collectorService.deleteCollector(id);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.accepted().build();
 	}

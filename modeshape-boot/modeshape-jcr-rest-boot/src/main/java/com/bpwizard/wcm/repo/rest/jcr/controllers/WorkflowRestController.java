@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,7 +44,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 @RequestMapping(WorkflowRestController.BASE_URI)
 @Validated
 public class WorkflowRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(WorkflowRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WorkflowRestController.class);
 
 	public static final String BASE_URI = "/wcm/api/bpmnWorkflow";
 
@@ -59,7 +59,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 //			throws WcmRepositoryException {
 //
 //		if (logger.isDebugEnabled()) {
-//			logger.traceEntry();
+//			logger.debug("Entry");
 //		}
 //		try {
 //			String baseUrl = RestHelper.repositoryUrl(request);
@@ -70,7 +70,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 //			bpmnWorkflow.setWorkspace(workspace);
 //			bpmnWorkflow.setLibrary(nodePath.split("/", 5)[3]);
 //			if (logger.isDebugEnabled()) {
-//				logger.traceExit();
+//				logger.debug("Exit");
 //			}
 //			return bpmnWorkflow;
 //		} catch (WcmRepositoryException e ) {
@@ -94,7 +94,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 
 		try {
@@ -109,11 +109,11 @@ public class WorkflowRestController extends BaseWcmRestController {
 				Arrays.sort(bpmnWorkflows, Collections.reverseOrder());
 			}
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(bpmnWorkflows);
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to load bpmn workflow", e);
 			throw e;
 		}
 	}
@@ -124,7 +124,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String absPath = String.format(WcmConstants.NODE_WORKFLOW_PATH_PATTERN, bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
 		try {
@@ -137,17 +137,17 @@ public class WorkflowRestController extends BaseWcmRestController {
 				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, absPath, absPath, true);
 			}
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to create bpmn workflow", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to create bpmn workflow", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_WORKFLOW_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to create bpmn workflow", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -156,7 +156,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 	public void saveBpmnWorkflow(@RequestBody BpmnWorkflow bpmnWorkflow, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String absPath = String.format(WcmConstants.NODE_WORKFLOW_PATH_PATTERN, bpmnWorkflow.getLibrary(), bpmnWorkflow.getName());
 		try {
@@ -167,16 +167,16 @@ public class WorkflowRestController extends BaseWcmRestController {
 			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.workflow, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to save bpmn workflow", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to save bpmn workflow", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_WORKFLOW_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to save bpmn workflow", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -188,7 +188,7 @@ public class WorkflowRestController extends BaseWcmRestController {
   			@RequestParam("path") String wcmPath,
   			HttpServletRequest request) { 
   		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
@@ -197,7 +197,7 @@ public class WorkflowRestController extends BaseWcmRestController {
   			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.workflow, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
-  				logger.traceExit();
+  				logger.debug("Exit");
   			}
   	  		
   			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -205,7 +205,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to purge bpmn workflow", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 
@@ -219,7 +219,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			return atNode.getChildren().stream().filter(this.wcmRequestHandler::isBpmnWorkflow)
 					.map(node -> this.toBpmnWorkflow(node, at.getRepository(), at.getWorkspace(), at.getLibrary()));
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to get bpmn workflow", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_WORKFLOW_ERROR, new String[] {baseUrl}));
 		}
 	}
@@ -233,7 +233,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 					.filter(this.wcmRequestHandler::notSystemLibrary)
 					.map(node -> toBpmnWorkflowWithLibrary(node, repository, workspace));
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to get bpmn workflow", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}

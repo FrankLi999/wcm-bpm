@@ -9,8 +9,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,7 +47,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class ResourceLibraryRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api/library";
-	private static final Logger logger = LogManager.getLogger(ResourceLibraryRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ResourceLibraryRestController.class);
 	
 	@Autowired
 	private WcmRequestHandler wcmRequestHandler;
@@ -67,7 +67,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 					throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -85,17 +85,17 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 				Arrays.sort(libraries, Collections.reverseOrder());
 			}			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(libraries);
 		} catch (RepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get library", e);
 			throw new WcmRepositoryException(e, new WcmError(e.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to get library", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get library", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -106,12 +106,12 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 		wcmRequestHandler.createLibrary(library, request);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}	
@@ -122,7 +122,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String repositoryName = library.getRepository();
@@ -139,15 +139,15 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 					jsonItem);
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 	
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to save library", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to save library", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -158,7 +158,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String baseUrl = RestHelper.repositoryUrl(request);
 		String absPath = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName()); 
@@ -174,11 +174,11 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
 		} catch (Throwable t) {
-	    	logger.error(t);
+			logger.error("Failed to delete library", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 	}
 	

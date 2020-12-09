@@ -44,8 +44,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 /**
  * An extension to the {@link ItemHandler} which is used by {@link org.modeshape.web.jcr.rest.ModeShapeRestService} to interact
  * with properties and nodes.
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 @Component
 public final class RestItemHandler extends ItemHandler {

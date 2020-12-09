@@ -1,7 +1,7 @@
 package com.bpwizard.wcm.repo.config;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +29,7 @@ import com.bpwizard.spring.boot.commons.service.domain.User;
 @AutoConfigureBefore({AutoConfiguration.class})
 public class AppSecurityConfig extends SpringJpaSecurityConfig {
 	
-	private static final Logger logger = LogManager.getLogger(AppSecurityConfig.class);
+	private static final Logger logger = LoggerFactory.getLogger(AppSecurityConfig.class);
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;

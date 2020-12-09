@@ -21,8 +21,6 @@ import java.util.List;
 
 /**
  * A REST representation of the {@link javax.jcr.Property}
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class RestProperty extends RestItem {
 

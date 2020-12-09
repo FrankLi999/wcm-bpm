@@ -5,8 +5,8 @@ import java.util.Map;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 @RequestMapping(AuthoringTemplateRestController.BASE_URI)
 @Validated
 public class AuthoringTemplateRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(AuthoringTemplateRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthoringTemplateRestController.class);
 
 	public static final String BASE_URI = "/wcm/api/at";
 	@Autowired
@@ -45,20 +45,20 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			Map<String, AuthoringTemplate> authoringTemplates = this.wcmRequestHandler.getAuthoringTemplates(repository, workspace, request);
 	
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return authoringTemplates;
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get AT", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get AT", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -71,11 +71,11 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(repository, workspace, atPath, request);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return at;
 	}
@@ -89,23 +89,23 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			this.wcmRequestHandler.lock(repository, workspace, absPath);
 			AuthoringTemplate at = this.getAuthoringTemplate(repository, workspace, absPath, request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return at;
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to lock AT", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to lock AT", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to lock AT", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -119,23 +119,23 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(repository, workspace, atPath, request);
 			this.wcmUtils.registerNodeType(at.getWorkspace(), at);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to create AT jcr", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to create AT jcr", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to create AT jcr", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -146,7 +146,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -159,17 +159,17 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 				this.wcmUtils.registerNodeType(WcmConstants.EXPIRED_WS, at);
 			}
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to create AT", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to create AT", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to create AT", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -179,7 +179,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			@RequestBody AuthoringTemplate at, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -195,17 +195,17 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			}
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to save AT", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to save AT", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_AT_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to save AT", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -217,7 +217,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
   			@RequestParam("path") String wcmPath,
   			HttpServletRequest request) { 
   		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
@@ -232,7 +232,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 	  		
   			//TODO: delete the corresponding JCR type also.
   	  		if (logger.isDebugEnabled()) {
-  				logger.traceExit();
+  				logger.debug("Exit");
   			}
   	  		
   			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -240,7 +240,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to purge AT", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 

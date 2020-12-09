@@ -31,8 +31,6 @@ import org.modeshape.web.jcr.WebLogger;
 
 /**
  * REST Easy {@link ContainerRequestFilter} which will print out various logging information in DEBUG mode.
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public class LoggingFilter implements Filter {
 

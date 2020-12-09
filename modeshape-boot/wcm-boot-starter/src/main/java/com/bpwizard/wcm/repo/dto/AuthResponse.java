@@ -29,7 +29,7 @@ public class AuthResponse {
     	authResponse.setLastName(user.getLastName());
     	authResponse.setExpireIn(expireIn);
     	authResponse.setSessionId(sessionId);
-    	authResponse.setRoles(user.getRoles().stream().map(Role::getName).toArray(String[]::new));
+    	authResponse.setRoles(user.getRoles().stream().toArray(String[]::new));
     	return authResponse;
     }
 

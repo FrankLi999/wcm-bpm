@@ -18,8 +18,6 @@ package com.bpwizard.wcm.repo.rest.modeshape.model;
 
 /**
  * A REST representation of a query plan.
- * 
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class RestQueryPlanResult { //implements JSONAble, Stringable {
     private final String plan;

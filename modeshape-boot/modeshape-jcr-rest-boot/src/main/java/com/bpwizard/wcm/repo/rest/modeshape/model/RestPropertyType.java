@@ -22,8 +22,6 @@ import javax.jcr.version.OnParentVersionAction;
 
 /**
  * A REST representation of a {@link PropertyDefinition}
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class RestPropertyType { //implements JSONAble {
 

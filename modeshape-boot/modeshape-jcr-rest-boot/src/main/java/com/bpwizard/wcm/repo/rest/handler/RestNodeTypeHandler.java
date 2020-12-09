@@ -37,7 +37,6 @@ import com.bpwizard.wcm.repo.rest.modeshape.model.RestNodeType;
 /**
  * Class which handles {@link NodeType} operations for incoming http requests on {@link org.modeshape.web.jcr.rest.ModeShapeRestService}
  *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 @Component
 public final class RestNodeTypeHandler extends AbstractHandler {

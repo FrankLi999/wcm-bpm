@@ -18,8 +18,6 @@ package com.bpwizard.wcm.repo.rest.modeshape.model;
 
 /**
  * A REST representation of a {@link javax.jcr.Item}
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public abstract class RestItem implements HasName { //implements JSONAble {
 

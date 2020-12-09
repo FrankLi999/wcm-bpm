@@ -20,8 +20,8 @@ import java.util.Map;
 
 import javax.jcr.Credentials;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.modeshape.jcr.ExecutionContext;
 import org.modeshape.jcr.security.AuthenticationProvider;
 import org.modeshape.jcr.security.AuthorizationProvider;
@@ -33,7 +33,7 @@ import org.springframework.security.core.Authentication;
  */
 public class SpringSecurityProvider implements AuthenticationProvider, AuthorizationProvider {
 
-    final static Logger logger = LogManager.getLogger(SpringSecurityProvider.class);
+    final static Logger logger = LoggerFactory.getLogger(SpringSecurityProvider.class);
 
     @Override
     public ExecutionContext authenticate(Credentials credentials,

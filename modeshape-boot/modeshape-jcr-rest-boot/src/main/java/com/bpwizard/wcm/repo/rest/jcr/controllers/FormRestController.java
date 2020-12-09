@@ -5,8 +5,8 @@ import java.util.Map;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 @RequestMapping(FormRestController.BASE_URI)
 @Validated
 public class FormRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(FormRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(FormRestController.class);
 
 	public static final String BASE_URI = "/wcm/api/form";
 	
@@ -47,20 +47,20 @@ public class FormRestController extends BaseWcmRestController {
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			Map<String, Form> forms = this.wcmRequestHandler.getForms(repository, workspace, request);
 	
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return forms;
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to get form", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get form", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -73,18 +73,21 @@ public class FormRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			Form form = this.wcmRequestHandler.getForm(repository, workspace, formPath, request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return form;
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to get form", e);
 			throw e;
-		} 
+		} catch (Throwable t) {
+			logger.error("Failed to get form", t);
+			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
+		}	
 	}
 	
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -93,7 +96,7 @@ public class FormRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -101,17 +104,17 @@ public class FormRestController extends BaseWcmRestController {
 			String repositoryName = form.getRepository();
 			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.form, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, form.toJson());
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to create form", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to create form", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_FORM_ERROR, null));
 	    } catch (Throwable t) {
-			logger.error(t);
+	    	logger.error("Failed to create form", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -121,7 +124,7 @@ public class FormRestController extends BaseWcmRestController {
 			@RequestBody Form form, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -132,17 +135,17 @@ public class FormRestController extends BaseWcmRestController {
 			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.form, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, formJson);
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to save form", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to save form", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_FORM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to save form", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -154,7 +157,7 @@ public class FormRestController extends BaseWcmRestController {
   			@RequestParam("path") String wcmPath,
   			HttpServletRequest request) { 
   		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
@@ -163,7 +166,7 @@ public class FormRestController extends BaseWcmRestController {
   			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.form, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
-  				logger.traceExit();
+  				logger.debug("Exit");
   			}
   	  		
   			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -171,7 +174,7 @@ public class FormRestController extends BaseWcmRestController {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to purge form", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 

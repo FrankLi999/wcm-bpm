@@ -9,8 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Service
 public class WcmEventHandler {
-	private static final Logger logger = LogManager.getLogger(SyndicatorService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SyndicatorService.class);
 	
 	@Autowired
 	private WcmEventService wcmEventService;
@@ -268,14 +268,14 @@ public class WcmEventHandler {
 	
 	public void populateDescendantIds(RestNode restNode, Set<String> nodeIds) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		for (RestNode child: restNode.getChildren()) {
 			nodeIds.add(child.getId());
 			populateDescendantIds(child, nodeIds);
 		}
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 	}
 

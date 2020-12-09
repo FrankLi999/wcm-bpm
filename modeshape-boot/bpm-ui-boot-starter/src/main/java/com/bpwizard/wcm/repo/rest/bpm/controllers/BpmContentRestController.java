@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +34,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 @RequestMapping(BpmContentRestController.BASE_URI)
 @Validated
 public class BpmContentRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(BpmContentRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BpmContentRestController.class);
 
 	public static final String BASE_URI = "/bpm/content";
 
@@ -47,7 +47,7 @@ public class BpmContentRestController extends BaseWcmRestController {
 			@RequestParam(name="wcmPath") final String wcmPath,
 			HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -73,11 +73,11 @@ public class BpmContentRestController extends BaseWcmRestController {
 					.map(this::toBpmApplication).collect(Collectors.toList());
 			bpmApplications.setBpmApplications(applications);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return bpmApplications;
 		} catch (RepositoryException ex) {
-			logger.error(ex);
+			logger.error("Failed to get BPM Applications", ex);
 			throw new WcmRepositoryException(ex, WcmError.createWcmError(ex.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
@@ -87,7 +87,7 @@ public class BpmContentRestController extends BaseWcmRestController {
 			@RequestParam(name="wcmPath") final String wcmPath,
 			HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -113,11 +113,11 @@ public class BpmContentRestController extends BaseWcmRestController {
 					.collect(Collectors.toList());
 			bpmLinks.setBpmLinks(links);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return bpmLinks;
 		} catch (RepositoryException ex) {
-			logger.error(ex);
+			logger.error("Failed to get BPM Links", ex);
 			throw new WcmRepositoryException(ex, WcmError.createWcmError(ex.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}
@@ -126,7 +126,7 @@ public class BpmContentRestController extends BaseWcmRestController {
 	public List<Resource> getResources(
 			HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -139,11 +139,11 @@ public class BpmContentRestController extends BaseWcmRestController {
 					.collect(Collectors.toList());
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return resources;
 		} catch (RepositoryException ex) {
-			logger.error(ex);
+			logger.error("Failed to get BPM resources", ex);
 			throw new WcmRepositoryException(ex, WcmError.createWcmError(ex.getMessage(), WcmErrors.GET_NODE_ERROR, null));
 		}
 	}

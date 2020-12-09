@@ -11,8 +11,8 @@ import javax.jcr.version.VersionManager;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,7 +60,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 @RequestMapping(ContentItemWorkflowRestController.BASE_URI)
 @Validated
 public class ContentItemWorkflowRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(ContentItemWorkflowRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ContentItemWorkflowRestController.class);
 	
 	public static final String BASE_URI = "/wcm/api/contentItem";
 
@@ -79,12 +79,12 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		contentItem.getProperties().setAuthor(WcmUtils.getCurrentUsername());
 		if (!this.authoringEnabled) {
 			if (logger.isDebugEnabled()) {
-				logger.traceExit("Authring is not enabled");
+				logger.debug("Exit. Authring is not enabled");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
@@ -107,13 +107,13 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 				ModeshapeUtils.grantPermissions(session, absPath, at.getContentItemAcl().getOnSaveDraftPermissions());
 			}
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to create draft", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to create draft", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to create draft", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 		try {
@@ -145,7 +145,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.contentItem, baseUrl, contentItem.getRepository(), WcmConstants.DRAFT_WS, absPath, contentItem.toJson(at));
 			//TODO: prepare for web socket push of reviewing tasks.
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
@@ -167,7 +167,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		    HttpServletRequest request) 
 		    throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 
 		String absPath = WcmUtils.nodePath(siteArea);
@@ -182,14 +182,14 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 					.map(WcmUtils::toDraftItem)
 					.toArray(DraftItem[]::new);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return  ResponseEntity.status(HttpStatus.OK).body(draftItems);
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to get draft", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get draft", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -201,11 +201,11 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		if (!authoringEnabled) {
 			if (logger.isDebugEnabled()) {
-				logger.traceExit("Authoring is not enabled");
+				logger.debug("Exit. Authoring is not enabled");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
@@ -255,17 +255,17 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			draftSession.save();
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to edit draft", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to edit draft", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.EDIT_DRAFT_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to edit draft", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -277,11 +277,11 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		if (!authoringEnabled) {
 			if (logger.isDebugEnabled()) {
-				logger.traceExit("Authoring is not enabled");
+				logger.debug("Exit. Authoring is not enabled");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
@@ -309,17 +309,17 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 				bpmService.canelDraft(cancelDraftRequest, request);
 			}
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to cancel draft", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to cancel draft", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CANCEL_DRAFT_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to cancel draft", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -331,11 +331,11 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		if (!this.authoringEnabled) {
 			if (logger.isDebugEnabled()) {
-				logger.traceExit("Authring is not enabled");
+				logger.debug("Exit. Authring is not enabled");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
@@ -368,17 +368,17 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        this.bpmService.rejectContentItemDraft(rejectRequest, request);
 			this.notifyRejectedItem(authorEmail, rejectRequest);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to reject draft", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to reject draft", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.REJECT_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to reject draft", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -390,11 +390,11 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		if (!this.authoringEnabled) {
 			if (logger.isDebugEnabled()) {
-				logger.traceExit("Authring is not enabled");
+				logger.debug("Debug. Authring is not enabled");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
@@ -423,17 +423,17 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			session.save();
 			this.bpmService.approveContentItemDraft(approvalRequest, request);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to approve draft", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to approve draft", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.APPROVE_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to approve draft", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -444,11 +444,11 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			HttpServletRequest request)
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		if (!authoringEnabled) {
 			if (logger.isDebugEnabled()) {
-				logger.traceExit("Authoring is not enabled");
+				logger.debug("Exit. Authoring is not enabled");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
@@ -476,17 +476,17 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			}
 	        
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to update draft", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to update draft", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.LOCK_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to update draft", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -498,7 +498,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String reviewTaskId = bpmService.claimReviewTask(
 				claimRequest, request);
@@ -518,7 +518,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		    versionManager.checkin(absPath);
 		    session.save();
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.ok(String.format("{\"reviewer\": \"%s\"}", currentUser));
 		} catch (RepositoryException e) {
@@ -533,7 +533,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String editTaskId = this.bpmService.claimEditTask(
 				editRequest,
@@ -554,7 +554,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		    versionManager.checkin(absPath);
 		    session.save();
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.ok(String.format("{\"editor\": \"%s\"}", editor));
 		} catch (RepositoryException e) {
@@ -569,11 +569,11 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		if (!this.authoringEnabled) {
 			if (logger.isDebugEnabled()) {
-				logger.traceExit("Authring is not enabled");
+				logger.debug("Exit. Authring is not enabled");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
@@ -646,17 +646,17 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			}
 	        
 	        if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to publish draft", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to publish draft", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.PUBLISH_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to publish draft", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}		
 	}
@@ -668,7 +668,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
   			@RequestParam("path") String absPath,
   			HttpServletRequest request) { 
     	if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
   		try {
   			String baseUrl = RestHelper.repositoryUrl(request);
@@ -705,17 +705,17 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
       			
             }
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to expire content item", e);
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to expire content item", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.EXPIRE_CONTENT_ITEM_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to expire content item", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
   		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
   	};
   	
@@ -731,19 +731,19 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
             node.setProperty("bpw:currentLifecycleState", state);
   			session.save();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to update workflow stage", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to update workflow stage", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_CONTENT_ITEM_WORKFLOW_ERROR, null));
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to update workflow stage", t);
 	    	throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
   	};
   	
   	protected String startContentFlow(StartFlowRequest startFlowRequest, HttpServletRequest request) {
-    	logger.traceEntry();
+    	logger.debug("Entry");
 		
     	String processInstanceId = bpmService.startContentFlow(
     			startFlowRequest,
@@ -763,7 +763,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
         	throw new WcmRepositoryException(WcmError.createWcmError("Failed to notification content reviewers", WcmErrors.EMAIL_ERROR, new String[] {startFlowRequest.getWcmPath()}));
 
         }
-    	logger.traceExit();
+    	logger.debug("Exit");
 		return processInstanceId;
 	}
 	

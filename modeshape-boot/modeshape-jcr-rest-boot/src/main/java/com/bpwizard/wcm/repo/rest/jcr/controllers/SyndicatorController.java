@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,7 +33,7 @@ import com.bpwizard.wcm.repo.rest.service.SyndicatorService;
 @Validated
 public class SyndicatorController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/syndicator";
-	private static final Logger logger = LogManager.getLogger(SyndicatorController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SyndicatorController.class);
 	
 	@Autowired
 	private SyndicatorService syndicatorService;
@@ -46,16 +46,16 @@ public class SyndicatorController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			wcmEventService.syndicate(syndicationRequest, request.getHeader("Authorization"));
 		} catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Syndication error", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -64,11 +64,11 @@ public class SyndicatorController extends BaseWcmRestController {
 	@GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Syndicator>> getSyndications() {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		List<Syndicator> syndicators = syndicatorService.getSyndicators();
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.ok(syndicators);
 	}
@@ -76,11 +76,11 @@ public class SyndicatorController extends BaseWcmRestController {
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Syndicator> getSyndicator(@PathVariable("id") long id, HttpServletRequest request) {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		Syndicator syndicator = syndicatorService.getSyndicator(id);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.ok(syndicator);
 	}
@@ -91,11 +91,11 @@ public class SyndicatorController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		syndicatorService.createSyndicator(syndicator);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -106,11 +106,11 @@ public class SyndicatorController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		syndicatorService.updateSyndicator(syndicationRequest);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.accepted().build();				
 	}
@@ -121,11 +121,11 @@ public class SyndicatorController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		syndicatorService.deleteSyndicator(id);
 		if (logger.isDebugEnabled()) {
-			logger.traceExit();
+			logger.debug("Exit");
 		}
 		return ResponseEntity.accepted().build();		
 	}

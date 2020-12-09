@@ -22,11 +22,11 @@ import java.util.Map;
 
 import javax.transaction.TransactionManager;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.modeshape.jcr.api.RepositoriesContainer;
 import org.modeshape.jcr.api.txn.TransactionManagerLookup;
 import org.modeshape.web.jcr.RepositoryManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +39,7 @@ import com.bpwizard.wcm.repo.jcr.ModeshapeTransactionManagerLookup;
 
 @Configuration
 public class ModeshapeConfig {
-	private static final Logger logger = LogManager.getLogger(ModeshapeConfig.class);
+	private static final Logger logger = LoggerFactory.getLogger(ModeshapeConfig.class);
 	@Autowired 
 	private TransactionManager transactionManager;
 	

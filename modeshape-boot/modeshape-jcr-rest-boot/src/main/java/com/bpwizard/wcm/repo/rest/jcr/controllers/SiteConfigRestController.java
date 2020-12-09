@@ -2,8 +2,8 @@ package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class SiteConfigRestController extends BaseWcmRestController {
 
 	public static final String BASE_URI = "/wcm/api/siteConfig";
-	private static final Logger logger = LogManager.getLogger(SiteConfigRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SiteConfigRestController.class);
 
 	@Autowired
 	private WcmRequestHandler wcmRequestHandler;
@@ -44,7 +44,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
 	public ResponseEntity<?> createSiteConfig(@RequestBody SiteConfig siteConfig, HttpServletRequest request)
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String repositoryName = siteConfig.getRepository();
@@ -53,15 +53,15 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.siteConfig, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, siteConfig.toJson());
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to create site config", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to create site config", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -77,10 +77,10 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			JsonNode jsonItem = siteConfig.toJson();
 			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.siteConfig, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, jsonItem);
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to save site config", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to save site config", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -92,7 +92,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			@PathVariable("workspace") String workspace,
 			@PathVariable("library") String library) throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -103,14 +103,14 @@ public class SiteConfigRestController extends BaseWcmRestController {
 					.map(node -> this.wcmRequestHandler.toSiteConfig(repository, workspace, library, node))
 					.toArray(SiteConfig[]::new);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return siteConfigs;
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get site config", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get site config", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -121,21 +121,21 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			@PathVariable("siteConfigName") String siteConfigName) throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH_PATTERN, library, siteConfigName);
 			this.wcmRequestHandler.lock(repository, workspace, absPath);
 			SiteConfig siteConfig = this.wcmRequestHandler.getSiteConfig(request, repository, workspace, library, siteConfigName);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return siteConfig;
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to lock site config", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to lock site config", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -148,7 +148,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String baseUrl = RestHelper.repositoryUrl(request);
@@ -158,14 +158,14 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			pageConfig.setNavigations(
 					this.wcmRequestHandler.getNavigations(baseUrl, repository, workspace, library, siteConfig.getRootSiteArea()));
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return pageConfig;
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to get site config", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get site config", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -177,7 +177,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
   			@RequestParam("path") String wcmPath,
   			HttpServletRequest request) { 
   		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
@@ -186,7 +186,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
   			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.siteConfig, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
-  				logger.traceExit();
+  				logger.debug("Exit");
   			}
   	  		
   			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -194,7 +194,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to purge site config", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 

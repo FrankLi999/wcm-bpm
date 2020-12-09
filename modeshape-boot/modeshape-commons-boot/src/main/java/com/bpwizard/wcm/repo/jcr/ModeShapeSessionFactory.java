@@ -11,7 +11,6 @@ import org.springframework.beans.factory.FactoryBean;
  * {@link org.springframework.beans.factory.FactoryBean} which uses {@link ModeShapeRepositoryFactory} to provide
  * different {@link Session} instances each time this bean is used.
  *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 // @Component
 public class ModeShapeSessionFactory implements FactoryBean<Session> {

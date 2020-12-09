@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -45,7 +45,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class ValidationRuleRestController extends BaseWcmRestController {
 	
 	public static final String BASE_URI = "/wcm/api/validationRule";
-	private static final Logger logger = LogManager.getLogger(ValidationRuleRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ValidationRuleRestController.class);
 	
 
 	@Autowired
@@ -65,7 +65,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 				throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 
 		try {
@@ -80,14 +80,14 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 				Arrays.sort(validationRules, Collections.reverseOrder());
 			}
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(validationRules);
 		} catch (WcmRepositoryException e) {
-			logger.error(e);
+			logger.error("Failed to load validation rule", e);
 			throw e;			
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to load validation rule", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -98,7 +98,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String absPath = String.format(WcmConstants.NODE_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
 		try {
@@ -107,17 +107,17 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			String repositoryName = validationRule.getRepository();
 			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.validationRule, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, validationRule.toJson());
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to create validation rule", e);
 			throw e;
 		} catch (RepositoryException re) {
-			logger.error(re);
+			logger.error("Failed to create validation rule", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.CREATE_VALIDATION_RULE_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			logger.error(t);
+	    	logger.error("Failed to create validation rule", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 	}
@@ -127,7 +127,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			@RequestBody ValidationRule validationRule, HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		String absPath = String.format(WcmConstants.NODE_VALIDATTOR_PATH_PATTERN, validationRule.getLibrary(), validationRule.getName());
 		try {
@@ -138,15 +138,15 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.validationRule, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 		} catch (WcmRepositoryException e ) {
 			throw e;
 		} catch (RepositoryException re) { 
-			logger.error(re);
+			logger.error("Failed to save validation rule", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.UPDATE_VALIDATION_RULE_ERROR, new String[] {absPath}));
 	    } catch (Throwable t) {
-			logger.error(t);
+	    	logger.error("Failed to save validation rule", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}	
 	}
@@ -161,7 +161,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			return atNode.getChildren().stream().filter(this.wcmRequestHandler::isValidationRule)
 					.map(node -> this.toValidationRule(node, rule.getRepository(), rule.getWorkspace(), rule.getLibrary()));
 		} catch (RepositoryException re) {;
-			logger.error(re);
+			logger.error("Failed to get validation rule", re);
 			throw new WcmRepositoryException(re, new WcmError(re.getMessage(), WcmErrors.GET_VALIDATION_RULE_ERROR, new String[] {absPath}));
 		}
 	}
@@ -236,7 +236,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
   			@RequestParam("path") String wcmPath,
   			HttpServletRequest request) { 
   		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
@@ -245,7 +245,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
   			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.validationRule, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
-  				logger.traceExit();
+  				logger.debug("Exit");
   			}
   	  		
   			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -253,7 +253,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			logger.error(String.format("Failed to delete item %s from expired repository. Content item does not exist", absPath), e);
 			throw e;
 	    } catch (Throwable t) {
-	    	logger.error(t);
+	    	logger.error("Failed to purge validation rule", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);
 		}
 

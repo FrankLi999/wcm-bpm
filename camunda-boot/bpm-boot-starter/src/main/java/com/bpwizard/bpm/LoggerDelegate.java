@@ -1,7 +1,7 @@
 package com.bpwizard.bpm;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component("logger")
 public class LoggerDelegate implements JavaDelegate {
  
-  private static final Logger logger = LogManager.getLogger(LoggerDelegate.class);
+  private static final Logger logger = LoggerFactory.getLogger(LoggerDelegate.class);
   public void execute(DelegateExecution execution) throws Exception {
     
     logger.info("\n\n  ... LoggerDelegate invoked by "

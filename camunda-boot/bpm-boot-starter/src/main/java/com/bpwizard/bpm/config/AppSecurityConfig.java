@@ -1,7 +1,8 @@
 package com.bpwizard.bpm.config;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
@@ -15,9 +16,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bpwizard.spring.boot.commons.service.AutoConfiguration;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.service.security.SpringJpaSecurityConfig;
 import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsService;
-import com.bpwizard.spring.boot.commons.service.domain.User;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +30,7 @@ import com.bpwizard.spring.boot.commons.service.domain.User;
 @AutoConfigureBefore({AutoConfiguration.class})
 public class AppSecurityConfig extends SpringJpaSecurityConfig {
 	
-	private static final Logger logger = LogManager.getLogger(AppSecurityConfig.class);
+	private static final Logger logger = LoggerFactory.getLogger(AppSecurityConfig.class);
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;

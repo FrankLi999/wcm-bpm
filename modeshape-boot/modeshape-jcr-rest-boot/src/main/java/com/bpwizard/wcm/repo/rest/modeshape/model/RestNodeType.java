@@ -30,8 +30,6 @@ import com.bpwizard.wcm.repo.rest.RestHelper;
 
 /**
  * A REST representation of a {@link NodeType}
- *
- * @author Horia Chiorean (hchiorea@redhat.com)
  */
 public final class RestNodeType { //implements JSONAble {
 

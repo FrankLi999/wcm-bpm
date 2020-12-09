@@ -30,11 +30,11 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.modeshape.common.annotation.ThreadSafe;
 import org.modeshape.jcr.api.RepositoriesContainer;
 import org.modeshape.jcr.api.ServletCredentials;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,7 +47,7 @@ import com.bpwizard.wcm.repo.jcr.security.SpringSecurityCredentials;
  */
 @ThreadSafe
 public class RepositoryManager {
-	private static final Logger logger = LogManager.getLogger(RepositoryManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(RepositoryManager.class);
     //private static final Logger LOGGER = WebLogger.getLogger(RepositoryManager.class);
     private Map<String, Object> factoryParams = new HashMap<>();
     private RepositoriesContainer repositoriesContainer;

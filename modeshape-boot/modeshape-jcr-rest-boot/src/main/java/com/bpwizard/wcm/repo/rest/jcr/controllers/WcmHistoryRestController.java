@@ -13,8 +13,8 @@ import javax.jcr.version.VersionIterator;
 import javax.jcr.version.VersionManager;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,7 @@ import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 @RequestMapping(WcmHistoryRestController.BASE_URI)
 @Validated
 public class WcmHistoryRestController extends BaseWcmRestController {
-	private static final Logger logger = LogManager.getLogger(WcmHistoryRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WcmHistoryRestController.class);
 	
 	public static final String BASE_URI = "/wcm/api/history";
 	
@@ -50,7 +50,7 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			Map<String, WcmHistory> libraryHistories = new HashMap<>();
@@ -62,9 +62,12 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 			libraryHistories.put("contentAreaLayout", this.doGetHistory(session, String.format("%s/contentAreaLayout", wcmPath)));
 			libraryHistories.put("category", this.doGetHistory(session, String.format("%s/category", wcmPath)));
 			libraryHistories.put("workflow", this.doGetHistory(session, String.format("%s/workflow", wcmPath)));
+			if (logger.isDebugEnabled()) {
+				logger.debug("Exit");
+			}
 			return ResponseEntity.status(HttpStatus.OK).body(libraryHistories);
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get library history.", t);
 			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GET_LIB_HISTORY_ERROR, null));
 		}	
 	}
@@ -78,14 +81,17 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 			HttpServletRequest request) 
 			throws WcmRepositoryException {
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			Session session = this.repositoryManager.getSession(repository, workspace);
 			WcmHistory history = this.doGetHistory(session, wcmPath);
+			if (logger.isDebugEnabled()) {
+				logger.debug("Exit");
+			}
 			return ResponseEntity.status(HttpStatus.OK).body(history);
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get version history.", t);
 			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.GET_VERSION_HISTORY_ERROR, null));
 		}	
 	}
@@ -100,7 +106,7 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		
 		try {
@@ -110,9 +116,12 @@ public class WcmHistoryRestController extends BaseWcmRestController {
 				session = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS);
 				this.doRestore(session, wcmPath, versionName);
 			}
+			if (logger.isDebugEnabled()) {
+				logger.debug("Exit");
+			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Restore failed.", t);
 			throw new WcmRepositoryException(t, new WcmError(t.getMessage(), WcmErrors.RESTORE_VERSION_ERROR, null));
 		}	
 	}

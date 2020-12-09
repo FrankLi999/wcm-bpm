@@ -32,8 +32,8 @@ import javax.jcr.security.AccessControlPolicyIterator;
 import javax.jcr.security.Privilege;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.modeshape.jcr.api.index.IndexColumnDefinitionTemplate;
 import org.modeshape.jcr.api.index.IndexDefinition;
 import org.modeshape.jcr.api.index.IndexDefinition.IndexKind;
@@ -69,7 +69,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @RestController
 @RequestMapping(ModeshapeController.BASE_URI)
 public class ModeshapeController {
-	private static final Logger logger = LogManager.getLogger(ModeshapeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ModeshapeController.class);
 	public static final String BASE_URI = "/modeshape/server";
 	@Autowired
 	private RepositoryManager repositoryManager;
@@ -82,7 +82,7 @@ public class ModeshapeController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String repositoryName = query.getRepository();
@@ -105,11 +105,11 @@ public class ModeshapeController {
 			}
 			
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to execute query statement", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}	
 	}
@@ -119,7 +119,7 @@ public class ModeshapeController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String repositoryName = query.getRepository();
@@ -165,7 +165,7 @@ public class ModeshapeController {
 			return ResponseEntity.ok(qJson);
 			//return ResponseEntity.status(HttpStatus.CREATED).build();
 	    } catch (Throwable t) {
-			logger.error(t);
+	    	logger.error("Failed to execute query statement", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}	
 	}
@@ -176,7 +176,7 @@ public class ModeshapeController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String repositoryName = query.getRepository();
@@ -187,14 +187,14 @@ public class ModeshapeController {
 			
 			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.query, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to add query statement", e);
 			throw e;
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to add query statement", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 
 		}	
@@ -206,7 +206,7 @@ public class ModeshapeController {
 			throws WcmRepositoryException {
 
 		if (logger.isDebugEnabled()) {
-			logger.traceEntry();
+			logger.debug("Entry");
 		}
 		try {
 			String repositoryName = query.getRepository();
@@ -221,14 +221,14 @@ public class ModeshapeController {
 			Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
 			session.getWorkspace().clone(WcmConstants.DEFAULT_WS, path, path, true);
 			if (logger.isDebugEnabled()) {
-				logger.traceExit();
+				logger.debug("Exit");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (WcmRepositoryException e ) {
-			logger.error(e);
+			logger.error("Failed to add query statement", e);
 			throw e;
 	    } catch (Throwable t) {
-			logger.error(t);
+	    	logger.error("Failed to add query statement", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 
 		}	
@@ -261,7 +261,7 @@ public class ModeshapeController {
             }
     		return "{\"modeshape\": \"up\"}";
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to ping modeshape", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
         } 
 	}
@@ -285,7 +285,7 @@ public class ModeshapeController {
             os.close();
     		return "{\"export\": \"done\"}";
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to export content", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
         } 
 	}
@@ -314,7 +314,7 @@ public class ModeshapeController {
             logger.debug("+ Root childs");
             return "{\"import\": \"done\"}";
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to import content", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
         } 
 	}
@@ -359,7 +359,7 @@ public class ModeshapeController {
             }
             return "{\"node-type\": \"up\"}";
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get node types", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
         } 
 	}
@@ -376,7 +376,7 @@ public class ModeshapeController {
 				try {
 					Event event = eventJournal.nextEvent();
 					logger.debug("Journal Event:" + event.getClass());
-					logger.debug(event);
+					logger.debug(event.toString());
 					eventsTypes.put(event.getClass().toString(), event.toString());
 				} catch (java.util.NoSuchElementException ex) {
 					logger.debug("donw event journaling");
@@ -385,7 +385,7 @@ public class ModeshapeController {
 			}
 			return ResponseEntity.ok().body(eventsTypes);
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get journal event", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
@@ -401,14 +401,14 @@ public class ModeshapeController {
 			eventJournal.forEachRemaining(e -> this.processEvent(e, eventsTypes));
 			return ResponseEntity.ok().body(eventsTypes);
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get journal", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
 	
 	private void processEvent(Object event, Map<String, String> eventsTypes) {
 		logger.debug("Journal Event:" + event.getClass());
-		logger.debug(event);
+		logger.debug(event.toString());
 		eventsTypes.put(event.getClass().toString(), event.toString());
 	}
 	
@@ -438,7 +438,7 @@ public class ModeshapeController {
 			}
 			return ResponseEntity.ok().body(indexModels);
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get index", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
@@ -466,7 +466,7 @@ public class ModeshapeController {
 			indexManager.registerIndex(indexDefinition, true);
 			return "done";
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to create index", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
@@ -479,7 +479,7 @@ public class ModeshapeController {
 			indexManager.unregisterIndexes(index);
 			return "done";
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to remove index", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
@@ -494,7 +494,7 @@ public class ModeshapeController {
 			}
 			return support.toString();
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to get features", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 		
@@ -651,7 +651,7 @@ public class ModeshapeController {
 			expiredSession.save();
 			return "done";
 		} catch (Throwable t) {
-			logger.error(t);
+			logger.error("Failed to test ACL", t);
 			throw new WcmRepositoryException(t, WcmError.createWcmError(t.getMessage(), WcmErrors.WCM_ERROR, null));
 		}
 	}
