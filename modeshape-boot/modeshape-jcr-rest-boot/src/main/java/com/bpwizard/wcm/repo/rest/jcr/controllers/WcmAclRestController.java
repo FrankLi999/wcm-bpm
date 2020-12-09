@@ -36,10 +36,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
-import com.bpwizard.spring.boot.commons.service.repo.domain.RoleRepository;
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
-import com.bpwizard.spring.boot.commons.service.repo.domain.UserRepository;
+import com.bpwizard.spring.boot.commons.service.domain.Role;
+import com.bpwizard.spring.boot.commons.service.domain.RoleService;
+import com.bpwizard.spring.boot.commons.service.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.UserService;
+import com.bpwizard.spring.boot.commons.service.domain.UnpagedSort;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Grant;
@@ -87,10 +88,10 @@ public class WcmAclRestController extends BaseWcmRestController {
 	private static final String JCR_READ = "jcr:read";
 	
 	@Autowired
-	private RoleRepository roleRepository;
+	private RoleService<Role, Long> roleService;
 	
 	@Autowired
-	private  UserRepository userRepository;
+	private  UserService<User<Long>, Long> userService;
 	
 	@PutMapping(path = "/grant/{repository}/{workspace}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateGrants(
@@ -187,16 +188,9 @@ public class WcmAclRestController extends BaseWcmRestController {
 			throws WcmRepositoryException {
 		
 		try {
-			
-			String roles[] = null;
 			Sort sort = "asc".equals(sortDirection) ? Sort.by("name").ascending() : Sort.by("name").descending();
-			if (pageIndex < 0) {
-				roles = this.roleRepository.findAll(sort).stream().map(Role::getName).toArray(String[]::new);
-			} else {
-				Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
-				roles = this.roleRepository.findAll(pageable).getContent().stream().map(Role::getName).toArray(String[]::new);
-			}
-			
+			Pageable pageable = (pageIndex < 0) ? pageable = UnpagedSort.of(sort) : PageRequest.of(pageIndex, pageSize, sort); 
+			String roles[] = this.roleService.findAllRoleNames(pageable).stream().toArray(String[]::new);
 			if (logger.isDebugEnabled()) {
 				logger.traceEntry();
 			}
@@ -227,12 +221,8 @@ public class WcmAclRestController extends BaseWcmRestController {
 		try {	
 			String users[] = null;
 			Sort sort = "asc".equals(sortDirection) ? Sort.by("name").ascending() : Sort.by("name").descending();
-			if (pageIndex < 0) {
-				users = this.userRepository.findAll(sort).stream().map(User::getName).toArray(String[]::new);
-			} else {
-				Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
-				users = this.userRepository.findAll(pageable).getContent().stream().map(User::getName).toArray(String[]::new);
-			}
+			Pageable pageable = (pageIndex < 0) ? pageable = UnpagedSort.of(sort) : PageRequest.of(pageIndex, pageSize, sort);
+			this.userService.findAllNames(pageable).stream().toArray(String[]::new);
 			if (logger.isDebugEnabled()) {
 				logger.traceEntry();
 			}

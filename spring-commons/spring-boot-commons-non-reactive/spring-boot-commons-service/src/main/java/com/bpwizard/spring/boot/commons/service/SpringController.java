@@ -26,7 +26,7 @@ import com.bpwizard.spring.boot.commons.domain.ChangePasswordForm;
 import com.bpwizard.spring.boot.commons.domain.ResetPasswordForm;
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.security.UserDto;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
@@ -40,7 +40,7 @@ import com.github.fge.jsonpatch.JsonPatchException;
  * API documentation</a> for details.
  */
 public abstract class SpringController
-	<U extends AbstractUser<ID>, ID extends Serializable> {
+	<U extends User<ID>, ID extends Serializable> {
 
 	private static final Logger logger = LoggerFactory.getLogger(SpringController.class);
 

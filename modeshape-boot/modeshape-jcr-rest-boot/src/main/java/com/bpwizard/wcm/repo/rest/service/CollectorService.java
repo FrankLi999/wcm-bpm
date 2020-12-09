@@ -2,7 +2,6 @@ package com.bpwizard.wcm.repo.rest.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +35,7 @@ public class CollectorService {
 	SimpleJdbcInsert simpleJdbcInsert;
 	
 	private static final String selectColumns = "SELECT c.ID as ID, c.LAST_SYNDICATION LAST_SYNDICATION, c.created_by as CREATED_BY, c.updated_by as UPDATED_BY, c.created_at as CREATED_AT, c.updated_at as UPDATED_AT, w.ID as SYNDICATOR_ID, w.HOST as SYNDICATOR_HOST, w.PORT as SYNDICATOR_PORT";
-	private static final String updateSql = "UPDATE SYN_COLLECTOR SET LAST_SYNDICATION = ?, updated_by=? , updated_at=? WHERE id = ?";
+	private static final String updateSql = "UPDATE SYN_COLLECTOR SET LAST_SYNDICATION = ?, updated_by=? WHERE id = ?";
 	private static final String deleteSql = "DELETE SYN_COLLECTOR WHERE id = ?";
 	private static final String selectByIdSql = String.format("%s from SYN_COLLECTOR as c JOIN SYN_WCM_SERVER as w ON c.SYNDICATOR_ID = w.ID WHERE s.id = :id", selectColumns);
 	private static final String selectByAllSql = String.format("%s  from SYN_COLLECTOR as c JOIN SYN_WCM_SERVER as w ON c.SYNDICATOR_ID = w.ID", selectColumns);
@@ -71,8 +70,8 @@ public class CollectorService {
 	public int updateColelctor(
 			UpdateCollectorRequest syndicationRequest) 
 			throws WcmRepositoryException {
-		Object[] params = { syndicationRequest.getLastSyndication(), syndicationRequest.getCollectorId(), WebUtils.currentUserId(), new Timestamp(System.currentTimeMillis())};
-	    int[] types = {Types.TIMESTAMP, Types.BIGINT, Types.VARCHAR, Types.TIMESTAMP};
+		Object[] params = { syndicationRequest.getLastSyndication(), syndicationRequest.getCollectorId(), WebUtils.currentUserId()};
+	    int[] types = {Types.TIMESTAMP, Types.BIGINT, Types.VARCHAR};
 	    return jdbcTemplate.update(updateSql, params, types);
 	}
 	

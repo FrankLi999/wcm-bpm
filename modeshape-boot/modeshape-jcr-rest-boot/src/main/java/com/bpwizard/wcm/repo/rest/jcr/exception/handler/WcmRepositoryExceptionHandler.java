@@ -17,7 +17,7 @@ public class WcmRepositoryExceptionHandler extends AbstractBadRequestExceptionHa
 
 	public WcmRepositoryExceptionHandler() {		
 		super(WcmRepositoryException.class);
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	@Override

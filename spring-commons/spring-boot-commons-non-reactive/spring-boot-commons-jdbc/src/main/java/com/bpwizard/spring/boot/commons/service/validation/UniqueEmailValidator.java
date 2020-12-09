@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidatorContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUserService;
+import com.bpwizard.spring.boot.commons.service.domain.UserService;
 
 /**
  * Validator for unique-email
@@ -16,9 +16,9 @@ implements ConstraintValidator<UniqueEmail, String> {
 
 	private static final Logger logger = LoggerFactory.getLogger(UniqueEmailValidator.class);
 
-	private AbstractUserService<?,?> userService;
+	private UserService<?, ?> userService;
 
-	public UniqueEmailValidator(AbstractUserService<?, ?> userService) {
+	public UniqueEmailValidator(UserService<?, ?> userService) {
 		
 		this.userService = userService;
 		logger.info("Created");

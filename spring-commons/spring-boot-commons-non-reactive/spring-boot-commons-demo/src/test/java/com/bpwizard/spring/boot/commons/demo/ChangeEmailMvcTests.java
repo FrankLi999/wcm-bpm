@@ -14,7 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 public class ChangeEmailMvcTests extends AbstractMvcTests {
@@ -29,9 +29,9 @@ public class ChangeEmailMvcTests extends AbstractMvcTests {
 	@BeforeEach
 	public void setUp() {
 		
-		User user = userService.findById(UNVERIFIED_USER_ID).get();
+		User<Long> user = userService.findById(UNVERIFIED_USER_ID).get();
 		user.setNewEmail(NEW_EMAIL);
-		userService.save(user);
+		userService.save(user, null, null);
 		
 		changeEmailCode = jweTokenService.createToken(
 				JSONWebEncryptionService.CHANGE_EMAIL_AUDIENCE,
@@ -122,7 +122,7 @@ public class ChangeEmailMvcTests extends AbstractMvcTests {
 		Thread.sleep(1L);
 		User user = userService.findById(UNVERIFIED_USER_ID).get();
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		userService.save(user);
+		userService.save(user, null, null);
 		
 		// A new auth token is needed, because old one would be obsolete!
 		String authToken = login(UNVERIFIED_USER_EMAIL, USER_PASSWORD);
@@ -159,7 +159,7 @@ public class ChangeEmailMvcTests extends AbstractMvcTests {
 		// Some other user changed to the same email
 		User user = userService.findById(ADMIN_ID).get();
 		user.setEmail(NEW_EMAIL);
-		userService.save(user);
+		userService.save(user, null, null);
 		
 		mvc.perform(post("/api/core/users/{id}/email", UNVERIFIED_USER_ID)
                 .param("code", changeEmailCode)

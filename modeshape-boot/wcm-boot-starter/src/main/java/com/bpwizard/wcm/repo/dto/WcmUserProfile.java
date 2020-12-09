@@ -2,17 +2,17 @@ package com.bpwizard.wcm.repo.dto;
 
 import java.util.Arrays;
 
-import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
-import com.bpwizard.spring.boot.commons.service.repo.dto.UserProfile;
+import com.bpwizard.spring.boot.commons.service.domain.Role;
+import com.bpwizard.spring.boot.commons.service.domain.User;
+import com.bpwizard.spring.boot.commons.service.dto.UserProfile;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmSystem;
 public class WcmUserProfile extends UserProfile {
 	
     private WcmSystem settings;
-    public static WcmUserProfile fromUserAndToken(User user, WcmSystem settings) {
+    public static WcmUserProfile fromUserAndToken(User<Long> user, WcmSystem settings) {
     	return WcmUserProfile.fromUserAndToken(user, null, 0, null, settings);
     }
-    public static WcmUserProfile fromUserAndToken(User user, String accessToken, long expireIn, String sessionId, WcmSystem settings) {
+    public static WcmUserProfile fromUserAndToken(User<Long> user, String accessToken, long expireIn, String sessionId, WcmSystem settings) {
     	WcmUserProfile userProfile = new WcmUserProfile();
     	userProfile.setAccessToken(accessToken);
     	userProfile.setId(user.getId().toString());

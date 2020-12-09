@@ -18,7 +18,7 @@ public class EntityNotFoundExceptionHandler extends AbstractExceptionHandler<Ent
 
 	public EntityNotFoundExceptionHandler() {		
 		super(EntityNotFoundException.class);
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	@Override

@@ -1,10 +1,14 @@
 package com.bpwizard.spring.boot.commons.service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -41,12 +45,12 @@ import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
 import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.security.UserEditPermission;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUserService;
-import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
-import com.bpwizard.spring.boot.commons.service.repo.domain.RoleSeervice;
-import com.bpwizard.spring.boot.commons.service.repo.domain.Tenant;
-import com.bpwizard.spring.boot.commons.service.repo.domain.TenantService;
+import com.bpwizard.spring.boot.commons.service.domain.Role;
+import com.bpwizard.spring.boot.commons.service.domain.RoleService;
+import com.bpwizard.spring.boot.commons.service.domain.Tenant;
+import com.bpwizard.spring.boot.commons.service.domain.TenantService;
+import com.bpwizard.spring.boot.commons.service.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.UserService;
 import com.bpwizard.spring.boot.commons.service.util.ServiceUtils;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
@@ -56,27 +60,27 @@ import com.nimbusds.jwt.JWTClaimsSet;
 @Validated
 @Transactional(propagation=Propagation.SUPPORTS, readOnly=true)
 public abstract class SpringService
-	<U extends AbstractUser<ID>, ID extends Serializable>
+	<U extends User<ID>, ID extends Serializable>
     extends AbstractSpringService<U, ID> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SpringService.class);
+    protected static final Logger logger = LoggerFactory.getLogger(SpringService.class);
     
-	protected AbstractUserService<U, ID> userService;
+	protected UserService<U, ID> userService;
 	protected UserDetailsService userDetailsService;
-	protected RoleSeervice roleService;
-	protected TenantService tenantService;
+	protected RoleService<Role, Long> roleService;
+	protected TenantService<Tenant, Long> tenantService;
 	protected Map<String, Role> preloadedRoles;
     protected AuthenticationManager authenticationManager;
 	@Autowired
 	public void createSpringService(SpringProperties properties,
 			PasswordEncoder passwordEncoder,
 			MailSender<?> mailSender,
-			AbstractUserService<U, ID> userService,
+			UserService<U, ID> userService,
 			UserDetailsService userDetailsService,
 			JSONWebSignatureService jwsTokenService,
 			JSONWebEncryptionService jweTokenService,
-			RoleSeervice roleService,
-			TenantService tenantService,
+			RoleService<Role, Long> roleService,
+			TenantService<Tenant, Long> tenantService,
 			Map<String, Role> preloadedRoles,
 			AuthenticationManager authenticationManager) {
 		
@@ -130,65 +134,46 @@ public abstract class SpringService
 	//			Tenant tenant = new Tenant();
 	//			tenant.setName("default");
 	//			tenantService.save(tenant);
-				Set<Tenant> tenants = null;
+				// Set<String> tenantNames = null;
+				List<Tenant> tenants = null;
 				String[] roleNames = properties.getRolename();
+//				if (tenantNames != null) { 
+//					for (String tenantName: tenantNames) {
+//						Tenant tenant = new Tenant();
+//						tenant = tenantService.save(tenant);
+//						tenants.add(tenant);
+//						
+//					}
+//				}
+				List<Role> roles = new ArrayList<>();
 				if (null != roleNames) {
 					for (String roleName: roleNames) {
 						Role role = createRole(roleName, tenants);
 						this.preloadedRoles.put(roleName, role);
-						
+						roles.add(role);
 					}
 				}
 				
 				SpringProperties.User[] users = properties.getUser();
 				for (SpringProperties.User user: users) {
-					createUser(user, this.preloadedRoles, tenants);
+					createUser(user, roles, tenants);
 				}
 			}
     	}
 	}
 
-	protected Role createRole(String roleName, Set<Tenant> tenants) {
+	protected Role createRole(String roleName, List<Tenant> tenants) {
 		Role role = new Role();
 		role.setName(roleName);
-		if (tenants != null) {
-			role.setTenants(tenants);
-		}
-    	roleService.save(role);
-		return role;
+		role.setTenants(tenants.stream().map(Tenant::getName).collect(Collectors.toSet()));
+		role = roleService.save(role);
+    	return role;
 	}
 
-	/**
-	 * Creates the initial Admin user.
-	 * Override this if needed.
-	 */
-	protected U createUser(SpringProperties.User user, Map<String, Role> roles, Set<Tenant> tenants) {
-    	logger.info("Creating the initial user: " + user.getUsername());
+	public abstract U newUser();
 
-    	// create the user
-    	U newUser = newUser();
-    	newUser.setName(user.getUsername());
-    	newUser.setEmail(user.getEmail());
-    	if (StringUtils.hasText(user.getFirstName())) {
-    		newUser.setFirstName(user.getFirstName());
-    	}
-    	if (StringUtils.hasText(user.getLastName())) {
-    		newUser.setLastName(user.getLastName());
-    	}
-    	newUser.setPassword(passwordEncoder.encode(
-				user.getPassword()));
-    	if (tenants != null) {
-    		newUser.setTenants(tenants);
-		}
-		for (String rolename: user.getRolename()) {
-			if (null != roles.get(rolename)) {
-				newUser.getRoles().add(roles.get(rolename));
-			}
-		}
-		userService.save(newUser);	
-		return newUser;
-	}
-    
+	protected abstract U createUser(SpringProperties.User user, List<Role> roles, List<Tenant> tenants);
+	
 //	/**
 //	 * Creates the initial Admin user.
 //	 * Override this if needed.
@@ -221,7 +206,7 @@ public abstract class SpringService
 	 * }
 	 * </pre>
 	 */
-    public abstract U newUser();
+    // public abstract U newUser();
 
     public Map<String, Role> getPreloadedRoles() {
     	return this.preloadedRoles;
@@ -295,11 +280,10 @@ public abstract class SpringService
 		logger.debug("Signing up user: " + user);
 
 		initUser(user); // sets right all fields of the user
-		userService.save(user);
-		
+		userService.create(user);
+
 		// if successfully committed
 		JdbcUtils.afterCommit(() -> {
-		
 			ServiceUtils.login(user); // log the user in
 			logger.debug("Signed up user: " + user);
 		});
@@ -315,16 +299,18 @@ public abstract class SpringService
 		logger.debug("Initializing user: " + user);
 
 		user.setPassword(passwordEncoder.encode(user.getPassword())); // encode the password
-		makeUnverified(user); // make the user unverified
+		Set<String> removedRoles = new HashSet<>();
+		Set<String> newRoles = new HashSet<>();
+		makeUnverified(user, removedRoles, newRoles); // make the user unverified
 	}
 
 	
 	/**
 	 * Makes a user unverified
 	 */
-	protected void makeUnverified(U user) {
-		
-		user.getRoles().add(this.preloadedRoles.get(UserUtils.Role.UNVERIFIED));
+	protected void makeUnverified(U user, Set<String> removedRoles, Set<String> newRoles) {
+		newRoles.add(this.preloadedRoles.get(UserUtils.Role.UNVERIFIED).getName());
+		user.getRoles().add(this.preloadedRoles.get(UserUtils.Role.UNVERIFIED).getName());
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 		JdbcUtils.afterCommit(() -> sendVerificationMail(user)); // send a verification mail to the user
 	}
@@ -397,9 +383,11 @@ public abstract class SpringService
 				claims.getClaim("email").equals(user.getEmail()),
 				"com.bpwizard.spring.wrong.verificationCode");
 		
-		user.removeRole(UserUtils.Role.UNVERIFIED); // make him verified
+		user.getRoles().remove(UserUtils.Role.UNVERIFIED); // make him verified
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		userService.save(user);
+		Set<String> removedRoles = new HashSet<>();
+		removedRoles.add(UserUtils.Role.UNVERIFIED);
+		userService.save(user, removedRoles, null);
 		
 		// after successful commit,
 		JdbcUtils.afterCommit(() -> {
@@ -451,7 +439,7 @@ public abstract class SpringService
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 		//user.setForgotPasswordCode(null);
 		
-		userService.save(user);
+		userService.save(user, null, null);
 		
 		// after successful commit,
 		JdbcUtils.afterCommit(() -> {
@@ -478,8 +466,10 @@ public abstract class SpringService
 		JdbcUtils.ensureCorrectVersion(user, updatedUser);
 
 		// delegates to updateUserFields
-		updateUserFields(user, updatedUser, WebUtils.currentUser());
-		userService.save(user);
+		Set<String> removedRoles = new HashSet<>();
+		Set<String> newRoles = new HashSet<>();
+		updateUserFields(user, updatedUser, WebUtils.currentUser(), removedRoles, newRoles);
+		userService.save(user, removedRoles, newRoles);
 		
 		logger.debug("Updated user: " + user);
 		
@@ -513,7 +503,7 @@ public abstract class SpringService
 		// sets the password
 		user.setPassword(passwordEncoder.encode(changePasswordForm.getPassword()));
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		userService.save(user);
+		userService.save(user, null, null);
 
 		logger.debug("Changed password for user: " + user);
 		return user.toUserDto().getUsername();
@@ -525,7 +515,7 @@ public abstract class SpringService
 	/**
 	 * Updates the fields of the users. Override this if you have more fields.
 	 */
-	protected void updateUserFields(U user, U updatedUser, UserDto currentUser) {
+	protected void updateUserFields(U user, U updatedUser, UserDto currentUser, Set<String> removedRoles, Set<String> newRoles) {
 
 		logger.debug("Updating user fields for user: " + user);
 
@@ -541,15 +531,14 @@ public abstract class SpringService
 				return;
 			
 			if (updatedUser.hasRole(UserUtils.Role.UNVERIFIED)) {
-				
 				if (!user.hasRole(UserUtils.Role.UNVERIFIED)) {
-
-					makeUnverified(user); // make user unverified
+					makeUnverified(user, removedRoles, newRoles); // make user unverified
 				}
-			} else {
-				
-				if (user.hasRole(UserUtils.Role.UNVERIFIED))
-					user.removeRole(UserUtils.Role.UNVERIFIED); // make user verified
+			} else {				
+				if (user.hasRole(UserUtils.Role.UNVERIFIED)) {
+					user.getRoles().remove(UserUtils.Role.UNVERIFIED); // make user verified
+					removedRoles.add(UserUtils.Role.UNVERIFIED);
+				}
 			}
 			
 			user.setRoles(updatedUser.getRoles());
@@ -578,7 +567,7 @@ public abstract class SpringService
 		// preserves the new email id
 		user.setNewEmail(updatedUser.getNewEmail());
 		//user.setChangeEmailCode(BpwUtils.uid());
-		userService.save(user);
+		userService.save(user, null, null);
 		
 		// after successful commit, mails a link to the user
 		JdbcUtils.afterCommit(() -> mailChangeEmailLink(user));
@@ -676,10 +665,12 @@ public abstract class SpringService
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 		
 		// make the user verified if he is not
+		Set<String> removedRoles = new HashSet<>();
 		if (user.hasRole(UserUtils.Role.UNVERIFIED))
-			user.removeRole(UserUtils.Role.UNVERIFIED);
+			user.getRoles().remove(UserUtils.Role.UNVERIFIED);
+			removedRoles.add(UserUtils.Role.UNVERIFIED);
 		
-		userService.save(user);
+		userService.save(user, removedRoles, null);
 		
 		// after successful commit,
 		JdbcUtils.afterCommit(() -> {
@@ -752,9 +743,9 @@ public abstract class SpringService
 	 * Saves the user
 	 */
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false)
-	public void save(U user) {
+	public void create(U user) {
 		
-		userService.save(user);
+		userService.create(user);
 	}
 	
 	

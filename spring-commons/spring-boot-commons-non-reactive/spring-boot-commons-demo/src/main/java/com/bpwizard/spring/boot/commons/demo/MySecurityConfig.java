@@ -15,7 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bpwizard.spring.boot.commons.service.AutoConfiguration;
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.service.security.SpringJpaSecurityConfig;
 import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsService;
 @Configuration
@@ -34,7 +34,7 @@ public class MySecurityConfig extends SpringJpaSecurityConfig {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private SpringUserDetailsService<User, Long> userDetailsService;
+	private SpringUserDetailsService<User<Long>, Long> userDetailsService;
 	
 	public MySecurityConfig() {
 		logger.info("Created");

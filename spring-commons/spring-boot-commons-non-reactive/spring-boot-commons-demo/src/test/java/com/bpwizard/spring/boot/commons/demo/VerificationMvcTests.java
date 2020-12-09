@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import com.bpwizard.spring.boot.commons.security.JSONWebEncryptionService;
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 public class VerificationMvcTests extends AbstractMvcTests {
@@ -110,7 +110,7 @@ public class VerificationMvcTests extends AbstractMvcTests {
 		Thread.sleep(1L);
 		User user = userService.findById(UNVERIFIED_USER_ID).get();
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		userService.save(user);
+		userService.save(user, null, null);
 		
 		mvc.perform(post("/api/core/users/{userId}/verification", UNVERIFIED_USER_ID)
                 .param("code", verificationCode)

@@ -20,7 +20,7 @@ public class DataIntegrityViolationExceptionHandler extends AbstractExceptionHan
 
 	public DataIntegrityViolationExceptionHandler() {		
 		super(DataIntegrityViolationException.class);
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	@Override

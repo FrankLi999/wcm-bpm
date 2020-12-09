@@ -1,8 +1,8 @@
 package com.bpwizard.bpm.wcm.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -600,7 +600,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			boolean newItem = false;
 			
-			List<String> currentDescendants = new ArrayList<String>();		
+			Set<String> currentDescendants = new HashSet<String>();		
 			if (this.syndicationEnabled) {
 				try {
 					RestNode restNode = (RestNode)this.wcmItemHandler.item(baseUrl, publishRequest.getRepository(),  WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
@@ -609,7 +609,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 					} else {
 						
 					}
-					syndicationUtils.populateDescendantIds(restNode, currentDescendants);
+					wcmEventService.populateDescendantIds(restNode, currentDescendants);
 				} catch (Throwable t) {
 					//TODO: 
 					logger.error("");
@@ -628,14 +628,14 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 	        if (this.syndicationEnabled) {
 				RestNode restNode = (RestNode)this.wcmItemHandler.item(baseUrl, publishRequest.getRepository(), WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
 				if (newItem) {
-					syndicationUtils.addNewItemEvent(
+					wcmEventService.addNewItemEvent(
 							restNode, 
 							publishRequest.getRepository(), 
 							WcmConstants.DEFAULT_WS, 
 							absPath,
 							WcmEvent.WcmItemType.contentItem);
 				} else {
-					syndicationUtils.addUpdateItemEvent(
+					wcmEventService.addUpdateItemEvent(
 						restNode, 
 						publishRequest.getRepository(), 
 						WcmConstants.DEFAULT_WS, 
@@ -672,12 +672,12 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
 		}
   		try {
   			String baseUrl = RestHelper.repositoryUrl(request);
-  			List<String> currentDescendants = new ArrayList<String>();	
+  			Set<String> currentDescendants = new HashSet<String>();	
   			String nodeId = null;
 			if (this.syndicationEnabled) {
 				RestNode restNode = (RestNode)this.wcmItemHandler.item(baseUrl, repository,  WcmConstants.DEFAULT_WS, absPath, WcmConstants.FULL_SUB_DEPTH);
 				nodeId = restNode.getId();
-				syndicationUtils.populateDescendantIds(restNode, currentDescendants);
+				wcmEventService.populateDescendantIds(restNode, currentDescendants);
 			}
 			
   			Session session = this.repositoryManager.getSession(repository, WcmConstants.DEFAULT_WS);
@@ -694,7 +694,7 @@ public class ContentItemWorkflowRestController extends BaseWcmRestController {
             	}
             	
             	if (this.syndicationEnabled) {
-    				syndicationUtils.addDeleteItemEvent(
+            		wcmEventService.addDeleteItemEvent(
     						nodeId, 
     						repository, 
     						WcmConstants.DEFAULT_WS, 

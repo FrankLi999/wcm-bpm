@@ -17,7 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 
@@ -58,6 +58,7 @@ public class UpdateUserMvcTests extends AbstractMvcTests {
 	 * change in the process.
 	 * @throws Exception 
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	@Test
     public void testUpdateSelf() throws Exception {
 		
@@ -95,6 +96,7 @@ public class UpdateUserMvcTests extends AbstractMvcTests {
 	 * the UNVERIFIED role. 
 	 * @throws Exception 
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	@Test
     public void testGoodAdminCanUpdateOther() throws Exception {
 		

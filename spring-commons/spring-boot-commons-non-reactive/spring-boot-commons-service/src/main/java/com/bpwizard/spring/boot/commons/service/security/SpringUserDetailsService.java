@@ -10,21 +10,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUserService;
+import com.bpwizard.spring.boot.commons.service.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.UserService;
 
 /**
  * UserDetailsService, as required by Spring Security.
  */
 public class SpringUserDetailsService
-	<U extends AbstractUser<ID>, ID extends Serializable>
+	<U extends User<ID>, ID extends Serializable>
 implements UserDetailsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SpringUserDetailsService.class);
 
-	private final AbstractUserService<U,ID> userService;
+	private final UserService<U,ID> userService;
 	
-	public SpringUserDetailsService(AbstractUserService<U, ID> userService) {
+	public SpringUserDetailsService(UserService<U, ID> userService) {
 		
 		this.userService = userService;
 		logger.info("Created");

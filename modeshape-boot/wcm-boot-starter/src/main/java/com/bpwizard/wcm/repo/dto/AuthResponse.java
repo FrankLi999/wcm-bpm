@@ -2,8 +2,8 @@ package com.bpwizard.wcm.repo.dto;
 
 import java.util.Arrays;
 
-import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.Role;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 public class AuthResponse {
     private String id;
 	private String email;
@@ -18,7 +18,7 @@ public class AuthResponse {
     private String sessionId = "n/a";
     private long expireIn;
     
-    public static AuthResponse fromUserAndToken(User user, String accessToken, long expireIn, String sessionId) {
+    public static AuthResponse fromUserAndToken(User<Long> user, String accessToken, long expireIn, String sessionId) {
     	AuthResponse authResponse = new AuthResponse();
     	authResponse.setAccessToken(accessToken);
     	authResponse.setId(user.getId().toString());

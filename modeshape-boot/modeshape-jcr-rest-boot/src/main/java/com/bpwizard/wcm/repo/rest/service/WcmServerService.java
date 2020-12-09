@@ -2,7 +2,6 @@ package com.bpwizard.wcm.repo.rest.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,7 @@ public class WcmServerService {
 	
 	SimpleJdbcInsert simpleJdbcInsert;
 	
-	private static final String updateSql = "UPDATE SYN_WCM_SERVER SET HOST = ?, PORT = ?, updated_by=? , updated_at=? WHERE id = ?";
+	private static final String updateSql = "UPDATE SYN_WCM_SERVER SET HOST = ?, PORT = ?, updated_by=? WHERE id = ?";
 	private static final String deleteSql = "DELETE SYN_WCM_SERVER WHERE id = ?";
 	private static final String selectByIdSql = "Select * from SYN_WCM_SERVER WHERE id = :id";
 	private static final String selectByAllSql = "Select * from SYN_WCM_SERVER";
@@ -70,8 +69,8 @@ public class WcmServerService {
 	
 	public int UpdateWcmServer(
 			WcmServer wcmServer) {
-		Object[] params = { wcmServer.getHost(), wcmServer.getPort(), wcmServer.getId(), WebUtils.currentUserId(), new Timestamp(System.currentTimeMillis())};
-	    int[] types = {Types.VARCHAR, Types.BIGINT, Types.BIGINT, Types.VARCHAR, Types.TIMESTAMP};
+		Object[] params = { wcmServer.getHost(), wcmServer.getPort(), wcmServer.getId(), WebUtils.currentUserId()};
+	    int[] types = {Types.VARCHAR, Types.BIGINT, Types.BIGINT, Types.VARCHAR};
 	    return jdbcTemplate.update(updateSql, params, types);
 	}
 	

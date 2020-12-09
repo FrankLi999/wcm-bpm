@@ -2,7 +2,9 @@ package com.bpwizard.spring.boot.commons;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +67,7 @@ public abstract class AbstractSpringService
     	user.setEmail(initialAdmin.getUsername());
 		user.setPassword(passwordEncoder.encode(
 			properties.getAdmin().getPassword()));
-		user.getRoleNames().add(UserUtils.Role.ADMIN);
+		user.getRoles().add(UserUtils.Role.ADMIN);
 		
 		return user;
 	}
@@ -90,15 +92,17 @@ public abstract class AbstractSpringService
 		logger.debug("Initializing user: " + user);
 
 		user.setPassword(passwordEncoder.encode(user.getPassword())); // encode the password
-		makeUnverified(user); // make the user unverified
+		Set<String> removedRoles = new HashSet<>();
+		Set<String> newRoles = new HashSet<>();
+		makeUnverified(user, removedRoles, newRoles); // make the user unverified
 	}
 	
 	/**
 	 * Makes a user unverified
 	 */
-	protected void makeUnverified(U user) {
-		
-		user.getRoleNames().add(UserUtils.Role.UNVERIFIED);
+	protected void makeUnverified(U user, Set<String> removedRoles, Set<String> newRoles) {
+		newRoles.add(UserUtils.Role.UNVERIFIED);
+		user.getRoles().add(UserUtils.Role.UNVERIFIED);
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
 	}
     

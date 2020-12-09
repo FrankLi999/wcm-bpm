@@ -18,7 +18,7 @@ public class JcrConstraintViolationExceptionHandler extends AbstractBadRequestEx
 
 	public JcrConstraintViolationExceptionHandler() {		
 		super(ConstraintViolationException.class);
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	@Override

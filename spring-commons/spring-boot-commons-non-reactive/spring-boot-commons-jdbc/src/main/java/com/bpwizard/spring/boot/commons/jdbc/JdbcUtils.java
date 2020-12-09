@@ -2,6 +2,8 @@ package com.bpwizard.spring.boot.commons.jdbc;
 
 import java.io.Serializable;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -41,5 +43,24 @@ public class JdbcUtils {
 		
 		if (original.getVersion() != updated.getVersion())
 			throw new VersionException(original.getClass().getSimpleName(), original.getId().toString());
+	}
+	
+	public static String sqlFragment(Pageable pageable) {
+		StringBuilder sqlFragment = new StringBuilder("");
+		if (pageable.getSort().isSorted()) {
+			sqlFragment.append("ORDER BY ");
+			int count = 0;
+			for (Order order: pageable.getSort().toList()) {
+				if (count > 0) {
+					sqlFragment.append(", ");
+				}
+				sqlFragment.append(order.getProperty()).append(" ").append(order.getDirection().name());
+				count++;
+			}
+		}
+		if (pageable.isPaged()) {
+			sqlFragment.append(" LIMIT").append(pageable.getPageSize()).append(" OFFSET").append(pageable.getOffset());
+		}
+		return sqlFragment.toString();
 	}
 }

@@ -22,10 +22,10 @@ import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.domain.IdConverter;
 import com.bpwizard.spring.boot.commons.jdbc.CommonsJdbcAutoConfiguration;
 import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUserService;
-import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
-import com.bpwizard.spring.boot.commons.service.repo.domain.RoleSeervice;
+import com.bpwizard.spring.boot.commons.service.domain.Role;
+import com.bpwizard.spring.boot.commons.service.domain.RoleService;
+import com.bpwizard.spring.boot.commons.service.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.UserService;
 import com.bpwizard.spring.boot.commons.service.security.OAuth2AuthenticationFailureHandler;
 import com.bpwizard.spring.boot.commons.service.security.OAuth2AuthenticationSuccessHandler;
 import com.bpwizard.spring.boot.commons.service.security.SpringAuthenticationSuccessHandler;
@@ -116,8 +116,8 @@ public class AutoConfiguration {
 	 */
 	@Bean
 	@ConditionalOnMissingBean(UserDetailsService.class)
-	public <U extends AbstractUser<ID>, ID extends Serializable>
-	SpringUserDetailsService<U, ID> userDetailService(AbstractUserService<U, ID> userService) {
+	public <U extends User<ID>, ID extends Serializable>
+	SpringUserDetailsService<U, ID> userDetailService(UserService<U, ID> userService) {
 		
         logger.info("Configuring SpringUserDetailsService");       
 		return new SpringUserDetailsService<U, ID>(userService);
@@ -139,7 +139,7 @@ public class AutoConfiguration {
 	 */
 	@Bean
 	@ConditionalOnMissingBean(SpringOAuth2UserService.class)	
-	public <U extends AbstractUser<ID>, ID extends Serializable>
+	public <U extends User<ID>, ID extends Serializable>
 		SpringOAuth2UserService<U,ID> springOAuth2UserService(
 			SpringUserDetailsService<U, ?> userDetailsService,
 			SpringService<U, ?> springService,
@@ -186,14 +186,14 @@ public class AutoConfiguration {
 	 * Configures UniqueEmailValidator if missing
 	 */
 	@Bean
-	public UniqueEmailValidator uniqueEmailValidator(AbstractUserService<?, ?> userService) {
+	public UniqueEmailValidator uniqueEmailValidator(UserService<?, ?> userService) {
 		
         logger.info("Configuring UniqueEmailValidator");       
 		return new UniqueEmailValidator(userService);		
 	}
 	
 	@Bean
-	public Map<String, Role> preloadedRoles(RoleSeervice roleService, SpringProperties properties) {
+	public Map<String, Role> preloadedRoles(RoleService<Role, Long> roleService, SpringProperties properties) {
 		
         logger.info("preloadedRoles");   //TODO, load in batch
         Map<String, Role> roles = new HashMap<>();

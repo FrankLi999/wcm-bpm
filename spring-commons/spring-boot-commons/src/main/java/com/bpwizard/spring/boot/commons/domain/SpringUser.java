@@ -6,7 +6,7 @@ public interface SpringUser<ID extends Serializable> {
 
 	void setEmail(String username);
 	void setPassword(String password);
-	Set<String> getRoleNames();
+	Set<String> getRoles();
 	String getPassword();
 	void setCredentialsUpdatedMillis(long currentTimeMillis);
 	ID getId();

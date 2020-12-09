@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 @Sql({"/test-data/initialize.sql", "/test-data/finalize.sql"})
@@ -73,7 +73,7 @@ public class LoginMvcTests extends AbstractMvcTests {
 		// Thread.sleep(1001L);		
 		User user = userService.findById(ADMIN_ID).get();
 		user.setCredentialsUpdatedMillis(System.currentTimeMillis());
-		userService.save(user);
+		userService.save(user, null, null);
 		
 		mvc.perform(get("/api/core/ping")
 				.header(HttpHeaders.AUTHORIZATION, tokens.get(ADMIN_ID)))

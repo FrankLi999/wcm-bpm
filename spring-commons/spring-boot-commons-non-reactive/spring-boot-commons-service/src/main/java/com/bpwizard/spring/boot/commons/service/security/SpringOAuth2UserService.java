@@ -27,18 +27,18 @@ import com.bpwizard.spring.boot.commons.exceptions.util.SpringExceptionUtils;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.security.UserDto;
 import com.bpwizard.spring.boot.commons.service.SpringService;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
-import com.bpwizard.spring.boot.commons.service.repo.domain.Role;
-import com.bpwizard.spring.boot.commons.service.repo.secureity.oauth2.AuthProvider;
-import com.bpwizard.spring.boot.commons.service.repo.secureity.oauth2.user.OAuth2UserInfo;
-import com.bpwizard.spring.boot.commons.service.repo.secureity.oauth2.user.OAuth2UserInfoFactory;
+import com.bpwizard.spring.boot.commons.service.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.Role;
+import com.bpwizard.spring.boot.commons.service.secureity.oauth2.AuthProvider;
+import com.bpwizard.spring.boot.commons.service.secureity.oauth2.user.OAuth2UserInfo;
+import com.bpwizard.spring.boot.commons.service.secureity.oauth2.user.OAuth2UserInfoFactory;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.bpwizard.spring.boot.commons.util.UserUtils;
 
 /**
  * Logs in or registers a user after OAuth2 SignIn/Up
  */
-public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Serializable> extends DefaultOAuth2UserService {
+public class SpringOAuth2UserService<U extends User<ID>, ID extends Serializable> extends DefaultOAuth2UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SpringOAuth2UserService.class);
 
@@ -142,11 +142,11 @@ public class SpringOAuth2UserService<U extends AbstractUser<ID>, ID extends Seri
 		user.setImageUrl(oauth2UserInfo.getImageUrl());
 		user.setProvider(AuthProvider.valueOf(registrationId));
 		user.setProviderId(oauth2UserInfo.getId());
-		user.getRoles().add(roles.get(UserUtils.Role.USER));
-		user.getRoles().add(roles.get(UserUtils.Role.READONLY));
-		user.getRoles().add(roles.get("wcm-viewer"));
+		user.getRoles().add(roles.get(UserUtils.Role.USER).getName());
+		user.getRoles().add(roles.get(UserUtils.Role.READONLY).getName());
+		user.getRoles().add(roles.get("wcm-viewer").getName());
 		springService.fillAdditionalFields(registrationId, user, attributes);
-		springService.save(user);
+		springService.create(user);
 		return user;
     }
 	

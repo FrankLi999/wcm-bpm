@@ -8,12 +8,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.bpwizard.spring.boot.commons.security.JSONWebSignatureService;
 import com.bpwizard.spring.boot.commons.security.UserDto;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.service.util.ServiceUtils;
 import com.bpwizard.spring.boot.commons.web.security.SpringCommonsWebTokenAuthenticationFilter;
 import com.nimbusds.jwt.JWTClaimsSet;
 
-public class SpringJpaTokenAuthenticationFilter<U extends AbstractUser<ID>, ID extends Serializable>
+public class SpringJpaTokenAuthenticationFilter<U extends User<ID>, ID extends Serializable>
 	extends SpringCommonsWebTokenAuthenticationFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(SpringJpaTokenAuthenticationFilter.class);

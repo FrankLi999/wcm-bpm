@@ -1,13 +1,11 @@
 package com.bpwizard.bpm.config;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,8 +14,6 @@ import com.bpwizard.spring.boot.commons.web.filter.LocaleFilter;
 
 
 @Configuration
-@EntityScan(basePackages= {"com.bpwizard.spring.boot.commons.service.repo"})
-@EnableJpaRepositories({"com.bpwizard.spring.boot.commons.service.repo"})
 @ComponentScan(basePackages={"com.bpwizard.bpm", "com.bpwizard.wcm_bpm", "com.bpwizard.spring.boot.commons"})
 public class BpmAppConfig {
 	@Autowired 

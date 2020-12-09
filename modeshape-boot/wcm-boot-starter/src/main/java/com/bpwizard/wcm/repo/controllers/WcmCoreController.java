@@ -19,8 +19,8 @@ import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.security.AuthenticationRequest;
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.service.SpringController;
-import com.bpwizard.spring.boot.commons.service.repo.annotations.CurrentUser;
-import com.bpwizard.spring.boot.commons.service.repo.domain.User;
+import com.bpwizard.spring.boot.commons.service.annotations.CurrentUser;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.wcm.repo.dto.WcmUserProfile;
 import com.bpwizard.wcm.repo.rest.jcr.controllers.WcmRequestHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
@@ -29,7 +29,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmSystem;
 
 // @RestController
 // @RequestMapping(WcmCoreController.BASE_URI)
-public class WcmCoreController extends SpringController<User, Long> {
+public class WcmCoreController extends SpringController<User<Long>, Long> {
 	private static final Logger logger = LogManager.getLogger(WcmCoreController.class);
 	public static final String BASE_URI = "/core/api/wcm";
 	@Autowired

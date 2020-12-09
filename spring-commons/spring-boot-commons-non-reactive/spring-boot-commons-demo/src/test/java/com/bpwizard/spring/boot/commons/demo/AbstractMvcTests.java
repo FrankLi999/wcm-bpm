@@ -22,7 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.bpwizard.spring.boot.commons.mail.MailSender;
-import com.bpwizard.spring.boot.commons.service.repo.domain.UserService;
+import com.bpwizard.spring.boot.commons.service.domain.User;
+import com.bpwizard.spring.boot.commons.service.domain.UserService;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 
 // @RunWith(SpringRunner.class)
@@ -56,7 +57,7 @@ public abstract class AbstractMvcTests {
     protected MockMvc mvc;
     
     @Autowired
-    protected UserService userService;
+    protected UserService<User<Long>, Long> userService;
     
     @SpyBean
     protected MailSender<?> mailSender;

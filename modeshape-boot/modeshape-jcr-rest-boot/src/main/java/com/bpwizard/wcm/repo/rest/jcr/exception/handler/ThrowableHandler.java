@@ -17,7 +17,7 @@ public class ThrowableHandler extends AbstractValidationExceptionHandler<Throwab
 	public ThrowableHandler() {
 		
 		super(Throwable.class);
-		log.info("Created");
+		logger.info("Created");
 	}
 	
 	@Override

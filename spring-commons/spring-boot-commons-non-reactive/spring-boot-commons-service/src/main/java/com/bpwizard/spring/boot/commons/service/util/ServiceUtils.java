@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.bpwizard.spring.boot.commons.security.SpringPrincipal;
 import com.bpwizard.spring.boot.commons.security.SpringTokenService;
-import com.bpwizard.spring.boot.commons.service.domain.AbstractUser;
+import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.util.SecurityUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
 
@@ -32,7 +32,7 @@ public class ServiceUtils {
 	 * 
 	 * @param user
 	 */
-	public static <U extends AbstractUser<ID>, ID extends Serializable>
+	public static <U extends User<ID>, ID extends Serializable>
 	void login(U user) {
 		
 		SpringPrincipal principal = new SpringPrincipal(user.toUserDto());
@@ -49,7 +49,7 @@ public class ServiceUtils {
 	 * Throws BadCredentialsException if 
 	 * user's credentials were updated after the JWT was issued
 	 */
-	public static <U extends AbstractUser<ID>, ID extends Serializable>
+	public static <U extends User<ID>, ID extends Serializable>
 	void ensureCredentialsUpToDate(JWTClaimsSet claims, U user) {
 		
 		long issueTime = (long) claims.getClaim(SpringTokenService.BPW_IAT);
