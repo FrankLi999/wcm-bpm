@@ -1,0 +1,2 @@
+and=com.bpwizard.gateway.web.condition.strategy.AndMatchStrategy
+or=com.bpwizard.gateway.web.condition.strategy.OrMatchStrategy

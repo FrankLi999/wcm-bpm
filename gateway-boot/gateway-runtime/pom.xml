@@ -26,18 +26,16 @@
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 
-		<!--soul gateway start-->
 		<dependency>
-			<groupId>org.dromara</groupId>
-			<artifactId>soul-spring-boot-starter-gateway</artifactId>
-			<version>2.2.0</version>
+			<groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>gateway-spring-boot-starter-gateway</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
-		<!--soul data sync start use http-->
 		<dependency>
-			<groupId>org.dromara</groupId>
-			<artifactId>soul-spring-boot-starter-sync-data-http</artifactId>
-			<version>2.2.0</version>
+			<groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>gateway-spring-boot-starter-sync-data-websocket</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

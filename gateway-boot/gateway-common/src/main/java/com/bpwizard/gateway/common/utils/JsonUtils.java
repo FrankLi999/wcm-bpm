@@ -1,41 +1,32 @@
-/*
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements.  See the NOTICE file distributed with
- *   this work for additional information regarding copyright ownership.
- *   The ASF licenses this file to You under the Apache License, Version 2.0
- *   (the "License"); you may not use this file except in compliance with
- *   the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- */
-
 package com.bpwizard.gateway.common.utils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -48,7 +39,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 
 /**
- * JsonUtils.
+ * Jackson Json JsonUtils.
  */
 @SuppressWarnings("deprecation")
 public final class JsonUtils {
@@ -78,6 +69,17 @@ public final class JsonUtils {
 
     }
 
+
+    /**
+     * To json node.
+     *
+     * @param object the object
+     * @return the string
+     */
+    public static JsonNode toJsonNode(final Object object) {
+        return mapper.valueToTree(object);
+    }
+    
     /**
      * To json string.
      *
@@ -92,6 +94,27 @@ public final class JsonUtils {
             return "{}";
         }
     }
+    
+    public static <T> T fromJson(JsonNode jsonNode, Class<T> valueType) {
+    	try {
+	    	return mapper.treeToValue(jsonNode, valueType);
+	    } catch (JsonMappingException e) {
+	    	throw new IllegalStateException("Json mapping error: " + e);
+	    } catch (JsonProcessingException e) {
+	     	throw new IllegalStateException("Json processing error: " + e);
+	    } 
+    }
+    
+    
+    public static <T> T fromJson(JsonNode jsonNode, TypeReference<T> ref) {
+    	try {
+	    	return mapper.readerFor(ref).readValue(jsonNode);
+	    } catch (IOException e) {
+	    	throw new IllegalStateException("Json mapping error: " + e);
+	    }  
+    }
+    
+    
     
     public static <T> T fromJson(String content, Class<T> valueType) {
 	    try {
@@ -112,6 +135,59 @@ public final class JsonUtils {
          	throw new IllegalStateException("Json processing error: " + e);
         } 
     }
+    
+    /**
+     * To object map map.
+     *
+     * @param json the json
+     * @return the map
+     */
+    public static Map<String, Object> toObjectMap(final String json) {
+    	try {
+    		return mapper.readValue(json, new TypeReference<LinkedHashMap<String, Object>>(){});
+	    } catch (JsonMappingException e) {
+	    	throw new IllegalStateException("Json mapping error: " + e);
+	    } catch (JsonProcessingException e) {
+	     	throw new IllegalStateException("Json processing error: " + e);
+	    } 
+        
+    }
+    
+
+    /**
+     * To tree map tree map.
+     *
+     * @param json the json
+     * @return the tree map
+     */
+    public static ConcurrentSkipListMap<String, Object> toTreeMap(final String json) {
+    	try {
+    		return mapper.readValue(json, new TypeReference<ConcurrentSkipListMap<String, Object>>(){});
+	    } catch (JsonMappingException e) {
+	    	throw new IllegalStateException("Json mapping error: " + e);
+	    } catch (JsonProcessingException e) {
+	     	throw new IllegalStateException("Json processing error: " + e);
+	    } 
+
+    }
+
+
+    /**
+     * toList Map.
+     *
+     * @param json json
+     * @return hashMap list
+     */
+    public static List<Map<String, Object>> toListMap(final String json) {
+    	try {
+    		return mapper.readValue(json, new TypeReference<ArrayList<Map<String, Object>>>(){});
+	    } catch (JsonMappingException e) {
+	    	throw new IllegalStateException("Json mapping error: " + e);
+	    } catch (JsonProcessingException e) {
+	     	throw new IllegalStateException("Json processing error: " + e);
+	    } 
+    }
+
     /**
      * Remove class object.
      *
@@ -132,6 +208,42 @@ public final class JsonUtils {
         } else {
             return object;
         }
+    }
+    
+    public static ObjectNode createObjectNode() {
+        return mapper.createObjectNode();
+    }
+	
+	public static ArrayNode creatArrayNode() {
+        return mapper.createArrayNode();
+    }
+	
+	public static TextNode createTextNode(String fromValue) {
+        return new TextNode(fromValue);
+    }
+	
+	public static JsonNode readTree(String fromValue) {
+        return mapper.convertValue(fromValue, JsonNode.class);
+    }
+	
+	public static JsonNode inputStreamToJsonNode(InputStream is) throws IOException {
+        return mapper.readTree(is);
+    }
+	
+	public static ArrayNode readTree(String fromValues[]) throws JsonProcessingException {
+		ArrayNode arrayNode = creatArrayNode();
+		for (String value: fromValues) {
+			arrayNode.add(mapper.readTree(value));
+		}
+		return arrayNode;
+    }
+	
+	public static String writeValueAsString(JsonNode jsonNode) throws JsonProcessingException {
+        return mapper.writeValueAsString(jsonNode);
+    }
+	
+	public static String objectAsJsonString(Object value) throws JsonProcessingException {
+        return mapper.writeValueAsString(value);
     }
 
 }

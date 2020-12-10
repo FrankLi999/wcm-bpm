@@ -1,0 +1,2 @@
+mysql=com.bpwizard.gateway.spi.fixture.MysqlSPI
+oracle=com.bpwizard.gateway.spi.fixture.OracleSPI
