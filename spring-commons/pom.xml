@@ -17,13 +17,13 @@
 		<relativePath>../</relativePath>
 	</parent>
 	<modules>
+	    <module>spring-boot-cluster</module>
 	    <module>spring-boot-hazelcast</module>
-		<module>spring-boot-ignite</module>
+	    <module>spring-boot-ignite</module>
 		<module>spring-boot-commons-exceptions</module>
 		<module>spring-boot-commons</module>
 		<module>spring-boot-commons-non-reactive</module>
 		<module>spring-boot-commons-reactive</module>
-		<module>wcm-bpm-commons</module>
 	</modules>
     <dependencies>
 	
