@@ -1,0 +1,3 @@
+random=com.bpwizard.gateway.web.balance.spi.RandomLoadBalance
+roundRobin=com.bpwizard.gateway.web.balance.spi.RoundRobinLoadBalance
+hash=com.bpwizard.gateway.web.balance.spi.HashLoadBalance

@@ -1,0 +1,22 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+	    <groupId>com.bpwizard.wcm-bpm</groupId>
+	    <artifactId>gateway-boot-starter-root</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+    
+    <artifactId>gateway-boot-starter-client-root</artifactId>
+	<name>gateway-boot-starter-client-root</name>
+    <packaging>pom</packaging>
+    <modules>
+		<module>gateway-spring-boot-starter-client-sofa</module>
+		<module>gateway-spring-boot-starter-client-springcloud</module>
+		<module>gateway-spring-boot-starter-client-springmvc</module>
+		
+    </modules>
+</project>

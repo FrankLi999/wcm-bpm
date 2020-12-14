@@ -11,7 +11,7 @@
 
 	<parent>
 	    <groupId>com.bpwizard.wcm-bpm</groupId>
-	    <artifactId>camunda-boot</artifactId>
+	    <artifactId>modeshape-boot</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>

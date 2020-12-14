@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+	    <groupId>com.bpwizard.wcm-bpm</groupId>
+	    <artifactId>gateway-boot</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+    
+    <artifactId>gateway-client-root</artifactId>
+	<name>gateway-client-root</name>
+    <packaging>pom</packaging>
+    <modules>
+        <module>gateway-client-common</module>
+        <module>sgateway-client-springmvc</module>
+        <module>gateway-client-springcloud</module>
+        <module>gateway-client-sofa</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+    </dependencies>
+</project>

@@ -30,59 +30,62 @@
 		-->
 	</properties>
 	<dependencyManagement>
-		<dependency>
-			<groupId>org.camunda.bpm.springboot</groupId>
-			<!-- <artifactId>camunda-bpm-spring-boot-starter</artifactId> -->
-			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId> 
-			<!-- <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId> -->
-			<version>${camunda.spring-boot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.camunda.bpm.springboot</groupId>
-			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
-			<version>${camunda.spring-boot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.camunda.bpm</groupId>
-			<artifactId>camunda-bom</artifactId>
-			<type>pom</type>
-			<scope>import</scope>
-			<version>${camunda.version}</version>
-		</dependency>
-		<!--
-		<dependency>
-			<groupId>org.camunda.spin</groupId>
-			<artifactId>camunda-spin-dataformat-json-jackson</artifactId>
-			<version>${camunda.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.camunda.bpm</groupId>
-			<artifactId>camunda-engine-plugin-spin</artifactId>
-			<version>${camunda.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.camunda.bpm.dmn</groupId>
-			<artifactId>camunda-engine-dmn</artifactId>
-			<version>${camunda.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.camunda.bpm.model</groupId>
-			<artifactId>camunda-dmn-model</artifactId>
-			<version>${camunda.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.camunda.bpm.dmn</groupId>
-			<artifactId>camunda-engine-feel-api</artifactId>
-			<version>${camunda.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.camunda.bpm.dmn</groupId>
-			<artifactId>camunda-engine-feel-juel</artifactId>
-			<version>${camunda.version}</version>
-		</dependency>
-		-->
+	  <dependencies>
+			<dependency>
+				<groupId>org.camunda.bpm.springboot</groupId>
+				<!-- <artifactId>camunda-bpm-spring-boot-starter</artifactId> -->
+				<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId> 
+				<!-- <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId> -->
+				<version>${camunda.spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.camunda.bpm.springboot</groupId>
+				<artifactId>camunda-bpm-spring-boot-starter</artifactId>
+				<version>${camunda.spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.camunda.bpm</groupId>
+				<artifactId>camunda-bom</artifactId>
+				<type>pom</type>
+				<scope>import</scope>
+				<version>${camunda.version}</version>
+			</dependency>
+			<!--
+			<dependency>
+				<groupId>org.camunda.spin</groupId>
+				<artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+				<version>${camunda.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.camunda.bpm</groupId>
+				<artifactId>camunda-engine-plugin-spin</artifactId>
+				<version>${camunda.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.camunda.bpm.dmn</groupId>
+				<artifactId>camunda-engine-dmn</artifactId>
+				<version>${camunda.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.camunda.bpm.model</groupId>
+				<artifactId>camunda-dmn-model</artifactId>
+				<version>${camunda.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.camunda.bpm.dmn</groupId>
+				<artifactId>camunda-engine-feel-api</artifactId>
+				<version>${camunda.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.camunda.bpm.dmn</groupId>
+				<artifactId>camunda-engine-feel-juel</artifactId>
+				<version>${camunda.version}</version>
+			</dependency>
+			-->
+		</dependencies>
 	</dependencyManagement>
 	<modules>
+	    <module>bpm-ui-boot-starter</module>
         <module>camunda-db-identity-plugin</module>	
 	    <module>camunda-rest-boot</module>
 	    <module>camunda-sample-processes</module>	

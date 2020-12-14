@@ -16,13 +16,13 @@
 		<relativePath>../</relativePath>
 	</parent>
 	<modules>
-            <module>bpm-wcm-client-model</module>
+      <module>bpm-wcm-client-model</module>
 	    <module>camel-syndicator</module>
-	    <module>bpm-ui-boot-starter</module>
+	    <!-- <module>bpm-ui-boot-starter</module> -->
 	    <module>wcm-workflow-client</module>
 	    <module>modeshape-commons-boot</module>
 	    <module>modeshape-jcr-boot</module>
-            <module>modeshape-jcr-rest-boot</module>
+      <module>modeshape-jcr-rest-boot</module>
 	    <module>modeshape-jcr-webdav-boot</module>
 	    <module>modeshape-webdav-boot</module>
 	    <module>wcm-boot</module>

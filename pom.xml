@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.bpwizard.wcm-bpm</groupId>
+  <groupId>com.bpwizard.wcm-bpm</groupId>
 	<artifactId>wcm-bpm-parent</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
@@ -18,15 +18,16 @@
 		<!-- <version>2.1.6.RELEASE</version>  -->
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<!--
-    <modules>
-	    <module>spring-commons</module>
+
+  <!--
+  <modules>
+	  <module>spring-commons</module>
 		<module>modeshape-boot</module>
 		<module>camunda-boot</module>
 		<module>setup</module>
 		<module>gateway-boot</module>
 	</modules>
-	-->
+  -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -34,6 +35,8 @@
 		<springfox.version>2.9.2</springfox.version>
 		<modeshape.version>5.4.1.Final</modeshape.version>
 		<atomikos.version>4.0.6</atomikos.version>
+		<mybatis.version>3.5.6</mybatis.version>
+		<joda-time.version>2.1</joda-time.version>
 		<!--
 		<ignite.version>2.8.0</ignite.version>
 		-->
@@ -55,11 +58,21 @@
 
 	<dependencyManagement>
 		<dependencies>
-		    <dependency>
-	            <groupId>javax.xml.bind</groupId>
-	            <artifactId>jaxb-api</artifactId>
-	            <version>${jaxb.api.version}</version>
-	        </dependency>
+		  <dependency>
+        <groupId>org.mybatis</groupId>
+        <artifactId>mybatis</artifactId>
+        <version>${mybatis.version}</version>
+      </dependency>
+      <dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>${joda-time.version}</version>
+			</dependency>
+		  <dependency>
+				<groupId>javax.xml.bind</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>${jaxb.api.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-kubernetes-dependencies</artifactId>
