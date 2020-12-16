@@ -54,6 +54,7 @@
 		<io.prometheus.version>0.9.0</io.prometheus.version>
 		<wiremock.version>2.27.2</wiremock.version>
 		<Java-WebSocket.version>1.5.0</Java-WebSocket.version>
+		<mybatis-spring-boot-starter.version>2.1.4</mybatis-spring-boot-starter.version>
 	</properties>
 
 	<dependencyManagement>

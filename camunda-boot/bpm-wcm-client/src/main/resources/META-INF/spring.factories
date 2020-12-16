@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.bpwizard.bpm.config.BpmAppConfig
+com.bpwizard.bpm.wcm.config.CamundaTaskConfig

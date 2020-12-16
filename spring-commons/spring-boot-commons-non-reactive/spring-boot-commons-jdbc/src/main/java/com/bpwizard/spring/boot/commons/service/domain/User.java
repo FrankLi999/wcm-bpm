@@ -137,7 +137,7 @@ public class User<ID extends Serializable> extends SpringEntity<ID> implements S
 
     // @NotNull
     // @Enumerated(EnumType.STRING)
-    private AuthProvider provider = AuthProvider.google;
+    private AuthProvider provider = AuthProvider.local;
 
     private String providerId;
     

@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 public interface UserService<U, ID> {
 	public Boolean existsByEmail(String email);
 
-	// public U save(U user);
-	public U save(U user, Set<String> removedRoles, Set<String> newRoles);
+	public void save(U user, Set<String> removedRoles, Set<String> newRoles);
 	public U create(U user);
 
 	public Optional<U> findById(ID id);

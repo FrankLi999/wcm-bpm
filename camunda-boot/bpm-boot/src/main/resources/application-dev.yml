@@ -78,7 +78,7 @@ spring:
     # url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
     username: wcmbpm
     password: P@ssw0rd
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     #driver-class-name: org.h2.Driver
     testOnBorrow: true
     testWhileIdle: true
@@ -197,6 +197,71 @@ bpw:
     # expiration-millis: 864000000 # 10 days
     # short-lived-millis: 120000   # two minutes
     short-lived-millis: 864000000 # 10 days
+mybatis:
+  # config-location: "classpath:/mybatis/mybatis-config.xml"
+  mapper-locations: 
+    - classpath:/mappers/*.xml
+    - classpath:/org/camunda/bpm/engine/impl/mapping/entity/*.xml
+  executor-type: BATCH
+  configuration-properties:
+    prefix: ""
+    limitBefore: ""
+    limitAfter: "LIMIT #{maxResults} OFFSET #{firstResult}"
+    limitBeforeWithoutOffset: ""
+    limitAfterWithoutOffset: "LIMIT #{maxResults}"
+    optimizeLimitBeforeWithoutOffset: ""
+    optimizeLimitAfterWithoutOffset: "LIMIT #{maxResults}"
+    innerLimitAfter: "LIMIT #{maxResults} OFFSET #{firstResult}"
+    limitBetween: ""
+    limitBetweenFilter: ""
+    limitBetweenAcquisition: ""
+    orderBy: "order by ${internalOrderBy}"
+    limitBeforeNativeQuery: ""
+    distinct: "distinct"
+    numericCast: ""
+    countDistinctBeforeStart: "select count(distinct"
+    countDistinctBeforeEnd: ")"
+    countDistinctAfterEnd: ""
+    escapeChar: "'\\\\'"
+    bitand1: ""
+    bitand2: " & "
+    bitand3: ""
+    datepart1: ""
+    datepart2: "("
+    datepart3: ")"
+
+    trueConstant: "1"
+    falseConstant: "0"
+
+    dbSpecificDummyTble: ""
+    dbSpecificIfNullFunction: "IFNULL"
+    dayComparator: "DATEDIFF(#{currentTimestamp}, ${date}) >= ${days}"
+    collationForCaseSensitivity: ""
+    #mysql specific constants
+    constant.event: "'event'"
+    constant.op_message: "CONCAT(NEW_VALUE_, '_|_', PROPERTY_)"
+    constant_for_update: "for update"
+    constant.datepart.quarter: "QUARTER"
+    constant.datepart.month: "MONTH"
+    constant.datepart.minute: "MINUTE"
+    constant.null.startTime: "null START_TIME_"
+    constant.varchar.cast: "'${key}'"
+    constant.integer.cast: "NULL"
+    constant.null.reporter: "NULL AS REPORTER_"
+
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 25000
+    dialect: mysql
+    cache-enabled: true
+    lazy-loading-enabled: true
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: false
+    #default-executor-type: SIMPLE
+    default-executor-type: BATCH
+        
 management:
   health:
     camunda:
@@ -207,11 +272,15 @@ camunda:
       enabled: false
     authorization:
       enabled: true
-    #database:
-      # schema-update: true
-      # schema-update: create-drop
-      # schema-update: true, false, create, create-drop, drop-create, default: true
-      # schema-update: create
+    database:
+      # tablePrefix: 
+      # true, false, create, create-drop, drop-create
+      schema-update: true
+      # h2, mysql, mariadb, oracle, postgres, mssql, db2 - auto detect
+      type: mysql
+      #table-prefix: ""
+      #schema-name: ""
+      #jdbc-batch-processing: true
     admin-user:
       id: demo
       password: demo

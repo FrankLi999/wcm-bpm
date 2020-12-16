@@ -1,25 +1,19 @@
 package com.bpwizard.bpm.config;
 
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 import com.bpwizard.bpm.rest.filter.StatelessUserAuthenticationFilter;
 
-@Configuration
-@EnableProcessApplication("wcm-boot")
 @ComponentScan(basePackages={"org.camunda.bpm.engine.rest, org.camunda.bpm.runtime, com.bpwizard.bpm.demo"})
 public class CamundaConfig {
-
 
 	@Autowired
 	ProcessEngine processEngine;
 	
-
 	@Bean
 	public FilterRegistrationBean<StatelessUserAuthenticationFilter> statelessUserAuthenticationFilter(){
 		FilterRegistrationBean<StatelessUserAuthenticationFilter> filterRegistration = new FilterRegistrationBean<>();

@@ -28,6 +28,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
@@ -165,8 +166,10 @@ public abstract class SpringService
 	protected Role createRole(String roleName, List<Tenant> tenants) {
 		Role role = new Role();
 		role.setName(roleName);
-		role.setTenants(tenants.stream().map(Tenant::getName).collect(Collectors.toSet()));
-		role = roleService.save(role);
+		if (!ObjectUtils.isEmpty(tenants)) {
+			role.setTenants(tenants.stream().map(Tenant::getName).collect(Collectors.toSet()));
+		}
+		role = roleService.create(role);
     	return role;
 	}
 

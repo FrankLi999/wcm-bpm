@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 public interface TenantService<T, ID> {
 	
 	public Optional<T> findByName(String name);
-	public T save(T entity);
+	public T create(T entity);
+	public void save(T entity);
 	public Optional<T> findById(ID id);
 	public boolean existsById(ID id);
 	public int deleteById(ID id);

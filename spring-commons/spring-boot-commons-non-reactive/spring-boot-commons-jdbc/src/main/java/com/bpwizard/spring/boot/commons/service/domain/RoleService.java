@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 public interface RoleService<R, ID> {
 	public Optional<R> findByName(String name);
 	
-	public R save(R role);
+	public void save(R role);
 	public R create(R role);
 
 	public Optional<R> findById(ID id);

@@ -23,12 +23,12 @@
         <opentracing-spring-jaeger-cloud.version>2.0.3</opentracing-spring-jaeger-cloud.version>
     </properties>
 	<dependencies>
-	    <!-- 
-		<dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-        </dependency>
-        -->
+	    <dependency>
+		    <groupId>org.mybatis.spring.boot</groupId>
+		    <artifactId>mybatis-spring-boot-starter</artifactId>
+		    <version>2.1.4</version>
+		</dependency>
+
 		<!-- <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>  --> 
 		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
@@ -72,7 +72,6 @@
 		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter-test</artifactId>
-			<version>${camunda.spring-boot.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -130,24 +129,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.tomcat.embed</groupId>
-					<artifactId>tomcat-embed-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.tomcat.embed</groupId>
-					<artifactId>tomcat-embed-websocket</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
-
+        <!--
 		<dependency>
 			<groupId>org.apache.tomcat.experimental</groupId>
 			<artifactId>tomcat-embed-programmatic</artifactId>
 			<version>${tomcat.version}</version>
 		</dependency>
-		
+		-->
 		<!--SpringFox dependencies -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -180,10 +169,12 @@
 		    <groupId>com.github.ulisesbocchio</groupId>
 		    <artifactId>jasypt-spring-boot-starter</artifactId>
 		</dependency>
+		<!-- 
 		<dependency>
             <groupId>org.jgroups</groupId>
             <artifactId>jgroups</artifactId>
         </dependency>
+         -->
         <!-- 
         <dependency>
 		    <groupId>org.jgroups</groupId>
@@ -224,20 +215,18 @@
 		    <groupId>io.micrometer</groupId>
 		    <artifactId>micrometer-core</artifactId>
 		</dependency>
-		<!-- 
+
 		<dependency>
           <groupId>com.h2database</groupId>
           <artifactId>h2</artifactId>
           <scope>test</scope>
         </dependency>
-        -->
-        <!--
         <dependency>
 		    <groupId>mysql</groupId>
 		    <artifactId>mysql-connector-java</artifactId>
 		</dependency>
-		-->
 		<!-- ignite caching -->
+		<!--
 		<dependency>
             <groupId>org.apache.ignite</groupId>
             <artifactId>ignite-core</artifactId>
@@ -258,12 +247,15 @@
             <artifactId>spring-boot-ignite</artifactId>
             <version>${project.version}</version>
         </dependency>
+		-->
+		<!-- 
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.197</version>
-            <!-- <scope>test</scope>  -->
+            <scope>test</scope>
         </dependency>
+        -->
         <!--
         <dependency>
             <groupId>org.apache.ignite</groupId>

@@ -1,39 +1,46 @@
 package com.bpwizard.spring.boot.commons.service.domain;
 
-import java.sql.Types;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import com.bpwizard.spring.boot.commons.jdbc.JdbcUtils;
+import com.bpwizard.spring.boot.commons.service.secureity.oauth2.AuthProvider;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 
 @Service
 public class UserServiceImpl implements UserService<User<Long>, Long> {
-	private static final String selectAllColumn = "SELECT name, email, password, first_name, last_name, image_url, provider, provider_id, version FROM usr WHERE %";
-	private static final String deleteByIdSql = "DELETE from usr where id = ? ";
-	private static final String deleteRoleMembershipByIdSql = "DELETE from user_role where user_id = ? ";
-	private static final String deleteTenantMembershipByIdSql = "DELETE from tenant_user where user_id = ? ";
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+	private static final String selectAllColumn = "SELECT id, name, email, password, first_name, last_name, image_url, provider, provider_id, version FROM usr WHERE %s";
+	private static final String deleteByIdSql = "DELETE from usr where id = :user_id ";
+	private static final String deleteRoleMembershipByIdSql = "DELETE from user_role where user_id = :user_id ";
+	private static final String deleteTenantMembershipByIdSql = "DELETE from tenant_user where user_id = :user_id ";
 	private static final String saveUserSql = "INSERT usr(" + 
 	    "created_by_id, name, email, email_verified, first_name, last_name, image_url, password, provider, provider_id, salt" + 
-		") values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " + 
+		") values(:created_by_id, :name, :email, :email_verified, :first_name, :last_name, :image_url, :password, :provider, :provider_id, :salt) " + 
 	    "ON DUPLICATE KEY UPDATE " + 
-	    "last_modified_by_id= ?, name = ?, email = ?, email_verified = ?, first_name = ?, last_name = ?, image_url = ?, " + 
-	    " password = ?, provider = ?, provider_id = ?, salt =?, " + 
-	    "lock_expiration_time = ?, new_email=?,  new_password=?, attempts=?, version=version+1";
+	    "last_modified_by_id= last_modified_by_id:, name = :name, email = :email, email_verified = :email_verified, first_name = :first_name, last_name = :last_name, image_url = :image_url, " + 
+	    " password = :password, provider = :provider, provider_id = :provider_id, salt =:salt, " + 
+	    "lock_expiration_time = :lock_expiration_time, new_email=:new_email,  new_password=:new_email, attempts=:attempts, version=version+1";
 	private static final String createUserSql = "INSERT usr(" + 
-		    "created_by_id, name, email, email_verified, first_name, last_name, image_url, password, provider, provider_id, salt" + 
-			") values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		    "created_by_id, name, email, email_verified, first_name, last_name, image_url, password, provider, provider_id, salt, attempts" + 
+			") values(:created_by_id, :name, :email, :email_verified, :first_name, :last_name, :image_url, :password, :provider, :provider_id, :salt, 0)";
 	private static final String findRolesByNameSql = "SELECT r.id, r.name FROM role r " +
 			"LEFT JOIN user_role ur ON r.id = ur.role_id " +
 			"LEFT JOIN usr u ON u.id = ur.user_id and u.name=:name";
@@ -42,21 +49,21 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 		"LEFT JOIN tenant_user ut ON t.id = ut.tenant_id " +
 		"LEFT JOIN usr u ON u.id = ut.user_id and u.name=:name";
 	
-	private static final String selectIds = "SELECT id FROM % WHERE name in (%s)";  
+	private static final String selectIds = "SELECT id FROM %s WHERE name in (%s)";  
 		
 	private static final String findByIdSql = String.format(selectAllColumn, "id=:id");
 	private static final String findByNameSql = String.format(selectAllColumn, "name=:name");
 	private static final String findByEmailSql = String.format(selectAllColumn, "email=:email");
-	private static final String findRoleByIdSql = "SELECT r.name FROM role r LEFT JOIN role_user ru ON r.id = ru.user_id LEFT JOIN usr u ON ru.user_ud = u.id AND u.id=:id";
+	private static final String findRoleByIdSql = "SELECT r.name FROM role r LEFT JOIN role_user ru ON r.id = ru.role_id LEFT JOIN usr u ON u.id=:id AND u.id = ru.user_id";
 	private static final String findAllSql = "SELECT * FROM usr %s";
 	private static final String findAllNamesSql = "SELECT name FROM usr %s";
 
-	private static final String joinTenantSql = "insert into tenant_user(created_by_id, user_id, tenant_id) values(?, ?)";
-	private static final String joinRoleSql = "insert into role_user(created_by_id, user_id, role_id) values(?, ?)";
-	private static final String removeRoleSql = "delete from role_user where user_id= ? and role_id = ? ";
+	private static final String joinTenantSql = "insert into tenant_user(created_by_id, user_id, tenant_id) values(:created_by_id, :user_id, :tenant_id)";
+	private static final String joinRoleSql = "insert into role_user(created_by_id, user_id, role_id) values(:created_by_id, :user_id, :role_id)";
+	private static final String removeRoleSql = "delete from role_user where user_id= :user_id and role_id = :role_id ";
 	
 	@Autowired 
-	private JdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate jdbcTemplate;
 	
 	@Override
 	public Boolean existsByEmail(String email) {
@@ -66,35 +73,44 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 	@Override
 	public Optional<User<Long>> findByName(String name) {
 		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("name", name);
-		User<Long> user = jdbcTemplate.queryForObject(
-				findByNameSql, new UserRowMapper(), namedParameters);
-        addRoles(user);
+		
+		User<Long> user = null; 
+		try {
+			user = jdbcTemplate.queryForObject(
+					findByNameSql, namedParameters, new UserRowMapper());
+	        addRoles(user);
+		} catch (EmptyResultDataAccessException e) {
+			logger.info("Not able to find user " + name, e);
+		}
 		return (user == null) ? Optional.empty() : Optional.of(user);
 	}
 
 	@Override
 	public User<Long> create(User<Long> user) {
-		Object[] params = { 
-			WebUtils.currentUserId(), user.getName(), user.getEmail(), user.getEmailVerified(), user.getFirstName(),
-		    user.getLastName(), user.getImageUrl(), user.getPassword(), user.getProvider(), user.getProviderId(), user.getSalt()		    
-		};
+		SqlParameterSource paramSource = new MapSqlParameterSource()
+				.addValue("created_by_id", WebUtils.currentUserId())
+				.addValue("name", user.getName())
+				.addValue("email", user.getEmail())
+				.addValue("email_verified", user.getEmailVerified())
+				.addValue("first_name", user.getFirstName())
+				.addValue("last_name", user.getLastName())
+				.addValue("image_url", user.getImageUrl())
+				.addValue("password", user.getPassword())
+				.addValue("provider", (user.getProvider() != null) ? user.getProvider().name() : AuthProvider.local.name())
+				.addValue("provider_id", user.getProviderId())
+				.addValue("salt", user.getSalt());
 		
-	    int[] types = {
-	    	Types.BIGINT, Types.VARCHAR, Types.VARCHAR, Types.BOOLEAN, Types.VARCHAR,
-	    	Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR
-	    	
-	    };
-	    jdbcTemplate.update(createUserSql, params, types);
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+	    jdbcTemplate.update(createUserSql, paramSource, keyHolder);
 		
-	    User<Long> newUser = this.findByName(user.getName()).get();
-		user.setId(newUser.getId());
+	    user.setId(keyHolder.getKeyAs(BigInteger.class).longValue());
 		
-		if (ObjectUtils.isEmpty(user.getTenants())) {
-			joinTenantsByName(newUser, user.getTenants());	
+		if (!ObjectUtils.isEmpty(user.getTenants())) {
+			joinTenantsByName(user, user.getTenants());	
 		}
 		
 		if (!ObjectUtils.isEmpty(user.getRoles())) {
-			joinRolesByName(newUser, user.getRoles());	
+			joinRolesByName(user, user.getRoles());	
 		}
 		return user;
 	}
@@ -102,19 +118,24 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 
 	
 	@Override
-	public User<Long> save(User<Long> user, Set<String> removedRoles, Set<String> newRoles) {
+	public void save(User<Long> user, Set<String> removedRoles, Set<String> newRoles) {
 		this.saveUser(user);
 		this.removeRolesByName(user, removedRoles);
 		this.joinRolesByName(user, newRoles);
-		return this.findByName(user.getName()).get();
 	}
 	
 	@Override
 	public Optional<User<Long>> findById(Long id) {
 		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", id);
-		User<Long> user = jdbcTemplate.queryForObject(
-				findByIdSql, new UserRowMapper(), namedParameters);
-		addRoles(user);
+		User<Long> user = null;
+		try {
+			user = jdbcTemplate.queryForObject(
+				findByIdSql, namedParameters, new UserRowMapper());
+			addRoles(user);
+		} catch (EmptyResultDataAccessException e) {
+			logger.info("Not able to find user " + id, e);
+		}
+
 		return (user == null) ? Optional.empty() : Optional.of(user);
 	}
 
@@ -125,12 +146,11 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 	
 	@Override
 	public int deleteById(Long id) {
-		
-		Object[] params = { id };
-	    int[] types = {Types.BIGINT};
-	    jdbcTemplate.update(deleteRoleMembershipByIdSql, params, types);
-	    jdbcTemplate.update(deleteTenantMembershipByIdSql, params, types);
-	    return jdbcTemplate.update(deleteByIdSql, params, types);
+		SqlParameterSource paramSource = new MapSqlParameterSource()
+				.addValue("user_id", id);
+	    jdbcTemplate.update(deleteRoleMembershipByIdSql, paramSource); //params, types);
+	    jdbcTemplate.update(deleteTenantMembershipByIdSql, paramSource); //params, types);
+	    return jdbcTemplate.update(deleteByIdSql, paramSource); //params, types);
 		
 	}
 
@@ -142,9 +162,14 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 	@Override
 	public Optional<User<Long>> findByEmail(String email) {
 		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("email", email);
-		User<Long> user = jdbcTemplate.queryForObject(
-				findByEmailSql, new UserRowMapper(), namedParameters);
-		addRoles(user);
+		User<Long> user = null;
+		try {
+			user = jdbcTemplate.queryForObject(
+				findByEmailSql, namedParameters, new UserRowMapper());
+			addRoles(user);
+		} catch (EmptyResultDataAccessException e) {
+			logger.info("Not able to find user " + email, e);
+		}
 		return (user == null) ? Optional.empty() : Optional.of(user);
 	}
 	
@@ -160,8 +185,8 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("name", name);
 		return jdbcTemplate.query(
 				findRolesByNameSql, 
-				new RoleRowMapper(),
-				namedParameters);
+				namedParameters,
+				new RoleRowMapper());
 	}
 	
 	@Override
@@ -169,8 +194,8 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("name", name);
 		return jdbcTemplate.query(
 				findTenantsByNameSql, 
-				new TenantRowMapper(),
-				namedParameters);
+				namedParameters,
+				new TenantRowMapper());
 	}
 	
 	@Override
@@ -181,33 +206,37 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 	}
 	
 	public int[] joinTenants(User<Long> user, List<Tenant> tenants) {
+
 		if (ObjectUtils.isEmpty(tenants)) {
 			return new int[] {};
 		}
-		List<Object[]> batchArgs = new ArrayList<>();
+		List<SqlParameterSource> batchArgs = new ArrayList<>();
 		for (Tenant tenant: tenants) {
-			Object[] params = { WebUtils.currentUserId(), user.getId(), tenant.getId() };
-			batchArgs.add(params);
+			SqlParameterSource namedParameters = new MapSqlParameterSource()
+					.addValue("created_by_id", WebUtils.currentUserId())
+					.addValue("user_id", user.getId())
+					.addValue("tenant_id", tenant.getId());
+			batchArgs.add(namedParameters);
 		}
-	
-	    int[] types = {Types.BIGINT, Types.BIGINT, Types.BIGINT};
 
-	    return jdbcTemplate.batchUpdate(joinTenantSql, batchArgs, types);
+
+	    return jdbcTemplate.batchUpdate(joinTenantSql, batchArgs.toArray(new SqlParameterSource[batchArgs.size()])); //batchArgs, types);
 	}
 	
 	public int[] joinRoles(User<Long> user, List<Role> roles) {
 		if (ObjectUtils.isEmpty(roles)) {
 			return new int[] {};
 		}
-		List<Object[]> batchArgs = new ArrayList<>();
+		List<SqlParameterSource> batchArgs = new ArrayList<>();
 		for (Role role: roles) {
-			Object[] params = { WebUtils.currentUserId(), user.getId(), role.getId() };
-			batchArgs.add(params);
+			SqlParameterSource namedParameters = new MapSqlParameterSource()
+					.addValue("created_by_id", WebUtils.currentUserId())
+					.addValue("user_id", user.getId())
+					.addValue("role_id", role.getId());
+			batchArgs.add(namedParameters);
 		}
-	
-	    int[] types = {Types.BIGINT, Types.BIGINT, Types.BIGINT};
 
-	    return jdbcTemplate.batchUpdate(joinRoleSql, batchArgs, types);
+	    return jdbcTemplate.batchUpdate(joinRoleSql, batchArgs.toArray(new SqlParameterSource[batchArgs.size()])); //batchArgs, types);
 	}
 	
 	public int[] joinTenantsByName(User<Long> user, Set<String> tenants) {
@@ -215,15 +244,16 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 			return new int[] {};
 		}
 		List<String> tenantIds = getIds("tenant", tenants);
-		List<Object[]> batchArgs = new ArrayList<>();
+		List<SqlParameterSource> batchArgs = new ArrayList<>();
 		for (String tenantId: tenantIds) {
-			Object[] params = { WebUtils.currentUserId(), user.getId(), tenantId };
-			batchArgs.add(params);
+			SqlParameterSource namedParameters = new MapSqlParameterSource()
+					.addValue("created_by_id", WebUtils.currentUserId())
+					.addValue("user_id", user.getId())
+					.addValue("tenant_id", tenantId);
+			batchArgs.add(namedParameters);
 		}
-	
-	    int[] types = {Types.BIGINT, Types.BIGINT, Types.BIGINT};
 
-	    return jdbcTemplate.batchUpdate(joinTenantSql, batchArgs, types);
+	    return jdbcTemplate.batchUpdate(joinTenantSql, batchArgs.toArray(new SqlParameterSource[batchArgs.size()])); //batchArgs, types);
 	}
 
 	public int[] joinRolesByName(User<Long> user, Set<String> roles) {
@@ -231,15 +261,16 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 			return new int[] {};
 		}
 		List<String> roleIds = getIds("role", roles);
-		List<Object[]> batchArgs = new ArrayList<>();
+		List<SqlParameterSource> batchArgs = new ArrayList<>();
 		for (String roleId: roleIds) {
-			Object[] params = { WebUtils.currentUserId(), user.getId(), roleId };
-			batchArgs.add(params);
+			SqlParameterSource namedParameters = new MapSqlParameterSource()
+					.addValue("created_by_id", WebUtils.currentUserId())
+					.addValue("user_id", user.getId())
+					.addValue("role_id", roleId);
+			batchArgs.add(namedParameters);
 		}
 	
-	    int[] types = {Types.BIGINT, Types.BIGINT, Types.BIGINT};
-
-	    return jdbcTemplate.batchUpdate(joinRoleSql, batchArgs, types);
+	    return jdbcTemplate.batchUpdate(joinRoleSql, batchArgs.toArray(new SqlParameterSource[batchArgs.size()])); //batchArgs, types);
 	}
 	
 	public int[] removeRolesByName(User<Long> user, Set<String> roles) {
@@ -252,9 +283,8 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 			Object[] params = { user.getId(), roleId };
 			batchArgs.add(params);
 		}
-	    int[] types = {Types.BIGINT, Types.BIGINT};
 
-	    return jdbcTemplate.batchUpdate(removeRoleSql, batchArgs, types);
+	    return jdbcTemplate.batchUpdate(removeRoleSql, batchArgs.toArray(new SqlParameterSource[batchArgs.size()])); //batchArgs, types);
 	}
 	private String candidateNames(Set<String> names) {
 		StringBuilder candidateNames = new StringBuilder();
@@ -281,28 +311,31 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 			SqlParameterSource idParameters = new MapSqlParameterSource().addValue("id", user.getId());
 			user.setRoles(jdbcTemplate.query(
 				findRoleByIdSql,
-				new NameColumnRowMapper(), 
-				idParameters).stream().collect(Collectors.toSet()));
+				idParameters,
+				new NameColumnRowMapper()).stream().collect(Collectors.toSet()));
 		}
 	}
 	
 	protected User<Long> saveUser(User<Long> user) {
+		SqlParameterSource paramSource = new MapSqlParameterSource()
+				.addValue("created_by_id", WebUtils.currentUserId())
+				.addValue("name", user.getName())
+				.addValue("email", user.getEmail())
+				.addValue("email_verified", user.getEmailVerified())
+				.addValue("first_name", user.getFirstName())
+				.addValue("last_name", user.getLastName())
+				.addValue("image_url", user.getImageUrl())
+				.addValue("password", user.getPassword())
+				.addValue("provider", user.getProvider())
+				.addValue("provider_id", user.getProviderId())
+				.addValue("salt", user.getSalt())
+		        .addValue("last_modified_by_id", WebUtils.currentUserId())
+		        .addValue("lock_expiration_time",user.getLockExpirationTime())
+		        .addValue("new_email", user.getNewEmail())
+		        .addValue("new_password", user.getNewPassword())
+		        .addValue("attempts", user.getAttempts());
 		
-		Object[] params = { 
-			WebUtils.currentUserId(), user.getName(), user.getEmail(), user.getEmailVerified(), user.getFirstName(),
-		    user.getLastName(), user.getImageUrl(), user.getPassword(), user.getProvider(), user.getProviderId(), user.getSalt(),
-		    WebUtils.currentUserId(), user.getName(), user.getEmail(), user.getEmailVerified(), user.getFirstName(), user.getLastName(), user.getImageUrl(),
-		    user.getPassword(), user.getProvider(), user.getProviderId(), user.getSalt(), user.getLockExpirationTime(), user.getNewEmail(), user.getNewPassword(), user.getAttempts()
-		};
-		
-	    int[] types = {
-	    	Types.BIGINT, Types.VARCHAR, Types.VARCHAR, Types.BOOLEAN, Types.VARCHAR,
-	    	Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
-	    	Types.BIGINT, Types.VARCHAR, Types.VARCHAR, Types.BOOLEAN, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-	    	Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.VARCHAR, Types.VARCHAR, Types.INTEGER
-	    	
-	    };
-	    jdbcTemplate.update(saveUserSql, params, types);
+	    jdbcTemplate.update(saveUserSql, paramSource); //params, types);
 	    return this.findByName(user.getName()).get();
 	}
 }
