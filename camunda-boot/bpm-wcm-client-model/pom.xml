@@ -4,14 +4,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bpm-wcm-client-model</artifactId>
+	<artifactId>bpm-wcm-client-model</artifactId>
 	<packaging>jar</packaging>
 	<name>bpm-wcm-client-model</name>
-	<description>Spring Boot Modeshape BPM Client</description>
+	<description>Spring Boot Camunda</description>
 
 	<parent>
 	    <groupId>com.bpwizard.wcm-bpm</groupId>
-	    <artifactId>modeshape-boot</artifactId>
+	    <artifactId>camunda-boot</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>

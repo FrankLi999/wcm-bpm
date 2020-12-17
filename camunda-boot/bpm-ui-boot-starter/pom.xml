@@ -4,14 +4,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bpm-ui-boot-starter</artifactId>
+  <artifactId>bpm-ui-boot-starter</artifactId>
 	<packaging>jar</packaging>
 	<name>bpm-ui-boot-starter</name>
 	<description>Spring Boot Modeshape BPM Client</description>
 
 	<parent>
-	    <groupId>com.bpwizard.wcm-bpm</groupId>
-	    <artifactId>camunda-boot</artifactId>
+	  <groupId>com.bpwizard.wcm-bpm</groupId>
+	  <artifactId>camunda-boot</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
@@ -125,7 +125,7 @@
 		
 		<!-- camunda dependencies -->
 	    <dependency>
-	      	<groupId>org.camunda.bpm</groupId>
+	      	<groupId>com.bpwizard.camunda.bpm</groupId>
 	      	<artifactId>camunda-engine</artifactId>
 	    </dependency>
 	</dependencies>

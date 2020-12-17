@@ -18,28 +18,28 @@
 	
 	<dependencies>
 	    <dependency>
-	      	<groupId>org.camunda.bpm.model</groupId>
+	      	<groupId>com.bpwizard.camunda.bpm.model</groupId>
 	      	<artifactId>camunda-bpmn-model</artifactId>
 	    </dependency>
 	
 	    <dependency>
-	      	<groupId>org.camunda.bpm.model</groupId>
+	      	<groupId>com.bpwizard.camunda.bpm.model</groupId>
 	      	<artifactId>camunda-cmmn-model</artifactId>
 	    </dependency>
         <dependency>
-	      	<groupId>org.camunda.bpm.model</groupId>
+	      	<groupId>com.bpwizard.camunda.bpm.model</groupId>
 	      	<artifactId>camunda-dmn-model</artifactId>
 	    </dependency>
 	    <dependency>
-	      	<groupId>org.camunda.bpm</groupId>
+	      	<groupId>com.bpwizard.camunda.bpm</groupId>
 	      	<artifactId>camunda-engine</artifactId>
 	    </dependency>
 	    <dependency>
-	      	<groupId>org.camunda.bpm.dmn</groupId>
+	      	<groupId>com.bpwizard.camunda.bpm.dmn</groupId>
 	      	<artifactId>camunda-engine-dmn</artifactId>
 	    </dependency>
 	    <dependency>
-	      	<groupId>org.camunda.commons</groupId>
+	      	<groupId>com.bpwizard.camunda.commons</groupId>
 	      	<artifactId>camunda-commons-typed-values</artifactId>
 	    </dependency>
 		<dependency>

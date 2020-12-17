@@ -10,10 +10,10 @@
 	<description>Spring Boot Camunda</description>
 
 	<parent>
-	    <groupId>com.bpwizard.wcm-bpm</groupId>
-	    <artifactId>camunda-boot</artifactId>
+    <groupId>com.bpwizard.wcm-bpm</groupId>
+	  <artifactId>camunda-boot</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../</relativePath>
+		<relativePath/>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -50,17 +50,22 @@
 		</dependency>
 		<!-- camunda dependencies -->
 	    <dependency>
-	      	<groupId>org.camunda.bpm</groupId>
+	      	<groupId>com.bpwizard.camunda.bpm</groupId>
 	      	<artifactId>camunda-engine</artifactId>
 	    </dependency>
-	    
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.camunda.bpm.springboot</groupId>
+		  <groupId>org.assertj</groupId>
+		  <artifactId>assertj-core</artifactId>
+		  <!-- <version>3.13.2</version>  -->
+		</dependency>
+
+		<dependency>
+			<groupId>com.bpwizard.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -71,12 +76,7 @@
 		  <scope>test</scope>
 		</dependency>
 		
-		<dependency>
-		  <groupId>org.assertj</groupId>
-		  <artifactId>assertj-core</artifactId>
-		  <!-- <version>3.13.2</version>  -->
-		</dependency>
-
+		
 		<dependency>
 			<groupId>org.camunda.bpm.extension</groupId>
 			<artifactId>camunda-bpm-assert-scenario</artifactId>
@@ -89,7 +89,6 @@
 			<version>0.3.2</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>javax.servlet-api</artifactId>

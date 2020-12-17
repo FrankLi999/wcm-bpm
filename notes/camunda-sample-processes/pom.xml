@@ -15,12 +15,12 @@
 	</properties>
 	<dependencies>
 		<dependency>
-				<groupId>org.camunda.bpm</groupId>
+				<groupId>com.bpwizard.camunda.bpm</groupId>
 				<artifactId>camunda-engine</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.camunda.bpm.springboot</groupId>
+			<groupId>com.bpwizard.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
 		</dependency>
 		<dependency>
@@ -29,12 +29,12 @@
 		  	<version>1.4.0</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.camunda.spin</groupId>
+		    <groupId>com.bpwizard.camunda.spin</groupId>
 		    <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
 		    <!-- <version>1.7.1</version> -->
 		</dependency>
 		<dependency>
-		    <groupId>org.camunda.bpm</groupId>
+		    <groupId>com.bpwizard.camunda.bpm</groupId>
 		    <artifactId>camunda-engine-plugin-spin</artifactId>
 		</dependency>
 		<dependency>
@@ -54,7 +54,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-			<groupId>org.camunda.bpm.springboot</groupId>
+			<groupId>com.bpwizard.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter-test</artifactId>
 			<version>${camunda.spring-boot.version}</version>
 			<scope>test</scope>
@@ -65,7 +65,7 @@
 		</dependency>
 		
         <dependency>
-	        <groupId>org.camunda.bpm.dmn</groupId>
+	        <groupId>com.bpwizard.camunda.bpm.dmn</groupId>
 	        <artifactId>camunda-engine-dmn</artifactId>
 	    </dependency>
 		<dependency>
@@ -97,12 +97,12 @@
 		</dependency>
 		<!-- Http connector -->
 		<dependency>
-	      	<groupId>org.camunda.bpm</groupId>
+	      	<groupId>com.bpwizard.camunda.bpm</groupId>
 	      	<artifactId>camunda-engine-plugin-connect</artifactId>	      	
 	      	<!-- <scope>provided</scope>  -->
 	    </dependency>
 	    <dependency>
-	      	<groupId>org.camunda.connect</groupId>
+	      	<groupId>com.bpwizard.camunda.connect</groupId>
 	      	<artifactId>camunda-connect-http-client</artifactId>
 	      	<!-- <scope>provided</scope>  -->
 	    </dependency>	

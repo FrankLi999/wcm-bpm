@@ -16,23 +16,23 @@
 		<relativePath>../</relativePath>
 	</parent>
     <properties>
-		<camunda.spring-boot.version>7.15.0-SNAPSHOT</camunda.spring-boot.version>
-		<camunda.version>7.15.0-SNAPSHOT</camunda.version>
+		<camunda.spring-boot.version>${project.version}</camunda.spring-boot.version>
+		<camunda.version>${project.version}</camunda.version>
 	</properties>
 	<dependencyManagement>
 	  <dependencies>
 			<dependency>
-				<groupId>org.camunda.bpm.springboot</groupId>
-				<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId> 
+				<groupId>com.bpwizard.camunda.bpm.springboot</groupId>
+				<artifactId>camunda-bpm-spring-boot-starter-test</artifactId> 
 				<version>${camunda.spring-boot.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.camunda.bpm.springboot</groupId>
+				<groupId>com.bpwizard.camunda.bpm.springboot</groupId>
 				<artifactId>camunda-bpm-spring-boot-starter</artifactId>
 				<version>${camunda.spring-boot.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.camunda.bpm</groupId>
+				<groupId>com.bpwizard.camunda.bpm</groupId>
 				<artifactId>camunda-bom</artifactId>
 				<type>pom</type>
 				<scope>import</scope>
@@ -40,13 +40,13 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	
 	<modules>
-	    <module>bpm-ui-boot-starter</module>
-        <module>camunda-db-identity-plugin</module>	
+	    <module>bpm-wcm-client-model</module>	
+			<module>bpm-wcm-client</module>	
+	  	<module>bpm-ui-boot-starter</module>
+      <module>camunda-db-identity-plugin</module>	
 	    <module>camunda-rest-boot</module>
-	    <module>camunda-sample-processes</module>	
-	    <module>camunda-sample-client</module>	
-	    <module>bpm-wcm-client</module>	
 	    <module>bpm-boot</module>	
 	    <module>bpm-boot-starter</module>	
 	</modules>    

@@ -29,9 +29,8 @@
 		    <version>2.1.4</version>
 		</dependency>
 
-		<!-- <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>  --> 
 		<dependency>
-			<groupId>org.camunda.bpm.springboot</groupId>
+			<groupId>com.bpwizard.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
 		</dependency>
 		
@@ -70,7 +69,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.camunda.bpm.springboot</groupId>
+			<groupId>com.bpwizard.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
