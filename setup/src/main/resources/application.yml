@@ -1,5 +1,5 @@
 bpw:
-  mysqlUrl: "jdbc:mysql://localhost:3306"
+  mysqlUrl: "jdbc:mysql://mysql:3306"
   mysqlAdminUser: mysqladmin
   mysqlAdminPassword: P@ssw0rd
   mysqlUser: wcmbpm

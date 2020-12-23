@@ -11,7 +11,7 @@
         "persistence" : {
             "type" : "db",
             "connectionUrl": "jdbc:mysql://${DB_HOSTNAME}:${DB_PORT}/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
-            "driver": "com.mysql.jdbc.Driver",
+            "driver": "com.mysql.cj.jdbc.Driver",
             "createOnStart" : true,
             "dropOnExit" : false,
             "username": "${DB_USERNAME}",
@@ -19,7 +19,7 @@
         },
         "binaryStorage" : {
             "type"  : "database",
-            "driverClass" : "com.mysql.jdbc.Driver",
+            "driverClass" : "com.mysql.cj.jdbc.Driver",
             "url" : "jdbc:mysql://${DB_HOSTNAME}:${DB_PORT}/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false",
             "username": "${DB_USERNAME}",
             "password": "${DB_PASSWORD}"

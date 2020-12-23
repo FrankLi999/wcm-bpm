@@ -47,7 +47,7 @@ public class WcmEventService extends AbstractHandler {
 	@PostConstruct
 	private void postConstruct() {
 		simpleJdbcInsert = 
-			new SimpleJdbcInsert(jdbcTemplate).withTableName("SYN_WCM_EVENT").usingGeneratedKeyColumns("ID");
+			new SimpleJdbcInsert(jdbcTemplate).withTableName("SYN_WCM_EVENT"); //.usingGeneratedKeyColumns("ID");
 	};
 	
 	public int clearWcmEventBefore(Timestamp timestamp) {
@@ -56,7 +56,7 @@ public class WcmEventService extends AbstractHandler {
 	    return jdbcTemplate.update(clearWcmEventsSql, params, types);
 	}
 
-	public Long addWcmEvent(WcmEvent event) {
+	public int addWcmEvent(WcmEvent event) {
 		return doInsert(event);
 	}
 
@@ -110,9 +110,9 @@ public class WcmEventService extends AbstractHandler {
 		return jdbcTemplate.batchUpdate(updateEventSql, batchArgs, argTypes);
     }
 	
-	protected Long doInsert(WcmEvent event) {
+	protected int doInsert(WcmEvent event) {
 		MapSqlParameterSource parameters = insertParameters(event);
-		 return simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+		 return simpleJdbcInsert.execute(parameters);
 	}
 	
 	protected int doUpsert(WcmEvent event) {
@@ -122,6 +122,8 @@ public class WcmEventService extends AbstractHandler {
 	}
 	
 	protected MapSqlParameterSource insertParameters(WcmEvent event) {
+		event.setTimeCreated(new Timestamp(System.currentTimeMillis()));
+		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("ID", event.getId());
 		parameters.addValue("REPOSITORY", event.getRepository());
@@ -132,6 +134,8 @@ public class WcmEventService extends AbstractHandler {
 	    parameters.addValue("OPERATION", event.getOperation().name());
 	    parameters.addValue("timeCreated", event.getTimeCreated());
 	    parameters.addValue("CONTENT", event.getContent());
+	    
+	    
 	    return parameters;
 	}
 	

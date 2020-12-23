@@ -130,7 +130,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.tomcat.experimental</groupId>
 			<artifactId>tomcat-embed-programmatic</artifactId>

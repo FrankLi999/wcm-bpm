@@ -52,7 +52,7 @@ public class ReactiveAutoConfiguration {
 				JSONWebSignatureService jwsTokenService,
 				AbstractMongoUserRepository<U, ID> userRepository,
 				SpringReactiveUserDetailsService<U, ID> userDetailsService,
-				SpringReactiveService<U, ID> lemonService,
+				SpringReactiveService<U, ID> springService,
 				PasswordEncoder passwordEncoder,
 				SpringProperties properties) {
 		
@@ -62,7 +62,7 @@ public class ReactiveAutoConfiguration {
 				jwsTokenService,
 				userRepository,
 				userDetailsService,
-				lemonService,
+				springService,
 				passwordEncoder,
 				properties);
 	}

@@ -22,7 +22,7 @@ import com.bpwizard.spring.boot.commons.service.SpringController;
 import com.bpwizard.spring.boot.commons.service.annotations.CurrentUser;
 import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.wcm.repo.dto.WcmUserProfile;
-import com.bpwizard.wcm.repo.rest.jcr.controllers.WcmRequestHandler;
+import com.bpwizard.wcm.repo.rest.handler.WcmRequestHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmSystem;

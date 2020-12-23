@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Charsets;
 
 @Component
-public class WcmEventKafkaPublisher {
+public class WcmEventKafkaPublisher implements WcmEventQueuePublisher {
 	@Autowired
 	private KafkaTemplate<String, Object> kafkaTemplate;
 	

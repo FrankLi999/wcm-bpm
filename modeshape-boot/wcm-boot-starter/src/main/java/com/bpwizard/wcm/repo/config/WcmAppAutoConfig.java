@@ -4,19 +4,27 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 // import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
+import com.bpwizard.spring.boot.commons.service.AutoConfiguration;
 import com.bpwizard.spring.boot.commons.web.filter.LocaleFilter;
 import com.bpwizard.wcm.repo.rest.filter.CleanupFilter;
 import com.bpwizard.wcm.repo.rest.filter.LoggingFilter;
 
 @Configuration
-// @EntityScan(basePackages= {"com.bpwizard.spring.boot.commons.service.repo"})
-// @EnableJpaRepositories({"com.bpwizard.spring.boot.commons.service.repo"})
-@ComponentScan(basePackages={"com.bpwizard.wcm.repo", "com.bpwizard.wcm_bpm", "com.bpwizard.spring.boot.commons"})
-@AutoConfigureBefore({ModeshapeAppConfig.class, ModeshapeConfig.class})
-public class WcmAppConfig {
+@ComponentScan(basePackages={"com.bpwizard.spring.boot.commons"})
+@Import({
+	  AppSecurityConfig.class,
+	  MailConfig.class,
+	  ModeshapeAppConfig.class,
+	  SwaggerConfig.class,
+	  WebdavConfig.class,
+	  WebSocketConfig.class
+	})
+@AutoConfigureBefore({ModeshapeConfig.class, AutoConfiguration.class})
+public class WcmAppAutoConfig {
 
 
 	@Bean

@@ -67,13 +67,13 @@ public class ReactiveCookieServerOAuth2AuthorizedClientRepository implements Ser
 
 		response.addCookie(cookie);
 		
-		String lemonRedirectUri = exchange.getRequest()
+		String springRedirectUri = exchange.getRequest()
 				.getQueryParams().getFirst(SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME);
 		
-		if (StringUtils.hasText(lemonRedirectUri)) {
+		if (StringUtils.hasText(springRedirectUri)) {
 			
 			cookie = ResponseCookie
-					.from(SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME, lemonRedirectUri)
+					.from(SecurityUtils.BPW_REDIRECT_URI_COOKIE_PARAM_NAME, springRedirectUri)
 					.path("/")
 					.httpOnly(true)
 					.maxAge(cookieExpirySecs)

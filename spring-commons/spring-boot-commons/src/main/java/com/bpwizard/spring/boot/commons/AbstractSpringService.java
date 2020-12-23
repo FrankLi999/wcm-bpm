@@ -44,9 +44,9 @@ public abstract class AbstractSpringService
     @EventListener
     public void afterApplicationReady(ApplicationReadyEvent event) {
     	
-    	logger.info("Starting up Spring Lemon ...");
+    	logger.info("Starting up Spring boot commons ...");
     	onStartup(); // delegate to onStartup()
-    	logger.info("Spring Lemon started");	
+    	logger.info("Spring boot commons started");	
     }
 
 	protected abstract void onStartup();

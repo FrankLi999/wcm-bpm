@@ -21,6 +21,7 @@ public class UserRowMapper implements RowMapper<User<Long>> {
     	user.setProvider(AuthProvider.valueOf(rs.getString("provider")));
     	user.setProviderId(rs.getString("provider_id"));
     	user.setVersion(rs.getLong("version"));
+    	user.setCredentialsUpdatedMillis(rs.getLong("credentials_updated_millis"));
         return user;
     }
 }

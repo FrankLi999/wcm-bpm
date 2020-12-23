@@ -69,7 +69,7 @@ spring:
     url: jdbc:mysql://${RDS_HOSTNAME:mysql}:${RDS_PORT:3306}/${RDS_DB_NAME:wcm_bpm}?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     username: ${RDS_USERNAME:wcmbpm}
     password: ${RDS_PASSWORD:P@ssw0rd}
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     # driver-class-name: org.h2.Driver
     # username: ${vaultConfiguration.dbUser}
     # password: ${vaultConfiguration.dbPassword}
@@ -160,7 +160,7 @@ bpw:
       url: jdbc:mysql://${RDS_HOSTNAME:mysql}:${RDS_PORT:3306}/${RDS_DB_NAME:wcm_bpm}?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       username: ${RDS_USERNAME:wcmbpm}
       password: ${RDS_PASSWORD:P@ssw0rd}
-      driver-class-name: com.mysql.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver
     authoring:
       enabled: true
   # auth:

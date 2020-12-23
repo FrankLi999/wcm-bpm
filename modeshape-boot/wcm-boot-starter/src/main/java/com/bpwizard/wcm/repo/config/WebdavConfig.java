@@ -1,10 +1,9 @@
 package com.bpwizard.wcm.repo.config;
+
 //import org.modeshape.web.jcr.webdav.ModeShapeWebdavServlet;
 //import org.springframework.boot.web.servlet.ServletRegistrationBean;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
-
-//@Configuration
 public class WebdavConfig {
 //	@Bean
 //	public ServletRegistrationBean<ModeShapeWebdavServlet> webDavDispatcherServletRegistration1() {

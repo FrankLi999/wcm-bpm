@@ -27,20 +27,20 @@ import com.bpwizard.spring.boot.commons.web.util.WebUtils;
 @Service
 public class UserServiceImpl implements UserService<User<Long>, Long> {
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-	private static final String selectAllColumn = "SELECT id, name, email, password, first_name, last_name, image_url, provider, provider_id, version FROM usr WHERE %s";
+	private static final String selectAllColumn = "SELECT id, name, email, password, first_name, last_name, image_url, provider, provider_id, credentials_updated_millis, version FROM usr WHERE %s";
 	private static final String deleteByIdSql = "DELETE from usr where id = :user_id ";
 	private static final String deleteRoleMembershipByIdSql = "DELETE from user_role where user_id = :user_id ";
 	private static final String deleteTenantMembershipByIdSql = "DELETE from tenant_user where user_id = :user_id ";
 	private static final String saveUserSql = "INSERT usr(" + 
-	    "created_by_id, name, email, email_verified, first_name, last_name, image_url, password, provider, provider_id, salt" + 
-		") values(:created_by_id, :name, :email, :email_verified, :first_name, :last_name, :image_url, :password, :provider, :provider_id, :salt) " + 
+	    "created_by_id, name, email, email_verified, first_name, last_name, image_url, password, provider, provider_id, salt, credentials_updated_millis" + 
+		") values(:created_by_id, :name, :email, :email_verified, :first_name, :last_name, :image_url, :password, :provider, :provider_id, :salt, :credentialsUpdatedMillis) " + 
 	    "ON DUPLICATE KEY UPDATE " + 
 	    "last_modified_by_id= last_modified_by_id:, name = :name, email = :email, email_verified = :email_verified, first_name = :first_name, last_name = :last_name, image_url = :image_url, " + 
 	    " password = :password, provider = :provider, provider_id = :provider_id, salt =:salt, " + 
-	    "lock_expiration_time = :lock_expiration_time, new_email=:new_email,  new_password=:new_email, attempts=:attempts, version=version+1";
+	    "lock_expiration_time = :lock_expiration_time, new_email=:new_email,  new_password=:new_email, attempts=:attempts, credentials_updated_millis=:credentialsUpdatedMillis ,version=version+1";
 	private static final String createUserSql = "INSERT usr(" + 
-		    "created_by_id, name, email, email_verified, first_name, last_name, image_url, password, provider, provider_id, salt, attempts" + 
-			") values(:created_by_id, :name, :email, :email_verified, :first_name, :last_name, :image_url, :password, :provider, :provider_id, :salt, 0)";
+		    "created_by_id, name, email, email_verified, first_name, last_name, image_url, password, provider, provider_id, salt, credentials_updated_millis, attempts" + 
+			") values(:created_by_id, :name, :email, :email_verified, :first_name, :last_name, :image_url, :password, :provider, :provider_id, :salt, :credentialsUpdatedMillis, 0)";
 	private static final String findRolesByNameSql = "SELECT r.id, r.name FROM role r " +
 			"LEFT JOIN user_role ur ON r.id = ur.role_id " +
 			"LEFT JOIN usr u ON u.id = ur.user_id and u.name=:name";
@@ -98,6 +98,7 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 				.addValue("password", user.getPassword())
 				.addValue("provider", (user.getProvider() != null) ? user.getProvider().name() : AuthProvider.local.name())
 				.addValue("provider_id", user.getProviderId())
+				.addValue("credentialsUpdatedMillis", user.getCredentialsUpdatedMillis())
 				.addValue("salt", user.getSalt());
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -333,6 +334,7 @@ public class UserServiceImpl implements UserService<User<Long>, Long> {
 		        .addValue("lock_expiration_time",user.getLockExpirationTime())
 		        .addValue("new_email", user.getNewEmail())
 		        .addValue("new_password", user.getNewPassword())
+		        .addValue("credentialsUpdatedMillis", user.getCredentialsUpdatedMillis()) //TODO
 		        .addValue("attempts", user.getAttempts());
 		
 	    jdbcTemplate.update(saveUserSql, paramSource); //params, types);

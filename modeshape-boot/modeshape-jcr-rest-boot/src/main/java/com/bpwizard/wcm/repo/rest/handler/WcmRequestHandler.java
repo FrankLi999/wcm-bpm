@@ -1,4 +1,4 @@
-package com.bpwizard.wcm.repo.rest.jcr.controllers;
+package com.bpwizard.wcm.repo.rest.handler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,10 +31,6 @@ import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.ModeshapeUtils;
 import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
-import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
-import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
-import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
-import com.bpwizard.wcm.repo.rest.handler.RestWcmItemHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AccessControlEntry;

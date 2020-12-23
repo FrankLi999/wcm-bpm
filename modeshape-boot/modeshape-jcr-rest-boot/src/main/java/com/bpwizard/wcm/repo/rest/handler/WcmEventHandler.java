@@ -25,7 +25,6 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.service.SyndicatorService;
-import com.bpwizard.wcm.repo.rest.service.WcmEventKafkaPublisher;
 import com.bpwizard.wcm.repo.rest.service.WcmEventRestPublisher;
 import com.bpwizard.wcm.repo.rest.service.WcmEventService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,8 +41,8 @@ public class WcmEventHandler {
 	@Autowired
 	private SyndicatorService syndicatorService;
 	
-	@Autowired
-	private WcmEventKafkaPublisher wcmEventKafkaPublisher;
+//	@Autowired
+//	private WcmEventQueuePublisher wcmEventQueuePublisher;
 	
 	@Autowired
 	private WcmEventRestPublisher wcmEventRestPublisher;
@@ -57,11 +56,11 @@ public class WcmEventHandler {
 		List<WcmEvent> cndEvents = wcmEventService.getCndAfter(syndicator, syndicationRequest.getEndTime());
 		if (cndEvents != null) {
 			for (WcmEvent cndEvent: cndEvents) {
-				if ("kafka".equals(syndicationStrategy)) {
-					wcmEventKafkaPublisher.syndicateCndTypes(cndEvent);
-				} else {
+//				if ("kafka".equals(syndicationStrategy)) {
+//					wcmEventQueuePublisher.syndicateCndTypes(cndEvent);
+//				} else {
 					wcmEventRestPublisher.syndicateCndTypes(cndEvent, syndicator, token);
-				}
+//				}
 			}
 		}
 		int pageSize = 20;
@@ -74,11 +73,11 @@ public class WcmEventHandler {
 			actualBatchSize = wcmEvents.size();
 			if (actualBatchSize > 0) {
 				for (WcmEvent wcmEvent: wcmEvents) {
-					if ("kafka".equals(syndicationStrategy)) {
-						wcmEventKafkaPublisher.syndicate(wcmEvent);
-					} else {
+//					if ("kafka".equals(syndicationStrategy)) {
+//						wcmEventQueuePublisher.syndicate(wcmEvent);
+//					} else {
 						wcmEventRestPublisher.syndicate(wcmEvent, syndicator, token);
-					}
+//					}
 					
 				}
 			}

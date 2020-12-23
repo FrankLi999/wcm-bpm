@@ -73,7 +73,7 @@ public class AppSecurityConfig extends SpringJpaSecurityConfig {
                 "/**/*.css",
                 "/**/*.js")
                 .permitAll()
-            .antMatchers("/core/api/**", "/auth/**", "/oauth2/**", "/login/**")
+            .antMatchers("/core/api/**", "/auth/**", "/oauth2/**", "/login/**", "/hello/**")
                 .permitAll()
             .antMatchers("/tensorflow/**", "/jet/**")
                 .permitAll()

@@ -63,7 +63,7 @@ spring:
     url: jdbc:mysql://${DB_HOST_PORT}/${DB_DATABASE}?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     
     
     # /secret/wcm-bpm/dev/vault.db_wcmbpm_password
