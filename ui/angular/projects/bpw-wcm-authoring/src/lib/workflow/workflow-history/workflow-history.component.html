@@ -1,0 +1,35 @@
+<mat-card fxLayout="column" fxFlex="80" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Workflow History</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div *ngIf="error" class="alert alert-danger mat-error">
+      {{ error }}
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="20">
+        <button
+          mat-icon-button
+          (click)="backToItems()"
+          title="Back to libraries"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>
+        </button>
+      </div>
+    </div>
+    <mat-accordion fxFlex="80">
+      <mat-expansion-panel *ngIf="itemName">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Workflow History: {{ itemName }} </mat-panel-title>
+        </mat-expansion-panel-header>
+        <wcm-history
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="itemPath"
+          [wcmVersions]="itemHistory"
+          [historySubject]="itemHistorySubject"
+        ></wcm-history>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>

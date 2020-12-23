@@ -1,0 +1,24 @@
+{
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "login"
+    },
+    "LOGOUT": {
+      "TITLE": "logout"
+    }
+  },
+  "MYSITE": {
+    "HOME": {
+      "TITLE": "home"
+    },
+    "NEWS": {
+      "TITLE": "News"
+    },
+    "CHECK_NEWS": {
+      "TITLE": "Check News"
+    },
+    "NEWSITEM": {
+      "TITLE": "Newsitem"
+    }
+  }
+}

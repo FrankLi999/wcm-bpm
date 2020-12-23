@@ -1,0 +1,28 @@
+<!-- hiden text for aoda {{ (bpmApplications$ | async).description }}-->
+<ng-container *ngIf="bpmApplications">
+  <h2>
+    {{ bpmApplications.title }}
+  </h2>
+  <ul
+    *ngFor="
+      let bpmApplication of bpmApplications.bpmApplications;
+      let i = index
+    "
+  >
+    <li>
+      <h3>{{ bpmApplication.title }}</h3>
+      <a
+        routerLink="{{ bpmApplication.link }}"
+        title="{{ bpmApplication.description }}"
+        >{{ bpmApplication.title }}</a
+      >
+      <!--
+      <a
+        [routerLink]="['/bpm/admin']"
+        title="{{ bpmApplication.description }}"
+        >{{ bpmApplication.title }}</a
+      >
+      -->
+    </li>
+  </ul>
+</ng-container>

@@ -1,0 +1,15 @@
+{
+  "NAV": {
+    "MYSITE": {
+      "HOME": {
+        "TITLE": "Home"
+      },
+      "NEWS": {
+        "TITLE": "News"
+      },
+      "NEWSITEM": {
+        "TITLE": "News Item"
+      }
+    }
+  }
+}

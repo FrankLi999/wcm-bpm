@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>angular</artifactId>
+	<name>angular</name>
+	<packaging>pom</packaging>
+	<description>Helper library for Spring Boot Web Applications</description>
+	<parent>
+    <groupId>com.bpwizard.ui</groupId>
+    <artifactId>wcm-ui-root</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+	</parent>
+  <properties>
+    <frontend-maven-plugin.version>1.11.0</frontend-maven-plugin.version>
+    <angular-project>wcm-authoring</angular-project>
+  </properties>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.github.eirslett</groupId>
+          <artifactId>frontend-maven-plugin</artifactId>
+          <version>${frontend-maven-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <resources>
+      <resource>
+        <directory>./dist</directory>
+        <targetPath>static</targetPath>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+          <groupId>com.github.eirslett</groupId>
+          <artifactId>frontend-maven-plugin</artifactId>
+          <configuration>
+              <workingDirectory>./</workingDirectory>
+              <nodeVersion>v12.16.1</nodeVersion>
+              <npmVersion>6.13.4</npmVersion>
+          </configuration>
+          <executions>
+              <execution>
+                  <id>install node and npm</id>
+                  <goals>
+                      <goal>install-node-and-npm</goal>
+                  </goals>
+              </execution>
+              <execution>
+                  <id>npm install</id>
+                  <goals>
+                      <goal>npm</goal>
+                  </goals>
+              </execution>
+              <execution>
+                  <id>npm run build</id>
+                  <goals>
+                      <goal>npm</goal>
+                  </goals>
+                  <configuration>
+                      <arguments>run build --project ${angular-project}</arguments>
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <profiles>
+    <profile>
+      <id>bpm-ui</id>
+      <properties>
+        <angular-project>bpm-ui</angular-project>
+      </properties>
+    </profile>
+    <profile>
+      <id>wcm-authoring</id>
+      <properties>
+        <angular-project>wcm-authoring</angular-project>
+      </properties>
+    </profile>
+  </profiles>
+</project>

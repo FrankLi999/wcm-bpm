@@ -1,0 +1,53 @@
+.mat-standard-chip {
+  margin: -4.5px !important;
+}
+.dropDown {
+  background: white;
+  position: absolute;
+  padding: 10px;
+  top: 60px;
+  width: calc(100% - 20px);
+  overflow: auto;
+  box-shadow: 0px 1px 2px 0px grey;
+  z-index: 1010;
+}
+
+.liftup {
+  z-index: 1010;
+}
+
+/* input.mat-chip-input {
+    display: none !important;
+} */
+
+::ng-deep .mat-chip-list-wrapper {
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  height: 32px;
+}
+
+.slideUp {
+  height: 0px !important;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+* {
+  transition: all 0.3s;
+}
+
+mat-error {
+  font-size: 75%;
+  margin-top: -1rem;
+  margin-bottom: 0.5rem;
+}
+::ng-deep
+  json-schema-form
+  mat-form-field
+  .mat-form-field-wrapper
+  .mat-form-field-flex
+  .mat-form-field-infix {
+  width: initial;
+}

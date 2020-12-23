@@ -1,0 +1,1356 @@
+{
+    "jcrThemes": [
+        {
+            "name": "camunda",
+            "library": "design",
+            "repositoryName": "bpwizard",
+            "workspace": "default"
+        },
+        {
+            "name": "apigateway",
+            "library": "design",
+            "repositoryName": "bpwizard",
+            "workspace": "default"
+        }
+    ],
+    "authoringTemplateForms": {
+        "/mysite/authoringTemplate/NewsItem": [
+            {
+                "repository": "bpwizard",
+                "workspace": "default",
+                "library": "mysite",
+                "resourceType": "NewsItem",
+                "nodeType": "bpw:mysite_NewsItem_AT",
+                "formSchema": {
+                    "schema": {
+                        "type": "object",
+                        "name": "NewsItem",
+                        "properties": {
+                            "properties": {
+                                "type": "object",
+                                "properties": {
+                                    "workflow": {
+                                        "type": "string",
+                                        "title": "Workflow"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "title": "Name",
+                                        "pattern": "^[a-zA-z]+([ '-][a-zA-Z]+)*$"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "title": "Description"
+                                    },
+                                    "categories": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "title": "Category"
+                                        }
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "title": "Title",
+                                        "pattern": "^[a-zA-z]+([ '-][a-zA-Z]+)*$"
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "title"
+                                ]
+                            },
+                            "elements": {
+                                "type": "object",
+                                "properties": {
+                                    "body": {
+                                        "type": "string",
+                                        "title": "Body"
+                                    }
+                                },
+                                "required": [
+                                    "body"
+                                ]
+                            }
+                        }
+                    },
+                    "layout": [
+                        {
+                            "type": "div",
+                            "flex-flow": "row wrap",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "column",
+                                    "fxFlex": 0,
+                                    "items": [
+                                        {
+                                            "title": "Body",
+                                            "key": "elements.body",
+                                            "type": "textarea",
+                                            "cols": 50,
+                                            "rows": 3
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "div",
+                            "flex-flow": "row wrap",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "column",
+                                    "fxFlex": 0,
+                                    "items": [
+                                        {
+                                            "title": "Name",
+                                            "key": "properties.name",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "title": "Title",
+                                            "key": "properties.title",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "title": "Description",
+                                            "key": "properties.description",
+                                            "type": "text"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "div",
+                            "flex-flow": "row wrap",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "column",
+                                    "fxFlex": 0,
+                                    "items": [
+                                        {
+                                            "title": "Category",
+                                            "type": "array",
+                                            "items": {
+                                                "key": "properties.categories",
+                                                "type": "wcm-categories"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "div",
+                            "flex-flow": "row wrap",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "column",
+                                    "fxFlex": 0,
+                                    "items": [
+                                        {
+                                            "title": "Workflow",
+                                            "key": "properties.workflow",
+                                            "type": "wcm-workflow"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "repository": "bpwizard",
+                "workspace": "default",
+                "library": "mysite",
+                "resourceType": "NewsItem",
+                "nodeType": "bpw:mysite_NewsItem_AT",
+                "formSchema": {
+                    "schema": {
+                        "type": "object",
+                        "name": "NewsItem",
+                        "properties": {
+                            "properties": {
+                                "type": "object",
+                                "properties": {
+                                    "workflow": {
+                                        "type": "string",
+                                        "title": "Workflow"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "title": "Name",
+                                        "pattern": "^[a-zA-z]+([ '-][a-zA-Z]+)*$"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "title": "Description"
+                                    },
+                                    "categories": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "title": "Category"
+                                        }
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "title": "Title",
+                                        "pattern": "^[a-zA-z]+([ '-][a-zA-Z]+)*$"
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "title"
+                                ]
+                            },
+                            "elements": {
+                                "type": "object",
+                                "properties": {
+                                    "body": {
+                                        "type": "string",
+                                        "title": "Body"
+                                    }
+                                },
+                                "required": [
+                                    "body"
+                                ]
+                            }
+                        }
+                    },
+                    "layout": [
+                        {
+                            "type": "div",
+                            "flex-flow": "row wrap",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "column",
+                                    "fxFlex": 0,
+                                    "items": [
+                                        {
+                                            "title": "Body",
+                                            "key": "elements.body",
+                                            "type": "textarea",
+                                            "cols": 50,
+                                            "rows": 3
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "div",
+                            "flex-flow": "row wrap",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "column",
+                                    "fxFlex": 0,
+                                    "items": [
+                                        {
+                                            "title": "Name",
+                                            "key": "properties.name",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "title": "Title",
+                                            "key": "properties.title",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "title": "Description",
+                                            "key": "properties.description",
+                                            "type": "text"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "div",
+                            "flex-flow": "row wrap",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "column",
+                                    "fxFlex": 0,
+                                    "items": [
+                                        {
+                                            "title": "Category",
+                                            "type": "array",
+                                            "items": {
+                                                "key": "properties.categories",
+                                                "type": "wcm-categories"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "div",
+                            "flex-flow": "row wrap",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "column",
+                                    "fxFlex": 0,
+                                    "items": [
+                                        {
+                                            "title": "Workflow",
+                                            "key": "properties.workflow",
+                                            "type": "wcm-workflow"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "forms": {},
+    "renderTemplates": {
+        "/design/renderTemplate/MyRenderTemplate": {
+            "name": "MyRenderTemplate",
+            "title": "MyRenderTemplate",
+            "description": "My Render Template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "code": "<render-element element='body'></render-element>",
+            "preloop": "<div>preloop</div>",
+            "postloop": "<div>postloop</div>",
+            "maxEntries": 10,
+            "note": "MyRenderTemplate note",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MyContent",
+            "nodeType": "bpw:design_MyContent_AT",
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/mysite/renderTemplate/RT_MyHome": {
+            "name": "RT_MyHome",
+            "title": "My Home Render Template",
+            "description": "My Home Render Template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "mysite",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 3,
+            "note": "Content area of my home page",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MyContent",
+            "nodeType": "bpw:design_MyContent_AT",
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "title",
+                                    "source": "property"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "body",
+                                    "source": "element"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/apigateway/renderTemplate/HandlerLayout": {
+            "name": "HandlerLayout",
+            "title": "HandlerLayout",
+            "description": "Handler Layout",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "apigateway",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 1,
+            "note": "HandlerLayout note",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MyContent",
+            "nodeType": "bpw:design_MyContent_AT",
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "body"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/design/renderTemplate/RT_DashboardRightNow": {
+            "name": "RT_DashboardRightNow",
+            "title": "Dashboard Right Now Render Template",
+            "description": "Dashboard Right Now Render Template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "code": "<div class=\"content\"><div class=\"dashboard-section-title\">Right Now</div><div class=\"dashboard-row\"><!--Running process instance --><div class=\"right-now-widget\"> <div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Running Process Instances</div><camunda-running-instances></camunda-running-instances></div></div><!-- open incidents --><div class=\"right-now-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Open Incidents</div><camunda-open-incidents></camunda-open-incidents></div></div><!-- open human tasks --><div class=\"right-now-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Open Human Tasks</div><camunda-human-tasks></camunda-human-tasks></div></div></div><div>",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 1,
+            "note": "Render BPM dashboard right now",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MyContent",
+            "nodeType": "bpw:design_MyContent_AT",
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/design/renderTemplate/RT_DashboardDeployed": {
+            "name": "RT_DashboardDeployed",
+            "title": "Dashboard Deployed Render Template",
+            "description": "Dashboard Deployed Render Template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "code": "<div class=\"content\"><div class=\"dashboard-section-title\">Deployed</div><div class=\"dashboard-row\"><!-- process definitions widget --><div class=\"deployed-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Process Definitions</div><camunda-process-definitions></camunda-process-definitions></div></div><!-- case definitions widget --><div class=\"deployed-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Case Definitions</div><camunda-case-definitions></camunda-case-definitions></div></div><!-- decision definitions widget --><div class=\"deployed-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Decision Definitions</div><camunda-decision-definitions></camunda-decision-definitions></div></div><!-- deployed widget --><div class=\"deployed-widget\"><div class=\"wcm-card dashboard-card\"><div class=\"dashboard-card-tile\">Deployed</div><camunda-deployed></camunda-deployed></div></div></div></div>",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 1,
+            "note": "Render BPM dashboard deployed",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MyContent",
+            "nodeType": "bpw:design_MyContent_AT",
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/mysite/renderTemplate/RT_FeaturedNews": {
+            "name": "RT_FeaturedNews",
+            "title": "Featured News Template",
+            "description": "Featured news render template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "mysite",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 3,
+            "note": "Featured news",
+            "query": true,
+            "resourceName": "/mysite/query/FeaturedNews",
+            "nodeType": "bpw:mysite_FeaturedNews_AT",
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "title",
+                                    "source": "query"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "elements.body",
+                                    "source": "query"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "link",
+                                    "source": "widget",
+                                    "body": "<link-element link=\"/mysite/news/item\" contentparameter=\"newsItem\" contentpath=\"${query:path}\" title=\"${query:title}\" hint=\"Select to read news details\" ></link-element>"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/design/renderTemplate/MyContentRenderLayout": {
+            "name": "MyContentRenderLayout",
+            "title": "MyContentRenderLayout",
+            "description": "MyContent Render Layout",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 1,
+            "note": "MyContentRenderLayout note",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MyContent",
+            "nodeType": "bpw:design_MyContent_AT",
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "name"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "title"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "fieldgroup2",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "description"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "body"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/mysite/renderTemplate/RT_TopNews": {
+            "name": "RT_TopNews",
+            "title": "Top News Template",
+            "description": "Top news render template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "mysite",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 3,
+            "note": "Featured news",
+            "query": true,
+            "resourceName": "/mysite/query/TopNews",
+            "nodeType": "bpw:mysite_TopNews_AT",
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "title",
+                                    "source": "query"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "elements.body",
+                                    "source": "query"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "link",
+                                    "source": "widget",
+                                    "body": "<link-element link=\"/mysite/news/item\" contentparameter=\"newsItem\" contentpath=\"${query:path}\" title=\"${query:title}\" hint=\"Select to read news details\" ></link-element>"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/mysite/renderTemplate/RT_NewsItem": {
+            "name": "RT_NewsItem",
+            "title": "NewsItem Render Template",
+            "description": "News item render template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "mysite",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 3,
+            "note": "News item",
+            "query": false,
+            "resourceName": "/mysite/authoringTemplate/NewsItem",
+            "nodeType": "bpw:mysite_NewsItem_AT",
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "title",
+                                    "source": "property"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "body",
+                                    "source": "element"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/design/renderTemplate/RT_MyLinks": {
+            "name": "RT_MyLinks",
+            "title": "My Links Render Template",
+            "description": "My Links Render Template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 3,
+            "note": "Render BPM application links",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MyContent",
+            "nodeType": "bpw:design_MyContent_AT",
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "title",
+                                    "source": "property"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "body",
+                                    "source": "element"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/design/renderTemplate/RT_MyApplications": {
+            "name": "RT_MyApplications",
+            "title": "My Applications Render Template",
+            "description": "My Applications Render Template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 3,
+            "note": "Render BPM application links",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MyContent",
+            "nodeType": "bpw:design_MyContent_AT",
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "title",
+                                    "source": "property"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "body",
+                                    "source": "element"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/design/renderTemplate/MySidePaneRenderTemplate": {
+            "name": "MySidePaneRenderTemplate",
+            "title": "MySidePaneRenderTemplate",
+            "description": "My Side Panel Render Template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "code": "<render-element element='sidebody'></render-element>",
+            "preloop": "<div>preloop</div>",
+            "postloop": "<div>postloop</div>",
+            "maxEntries": 10,
+            "note": "MySidePaneRenderTemplate note",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MySidePaneContent",
+            "nodeType": "bpw:design_MySidePaneContent_AT",
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/design/renderTemplate/RT_UserProfile": {
+            "name": "RT_UserProfile",
+            "title": "UserProfile Render Template",
+            "description": "UserProfile Template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "code": "<render-element element='body'></render-element>",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 1,
+            "note": "Render user profile",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MyContent",
+            "nodeType": "bpw:design_MyContent_AT",
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/mysite/renderTemplate/RT_NewsListCode": {
+            "name": "RT_NewsListCode",
+            "title": "NewsItem Render Template",
+            "description": "News item render template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "mysite",
+            "code": "<query-result-column column=\"elements.body\"></query-result-column><link-element link=\"/mysite/news/item\" contentparameter=\"newsItem\" contentpath=\"${query:path}\" title=\"${query:title}\" hint=\"Select to read news details\" ></link-element>",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 3,
+            "note": "News item",
+            "query": true,
+            "resourceName": "/mysite/query/NewsList",
+            "nodeType": "bpw:mysite_NewsList_AT",
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/mysite/renderTemplate/RT_NewsList": {
+            "name": "RT_NewsList",
+            "title": "NewsList Render Template",
+            "description": "News list render template",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "mysite",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 300,
+            "note": "News list",
+            "query": true,
+            "resourceName": "/mysite/query/NewsList",
+            "nodeType": "bpw:mysite_NewsList_AT",
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "title",
+                                    "source": "query"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "elements.body",
+                                    "source": "query"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "link",
+                                    "source": "widget",
+                                    "body": "<link-element link=\"/mysite/news/item\" contentparameter=\"newsItem\" contentpath=\"${query:path}\" title=\"${query:title}\" hint=\"Select to read news details\" ></link-element>"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        },
+        "/apigateway/renderTemplate/AdminLayout": {
+            "name": "AdminLayout",
+            "title": "AdminLayout",
+            "description": "Admin Layout",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "apigateway",
+            "preloop": "",
+            "postloop": "",
+            "maxEntries": 1,
+            "note": "AdminLayout note",
+            "query": false,
+            "resourceName": "/design/authoringTemplate/MyContent",
+            "nodeType": "bpw:design_MyContent_AT",
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "id": "fieldgroup1",
+                            "width": 0,
+                            "elements": [
+                                {
+                                    "name": "body"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            }
+        }
+    },
+    "contentAreaLayouts": {
+        "/design/contentAreaLayout/CamundaHomeLayout": {
+            "name": "CamundaHomeLayout",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "contentWidth": 0,
+            "sidePane": {
+                "left": true,
+                "width": 0,
+                "viewers": []
+            },
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            },
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "width": 66,
+                            "viewers": [
+                                {
+                                    "renderTemplate": "/design/renderTemplate/RT_MyApplications",
+                                    "contentPath": [
+                                        "/camunda/rootSiteArea/home/MyApplications"
+                                    ],
+                                    "title": "My Applications Render Template"
+                                },
+                                {
+                                    "renderTemplate": "/design/renderTemplate/RT_MyLinks",
+                                    "contentPath": [
+                                        "/camunda/rootSiteArea/home/MyLinks"
+                                    ],
+                                    "title": "MyRenderTemplate"
+                                }
+                            ]
+                        },
+                        {
+                            "width": 33,
+                            "viewers": [
+                                {
+                                    "renderTemplate": "/design/renderTemplate/RT_UserProfile",
+                                    "contentPath": [
+                                        "/camunda/rootSiteArea/home/UserProfile"
+                                    ],
+                                    "title": "UserProfile Render Template"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "/design/contentAreaLayout/MyLayout": {
+            "name": "MyLayout",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "contentWidth": 0,
+            "sidePane": {
+                "left": true,
+                "width": 0,
+                "viewers": []
+            },
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            },
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "width": 100,
+                            "viewers": [
+                                {
+                                    "renderTemplate": "/design/renderTemplate/MyRenderTemplate",
+                                    "title": "MyRenderTemplate"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "/design/contentAreaLayout/MyLayoutWithSidePane": {
+            "name": "MyLayoutWithSidePane",
+            "repository": "bpwizard",
+            "workspace": "default",
+            "library": "design",
+            "contentWidth": 0,
+            "sidePane": {
+                "left": true,
+                "width": 20,
+                "viewers": [
+                    {
+                        "renderTemplate": "/design/renderTemplate/MySidePaneRenderTemplate",
+                        "title": "MySidePaneRenderTemplate"
+                    }
+                ]
+            },
+            "wcmAuthority": {
+                "creator": true,
+                "editor": true,
+                "reviewer": true,
+                "admin": true
+            },
+            "rows": [
+                {
+                    "columns": [
+                        {
+                            "width": 100,
+                            "viewers": [
+                                {
+                                    "renderTemplate": "/design/renderTemplate/MyRenderTemplate",
+                                    "title": "MyRenderTemplate"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "siteConfig": {
+        "name": "mysite",
+        "repository": "bpwizard",
+        "workspace": "default",
+        "library": "mysite",
+        "rootSiteArea": "rootSiteArea",
+        "animations": false,
+        "themeColors": {
+            "main": "theme-default"
+        },
+        "direction": "ltr",
+        "customScrollbars": false,
+        "layout": {
+            "title": "horizontal-layout",
+            "mode": "fullwidth",
+            "scroll": "content",
+            "navbar": {
+                "primaryBackground": "wcm-light-200",
+                "secondaryBackground": "wcm-light-300",
+                "display": true,
+                "folded": false,
+                "position": "drawer",
+                "variant": "vertical"
+            },
+            "toolbar": {
+                "customBackgroundColor": false,
+                "background": "wcm-light-300",
+                "display": true,
+                "position": "below",
+                "style": "fixed"
+            },
+            "footer": {
+                "customBackgroundColor": true,
+                "background": "wcm-light-300",
+                "display": false,
+                "position": "above-static",
+                "style": "fixed"
+            },
+            "leftSidePanel": {
+                "display": false
+            },
+            "rightSidePanel": {
+                "display": false
+            }
+        },
+        "wcmAuthority": {
+            "creator": true,
+            "editor": true,
+            "reviewer": true,
+            "admin": true
+        }
+    },
+    "navigations": [
+        {
+            "id": "mysite_home",
+            "title": "Home",
+            "type": "item",
+            "translate": "NAV.MYSITE.HOME.TITLE",
+            "icon": "archive",
+            "hidden": false,
+            "url": "/mysite/home",
+            "exactMatch": false,
+            "externalUrl": false,
+            "openInNewTab": false,
+            "children": []
+        },
+        {
+            "id": "mysite_news",
+            "title": "News",
+            "type": "item",
+            "translate": "NAV.MYSITE.NEWS.TITLE",
+            "icon": "archive",
+            "hidden": false,
+            "url": "/mysite/news",
+            "exactMatch": false,
+            "externalUrl": false,
+            "openInNewTab": false,
+            "auth": ["guestLink", "admin"],
+            "children": [
+            ]
+        }
+    ],
+    "siteAreas": {
+        "~mysite~home": {
+            "siteAreaLayout": {
+                "contentWidth": 100,
+                "sidePane": {
+                    "left": true,
+                    "width": 0,
+                    "viewers": []
+                },
+                "rows": [
+                    {
+                        "columns": [
+                            {
+                                "width": 66,
+                                "viewers": [
+                                    {
+                                        "renderTemplate": "/mysite/renderTemplate/RT_MyHome",
+                                        "contentPath": [
+                                            "/mysite/rootSiteArea/home/MyHome"
+                                        ],
+                                        "title": "Home Render Template"
+                                    }
+                                ]
+                            },
+                            {
+                                "width": 33,
+                                "viewers": [
+                                    {
+                                        "renderTemplate": "/mysite/renderTemplate/RT_FeaturedNews",
+                                        "title": "Feature News Render Template"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "elements": {
+                "contentAreaLayout": "/design/contentAreaLayout/MyLayout",
+                "navigationId": "mysite_home",
+                "icon": "archive",
+                "navigationType": "item",
+                "url": "/mysite/home",
+                "translate": "NAV.MYSITE.HOME.TITLE"
+            },
+            "properties": {
+                "name": "home",
+                "title": "Home"
+            },
+            "name": "home"
+        },
+        "~mysite~news~item": {
+            "siteAreaLayout": {
+                "contentWidth": 100,
+                "sidePane": {
+                    "left": true,
+                    "width": 0,
+                    "viewers": []
+                },
+                "rows": [
+                    {
+                        "columns": [
+                            {
+                                "width": 100,
+                                "viewers": [
+                                    {
+                                        "renderTemplate": "/mysite/renderTemplate/RT_NewsItem",
+                                        "title": "NewsItem Render Template",
+                                        "contentParameter": "newsItem"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "elements": {
+                "contentAreaLayout": "/design/contentAreaLayout/MyLayout",
+                "navigationId": "mysite_newsitem",
+                "icon": "archive",
+                "navigationType": "item",
+                "url": "/mysite/news/item",
+                "translate": "NAV.MYSITE.NEWSITEM.TITLE"
+            },
+            "properties": {
+                "name": "newItem",
+                "title": "News Item"
+            },
+            "name": "newItem"
+        },
+        "~mysite~news": {
+            "siteAreaLayout": {
+                "contentWidth": 100,
+                "sidePane": {
+                    "left": true,
+                    "width": 0,
+                    "viewers": []
+                },
+                "rows": [
+                    {
+                        "columns": [
+                            {
+                                "width": 66,
+                                "viewers": [
+                                    {
+                                        "renderTemplate": "/mysite/renderTemplate/RT_NewsListCode",
+                                        "title": "NewsList Render Template"
+                                    }
+                                ]
+                            },
+                            {
+                                "width": 33,
+                                "viewers": [
+                                    {
+                                        "renderTemplate": "/mysite/renderTemplate/RT_TopNews",
+                                        "title": "Feature News Render Template"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "elements": {
+                "contentAreaLayout": "/design/contentAreaLayout/MyLayout",
+                "navigationId": "mysite_news",
+                "icon": "archive",
+                "navigationType": "item",
+                "url": "/mysite/news",
+                "translate": "NAV.MYSITE.NEWS.TITLE"
+            },
+            "properties": {
+                "name": "news",
+                "title": "News"
+            },
+            "name": "news"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+<div class="h-200" *ngIf="widget">
+  <ngx-charts-pie-chart
+    *ifOnDom
+    [scheme]="widget.scheme"
+    [results]="widget.values"
+    [doughnut]="true"
+    [tooltipText]="tooltipText"
+    (select)="onSelect($event)"
+    [view]="[150, 150]"
+  >
+  </ngx-charts-pie-chart>
+</div>
+<div *ngIf="totalIncidents">
+  <span>Incident count: {{ totalIncidents }}</span>
+</div>

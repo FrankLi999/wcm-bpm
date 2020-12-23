@@ -1,0 +1,22 @@
+.aceEditorDirective {
+    margin-top: 50px;
+    min-height: 200px;
+    width: 100%;
+    overflow: auto;
+}
+
+.template-form-container > * {
+    width: 90%;
+}
+
+.template-form-container .h2 {
+    margin-top: 24px;
+}
+
+#render-template {
+  height: 100%;
+  min-height: 600px;
+}
+#render-template mat-tab-body {
+  flex-grow: 1;
+}

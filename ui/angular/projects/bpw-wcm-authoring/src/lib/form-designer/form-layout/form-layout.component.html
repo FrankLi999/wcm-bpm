@@ -1,0 +1,81 @@
+<div *ngIf="form" class="builder-container page-layout carded left-sidebar">
+  <!-- RESOURCE TYPE -->
+  <div fxFlex="100">
+    <!-- HEADER -->
+    <div class="card" id="form-layout-header">
+      <div class="form-layout" fxFlex="50">
+        <div fxLayout="row">
+          <h3 style="margin: 0">{{ form.name }}</h3>
+        </div>
+        <div fxLayout="row" style="padding: 6px">
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+      <div class="form-layout-action" fxFlex="50">
+        <div fxLayout="row">
+          <div fxFlex="25">
+            <button mat-raised-button (click)="editForm()">
+              <mat-icon class="mat-icon-rtl-mirror">edit</mat-icon>Edit
+            </button>
+          </div>
+          <div fxFlex="25">
+            <button mat-raised-button (click)="saveForm()">
+              <mat-icon class="mat-icon-rtl-mirror">save</mat-icon>Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / HEADER -->
+    <!-- ROWS -->
+    <form-group
+      [formGroups]="form.formLayout"
+      [formControls]="form.formControls"
+      [builderTargets]="builderTargets"
+    >
+    </form-group>
+    <!-- / ROWS -->
+  </div>
+  <!-- / RESOURCE TYPE -->
+  <!-- SIDEBAR -->
+  <sidebar
+    class="sidebar"
+    name="field-pallet-side-bar"
+    position="left"
+    lockedOpen="gt-md"
+    fxFlex="20"
+  >
+    <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+      <div class="card field-pallet">
+        <mat-icon>apps</mat-icon><span>Control Fields</span>
+      </div>
+      <div class="builder-source">
+        <div
+          [perfectScrollbar]="{ suppressScrollX: true }"
+          class="form-field-viewport"
+        >
+          <div
+            id="palletFields"
+            cdkDropList
+            [cdkDropListData]="controlFields"
+            [cdkDropListConnectedTo]="builderTargets"
+            class="field-list"
+            [cdkDropListEnterPredicate]="noReturnPredicate"
+          >
+            <div
+              class="pallet-box"
+              *ngFor="let control of controlFields"
+              [cdkDragData]="control"
+              cdkDrag
+            >
+              <mat-icon>{{ control.icon }}</mat-icon
+              ><span>{{ control.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sidebar>
+  <!-- / SIDEBAR -->
+</div>
+<template #blockUIContainer> </template>

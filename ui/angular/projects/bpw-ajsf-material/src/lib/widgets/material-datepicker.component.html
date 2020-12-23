@@ -1,0 +1,78 @@
+<mat-form-field
+  [appearance]="
+    options?.appearance || matFormFieldDefaultOptions?.appearance || 'standard'
+  "
+  [class]="options?.htmlClass || ''"
+  [floatLabel]="
+    options?.floatLabel ||
+    matLabelGlobalOptions?.float ||
+    (options?.notitle ? 'never' : 'auto')
+  "
+  [hideRequiredMarker]="options?.hideRequired ? 'true' : 'false'"
+  [style.width]="'100%'"
+>
+  <mat-label *ngIf="!options?.notitle">{{ options?.title }}</mat-label>
+  <span
+    matPrefix
+    *ngIf="options?.prefix || options?.fieldAddonLeft"
+    [innerHTML]="options?.prefix || options?.fieldAddonLeft"
+  ></span>
+  <input
+    matInput
+    *ngIf="boundControl"
+    [formControl]="formControl"
+    [attr.aria-describedby]="'control' + layoutNode?._id + 'Status'"
+    [attr.list]="'control' + layoutNode?._id + 'Autocomplete'"
+    [attr.readonly]="readonly"
+    [id]="'control' + layoutNode?._id"
+    [max]="options?.maximum"
+    [matDatepicker]="picker"
+    [min]="options?.minimum"
+    [name]="controlName"
+    [placeholder]="options?.title"
+    [readonly]="readonly"
+    [required]="options?.required"
+    [style.width]="'100%'"
+    (blur)="onBlur($event)"
+    (dateChange)="updateValue($event)"
+    (dateInput)="updateValue($event)"
+  />
+  <input
+    matInput
+    *ngIf="!boundControl"
+    [attr.aria-describedby]="'control' + layoutNode?._id + 'Status'"
+    [attr.list]="'control' + layoutNode?._id + 'Autocomplete'"
+    [attr.readonly]="readonly"
+    [disabled]="disabled"
+    [id]="'control' + layoutNode?._id"
+    [max]="options?.maximum"
+    [matDatepicker]="picker"
+    [min]="options?.minimum"
+    [name]="controlName"
+    [placeholder]="options?.title"
+    [required]="options?.required"
+    [style.width]="'100%'"
+    [readonly]="readonly"
+    (blur)="onBlur($event)"
+    (dateChange)="updateValue($event)"
+    (dateInput)="updateValue($event)"
+  />
+  <span
+    matSuffix
+    *ngIf="options?.suffix || options?.fieldAddonRight"
+    [innerHTML]="options?.suffix || options?.fieldAddonRight"
+  ></span>
+  <mat-hint
+    *ngIf="
+      options?.description && (!options?.showErrors || !options?.errorMessage)
+    "
+    align="end"
+    [innerHTML]="options?.description"
+  ></mat-hint>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+</mat-form-field>
+<mat-datepicker #picker></mat-datepicker>
+<mat-error
+  *ngIf="options?.showErrors && options?.errorMessage"
+  [innerHTML]="options?.errorMessage"
+></mat-error>

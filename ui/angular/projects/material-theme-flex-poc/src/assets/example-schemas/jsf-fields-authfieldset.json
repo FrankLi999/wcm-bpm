@@ -1,0 +1,21 @@
+{
+  "schema": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "key": {
+      "type": "string",
+      "title": "Access key"
+    }
+  },
+  "layout": [
+    "name",
+    {
+      "type": "authfieldset",
+      "items": [
+        "key"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome bpm-ui",
+      "url": "http://bpm-ui:4009",
+      "webRoot": "${workspaceFolder}/projects/bpm-ui"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome wcm-authoring",
+      "url": "http://wcm-authoring:3009",
+      "webRoot": "${workspaceFolder}/projects/wcm-authoring",
+      "sourceMapPathOverrides": {
+        "webpack:///../bpw-wcm-authoring/src/lib/*": "${workspaceFolder}/projects/bpw-wcm-authoring/src/lib/*"
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome mysite",
+      "url": "http://mysite:6009",
+      "webRoot": "${workspaceFolder}/projects/mysite"
+    }
+  ]
+}

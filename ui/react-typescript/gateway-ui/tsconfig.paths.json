@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "app": [
+        "app"
+      ],
+      "app/*": [
+        "app/*"
+      ],
+      "bpw-common": [
+        "bpw-common"
+      ],
+      "bpw-common/*": [
+        "bpw-common/*"
+      ],
+      "bpw-oauth2": [
+        "bpw-oauth2"
+      ],
+      "bpw-oauth2/*": [
+        "bpw-oauth2/*"
+      ],
+      "bpw-auth": [
+        "bpw-auth"
+      ],
+      "bpw-auth/*": [
+        "bpw-auth/*"
+      ],
+      "bpw-wcm": [
+        "bpw-wcm"
+      ],
+      "bpw-wcm/*": [
+        "bpw-wcm/*"
+      ]
+    }
+  }
+}

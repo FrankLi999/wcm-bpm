@@ -1,0 +1,170 @@
+<div
+  *ngIf="wcmSystem"
+  id="template"
+  class="page-layout carded left-sidebar inner-scroll"
+>
+  <div
+    class="card wcm-portlet"
+    fxFlex="{{ layout.sidePane.width }}"
+    *ngIf="leftSidePane()"
+  >
+    <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+      <div
+        class="card container"
+        *ngFor="let viewer of layout.sidePane?.viewers; let viewerIndex = index"
+      >
+        <wcm-editable
+          *ngFor="
+            let contentPath of layout.sidePane.viewers[viewerIndex].contentPath;
+            let contentPathIndex = index
+          "
+        >
+          <ng-template viewMode>
+            <resource-renderer
+              [repository]="repository"
+              [workspace]="workspace"
+              [siteAreaKey]="getSiteAreaKey(siteArea)"
+              [renderer]="sideRenderId(viewerIndex)"
+              [rendererTemplate]="
+                wcmSystem.renderTemplates[
+                  layout.sidePane.viewers[viewerIndex].renderTemplate
+                ]
+              "
+              [contentPath]="contentPath"
+            >
+            </resource-renderer>
+          </ng-template>
+          <ng-template editMode>
+            <in-place-content-item-editor
+              [repository]="repository"
+              [workspace]="workspace"
+              [wcmPath]="contentPath"
+              [editing]="true"
+            >
+            </in-place-content-item-editor>
+          </ng-template>
+        </wcm-editable>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="card content-layout"
+    fxFlex="{{ layout.contentWidth }}"
+    *ngIf="layout"
+  >
+    <!-- ROWS -->
+    <div *ngFor="let row of layout.rows; let rowIndex = index">
+      <!-- COLUMNS -->
+      <div class="card, wcm-portlet">
+        <div
+          class="column-layout"
+          *ngFor="let column of row.columns; let columnIndex = index"
+          fxFlex="{{ column.width }}"
+        >
+          <div
+            class="card container"
+            *ngFor="let viewer of column.viewers; let viewerIndex = index"
+          >
+            <wcm-editable *ngIf="hasPreloop(viewer.renderTemplate)">
+              <ng-template viewMode>
+                <div [innerHTML]="preloop(viewer.renderTemplate)"></div>
+              </ng-template>
+              <ng-template editMode>preloop edit mode</ng-template>
+            </wcm-editable>
+            <wcm-editable
+              *ngFor="
+                let contentPath of layout.rows[rowIndex].columns[columnIndex]
+                  .viewers[viewerIndex].contentPath;
+                let contentPathIndex = index
+              "
+            >
+              <ng-template viewMode>
+                <resource-renderer
+                  [repository]="repository"
+                  [workspace]="workspace"
+                  [siteAreaKey]="getSiteAreaKey(siteArea)"
+                  [renderer]="
+                    contentRenderId(rowIndex, columnIndex, viewerIndex)
+                  "
+                  [rendererTemplate]="
+                    wcmSystem.renderTemplates[
+                      layout.rows[rowIndex].columns[columnIndex].viewers[
+                        viewerIndex
+                      ].renderTemplate
+                    ]
+                  "
+                  [contentPath]="contentPath"
+                  [contentPathIndex]="contentPathIndex"
+                >
+                </resource-renderer>
+              </ng-template>
+              <ng-template editMode>
+                <in-place-content-item-editor
+                  [repository]="repository"
+                  [workspace]="workspace"
+                  [wcmPath]="contentPath"
+                  [editing]="true"
+                >
+                </in-place-content-item-editor>
+              </ng-template>
+            </wcm-editable>
+            <wcm-editable *ngIf="hasPostloop(viewer.renderTemplate)">
+              <ng-template viewMode>
+                <div [innerHTML]="postloop(viewer.renderTemplate)"></div>
+              </ng-template>
+              <ng-template editMode>postloop edit mode</ng-template>
+            </wcm-editable>
+          </div>
+        </div>
+      </div>
+      <!-- / COLUMNS -->
+    </div>
+    <!-- / ROWS -->
+  </div>
+  <!-- RIGT SIDE PANEL -->
+  <div
+    class="card wcm-portlet"
+    fxFlex="{{ layout.sidePane.width }}"
+    *ngIf="rightSidePane()"
+  >
+    <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+      <div
+        class="card container"
+        *ngFor="let viewer of layout.sidePane?.viewers; let viewerIndex = index"
+      >
+        <wcm-editable
+          *ngFor="
+            let contentPath of layout.sidePane.viewers[viewerIndex].contentPath;
+            let contentPathIndex = index
+          "
+        >
+          <ng-template viewMode>
+            <resource-renderer
+              [repository]="repository"
+              [workspace]="workspace"
+              [siteAreaKey]="getSiteAreaKey(siteArea)"
+              [renderer]="sideRenderId(viewerIndex)"
+              [rendererTemplate]="
+                wcmSystem.renderTemplates[
+                  layout.sidePane.viewers[viewerIndex].renderTemplate
+                ]
+              "
+              [contentPath]="contentPath"
+            >
+            </resource-renderer>
+          </ng-template>
+          <ng-template editMode>
+            <in-place-content-item-editor
+              [repository]="repository"
+              [workspace]="workspace"
+              [wcmPath]="contentPath"
+              [editing]="true"
+            >
+            </in-place-content-item-editor>
+          </ng-template>
+        </wcm-editable>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<section [class]="options?.htmlClass || ''" align="end">
+  <button
+    mat-raised-button
+    *ngIf="showAddButton"
+    [color]="options?.color || 'accent'"
+    [disabled]="disabled"
+    (click)="addItem($event)"
+  >
+    <span *ngIf="options?.icon" [class]="options?.icon"></span>
+    <span *ngIf="options?.title" [innerHTML]="buttonText"></span>
+  </button>
+</section>

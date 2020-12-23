@@ -1,0 +1,47 @@
+<div
+  class="card, content-item-layout"
+  *ngIf="renderCode()"
+  id="row-viewer-{{ rowId() }}"
+></div>
+<div class="card, content-item-layout">
+  <ng-container *ngIf="renderLayout()">
+    <div
+      class="card container"
+      fxLayout="row"
+      style="padding: 6px"
+      *ngFor="let row of rendererTemplate.rows; let rowIndex = index"
+    >
+      <div
+        fxLayout="column"
+        *ngFor="let column of row.columns; let columnIndex = index"
+        fxLayoutAlign="start"
+        fxFlex="{{ column.width ? column.width : 100 }}"
+      >
+        <div
+          fxLayout="row"
+          id="row-viewer-{{ rowId() }}-{{ element.name }}"
+          *ngFor="let element of column.elements; let rowIndex = index"
+          fxLayoutAlign="start"
+          fxFlex="{{ column.width ? column.width : 100 }}"
+        >
+          <!--
+          <query-result-column
+            *ngIf="isQuery(element.source)"
+            [queryresultid]="queryResultId"
+            [rowindex]="rowIndex"
+            [column]="element.name"
+          >
+          </query-result-column>
+          <render-fragement
+            *ngIf="isWidget(element.source)"
+            [queryresultid]="queryResultId"
+            [rowindex]="rowIndex"
+            [body]="element.body"
+          >
+          </render-fragement>
+          -->
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

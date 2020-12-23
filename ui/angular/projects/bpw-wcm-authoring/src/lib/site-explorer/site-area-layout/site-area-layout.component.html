@@ -1,0 +1,230 @@
+<div
+  [perfectScrollbar]="{ suppressScrollX: true }"
+  class="site-area-layout-viewport"
+>
+  <div
+    *ngIf="layout"
+    id="layout"
+    fxLayout="column"
+    class="page-layout carded inner-scroll center"
+  >
+    <!-- CONTENT AREA -->
+    <div fxLayout="row" fxLayoutAlign="start" fxFlex="1 0 auto">
+      <div fxLayout="column" fxFlex="20">
+        <button
+          mat-icon-button
+          type="button"
+          title="Update side navigation configutation"
+          aria-label="Update side navigation configutation"
+          [matMenuTriggerFor]="sidePanelMenu"
+        >
+          <mat-icon>build</mat-icon>Side Navivation
+        </button>
+      </div>
+      <div fxLayout="column" fxFlex="20">
+        <button mat-icon-button type="button" [matMenuTriggerFor]="saveMenu">
+          <mat-icon>build</mat-icon>Actions
+        </button>
+      </div>
+    </div>
+    <!-- / HEADER -->
+    <div class="card" fxLayout="row" id="page-layout">
+      <div
+        class="card"
+        id="sidePanel-layout"
+        fxFlex="{{ layout.sidePane.width }}"
+        *ngIf="showLeftSidePanel()"
+      >
+        <!-- Add container link-->
+        <a [routerLink]="" (click)="addSideViewer()"
+          ><mat-icon>add_circle_outline</mat-icon>Add Viewer</a
+        >
+        <div
+          class="card container"
+          *ngFor="
+            let viewer of layout.sidePane.viewers;
+            let viewerIndex = index
+          "
+        >
+          <resource-viewer
+            [viewerIndex]="viewerIndex"
+            [resourceViewer]="layout.sidePane.viewers[viewerIndex]"
+            [renderTemplate]="
+              renderTemplate(
+                layout.sidePane.viewers[viewerIndex].renderTemplate
+              )
+            "
+            (resourceViewerRemoved)="removeSideViewer($event)"
+          >
+          </resource-viewer>
+        </div>
+      </div>
+      <div class="card" id="content-layout" fxFlex="{{ layout.contentWidth }}">
+        <!-- ROWS -->
+        <div *ngFor="let row of layout.rows; let rowIndex = index">
+          <div fxLayout="row" fxLayoutAlign="end">
+            <div fxLayout="column" fxLayoutAlign="start" fxFlex="20">
+              <button
+                mat-icon-button
+                type="button"
+                title="Update this row"
+                aria-label="Update this row"
+                [matMenuTriggerFor]="updateRowMenu"
+                [matMenuTriggerData]="{ item: rowIndex }"
+              >
+                <mat-icon>edit</mat-icon>Update Row
+              </button>
+            </div>
+            <div
+              *ngIf="canRewmoveRow()"
+              fxLayout="column"
+              fxLayoutAlign="start"
+              fxFlex="20"
+            >
+              <button
+                mat-icon-button
+                title="Delete this row"
+                aria-label="Delete this row"
+                fxFlex="20"
+                (click)="removeRow(rowIndex)"
+              >
+                <mat-icon>delete</mat-icon>Remove Row
+              </button>
+            </div>
+          </div>
+          <!-- COLUMNS -->
+          <div class="card, row-layout">
+            <div
+              class="column-layout"
+              *ngFor="let column of row.columns; let columnIndex = index"
+              fxFlex="{{ column.width }}"
+            >
+              <a
+                [routerLink]=""
+                (click)="addResourceViewer(rowIndex, columnIndex)"
+                ><mat-icon>add_circle_outline</mat-icon>Add Viewer</a
+              >
+              <div
+                class="card container"
+                *ngFor="let viewer of column.viewers; let viewerIndex = index"
+              >
+                <resource-viewer
+                  [viewerIndex]="viewerIndex"
+                  [resourceViewer]="
+                    layout.rows[rowIndex].columns[columnIndex].viewers[
+                      viewerIndex
+                    ]
+                  "
+                  [renderTemplate]="
+                    renderTemplate(
+                      layout.rows[rowIndex].columns[columnIndex].viewers[
+                        viewerIndex
+                      ].renderTemplate
+                    )
+                  "
+                  (resourceViewerRemoved)="
+                    removeResourceViewer(rowIndex, columnIndex, $event)
+                  "
+                >
+                </resource-viewer>
+              </div>
+            </div>
+          </div>
+          <!-- / COLUMNS -->
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end">
+          <div fxLayout="column" fxLayoutAlign="start" fxFlex="20">
+            <button mat-icon-button type="button" (click)="addRow()">
+              <mat-icon>add_box</mat-icon>Add Row
+            </button>
+          </div>
+        </div>
+        <!-- / ROWS -->
+      </div>
+      <div
+        class="card"
+        id="sidePanel-layout"
+        fxFlex="{{ layout.sidePane.width }}"
+        *ngIf="showRightSidePanel()"
+      >
+        <a [routerLink]="" (click)="addSideViewer()"
+          ><mat-icon>add_circle_outline</mat-icon>Add Viewer</a
+        >
+        <div
+          class="card container"
+          *ngFor="
+            let viewer of layout.sidePane.viewers;
+            let viewerIndex = index
+          "
+        >
+          <resource-viewer
+            [viewerIndex]="viewerIndex"
+            [resourceViewer]="layout.sidePane.viewers[viewerIndex]"
+            [renderTemplate]="
+              renderTemplate(
+                layout.sidePane.viewers[viewerIndex].renderTemplate
+              )
+            "
+            (resourceViewerRemoved)="removeSideViewer($event)"
+          >
+          </resource-viewer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-menu #updateRowMenu="matMenu">
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="updateRow(item, 0)">One Column</button>
+    <button mat-menu-item (click)="updateRow(item, 1)">
+      Two Columns (50/50)
+    </button>
+    <button mat-menu-item (click)="updateRow(item, 2)">
+      Two Columns (33/66)
+    </button>
+    <button mat-menu-item (click)="updateRow(item, 3)">
+      Tow Columns (66/33)
+    </button>
+    <button mat-menu-item (click)="updateRow(item, 4)">
+      Tow Columns (25/75)
+    </button>
+    <button mat-menu-item (click)="updateRow(item, 5)">
+      Tow Columns (75/25)
+    </button>
+    <button mat-menu-item (click)="updateRow(item, 6)">
+      Three Columns (33/33/33)
+    </button>
+    <button mat-menu-item (click)="updateRow(item, 7)">
+      Four Columns (25/25/25/25)
+    </button>
+  </ng-template>
+</mat-menu>
+<mat-menu #sidePanelMenu="matMenu">
+  <button mat-menu-item (click)="updateSidePane(0)">None</button>
+  <button mat-menu-item (click)="updateSidePane(1)">
+    Left Side Navigation (20%)
+  </button>
+  <button mat-menu-item (click)="updateSidePane(2)">
+    Left Side Navigation (30%)
+  </button>
+  <button mat-menu-item (click)="updateSidePane(3)">
+    Left Side Navigation (40%)
+  </button>
+  <button mat-menu-item (click)="updateSidePane(4)">
+    Righ Side Navigation (20%)
+  </button>
+  <button mat-menu-item (click)="updateSidePane(5)">
+    Righ Side Navigation (30%)
+  </button>
+  <button mat-menu-item (click)="updateSidePane(6)">
+    Righ Side Navigation (40%)
+  </button>
+</mat-menu>
+<mat-menu #saveMenu="matMenu">
+  <button mat-menu-item (click)="commitLayout()">Commit Sitearea Layout</button>
+  <button mat-menu-item (click)="clearLayout()">Clear Sitearea Layout</button>
+  <!--
+    <button mat-menu-item (click)="resolveLayout()">Resolve from Page Layout</button>
+    -->
+</mat-menu>

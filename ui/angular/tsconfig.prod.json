@@ -1,0 +1,42 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "bpw-auth": ["dist/bpw-auth"],
+      "bpw-auth/*": ["dist/bpw-auth/*"],
+      "bpw-wcm-service": ["dist/bpw-wcm-service"],
+      "bpw-wcm-service/*": ["dist/bpw-wcm-service/*"],
+      "bpw-wcm-rendering": ["dist/bpw-wcm-rendering"],
+      "bpw-wcm-rendering/*": ["dist/bpw-wcm-rendering/*"],
+      "bpw-wcm-authoring": ["dist/bpw-wcm-authoring"],
+      "bpw-wcm-authoring/*": ["dist/bpw-wcm-authoring/*"],
+      "bpw-wcm-elements": ["dist/bpw-wcm-elements"],
+      "bpw-wcm-elements/*": ["dist/bpw-wcm-elements/*"],
+      "bpw-rest-client": ["dist/bpw-rest-client"],
+      "bpw-rest-client/*": ["dist/bpw-rest-client/*"],
+      "bpw-common": ["dist/bpw-common"],
+      "bpw-common/*": ["dist/bpw-common/*"],
+      "@bpw/ajsf-core": ["dist/@bpw/ajsf-core"],
+      "@bpw/ajsf-cor/*": ["dist/@bpw/ajsf-core/*"],
+      "@bpw/ajsf-material": ["dist/@bpw/ajsf-material"],
+      "@bpw/ajsf-material/*": ["dist/@bpw/ajsf-material/*"],
+      "bpw-test": ["dist/bpw-test/bpw-test", "dist/bpw-test"]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

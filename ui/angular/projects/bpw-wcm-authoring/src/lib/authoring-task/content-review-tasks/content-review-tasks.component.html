@@ -1,0 +1,95 @@
+<mat-card fxLayout="column" fxFlex="80" [ngClass]="'wcm-content'">
+  <mat-card-content fxLayout="column">
+    <wcm-response
+      [status$]="status$"
+      [successMessage]="successMessage"
+    ></wcm-response>
+    <div class="spinner-container" *ngIf="loading">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <div fxLayout="row">
+      <div fxFlex="80">
+        <mat-form-field>
+          <input
+            matInput
+            #input
+            placeholder="Filter"
+            (keyup)="filterSubject.next($event.target.value)"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-table
+      class="item-table mat-elevation-z8"
+      [dataSource]="dataSource"
+      matSort
+      matSortDisableClear="true"
+      [matSortActive]="defaultSort.active"
+      [matSortDirection]="defaultSort.direction"
+    >
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Name</mat-header-cell
+        >
+        <mat-cell *matCellDef="let item">
+          {{ item.name }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+        <mat-cell class="duration-cell" *matCellDef="let item">
+          {{ item.title }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="author">
+        <mat-header-cell *matHeaderCellDef>Creater</mat-header-cell>
+        <mat-cell class="duration-cell" *matCellDef="let item">
+          {{ item.author }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+        <mat-cell *matCellDef="let item; let i = index">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="itemContextMenu"
+            [matMenuTriggerData]="{ item: i }"
+          >
+            <mat-icon class="mat-icon-rtl-mirror">more_vert</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+
+    <mat-paginator
+      [length]="itemCount"
+      [pageSize]="3"
+      [pageSizeOptions]="[3, 5, 10]"
+    ></mat-paginator>
+  </mat-card-content>
+</mat-card>
+
+<mat-menu #itemContextMenu="matMenu">
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="editPermissions(item)">
+      Edit Permissions
+    </button>
+    <button mat-menu-item (click)="showItemHistory(item)">
+      Show History
+    </button>
+    <button mat-menu-item (click)="editDraft(item)">
+      Edit Draft
+    </button>
+    <button *ngIf="isReviewer(item)" mat-menu-item (click)="reviewDraft(item)">
+      Review Draft
+    </button>
+    <button mat-menu-item (click)="cancelDraft(item)">
+      Cancel Draft
+    </button>
+  </ng-template>
+</mat-menu>
+
+<template #blockUIContainer> </template>

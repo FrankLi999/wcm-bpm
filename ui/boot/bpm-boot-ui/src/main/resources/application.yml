@@ -1,0 +1,24 @@
+spring:
+    application:
+      name: bpm_ui_ssl
+# security:
+  # require-ssl: true
+server:
+  contextPath: /
+  servlet:
+    session.persistent: false
+  port: 4009
+  ssl:
+    enabled: false
+    # client-auth: need
+    key-store: classpath:jks/bpm-ui-client.jks
+    key-store-password: Passw0rd
+    key-alias: bpm_ui_ssl
+    key-store-type: JKS
+    #key-store-provider: SUN
+    trust-store: classpath:jks/bpm-ui-client.jks
+    trust-store-password: Passw0rd
+    trust-store-type: JKS
+
+endpoint:
+  ms-service: https://localhost:8843/configserver/api/props

@@ -1,0 +1,87 @@
+<div id="manage-authorizations" class="page-layout carded left-sidebar">
+  <!-- SIDEBAR -->
+  <sidebar
+    class="sidebar"
+    id="manage-authorizations-sidebar"
+    position="left"
+    lockedOpen="gt-md"
+    name="manage-authorizations-sidebar"
+  >
+    <!-- SIDEBAR HEADER -->
+    <div
+      fxLayout="column"
+      fxLayoutAlign="space-between start"
+      class="header wcm-accent p-24 pb-4"
+    >
+      <div class="logo" fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32"> list </mat-icon>
+        <span class="logo-text">Resources</span>
+      </div>
+    </div>
+    <!-- / SIDEBAR HEADER -->
+    <!-- SIDEBAR CONTENT -->
+    <div class="content">
+      <div class="nav material2">
+        <ng-container *ngIf="resources">
+          <mat-action-list>
+            <mat-list-item
+              *ngFor="let resource of resources; let selected = index"
+            >
+              <button
+                style="margin-top: 6px; margin-bottom: 6px; font-size: 12px"
+                title="{{ resource.title }}"
+                (click)="resourceChanged(selected)"
+              >
+                {{ resource.title }}
+              </button>
+            </mat-list-item>
+          </mat-action-list>
+        </ng-container>
+      </div>
+    </div> </sidebar
+  ><!-- CENTER -->
+  <div class="center">
+    <!-- CONTENT HEADER -->
+    <div class="header" fxLayout="row" fxLayoutAlign="start center">
+      <div
+        class="search-wrapper"
+        fxFlex
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <button
+          mat-icon-button
+          class="sidebar-toggle"
+          fxHide.gt-md
+          (click)="toggleSidebar('manage-authorizations-sidebar')"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+        <!--
+        <div class="search" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="logo-icon s-32">
+            settings
+          </mat-icon>
+          <span class="logo-text"
+            >Authorizations</span
+          >
+        </div>
+        -->
+      </div>
+    </div>
+    <!-- / CONTENT HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <!-- / CONTENT -->
+      <div class="content" fxFlexAlign="row">
+        <!-- FOLDER OVERVIEW -->
+        <authorization-table *ngIf="resources"></authorization-table>
+        <!-- / FOLDER OVERVIEW -->
+      </div>
+      <!-- / CONTENT -->
+    </div>
+    <!-- / CONTENT HEADER -->
+  </div>
+  <!-- / CENTER -->
+</div>

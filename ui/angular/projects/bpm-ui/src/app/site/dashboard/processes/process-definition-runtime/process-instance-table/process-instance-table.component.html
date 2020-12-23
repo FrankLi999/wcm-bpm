@@ -1,0 +1,41 @@
+<mat-table
+  class="wcm-item-table mat-elevation-z8"
+  [dataSource]="dataSource"
+  matSort
+  matSortDisableClear="true"
+  [matSortActive]="defaultSort.active"
+  [matSortDirection]="defaultSort.direction"
+>
+  <ng-container matColumnDef="state">
+    <mat-header-cell *matHeaderCellDef>State</mat-header-cell>
+    <mat-cell *matCellDef="let item">
+      <mat-icon class="material-icons color_green" *ngIf="!item.suspended"
+        >check_circle_outline</mat-icon
+      >
+      <mat-icon class="material-icons color_grey" *ngIf="item.suspended"
+        >pause_circle_outline</mat-icon
+      >
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+    <mat-cell *matCellDef="let item"
+      ><a (click)="processInstanceSelected(item.id)">{{ item.id }}</a></mat-cell
+    >
+  </ng-container>
+  <ng-container matColumnDef="startTime">
+    <mat-header-cell *matHeaderCellDef mat-sort-header
+      >Start Time</mat-header-cell
+    >
+    <mat-cell *matCellDef="let item">{{ item.startTime }}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="businessKey">
+    <mat-header-cell *matHeaderCellDef>Business Key</mat-header-cell>
+    <mat-cell *matCellDef="let item">{{ item.businessKey }}</mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+</mat-table>
+
+<mat-paginator [length]="itemCount" [pageSize]="50" [pageSizeOptions]="[50]">
+</mat-paginator>

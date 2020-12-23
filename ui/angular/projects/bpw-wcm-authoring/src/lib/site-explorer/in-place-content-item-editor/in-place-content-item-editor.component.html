@@ -1,0 +1,35 @@
+<mat-card fxLayout="column" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Content Item: {{ wcmPath }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div fxLayout="row">
+      <div fxFlex="20">
+        <button id="cancelEditing" mat-icon-button title="Back to view mode">
+          <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="jsonForm"
+      id="template"
+      fxLayout="column"
+      class="page-layout carded left-sidebar inner-scroll"
+    >
+      <div fxLayout="row" fxFlex="100" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <json-schema-form
+          loadExternalAssets="true"
+          [form]="jsonForm.formSchema"
+          [options]="formConfig.jsonFormOptions"
+          [framework]="formConfig.selectedFramework"
+          [language]="formConfig.selectedLanguage"
+          [data]="contentItemData"
+          (onSubmit)="saveItem($event)"
+        >
+        </json-schema-form>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<template #blockUIContainer> </template>

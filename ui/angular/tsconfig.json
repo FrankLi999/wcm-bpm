@@ -1,0 +1,125 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+
+  To learn more about this file see: https://angular.io/config/solution-tsconfig.
+*/
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/bpw-wcm-service/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/bpw-wcm-service/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-wcm-rendering/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/bpw-wcm-rendering/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-wcm-authoring/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/bpw-wcm-authoring/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-wcm-elements/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/bpw-wcm-elements/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/wcm-authoring/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/wcm-authoring/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpm-ui/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/bpm-ui/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-rest-client/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/bpw-rest-client/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-skeleton/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/bpw-skeleton/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-reference-app/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/bpw-reference-app/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-skeleton-minimal/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/bpw-skeleton-minimal/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-common/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/bpw-common/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-ajsf-core/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/bpw-ajsf-core/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-ajsf-material/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/bpw-ajsf-material/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-form/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/bpw-form/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-auth/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/bpw-auth/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/mysite/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/mysite/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpmn-modeler/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/bpmn-modeler/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/material-theme-flex-poc/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/material-theme-flex-poc/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/bpw-test/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/bpw-test/tsconfig.spec.json"
+    }
+  ]
+}

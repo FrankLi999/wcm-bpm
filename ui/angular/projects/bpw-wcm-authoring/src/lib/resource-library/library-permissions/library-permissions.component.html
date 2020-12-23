@@ -1,0 +1,149 @@
+<mat-card fxLayout="column" fxFlex="80" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Resource Library Permissions</mat-card-title>
+    <mat-card-subtitle>Library Name: {{ library.name }} </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div *ngIf="error" class="alert alert-danger mat-error">
+      {{ error }}
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="20">
+        <button
+          mat-icon-button
+          (click)="backToLibraries()"
+          title="Back to libraries"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>
+        </button>
+      </div>
+    </div>
+    <mat-accordion fxFlex="80">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Library Permissions
+          </mat-panel-title>
+          <mat-panel-description>
+            Set up libary permssions
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <wcm-acl
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="library.name"
+          [wcmPermission]="libraryPermission"
+          [permissionSubject]="libraryPermissionSubject"
+        ></wcm-acl>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            AuthoringTemplate Permissions
+          </mat-panel-title>
+          <mat-panel-description>
+            Set up authoring template permssions
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <wcm-acl
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="authoringTemplatePath"
+          [wcmPermission]="authoringTemplatePermission"
+          [permissionSubject]="authoringTemplatePermissionSubject"
+        ></wcm-acl>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Site Area Permission
+          </mat-panel-title>
+          <mat-panel-description>
+            Set up libary site area permssions
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <wcm-acl
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="contentItemsPath"
+          [wcmPermission]="contentItemsPermission"
+          [permissionSubject]="contentItemsPermissionSubject"
+        ></wcm-acl>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Render Templates
+          </mat-panel-title>
+          <mat-panel-description>
+            Set up render template permssions
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <wcm-acl
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="renderTemplatePath"
+          [wcmPermission]="renderTemplatePermission"
+          [permissionSubject]="renderTemplatePermissionSubject"
+        ></wcm-acl>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Content Area Layouts
+          </mat-panel-title>
+          <mat-panel-description>
+            Set up content area layouts permssions
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <wcm-acl
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="contentAreaLayoutPath"
+          [wcmPermission]="contentAreaLayoutPermission"
+          [permissionSubject]="contentAreaLayoutPermissionSubject"
+        ></wcm-acl>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Category Permissions
+          </mat-panel-title>
+          <mat-panel-description>
+            Set up category permssions
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <wcm-acl
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="categoryPath"
+          [wcmPermission]="categoryPermission"
+          [permissionSubject]="categoryPermissionSubject"
+        ></wcm-acl>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Workflow Permissions
+          </mat-panel-title>
+          <mat-panel-description>
+            Set up workflow permssions
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <wcm-acl
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="workflowPath"
+          [wcmPermission]="workflowPermission"
+          [permissionSubject]="workflowPermissionSubject"
+        ></wcm-acl>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>

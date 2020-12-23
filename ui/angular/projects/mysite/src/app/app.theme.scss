@@ -1,0 +1,140 @@
+@import "~@angular/material/theming";
+// Perfect scrollbar
+@import "~perfect-scrollbar/css/perfect-scrollbar";
+@import "../../../../dist/bpw-common/lib/scss/theming";
+@import "../../../../dist/bpw-common/lib/scss/wcm";
+// @import "../../../../dist/bpw-common/lib/scss/normalize";
+// @import "../../../../dist/bpw-common/lib/scss/scrollbars";
+// @import "../../../../dist/bpw-common/lib/scss/helpers";
+// @import "../../../../dist/bpw-common/lib/scss/general";
+// @import "../../../../dist/bpw-common/lib/scss/angular-material-fix";
+// @import "../../../../dist/bpw-common/lib/scss/docs";
+// @import "../../../../dist/bpw-common/lib/scss/forms";
+// @import "../../../../dist/bpw-common/lib/scss/print";
+// @import "../../../../dist/bpw-common/lib/scss/plugins/plugins";
+
+@mixin wcm-core-theme($theme) {
+  // Theming for Wcm core styles
+  @include colors-theme($theme);
+
+  @include cards-theme($theme);
+  @include material-theme($theme);
+  @include page-layouts-theme($theme);
+  @include typography-theme($theme);
+  // Theming for WCM components
+  @include search-bar-theme($theme);
+  @include shortcuts-theme($theme);
+  @include sidebar-theme($theme);
+  @include widget-theme($theme);
+}
+
+@include mat-core();
+// $matPalettes: (
+//   "red": $mat-red,
+//   "pink": $mat-pink,
+//   "purple": $mat-purple,
+//   "deep-purple": $mat-deep-purple,
+//   "indigo": $mat-indigo,
+//   "blue": $mat-blue,
+//   "light-blue": $mat-light-blue,
+//   "cyan": $mat-cyan,
+//   "teal": $mat-teal,
+//   "green": $mat-green,
+//   "light-green": $mat-light-green,
+//   "lime": $mat-lime,
+//   "yellow": $mat-yellow,
+//   "amber": $mat-amber,
+//   "orange": $mat-orange,
+//   "deep-orange": $mat-deep-orange,
+//   "brown": $mat-brown,
+//   "grey": $mat-grey,
+//   "blue-grey": $mat-blue-grey,
+// );
+// @include wcm-color-classes($matPalettes);
+// -----------------------------------------------------------------------------------------------------
+// @ Custom color maps for WCM
+// -----------------------------------------------------------------------------------------------------
+$wcm-white: (
+  500: white,
+  contrast: (
+    500: $dark-primary-text,
+  ),
+);
+
+$wcm-black: (
+  500: black,
+  contrast: (
+    500: $light-primary-text,
+  ),
+);
+
+// Generate WCM color classes for custom palettes
+$custom_palettes: (
+  wcm-white: $wcm-white,
+  wcm-black: $wcm-black,
+  wcm-light: $mat-grey,
+);
+
+@include wcm-color-classes($custom_palettes);
+
+// -----------------------------------------------------------------------------------------------------
+// @ Typography
+// -----------------------------------------------------------------------------------------------------
+
+// Angular Material typography
+$typography: mat-typography-config(
+  $font-family: "Muli, Helvetica Neue, Arial, sans-serif",
+  $title: mat-typography-level(20px, 32px, 600),
+  $body-2: mat-typography-level(14px, 24px, 600),
+  $button: mat-typography-level(14px, 14px, 600),
+  $input: mat-typography-level(16px, 1.125, 400)
+    // line-height must be unitless !!!,,,,,,,,,,,,,,,,,,,,,,
+);
+
+// Setup the typography
+@include angular-material-typography($typography);
+
+// Define a mixin for easier access
+
+@mixin components-theme($theme) {
+  //     // Layout components
+  // @include chat-panel-theme($theme);
+  @include toolbar-theme($theme);
+
+  //     // Pages
+  @include forgot-password-theme($theme);
+  @include lock-screen-theme($theme);
+  @include login-theme($theme);
+  @include mail-confirm-theme($theme);
+  @include reset-password-theme($theme);
+  @include signup-theme($theme);
+}
+
+// -----------------------------------------------------------------------------------------------------
+// @ Define the default theme
+// -----------------------------------------------------------------------------------------------------
+
+// Define the primary, accent and warn palettes
+$default-primary-palette: mat-palette($mat-grey);
+$default-accent-palette: mat-palette($mat-light-blue, 600, 400, 700);
+$default-warn-palette: mat-palette($mat-red);
+
+// Create the Material theme object
+$theme: mat-light-theme(
+  $default-primary-palette,
+  $default-accent-palette,
+  $default-warn-palette
+);
+
+// Add ".theme-default" class to the body to activate this theme.
+// Class name must start with "theme-" !!!
+body.theme-default {
+  // Create an Angular Material theme from the $theme map
+  @include angular-material-theme($theme);
+
+  // Apply the theme to the WCM Core
+  @include wcm-core-theme($theme);
+
+  // Apply the theme to the user components
+  @include components-theme($theme);
+}

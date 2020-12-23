@@ -1,0 +1,17 @@
+<!-- hiden text for aoda {{ (bpmApplications$ | async).description }}-->
+<ng-container *ngIf="bpmLinks">
+  <h2>
+    {{ bpmLinks.title }}
+  </h2>
+  <ul *ngFor="let bpmLink of bpmLinks.bpmLinks; let i = index">
+    <li>
+      <h3>{{ bpmLink.title }}</h3>
+      <a
+        href="{{ bpmLink.link }}"
+        title="{{ bpmLink.description }}"
+        target="_blank"
+        >{{ bpmLink.title }}</a
+      >
+    </li>
+  </ul>
+</ng-container>

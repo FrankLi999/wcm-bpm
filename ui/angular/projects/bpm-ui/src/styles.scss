@@ -1,0 +1,28 @@
+@import "app/app.theme";
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons&display=block");
+@import url("https://fonts.googleapis.com/css?family=Muli:300,400,600,700");
+
+.dashboard-item-link {
+  margin-top: 24px;
+}
+.dashboard-section-title {
+  margin-bottom: 24px;
+}
+
+.dashboard-row {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.dashboard-card-tile {
+  flex: 25;
+}
+
+.deployed-widget {
+  flex: 25;
+}
+
+.right-now-widget {
+  flex: 33;
+}

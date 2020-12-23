@@ -1,0 +1,87 @@
+<div *ngIf="updateStatus" class="alert alert-danger">
+  {{ updateStatus }}
+</div>
+<div
+  style="flex-direction: row;
+    box-sizing: border-box;
+    display: flex;
+    flex: 1 1 1e-09px;"
+>
+  <div
+    style="place-content: center;
+    align-items: center;
+    flex-direction: row;
+    box-sizing: border-box;
+    display: flex;
+    flex: 1 1 100%;
+    max-width: 40%;"
+  >
+    <group-selection (groupSelected)="groupSelected($event)"></group-selection>
+  </div>
+  <div
+    style="place-content: center;
+    align-items: center;
+    flex-direction: row;
+    box-sizing: border-box;
+    display: flex;
+    flex: 1 1 100%;
+    max-width: 40%;"
+  >
+    <user-selection (userSelected)="userSelected($event)"></user-selection>
+  </div>
+  <div
+    style="place-content: center;
+    align-items: center;
+    flex-direction: row;
+    box-sizing: border-box;
+    display: flex;
+    flex: 1 1 100%;
+    max-width: 20%;"
+  >
+    <button title="Save wcm permissions" (click)="saveWcmPermission()">
+      Save
+    </button>
+  </div>
+</div>
+<div fxLayout="row">
+  <mat-table
+    #permissionTable
+    class="permission-table mat-elevation-z8"
+    [dataSource]="dataSource"
+  >
+    <ng-container matColumnDef="principal">
+      <mat-header-cell *matHeaderCellDef>Principal</mat-header-cell>
+      <mat-cell *matCellDef="let permission">
+        {{ permission.principalName }}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="viewer">
+      <mat-header-cell *matHeaderCellDef>Viewer</mat-header-cell>
+      <mat-cell class="viewer-cell" *matCellDef="let permission">
+        <mat-checkbox [(ngModel)]="permission.viewer"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="editor">
+      <mat-header-cell *matHeaderCellDef>Editor</mat-header-cell>
+      <mat-cell class="editor-cell" *matCellDef="let permission">
+        <mat-checkbox [(ngModel)]="permission.editor"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="admin">
+      <mat-header-cell *matHeaderCellDef>Administrator</mat-header-cell>
+      <mat-cell class="admin-cell" *matCellDef="let permission">
+        <mat-checkbox [(ngModel)]="permission.administrator"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let permission; let i = index">
+        <button mat-icon-button (click)="removeLibraryPermission(i)">
+          <mat-icon class="mat-icon-rtl-mirror">remove</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</div>

@@ -1,0 +1,10 @@
+{
+  "schema": {
+    "type": "string"
+  },
+  "layout": [
+    {
+      "key": "1"
+    }
+  ]
+}

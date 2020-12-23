@@ -1,0 +1,138 @@
+<mat-card fxLayout="column" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Content Item</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div fxLayout="row">
+      <div fxLayout="column" fxFlex="50">
+        <button
+          mat-icon-button
+          (click)="backToItems()"
+          title="Back to content items"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>Back to
+          content items
+        </button>
+      </div>
+      <div
+        fxLayout="column"
+        fxFlex="50"
+        *ngIf="formIsValid && defaultWorkspace && !reviewing"
+      >
+        <button
+          mat-icon-button
+          type="button"
+          [matMenuTriggerFor]="contentItemMenu"
+        >
+          <mat-icon>build</mat-icon>Save Content Item
+        </button>
+      </div>
+      <!--
+      <div
+        fxLayout="column"
+        fxFlex="50"
+        *ngIf="formIsValid && defaultWorkspace && !reviewing"
+      >
+        <button
+          mat-icon-button
+          type="button"
+          [matMenuTriggerFor]="contentItemMenu"
+        >
+          <mat-icon>build</mat-icon>Save Content Item
+        </button>
+      </div>
+      -->
+      <div fxLayout="column" fxFlex="50" *ngIf="formIsValid && draftWorkspace">
+        <button
+          mat-icon-button
+          type="button"
+          [matMenuTriggerFor]="draftItemMenu"
+        >
+          <mat-icon>build</mat-icon>Save Draft Item
+        </button>
+      </div>
+      <div fxLayout="column" fxFlex="50" *ngIf="reviewing">
+        <button
+          mat-icon-button
+          type="button"
+          [matMenuTriggerFor]="reviewItemMenu"
+        >
+          <mat-icon>build</mat-icon>Complete Review
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="itemForm"
+      id="template"
+      fxLayout="column"
+      class="page-layout carded left-sidebar"
+    >
+      <div fxLayout="row" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <h3>Node Path: {{ wcmPath }}</h3>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <h3>Authoring Template: {{ contentItem.authoringTemplate }}</h3>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <h3>Repository: {{ repository }}</h3>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <h3>Workspace: {{ workspace }}</h3>
+      </div>
+
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start"
+        fxFlex="1 0 auto"
+        class="inner-scroll"
+      >
+        <!--
+        <mat-tab-group fxLayout="column" fxFlex>
+          <mat-tab label="Properties">
+
+            -->
+        <perfect-scrollbar
+          class="scroll-container"
+          fxFlex="auto"
+          [config]="perfectScrollconfig"
+          [scrollIndicators]="true"
+        >
+          <json-schema-form
+            #contentItemForm
+            loadExternalAssets="true"
+            [form]="itemForm.formSchema"
+            [options]="formConfig.jsonFormOptions"
+            [framework]="formConfig.selectedFramework"
+            [language]="formConfig.selectedLanguage"
+            [readonly]="reviewing"
+            [data]="contentItemData"
+            [widgets]="formConfig.wcmWidgets"
+            (onChanges)="onFormDataChanges($event)"
+            (isValid)="isFormDataValid($event)"
+            (onSubmit)="createContent($event)"
+          >
+          </json-schema-form>
+        </perfect-scrollbar>
+        <!--
+
+          </mat-tab>
+        </mat-tab-group>
+        -->
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-menu #contentItemMenu="matMenu">
+  <button mat-menu-item (click)="saveItemAsDraft()">Save As Draft</button>
+  <button mat-menu-item (click)="publishItem()">Save and Publish</button>
+</mat-menu>
+<mat-menu #draftItemMenu="matMenu">
+  <button mat-menu-item (click)="saveDraft()">Save Draft</button>
+</mat-menu>
+<mat-menu #reviewItemMenu="matMenu">
+  <button mat-menu-item (click)="approveDraft()">Approve Draft Item</button>
+  <button mat-menu-item (click)="rejectDraft()">Reject Draft Item</button>
+  <button mat-menu-item (click)="previewDraft()">Preview</button>
+</mat-menu>
+<template #blockUIContainer> </template>

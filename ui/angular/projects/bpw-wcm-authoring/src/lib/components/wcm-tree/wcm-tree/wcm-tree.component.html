@@ -1,0 +1,57 @@
+<div class="content wcm-content-container">
+  <div
+    [perfectScrollbar]="{ suppressScrollX: true }"
+    class="wcm-scroll-container"
+  >
+    <mat-tree
+      #siteNavigator
+      [dataSource]="dataSource"
+      [treeControl]="treeControl"
+    >
+      <mat-tree-node
+        *matTreeNodeDef="let node"
+        matTreeNodePadding
+        [matTreeNodePaddingIndent]="10"
+      >
+        <button
+          mat-icon-button
+          [attr.aria-label]="'toggle ' + node.data.name"
+          (click)="loadChildren(node)"
+          matTreeNodeToggle
+        >
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+          </mat-icon>
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ node.active ? "folder_open" : "folder" }}
+          </mat-icon>
+        </button>
+        <button mat-icon-button (click)="onNodeSelected(node)">
+          <span
+            *ngIf="currentNodeOperations"
+            style="margin-left: 8px"
+            [matMenuTriggerFor]="contextMenu"
+            [matMenuTriggerData]="{ item: node.data.id }"
+          >
+            {{ node.data.name }}
+          </span>
+          <span *ngIf="!currentNodeOperations" style="margin-left: 8px">
+            {{ node.data.name }}
+          </span>
+        </button>
+      </mat-tree-node>
+    </mat-tree>
+  </div>
+</div>
+<mat-menu #contextMenu="matMenu">
+  <ng-template matMenuContent let-item="item">
+    <button
+      mat-menu-item
+      *ngFor="let operation of currentNodeOperations"
+      (click)="doNodeOperation(item, operation)"
+    >
+      <mat-icon>{{ operation.defaultIcon }}</mat-icon
+      ><span>{{ operation.defaultTitle }}</span>
+    </button>
+  </ng-template>
+</mat-menu>

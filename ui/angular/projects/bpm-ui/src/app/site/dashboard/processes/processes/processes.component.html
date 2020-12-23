@@ -1,0 +1,84 @@
+<mat-card fxLayout="column" fxFlex="100" [ngClass]="'wcm-content'"
+  ><mat-card-header fxLayout="row">
+    <mat-card-title>
+      {{ itemCount }}
+      {{ itemCount > 1 ? "process definitions" : "process definition" }}
+      deployed</mat-card-title
+    >
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <mat-tab-group mat-align-tabs="end">
+      <mat-tab label="List">
+        <mat-table
+          class="wcm-item-table mat-elevation-z8"
+          [dataSource]="dataSource"
+          matSort
+          matSortDisableClear="true"
+          [matSortActive]="defaultSort.active"
+          [matSortDirection]="defaultSort.direction"
+        >
+          <ng-container matColumnDef="state">
+            <mat-header-cell *matHeaderCellDef>State</mat-header-cell>
+            <mat-cell *matCellDef="let item">
+              <mat-icon
+                class="material-icons color_green"
+                *ngIf="!item.suspended"
+                >check_circle_outline</mat-icon
+              >
+              <mat-icon class="material-icons color_grey" *ngIf="item.suspended"
+                >pause_circle_outline</mat-icon
+              >
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="incidents">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+              >Incidents</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item"> {{ item.incidents }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="runnningInstances">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+              >Runnning Instances</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item">{{
+              item.runnningInstances
+            }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+              >Name</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item; let i = index"
+              ><a (click)="itemSelected(i)">{{ item.name }}</a></mat-cell
+            >
+          </ng-container>
+          <ng-container matColumnDef="tenantID">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+              >Tenant ID</mat-header-cell
+            >
+            <mat-cell *matCellDef="let item">{{ item.tenantID }}</mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+        </mat-table>
+
+        <mat-paginator
+          [length]="itemCount"
+          [pageSize]="5"
+          [pageSizeOptions]="[5, 10]"
+        >
+        </mat-paginator>
+      </mat-tab>
+      <mat-tab label="Previews">
+        <div class="h-200">
+          <a
+            routerLink="/bpm/processes/processinstance"
+            title="Select to check deployed applications"
+          >
+            Process Instances</a
+          >
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

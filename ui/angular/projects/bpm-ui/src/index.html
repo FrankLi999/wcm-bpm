@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Camunda BPM UI</title>
+    <base href="/" />
+
+    <meta charset="utf-8" />
+    <meta
+      name="keywords"
+      content="HTML,CSS,AngularJS,Angular,Angular 2,Angular 4,Angular 5,Angular 6,Angular 7,Material,Material 2"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!--
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700"
+      rel="stylesheet"
+    />
+    -->
+    <script>
+      if (global === undefined) {
+        var global = window;
+      }
+    </script>
+  </head>
+
+  <body>
+    <!-- WCM Splash Screen -->
+    <div class="app-loading" id="wcm-splash-screen">
+      <div class="center">
+        <div class="logo">
+          <img width="128" src="assets/images/logos/wcm.png" />
+        </div>
+        <svg class="spinner" viewBox="25 25 50 50">
+          <circle
+            class="path"
+            cx="50"
+            cy="50"
+            r="20"
+            fill="none"
+            stroke-width="2"
+            stroke-miterlimit="10"
+          />
+        </svg>
+      </div>
+    </div>
+    <!-- / WCM Splash Screen -->
+
+    <bpw-app></bpw-app>
+  </body>
+</html>

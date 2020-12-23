@@ -1,0 +1,15 @@
+<!-- PROGRESS BAR -->
+<progress-bar></progress-bar>
+<!-- / PROGRESS BAR -->
+
+<!-- VERTICAL LAYOUT -->
+<ng-container *ngIf="uiConfig.layout.title === 'vertical-layout'">
+  <vertical-layout></vertical-layout>
+</ng-container>
+<!-- / VERTICAL LAYOUT -->
+
+<!-- HORIZONTAL LAYOUT -->
+<ng-container *ngIf="uiConfig.layout.title === 'horizontal-layout'">
+  <horizontal-layout></horizontal-layout>
+</ng-container>
+<!-- / HORIZONTAL LAYOUT -->

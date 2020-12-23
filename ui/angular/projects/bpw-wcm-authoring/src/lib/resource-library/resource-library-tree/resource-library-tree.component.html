@@ -1,0 +1,31 @@
+<div id="resource-library-tree" class="page-layout carded inner-scroll">
+  <!-- TOP BACKGROUND -->
+  <div style="padding-top: 50px;"></div>
+  <!-- CENTER -->
+  <div class="center">
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <!-- / CONTENT -->
+      <div class="content" fxLayout="column" fxLayoutAlign="start start">
+        <router-outlet></router-outlet>
+      </div>
+      <!-- / CONTENT -->
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+  <!--
+  <mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+      <button
+        mat-menu-item
+        *ngFor="let operation of currentNodeOperations"
+        (click)="doNodeOperation(item, operation)"
+      >
+        <mat-icon>{{ operation.defaultIcon }}</mat-icon
+        ><span>{{ operation.defaultTitle }}</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+  -->
+</div>

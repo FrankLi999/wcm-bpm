@@ -1,0 +1,47 @@
+<mat-card fxLayout="column" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Workflow</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <wcm-response
+      [status$]="status$"
+      [successMessage]="successMessage"
+    ></wcm-response>
+    <div fxLayout="row">
+      <div fxFlex="20">
+        <button
+          mat-icon-button
+          (click)="backToItems()"
+          title="Back to workflows"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div
+      *ngIf="itemForm"
+      id="template"
+      fxLayout="column"
+      class="page-layout carded left-sidebar inner-scroll"
+    >
+      <div fxLayout="row" fxFlex="100" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <h3>Repository: {{ repository }}</h3>
+        <h3>Workspace: {{ workspace }}</h3>
+        <h3>WCM Path: {{ wcmPath }}</h3>
+      </div>
+      <div fxLayout="row" fxFlex="100" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <json-schema-form
+          loadExternalAssets="true"
+          [form]="itemForm.formSchema"
+          [options]="formConfig.jsonFormOptions"
+          [framework]="formConfig.selectedFramework"
+          [language]="formConfig.selectedLanguage"
+          [data]="formData"
+          (onSubmit)="upsertItem($event)"
+        >
+        </json-schema-form>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<template #blockUIContainer> </template>

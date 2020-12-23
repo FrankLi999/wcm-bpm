@@ -1,0 +1,14 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/@bpw/ajsf-core",
+  "lib": {
+    "entryFile": "src/public-api.ts",
+    "umdModuleIds": {
+      "ajv": "ajv",
+      "ajv/lib/refs/json-schema-draft-06.json": "jsonDraft6"
+    }
+  },
+  "whitelistedNonPeerDependencies": [
+    "ajv"
+  ]
+}

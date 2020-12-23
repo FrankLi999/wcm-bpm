@@ -1,0 +1,38 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string",
+        "title": "Text"
+      }
+    },
+    "required": ["text"]
+  },
+  "layout": [
+    {
+      "key": "text",
+      "onBlur": {
+        "arguments": "evt",
+        "body": "var value = evt.target.value;if (value) alert(value);"
+      },
+      "validateFn": {
+        "arguments": "control",
+        "body": "if (control.value && (!control.value.startsWith(\"@\"))) { return { validText: true};}return null;"
+      },
+      "customValidationMessages": {
+        "en": {
+          "validText": "xxxxxxxxxxxxxxx"
+        }
+      }
+    },
+    {
+      "type": "button",
+      "title": "Click me",
+      "onClick": {
+        "arguments": "evt",
+        "body": "evt.preventDefault();alert('Thank you!');"
+      }
+    }
+  ]
+}

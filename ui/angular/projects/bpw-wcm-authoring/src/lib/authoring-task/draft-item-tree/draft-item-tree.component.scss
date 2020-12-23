@@ -1,0 +1,15 @@
+draft-item-tree {
+  width: 100%;
+}
+
+.scroll-container {
+  position: relative;
+}
+.content-container {
+  position: relative;
+
+  min-height: 0;
+  padding: 8px;
+  margin: 12px 16px;
+  border: 1px solid #ccc;
+}

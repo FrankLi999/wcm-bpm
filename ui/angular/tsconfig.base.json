@@ -1,0 +1,89 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "bpw-auth": [
+        "projects/bpw-auth/src/public-api"
+      ],
+      "bpw-auth/*": [
+        "projects/bpw-auth/src/lub/*"
+      ],
+      "bpw-wcm-service": [
+        "projects/bpw-wcm-service/src/public-api"
+      ],
+      "bpw-wcm-service/*": [
+        "projects/bpw-wcm-service/src/lib/*"
+      ],
+      "bpw-wcm-rendering": [
+        "projects/bpw-wcm-rendering/src/public-api"
+      ],
+      "bpw-wcm-rendering/*": [
+        "projects/bpw-wcm-rendering/src/lib/*"
+      ],
+      "bpw-wcm-authoring": [
+        "projects/bpw-wcm-authoring/src/public-api"
+      ],
+      "bpw-wcm-authoring/*": [
+        "projects/bpw-wcm-authoring/src/lib/*"
+      ],
+      "bpw-wcm-elements": [
+        "projects/bpw-wcm-elements/src/public-api"
+      ],
+      "bpw-wcm-elements/*": [
+        "projects/bpw-wcm-elements/src/lib/*"
+      ],
+      "bpw-rest-client": [
+        "projects/bpw-rest-client/src/public-api"
+      ],
+      "bpw-rest-client/*": [
+        "projects/bpw-rest-client/src/lib/*"
+      ],
+      "bpw-common": [
+        "projects/bpw-common/src/public-api"
+      ],
+      "bpw-common/*": [
+        "projects/bpw-common/src/lib/*"
+      ],
+      "@bpw/ajsf-core": [
+        "projects/bpw-ajsf-core/src/public-api"
+      ],
+      "@bpw/ajsf-cor/*": [
+        "projects/bpw-ajsf-core/src/public-api/*"
+      ],
+      "@bpw/ajsf-material": [
+        "projects/bpw-ajsf-material/src/public-api"
+      ],
+      "@bpw/ajsf-material/*": [
+        "projects/bpw-ajsf-material/src/public-api/*"
+      ],
+      "bpw-test": [
+        "projects/bpw-test/src/public-api"
+      ],
+      "bpw-test/*": [
+        "projects/bpw-test/src/public-api/*"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

@@ -1,0 +1,122 @@
+<mat-card fxLayout="column" fxFlex="80" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Resource Library History</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div *ngIf="error" class="alert alert-danger mat-error">
+      {{ error }}
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="20">
+        <button
+          mat-icon-button
+          (click)="backToLibraries()"
+          title="Back to libraries"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>
+        </button>
+      </div>
+    </div>
+    <mat-accordion fxFlex="80">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Library History
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <wcm-history
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="library.name"
+          [wcmVersions]="libraryHistory"
+          [historySubject]="libraryHistorySubject"
+        ></wcm-history>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            AuthoringTemplate History
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <wcm-history
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="authoringTemplatePath"
+          [wcmVersions]="authoringTemplateHistory"
+          [historySubject]="authoringTemplateHistorySubject"
+        ></wcm-history>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Site Area History
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <wcm-history
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="contentItemsPath"
+          [wcmVersions]="contentItemsHistory"
+          [historySubject]="contentItemsHistorySubject"
+        ></wcm-history>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Render Templates History
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <wcm-history
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="renderTemplatePath"
+          [wcmVersions]="renderTemplateHistory"
+          [historySubject]="renderTemplateHistorySubject"
+        ></wcm-history>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Content Area Layouts History
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <wcm-history
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="contentAreaLayoutPath"
+          [wcmVersions]="contentAreaLayoutHistory"
+          [historySubject]="contentAreaLayoutHistorySubject"
+        ></wcm-history>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Category History
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <wcm-history
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="categoryPath"
+          [wcmVersions]="categoryHistory"
+          [historySubject]="categoryHistorySubject"
+        ></wcm-history>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Workflow History
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <wcm-history
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="workflowPath"
+          [wcmVersions]="workflowHistory"
+          [historySubject]="workflowHistorySubject"
+        ></wcm-history>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>

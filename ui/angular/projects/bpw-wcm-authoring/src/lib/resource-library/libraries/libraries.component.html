@@ -1,0 +1,110 @@
+<mat-card fxLayout="column" fxFlex="80" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Resource Libraries</mat-card-title>
+    <mat-card-subtitle>Libraries: {{ itemCount }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <wcm-response
+      [status$]="status$"
+      [successMessage]="successMessage"
+    ></wcm-response>
+    <div class="spinner-container" *ngIf="loading">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="80">
+        <mat-form-field>
+          <input
+            matInput
+            #input
+            placeholder="Filter"
+            (keyup)="filterSubject.next($event.target.value)"
+          />
+        </mat-form-field>
+      </div>
+      <div fxFlex="20">
+        <button mat-icon-button (click)="newItem()" title="New Library">
+          <mat-icon class="mat-icon-rtl-mirror">add_circle</mat-icon>
+        </button>
+        <button mat-icon-button (click)="retry()" title="Reload libraries">
+          <mat-icon class="mat-icon-rtl-mirror">autorenew</mat-icon>
+        </button>
+      </div>
+    </div>
+    <mat-table
+      class="library-table mat-elevation-z8"
+      [dataSource]="dataSource"
+      matSort
+      matSortDisableClear="true"
+      [matSortActive]="defaultSort.active"
+      [matSortDirection]="defaultSort.direction"
+    >
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Library Name</mat-header-cell
+        >
+        <mat-cell *matCellDef="let library">
+          {{ library.name }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+        <mat-cell class="duration-cell" *matCellDef="let library">
+          {{ library.title }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="language">
+        <mat-header-cell *matHeaderCellDef>Langauge</mat-header-cell>
+        <mat-cell class="duration-cell" *matCellDef="let library">
+          {{ library.language }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+        <mat-cell class="description-cell" *matCellDef="let library">
+          {{ library.description }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+        <mat-cell *matCellDef="let library; let i = index">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="libraryContextMenu"
+            [matMenuTriggerData]="{ item: i }"
+          >
+            <mat-icon class="mat-icon-rtl-mirror">more_vert</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+
+    <mat-paginator
+      [length]="itemCount"
+      [pageSize]="3"
+      [pageSizeOptions]="[3, 5, 10]"
+    ></mat-paginator>
+  </mat-card-content>
+</mat-card>
+<!--
+<mat-menu #libraryMenu="matMenu">
+  <button mat-menu-item (click)="newLibrary()">
+    <mat-icon class="mat-icon-rtl-mirror">archive</mat-icon>New Query
+  </button>
+</mat-menu>
+-->
+<mat-menu #libraryContextMenu="matMenu">
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="editItem(item)">Edit</button>
+    <button mat-menu-item (click)="editItemPermissions(item)">
+      Edit Permissions
+    </button>
+    <button mat-menu-item (click)="showItemHistory(item)">
+      Show History
+    </button>
+    <button mat-menu-item (click)="deleteItem(item)">Delete</button>
+  </ng-template>
+</mat-menu>
+<template #blockUIContainer> </template>

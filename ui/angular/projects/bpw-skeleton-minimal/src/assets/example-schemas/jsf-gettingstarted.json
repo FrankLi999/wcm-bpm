@@ -1,0 +1,14 @@
+{
+  "schema": {
+    "field": {
+      "type": "string",
+      "title": "A field"
+    }
+  },
+  "layout": [ {
+    "key": "field"
+  }, {
+    "type": "submit",
+    "title": "Submit"
+  } ]
+}

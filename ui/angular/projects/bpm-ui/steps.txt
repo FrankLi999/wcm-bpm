@@ -1,0 +1,10 @@
+1. create Camunda content library
+2. create site areas
+3. create authoring template: MyContent
+4. create rendering remplates:
+  ApplicationLinks
+  Links
+  UserProfile
+5.Create Content Area Layout - CamundaHome
+6. Associate Home page site area with CamundaHome content area layout
+

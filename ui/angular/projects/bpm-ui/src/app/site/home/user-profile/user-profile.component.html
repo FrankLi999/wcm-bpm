@@ -1,0 +1,15 @@
+<!-- hiden text for aoda {{ (bpmApplications$ | async).description }}-->
+<ng-container *ngIf="userProfile">
+  <h2>
+    {{ userProfile.name }}
+  </h2>
+  <h3>
+    {{ userProfile.email }}
+  </h3>
+  <h2>Group</h2>
+  <ul *ngFor="let group of userProfile.roles; let i = index">
+    <li>
+      <h3>{{ group }}</h3>
+    </li>
+  </ul>
+</ng-container>

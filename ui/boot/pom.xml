@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	
+	<artifactId>wcm-boot-ui-root</artifactId>
+	<name>wcm-boot-ui-root</name>
+	<packaging>pom</packaging>
+	<description>Helper library for Spring Boot Web Applications</description>
+	<parent>
+	    <groupId>com.bpwizard.ui</groupId>
+	    <artifactId>wcm-ui-root</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+	<modules>
+	  <module>authoring-boot-ui</module>
+	  <module>bpm-boot-ui</module>
+	</modules>
+</project>
+

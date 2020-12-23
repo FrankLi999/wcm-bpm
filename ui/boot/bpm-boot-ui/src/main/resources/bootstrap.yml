@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: bpm_ui_ssl
+  cloud:
+    config:
+      # request-read-timeout:
+      # request-connect-timeout:
+      # ${spring.application.name}
+      name: "bpm_ui" 
+      # ${spring.profiles.active}
+      profile: "dev"
+      label: "master"
+      uri: "https://localhost:8843/configserver"
+      username: "config"
+      password: "Passw0rd"
+      fail-fast: true
+encrypt:
+  key-store:
+    location: "classpath:/jks/bpm-ui-client.jks"
+    password: "Passw0rd"
+    alias: "bpm_ui"
+    secret: "Passw0rd"
+http:
+  client:
+    ssl:
+      trust-store: jks/bpm-ui-client.jks
+      trust-store-password: Passw0rd
+      trust-store-type: jks

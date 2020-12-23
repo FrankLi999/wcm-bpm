@@ -1,0 +1,18 @@
+<div class="h-200" *ngIf="widget">
+  <ngx-charts-pie-chart
+    *ifOnDom
+    [scheme]="widget.scheme"
+    [results]="widget.values"
+    [doughnut]="true"
+    [tooltipText]="tooltipText"
+    (select)="onSelect($event)"
+    [view]="[150, 150]"
+  >
+  </ngx-charts-pie-chart>
+</div>
+<a
+  *ngIf="totalInstances"
+  routerLink="/bpm/dashboard/processes"
+  title="Select to check process definitions"
+  >Running process instance count: {{ totalInstances }}</a
+>

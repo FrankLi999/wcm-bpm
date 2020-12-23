@@ -1,0 +1,65 @@
+<mat-card
+  fxLayout="column"
+  [ngClass]="'wcm-content'"
+  fxLayout="column"
+  fxFlex="100"
+>
+  <mat-card-header fxLayout="row" [ngClass]="'wcm-skin'">
+    <mat-card-title fxFlex="100"
+      >Repository - {{ repository.name }}
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <span
+      >{{ repository.activeSessionsCount }}
+      <span *ngIf="repository.activeSessionsCount > 1">active sessions</span>
+      <span *ngIf="repository.activeSessionsCount < 2">active session</span>
+    </span>
+  </mat-card-content>
+</mat-card>
+<mat-card
+  fxLayout="column"
+  [ngClass]="'wcm-content'"
+  fxLayout="column"
+  fxFlex="100"
+>
+  <mat-card-header fxLayout="row" [ngClass]="'wcm-skin'">
+    <mat-card-title>Repository URLs</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div class="info-line">
+      <div class="title">Workspaces Url</div>
+      <div class="info">{{ repository.workspacesUrl }}</div>
+    </div>
+    <div class="info-line">
+      <div class="title">Backup Url</div>
+      <div class="info">{{ repository.backupUrl }}</div>
+    </div>
+
+    <div class="info-line">
+      <div class="title">Restore Url</div>
+      <div class="info">{{ repository.restoreUrl }}</div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-card
+  fxLayout="column"
+  [ngClass]="'wcm-content'"
+  fxLayout="column"
+  fxFlex="100"
+>
+  <mat-card-header fxLayout="row" [ngClass]="'wcm-skin'">
+    <mat-card-title>Metadata</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div class="info-line" *ngFor="let item of repository.metadata | keyvalue">
+      <div class="title">{{ item.key }}</div>
+      <div class="info">
+        <span *ngFor="let value of item.value; let i = index">
+          <span style="margin-right:4px" *ngIf="i > 0">,</span
+          ><span>{{ value }}</span>
+        </span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

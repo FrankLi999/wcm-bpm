@@ -1,0 +1,174 @@
+<div class="page-layout carded left-sidebar inner-scroll">
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg wcm-accent"></div>
+
+  <div
+    *ngIf="loadError"
+    fxLayout="column"
+    fxLayoutAlign="start"
+    fxFlex="1 0 auto"
+  >
+    {{ loadError }}
+  </div>
+  <!-- SIDEBAR -->
+  <sidebar
+    class="sidebar"
+    id="jcr-explorer-side-bar"
+    position="left"
+    lockedOpen="gt-md"
+    name="site-explorer-sidebar"
+  >
+    <!-- SIDEBAR HEADER -->
+    <div
+      fxLayout="column"
+      fxLayoutAlign="space-between start"
+      class="header wcm-accent p-24 pb-4"
+    >
+      <div class="logo" fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon
+          class="logo-icon s-32"
+          [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }"
+        >
+          laptop_window
+        </mat-icon>
+        <span
+          class="logo-text"
+          [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }"
+          >JCR Explorer</span
+        >
+      </div>
+    </div>
+    <!-- / SIDEBAR HEADER -->
+    <!-- SIDEBAR CONTENT -->
+    <div class="content wcm-content-container">
+      <div
+        [perfectScrollbar]="{ suppressScrollX: true }"
+        class="wcm-scroll-container"
+      >
+        <mat-tree
+          #jcrExplorer
+          [dataSource]="dataSource"
+          [treeControl]="treeControl"
+        >
+          <mat-tree-node
+            *matTreeNodeDef="let node"
+            matTreeNodePadding
+            [matTreeNodePaddingIndent]="10"
+          >
+            <button
+              mat-icon-button
+              [attr.aria-label]="'toggle ' + node.filename"
+              (click)="loadChildren(node)"
+              matTreeNodeToggle
+            >
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{
+                  treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+                }}
+              </mat-icon>
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{ node.active ? "folder_open" : "folder" }}
+              </mat-icon>
+              <span
+                style="margin-left: 8px"
+                [matMenuTriggerFor]="contextMenu"
+                [matMenuTriggerData]="{ item: node.id }"
+              >
+                {{ node.name }}
+              </span>
+            </button>
+          </mat-tree-node>
+        </mat-tree>
+      </div>
+    </div>
+    <!-- / SIDEBAR CONTENT -->
+  </sidebar>
+  <!-- / SIDEBAR -->
+  <!-- CENTER -->
+  <div class="center">
+    <!-- CONTENT HEADER -->
+    <div class="header" fxLayout="row" fxLayoutAlign="start center">
+      <div
+        class="search-wrapper"
+        fxFlex
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <button
+          mat-icon-button
+          class="sidebar-toggle"
+          fxHide.gt-md
+          (click)="toggleSidebar('site-explorer-sidebar')"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <div class="search" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="secondary-text">search</mat-icon>
+          <input [placeholder]="'Search text'" fxFlex />
+        </div>
+      </div>
+    </div>
+    <!-- / CONTENT HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <!-- / CONTENT -->
+      <div class="content" fxLayout="column" fxLayoutAlign="start start">
+        <mat-card
+          fxLayout="column"
+          [ngClass]="'wcm-content'"
+          *ngIf="jcrMessage"
+        >
+          <mat-card-header fxLayout="row">
+            <mat-icon mat-card-avatar>message</mat-icon>
+            <mat-card-title>JCR Message</mat-card-title>
+          </mat-card-header>
+          <mat-card-content fxLayout="row">{{ jcrMessage }}</mat-card-content>
+        </mat-card>
+
+        <jcr-node
+          fxLayout="column"
+          fxFlex="100"
+          *ngIf="isRestNode(activeNode)"
+          [restNode]="activeNode.value"
+          [perfectScrollbar]="{ suppressScrollX: true }"
+          fxFlex
+        ></jcr-node>
+        <repository
+          fxLayout="column"
+          fxFlex="100"
+          *ngIf="isRepository(activeNode)"
+          [repository]="activeNode.value"
+          [perfectScrollbar]="{ suppressScrollX: true }"
+        ></repository>
+        <workspace
+          fxLayout="column"
+          fxFlex="100"
+          *ngIf="isWorkspace(activeNode)"
+          [workspace]="activeNode.value"
+          [perfectScrollbar]="{ suppressScrollX: true }"
+          fxFlex
+        ></workspace>
+      </div>
+      <!-- / CONTENT -->
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>
+<mat-menu #contextMenu="matMenu">
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="editCurrentNode(item)">
+      <mat-icon>dialpad</mat-icon><span>Edit</span>
+    </button>
+    <button
+      mat-menu-item
+      *ngFor="let operation of currentNodeOperations"
+      (click)="doNodeOperation(item, operation)"
+    >
+      <mat-icon>{{ operation.defaultIcon }}</mat-icon
+      ><span>{{ operation.defaultTitle }}</span>
+    </button>
+  </ng-template>
+</mat-menu>

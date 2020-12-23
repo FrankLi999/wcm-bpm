@@ -1,0 +1,19 @@
+<mat-form-field>
+  <mat-select placeholder="Group" [(value)]="selectedGroup">
+    <div class="scrollable-options">
+      <div class="scrollable-options">
+        <div
+          [perfectScrollbar]="{ suppressScrollX: true }"
+          class="group-container"
+        >
+          <mat-option *cdkVirtualFor="let group of dataSource" [value]="group">
+            {{ group }}
+          </mat-option>
+        </div>
+      </div>
+    </div>
+  </mat-select>
+</mat-form-field>
+<button (click)="addSelectedGroup()" style="margin-left: 16px">
+  Add Group
+</button>

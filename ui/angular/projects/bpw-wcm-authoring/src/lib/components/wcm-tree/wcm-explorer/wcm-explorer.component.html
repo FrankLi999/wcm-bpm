@@ -1,0 +1,89 @@
+<div id="wcm-explorer" class="page-layout carded left-sidebar inner-scroll">
+  <!-- SIDEBAR -->
+  <sidebar
+    class="sidebar"
+    id="wcm-explorer-sidebar"
+    position="left"
+    lockedOpen="gt-md"
+    name="wcm-explorer-sidebar"
+  >
+    <!-- SIDEBAR HEADER -->
+    <div
+      fxLayout="column"
+      fxLayoutAlign="space-between start"
+      class="header wcm-accent p-24 pb-4"
+    >
+      <div class="logo" fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon
+          class="logo-icon s-32"
+          [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }"
+        >
+          laptop_window
+        </mat-icon>
+        <span
+          class="logo-text"
+          [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }"
+          >{{ explorerTitle }}</span
+        >
+      </div>
+    </div>
+    <!-- / SIDEBAR HEADER -->
+    <!-- SIDEBAR CONTENT -->
+    <div class="content">
+      <div class="nav material2">
+        <wcm-tree
+          #wcmTree
+          [rootNode]="rootNode"
+          [rootNodeType]="rootNodeType"
+          [nodeFilter]="nodeFilter"
+          [operationMap]="operationMap"
+          (nodeOperationSelected)="onNodeOperationSelected($event)"
+          (nodeSelected)="onNodeSelected($event)"
+        >
+        </wcm-tree>
+      </div>
+    </div>
+    <!-- SIDEBAR CONTENT -->
+  </sidebar>
+  <!-- / SIDEBAR -->
+  <!-- CENTER -->
+  <div class="center">
+    <!-- CONTENT HEADER -->
+    <div class="header" fxLayout="row" fxLayoutAlign="start center">
+      <div
+        class="search-wrapper"
+        fxFlex
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <button
+          mat-icon-button
+          class="sidebar-toggle"
+          fxHide.gt-md
+          (click)="toggleSidebar('wcm-explorer-sidebar')"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <div class="search" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="secondary-text">search</mat-icon>
+          <input [placeholder]="'Search Text'" fxFlex />
+        </div>
+      </div>
+    </div>
+    <!-- / CONTENT HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <!-- / CONTENT -->
+      <div class="content" fxFlexAlign="row">
+        <!-- FOLDER OVERVIEW -->
+        <router-outlet></router-outlet>
+        <!-- / FOLDER OVERVIEW -->
+      </div>
+      <!-- / CONTENT -->
+    </div>
+    <!-- / CONTENT HEADER -->
+  </div>
+  <!-- / CENTER -->
+</div>

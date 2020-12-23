@@ -1,0 +1,131 @@
+## Chrome
+   redux devtool
+## VS Code tooling for Angular
+	Angular Essentials
+	https://aka.ms/ab-angular or
+	https://marketplace.visualstudio.com/items?itemName=johnpapa.angular-essentials&wt.mc_id=anglebrackets-event-jopapa
+
+	it includes:
+		Angular 2 inline
+		Angular Language Service
+		Angular Snippets
+		Angular Console
+		Chrome Debugger
+		Editor config
+		Material Icon Theme
+		npm
+		Peacock
+		prettier
+		tslint
+		Winter is coming
+
+### Set up editor
+ ctrl-shift-P, then select "open settings(JSON)" and add the following settings.
+
+### Editor settings
+
+  "editor.autoIndent": "full",
+  "editor.codeLens": false,
+  "editor.cursorBlinking": "solid",
+  "editor.cursorSmoothCaretAnimation": true,
+  "editor.cursorStyle": "line",
+  "editor.fontSize": 16,
+  "editor.fontFamily": "Dank Mono, Operator Mono, Fira Code, Inconsolata",
+  "editor.fontLigatures": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": false,
+  "editor.formatOnSave": true,
+  "editor.letterSpacing": 0.5,
+  "editor.lineHeight": 25,
+  "editor.minimap.enabled": false,
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.suggestSelection": "first",
+  "editor.tabCompletion": "on",
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+### File settings
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "files.hotExit": "onExit",
+  "files.defaultLanguage": "",
+  "files.trimTrailingWhitespace": true,
+
+### Prettier settings
+  "prettier.printWidth": 120,
+  "prettier.bracketSpacing": true,
+  "prettier.singleQuote": true,
+
+## RxJS Subscriptions
+   onInit(): Subscribe
+   onDestry(): unsubscribe
+
+      use subsink -> npm install --save subsink
+
+
+## NgRx version 8 and @ngrx/data
+    https://ngrx.io/guide/data
+
+    redux developer tool on chrome
+
+	EntityMetadataMap { // from 'ngrx-data'
+	  Hero:{}
+	  Villain: {}
+	}
+	const pluralNames = {Hero: 'Heros'}
+	export const entityConfig = {
+	  entityMetadataMap,
+	  pluralNames
+	}
+
+	StoreModule.forRoot(),
+	EffectsModule.forRoot(),
+	[] : StoreDevtoolModule.instrument(),
+	NgrxDataModule.forRoot(entityConfig)
+
+## Preloading strategies
+   lazy load modules
+
+   PreloadingStrategy interface and config it on Route config
+
+   opt in selectively
+   network/device aware preloading
+   custom predictive preloading
+
+   azuer ext: https://aka.ms/ps072019-preload
+
+## API strategies
+   static site: https://aka.ms/ps072019-static
+   serverless site: https://aka.ms/ps072019-func
+   azuer ext: https://aka.ms/ps072019-aztools
+   free azure trial http://aka.ms/ps072019-free
+   free azure trial http://aka.ms/ps072019-demo
+   service less
+      security
+	  high performance
+	  high scalability
+	  low cost
+
+## Angular Debugging
+
+   https://github.com/Microsoft/vscode-recipes/tree/master/Angular-CLI
+   https://code.visualstudio.com/docs/nodejs/angular-tutorial
+
+   Config launch.json:
+   {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://wcm-ui:3009",
+            "webRoot": "${workspaceFolder}/bpw-wcm/projects/wcm-authoring"
+        }
+    ]
+    }
+
+    > npm run start-wcm-authoring
+    > Click the launch icon to start the chrome in debug mode.

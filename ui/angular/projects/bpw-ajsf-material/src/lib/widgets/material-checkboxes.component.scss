@@ -1,0 +1,17 @@
+.title {
+  font-weight: bold;
+}
+.checkbox-list {
+  list-style-type: none;
+}
+.horizontal-list > li {
+  display: inline-block;
+  margin-right: 10px;
+  zoom: 1;
+}
+.checkbox-name {
+  white-space: nowrap;
+}
+mat-error {
+  font-size: 75%;
+}

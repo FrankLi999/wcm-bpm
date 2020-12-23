@@ -1,0 +1,39 @@
+<mat-card fxLayout="column" fxFlex="80" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Form Permissions</mat-card-title>
+    <mat-card-subtitle>Name: {{ itemName }} </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div *ngIf="error" class="alert alert-danger mat-error">
+      {{ error }}
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="20">
+        <button mat-icon-button (click)="backToItems()" title="Back to forms">
+          <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>
+        </button>
+      </div>
+    </div>
+    <mat-accordion fxFlex="80">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Form Permissions
+          </mat-panel-title>
+          <mat-panel-description>
+            Set up form permssions
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <wcm-acl
+          *ngIf="itemName"
+          [repository]="repository"
+          [workspace]="workspace"
+          [wcmPath]="itemPath"
+          [wcmPermission]="itemPermission"
+          [permissionSubject]="itemPermissionSubject"
+        >
+        </wcm-acl>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>

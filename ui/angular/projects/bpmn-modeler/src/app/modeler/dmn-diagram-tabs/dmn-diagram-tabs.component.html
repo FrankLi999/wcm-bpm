@@ -1,0 +1,11 @@
+<div class="editor-tabs">
+  <div
+    *ngFor="let aView of views; index as i"
+    [ngClass]="i == activeTabId ? 'tab active' : 'tab'"
+    data-id="{{ i }}"
+    (click)="onTabClick(aView, i)"
+  >
+    <span [class]="getClassName(aView)"></span>
+    {{ aView.element.name }}
+  </div>
+</div>

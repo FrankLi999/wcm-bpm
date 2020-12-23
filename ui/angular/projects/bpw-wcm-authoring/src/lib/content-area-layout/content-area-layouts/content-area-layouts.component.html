@@ -1,0 +1,96 @@
+<mat-card fxLayout="column" fxFlex="80" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Content Area Layouts</mat-card-title>
+    <mat-card-subtitle
+      >Content Area Layout counts: {{ itemCount }}</mat-card-subtitle
+    >
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <wcm-response
+      [status$]="status$"
+      [successMessage]="successMessage"
+    ></wcm-response>
+    <div class="spinner-container" *ngIf="loading">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <div fxLayout="row">
+      <div fxFlex="80">
+        <mat-form-field>
+          <input
+            matInput
+            #input
+            placeholder="Filter"
+            (keyup)="filterSubject.next($event.target.value)"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-table
+      class="item-table mat-elevation-z8"
+      [dataSource]="dataSource"
+      matSort
+      matSortDisableClear="true"
+      [matSortActive]="defaultSort.active"
+      [matSortDirection]="defaultSort.direction"
+    >
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Name</mat-header-cell
+        >
+        <mat-cell *matCellDef="let layout">
+          {{ layout.name }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+        <mat-cell class="duration-cell" *matCellDef="let layout">
+          {{ layout.title }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="library">
+        <mat-header-cell *matHeaderCellDef>Library</mat-header-cell>
+        <mat-cell class="duration-cell" *matCellDef="let layout">
+          {{ layout.library }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+        <mat-cell *matCellDef="let layout; let i = index">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="layoutContextMenu"
+            [matMenuTriggerData]="{ item: i }"
+          >
+            <mat-icon class="mat-icon-rtl-mirror">more_vert</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+
+    <mat-paginator
+      [length]="itemCount"
+      [pageSize]="3"
+      [pageSizeOptions]="[3, 5, 10]"
+    ></mat-paginator>
+  </mat-card-content>
+</mat-card>
+<mat-menu #layoutContextMenu="matMenu">
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="editItem(item)">
+      Edit Content Area Layout
+    </button>
+    <button mat-menu-item (click)="editPermissions(item)">
+      Edit Permissions
+    </button>
+    <button mat-menu-item (click)="showHistory(item)">
+      Show History
+    </button>
+    <button mat-menu-item (click)="deleteItem(item)">
+      Delete Content Area Layout
+    </button>
+  </ng-template>
+</mat-menu>
+<template #blockUIContainer> </template>

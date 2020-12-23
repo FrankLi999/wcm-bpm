@@ -1,0 +1,30 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar class="mat-accent m-0">
+    <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="title dialog-title">Folder</span>
+      <button
+        mat-icon-button
+        (click)="matDialogRef.close()"
+        aria-label="Close dialog"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div mat-dialog-content class="p-24 m-0" [perfectScrollbar]="{suppressScrollX: true}">
+    <!--
+        (onChanges)="onChanges($event)"
+        (isValid)="isValid($event)"
+        (validationErrors)="validationErrors($event)"
+      -->
+    <json-schema-form
+      loadExternalAssets="true"
+      [form]="authoringTemplateForm"
+      [options]="jsonFormOptions"
+      [framework]="selectedFramework"
+      [language]="selectedLanguage"
+      (onSubmit)="createFolder($event)"
+    >
+    </json-schema-form>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "a0d2407a-ac0c-11ea-b877-f2d5bf80b1aa",
+    "type": 1,
+    "permissions": ["ALL"],
+    "userId": null,
+    "groupId": "camunda-admin",
+    "resourceType": 0,
+    "resourceId": "*",
+    "removalTime": null,
+    "rootProcessInstanceId": null
+  },
+  {
+    "id": "a0dd3d16-ac0c-11ea-b877-f2d5bf80b1aa",
+    "type": 1,
+    "permissions": ["ACCESS"],
+    "userId": null,
+    "groupId": "sales",
+    "resourceType": 0,
+    "resourceId": "tasklist",
+    "removalTime": null,
+    "rootProcessInstanceId": null
+  },
+  {
+    "id": "a0ddd958-ac0c-11ea-b877-f2d5bf80b1aa",
+    "type": 1,
+    "permissions": ["ACCESS"],
+    "userId": null,
+    "groupId": "accounting",
+    "resourceType": 0,
+    "resourceId": "tasklist",
+    "removalTime": null,
+    "rootProcessInstanceId": null
+  },
+  {
+    "id": "a0ddd95a-ac0c-11ea-b877-f2d5bf80b1aa",
+    "type": 1,
+    "permissions": ["ACCESS"],
+    "userId": null,
+    "groupId": "management",
+    "resourceType": 0,
+    "resourceId": "tasklist",
+    "removalTime": null,
+    "rootProcessInstanceId": null
+  }
+]

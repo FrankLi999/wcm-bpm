@@ -1,0 +1,23 @@
+// @import "~bpw-common/lib/scss/theming";
+@import "../../../../../../dist/bpw-common/lib/scss/theming";
+.theme-new-dialog {
+    @include media-breakpoint('xs') {
+        width: 100%;
+    }
+    @include media-breakpoint('gt-xs') {
+        width: 640px;
+    }
+    .mat-dialog-container {
+        padding: 0;
+        .new-thtme {
+            .mat-form-field {
+                width: 100%;
+            }
+        }
+    }
+    .dialog-content-wrapper {
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+    }
+}

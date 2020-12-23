@@ -1,0 +1,108 @@
+{
+  "schema": {
+    "type": "object",
+    "name": "formatedInputType",
+    "properties": {
+      "customConstraint": {
+        "type": "object",
+        "$ref": "#/definitions/customConstraint"
+      }
+    },
+    "definitions": {
+      "javascriptFunction": {
+        "type": "object",
+        "properties": {
+          "params": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "functionBody": {
+            "type": "string"
+          }
+        }
+      },
+      "customConstraint": {
+        "type": "object",
+        "properties": {
+          "javascriptFunction": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/javascriptFunction"
+            }
+          }
+        }
+      }
+    }
+  },
+  "layout": [
+    {
+      "type": "tabs",
+      "items": [
+        {
+          "title": "Custom Constraint",
+          "type": "tab",
+          "items": [
+            {
+              "type": "div",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "title": "javascript Function",
+                      "type": "array",
+                      "key": "customConstraint.javascriptFunction",
+                      "items": [
+                        {
+                          "type": "div",
+                          "flex-flow": "row wrap",
+                          "items": [
+                            {
+                              "type": "div",
+                              "displayFlex": true,
+                              "flex-direction": "column",
+                              "fxFlex": 0,
+                              "items": [
+                                {
+                                  "title": "Parameters",
+                                  "type": "array",
+                                  "items": {
+                                    "key": "customConstraint.javascriptFunction[].params[]",
+                                    "type": "text"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "type": "div",
+                              "displayFlex": true,
+                              "flex-direction": "column",
+                              "fxFlex": 0,
+                              "items": [
+                                {
+                                  "title": "Function Body",
+                                  "key": "customConstraint.javascriptFunction[].functionBody",
+                                  "type": "text"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

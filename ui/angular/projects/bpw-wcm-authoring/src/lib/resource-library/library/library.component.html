@@ -1,0 +1,33 @@
+<mat-card fxLayout="column" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Resource Library</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <wcm-response
+      [status$]="status$"
+      [successMessage]="successMessage"
+    ></wcm-response>
+    <div fxLayout="row">
+      <div fxFlex="20">
+        <button
+          mat-icon-button
+          (click)="backToItems()"
+          title="Back to libraries"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>
+        </button>
+      </div>
+    </div>
+    <json-schema-form
+      loadExternalAssets="true"
+      [form]="libraryForm.formSchema"
+      [options]="formConfig.jsonFormOptions"
+      [data]="formData"
+      [framework]="formConfig.selectedFramework"
+      [language]="formConfig.selectedLanguage"
+      (onSubmit)="upsertItem($event)"
+    >
+    </json-schema-form>
+  </mat-card-content>
+</mat-card>
+<template #blockUIContainer> </template>

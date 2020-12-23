@@ -1,0 +1,110 @@
+<div class="base">
+  <mat-form-field
+    class="full-width pointer"
+    [class.liftup]="dropDown"
+    (click)="dropDown = !dropDown"
+  >
+    <!--
+    <button
+      type="button"
+      matPrefix
+      mat-icon-button
+      (click)="scrollLeft($event)"
+      color="primary"
+    >
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    -->
+    <mat-chip-list color="primary" #chipList aria-label="Category selection">
+      <mat-chip
+        color="primary"
+        *ngFor="let node of selectedNodes"
+        [selectable]="selectable"
+        [removable]="removable"
+        (remove)="remove(node)"
+      >
+        {{ node.replace(" ", "&nbsp;") }}
+        <mat-icon color="warn" matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input
+        mat-input
+        #chipInput
+        placeholder="Select caegory..."
+        [matAutocomplete]="auto"
+        [formControl]="chipCtrl"
+        [placeholder]="placeholder"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event)"
+      />
+    </mat-chip-list>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selected($event)"
+    >
+      <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
+        {{ fruit }}
+      </mat-option>
+    </mat-autocomplete>
+    <!--
+    <button
+      type="button"
+      matSuffix
+      mat-icon-button
+      (click)="scrollRight($event)"
+      color="primary"
+    >
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+    <button type="button" matSuffix mat-icon-button color="primary">
+      <mat-icon *ngIf="!dropDown" matSuffix>arrow_drop_down</mat-icon>
+      <mat-icon *ngIf="dropDown" matSuffix>arrow_drop_up</mat-icon>
+    </button>
+    -->
+
+    <!-- <div class="dropDown" *ngIf="dropDown" [style.height]="config.height"> -->
+    <!--
+    <div class="dropDown" [class.slideUp]="!dropDown">
+      <mat-tree
+        #selectionTree
+        [dataSource]="dataSource"
+        [treeControl]="treeControl"
+      >
+
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+          <button mat-icon-button (click)="nodeSelected(node)">
+            {{ node.name }}
+          </button>
+        </mat-tree-node>
+        <mat-tree-node
+          *matTreeNodeDef="let node; when: hasChild"
+          matTreeNodePadding
+        >
+          <button
+            mat-icon-button
+            matTreeNodeToggle
+            [attr.aria-label]="'toggle ' + node.name"
+            (click)="nodeSelected(node)"
+          >
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{
+                treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+              }}
+            </mat-icon>
+
+            {{ node.name }}
+          </button>
+        </mat-tree-node>
+      </mat-tree>
+    </div>
+    -->
+  </mat-form-field>
+</div>
+
+<!--
+<div
+  class="cvr-screen"
+  *ngIf="dropDown"
+  (click)="$event.stopPropagation(); dropDown = !dropDown"
+></div>
+-->

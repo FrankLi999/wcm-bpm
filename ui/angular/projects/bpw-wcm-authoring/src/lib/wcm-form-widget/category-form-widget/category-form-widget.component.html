@@ -1,0 +1,83 @@
+<mat-form-field
+  class="jsf-chip-list"
+  [appearance]="
+    options?.appearance || matFormFieldDefaultOptions?.appearance || 'standard'
+  "
+  [class]="options?.htmlClass || ''"
+  [floatLabel]="
+    options?.floatLabel ||
+    matLabelGlobalOptions?.float ||
+    (options?.notitle ? 'never' : 'auto')
+  "
+  [hideRequiredMarker]="options?.hideRequired ? 'true' : 'false'"
+  [style.width]="'100%'"
+>
+  <mat-label *ngIf="!options?.notitle">{{ options?.title }}</mat-label>
+  <mat-chip-list
+    #chipList
+    aria-label="options?.title"
+    (click)="togglewDropDown($event)"
+  >
+    <mat-chip
+      *ngFor="let chip of chips"
+      [selectable]="selectable"
+      [removable]="removable"
+      (removed)="remove(chip)"
+    >
+      {{ chip }}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    <!--
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)"
+    -->
+    <input
+      matInput
+      #chipInput
+      [formControl]="chipControl"
+      [attr.aria-describedby]="'control' + layoutNode?._id + 'Status'"
+      [attr.list]="'control' + layoutNode?._id + 'Autocomplete'"
+      [attr.maxlength]="options?.maxLength"
+      [attr.minlength]="options?.minLength"
+      [attr.pattern]="options?.pattern"
+      [readonly]="'readonly'"
+      [id]="'control' + layoutNode?._id"
+      [name]="controlName"
+      [required]="options?.required"
+      [style.width]="'100%'"
+      (blur)="options.showErrors = true"
+    />
+    <mat-hint
+      *ngIf="
+        options?.description && (!options?.showErrors || !options?.errorMessage)
+      "
+      align="end"
+      [innerHTML]="options?.description"
+    ></mat-hint>
+  </mat-chip-list>
+  <div class="dropDown" [class.slideUp]="!dropDown">
+    <button
+      mat-icon-button
+      [attr.aria-label]="'Close the drop down'"
+      (click)="hideDropDown($event)"
+    >
+      <mat-icon class="mat-icon-rtl-mirror">
+        keyboard_arrow_up
+      </mat-icon>
+    </button>
+    <wcm-tree
+      #wcmTree
+      [rootNode]="rootNode"
+      [rootNodeType]="rootNodeType"
+      [nodeFilter]="nodeFilter"
+      [operationMap]="operationMap"
+      (nodeSelected)="onNodeSelected($event)"
+    >
+    </wcm-tree>
+  </div>
+</mat-form-field>
+<mat-error
+  *ngIf="options?.showErrors && options?.errorMessage"
+  [innerHTML]="options?.errorMessage"
+></mat-error>

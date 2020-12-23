@@ -1,0 +1,15 @@
+user-selection {
+  .scrollable-options {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 240px;
+    width: 100%;
+  }
+
+  .users-container {
+    height: 240px;
+  }
+}

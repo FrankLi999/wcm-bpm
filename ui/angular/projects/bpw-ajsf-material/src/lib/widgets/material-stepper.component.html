@@ -1,0 +1,28 @@
+<mat-horizontal-stepper #stepper linear>
+  <mat-step *ngFor="let item of layoutNode?.items; let i = index">
+    <ng-template matStepLabel>{{ setTabTitle(item, i) }}</ng-template>
+    <select-framework-widget
+      [class]="
+        (options?.fieldHtmlClass || '') +
+        ' ' +
+        (options?.activeClass || '') +
+        ' ' +
+        (options?.style?.selected || '')
+      "
+      [dataIndex]="
+        layoutNode?.dataType === 'array'
+          ? (dataIndex || []).concat(i)
+          : dataIndex
+      "
+      [layoutIndex]="(layoutIndex || []).concat(i)"
+      [layoutNode]="item"
+    ></select-framework-widget>
+    <button type="button" *ngIf="i > 0" matStepperPrevious>
+      Back
+    </button>
+    &nbsp;
+    <button type="button" matStepperNext *ngIf="hasNextStep()">
+      Next
+    </button>
+  </mat-step>
+</mat-horizontal-stepper>

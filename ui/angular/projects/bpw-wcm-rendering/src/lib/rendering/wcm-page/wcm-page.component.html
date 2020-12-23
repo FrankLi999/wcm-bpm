@@ -1,0 +1,233 @@
+<div
+  *ngIf="wcmSystem"
+  id="template"
+  class="page-layout carded left-sidebar inner-scroll"
+>
+  <!-- LEFT SIDE PANEL -->
+  <!--
+    <sidebar fxFlex="layout.sidePane?.width" class="sidebar" name="page-template-side-bar" position="left" lockedOpen="gt-md" *ngIf="leftSidePane()">
+    -->
+  <div
+    class="card sidePanel-layout"
+    fxFlex="{{ layout.sidePane.width }}"
+    *ngIf="leftSidePane()"
+  >
+    <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+      <div
+        class="card container"
+        *ngFor="let viewer of layout.sidePane?.viewers; let viewerIndex = index"
+      >
+        <ng-container
+          *ngIf="
+            wcmSystem.renderTemplates[
+              layout.sidePane.viewers[viewerIndex].renderTemplate
+            ].query
+          "
+        >
+          <query-result-renderer
+            [repository]="repository"
+            [workspace]="workspace"
+            [renderer]="sideRenderId(viewerIndex)"
+            [siteAreaKey]="getSiteAreaKey(siteArea)"
+            [rendererTemplate]="
+              wcmSystem.renderTemplates[
+                layout.sidePane.viewers[viewerIndex].renderTemplate
+              ]
+            "
+          >
+          </query-result-renderer>
+        </ng-container>
+        <ng-container
+          *ngIf="
+            layout.sidePane.viewers[viewerIndex].contentPath ||
+            contentPathParam(layout.sidePane.viewers[viewerIndex])
+          "
+        >
+          <resource-renderer
+            *ngFor="
+              let contentPath of layout.sidePane.viewers[viewerIndex]
+                .contentPath ||
+                contentPathParam(layout.sidePane.viewers[viewerIndex]);
+              let contentPathIndex = index
+            "
+            [repository]="repository"
+            [workspace]="workspace"
+            [siteAreaKey]="getSiteAreaKey(siteArea)"
+            [renderer]="sideRenderId(viewerIndex)"
+            [rendererTemplate]="
+              wcmSystem.renderTemplates[
+                layout.sidePane.viewers[viewerIndex].renderTemplate
+              ]
+            "
+            [contentPath]="contentPath"
+            [contentPathIndex]="contentPathIndex"
+          >
+          </resource-renderer>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <!--
+    </sidebar>
+    -->
+
+  <div
+    class="center content-layout"
+    fxFlex="{{ layout.contentWidth }}"
+    *ngIf="layout"
+  >
+    <!-- ROWS -->
+    <div *ngFor="let row of layout.rows; let rowIndex = index">
+      <!-- COLUMNS -->
+      <div class="card, row-layout">
+        <div
+          class="column-layout"
+          *ngFor="let column of row.columns; let columnIndex = index"
+          fxFlex="{{ column.width }}"
+        >
+          <div
+            class="card container"
+            *ngFor="let viewer of column.viewers; let viewerIndex = index"
+          >
+            <div
+              *ngIf="hasPreloop(viewer.renderTemplate)"
+              [innerHTML]="preloop(viewer.renderTemplate)"
+            ></div>
+            <ng-container
+              *ngIf="
+                wcmSystem.renderTemplates[
+                  layout.rows[rowIndex].columns[columnIndex].viewers[
+                    viewerIndex
+                  ].renderTemplate
+                ].query
+              "
+            >
+              <query-result-renderer
+                [repository]="repository"
+                [workspace]="workspace"
+                [renderer]="contentRenderId(rowIndex, columnIndex, viewerIndex)"
+                [siteAreaKey]="getSiteAreaKey(siteArea)"
+                [rendererTemplate]="
+                  wcmSystem.renderTemplates[
+                    layout.rows[rowIndex].columns[columnIndex].viewers[
+                      viewerIndex
+                    ].renderTemplate
+                  ]
+                "
+              >
+              </query-result-renderer>
+            </ng-container>
+            <ng-container
+              *ngIf="
+                layout.rows[rowIndex].columns[columnIndex].viewers[viewerIndex]
+                  .contentPath ||
+                contentPathParam(
+                  layout.rows[rowIndex].columns[columnIndex].viewers[
+                    viewerIndex
+                  ]
+                )
+              "
+            >
+              <resource-renderer
+                *ngFor="
+                  let contentPath of layout.rows[rowIndex].columns[columnIndex]
+                    .viewers[viewerIndex].contentPath ||
+                    contentPathParam(
+                      layout.rows[rowIndex].columns[columnIndex].viewers[
+                        viewerIndex
+                      ]
+                    );
+                  let contentPathIndex = index
+                "
+                [repository]="repository"
+                [workspace]="workspace"
+                [siteAreaKey]="getSiteAreaKey(siteArea)"
+                [renderer]="contentRenderId(rowIndex, columnIndex, viewerIndex)"
+                [rendererTemplate]="
+                  wcmSystem.renderTemplates[
+                    layout.rows[rowIndex].columns[columnIndex].viewers[
+                      viewerIndex
+                    ].renderTemplate
+                  ]
+                "
+                [contentPath]="contentPath"
+                [contentPathIndex]="contentPathIndex"
+              >
+              </resource-renderer>
+            </ng-container>
+            <div
+              *ngIf="hasPostloop(viewer.renderTemplate)"
+              [innerHTML]="postloop(viewer.renderTemplate)"
+            ></div>
+          </div>
+        </div>
+      </div>
+      <!-- / COLUMNS -->
+    </div>
+    <!-- / ROWS -->
+  </div>
+  <!-- RIGT SIDE PANEL -->
+  <div
+    class="card sidePanel-layout"
+    fxFlex="{{ layout.sidePane.width }}"
+    *ngIf="rightSidePane()"
+  >
+    <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+      <div
+        class="card container"
+        *ngFor="let viewer of layout.sidePane?.viewers; let viewerIndex = index"
+      >
+        <ng-container
+          *ngIf="
+            wcmSystem.renderTemplates[
+              layout.sidePane.viewers[viewerIndex].renderTemplate
+            ].query
+          "
+        >
+          <query-result-renderer
+            [repository]="repository"
+            [workspace]="workspace"
+            [renderer]="sideRenderId(viewerIndex)"
+            [siteAreaKey]="getSiteAreaKey(siteArea)"
+            [rendererTemplate]="
+              wcmSystem.renderTemplates[
+                layout.sidePane.viewers[viewerIndex].renderTemplate
+              ]
+            "
+          >
+          </query-result-renderer>
+        </ng-container>
+        <ng-container
+          *ngIf="
+            layout.sidePane.viewers[viewerIndex].contentPath ||
+            contentPathParam(layout.sidePane.viewers[viewerIndex])
+          "
+        >
+          <resource-renderer
+            *ngFor="
+              let contentPath of layout.sidePane.viewers[viewerIndex]
+                .contentPath ||
+                contentPathParam(layout.sidePane.viewers[viewerIndex]);
+              let contentPathIndex = index
+            "
+            [repository]="repository"
+            [workspace]="workspace"
+            [siteAreaKey]="getSiteAreaKey(siteArea)"
+            [renderer]="sideRenderId(viewerIndex)"
+            [rendererTemplate]="
+              wcmSystem.renderTemplates[
+                layout.sidePane.viewers[viewerIndex].renderTemplate
+              ]
+            "
+            [contentPath]="contentPath"
+            [contentPathIndex]="contentPathIndex"
+          >
+          </resource-renderer>
+        </ng-container>
+      </div>
+    </div>
+    <!--
+    </sidebar>
+    -->
+  </div>
+</div>

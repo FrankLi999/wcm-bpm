@@ -1,0 +1,22 @@
+
+<h1 mat-dialog-title>Render Template</h1>
+<div mat-dialog-content fxLayout="row">
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field appearance="outline">
+            <mat-label>Render Template:</mat-label>
+            <mat-select [(ngModel)]="data.selectedRenderTemplate">
+                <mat-option *ngFor="let rt of data.renderTemplates" [value]="rt">
+                    {{rt.value}}
+                </mat-option>
+            </mat-select>               
+        </mat-form-field>
+    </div>
+</div>
+<div mat-dialog-content fxLayout="row">    
+    <div fxLayout="column" fxFlex="100">
+        <div mat-dialog-actions>
+            <button mat-button (click)="onNoClick()">No Thanks</button>
+            <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+        </div>
+    </div>
+</div>

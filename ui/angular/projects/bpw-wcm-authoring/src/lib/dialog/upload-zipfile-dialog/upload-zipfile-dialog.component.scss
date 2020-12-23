@@ -1,0 +1,18 @@
+// @import "~bpw-common/lib/scss/theming";
+@import "../../../../../../dist/bpw-common/lib/scss/theming";
+.zipfile-upload-dialog {
+
+    @include media-breakpoint('xs') {
+        width: 100%;
+    }
+
+    @include media-breakpoint('gt-xs') {
+        width: 640px;
+    }
+
+    .dialog-content-wrapper {
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+    }
+}

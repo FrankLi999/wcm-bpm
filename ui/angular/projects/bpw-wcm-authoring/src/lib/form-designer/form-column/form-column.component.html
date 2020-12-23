@@ -1,0 +1,52 @@
+<div fxLayout="row">
+  <div
+    class="builder-target card container"
+    *ngFor="let column of columns"
+    fxFlex="{{ column.fxFlex }}"
+  >
+    <form-group
+      [formGroups]="getFormGroups(column)"
+      [formControls]="formControls"
+      [builderTargets]="builderTargets"
+    >
+    </form-group>
+    <div
+      cdkDropList
+      id="{{ column.id }}"
+      [cdkDropListData]="column.formControls"
+      [cdkDropListConnectedTo]="builderTargets"
+      class="field-list"
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListEnterPredicate]="evenPredicate"
+    >
+      <div
+        class="field-box"
+        cdkDrag
+        *ngFor="let formControl of column.formControls; let index = index"
+        [cdkDragData]="formControl"
+      >
+        <div class="resource-field-column" fxFlex="100">
+          <div fxLayout="row" fxLayoutAlign="flex-end">
+            <button mat-icon-button (click)="deleteTargetField(index, column)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button (click)="editTargetField(index, column)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100">
+              {{ formControl }}{{ getResourceFieldHint(formControl) }}
+            </div>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="100">
+              {{ getControlTypeName(formControl)
+              }}{{ getResourceFieldFlags(formControl) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

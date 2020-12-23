@@ -1,0 +1,98 @@
+app-grid {
+  .container {
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-rows: auto 1fr auto;
+    grid-gap: 2px;
+    grid-template-areas:
+      "header header header"
+      "nav content side"
+      "footer footer footer";
+    height: 100vh;
+  }
+  header {
+    width: 100%;
+  }
+  app-top-nav {
+    color: white;
+    font-size: 14px;
+    grid-area: header;
+    text-align: center;
+    background-color: #eeeeee;
+    width: 100%;
+  }
+  app-header {
+    color: white;
+    font-size: 14px;
+    grid-area: header;
+    text-align: center;
+    background-color: #fa7d44;
+    display: flex;
+    width: 100%;
+    app-toolbar {
+      color: white;
+      font-size: 14px;
+      grid-area: header;
+      text-align: center;
+      background-color: #e0e0e0;
+      width: 100%;
+    }
+  }
+
+  app-nav {
+    grid-area: nav;
+    margin-left: 0.6rem;
+    background-color: #2a92bf;
+  }
+  app-nav a {
+    color: white !important;
+  }
+  app-privacy-policy,
+  app-main {
+    grid-area: content;
+    background-color: #f4ce46;
+    padding: 25px;
+  }
+
+  app-aside {
+    grid-area: side;
+    margin-right: 0.6rem;
+    background-color: #2a92bf;
+  }
+
+  app-footer {
+    grid-area: footer;
+    background-color: #2bb961;
+    color: white;
+    text-align: center;
+    padding: 25px 0;
+  }
+
+  ul li {
+    color: white;
+  }
+  ul li a {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: 991px) {
+    app-nav,
+    app-aside {
+      margin: 0;
+    }
+
+    .container {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "header"
+        "nav"
+        "content"
+        "side"
+        "footer";
+      grid-template-rows: auto minmax(60px, auto) 1fr minmax(70px, auto) auto;
+    }
+  }
+}

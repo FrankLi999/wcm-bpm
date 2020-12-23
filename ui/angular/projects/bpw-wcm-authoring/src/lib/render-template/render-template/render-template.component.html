@@ -1,0 +1,369 @@
+<div id="page-designer" class="page-layout carded left-sidebar inner-scroll">
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg wcm-accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+    <!-- CONTENT HEADER -->
+    <div
+      class="header wcm-accent"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <div fxLayout="row">
+        <div fxFlex="20">
+          <button
+            mat-icon-button
+            (click)="backToItems()"
+            title="Back to render templates"
+          >
+            <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>
+          </button>
+        </div>
+      </div>
+      <wcm-response
+        [status$]="status$"
+        [successMessage]="successMessage"
+      ></wcm-response>
+      <!-- APP TITLE -->
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="column" fxLayoutAlign="start start">
+          <div class="h2">
+            Render Template
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / CONTENT HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <!-- CONTENT -->
+      <div class="content">
+        <form
+          class="mat-card"
+          name="renderTemplateForm"
+          [formGroup]="renderTemplateForm"
+        >
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <mat-tab-group fxLayout="column" fxFlex id="render-template">
+              <mat-tab label="Properties">
+                <div class="tab-content" [perfectScrollbar]="{suppressScrollX: true}">
+                  <div fxLayout="row" fxLayoutAlign="start center">
+                    <div
+                      fxLayout="column"
+                      class="template-form-container"
+                      fxLayoutAlign="start start"
+                      fxFlex="100"
+                    >
+                      <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input matInput formControlName="name" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div fxLayout="row" fxLayoutAlign="start center">
+                    <div
+                      fxLayout="column"
+                      class="template-form-container"
+                      fxLayoutAlign="start start"
+                      fxFlex="100"
+                    >
+                      <mat-form-field appearance="outline">
+                        <mat-label>Title</mat-label>
+                        <input matInput formControlName="title" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div fxLayout="row" fxLayoutAlign="start center">
+                    <div
+                      fxLayout="column"
+                      class="template-form-container"
+                      fxLayoutAlign="start start"
+                      fxFlex="100"
+                    >
+                      <mat-form-field appearance="outline">
+                        <mat-label>Description</mat-label>
+                        <input matInput formControlName="description" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div fxLayout="row" fxLayoutAlign="start center">
+                    <div
+                      fxLayout="column"
+                      class="template-form-container"
+                      fxLayoutAlign="start start"
+                      fxFlex="100"
+                    >
+                      <mat-form-field appearance="outline" style="width: 20%;">
+                        <mat-label>Max. Entries</mat-label>
+                        <input matInput formControlName="maxEntries" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="start center">
+                    <div
+                      fxLayout="column"
+                      class="template-form-container"
+                      fxLayoutAlign="start start"
+                      fxFlex="100"
+                    >
+                      <mat-form-field appearance="outline">
+                        <mat-label>Note</mat-label>
+                        <textarea
+                          matInput
+                          rows="3"
+                          name="note"
+                          formControlName="note"
+                          required
+                        ></textarea>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  *ngIf="hasContentItems()"
+                  fxLayout="row"
+                  style="border: 0px; width: 100%;"
+                  fxLayoutAlign="start center"
+                >
+                  <div fxLayout="column" fxFlex="50">
+                    <div>Pre Loop Design</div>
+                    <!--
+                    <ace-editor
+                      [(text)]="code.preloop"
+                      [autoUpdateContent]="true"
+                      theme="github"
+                      style="min-height: 100px; width: 100%; overflow: auto;"
+                      mode="html"
+                    >
+                    </ace-editor>
+                    -->
+                  </div>
+                  <div fxLayout="column" fxFlex="50">
+                    <div>Post Loop Design</div>
+                    <!--
+                    <ace-editor
+                      [(text)]="code.postloop"
+                      [autoUpdateContent]="true"
+                      theme="github"
+                      style="min-height: 100px; width: 100%; overflow: auto;"
+                      mode="html"
+                    >
+                    </ace-editor>
+                    -->
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Layout">
+                <div
+                  *ngIf="hasContentItems()"
+                  fxLayout="row"
+                  fxLayoutAlign="start center"
+                  style="margin-top: 24px;"
+                >
+                  <div fxLayout="column" fxFlex="50">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Select a Content Type:</mat-label>
+                      <mat-select formControlName="selectedContentType">
+                        <mat-option
+                          *ngFor="let contentType of contentTypes"
+                          [value]="contentType.value"
+                        >
+                          {{ contentType.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <button
+                      [disabled]="disableSelectContentTypeButton"
+                      (click)="selectContentType()"
+                      mat-raised-button
+                      type="button"
+                    >
+                      Select Content Type
+                    </button>
+                  </div>
+                  <div style="margin-left: 12px;" fxLayout="column" fxFlex="50">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Select a Query:</mat-label>
+                      <mat-select formControlName="selectedQuery">
+                        <mat-option
+                          *ngFor="let query of queries"
+                          [value]="query.value"
+                        >
+                          {{ query.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <button
+                      [disabled]="disableSelectQueryButton"
+                      (click)="selectQuery()"
+                      mat-raised-button
+                      type="button"
+                    >
+                      Select Query
+                    </button>
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start center">
+                  <mat-tab-group
+                    [selectedIndex]="layoutTabIndex()"
+                    fxLayout="column"
+                    fxFlex
+                  >
+                    <mat-tab label="Layout Design">
+                      <render-layout-designer
+                        *ngIf="item"
+                        [selectedContentType]="selectedContentType"
+                        [contentElementsMap]="contentElementsMap"
+                        [contentPropertiesMap]="contentPropertiesMap"
+                        [queryElementsMap]="queryElementsMap"
+                        [query]="code.query"
+                        [rows]="item.rows"
+                      ></render-layout-designer>
+                    </mat-tab>
+                    <mat-tab label="Fragment">
+                      <div
+                        fxLayout="row"
+                        fxLayoutAlign="start center"
+                        style="margin-top: 24px;"
+                      >
+                        <div
+                          fxLayout="column"
+                          class="template-form-container"
+                          fxLayoutAlign="start start"
+                        >
+                          <div class="h2">Code</div>
+                        </div>
+                      </div>
+                      <!--
+                      <ace-editor
+                        *ngIf="!hasContentItems()"
+                        [(text)]="code.code"
+                        [autoUpdateContent]="true"
+                        theme="github"
+                        style="min-height: 200px; width: 100%; overflow: auto;"
+                        mode="html"
+                      >
+                      </ace-editor>
+                      -->
+                      <div
+                        *ngIf="hasContentItems()"
+                        fxLayout="row"
+                        fxLayoutAlign="start center"
+                        style="margin-top: 24px;"
+                      >
+                        <div
+                          fxLayout="column"
+                          class="template-form-container"
+                          fxLayoutAlign="start start"
+                          fxFlex="100"
+                        >
+                          <!--
+                          <ace-editor
+                            [(text)]="code.code"
+                            [autoUpdateContent]="true"
+                            theme="github"
+                            style="
+                              min-height: 200px;
+                              width: 100%;
+                              overflow: auto;
+                            "
+                            mode="html"
+                          >
+                          </ace-editor>
+                          -->
+                          <div
+                            fxLayout="row"
+                            fxLayoutAlign="end"
+                            style="margin-bottom: 12px; margin-top: 12px;"
+                          >
+                            <div
+                              style="margin-left: 12px;"
+                              fxLayout="column"
+                              fxFlex="45"
+                            >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Select a Content Element:</mat-label>
+                                <mat-select
+                                  formControlName="selectedContentElement"
+                                >
+                                  <mat-option
+                                    *ngFor="
+                                      let contentElement of contentElements
+                                    "
+                                    [value]="contentElement"
+                                  >
+                                    {{ contentElement }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <button
+                                [disabled]="disableAddElementButton"
+                                (click)="addContentElement()"
+                                mat-raised-button
+                                type="button"
+                              >
+                                Add Content Element
+                              </button>
+                            </div>
+                            <div
+                              style="margin-left: 12px;"
+                              fxLayout="column"
+                              fxFlex="45"
+                            >
+                              <mat-form-field appearance="outline">
+                                <mat-label
+                                  >Select a Content Property:</mat-label
+                                >
+                                <mat-select
+                                  formControlName="selectedContentProperty"
+                                >
+                                  <mat-option
+                                    *ngFor="
+                                      let contentProperty of contentProperties
+                                    "
+                                    [value]="contentProperty"
+                                  >
+                                    {{ contentProperty }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <button
+                                [disabled]="disableAddPropertyButton"
+                                (click)="addContentProperty()"
+                                mat-raised-button
+                                type="button"
+                              >
+                                Add Content Property
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+                  </mat-tab-group>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="column" fxFlex="100">
+              <button mat-raised-button (click)="saveRenderTemplate()">
+                <mat-icon class="mat-icon-rtl-mirror">save</mat-icon>Save
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- / CONTENT -->
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>
+<template #blockUIContainer> </template>

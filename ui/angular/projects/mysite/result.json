@@ -1,0 +1,8 @@
+{
+  "bpw:columns": ["elements.body", "title", "description"],
+  "bpw:rows": [
+    { "elements.body": "News 1", "title": "News 1", "description": "News 1" },
+    { "elements.body": "News 3", "title": "News 3", "description": "News 3" },
+    { "elements.body": "News 5", "title": "News 5", "description": "News 5" }
+  ]
+}

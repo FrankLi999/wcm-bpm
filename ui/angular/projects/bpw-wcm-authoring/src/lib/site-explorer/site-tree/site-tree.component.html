@@ -1,0 +1,128 @@
+<div id="site-tree" class="page-layout carded left-sidebar">
+  <!-- SIDEBAR -->
+  <sidebar
+    class="sidebar"
+    id="site-explorer-sidebar"
+    position="left"
+    lockedOpen="gt-md"
+    name="site-explorer-sidebar"
+  >
+    <!-- SIDEBAR HEADER -->
+    <div
+      fxLayout="column"
+      fxLayoutAlign="space-between start"
+      class="header wcm-accent p-24 pb-4"
+    >
+      <div class="logo" fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon
+          class="logo-icon s-32"
+          [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }"
+        >
+          laptop_window
+        </mat-icon>
+        <span
+          class="logo-text"
+          [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }"
+          >Site Explorer</span
+        >
+      </div>
+    </div>
+    <!-- / SIDEBAR HEADER -->
+    <!-- SIDEBAR CONTENT -->
+    <div class="content wcm-content-container">
+      <div
+        [perfectScrollbar]="{ suppressScrollX: true }"
+        class="wcm-scroll-container"
+      >
+        <mat-tree
+          #siteNavigator
+          [dataSource]="dataSource"
+          [treeControl]="treeControl"
+        >
+          <mat-tree-node
+            *matTreeNodeDef="let node"
+            matTreeNodePadding
+            [matTreeNodePaddingIndent]="10"
+          >
+            <button
+              mat-icon-button
+              [attr.aria-label]="'toggle ' + node.data.name"
+              (click)="loadChildren(node)"
+              matTreeNodeToggle
+            >
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{
+                  treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+                }}
+              </mat-icon>
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{ node.active ? "folder_open" : "folder" }}
+              </mat-icon>
+              <span
+                style="margin-left: 8px"
+                [matMenuTriggerFor]="contextMenu"
+                [matMenuTriggerData]="{ item: node.data.id }"
+              >
+                {{ node.data.name }}
+              </span>
+            </button>
+          </mat-tree-node>
+        </mat-tree>
+      </div>
+    </div>
+    <!-- SIDEBAR CONTENT -->
+  </sidebar>
+  <!-- / SIDEBAR -->
+  <!-- CENTER -->
+  <div class="center">
+    <!-- CONTENT HEADER -->
+    <div class="header" fxLayout="row" fxLayoutAlign="start center">
+      <div
+        class="search-wrapper"
+        fxFlex
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <button
+          mat-icon-button
+          class="sidebar-toggle"
+          fxHide.gt-md
+          (click)="toggleSidebar('site-explorer-sidebar')"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <div class="search" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="secondary-text">search</mat-icon>
+          <input [placeholder]="'Search Text'" fxFlex />
+        </div>
+      </div>
+    </div>
+    <!-- / CONTENT HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <!-- / CONTENT -->
+      <div class="content" fxFlexAlign="row">
+        <!-- FOLDER OVERVIEW -->
+        <router-outlet></router-outlet>
+        <!-- / FOLDER OVERVIEW -->
+      </div>
+      <!-- / CONTENT -->
+    </div>
+    <!-- / CONTENT HEADER -->
+  </div>
+  <!-- / CENTER -->
+  <mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="item">
+      <button
+        mat-menu-item
+        *ngFor="let operation of currentNodeOperations"
+        (click)="doNodeOperation(item, operation)"
+      >
+        <mat-icon>{{ operation.defaultIcon }}</mat-icon
+        ><span>{{ operation.defaultTitle }}</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+</div>

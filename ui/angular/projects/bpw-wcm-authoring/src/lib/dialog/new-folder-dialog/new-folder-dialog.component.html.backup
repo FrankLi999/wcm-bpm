@@ -1,0 +1,42 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar class="mat-accent m-0">
+        <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">New Folder</span>
+            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 m-0" perfectScrollbar>
+
+        <form name="newFolderForm" [formGroup]="newFolderForm" class="new-folder" fxLayout="column" fxFlex>
+            <mat-form-field appearance="outline">
+                <mat-label>Folder Name</mat-label>
+                <input matInput name="folderName"
+                       formControlName="folderName"
+                       type="text">
+            </mat-form-field>
+        </form>
+    </div>
+
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button mat-raised-button
+                    color="accent"
+                    (click)="createFolder()"
+                    class="save-button"
+                    [disabled]="newFolderForm.invalid"
+                    aria-label="SAVE">
+                Create
+            </button>
+
+        </div>
+
+        <button mat-icon-button (click)="matDialogRef.close(['cancel', newFolderForm])"
+                aria-label="Cancel"
+                matTooltip="Cancel">
+            <mat-icon>cancel</mat-icon>
+        </button>
+    </div>
+</div>

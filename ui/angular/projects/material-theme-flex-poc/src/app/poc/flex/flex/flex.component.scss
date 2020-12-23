@@ -1,0 +1,40 @@
+flex {
+  div#fone {
+    display: flex;
+  }
+  div#ftwo {
+    display: inline-flex;
+  }
+  div {
+    border: 1px dashed;
+    background: silver;
+  }
+  div > * {
+    border: 1px solid;
+    background: #aaa;
+  }
+  div p {
+    margin: 0;
+  }
+
+  .mynav {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    justify-content: center;
+
+    a {
+      margin: 0 5px;
+      padding: 5px 15px;
+      border-radius: 3px 3px 0 0;
+      background-color: #ddaa00;
+      text-decoration: none;
+      color: #ffffff;
+    }
+    a:hover,
+    a:focus,
+    a:active {
+      background-color: #ffcc22;
+      color: black;
+    }
+  }
+}

@@ -1,0 +1,95 @@
+<div *ngIf="at" class="builder-container page-layout carded left-sidebar">
+  <!-- RESOURCE TYPE -->
+  <div fxFlex="100">
+    <!-- HEADER -->
+    <div class="card" id="authoring-template-header">
+      <div class="authoring-template" fxFlex="50">
+        <div fxLayout="row">
+          <mat-icon class="s-20">{{ getIcon(at.baseType) }}</mat-icon>
+          <h3 style="margin: 0">{{ at.name }}</h3>
+        </div>
+        <div fxLayout="row" style="padding: 6px">
+          <mat-divider></mat-divider>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="30">
+            {{ at.baseType }}
+          </div>
+        </div>
+      </div>
+      <div class="authoring-template-action" fxFlex="50">
+        <div fxLayout="row">
+          <div fxFlex="25">
+            <button mat-raised-button (click)="editItem()">
+              <mat-icon class="mat-icon-rtl-mirror">edit</mat-icon>Edit
+            </button>
+          </div>
+          <div fxFlex="25">
+            <button mat-raised-button (click)="saveItem()">
+              <mat-icon class="mat-icon-rtl-mirror">save</mat-icon>Save
+            </button>
+          </div>
+          <!--
+          <div fxFlex="50">
+            <button mat-icon-button [matMenuTriggerFor]="formGroupMenu">
+              <mat-icon class="mat-icon-rtl-mirror">more_vert</mat-icon>
+            </button>
+          </div>
+          -->
+        </div>
+      </div>
+    </div>
+    <!-- / HEADER -->
+    <!-- ROWS -->
+    <wcm-authoring-form-group
+      [elementGroups]="at.elementGroups"
+      [elements]="at.elements"
+      [properties]="at.properties"
+      [builderTargets]="builderTargets"
+    >
+    </wcm-authoring-form-group>
+    <!-- / ROWS -->
+  </div>
+  <!-- / RESOURCE TYPE -->
+  <!-- SIDEBAR -->
+  <sidebar
+    class="sidebar"
+    name="field-pallet-side-bar"
+    position="left"
+    lockedOpen="gt-md"
+    fxFlex="20"
+  >
+    <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+      <div class="card field-pallet">
+        <mat-icon>apps</mat-icon><span>Control Fields</span>
+      </div>
+      <div class="builder-source">
+        <div
+          [perfectScrollbar]="{ suppressScrollX: true }"
+          class="authoring-template-field-viewport"
+        >
+          <div
+            id="palletFields"
+            cdkDropList
+            [cdkDropListData]="controlFields"
+            [cdkDropListConnectedTo]="builderTargets"
+            class="field-list"
+            [cdkDropListEnterPredicate]="noReturnPredicate"
+          >
+            <div
+              class="pallet-box"
+              *ngFor="let control of controlFields"
+              [cdkDragData]="control"
+              cdkDrag
+            >
+              <mat-icon>{{ control.icon }}</mat-icon
+              ><span>{{ control.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sidebar>
+  <!-- / SIDEBAR -->
+</div>
+<template #blockUIContainer> </template>

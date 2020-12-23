@@ -1,0 +1,19 @@
+<div class="button-row" [class]="options?.htmlClass || ''">
+  <button
+    mat-raised-button
+    [attr.readonly]="readonly"
+    [attr.aria-describedby]="'control' + layoutNode?._id + 'Status'"
+    [color]="options?.color || 'primary'"
+    [disabled]="disabled"
+    [id]="'control' + layoutNode?._id"
+    [name]="controlName"
+    [type]="layoutNode?.type"
+    [value]="controlValue"
+    (click)="updateValue($event)"
+  >
+    <mat-icon *ngIf="options?.icon" class="mat-24">{{
+      options?.icon
+    }}</mat-icon>
+    <span *ngIf="options?.title" [innerHTML]="options?.title"></span>
+  </button>
+</div>

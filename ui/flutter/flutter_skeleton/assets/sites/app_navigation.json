@@ -1,0 +1,61 @@
+{
+    "siteConfig": {
+        "name": "name",
+        "animations": false,
+        "themeColors": {
+            "main": "theme-default"
+        },
+        "direction": "ltr",
+        "customScrollbars": false,
+        "layout": {
+            "title": "horizontal-layout",
+            "mode": "fullwidth",
+            "scroll": "content",
+            "navbar": {
+                "display": false
+            },
+            "toolbar": {
+                "display": false
+            },
+            "footer": {
+                "display": false
+            },
+            "leftSidePanel": {
+                "display": false
+            },
+            "rightSidePanel": {
+                "display": false
+            }
+        }
+    },
+    "navigations": [
+        {
+            "id": "auth_login",
+            "title": "Login",
+            "type": "item",
+            "translate": "NAV.AUTH.LOGIN.TITLE",
+            "icon": "archive",
+            "hidden": false,
+            "url": "/auth/login",
+            "exactMatch": false,
+            "externalUrl": false,
+            "openInNewTab": false,
+            "auth": ["guest"],
+            "children": []
+        },
+        {
+            "id": "auth_logout",
+            "title": "Logout",
+            "type": "item",
+            "translate": "NAV.AUTH.LOGOUT.TITLE",
+            "icon": "archive",
+            "hidden": false,
+            "url": "/auth/logout",
+            "exactMatch": false,
+            "externalUrl": false,
+            "openInNewTab": false,
+            "auth": ["authenticated"],
+            "children": []
+        }
+    ]
+}

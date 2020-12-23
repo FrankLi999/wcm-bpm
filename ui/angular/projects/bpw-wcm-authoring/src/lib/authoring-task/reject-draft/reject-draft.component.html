@@ -1,0 +1,54 @@
+<mat-card fxLayout="column" [ngClass]="'wcm-content'">
+  <mat-card-header fxLayout="row">
+    <mat-card-title>Reject Draft</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div fxLayout="row">
+      <div fxLayout="column" fxFlex="50">
+        <button
+          mat-icon-button
+          (click)="backToItems()"
+          title="Back to draft items"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>Back to
+          draft items
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="reviewTaskForm"
+      id="template"
+      fxLayout="column"
+      class="page-layout carded left-sidebar"
+    >
+      <div fxLayout="row" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <h3>Node Path: {{ wcmPath }}</h3>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <h3>Repository: {{ repository }}</h3>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <h3>Workspace: {{ workspace }}</h3>
+      </div>
+
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start"
+        fxFlex="1 0 auto"
+        class="inner-scroll"
+      >
+        <json-schema-form
+          loadExternalAssets="true"
+          [form]="reviewTaskForm.formSchema"
+          [options]="formConfig.jsonFormOptions"
+          [framework]="formConfig.selectedFramework"
+          [language]="formConfig.selectedLanguage"
+          (onSubmit)="rejectDraft($event)"
+        >
+        </json-schema-form>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<template #blockUIContainer> </template>

@@ -1,0 +1,58 @@
+<div id="authoring-template-editor" class="page-layout carded left-sidebar">
+  <div fxLayout="row">
+    <div fxFlex="20">
+      <button
+        mat-icon-button
+        (click)="backToItems()"
+        title="Back to authoring templates"
+      >
+        <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>
+      </button>
+    </div>
+  </div>
+  <wcm-response
+    [status$]="status$"
+    [successMessage]="successMessage"
+  ></wcm-response>
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg wcm-accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+    <!-- CONTENT HEADER -->
+    <div
+      class="header wcm-accent"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <!-- APP TITLE -->
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="column" fxLayoutAlign="start start">
+          <div class="h2">
+            Resource Type Editor
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / CONTENT HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <!-- CONTENT -->
+      <div class="content">
+        <div class="order-details tab-content p-24">
+          <authoring-template-layout
+            [at]="at"
+            [controlFields]="controlFields"
+            [editing]="editing"
+          >
+          </authoring-template-layout>
+        </div>
+      </div>
+      <!-- / CONTENT -->
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>

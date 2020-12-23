@@ -1,0 +1,9 @@
+<ng-container *ngIf="queryResult">
+  <query-row-renderer
+    *ngFor="let rowValue of queryResult.rows; let rowIndex = index"
+    [rendererTemplate]="rendererTemplate"
+    [queryResultId]="queryResultId()"
+    [rowIndex]="rowIndex"
+  >
+  </query-row-renderer>
+</ng-container>

@@ -1,0 +1,142 @@
+<div id="process-definition-runtime" class="page-layout carded left-sidebar">
+  <!-- SIDEBAR -->
+  <sidebar
+    class="sidebar"
+    id="process-definition-runtime-sidebar"
+    position="left"
+    lockedOpen="gt-md"
+    name="process-definition-runtime-sidebar"
+  >
+    <!-- SIDEBAR HEADER -->
+    <!--
+    <div
+      fxLayout="column"
+      fxLayoutAlign="space-between start"
+      class="header wcm-accent p-24 pb-4"
+    >
+      <div class="logo" fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon
+          class="logo-icon s-32"
+          [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }"
+        >
+          laptop_window
+        </mat-icon>
+        <span
+          class="logo-text"
+          [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }"
+          >Process Definition</span
+        >
+      </div>
+    </div>
+    -->
+    <!-- / SIDEBAR HEADER -->
+    <!-- SIDEBAR CONTENT -->
+    <div class="content pdf-content-container">
+      <div class="pdf-scroll-container ps" [perfectScrollbar]="config">
+        <dl *ngIf="currentVersion">
+          <dt>Definition Version:</dt>
+          <dd *ngIf="versionNumbers.length > 1">
+            <button
+              mat-raised-button
+              title="Select versions"
+              [matMenuTriggerFor]="versionMenu"
+            >
+              {{ currentVersion.version }}
+              <mat-icon class="mat-icon-rtl-mirror">arrow_drop_down</mat-icon>
+            </button>
+            <mat-menu #versionMenu="matMenu">
+              <button
+                mat-menu-item
+                *ngFor="let v of versionNumbers"
+                (click)="switchToVersion(v)"
+              >
+                {{ v }}
+              </button>
+            </mat-menu>
+          </dd>
+          <dd *ngIf="versionNumbers.length == 1">
+            {{ currentVersion.version }}
+          </dd>
+          <dt>Version Tag:</dt>
+          <dd>{{ currentVersion.versionTag }}</dd>
+          <dt>Definition ID:</dt>
+          <dd>{{ currentVersion.id }}</dd>
+          <dt>Definition Key:</dt>
+          <dd>{{ currentVersion.key }}</dd>
+          <dt>Definition Name:</dt>
+          <dd>{{ currentVersion.name }}</dd>
+          <dt>History Time To Live:</dt>
+          <dd>{{ currentVersion.historyTimeToLive }}</dd>
+          <dt>Tenant ID:</dt>
+          <dd>{{ currentVersion.tenantID }}</dd>
+          <dt>Deployment ID:</dt>
+          <dd>{{ currentVersion.deploymentId }}</dd>
+          <dt>Instances Running:</dt>
+          <dd>
+            <ul>
+              <li>
+                current version:
+                <strong class="current-version">{{ currentInstances }}</strong>
+              </li>
+              <li>
+                all versions:
+                <strong class="all-versions">{{ totalInstances }}</strong>
+              </li>
+            </ul>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <!-- SIDEBAR CONTENT -->
+  </sidebar>
+  <!-- / SIDEBAR -->
+  <!-- CENTER -->
+  <div class="center">
+    <!-- CONTENT HEADER -->
+    <div class="header" fxLayout="row" fxLayoutAlign="start center">
+      <div
+        class="search-wrapper"
+        fxFlex
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <button
+          mat-icon-button
+          class="sidebar-toggle"
+          fxHide.gt-md
+          (click)="toggleSidebar('process-definition-runtime-sidebar')"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+    </div>
+    <!-- / CONTENT HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <!-- / CONTENT -->
+      <div class="content" fxFlexAlign="row">
+        <!-- FOLDER OVERVIEW -->
+        <mat-tab-group
+          *ngIf="currentVersion"
+          (selectedIndexChange)="selectedIndexChange($event)"
+        >
+          <mat-tab label="Process Instances">
+            <process-instance-table
+              [processDefinitionId]="currentVersion.id"
+            ></process-instance-table>
+          </mat-tab>
+          <mat-tab label="Incidents"> Incidents </mat-tab>
+          <mat-tab label="Called Process Definitions">
+            Called Process Definitions
+          </mat-tab>
+          <mat-tab label="Job Definitions"> Job Definitions </mat-tab>
+        </mat-tab-group>
+        <!-- / FOLDER OVERVIEW -->
+      </div>
+      <!-- / CONTENT -->
+    </div>
+    <!-- / CONTENT HEADER -->
+  </div>
+  <!-- / CENTER -->
+</div>

@@ -1,0 +1,48 @@
+<mat-card
+  fxLayout="column"
+  [ngClass]="'wcm-content'"
+  fxLayout="column"
+  fxFlex="100"
+>
+  <mat-card-header fxLayout="row" [ngClass]="'wcm-skin'">
+    <mat-card-title fxFlex="100"
+      >Workspace - {{ workspace.name }}
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content> </mat-card-content>
+</mat-card>
+<mat-card
+  fxLayout="column"
+  [ngClass]="'wcm-content'"
+  fxLayout="column"
+  fxFlex="100"
+>
+  <mat-card-header fxLayout="row" [ngClass]="'wcm-skin'">
+    <mat-card-title>Workspace URLs</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div class="info-line">
+      <div class="title">Repository Url</div>
+      <div class="info">{{ workspace.repositoryUrl }}</div>
+    </div>
+    <div class="info-line">
+      <div class="title">Query Url</div>
+      <div class="info">{{ workspace.queryUrl }}</div>
+    </div>
+
+    <div class="info-line">
+      <div class="title">Item Url</div>
+      <div class="info">{{ workspace.itemsUrl }}</div>
+    </div>
+
+    <div class="info-line">
+      <div class="title">Binary Url</div>
+      <div class="info">{{ workspace.binaryUrl }}</div>
+    </div>
+
+    <div class="info-line">
+      <div class="title">Node Type Url</div>
+      <div class="info">{{ workspace.nodeTypesUrl }}</div>
+    </div>
+  </mat-card-content>
+</mat-card>

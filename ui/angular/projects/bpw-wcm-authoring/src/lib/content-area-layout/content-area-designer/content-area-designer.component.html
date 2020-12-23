@@ -1,0 +1,66 @@
+<div id="page-designer" class="page-layout carded left-sidebar inner-scroll">
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg wcm-accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+    <!-- CONTENT HEADER -->
+    <div fxLayout="row">
+      <div fxFlex="20">
+        <button
+          mat-icon-button
+          (click)="backToItems()"
+          title="Back to render templates"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">chevron_left</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div
+      class="header wcm-accent"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <!-- APP TITLE -->
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div
+          fxLayout="column"
+          fxLayoutAlign="start start"
+          [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }"
+        >
+          <div class="h2">
+            Content Area Layout Designer
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / CONTENT HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <!-- CONTENT -->
+      <div class="content">
+        <content-area-layout
+          [editing]="editing"
+          [repository]="repository"
+          [workspace]="workspace"
+          [library]="library"
+          [layoutName]="layoutName"
+        ></content-area-layout>
+        <!--
+        <mat-tab-group fxLayout="column" fxFlex>
+          <mat-tab label="Page Layout">
+            <div class="order-details tab-content p-24" [perfectScrollbar]="{suppressScrollX: true}">
+              <div class="section pb-48"></div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+        -->
+      </div>
+      <!-- / CONTENT -->
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>

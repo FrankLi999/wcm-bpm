@@ -1,0 +1,55 @@
+{
+  "schema": {
+    "reminders": {
+      "type": "array",
+      "title": "Reminders",
+      "items": {
+        "type": "array",
+        "title": "Task List",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "layout": [
+    {
+      "key": "reminders",
+      "title": "Add Task List",
+      "listItems": 4,
+      "type": "array",
+      "items": [
+        {
+          "type": "div",
+          "displayFlex": true,
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "reminders[]",
+              "type": "array",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "row",
+                  "items": [
+                    {
+                      "key": "reminders[][]"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "value": {
+    "reminders": [
+      ["Buy clothes", "Pick up kids"],
+      ["Call John", "Send email"],
+      ["Wash car"]
+    ]
+  }
+}

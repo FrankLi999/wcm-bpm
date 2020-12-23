@@ -1,0 +1,79 @@
+<h1 mat-dialog-title>Create a new authorization</h1>
+<div mat-dialog-content fxLayout="row">
+  <div fxLayout="column" fxFlex="100">
+    <div>
+      <mat-form-field appearance="fill">
+        <!-- TYPE  -->
+        <mat-form-field appearance="outline">
+          <mat-label>Type:</mat-label>
+          <mat-select [(ngModel)]="data.authorization.type">
+            <mat-option [value]="0"> GLOBAL </mat-option>
+            <mat-option [value]="1"> ALLOW </mat-option>
+            <mat-option [value]="2"> DENY </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-form-field>
+    </div>
+    <!-- User / Group -->
+    <div>
+      <button *ngIf="isUser()" mat-icon-butto (click)="switchToGroup()">
+        <mat-icon class="mat-icon-rtl-mirror">person</mat-icon>
+      </button>
+      <button *ngIf="isGroup()" mat-icon-butto (click)="switchToUser()">
+        <mat-icon class="mat-icon-rtl-mirror">group</mat-icon>
+      </button>
+      <!-- TODO: validations-->
+      <mat-form-field appearance="fill">
+        <input
+          *ngIf="isUser()"
+          matInput
+          [(ngModel)]="data.authorization.userId"
+        />
+        <input
+          *ngIf="isGroup()"
+          matInput
+          [(ngModel)]="data.authorization.groupId"
+        />
+      </mat-form-field>
+    </div>
+    <!-- Permissions--->
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-select [(ngModel)]="data.authorization.permissions" multiple>
+          <mat-select-trigger>
+            {{ getPermissions() }}
+          </mat-select-trigger>
+          <mat-option
+            #allSelected
+            (click)="toggleAllSelection()"
+            [value]="'ALL'"
+            >ALL</mat-option
+          >
+          <mat-option
+            *ngFor="let permission of data.resource.permissions"
+            [value]="permission"
+            (click)="togglePerOne()"
+          >
+            {{ permission }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!-- Resource ID -->
+    <div>
+      <mat-form-field appearance="fill">
+        <input matInput [(ngModel)]="data.authorization.resourceId" />
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content fxLayout="row">
+  <div fxLayout="column" fxFlex="100">
+    <div mat-dialog-actions>
+      <button mat-button (click)="onNoClick()">Cancel</button>
+      <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>
+        Ok
+      </button>
+    </div>
+  </div>
+</div>

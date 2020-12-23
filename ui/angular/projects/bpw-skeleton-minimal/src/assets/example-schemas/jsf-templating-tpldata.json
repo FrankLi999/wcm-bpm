@@ -1,0 +1,15 @@
+{
+  "schema": {
+    "age": {
+      "type": "integer",
+      "title": "Age"
+    }
+  },
+  "layout": [ {
+    "key": "age",
+    "title": "{{user.name}}'s age"
+  } ],
+  "tpldata": {
+    "user": { "name": "tidoust" }
+  }
+}

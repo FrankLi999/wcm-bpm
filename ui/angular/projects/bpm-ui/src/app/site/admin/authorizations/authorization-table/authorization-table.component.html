@@ -1,0 +1,174 @@
+<mat-card
+  *ngIf="resource"
+  fxLayout="column"
+  fxFlex="100"
+  [ngClass]="'wcm-content'"
+>
+  <mat-card-header fxLayout="row">
+    <mat-card-title>{{ resource.title }} Authorizations</mat-card-title>
+    <mat-card-subtitle>Item count: {{ itemCount }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div class="spinner-container" *ngIf="loading">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="80"></div>
+      <div fxFlex="20">
+        <button mat-icon-button (click)="retry()" title="Reload wcm items">
+          <mat-icon class="mat-icon-rtl-mirror">autorenew</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          (click)="newAuthorization()"
+          title="Create new Authorization"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <mat-table
+      class="wcm-item-table mat-elevation-z8"
+      [dataSource]="dataSource"
+    >
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Type</mat-header-cell
+        >
+        <mat-cell *matCellDef="let item">
+          {{ getGrantType(item.type) }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="principal">
+        <mat-header-cell *matHeaderCellDef>User / Group</mat-header-cell>
+        <mat-cell class="duration-cell" *matCellDef="let item; let i = index">
+          <ng-container *ngIf="!isInUpdate(i)">
+            <mat-icon *ngIf="isUser(item)" class="mat-icon-rtl-mirror"
+              >person</mat-icon
+            >
+            <mat-icon *ngIf="isGroup(item)" class="mat-icon-rtl-mirror"
+              >group</mat-icon
+            >
+            {{ getPrincipal(item) }}
+          </ng-container>
+          <ng-container *ngIf="!!isInUpdate(i)">
+            <button
+              *ngIf="isUser(inUpdates[i])"
+              mat-icon-butto
+              (click)="switchToGroup(i)"
+            >
+              <mat-icon class="mat-icon-rtl-mirror">person</mat-icon>
+            </button>
+            <button
+              *ngIf="isGroup(inUpdates[i])"
+              mat-icon-butto
+              (click)="switchToUser(i)"
+            >
+              <mat-icon class="mat-icon-rtl-mirror">group</mat-icon>
+            </button>
+            <!-- TODO: validations-->
+            <mat-form-field appearance="fill">
+              <input
+                *ngIf="isUser(inUpdates[i])"
+                matInput
+                [(ngModel)]="inUpdates[i].userId"
+              />
+              <input
+                *ngIf="isGroup(inUpdates[i])"
+                matInput
+                [(ngModel)]="inUpdates[i].groupId"
+              />
+            </mat-form-field>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="permissions">
+        <mat-header-cell *matHeaderCellDef>Permissions</mat-header-cell>
+        <mat-cell
+          class="description-cell"
+          *matCellDef="let item; let i = index"
+        >
+          <ng-container *ngIf="!isInUpdate(i)">
+            {{ getPermissions(item) }}
+          </ng-container>
+          <ng-container *ngIf="!!isInUpdate(i)">
+            <mat-form-field appearance="fill">
+              <mat-select [(ngModel)]="inUpdates[i].permissions" multiple>
+                <mat-select-trigger>
+                  {{ getPermissions(inUpdates[i]) }}
+                </mat-select-trigger>
+                <mat-option
+                  #allSelected
+                  (click)="toggleAllSelection(i)"
+                  [value]="'ALL'"
+                  >ALL</mat-option
+                >
+                <mat-option
+                  *ngFor="let permission of resource.permissions"
+                  [value]="permission"
+                  (click)="togglePerOne(i)"
+                >
+                  {{ permission }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="resource">
+        <mat-header-cell *matHeaderCellDef>Resource ID</mat-header-cell>
+        <mat-cell class="duration-cell" *matCellDef="let item; let i = index">
+          <ng-container *ngIf="!isInUpdate(i)">
+            {{ item.resourceId }}
+          </ng-container>
+          <ng-container *ngIf="!!isInUpdate(i)">
+            <!-- TODO: validations-->
+            <mat-form-field appearance="fill">
+              <input matInput [(ngModel)]="inUpdates[i].resourceId" />
+            </mat-form-field>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+        <mat-cell *matCellDef="let item; let i = index">
+          <ng-container *ngIf="!isInUpdate(i)">
+            <button mat-icon-butto (click)="editAuthorization(i)">
+              <mat-icon class="mat-icon-rtl-mirror">edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              style="margin-left: 4px"
+              (click)="deleteAuthorization(i)"
+            >
+              <mat-icon class="mat-icon-rtl-mirror">delete</mat-icon>
+            </button>
+          </ng-container>
+          <ng-container *ngIf="isInUpdate(i)">
+            <button mat-icon-butto (click)="updateAuthorization(i)">
+              <mat-icon class="mat-icon-rtl-mirror">save</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              style="margin-left: 4px"
+              (click)="cancelUpdate(i)"
+            >
+              <mat-icon class="mat-icon-rtl-mirror">cancel</mat-icon>
+            </button>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+
+    <mat-paginator
+      [length]="itemCount"
+      [pageSize]="25"
+      [pageSizeOptions]="[25]"
+      (page)="handlePageEvent($event)"
+    ></mat-paginator>
+  </mat-card-content>
+</mat-card>
+<template #blockUIContainer> </template>

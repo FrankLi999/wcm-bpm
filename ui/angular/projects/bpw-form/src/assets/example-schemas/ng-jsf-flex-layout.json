@@ -1,0 +1,506 @@
+{
+  "schema": {
+    "type": "object",
+    "name": "siteAreaType",
+    "properties": {
+      "properties": {
+        "type": "object",
+        "properties": {
+          "exactMatch": {
+            "type": "string",
+            "default": "false"
+          },
+          "classes": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "allowedArtifactTypes": {
+            "type": "string"
+          },
+          "translate": {
+            "type": "string"
+          },
+          "showOnMenu": {
+            "type": "string",
+            "default": "false"
+          },
+          "defaultContent": {
+            "type": "string"
+          },
+          "function": {
+            "type": "string"
+          },
+          "navigationType": {
+            "type": "string"
+          },
+          "contentAreaLayout": {
+            "type": "string"
+          },
+          "externalUrl": {
+            "type": "string",
+            "default": "false"
+          },
+          "cacheTTL": {
+            "type": "string",
+            "default": "15"
+          },
+          "navigationId": {
+            "type": "string"
+          },
+          "allowedFileExtension": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "securePage": {
+            "type": "string",
+            "default": "false"
+          },
+          "siteConfig": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sorderOrder": {
+            "type": "string",
+            "default": "0"
+          },
+          "friendlyURL": {
+            "type": "string"
+          },
+          "openInNewTab": {
+            "type": "string",
+            "default": "false"
+          }
+        },
+        "required": [
+          "classes",
+          "icon",
+          "title",
+          "translate",
+          "function",
+          "navigationType",
+          "contentAreaLayout",
+          "navigationId",
+          "url",
+          "siteConfig",
+          "name",
+          "friendlyURL"
+        ]
+      },
+      "elements": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string"
+          }
+        },
+        "required": ["body"]
+      },
+      "metadata": {
+        "$ref": "#/definitions/keyValues"
+      },
+      "searchData": {
+        "$ref": "#/definitions/pageSearchData"
+      },
+      "badge": {
+        "$ref": "#/definitions/navigationBadge"
+      }
+    },
+    "definitions": {
+      "keyValues": {
+        "type": "object",
+        "properties": {
+          "keyValues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "pageSearchData": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "navigationBadge": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "translate": {
+            "type": "string"
+          },
+          "bg": {
+            "type": "string"
+          },
+          "fg": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "layout": [
+    {
+      "type": "flex",
+      "flex-flow": "row wrap",
+      "items": [
+        {
+          "type": "div",
+          "displayFlex": true,
+          "flex-direction": "column",
+          "fxFlex": 0,
+          "items": [
+            {
+              "key": "properties.name",
+              "title": "Name"
+            },
+            {
+              "key": "properties.title",
+              "title": "Title"
+            },
+            {
+              "key": "properties.description",
+              "title": "Description"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "stepper",
+      "items": [
+        {
+          "title": "Badge",
+          "type": "section",
+          "items": [
+            {
+              "type": "flex",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "title": "Badge BG",
+                      "key": "badge.bg"
+                    },
+                    {
+                      "title": "Badge FG",
+                      "key": "badge.fg"
+                    },
+                    {
+                      "title": "Badge Title",
+                      "key": "badge.title"
+                    },
+                    {
+                      "title": "Badge Translate",
+                      "key": "badge.translate"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Content",
+          "type": "section",
+          "items": [
+            {
+              "type": "flex",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "key": "properties.url",
+                      "title": "URL"
+                    },
+                    {
+                      "key": "properties.cacheTTL",
+                      "title": "Cache TTL"
+                    },
+                    {
+                      "key": "properties.securePage",
+                      "title": "Secure Page"
+                    },
+                    {
+                      "key": "properties.sorderOrder",
+                      "title": "Sort Order"
+                    },
+                    {
+                      "key": "properties.defaultContent",
+                      "title": "Default Content"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "flex",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "key": "elements.body",
+                      "title": "Body"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Meta Data",
+          "type": "section",
+          "items": [
+            {
+              "type": "flex",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "type": "array",
+                      "title": "metadata",
+                      "items": [
+                        {
+                          "title": "Name",
+                          "key": "metadata.keyValues[].name"
+                        },
+                        {
+                          "title": "Value",
+                          "key": "metadata.keyValues[].value"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Navigation",
+          "type": "section",
+          "items": [
+            {
+              "type": "flex",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "key": "properties.navigationId",
+                      "title": "Navigation ID"
+                    },
+                    {
+                      "key": "properties.navigationType",
+                      "title": "Navigation Type"
+                    },
+                    {
+                      "key": "properties.function",
+                      "title": "Function"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "flex",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "key": "properties.translate",
+                      "title": "Translate"
+                    },
+                    {
+                      "key": "properties.icon",
+                      "title": "Icon"
+                    },
+                    {
+                      "key": "properties.classes",
+                      "title": "Classes"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "flex",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "key": "properties.exactMatch",
+                      "title": "Exact Match"
+                    },
+                    {
+                      "key": "properties.externalUrl",
+                      "title": "External Url"
+                    },
+                    {
+                      "key": "properties.openInNewTab",
+                      "title": "Open In New Tab"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Properties",
+          "type": "section",
+          "items": [
+            {
+              "type": "flex",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "key": "properties.contentAreaLayout",
+                      "title": "Content Area Layout"
+                    },
+                    {
+                      "key": "properties.siteConfig",
+                      "title": "Site Config"
+                    },
+                    {
+                      "key": "properties.friendlyURL",
+                      "title": "Friendly URL"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "flex",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "key": "properties.showOnMenu",
+                      "title": "Show On Menu"
+                    },
+                    {
+                      "key": "properties.allowedArtifactTypes",
+                      "title": "Allowed ArtifactTypes"
+                    },
+                    {
+                      "key": "properties.allowedFileExtension",
+                      "title": "Allowed FileExtension"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Search Data",
+          "type": "section",
+          "items": [
+            {
+              "type": "flex",
+              "flex-flow": "row wrap",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "column",
+                  "fxFlex": 0,
+                  "items": [
+                    {
+                      "title": "Description",
+                      "key": "searchData.description"
+                    },
+                    {
+                      "title": "Keywords",
+                      "key": "searchData.keywords",
+                      "type": "array",
+                      "items": ["searchData.keywords[]"]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

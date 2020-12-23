@@ -1,0 +1,8 @@
+<ng-container *ngIf="status$ | async as status">
+  <div *ngIf="isSucessfule(status)" class="alert alert-danger">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="!isSucessfule(status)" class="alert alert-danger mat-error">
+    {{ errorMessage(status) }}
+  </div>
+</ng-container>

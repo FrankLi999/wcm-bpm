@@ -1,0 +1,76 @@
+<mat-card
+  fxLayout="column"
+  [ngClass]="'wcm-content'"
+  fxLayout="column"
+  fxFlex="100"
+>
+  <mat-card-header fxLayout="row" [ngClass]="'wcm-skin'">
+    <mat-card-title fxFlex="100"
+      >JCR Node - {{ restNode.name }}
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <span>{{ restNode.id }}</span>
+  </mat-card-content>
+</mat-card>
+
+<mat-card
+  fxLayout="column"
+  [ngClass]="'wcm-content'"
+  fxLayout="column"
+  fxFlex="100"
+>
+  <mat-card-header fxLayout="row" [ngClass]="'wcm-skin'">
+    <mat-card-title>JCR restNode URLs</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div class="info-line">
+      <div class="title">URL</div>
+      <div class="info">{{ restNode.url }}</div>
+    </div>
+    <div class="info-line">
+      <div class="title">Parent Url</div>
+      <div class="info">{{ restNode.parentUrl }}</div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-card
+  fxLayout="column"
+  [ngClass]="'wcm-content'"
+  fxLayout="column"
+  fxFlex="100"
+>
+  <mat-card-header fxLayout="row" [ngClass]="'wcm-skin'">
+    <mat-card-title>Custom Properties</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div
+      class="info-line"
+      *ngFor="let item of restNode.customProperties | keyvalue"
+    >
+      <div class="title">{{ item.key }}</div>
+      <div class="info">{{ item.value }}</div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-card
+  fxLayout="column"
+  [ngClass]="'wcm-content'"
+  fxLayout="column"
+  fxFlex="100"
+>
+  <mat-card-header fxLayout="row" [ngClass]="'wcm-skin'">
+    <mat-card-title>JCR Properties</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <div class="info-line" *ngFor="let jcrProperty of restNode.jcrProperties">
+      <div class="title">{{ jcrProperty.name }}</div>
+      <div class="info">
+        <span *ngFor="let value of jcrProperty.values; let i = index">
+          <span style="margin-right:4px" *ngIf="i > 0">,</span
+          ><span>{{ value }}</span>
+        </span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

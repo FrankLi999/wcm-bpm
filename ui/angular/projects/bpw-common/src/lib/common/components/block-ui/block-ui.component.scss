@@ -1,0 +1,42 @@
+// Spinner style - https://github.com/lukehaas/css-loaders
+.block-ui-wrapper {
+  display: block;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: #f5f5f5;
+  z-index: 30000;
+  cursor: wait;
+}
+// .block-ui-wrapper.block-ui-wrapper--element {
+//   position: absolute;
+// }
+// .block-ui-wrapper.active {
+//   display: block;
+// }
+// .block-ui-wrapper.block-ui-main {
+//   position: fixed;
+// }
+
+//.block-ui-template,
+.block-ui-spinner {
+  position: absolute;
+  top: 40%;
+  margin: 0 auto;
+  left: 40%;
+  right: 0;
+  transform: translateY(-50%);
+}
+.block-ui-message {
+  position: absolute;
+  top: 40%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  font-size: 1.3em;
+  text-align: center;
+  color: #000;
+}
