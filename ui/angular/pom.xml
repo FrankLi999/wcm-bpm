@@ -16,7 +16,9 @@
 	</parent>
   <properties>
     <frontend-maven-plugin.version>1.11.0</frontend-maven-plugin.version>
+    <!--
     <angular-project>wcm-authoring</angular-project>
+    -->
   </properties>
   <build>
     <pluginManagement>
@@ -69,6 +71,7 @@
       </plugin>
     </plugins>
   </build>
+  <!--
   <profiles>
     <profile>
       <id>bpm-ui</id>
@@ -83,4 +86,5 @@
       </properties>
     </profile>
   </profiles>
+  -->
 </project>
