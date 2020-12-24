@@ -5,6 +5,8 @@
 /dist
 /tmp
 /out-tsc
+/csstdg4figs
+/coverage
 # Only exists if Bazel was run
 /bazel-out
 

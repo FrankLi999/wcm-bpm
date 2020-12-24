@@ -27,3 +27,20 @@ mvn clean verify sonar:sonar -P sonar,coverage
 
   >mvn package docker:build -P docker
 
+# docker push
+3. docker push
+
+      About authentication
+			There are six different locations searched for credentials. In order, these are:
+          o Providing system properties docker.username and docker.password from the outside.
+          o Providing system properties registry.username and registry.password from the outside.
+          o Using a <authConfig> section in the plugin configuration with <username> and <password> elements.
+          o Using OpenShift configuration in ~/.config/kube
+          o Using a <server> configuration in ~/.m2/settings.xml
+          o Login into a registry with docker login (credentials in a credential helper or in ~/.docker/config.json)
+
+      examples:
+      mvn -Ddocker.username=dockerUser -Ddocker.password=pdw docker:push
+
+      docker login container-registry:32000
+      mvn  docker:push

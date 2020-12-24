@@ -64,10 +64,13 @@
 		<swagger-rest-locations>com.bpwizard.boot.web</swagger-rest-locations>
 		<swagger-host>host:port</swagger-host>
 		<project.artifact.name>${project.artifactId}</project.artifact.name>
+    <build.number>LOCAL</build.number>
+		<docker.port></docker.port>
+
 		<!--
 		<unit-tests.skip>true</unit-tests.skip>
 		<integration-tests.skip>true</integration-tests.skip>
-		<build.number>LOCAL</build.number>
+		
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.language>java</sonar.language>
@@ -436,7 +439,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<docker.image.prefix>192.168.0.188:32000</docker.image.prefix>
+				<docker.image.prefix>container-registry:32000</docker.image.prefix>
 				<docker.image.name>${project.artifact.name}</docker.image.name>
 			</properties>
 			<build>
@@ -476,7 +479,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<docker.image.prefix>192.168.0.168:32000</docker.image.prefix>
+				<docker.image.prefix>container-registry:32000</docker.image.prefix>
 				<docker.image.name>${project.artifact.name}</docker.image.name>
 			</properties>
 			<build>
@@ -516,7 +519,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<docker.image.prefix>192.168.0.168:32000</docker.image.prefix>
+				<docker.image.prefix>container-registry:32000</docker.image.prefix>
 				<docker.image.name>${project.artifact.name}</docker.image.name>
 			</properties>
 			<build>
@@ -557,7 +560,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-			    <docker.image.prefix>192.168.0.168:32000</docker.image.prefix>
+			    <docker.image.prefix>container-registry:32000</docker.image.prefix>
         	<docker.image.name>${project.artifact.name}</docker.image.name>
 			</properties>
 			<build>
@@ -580,7 +583,7 @@
 								<argument>run</argument>
 								<argument>-d</argument>
 								<argument>-p</argument>
-								<argument>5002:5002</argument>
+								<argument>${container-port}</argument>
 								<argument>--name</argument>
 								<argument>${docker.image.name}</argument>
 								<argument>-v</argument>
@@ -662,6 +665,65 @@
 								</goals>
 							</execution>
 							-->
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>k8s</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+		    <fabric8.skip.build.pom>true</fabric8.skip.build.pom>
+				<jkube.enricher.jkube-service.type>LoadBalancer</jkube.enricher.jkube-service.type>
+      </properties>
+			<dependencyManagement>
+	    <dependencies>
+	      <dependency>
+					<groupId>org.springframework.cloud</groupId>
+					<artifactId>spring-cloud-kubernetes-dependencies</artifactId>
+					<version>1.1.7.RELEASE</version>
+					<type>pom</type>
+	        <scope>import</scope>
+	      </dependency>
+	    </dependencies>
+	  </dependencyManagement>
+
+	  <dependencies>
+	    <dependency>
+	      <groupId>org.springframework.cloud</groupId>
+	      <artifactId>spring-cloud-starter-kubernetes-config</artifactId>
+	    </dependency>
+	  </dependencies>
+			<build>
+				<plugins>
+				  <plugin>
+						<groupId>io.fabric8</groupId>
+						<artifactId>fabric8-maven-plugin</artifactId>
+						<configuration>
+						<apiVersion>v2</apiVersion>
+						  <!--
+						  <dockerHost>https://127.0.0.1:32782</dockerHost>
+							<certPath>C:\Users\frank\.minikube\certs</certPath>
+							-->
+							<enricher>
+								<config>
+									<fmp-service>
+										<type>LoadBalancer</type>
+									</fmp-service>
+								</config>
+							</enricher>
+						</configuration>
+						<executions>
+							<execution>
+								<id>fmp</id>
+								<goals>
+									<goal>resource</goal>
+									<goal>build</goal>
+								</goals>
+							</execution>
 						</executions>
 					</plugin>
 				</plugins>

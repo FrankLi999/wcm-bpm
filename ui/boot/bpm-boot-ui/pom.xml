@@ -14,6 +14,7 @@
   <properties>
 		<container-port>4009:4009</container-port>
 		<probe-url>http://localhost:4009/actuator/health</probe-url>
+		
 	</properties>
 
 	<dependencies>
@@ -54,6 +55,7 @@
 		</dependency>
 	</dependencies>
 	<build>
+	  <finalName>${project.artifact.name}-${project.version}-${build.number}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

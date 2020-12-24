@@ -7,7 +7,7 @@ EXPOSE 4009
 
 ARG JAR_FILE
 COPY ${JAR_FILE} /var/data/app/app.jar
-ADD h2/wcm_bpm_db.mv.db  /var/data/app/h2/wcm_bpm_db.mv.db
+#ADD h2/wcm_bpm_db.mv.db  /var/data/app/h2/wcm_bpm_db.mv.db
 WORKDIR /var/data/app
 RUN sh -c 'touch app.jar'
 ENV JAVA_OPTS="-DLOG_PATH=/var/logs"
