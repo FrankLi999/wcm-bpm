@@ -16,12 +16,14 @@
 		<relativePath>../</relativePath>
 	</parent>
 	<properties>
-	    <!-- <jgroups.version>4.1.8.Final</jgroups.version>  -->
-	    <jgroups.version>3.6.10.Final</jgroups.version>
-	    <jgroups-raft.version>0.5.1.Final</jgroups-raft.version>
-        <commons-cli.version>1.4</commons-cli.version>
-        <opentracing-spring-jaeger-cloud.version>2.0.3</opentracing-spring-jaeger-cloud.version>
-    </properties>
+	  <!-- <jgroups.version>4.1.8.Final</jgroups.version>  -->
+	  <jgroups.version>3.6.10.Final</jgroups.version>
+	  <jgroups-raft.version>0.5.1.Final</jgroups-raft.version>
+    <commons-cli.version>1.4</commons-cli.version>
+    <opentracing-spring-jaeger-cloud.version>2.0.3</opentracing-spring-jaeger-cloud.version>
+		<swagger-rest-locations>com.bpwizard.bpm</swagger-rest-locations>
+		<swagger-host>localhost:28081</swagger-host>
+  </properties>
 	<dependencies>
 	    <dependency>
 		    <groupId>org.mybatis.spring.boot</groupId>
