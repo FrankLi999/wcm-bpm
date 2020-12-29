@@ -1,0 +1,1342 @@
+{
+    "wcmItems": [{
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/home",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/home" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/home/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+				"bpw:name":"home",
+		        "bpw:title":"Home"
+		    },
+		    "library/apigateway/rootSiteArea/home/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_home",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/home",
+		        "translate": "NAV.API.HOME.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/home/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/home/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/home/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/home/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "100"
+		    },
+		    "library/apigateway/rootSiteArea/home/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "API Gateway",
+		        "bpw:renderTemplateName": "/design/renderTemplate/MyContentRenderLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/home/welcome"
+		    },
+		    "library/apigateway/rootSiteArea/home/welcome" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/home/welcome/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<ApiGatewayWelcome message=\"APIGATEWAY_WELCOME\"></ApiGatewayWelcome>"
+		    },
+		    "library/apigateway/rootSiteArea/home/welcome/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"This is API Gateway admin UI",
+		        "bpw:title":"API Gateway"
+		    }
+      	}
+    },
+    {
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers",
+      	"content": {
+      	    "library/apigateway/rootSiteArea/handlers" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+				"bpw:name":"handlers",
+		        "bpw:title":"Handlers"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_handlers",
+		        "navigationType": "group",
+		        "icon": "archive",
+		        "url": "/apigateway/handlers",
+		        "translate": "NAV.API.HANDLERS.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    }
+      	}
+    },
+    {
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/firewall",
+      	"content": {
+      		"library/apigateway/rootSiteArea/handlers/firewall" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name":"fireware",
+		        "bpw:title":"Firewall"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_handlers_firewall",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/handlers/firewall",
+		        "translate": "NAV.API.HANDLERS_FIREWALL.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "40"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Firewall Selectors",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/firewall/selectors"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/row0/column1" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "60"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/siteAreaLayout/row0/column1/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Firewall Selector Rules",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/firewall/selectorRules"
+		    }
+         }
+     },
+     {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/firewall/selectors",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/firewall/selectors" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/selectors/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<FirewallSelectors></FirewallSelectors>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/selectors/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Firewall selectors management",
+		        "bpw:title":"Firewall Selectors"
+		    }
+      	}
+      },
+      {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/firewall/selectorRules",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/firewall/selectorRules" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/selectorRules/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<FirewallSelectorRules></FirewallSelectorRules>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/firewall/selectorRules/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Firewall selector rules management",
+		        "bpw:title":"Firewall Selectors"
+		    }
+      	}
+      },
+      {
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/sign",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/sign" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name":"sign",
+		        "bpw:title":"Sign"
+		    } ,
+		    "library/apigateway/rootSiteArea/handlers/sign/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_handlers_sign",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/handlers/sign",
+		        "translate": "NAV.API.HANDLERS_SIGN.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "40"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Sign Selectors",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/sign/selectors"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/siteAreaLayout/row0/column1" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "60"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/siteAreaLayout/row0/column1/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Sign Selector Rules",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/sign/selectorRules"
+		    }
+      	}
+      },
+      {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/sign/selectors",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/sign/selectors" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/selectors/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<SignSelectors></SignSelectors>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/selectors/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Sign selectors management",
+		        "bpw:title":"Sign Selectors"
+		    }
+      	}
+      },
+      {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/sign/selectorRules",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/sign/selectorRules" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/selectorRules/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<SignSelectorRules></SignSelectorRules>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/sign/selectorRules/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Sign selector rules management",
+		        "bpw:title":"Sign Selectors"
+		    }
+      	}
+      },
+      {
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/monitor",
+      	"content": {
+      		"library/apigateway/rootSiteArea/handlers/monitor" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name":"monitor",
+		        "bpw:title":"Monitor"
+		    } ,
+		    "library/apigateway/rootSiteArea/handlers/monitor/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_handlers_monitor",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/handlers/monitor",
+		        "translate": "NAV.API.HANDLERS_MONITOR.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		     "library/apigateway/rootSiteArea/handlers/monitor/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "40"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Monitor Selectors",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/monitor/selectors"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/siteAreaLayout/row0/column1" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "60"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/siteAreaLayout/row0/column1/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Monitor Selector Rules",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/monitor/selectorRules"
+		    }
+      	}
+    },
+    {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/monitor/selectors",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/monitor/selectors" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/selectors/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<MonitorSelectors></MonitorSelectors>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/selectors/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Monitor selectors management",
+		        "bpw:title":"Monitor Selectors"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/monitor/selectorRules",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/monitor/selectorRules" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/selectorRules/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<MonitorSelectorRules></MonitorSelectorRules>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/monitor/selectorRules/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Monitor selector rules management",
+		        "bpw:title":"Monitor Selectors"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/rewrite",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/rewrite" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name":"rewrite",
+		        "bpw:title":"Rewrite"
+		    } ,
+		    "library/apigateway/rootSiteArea/handlers/rewrite/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_handlers_rewrite",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/handlers/rewrite",
+		        "translate": "NAV.API.HANDLERS_REWRITE.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "40"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Rewrite Selectors",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/rewrite/selectors"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/siteAreaLayout/row0/column1" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "60"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/siteAreaLayout/row0/column1/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Rewrite Selector Rules",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/rewrite/selectorRules"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/rewrite/selectors",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/rewrite/selectors" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/selectors/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<RewriteSelectors></RewriteSelectors>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/selectors/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Rewrite selectors management",
+		        "bpw:title":"Rewrite Selectors"
+		    }
+		}
+		    
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/rewrite/selectorRules",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/rewrite/selectorRules" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/selectorRules/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<RewriteSelectorRules></RewriteSelectorRules>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rewrite/selectorRules/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Rewrite selector rules management",
+		        "bpw:title":"Rewrite Selectors"
+		    }
+		} 
+   },
+   {
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/rate_limiter",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/rate_limiter" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name":"rate_limiter",
+		        "bpw:title":"Rate Limiter"
+		    } ,
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_handlers_rate_limiter",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/handlers/rate_limiter",
+		        "translate": "NAV.API.HANDLERS_RATE_LIMITER.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "40"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Rate Limiter Selectors",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/rate_limiter/selectors"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/siteAreaLayout/row0/column1" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "60"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/siteAreaLayout/row0/column1/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Rate Limiter Selector Rules",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/rate_limiter/selectorRules"
+		    }
+		}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/rate_limiter/selectors",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/rate_limiter/selectors" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/selectors/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<RateLimiterSelectors></RateLimiterSelectors>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/selectors/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Rate Limiter selectors management",
+		        "bpw:title":"Rate Limiter Selectors"
+		    }
+		}
+		    
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/rate_limiter/selectorRules",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/rate_limiter/selectorRules" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/selectorRules/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<RateLimiterSelectorRules></RateLimiterSelectorRules>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/rate_limiter/selectorRules/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Rate Limiter selector rules management",
+		        "bpw:title":"Rate Limiter Selectors"
+		    }
+		}
+		    
+   },
+   {
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/divide",
+      	"content": {
+      		"library/apigateway/rootSiteArea/handlers/divide" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name":"divide",
+		        "bpw:title":"Divide"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_handlers/divide",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/handlers/divide",
+		        "translate": "NAV.API.HANDLERS_DIVIDE.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "40"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Divide Selectors",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/divide/selectors"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/siteAreaLayout/row0/column1" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "60"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/siteAreaLayout/row0/column1/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Divide Selector Rules",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/divide/selectorRules"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/divide/selectors",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/divide/selectors" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/selectors/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<DivideSelectors></DivideSelectors>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/selectors/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Divide selectors management",
+		        "bpw:title":"Divide Selectors"
+		    }
+		}
+		    
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/divide/selectorRules",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/divide/selectorRules" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/selectorRules/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<DivideSelectorRules></DivideSelectorRules>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/divide/selectorRules/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Divide selector rules management",
+		        "bpw:title":"Divide Selectors"
+		    }
+		}
+		    
+   },
+   {
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/springCloud",
+      	"content": {
+      		"library/apigateway/rootSiteArea/handlers/springCloud" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name":"springCloud",
+		        "bpw:title":"Spring Cloud"
+		    } ,
+		    "library/apigateway/rootSiteArea/handlers/springCloud/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_handlers_springCloud",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/handlers/springCloud",
+		        "translate": "NAV.API.HANDLERS_SPRING_CLOUD.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "40"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "SpringCloud Selectors",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/springCloud/selectors"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column1" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "60"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/siteAreaLayout/row0/column1/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "SpringCloud Selector Rules",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/springCloud/selectorRules"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/springCloud/selectors",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/springCloud/selectors" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/selectors/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<SpringCloudSelectors></SpringCloudSelectors>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/selectors/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"SpringCloud selectors management",
+		        "bpw:title":"SpringCloud Selectors"
+		    }
+		}
+		    
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/springCloud/selectorRules",
+      	"content": {
+	        "library/apigateway/rootSiteArea/handlers/springCloud/selectorRules" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/selectorRules/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<SpringCloudSelectorRules></SpringCloudSelectorRules>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/springCloud/selectorRules/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"SpringCloud selector rules management",
+		        "bpw:title":"SpringCloud Selectors"
+		    }
+		}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/hystrix",
+      	"content": {
+      		"library/apigateway/rootSiteArea/handlers/hystrix" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name":"hystrix",
+		        "bpw:title":"Hystrix"
+		    } ,
+		    "library/apigateway/rootSiteArea/handlers/hystrix/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_handlers_hystrix",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/handlers/hystrix",
+		        "translate": "NAV.API.HANDLERS_HYSTRIX.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "40"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Hystrix Selectors",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/hystrix/selectors"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/siteAreaLayout/row0/column1" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "60"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/siteAreaLayout/row0/column1/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Hystrix Selector Rules",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/HandlerLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/handlers/hystrix/selectorRules"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/hystrix/selectors",
+      	"content": {
+	      	"library/apigateway/rootSiteArea/handlers/hystrix/selectors" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/selectors/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<HystrixSelectors></HystrixSelectors>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/selectors/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Hystrix selectors management",
+		        "bpw:title":"Hystrix Selectors"
+		    }
+		}
+		    
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/handlers/hystrix/selectorRules",
+      	"content": {
+	        "library/apigateway/rootSiteArea/handlers/hystrix/selectorRules" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/selectorRules/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<HystrixSelectorRules></HystrixSelectorRules>"
+		    },
+		    "library/apigateway/rootSiteArea/handlers/hystrix/selectorRules/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Hystrix selector rules management",
+		        "bpw:title":"Hystrix Selectors"
+		    }
+		}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/system",
+      	"content": {
+      		"library/apigateway/rootSiteArea/system" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/system/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		         "bpw:name":"system",
+		        "bpw:title":"System"
+		    } ,
+		    "library/apigateway/rootSiteArea/system/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_system",
+		        "navigationType": "group",
+		        "icon": "archive",
+		        "url": "/apigateway/system",
+		        "translate": "NAV.API.SYSTEM.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    }
+		}
+    }, 
+    {
+        "operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/system/metadata",
+      	"content": {
+		    "library/apigateway/rootSiteArea/system/metadata" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/system/metadata/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		         "bpw:name":"metadata",
+		        "bpw:title":"Metadata"
+		    } ,
+		    "library/apigateway/rootSiteArea/system/metadata/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_system_metadata",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/system/metadata",
+		        "translate": "NAV.API.SYSTEM_METADATA.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/system/metadata/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/system/metadata/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/system/metadata/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/system/metadata/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "100"
+		    },
+		    "library/apigateway/rootSiteArea/system/metadata/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Metadata",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/AdminLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/system/metadata/metadata"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/system/metadata/metadata",
+      	"content": {
+	        "library/apigateway/rootSiteArea/system/metadata/metadata" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/system/metadata/metadata/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<Metadata></Metadata>"
+		    },
+		    "library/apigateway/rootSiteArea/system/metadata/metadata/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Metadata Management",
+		        "bpw:title":"Metadata"
+		    }
+		}
+   }, 
+   {
+        "operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/system/handlers",
+      	"content": {
+      		"library/apigateway/rootSiteArea/system/handlers" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/system/handlers/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		         "bpw:name":"handlers",
+		        "bpw:title":"Handlers"
+		    } ,
+		    "library/apigateway/rootSiteArea/system/handlers/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_system_handlers",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/system/handlers",
+		        "translate": "NAV.API.SYSTEM_HANDLERS.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		        "library/apigateway/rootSiteArea/system/handlers/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/system/handlers/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/system/handlers/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/system/handlers/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "100"
+		    },
+		    "library/apigateway/rootSiteArea/system/handlers/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Handlers",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/AdminLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/system/handlers/handlers"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/system/handlers/handlers",
+      	"content": {
+	        "library/apigateway/rootSiteArea/system/handlers/handlers" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/system/handlers/handlers/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<RequestHandlers></RequestHandlers>"
+		    },
+		    "library/apigateway/rootSiteArea/system/handlers/handlers/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Handlers management",
+		        "bpw:title":"Handlers"
+		    }
+		}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/system/handlers/handlers",
+      	"content": {
+	        "library/apigateway/rootSiteArea/system/handlers/handlers" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/system/handlers/handlers/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<RequestHandlers></RequestHandlers>"
+		    },
+		    "library/apigateway/rootSiteArea/system/handlers/handlers/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Handlers management",
+		        "bpw:title":"Handlers"
+		    }
+		}
+   }, 
+   {
+        "operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/system/appAuth",
+      	"content": {
+      		"library/apigateway/rootSiteArea/system/appAuth" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/system/appAuth/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name":"appAuth",
+		        "bpw:title":"Authentication Management"
+		    },
+		    "library/apigateway/rootSiteArea/system/appAuth/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_system_certificate",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/system/appAuth",
+		        "translate": "NAV.API.SYSTEM_APP_AUTH.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/system/appAuth/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/system/appAuth/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/system/appAuth/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/system/appAuth/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "100"
+		    },
+		    "library/apigateway/rootSiteArea/system/appAuth/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Authentication management",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/AdminLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/system/appAuth/appAuth"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/system/appAuth/appAuth",
+      	"content": {
+	        "library/apigateway/rootSiteArea/system/appAuth/appAuth" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/system/appAuth/appAuth/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<AppAuth></AppAuth>"
+		    },
+		    "library/apigateway/rootSiteArea/system/appAuth/appAuth/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Authentication Management",
+		        "bpw:title":"AppAuth"
+		    }
+		}
+   }, 
+   {
+        "operation": "create",
+      	"itemType": "siteArea",
+      	"wcmPath": "library/apigateway/rootSiteArea/system/account",
+      	"content": {
+      		"library/apigateway/rootSiteArea/system/account" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType"
+		    },
+		    "library/apigateway/rootSiteArea/system/account/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		         "bpw:name":"account",
+		        "bpw:title":"Account"
+		    },
+		    "library/apigateway/rootSiteArea/system/account/elements" : {
+		        "jcr:primaryType":"bpw:system_siteAreaType_ElementFolder",
+		        "navigationId": "apigateway_certificate",
+		        "navigationType": "item",
+		        "icon": "archive",
+		        "url": "/apigateway/system/account",
+		        "translate": "NAV.API.SYSTEM_ACCOUNT.TITLE",
+		        "contentAreaLayout": "/design/contentAreaLayout/MyLayout"
+		    },
+		    "library/apigateway/rootSiteArea/system/account/siteAreaLayout" : {
+		        "jcr:primaryType":"bpw:siteAreaLayout",
+		        "bpw:contentWidth": "100"
+		    },
+		    "library/apigateway/rootSiteArea/system/account/siteAreaLayout/sidePane" : {
+		        "jcr:primaryType":"bpw:contentAreaSidePanel",
+		        "bpw:isLeft": "true",
+		        "bpw:width": "0"
+		    },
+		    "library/apigateway/rootSiteArea/system/account/siteAreaLayout/row0" : {
+		        "jcr:primaryType":"bpw:layoutRow"
+		    },
+		    "library/apigateway/rootSiteArea/system/account/siteAreaLayout/row0/column0" : {
+		        "jcr:primaryType":"bpw:layoutColumn",
+		        "bpw:width": "100"
+		    },
+		    "library/apigateway/rootSiteArea/system/account/siteAreaLayout/row0/column0/viewer0" : {
+		        "jcr:primaryType":"bpw:resourceViewer",
+		        "bpw:title": "Account",
+		        "bpw:renderTemplateName": "/apigateway/renderTemplate/AdminLayout",
+		        "bpw:contentPath": "/apigateway/rootSiteArea/system/account/account"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "contentItem",
+      	"wcmPath": "library/apigateway/rootSiteArea/system/account/account",
+      	"content": {
+	        "library/apigateway/rootSiteArea/system/account/account" : {
+		        "jcr:primaryType":"bpw:design_MyContent_AT",
+		        "bpw:authoringTemplate":"/design/authoringTemplate/MyContent"      
+		    },
+		    "library/apigateway/rootSiteArea/system/account/account/elements" : {
+		        "jcr:primaryType":"bpw:design_MyContent_ElementFolder",
+		        "body": "<AccountManagement></AccountManagement>"
+		    },
+		    "library/apigateway/rootSiteArea/system/account/account/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:workflow": "/apigateway/workflow/ContentItemWorkflow",
+		        "bpw:description":"Account Management",
+		        "bpw:title":"Account"
+		    }
+		}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "siteConfig",
+      	"wcmPath": "library/apigateway/siteConfig/apigateway",
+      	"content": {
+      		"library/apigateway/siteConfig/apigateway" : {
+		        "jcr:primaryType":"bpw:system_siteConfigType"
+		    },
+		    "library/apigateway/siteConfig/apigateway/properties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name":"apigateway"
+		    },
+		    "library/apigateway/siteConfig/apigateway/elements" : {
+		        "jcr:primaryType":"bpw:system_siteConfigType_ElementFolder",
+		        "rootSiteArea":"rootSiteArea",
+		        "customScrollbars":"true",
+		        "animations":"true",
+		        "direction": "ltr"
+		    },
+		    "library/apigateway/siteConfig/apigateway/elements/themeColors" : {
+		    	"jcr:primaryType":"bpw:themeColors",
+		        "main":"default",
+		        "navbar":"default",
+		        "toolbar":"default",
+		        "footer":"default"
+		    },
+		    "library/apigateway/siteConfig/apigateway/elements/layout" : {
+		        "jcr:primaryType":"bpw:pageLayout",
+		        "bpw:title":"horizontal",
+		        "bpw:mode":"fullwidth",
+		        "bpw:scroll": "content"
+		    },
+		    "library/apigateway/siteConfig/apigateway/elements/layout/navbar" : {
+		        "jcr:primaryType":"bpw:navbar",
+		        "display":"true"
+		    },
+		    "library/apigateway/siteConfig/apigateway/elements/layout/toolbar" : {
+		        "jcr:primaryType":"bpw:toolbar",
+		        "display":"true",
+		        "position":"above"
+		    },
+		    "library/apigateway/siteConfig/apigateway/elements/layout/footer" : {
+		        "jcr:primaryType":"bpw:footer",
+		        "display":"false",
+		        "style": "fixed"
+		    },
+		    "library/apigateway/siteConfig/apigateway/elements/layout/leftSidePanel" : {
+		        "jcr:primaryType":"bpw:sidePanel",
+		        "display":"false"
+		    },
+		    "library/apigateway/siteConfig/apigateway/elements/layout/rightSidePanel": {
+		        "jcr:primaryType":"bpw:sidePanel",
+		        "display":"false"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "workflow",
+      	"wcmPath": "library/apigateway/workflow/ContentItemWorkflow",
+      	"content": {
+      		"library/apigateway/workflow/ContentItemWorkflow" : {
+		        "jcr:primaryType":"bpw:system_bpmnWorkflowType"
+		    },
+		    "library/apigateway/workflow/ContentItemWorkflow/itemProperties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+		        "bpw:name": "ContentItemWorkflow",
+		        "bpw:title": "Content Item Workflow",
+		        "bpw:description": "Content Item Workflow"
+		    },
+		    "library/apigateway/workflow/ContentItemWorkflow/elements" : {
+		        "jcr:primaryType":"bpw:system_bpmnWorkflowType_ElementFolder",
+		        "bpmn": "Content Item Workflow"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "theme",
+      	"wcmPath": "library/design/theme/apigateway",
+      	"content": {
+      		"library/design/theme/apigateway" : {
+		        "jcr:primaryType":"bpw:system_themeType"        
+		    },
+		    "library/design/theme/apigateway/properties" : {
+		        "jcr:primaryType":"bpw:ContentItemproperties",
+				"bpw:name": "apigateway",
+		        "bpw:title": "API Gateway"
+		    },
+		    "library/design/theme/apigateway/elements" : {
+		        "jcr:primaryType":"bpw:system_themeType_ElementFolder",
+		        "note": "API gateway theme"
+		    }
+      	}
+   },
+   {
+      	"operation": "create",
+      	"itemType": "renderTemplate",
+      	"wcmPath": "library/apigateway/renderTemplate/HandlerLayout",
+      	"content": {
+      		"library/apigateway/renderTemplate/HandlerLayout": {
+				"jcr:primaryType": "bpw:renderTemplate",
+				"bpw:name": "HandlerLayout",
+				"bpw:title": "HandlerLayout",
+				"bpw:description": "Handler Layout",
+				"bpw:preloop": "",
+				"bpw:postloop": "",
+				"bpw:maxEntries": "1",
+				"bpw:note": "HandlerLayout note",
+				"bpw:resourceName": "/design/authoringTemplate/MyContent",
+				"bpw:nodeType": "bpw:design_MyContent_AT",
+				"bpw:isQuery": "false"
+			},
+			"library/apigateway/renderTemplate/HandlerLayout/row1": {
+			    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+			},
+			"library/apigateway/renderTemplate/HandlerLayout/row1/column1": {
+			    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+			    "bpw:id": "fieldgroup1",
+				"bpw:width": "100"
+			},
+			"library/apigateway/renderTemplate/HandlerLayout/row1/column1/body": {
+			    "jcr:primaryType": "bpw:ResourceElementRender",
+				"bpw:name": "body"
+			},
+			"library/apigateway/renderTemplate/AdminLayout": {
+				"jcr:primaryType": "bpw:renderTemplate",
+				"bpw:name": "AdminLayout",
+				"bpw:title": "AdminLayout",
+				"bpw:description": "Admin Layout",
+				"bpw:preloop": "",
+				"bpw:postloop": "",
+				"bpw:maxEntries": "1",
+				"bpw:note": "AdminLayout note",
+				"bpw:resourceName": "/design/authoringTemplate/MyContent",
+				"bpw:nodeType": "bpw:design_MyContent_AT",
+				"bpw:isQuery": "false"
+			},
+			"library/apigateway/renderTemplate/AdminLayout/row1": {
+			    "jcr:primaryType": "bpw:RenderTemplateLayoutRow"
+			},
+			"library/apigateway/renderTemplate/AdminLayout/row1/column1": {
+			    "jcr:primaryType": "bpw:RenderTemplateLayoutColumn",
+			    "bpw:id": "fieldgroup1",
+				"bpw:width": "100"
+			},
+			"library/apigateway/renderTemplate/AdminLayout/row1/column1/body": {
+			    "jcr:primaryType": "bpw:ResourceElementRender",
+				"bpw:name": "body"
+			}
+      	}
+   }]
+}

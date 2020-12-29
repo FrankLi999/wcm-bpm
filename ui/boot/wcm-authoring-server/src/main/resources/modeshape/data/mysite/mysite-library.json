@@ -1,0 +1,7 @@
+{
+  "name": "mysite",
+  "title": "Mysite",
+  "description": "Mysite Library",
+  "language": "en",
+  "rootContentAreaLayout": "/design/contentAreaLayout/MyLayout"
+}

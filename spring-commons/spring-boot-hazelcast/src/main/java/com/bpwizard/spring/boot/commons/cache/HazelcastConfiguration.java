@@ -15,11 +15,16 @@ import org.springframework.util.StringUtils;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.EntryListenerConfig;
 import com.hazelcast.config.EvictionPolicy;
+import com.hazelcast.config.MaxSizePolicy;
 import com.hazelcast.config.ManagementCenterConfig;
-import com.hazelcast.config.MapAttributeConfig;
+// import com.hazelcast.config.MapAttributeConfig;
+import com.hazelcast.config.AttributeConfig;
 import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.MapIndexConfig;
-import com.hazelcast.config.MaxSizeConfig;
+// import com.hazelcast.config.MapIndexConfig;
+import com.hazelcast.config.IndexConfig;
+// import com.hazelcast.config.MaxSizeConfig;
+import com.hazelcast.config.EvictionConfig;
+import com.hazelcast.config.IndexType;
 import com.hazelcast.config.TcpIpConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ManagedContext;
@@ -109,10 +114,11 @@ public class HazelcastConfiguration {
 		if (StringUtils.hasText(hazelcastProperties.getManagementCenter().getUrl())) {
 			ManagementCenterConfig managementCenterConfig = new ManagementCenterConfig();
 			// managementCenterConfig.setEnabled(true);
-			managementCenterConfig.setUrl(hazelcastProperties.getManagementCenter().getUrl());
+			// managementCenterConfig.setUrl(hazelcastProperties.getManagementCenter().getUrl());
+			managementCenterConfig.addTrustedInterface(hazelcastProperties.getManagementCenter().getUrl());
 			// managementCenterConfig.setUpdateInterval(updateInterval);
 			// managementCenterConfig.setScriptingEnabled(scriptingEnabled);
-			managementCenterConfig.setEnabled(hazelcastProperties.getManagementCenter().isEnabled());
+			// managementCenterConfig.setEnabled(hazelcastProperties.getManagementCenter().isEnabled());
 			config.setManagementCenterConfig(managementCenterConfig);
 		}
 
@@ -138,11 +144,15 @@ public class HazelcastConfiguration {
 	}
 
 	private MapConfig initCache(CacheConfig cacheConfig) {
-
+		EvictionConfig evictionConfig = new EvictionConfig()
+            .setEvictionPolicy(EvictionPolicy.valueOf(cacheConfig.getEvictionPolicy()))
+            .setMaxSizePolicy(MaxSizePolicy.valueOf(cacheConfig.getMaxSizePolicy()))
+            .setSize(cacheConfig.getMaxSize());
 		MapConfig mapConfig = new MapConfig().setName(cacheConfig.getCacheName())
-				.setMaxSizeConfig(new MaxSizeConfig(cacheConfig.getMaxSize(),
-						MaxSizeConfig.MaxSizePolicy.valueOf(cacheConfig.getMaxSizePolicy())))
-				.setEvictionPolicy(EvictionPolicy.valueOf(cacheConfig.getEvictionPolicy()))
+				// .setMaxSizeConfig(new MaxSizeConfig(cacheConfig.getMaxSize(),
+				// 		MaxSizeConfig.MaxSizePolicy.valueOf(cacheConfig.getMaxSizePolicy())))
+				// .setEvictionPolicy(EvictionPolicy.valueOf(cacheConfig.getEvictionPolicy()))
+				.setEvictionConfig(evictionConfig)
 				.setTimeToLiveSeconds(cacheConfig.getTimeToLiveSeconds()).setBackupCount(cacheConfig.getBackupCount());
 
 		for (CacheConfig.EntryListener entryListener : cacheConfig.getEntryListeners()) {
@@ -154,17 +164,26 @@ public class HazelcastConfiguration {
 		}
 
 		for (CacheConfig.Index index : cacheConfig.getIndexes()) {
-			MapIndexConfig mapIndexConfig = new MapIndexConfig();
-			mapIndexConfig.setAttribute(index.getAttribute());
-			mapIndexConfig.setOrdered(index.isOrdered());
-			mapConfig.addMapIndexConfig(mapIndexConfig);
+			// MapIndexConfig mapIndexConfig = new MapIndexConfig();
+			IndexConfig mapIndexConfig = new IndexConfig();
+			// mapIndexConfig.setAttribute(index.getAttribute());
+			mapIndexConfig.addAttribute(index.getAttribute());
+			// mapIndexConfig.setOrdered(index.isOrdered());
+			if (index.isOrdered()) {
+				mapIndexConfig.setType(IndexType.SORTED);
+			}
+			// mapConfig.addMapIndexConfig(mapIndexConfig);
+			mapConfig.addIndexConfig(mapIndexConfig);
 		}
 
 		for (CacheConfig.Attribute attribute : cacheConfig.getAttributes()) {
-			MapAttributeConfig mapAttributeConfig = new MapAttributeConfig();
+			// MapAttributeConfig mapAttributeConfig = new MapAttributeConfig();
+			AttributeConfig mapAttributeConfig = new AttributeConfig();
 			mapAttributeConfig.setName(attribute.getName());
-			mapAttributeConfig.setExtractor(attribute.getExtractor());
-			mapConfig.addMapAttributeConfig(mapAttributeConfig);
+			// mapAttributeConfig.setExtractor(attribute.getExtractor());
+			mapAttributeConfig.setExtractorClassName(attribute.getExtractor());
+			// mapConfig.addMapAttributeConfig(mapAttributeConfig);
+			mapConfig.addAttributeConfig(mapAttributeConfig);
 		}
 		// MapStoreConfig mapStoreConfig = new MapStoreConfig();
 		// mapConfig.setMapStoreConfig(mapStoreConfig);

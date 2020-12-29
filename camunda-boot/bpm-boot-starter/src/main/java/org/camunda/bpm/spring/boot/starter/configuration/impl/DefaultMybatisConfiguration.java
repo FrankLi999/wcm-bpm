@@ -10,7 +10,6 @@ public class DefaultMybatisConfiguration extends AbstractCamundaConfiguration
 
 	@Autowired
 	protected SqlSessionFactory sqlSessionFactory;
-	
 
 	@Override
 	public void preInit(SpringProcessEngineConfiguration configuration) {

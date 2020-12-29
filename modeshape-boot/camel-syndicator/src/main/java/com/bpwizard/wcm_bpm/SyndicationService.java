@@ -42,7 +42,7 @@ public class SyndicationService {
 	@Autowired
 	private JSONWebSignatureService jwsTokenService;
 	
-	RestTemplate restTemplate = new RestTemplate();
+	RestTemplate restTemplate; // = new RestTemplate();
 	
     public void syndicate(Syndication syndication) throws Exception {
     	String token = getShortLivedAuthToken(syndication.getImportUser());

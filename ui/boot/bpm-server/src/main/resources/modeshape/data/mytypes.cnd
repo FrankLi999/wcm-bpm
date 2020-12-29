@@ -1,0 +1,57 @@
+<jcr = 'http://www.jcp.org/jcr/1.0'>
+<nt = 'http://www.jcp.org/jcr/nt/1.0'>
+<mix = 'http://www.jcp.org/jcr/mix/1.0'>
+<mode = "http://www.modeshape.org/1.0">
+<bpw = 'http://www.bpwizard.com/bpw/1.0'>
+
+[bpw:design_MyContent_ElementFolder]  > bpw:ContentItemElementFolder
+- body (STRING)
+
+[bpw:design_MyContent_AT] > nt:folder, bpw:baseContentType
++ elements (bpw:design_MyContent_ElementFolder)
++ itemProperties (bpw:ContentItemproperties)
+
+[bpw:design_MyFile_ElementFolder]  > bpw:ContentItemElementFolder
+- body (STRING)
+- file (BINARY)
+- files (BINARY) multiple
+
+[bpw:design_MyFile_AT] > nt:folder, bpw:baseContentType
++ elements (bpw:design_MyFile_ElementFolder)
++ itemProperties (bpw:ContentItemproperties)
+
+
+[bpw:design_MySidePaneContent_ElementFolder]  > bpw:ContentItemElementFolder
+- sidebody (STRING)
+
+[bpw:design_MySidePaneContent_AT] > nt:folder, bpw:baseContentType
++ elements (bpw:design_MySidePaneContent_ElementFolder)
++ itemProperties (bpw:ContentItemproperties)
+
+[bpw:design_MyApplication_ElementFolder]  > bpw:ContentItemElementFolder
+- link (STRING)
+- image (BINARY)
+
+[bpw:design_MyApplication_AT] > nt:folder, bpw:baseContentType
++ elements (bpw:design_MyApplication_ElementFolder)
++ itemProperties (bpw:ContentItemproperties)
+
+[bpw:design_MyLink_ElementFolder]  > bpw:ContentItemElementFolder
+- link (STRING)
+
+[bpw:design_MyLink_AT] > nt:folder, bpw:baseContentType
++ elements (bpw:design_MyLink_ElementFolder)
++ itemProperties (bpw:ContentItemproperties)
+
+[bpw:mysite_NewsItem_ElementFolder]  > bpw:ContentItemElementFolder
+- body (STRING)
+
+[bpw:mysite_NewsItem_AT] > nt:folder, bpw:baseContentType
++ elements (bpw:mysite_NewsItem_ElementFolder)
++ itemProperties (bpw:ContentItemproperties)
+
+[bpw:camunda_resources] > nt:hierarchyNode
+- bpw:name (STRING)
+- bpw:title (STRING)
+- bpw:resourceId (LONG)
+- bpw:permissions (STRING) multiple

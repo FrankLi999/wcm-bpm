@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bpwizard.spring.boot.commons.service.domain.User;
-import com.bpwizard.spring.boot.commons.service.security.SpringJpaSecurityConfig;
+import com.bpwizard.spring.boot.commons.service.security.SpringJdbcSecurityConfig;
 import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsService;
 
 @EnableWebSecurity
@@ -22,7 +22,7 @@ import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsServic
         jsr250Enabled = true,
         prePostEnabled = true
 )
-public class AppSecurityConfig extends SpringJpaSecurityConfig {
+public class AppSecurityConfig extends SpringJdbcSecurityConfig {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AppSecurityConfig.class);
 	

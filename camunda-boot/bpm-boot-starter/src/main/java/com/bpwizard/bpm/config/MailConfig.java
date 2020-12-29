@@ -11,6 +11,7 @@ public class MailConfig {
 	      "This is the test email template for your email:\n%s\n");
 	    return message;
 	}
+	
 //	@Bean
 //	public JavaMailSender javaMailSender() {
 //	    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

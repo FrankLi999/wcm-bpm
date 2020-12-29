@@ -1,0 +1,17 @@
+[
+	{
+	    "library": "mysite",
+  		"name": "FeaturedNews",
+   		"query": "SELECT news.[jcr:path] as path, elements.body as body, properties.[bpw:title] as title, properties.[bpw:description] as description FROM [bpw:mysite_NewsItem_AT] as news JOIN [bpw:ContentItemproperties] as properties ON ISCHILDNODE(properties, news) JOIN [bpw:mysite_NewsItem_ElementFolder] as elements ON ISCHILDNODE(elements, news) WHERE ISDESCENDANTNODE (news, '/library/mysite/rootSiteArea/news') and CONTAINS(properties.[bpw:categories], '/mysite/category/News/FeaturedNews')"
+	},
+	{
+		"library": "mysite",
+  		"name":"TopNews",
+  		"query": "SELECT news.[jcr:path] as path, elements.body as body, properties.[bpw:title] as title, properties.[bpw:description] as description FROM [bpw:mysite_NewsItem_AT] as news JOIN [bpw:ContentItemproperties] as properties ON ISCHILDNODE(properties, news) JOIN [bpw:mysite_NewsItem_ElementFolder] as elements ON ISCHILDNODE(elements, news) WHERE ISDESCENDANTNODE (news, '/library/mysite/rootSiteArea/news') and CONTAINS(properties.[bpw:categories], '/mysite/category/News/TopNews')"
+	}, 
+	{
+	    "library": "mysite",
+		"name": "NewsList",
+ 		"query": "SELECT news.[jcr:path] as path, elements.body as body, properties.[bpw:title] as title, properties.[bpw:description] as description FROM [bpw:mysite_NewsItem_AT] as news JOIN [bpw:ContentItemproperties] as properties ON ISCHILDNODE(properties, news) JOIN [bpw:mysite_NewsItem_ElementFolder] as elements ON ISCHILDNODE(elements, news) WHERE ISDESCENDANTNODE (news, '/library/mysite/rootSiteArea/news')"
+   	}
+]

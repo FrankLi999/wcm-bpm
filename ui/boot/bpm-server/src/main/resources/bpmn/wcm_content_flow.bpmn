@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="wcm_content_flow_definitions" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:message id="Message_1v9zwcg" name="deleteEditingDraftMessage" />
+  <bpmn:collaboration id="Collaboration_02re3id">
+    <bpmn:participant id="Participant_0blsa88" processRef="wcm_content_flow" />
+  </bpmn:collaboration>
+  <bpmn:process id="wcm_content_flow" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_1fj0zb4">
+      <bpmn:lane id="system_lane" name="System">
+        <bpmn:flowNodeRef>StartEvent_1ur0rcf</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ServiceTask_1wv7pc9</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_1d54o2u</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_0hijles</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="reviewer_lane" name="Reviewer">
+        <bpmn:flowNodeRef>review-content</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>cancel_review_event</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ApprovedGateway</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="author_lane" name="Author">
+        <bpmn:flowNodeRef>EndEvent_0frnxda</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>edit-task</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>cancel_edit_event</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1ur0rcf">
+      <bpmn:outgoing>SequenceFlow_08nawxs</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1lpsqle" sourceRef="ApprovedGateway" targetRef="ServiceTask_1wv7pc9">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!reviewRejected}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_18t02sg" sourceRef="ApprovedGateway" targetRef="edit-task">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${reviewRejected}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_02bk0om" sourceRef="ServiceTask_1wv7pc9" targetRef="EndEvent_1d54o2u" />
+    <bpmn:sequenceFlow id="SequenceFlow_08nawxs" sourceRef="StartEvent_1ur0rcf" targetRef="review-content" />
+    <bpmn:sequenceFlow id="SequenceFlow_04majli" sourceRef="cancel_review_event" targetRef="EndEvent_0hijles" />
+    <bpmn:serviceTask id="ServiceTask_1wv7pc9" name="Publish Content Item" camunda:delegateExpression="${publishContentItemDelegate}">
+      <bpmn:incoming>SequenceFlow_1lpsqle</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_02bk0om</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_1d54o2u">
+      <bpmn:incoming>SequenceFlow_02bk0om</bpmn:incoming>
+      <bpmn:terminateEventDefinition />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_0hijles">
+      <bpmn:incoming>SequenceFlow_04majli</bpmn:incoming>
+      <bpmn:terminateEventDefinition />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1oszru9" sourceRef="cancel_edit_event" targetRef="EndEvent_0frnxda" />
+    <bpmn:endEvent id="EndEvent_0frnxda">
+      <bpmn:incoming>SequenceFlow_1oszru9</bpmn:incoming>
+      <bpmn:terminateEventDefinition />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0yc1een" sourceRef="review-content" targetRef="ApprovedGateway" />
+    <bpmn:userTask id="review-content" name="Review Content" camunda:candidateGroups="wcm-viewer">
+      <bpmn:incoming>SequenceFlow_08nawxs</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0c2whp9</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0yc1een</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics>
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">2</bpmn:loopCardinality>
+        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${nrOfCompletedInstances/nrOfInstances &gt;= 0.5 || reviewRejected}</bpmn:completionCondition>
+      </bpmn:multiInstanceLoopCharacteristics>
+    </bpmn:userTask>
+    <bpmn:boundaryEvent id="cancel_review_event" name="cancel_review_event" attachedToRef="review-content">
+      <bpmn:outgoing>SequenceFlow_04majli</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_0vd4wjf" />
+    </bpmn:boundaryEvent>
+    <bpmn:exclusiveGateway id="ApprovedGateway" name="Approved">
+      <bpmn:incoming>SequenceFlow_0yc1een</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_18t02sg</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1lpsqle</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0c2whp9" sourceRef="edit-task" targetRef="review-content" />
+    <bpmn:userTask id="edit-task" name="Edit Draft" camunda:candidateGroups="wcm-viewer">
+      <bpmn:incoming>SequenceFlow_18t02sg</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0c2whp9</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:boundaryEvent id="cancel_edit_event" name="cancel_edit_event" attachedToRef="edit-task">
+      <bpmn:outgoing>SequenceFlow_1oszru9</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_1v9zwcg" />
+    </bpmn:boundaryEvent>
+    <bpmn:textAnnotation id="TextAnnotation_07zxih4">
+      <bpmn:text>reporsitory, workspace, contentId, contentPath</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0a2m552" sourceRef="StartEvent_1ur0rcf" targetRef="TextAnnotation_07zxih4" />
+  </bpmn:process>
+  <bpmn:message id="Message_0vd4wjf" name="deleteReviewingDraftMessage" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_02re3id">
+      <bpmndi:BPMNShape id="Participant_0blsa88_di" bpmnElement="Participant_0blsa88" isHorizontal="true">
+        <dc:Bounds x="161" y="80" width="930" height="530" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1ur0rcf_di" bpmnElement="StartEvent_1ur0rcf">
+        <dc:Bounds x="212" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1wv7pc9_di" bpmnElement="ServiceTask_1wv7pc9">
+        <dc:Bounds x="870" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0q9issy_di" bpmnElement="ApprovedGateway" isMarkerVisible="true">
+        <dc:Bounds x="705" y="335" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="787" y="350" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_07zxih4_di" bpmnElement="TextAnnotation_07zxih4">
+        <dc:Bounds x="260" y="120" width="100" height="68" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BoundaryEvent_1aouuqo_di" bpmnElement="cancel_review_event">
+        <dc:Bounds x="552" y="302" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="498" y="285.5" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BoundaryEvent_1g7vo5a_di" bpmnElement="cancel_edit_event">
+        <dc:Bounds x="912" y="512" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="825" y="543" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1lpsqle_di" bpmnElement="SequenceFlow_1lpsqle">
+        <di:waypoint x="730" y="335" />
+        <di:waypoint x="730" y="210" />
+        <di:waypoint x="870" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_18t02sg_di" bpmnElement="SequenceFlow_18t02sg">
+        <di:waypoint x="730" y="385" />
+        <di:waypoint x="730" y="490" />
+        <di:waypoint x="870" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_02bk0om_di" bpmnElement="SequenceFlow_02bk0om">
+        <di:waypoint x="970" y="210" />
+        <di:waypoint x="1033" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_08nawxs_di" bpmnElement="SequenceFlow_08nawxs">
+        <di:waypoint x="248" y="210" />
+        <di:waypoint x="290" y="210" />
+        <di:waypoint x="290" y="350" />
+        <di:waypoint x="490" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0a2m552_di" bpmnElement="Association_0a2m552">
+        <di:waypoint x="245" y="200" />
+        <di:waypoint x="262" y="188" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Lane_0efepyy_di" bpmnElement="system_lane" isHorizontal="true">
+        <dc:Bounds x="191" y="80" width="900" height="196" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_066rhn6_di" bpmnElement="reviewer_lane" isHorizontal="true">
+        <dc:Bounds x="191" y="276" width="900" height="137" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0o64mhl_di" bpmnElement="author_lane" isHorizontal="true">
+        <dc:Bounds x="191" y="413" width="900" height="197" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_04majli_di" bpmnElement="SequenceFlow_04majli">
+        <di:waypoint x="570" y="302" />
+        <di:waypoint x="570" y="210" />
+        <di:waypoint x="632" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_1ctppmw_di" bpmnElement="EndEvent_1d54o2u">
+        <dc:Bounds x="1033" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_07k94dv_di" bpmnElement="EndEvent_0hijles">
+        <dc:Bounds x="632" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1oszru9_di" bpmnElement="SequenceFlow_1oszru9">
+        <di:waypoint x="945" y="540" />
+        <di:waypoint x="1033" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_14op6wi_di" bpmnElement="EndEvent_0frnxda">
+        <dc:Bounds x="1033" y="522" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_10t2cxh_di" bpmnElement="review-content">
+        <dc:Bounds x="490" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0yc1een_di" bpmnElement="SequenceFlow_0yc1een">
+        <di:waypoint x="590" y="360" />
+        <di:waypoint x="705" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0c2whp9_di" bpmnElement="SequenceFlow_0c2whp9">
+        <di:waypoint x="870" y="510" />
+        <di:waypoint x="540" y="510" />
+        <di:waypoint x="540" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1denizq_di" bpmnElement="edit-task">
+        <dc:Bounds x="870" y="450" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

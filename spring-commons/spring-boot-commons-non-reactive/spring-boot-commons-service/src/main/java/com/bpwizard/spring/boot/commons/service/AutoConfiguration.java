@@ -29,7 +29,7 @@ import com.bpwizard.spring.boot.commons.service.domain.UserService;
 import com.bpwizard.spring.boot.commons.service.security.OAuth2AuthenticationFailureHandler;
 import com.bpwizard.spring.boot.commons.service.security.OAuth2AuthenticationSuccessHandler;
 import com.bpwizard.spring.boot.commons.service.security.SpringAuthenticationSuccessHandler;
-import com.bpwizard.spring.boot.commons.service.security.SpringJpaSecurityConfig;
+import com.bpwizard.spring.boot.commons.service.security.SpringJdbcSecurityConfig;
 import com.bpwizard.spring.boot.commons.service.security.SpringOAuth2UserService;
 import com.bpwizard.spring.boot.commons.service.security.SpringOidcUserService;
 import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsService;
@@ -156,8 +156,8 @@ public class AutoConfiguration {
 	@ConditionalOnMissingBean(SpringWebSecurityConfig.class)	
 	public SpringWebSecurityConfig springSecurityConfig() {
 		
-        logger.info("Configuring SpringJpaSecurityConfig");       
-		return new SpringJpaSecurityConfig();
+        logger.info("Configuring SpringJdbcSecurityConfig");       
+		return new SpringJdbcSecurityConfig();
 	}
 	
 	/**

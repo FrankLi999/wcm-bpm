@@ -18,12 +18,12 @@ spec:
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:
-                name: wcm-bpm-database-secret
+                name: wcm-database-secret
                 key: user
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: wcm-bpm-database-secret
+                name: wcm-database-secret
                 key: password
           livenessProbe:
             httpGet:

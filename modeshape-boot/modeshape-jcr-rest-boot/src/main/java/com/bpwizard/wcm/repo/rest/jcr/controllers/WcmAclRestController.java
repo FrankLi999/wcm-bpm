@@ -1,7 +1,7 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
 import java.security.Principal;
-import java.security.acl.Group;
+import com.bpwizard.spring.boot.commons.security.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

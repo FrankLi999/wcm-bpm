@@ -1,14 +1,20 @@
 package com.bpwizard.bpm.config;
 
 import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 import com.bpwizard.bpm.rest.filter.StatelessUserAuthenticationFilter;
 
-@ComponentScan(basePackages={"org.camunda.bpm.engine.rest, org.camunda.bpm.runtime, com.bpwizard.bpm.demo"})
+@Configuration
+@ComponentScan(basePackages={"org.camunda.bpm.engine.rest, org.camunda.bpm.runtime"})
+@AutoConfigureAfter({MybatisAutoConfiguration.class, CamundaBpmAutoConfiguration.class })
 public class CamundaConfig {
 
 	@Autowired

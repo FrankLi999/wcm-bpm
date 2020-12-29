@@ -1,0 +1,12 @@
+{
+   "wcmItems": [{
+      	"operation": "create",
+      	"itemType": "libraryFolder",
+      	"wcmPath": "library",
+      	"content": {
+      		"library" : {
+		        "jcr:primaryType":"bpw:libraryFolder"
+		    }
+      	}
+    }]
+}

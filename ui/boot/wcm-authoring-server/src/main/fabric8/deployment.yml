@@ -1,0 +1,111 @@
+spec:
+  template:
+    spec:
+      serviceAccountName: "wcm-bpm"
+      containers:
+        - name: wcm-authoring-server
+          image: container-registry:32000/wcm-authoring-server
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "spring.profiles.active"
+              value: "k8s"    
+            - name: JAEGER_ENDPOINT
+              value: "http://jaeger-collector.istio-system.svc:14268/api/traces"
+            - name: JAEGER_REPORTER_LOG_SPANS
+              value: "true"
+            - name: JAEGER_SAMPLER_TYPE
+              value: const
+            - name: JAEGER_SAMPLER_PARAM
+              value: "1"
+            - name: JAEGER_PROPAGATION
+              value: b3
+            - name: ACCOUNT_DB_HOST_PORT
+              value: "mysql:3306"
+            - name: ACCOUNT_DB_NAME
+              value: account
+            - name: ACCOUNT_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: account-database-secret
+            - name: ACCOUNT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: account-database-secret
+            - name: WCM_DB_HOST_PORT
+              value: "mysql:3306"
+            - name: WCM_DB_NAME
+              value: wcm
+            - name: WCM_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: wcm-database-secret
+            - name: WCM_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: wcm-database-secret
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: "jasypt.encryptor.password"
+              value: password
+            - name: ROOT_LOG_LEVEL
+              value: WARN
+            - name: APP_LOG_LEVEL
+              value: INFO
+            - name: SQL_LOG_LEVEL
+              value: WARN
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 3009
+              scheme: HTTP
+            initialDelaySeconds: 180
+            successThreshold: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 3009
+              scheme: HTTP
+            initialDelaySeconds: 20
+            successThreshold: 1
+          volumeMounts:
+            - name: "wcm-authoring-server-log-directory"
+              mountPath: "/var/spring-logs/wcm-authoring-server"
+            - name: "wcm-database-secret-config"
+              readOnly: true
+              # Mount the secret where spring-cloud-kubernetes is configured to read it
+              # see src/main/resources/bootstrap.yml
+              mountPath: "/etc/secrets/wcm-db"
+            - name: "account-database-secret"
+              readOnly: true
+              # Mount the secret where spring-cloud-kubernetes is configured to read it
+              # see src/main/resources/bootstrap.yml
+              mountPath: "/etc/secrets/account-db"
+          # resources:
+#            # requests:
+#              # cpu: "0.2"
+#              # memory: 256Mi
+#            # limits:
+#              # cpu: "1.0"
+#              # memory: 256Mi
+      volumes:
+        - name: "wcm-authoring-server-log-directory"
+          hostPath:
+            path: /home/ubuntu/logs/wcm-authoring-server
+          # emptyDir: {}
+        - name: "wcm-database-secret-config"
+          secret:
+            # The secret must be created before deploying this application
+            secretName: "wcm-database-secret"
+        - name: "account-database-secret"
+          secret:
+            # The secret must be created before deploying this application
+            secretName: "account-database-secret"
+            

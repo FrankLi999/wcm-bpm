@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bpwizard.spring.boot.commons.service.AutoConfiguration;
 import com.bpwizard.spring.boot.commons.service.domain.User;
-import com.bpwizard.spring.boot.commons.service.security.SpringJpaSecurityConfig;
+import com.bpwizard.spring.boot.commons.service.security.SpringJdbcSecurityConfig;
 import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsService;
 @Configuration
 @EnableWebSecurity
@@ -26,7 +26,7 @@ import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsServic
         prePostEnabled = true
 )
 @AutoConfigureBefore({AutoConfiguration.class})
-public class MySecurityConfig extends SpringJpaSecurityConfig {
+public class MySecurityConfig extends SpringJdbcSecurityConfig {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MySecurityConfig.class);
 	

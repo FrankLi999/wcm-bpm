@@ -1,0 +1,7 @@
+{
+  "name": "camunda",
+  "title": "Camunda",
+  "description": "Camunda BPM UI Library",
+  "language": "en",
+  "rootContentAreaLayout": "/design/contentAreaLayout/MyLayout"
+}

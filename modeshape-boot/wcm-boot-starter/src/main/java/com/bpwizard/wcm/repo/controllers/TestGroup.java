@@ -1,6 +1,6 @@
 package com.bpwizard.wcm.repo.controllers;
 import java.security.Principal;
-import java.security.acl.Group;
+import com.bpwizard.spring.boot.commons.security.Group;
 import java.util.Enumeration;
 
 public class TestGroup implements Group {

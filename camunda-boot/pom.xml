@@ -40,14 +40,14 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<modules>
-	    <module>bpm-wcm-client-model</module>	
-			<module>bpm-wcm-client</module>	
-	  	<module>bpm-ui-boot-starter</module>
-      <module>camunda-db-identity-plugin</module>	
-	    <module>camunda-rest-boot</module>
-	    <module>bpm-boot</module>	
-	    <module>bpm-boot-starter</module>	
+		<module>bpm-wcm-client-model</module>	
+		<module>bpm-wcm-client</module>	
+		<module>bpm-ui-boot-starter</module>
+		<module>camunda-db-identity-plugin</module>	
+		<module>camunda-rest-boot</module>
+		<module>bpm-server-demo</module>	
+		<module>bpm-boot-starter</module>	
 	</modules>    
 </project>	

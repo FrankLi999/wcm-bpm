@@ -20,15 +20,15 @@ import com.bpwizard.spring.boot.commons.jdbc.CommonsJdbcAutoConfiguration;
 import com.bpwizard.spring.boot.commons.web.filter.LocaleFilter;
 
 @Configuration
-@EnableProcessApplication("wcm-boot")
+@EnableProcessApplication("bpm-server")
 @ComponentScan(basePackages={"com.bpwizard.bpm", "com.bpwizard.wcm_bpm", "com.bpwizard.spring.boot.commons"})
 @Import({
-  CamundaConfig.class,
+  // CamundaConfig.class,
   MailConfig.class,
   SwaggerConfig.class,
   AppSecurityConfig.class
 })
-@AutoConfigureBefore({CamundaBpmAutoConfiguration.class, CommonsJdbcAutoConfiguration.class})
+@AutoConfigureBefore({CamundaBpmAutoConfiguration.class, CamundaConfig.class, CommonsJdbcAutoConfiguration.class})
 @AutoConfigureAfter({MybatisAutoConfiguration.class })
 public class BpmAppAutoConfig {
 

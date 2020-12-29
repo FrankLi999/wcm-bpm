@@ -54,12 +54,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: user
-              name: wcm-bpm-database-secret
+              name: wcm-database-secret
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: wcm-bpm-database-secret
+              name: wcm-database-secret
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:
@@ -109,6 +109,6 @@ spec:
         name: openshift-demo-log-directory
       - name: openshift-demo-config
         secret:
-          secretName: wcm-bpm-database-secret
+          secretName: wcm-database-secret
   triggers:
   - type: ConfigChange

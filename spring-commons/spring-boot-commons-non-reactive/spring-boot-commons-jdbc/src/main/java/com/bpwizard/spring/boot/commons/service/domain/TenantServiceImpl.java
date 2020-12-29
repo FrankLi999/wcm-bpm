@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -54,7 +55,9 @@ public class TenantServiceImpl implements TenantService<Tenant, Long> {
 	private static final String findAllNamesSql = "SELECT name FROM tenant %s";
 
 	@Autowired 
+	@Qualifier("accountDBJdbcTemplate")
 	private NamedParameterJdbcTemplate jdbcTemplate;
+
 	
 	@Override
 	public Optional<Tenant> findByName(String name) {

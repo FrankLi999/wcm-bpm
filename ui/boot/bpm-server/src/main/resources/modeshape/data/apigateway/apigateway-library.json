@@ -1,0 +1,7 @@
+{
+  "name": "apigateway",
+  "title": "Apigateway",
+  "description": "API Gateway Library",
+  "language": "en",
+  "rootContentAreaLayout": "/design/contentAreaLayout/MyLayout"
+}

@@ -1,7 +1,7 @@
 package com.bpwizard.wcm.repo;
 
 import java.security.Principal;
-import java.security.acl.Group;
+import com.bpwizard.spring.boot.commons.security.Group;
 import java.util.Enumeration;
 
 @SuppressWarnings("removal")
