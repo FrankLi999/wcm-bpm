@@ -44,10 +44,11 @@
 	<modules>
 		<module>bpm-wcm-client-model</module>	
 		<module>bpm-wcm-client</module>	
-		<module>bpm-ui-boot-starter</module>
+		<module>bpm-ui-boot-controller</module>
 		<module>camunda-db-identity-plugin</module>	
 		<module>camunda-rest-boot</module>
 		<module>bpm-server-demo</module>	
-		<module>bpm-boot-starter</module>	
+		<module>bpm-boot-autoconfigure</module>	
+		<module>bpm-mybatis-autoconfigure</module>	
 	</modules>    
 </project>	

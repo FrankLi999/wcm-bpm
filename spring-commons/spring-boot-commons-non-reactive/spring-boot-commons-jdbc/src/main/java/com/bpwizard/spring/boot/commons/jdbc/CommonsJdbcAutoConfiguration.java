@@ -11,7 +11,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import com.bpwizard.spring.boot.commons.web.CommonsWebAutoConfiguration;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -27,11 +27,13 @@ public class CommonsJdbcAutoConfiguration {
 	private Environment env;
 
 	@Bean(name = "accountDBJdbcTemplate")
+	@ConditionalOnMissingBean(name = "accountDBJdbcTemplate")
 	public NamedParameterJdbcTemplate accountDBJdbcTemplate(@Qualifier("accountDBDatasource") DataSource accountDBDatasource) {
 	    return new NamedParameterJdbcTemplate(accountDBDatasource);
 	}
 
 	@Bean(name="accountDBDatasource")
+	@ConditionalOnMissingBean(name="accountDBDatasource")
 	public DataSource accountDBDatasource() {
         return JdbcUtils.getDataSource("bpw.account.datasource", env);
 	} 

@@ -83,5 +83,10 @@
 		    <groupId>javax.annotation</groupId>
 		    <artifactId>javax.annotation-api</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.bpwizard.spring</groupId>
+			<artifactId>spring-boot-commons-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

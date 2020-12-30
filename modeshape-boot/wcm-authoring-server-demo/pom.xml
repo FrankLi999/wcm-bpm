@@ -27,7 +27,7 @@
 	<dependencies>
         <dependency>
 			<groupId>com.bpwizard.wcm-bpm</groupId>
-			<artifactId>wcm-boot-starter</artifactId>
+			<artifactId>wcm-boot-autoconfigure</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		 <dependency>

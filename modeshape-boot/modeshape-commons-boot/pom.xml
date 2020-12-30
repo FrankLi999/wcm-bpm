@@ -37,6 +37,10 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
 		<!-- modeshape dependencies -->
 		<dependency>
 			<groupId>org.modeshape</groupId>
@@ -68,6 +72,11 @@
 		<dependency>
 		    <groupId>javax.annotation</groupId>
 		    <artifactId>javax.annotation-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.bpwizard.spring</groupId>
+			<artifactId>spring-boot-commons-service</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

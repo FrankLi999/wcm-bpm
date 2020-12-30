@@ -73,24 +73,17 @@ spring:
   #           # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
             
   datasource:
-    # url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-    #url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     url: jdbc:mysql://localhost:3306/bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-    # url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
     username: bpm
     password: P@ssw0rd
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #driver-class-name: org.h2.Driver
     hikari:
       connection-test-query: select 1
-      # idle-timeout: 5000
       idle-timeout: 600000
-      # max-lifetime: 120000
       max-lifetime: 1800000
       maximum-pool-size: 5
       minimum-idle: 5
-      # connectionTimeout: 30000
-  
+      connectionTimeout: 30000  
   security:
     oauth2:
       client:
@@ -161,26 +154,23 @@ bpw:
     syndication:
       enabled: false
     datasource:
-      # url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       url: jdbc:mysql://localhost:3306/wcm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-      # url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
       driver-class-name: com.mysql.cj.jdbc.Driver
-      # driver-class-name: org.h2.Driver
       username: wcm
       password: P@ssw0rd        
-  # camunda:
-  #   datasource:
-  #     driver-class-name: com.mysql.cj.jdbc.Driver
-  #     url: jdbc:mysql://localhost:3306/bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-  #     username: bpm
-  #     password: P@ssw0rd
-  #     hikari:
-  #       connection-test-query: select 1
-  #       idle-timeout: 600000
-  #       max-lifetime: 1800000
-  #       maximum-pool-size: 5
-  #       minimum-idle: 5
-  #       connection-timeout: 30000
+  camunda:
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+      username: bpm
+      password: P@ssw0rd
+      hikari:
+        connection-test-query: select 1
+        idle-timeout: 600000
+        max-lifetime: 1800000
+        maximum-pool-size: 5
+        minimum-idle: 5
+        connection-timeout: 30000
   # auth:
     # tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
     # tokenExpirationMsec: 864000000
@@ -270,16 +260,16 @@ mybatis:
     dayComparator: "DATEDIFF(#{currentTimestamp}, ${date}) >= ${days}"
     collationForCaseSensitivity: ""
     #mysql specific constants
-    constant.event: "'event'"
-    constant.op_message: "CONCAT(NEW_VALUE_, '_|_', PROPERTY_)"
-    constant_for_update: "for update"
-    constant.datepart.quarter: "QUARTER"
-    constant.datepart.month: "MONTH"
-    constant.datepart.minute: "MINUTE"
-    constant.null.startTime: "null START_TIME_"
-    constant.varchar.cast: "'${key}'"
-    constant.integer.cast: "NULL"
-    constant.null.reporter: "NULL AS REPORTER_"
+    "constant.event": "'event'"
+    "constant.op_message": "CONCAT(NEW_VALUE_, '_|_', PROPERTY_)"
+    "constant_for_update": "for update"
+    "constant.datepart.quarter": "QUARTER"
+    "constant.datepart.month": "MONTH"
+    "constant.datepart.minute": "MINUTE"
+    "constant.null.startTime": "null START_TIME_"
+    "constant.varchar.cast": "'${key}'"
+    "constant.integer.cast": "NULL"
+    "constant.null.reporter": "NULL AS REPORTER_"
 
   configuration:
     map-underscore-to-camel-case: true
@@ -449,11 +439,28 @@ ignite:
       deleteQuery: "delete from MICROFLOW_ENTRIES where akey=?"
 
 #spring.datasource.url=jdbc:h2:./camunda-db-order;DB_CLOSE_ON_EXIT=false
+syndication:
+  #strategy: kafka
+  #strategy: rest
+  strategy: camel
 kafka:
-  bootstrapAddress: localhost:9092
+  bootstrap-servers: kafka:9092
+  topic:
+    wcm-event: wcm-event
+    wcm-workflow: wcm-workflow
 message:
   topic:
-    name: flowing-retail
+    name: wcm-event
   group: order
-#server:
-  #port: 8091
+  
+org:
+  modeshape:
+    backupLocation: "/home/ubuntu/temp"
+    web:
+      jcr:
+        webdav:
+          CONTENT_PRIMARY_TYPE_NAMES: "nt:resource,mode:resource"
+          RESOURCE_PRIMARY_TYPES_NAMES: "nt:file"
+          NEW_FOLDER_PRIMARY_TYPE_NAME: "nt:folder"
+          NEW_RESOURCE_PRIMARY_TYPE_NAME: "nt:file"
+          NEW_CONTENT_PRIMARY_TYPE_NAME: "nt:resource"  

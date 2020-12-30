@@ -6,6 +6,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,7 +20,9 @@ public class MailService {
 	private JavaMailSender javaMailSender;
 
 	@Autowired
-	private SimpleMailMessage templateSimpleMessage;
+	@Qualifier("workflowTMessage")
+	private SimpleMailMessage workflowMessage;
+	
 	public void sendEmail(String subject, String[] recipient, String message) {
 
         SimpleMailMessage msg = new SimpleMailMessage();
@@ -27,7 +30,7 @@ public class MailService {
 
         msg.setSubject("Testing from Spring Boot");
         msg.setSubject(subject);
-        String text = String.format(templateSimpleMessage.getText(), message);  
+        String text = String.format(workflowMessage.getText(), message);  
         msg.setText(text);
 
         javaMailSender.send(msg);
@@ -41,7 +44,7 @@ public class MailService {
         MimeMessageHelper helper = new MimeMessageHelper(msg, true);
         helper.setTo(recipient);
         helper.setSubject(subject);
-        String text = String.format(templateSimpleMessage.getText(), message); 
+        String text = String.format(workflowMessage.getText(), message); 
         helper.setText(text, true);
          helper.addAttachment("my_photo.png", new ClassPathResource("android.png"));
         helper.addAttachment(attachment, new ClassPathResource(attachment));

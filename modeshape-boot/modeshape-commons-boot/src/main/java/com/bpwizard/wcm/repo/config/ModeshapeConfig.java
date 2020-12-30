@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
@@ -38,6 +39,7 @@ import com.bpwizard.wcm.repo.context.SpringContext;
 import com.bpwizard.wcm.repo.jcr.ModeshapeTransactionManagerLookup;
 
 @Configuration
+@ComponentScan(basePackages={"com.bpwizard.spring.boot.commons"})
 public class ModeshapeConfig {
 	private static final Logger logger = LoggerFactory.getLogger(ModeshapeConfig.class);
 	@Autowired 

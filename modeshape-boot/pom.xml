@@ -24,6 +24,6 @@
 	    <module>modeshape-jcr-webdav-boot</module>
 	    <module>modeshape-webdav-boot</module>
 	    <module>wcm-authoring-server-demo</module>
-	    <module>wcm-boot-starter</module>
+	    <module>wcm-boot-autoconfigure</module>
 	</modules>
 </project>	

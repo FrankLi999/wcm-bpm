@@ -16,7 +16,7 @@ program argument:
 VM arguments: spring-boot.run.jvmArguments
       -Drun.arguments: overriding system properties
 
-mvn spring-boot:run -Dspring-boot.run.arguments="--spring.main.banner-mode=OFF" -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-28080 -DWCM_PORT=28080" -P mysql
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.main.banner-mode=OFF" -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-3009 -DWCM_PORT=3009" -P mysql
 
 
 

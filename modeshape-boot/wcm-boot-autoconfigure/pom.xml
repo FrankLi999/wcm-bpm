@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>wcm-boot-autoconfigure</artifactId>
+	<packaging>jar</packaging>
+	<name>wcm-boot-autoconfigure</name>
+	<description>Spring Boot Modeshape</description>
+
+	<parent>
+	    <groupId>com.bpwizard.wcm-bpm</groupId>
+	    <artifactId>modeshape-boot</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+	<properties>
+	    <jgroups.version>3.6.10.Final</jgroups.version>
+	    <jgroups-raft.version>0.5.1.Final</jgroups-raft.version>
+        <commons-cli.version>1.4</commons-cli.version>
+        <opentracing-spring-jaeger-cloud.version>2.0.3</opentracing-spring-jaeger-cloud.version>
+    </properties>
+	<dependencies>
+	    <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>modeshape-commons-boot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -236,7 +236,7 @@ bpw:
     short-lived-millis: 864000000 # 10 days
 org:
   modeshape:
-    backupLocation: "c:/temp"
+    backupLocation: "/home/ubuntu/temp"
     web:
       jcr:
         webdav:

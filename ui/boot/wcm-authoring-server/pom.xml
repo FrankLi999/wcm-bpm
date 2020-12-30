@@ -38,13 +38,10 @@
 		<!-- modesahpe dependencies -->
 		<dependency>
 			<groupId>com.bpwizard.wcm-bpm</groupId>
-			<artifactId>wcm-boot-starter</artifactId>
+			<artifactId>wcm-boot-autoconfigure</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-        </dependency>
+
 		<!-- end of modesahpe dependencies -->
 		<dependency>
             <groupId>org.springframework.boot</groupId>

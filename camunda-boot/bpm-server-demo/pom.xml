@@ -46,13 +46,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-        <!--
-		<dependency>
-			<groupId>org.apache.tomcat.experimental</groupId>
-			<artifactId>tomcat-embed-programmatic</artifactId>
-			<version>${tomcat.version}</version>
-		</dependency>
-		-->		
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
@@ -85,7 +78,7 @@
 		</dependency>
         <dependency>
 			<groupId>com.bpwizard.wcm-bpm</groupId>
-			<artifactId>bpm-boot-starter</artifactId>
+			<artifactId>bpm-boot-autoconfigure</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -120,6 +113,7 @@
 		  <groupId>org.assertj</groupId>
 		  <artifactId>assertj-core</artifactId>
 		  <!-- <version>3.13.2</version>  -->
+		  <scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -480,7 +474,7 @@
 		<profile>
 			<id>mysql</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
             <dependencies>
 				<dependency>
