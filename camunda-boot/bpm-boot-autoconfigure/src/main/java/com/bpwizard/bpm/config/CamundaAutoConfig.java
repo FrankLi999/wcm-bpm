@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Import;
 @EnableProcessApplication("bpm-server")
 @ComponentScan(basePackages={"com.bpwizard.bpm", "com.bpwizard.wcm", "com.bpwizard.spring.boot.commons", "org.camunda.bpm.engine.rest", "org.camunda.bpm.runtime"})
 @Import({
-  SwaggerConfig.class,
   AppSecurityConfig.class,
+  SwaggerConfig.class,
   CamundaConfig.class
 })
 @AutoConfigureAfter({BpmMybatisAutoConfig.class })

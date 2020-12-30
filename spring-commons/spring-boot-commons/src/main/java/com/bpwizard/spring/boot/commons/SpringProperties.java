@@ -93,6 +93,9 @@ public class SpringProperties {
 	 */
 	private Jwt jwt;
 
+	private Swagger swagger;
+
+	private AppSecurity appSecurity;
 
 	/**************************
 	 * Static classes
@@ -243,5 +246,64 @@ public class SpringProperties {
 		 * Expiration milliseconds for short-lived tokens and cookies
 		 */
 		private long shortLivedMillis = 120000; // Two minutes
-	}	
+	}
+	
+	/**
+	 * Properties regarding the swagger
+	 */
+	@Getter @Setter
+	public static class Swagger {
+		
+		/**
+		 * Application information
+		 */
+		private AppInfo appInfo;
+		
+		private String[] basePackages;
+		/**
+		 * API base path
+		 */		
+		private String pathMapping;
+
+		private ApiKey apiKey;
+	}
+
+	/**
+	 * Properties regarding Swagger application infomration
+	 */
+	@Getter @Setter
+	public static class AppInfo {
+		/** Title of the application */
+		private String title = "API Reference";
+
+		/** Version of the application */
+		private String version = "1.0.0";
+	}
+
+	/**
+	 * Properties regarding Swagger ApiKey
+	 */
+	@Getter @Setter
+	public static class ApiKey {
+		/** Title of the application */
+		private String name = "Authorization";
+
+		private String keyname = "";
+
+		/** Version of the application */
+		private String passAs = "header";
+	}
+	
+
+	/**
+	 * Properties regarding application security
+	 */
+	@Getter @Setter
+	public static class AppSecurity {
+		
+		/**
+		 * Permit all url patterns
+		 */
+		private String permitAll[];
+	}
 }

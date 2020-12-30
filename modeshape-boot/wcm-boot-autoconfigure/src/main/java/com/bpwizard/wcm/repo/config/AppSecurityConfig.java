@@ -2,6 +2,7 @@ package com.bpwizard.wcm.repo.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.bpwizard.spring.boot.commons.SpringProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +26,10 @@ import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsServic
 public class AppSecurityConfig extends SpringJdbcSecurityConfig {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AppSecurityConfig.class);
-	
+    
+    @Autowired
+    private SpringProperties springProperties;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -56,33 +60,11 @@ public class AppSecurityConfig extends SpringJdbcSecurityConfig {
 	
 	@Override
 	protected void authorizeRequests(HttpSecurity http) throws Exception {
-		logger.debug("config authorizeRequests");
-		http.authorizeRequests()
-			.antMatchers("/",
-                "/error",
-                "/favicon.ico",
-                "/**/*.png",
-                "/**/*.gif",
-                "/**/*.svg",
-                "/**/*.jpg",
-                "/**/*.html",
-                "/**/*.css",
-                "/**/*.js")
-                .permitAll()
-            .antMatchers("/core/api/**", "/auth/**", "/oauth2/**", "/login/**")
-                .permitAll()
-            .antMatchers("/tensorflow/**", "/jet/**")
-                .permitAll()
-            .antMatchers("/drools/api/**") 
-                .permitAll()
-            .antMatchers("/hello/**", "/webdav/**", "/modeshape/server/**", "/core/api/**", "/modeshape/api/**", "/wcm/api/**")
-                .permitAll()
-            .antMatchers("/wcm-websocket/**", "/wcm-app/**") 
-                .permitAll()
-//              .antMatchers("/gateway-admin/api/**")
-//              .permitAll()
-          .antMatchers("/gateway-websocket/**") 
-              .permitAll()                
+        logger.debug("config authorizeRequests");
+        String permitAllMaters[] = springProperties.getAppSecurity().getPermitAll();
+        http.authorizeRequests()
+            .antMatchers(permitAllMaters)
+            .permitAll()            
             .anyRequest()
                 .authenticated();
 	}

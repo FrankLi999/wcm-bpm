@@ -71,6 +71,50 @@ server:
   # port: 8080
 # Spring Commons related properties
 bpw:
+  # Application security
+  appSecurity:
+    permitAll:
+      - "/"
+      - "/error"
+      - "/favicon.ico"
+      - "/**/*.png"
+      - "/**/*.gif"
+      - "/**/*.svg"
+      - "/**/*.jpg"
+      - "/**/*.html"
+      - "/**/*.css"
+      - "/**/*.js"
+      - "/core/api/**"
+      - "/auth/**"
+      - "/oauth2/**"
+      - "/login/**"
+      - "/tensorflow/**"
+      - "/jet/**"
+      - "/drools/api/**" 
+      - "/hello/**"
+      - "/webdav/**"
+      - "/modeshape/server/**"
+      - "/core/api/**"
+      - "/modeshape/api/**"
+      - "/wcm/api/**"
+      - "/wcm-websocket/**"
+      - "/wcm-app/**" 
+      - "/gateway-admin/api/**"
+      - "/gateway-websocket/**"
+  # Swagger settings
+  swagger:
+    appInfo:
+      itle: "API Reference"
+      version: "1.0.0"
+    basePackages:
+      - "com.bpwizard.bpm"
+      - "com.bpwizard.wcm"
+      - "com.bpwizard.gateway"
+    pathMapping: "/"
+    apiKey:
+      name: "Authorization"
+      keyname: ""
+      passAs: "header"
   # prepopulate Users and Roles
   rolename: 
     - admin

@@ -1,10 +1,9 @@
 package com.bpwizard.bpm.config;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.bpwizard.spring.boot.commons.SpringProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -14,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.bpwizard.spring.boot.commons.service.AutoConfiguration;
 import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.service.security.SpringJdbcSecurityConfig;
 import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsService;
@@ -25,11 +23,13 @@ import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsServic
         jsr250Enabled = true,
         prePostEnabled = true
 )
-@AutoConfigureBefore({AutoConfiguration.class})
 public class AppSecurityConfig extends SpringJdbcSecurityConfig {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AppSecurityConfig.class);
-	
+    
+    @Autowired
+    private SpringProperties springProperties;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -60,31 +60,11 @@ public class AppSecurityConfig extends SpringJdbcSecurityConfig {
 	
 	@Override
 	protected void authorizeRequests(HttpSecurity http) throws Exception {
-		logger.debug("config authorizeRequests");
-		http.authorizeRequests()
-			.antMatchers("/",
-                "/error",
-                "/favicon.ico",
-                "/**/*.png",
-                "/**/*.gif",
-                "/**/*.svg",
-                "/**/*.jpg",
-                "/**/*.html",
-                "/**/*.css",
-                "/**/*.js")
-                .permitAll()
-            .antMatchers("/core/api/**", "/auth/**", "/oauth2/**", "/login/**", "/hello/**")
-                .permitAll()
-            .antMatchers("/tensorflow/**", "/jet/**")
-                .permitAll()
-            .antMatchers("/drools/api/**") 
-                .permitAll()
-            .antMatchers("/webdav/**", "/modeshape/server/**", "/core/api/**", "/modeshape/api/**", "/wcm/api/**")
-                .permitAll()
-            .antMatchers("/wcm-websocket/**", "/wcm-app/**") 
-                .permitAll()
-            .antMatchers("/gateway-websocket/**") 
-                .permitAll()                
+        logger.debug("config authorizeRequests");
+        String permitAllMaters[] = springProperties.getAppSecurity().getPermitAll();
+        http.authorizeRequests()
+            .antMatchers(permitAllMaters)
+            .permitAll()            
             .anyRequest()
                 .authenticated();
 	}
