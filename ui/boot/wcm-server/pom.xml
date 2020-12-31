@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>wcm-server</artifactId>
+	<packaging>jar</packaging>
+	<name>wcm-server</name>
+	<description>Spring Boot Modeshape</description>
+
+	<parent>
+	    <groupId>com.bpwizard.wcm-bpm</groupId>
+	    <artifactId>modeshape-boot</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath/>
+	</parent>
+	<properties>
+		<container-port>6009:6009</container-port>
+		<probe-url>http://localhost:6009/actuator/health</probe-url>
+		<project.artifact.name>${project.artifactId}</project.artifact.name>
+		<build.number>LOCAL</build.number>
+	
+	  	<!-- <jgroups.version>4.1.8.Final</jgroups.version>  -->
+	  	<jgroups.version>3.6.10.Final</jgroups.version>
+	 	<jgroups-raft.version>0.5.1.Final</jgroups-raft.version>
+		<commons-cli.version>1.4</commons-cli.version>
+		<opentracing-spring-jaeger-cloud.version>2.0.3</opentracing-spring-jaeger-cloud.version>
+		<swagger-rest-locations>com.bpwizard.wcm.repo</swagger-rest-locations>
+		<swagger-host>localhost:6009</swagger-host>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.bpwizard.spring</groupId>
+			<artifactId>spring-boot-commons-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- modesahpe dependencies -->
+		<dependency>
+			<groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>wcm-boot-autoconfigure</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- end of modesahpe dependencies -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jta-atomikos</artifactId>
+		</dependency>	
+		<dependency>
+			<groupId>com.atomikos</groupId>
+			<artifactId>transactions</artifactId>
+			<version>${atomikos.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-configuration-processor</artifactId>
+		</dependency>        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>		
+		<dependency>
+		  <groupId>com.fasterxml.jackson.datatype</groupId>
+		  <artifactId>jackson-datatype-jdk8</artifactId>
+		</dependency>		
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		 <dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+        </dependency>
+       
+		<dependency>
+		    <groupId>org.hibernate.validator</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jta-atomikos</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.atomikos</groupId>
+			<artifactId>transactions</artifactId>
+			<version>${atomikos.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!-- sapring boot ssl support -->
+	    <dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<!--SpringFox dependencies -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${springfox.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${springfox.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>com.github.ulisesbocchio</groupId>
+		    <artifactId>jasypt-spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.jgroups</groupId>
+            <artifactId>jgroups</artifactId>
+        </dependency>
+		<!-- Jaegers opentracing -->
+		<!-- 
+		     Turned off Jaegers for now. It messed up javax.transaction.TransactionManager that is used by modeshape 
+		     and org.springframework.transaction.PlatformTransactionManager that is used by camunda
+		<dependency>
+		  <groupId>io.opentracing.contrib</groupId>
+		  <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
+		  <version>${opentracing-spring-jaeger-cloud.version}</version>
+		</dependency>
+		 -->
+		<!-- prometheus monitoring -->
+		<dependency>
+		    <groupId>io.micrometer</groupId>
+		    <artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+		<!-- Micormeter core dependecy  -->
+		<dependency>
+		    <groupId>io.micrometer</groupId>
+		    <artifactId>micrometer-core</artifactId>
+		</dependency>
+		
+		<dependency>
+          <groupId>com.h2database</groupId>
+          <artifactId>h2</artifactId>
+          <scope>test</scope>
+        </dependency>
+	</dependencies>
+
+	<build>
+	    <finalName>${project.artifact.name}-${project.version}-${build.number}</finalName>
+	    <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.6.2</version>
+            </extension>
+        </extensions>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+        			<executable>true</executable>
+    		    </configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+			        <execution>
+						<id>copy-resources</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/classes/static/</outputDirectory >
+							<resources>
+									<resource>
+											<directory>${project.basedir}/../../angular/dist/${angular-project}</directory>
+									</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+	    <profile>
+			<id>h2</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+            <dependencies>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+            </dependencies>
+		</profile>	
+		<profile>
+			<id>mysql</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+            <dependencies>
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+				</dependency>
+            </dependencies>
+		</profile>	
+    </profiles>
+</project>

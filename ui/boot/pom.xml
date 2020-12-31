@@ -16,8 +16,9 @@
 		<relativePath>../</relativePath>
 	</parent>
 	<modules>
-	  <module>authoring-boot-ui</module>
-	  <module>bpm-boot-ui</module>
+	  <module>wcm-authoring-server</module>
+	  <module>wcm-server</module>
+	  <module>bpm-server</module>
 	</modules>
 </project>
 

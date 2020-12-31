@@ -90,6 +90,7 @@ bpw:
       - "/wcm-app/**" 
       - "/gateway-admin/api/**"
       - "/gateway-websocket/**"
+      - "/actuator/**"
   # Swagger settings
   swagger:
     appInfo:

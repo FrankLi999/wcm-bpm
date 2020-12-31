@@ -56,7 +56,7 @@ server:
   contextPath: /
   # servlet.session.persistent: false
   # port: 19090
-  port: ${WCM_PORT:3009}
+  port: 3009
   ssl:
     enabled: false
     # client-auth: need
@@ -101,6 +101,7 @@ bpw:
       - "/wcm-app/**" 
       - "/gateway-admin/api/**"
       - "/gateway-websocket/**"
+      - "/actuator/**"
   # Swagger settings
   swagger:
     appInfo:

@@ -23,13 +23,14 @@ keycloak:
   base-url: http://keycloak:18680/auth
   realm: wcm_bpm
   realm-url: ${kc.base-url}/realms/${kc.realm}
-
+server:
+  port: 3009
 spring:
   #cache:
   #  type: hazelcast
   mail:
-    host: localhost
-    port: 2525
+    host: fakesmtp
+    port: 2500
     username: username@gmail.com
     password: password
     # Other properties
@@ -73,10 +74,10 @@ spring:
   #           # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
             
   datasource:
-    url: jdbc:mysql://${ACCOUNT_DB_HOST_PORT}/${ACCOUNT_DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    url: jdbc:mysql://${WCM_DB_HOST_PORT}/${WCM_DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${WCM_DB_USERNAME}
-    password: ${ACCOUNT_DB_PASSWORD}
+    password: ${WCM_DB_PASSWORD}
     hikari:
       connection-test-query: select 1
       idle-timeout: 600000

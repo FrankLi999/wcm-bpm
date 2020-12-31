@@ -18,8 +18,11 @@ VM arguments: spring-boot.run.jvmArguments
 
 mvn spring-boot:run -Dspring-boot.run.arguments="--spring.main.banner-mode=OFF" -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-3009 -DWCM_PORT=3009" -P mysql
 
-mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-3009 -DWCM_PORT=3009" -P mysql
-
+authoring:
+      mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-3009 -DWCM_PORT=3009" -P mysql
+mysite:
+      mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-6009 -DWCM_PORT=6009" -P mysql
+      java -Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-6009 -DWCM_PORT=6009 -jar wcm-server-0.0.1-SNAPSHOT-LOCAL.jar
 bpm-server:
 
 -Djava.security.egd=file:/dev/./urandom-28081 -Dspring.profiles.active=dev 
@@ -31,7 +34,7 @@ bpm-server:
 
 mvn spring-boot:run -Dspring-boot.run.arguments="--spring.main.banner-mode=OFF" -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -DBPM_PORT=4009 -Dspring.jta.log-dir=/home/ubuntu/var/camunda/transaction-logs-4009"
 
-
+java -Dspring.profiles.active=dev -DBPM_PORT=4009 -Dspring.jta.log-dir=/home/ubuntu/var/camunda/transaction-logs-4009 -jar bpm-server-0.0.1-SNAPSHOT-LOCAL.jar
 	  
 bpm-boot-ui
 

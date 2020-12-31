@@ -23,7 +23,7 @@ spring:
   #  type: hazelcast
   mail:
     host: localhost
-    port: 2525
+    port: 10025
     username: username@gmail.com
     password: password
     # Other properties

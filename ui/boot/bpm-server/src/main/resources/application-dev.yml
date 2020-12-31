@@ -23,13 +23,14 @@ keycloak:
   base-url: http://keycloak:18680/auth
   realm: wcm_bpm
   realm-url: ${kc.base-url}/realms/${kc.realm}
-
+server:
+  port: ${BPM_PORT:4009}
 spring:
   #cache:
   #  type: hazelcast
   mail:
     host: localhost
-    port: 2525
+    port: 10025
     username: username@gmail.com
     password: password
     # Other properties

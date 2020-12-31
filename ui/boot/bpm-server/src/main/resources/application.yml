@@ -55,7 +55,7 @@ springfox:
 server:
   contextPath: /
   # servlet.session.persistent: false
-  port: ${BPM_PORT:4009}
+  port: 4009
 #  ssl:
 #    enabled: false
 #    # client-auth: need
@@ -99,6 +99,7 @@ bpw:
       - "/wcm-app/**" 
       - "/gateway-admin/api/**"
       - "/gateway-websocket/**"
+      - "/actuator/**"
   # Swagger settings
   swagger:
     appInfo:

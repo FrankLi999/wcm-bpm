@@ -27,7 +27,7 @@
 		<commons-cli.version>1.4</commons-cli.version>
 		<opentracing-spring-jaeger-cloud.version>2.0.3</opentracing-spring-jaeger-cloud.version>
 		<swagger-rest-locations>com.bpwizard.wcm.repo</swagger-rest-locations>
-		<swagger-host>localhost:28080</swagger-host>
+		<swagger-host>localhost:3009</swagger-host>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -184,6 +184,7 @@
 	</dependencies>
 
 	<build>
+	    <finalName>${project.artifact.name}-${project.version}-${build.number}</finalName>
 	    <extensions>
             <extension>
                 <groupId>kr.motd.maven</groupId>
