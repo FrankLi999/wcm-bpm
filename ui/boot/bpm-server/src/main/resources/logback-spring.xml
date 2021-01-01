@@ -51,7 +51,7 @@
     </logger>
     -->
 
-    <logger name="com.bpwizard" level="INFO" dditivity="false"/>
+    <logger name="com.bpwizard" level="WARN" dditivity="false"/>
     <logger name="org.springframework" level="WARN" dditivity="false"/>
     <logger name="org.h2.*" level="WARN" dditivity="false"/>
     <logger name="org.hibernate.*" level="WARN" dditivity="false"/>
