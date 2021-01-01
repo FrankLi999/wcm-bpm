@@ -22,7 +22,7 @@ import { ContentAreaLayout } from "../model/ContentAreaLayout";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/contentAreaLayout",
   headers: {
     "content-type": "application/json"

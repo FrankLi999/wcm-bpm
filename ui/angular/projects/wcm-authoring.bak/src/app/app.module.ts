@@ -35,19 +35,10 @@ import { environment } from "../environments/environment";
 import { AppComponent } from "./app.component";
 import { AppStoreModule } from "./store/store.module";
 
-import { appApiConfig, appLayoutConfig } from "./config/app.config";
+
 import { AppErrorComponent } from "./components/app-error/app-error.component";
-import { appConfig, layoutConfig } from "bpw-common";
-appConfig.baseUrl = "wcm-authoring";
-appConfig.defaultUrl = "/wcm-authoring/site-explorer";
-appConfig.repository = "bpwizard",
-appConfig.workspace = "default",
-appConfig.library = "camunda";
-appConfig.siteConfig = " bpm";
-appConfig.apiBaseUrl = "http://wcm-server.bpwizard.com:28080",
-appConfig.oauth2RedirectUrl = "http://wcm-authoring:3009/oauth2/redirect";
-appConfig.routeSubscriptions = [],
-appConfig.layoutConfig = layoutConfig;
+import { appConfig } from "bpw-common";
+import { appApiConfig, appLayoutConfig } from "./config/app.config";
 
 const appRoutes: Routes = [
   {

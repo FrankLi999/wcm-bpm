@@ -10,11 +10,22 @@ wcm-authoring-server:
       -DWCM_PORT=28080 -Dlog.root.dir=/home/ubuntu/var/spring-logs/gateway-admin-boot-28080
       -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-28080 -Dglowroot.agent.port=5000 
       -javaagent:/home/ubuntu/tools/glowroot/glowroot-0.13.6/glowroot.jar
-	  
+
+-Djava.security.egd=file:/dev/./urandom-28080 -Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-28080 -DWCM_PORT=28080
+
 program argument:
       -Dspring-boot.run.argument: passing command line arguments
 VM arguments: spring-boot.run.jvmArguments
       -Drun.arguments: overriding system properties
+
+      mvn spring-boot:run -Dspring-boot.run.arguments="--spring.main.banner-mode=OFF" -Dspring-boot.run.jvmArguments="-Djava.security.egd=file:/dev/./urandom-28080 -Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-28080 -DWCM_PORT=28080" -P mysql
+      java -Djava.security.egd=file:/dev/./urandom-28080 -Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-28080 -DWCM_PORT=28080 -jar  wcm-authoring-server-0.0.1-SNAPSHOT-LOCAL.jar
+
+debug mode:
+      mvn spring-boot:run -Drun.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000 -Djava.security.egd=file:/dev/./urandom-28080 -Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-28080 -DWCM_PORT=28080" -P mysql
+
+
+-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
 
 mvn spring-boot:run -Dspring-boot.run.arguments="--spring.main.banner-mode=OFF" -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-3009 -DWCM_PORT=3009" -P mysql
 
@@ -34,10 +45,10 @@ bpm-server:
 
 mvn spring-boot:run -Dspring-boot.run.arguments="--spring.main.banner-mode=OFF" -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -DBPM_PORT=4009 -Dspring.jta.log-dir=/home/ubuntu/var/camunda/transaction-logs-4009"
 
-java -Dspring.profiles.active=dev -DBPM_PORT=4009 -Dspring.jta.log-dir=/home/ubuntu/var/camunda/transaction-logs-4009 -jar bpm-server-0.0.1-SNAPSHOT-LOCAL.jar
-	  
-bpm-boot-ui
+      
 
+bpm-server: 
+ java -Djava.security.egd=file:/dev/./urandom-28081 -Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/camunda/transaction-logs-28081 -DWCM_PORT=28081 -jar bpm-server-0.0.1-SNAPSHOT-LOCAL.jar 
 
 -Djava.security.egd=file:/dev/./urandom-28083 -Dspring.profiles.active=dev 
       -Djasypt.encryptor.password=password -DROOT_LOG_LEVEL=WARN -DAPP_LOG_LEVEL=WARN -DSQL_LOG_LEVEL=WARN
@@ -54,4 +65,4 @@ authoring-boot-ui
       -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-28082 -Dglowroot.agent.port=5002 
       -javaagent:/home/ubuntu/tools/glowroot/glowroot-0.13.6/glowroot.jar	  
 
-mvn spring-boot:run -Dspring-boot.run.arguments="--spring.main.banner-mode=OFF" -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -DWCM_PORT=28082 -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-28082" -P mysql      
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.main.banner-mode=OFF" -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -DBPM_PORT=28082 -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-28082" -P mysql      

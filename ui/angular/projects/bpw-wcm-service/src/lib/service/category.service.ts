@@ -23,7 +23,7 @@ import { Category } from "../model/Category";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/category",
   headers: {
     "content-type": "application/json"

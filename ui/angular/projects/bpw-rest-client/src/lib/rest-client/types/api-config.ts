@@ -7,7 +7,9 @@
 // export const FACEBOOK_AUTH_URL = API_BASE_URL + '/oauth2/authorization/facebook?redirect_uri=' + OAUTH2_REDIRECT_URI;
 // export const GITHUB_AUTH_URL = API_BASE_URL + '/oauth2/authorization/github?redirect_uri=' + OAUTH2_REDIRECT_URI;
 export interface ApiConfig {
-  apiBaseUrl: string;
+  // wcmApiBaseUrl: string;
+  // bpmApiBaseUrl: string;
+  apiBaseUrls: { [key: string]: string };
   accessToken: string;
   oauth2RedirectUrl: string;
   googleAuthUrl: string;

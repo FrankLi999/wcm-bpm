@@ -24,7 +24,7 @@ import { ValidationRule } from "../model/ValidationRule";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/validationRule",
   headers: {
     "content-type": "application/json"

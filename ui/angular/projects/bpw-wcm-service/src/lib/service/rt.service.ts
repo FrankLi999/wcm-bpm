@@ -22,7 +22,7 @@ import { RenderTemplate } from "../model/RenderTemplate";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/rt",
   headers: {
     "content-type": "application/json"

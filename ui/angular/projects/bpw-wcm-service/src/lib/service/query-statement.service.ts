@@ -24,7 +24,7 @@ import { QueryResult } from "../model/QueryResult";
   providedIn: "root",
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/queryStatement",
   headers: {
     "content-type": "application/json",

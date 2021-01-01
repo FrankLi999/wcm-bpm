@@ -114,7 +114,8 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
         		reviewTaskId, 
         		false,
         		rejectRequest.getComment(),
-        		"http://wcm-server.bpwizard.com:28080/wcm/api/contentItem/publish");
+				//apiService.wcmServiceBaseUrl+
+				"/wcm/api/contentItem/publish");
         this.completeReview(completeReviewRequest, request);
 		if (logger.isDebugEnabled()) {
 			logger.debug("Exit");
@@ -138,7 +139,7 @@ public class ContentItemWorkflowRestController { //extends BaseWcmRestController
         		reviewTaskId, 
         		true,
         		approvalRequest.getComment(),
-        		"http://wcm-server.bpwizard.com:28080/wcm/api/contentItem/publish");
+        		"/wcm/api/contentItem/publish");
         this.completeReview(completeReviewRequest, request);
 
 		if (logger.isDebugEnabled()) {

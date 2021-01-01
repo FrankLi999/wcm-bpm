@@ -22,7 +22,7 @@ import { SiteArea } from "../model/SiteArea";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/sitearea",
   headers: {
     "content-type": "application/json"

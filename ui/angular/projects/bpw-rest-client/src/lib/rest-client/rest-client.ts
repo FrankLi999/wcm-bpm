@@ -23,7 +23,7 @@ export class RestClient {
   };
 
   public getApiBaseUrl(): string {
-    return this.apiConfigService.apiConfig.apiBaseUrl;
+    return this.apiConfigService.apiConfig.apiBaseUrls[this.getServiceId()];
   };
 
   public getDefaultHeaders(): Object {

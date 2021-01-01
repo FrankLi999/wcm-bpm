@@ -5,7 +5,8 @@ class QueryStatementService {
   // @Post("/query")
 
   executeQueryStatement = (queryStatement) => {
-    return from(axios.post('http://wcm-server.bpwizard.com:28080/wcm/api/queryStatement/query', queryStatement)).pipe(
+        //apiConfigService.baseUrl['auth-service']
+    return from(axios.post('/wcm/api/queryStatement/query', queryStatement)).pipe(
       map((resp) => resp.data),
       filter((result) => !!result)
     );

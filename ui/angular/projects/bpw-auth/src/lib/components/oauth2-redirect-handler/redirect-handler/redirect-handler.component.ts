@@ -42,7 +42,7 @@ export class RedirectHandlerComponent implements OnInit {
       // );
       const headers = new HttpHeaders().set("Authorization", `Bearer ${token}`);
       this.http
-        .get(`${this.apiConfigService.apiConfig.apiBaseUrl}/user/api/me`, {
+        .get(`${this.apiConfigService.apiConfig.apiBaseUrls["wcm"]}/user/api/me`, {
           headers,
         })
         .subscribe(

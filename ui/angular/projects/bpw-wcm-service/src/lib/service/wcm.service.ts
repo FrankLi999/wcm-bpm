@@ -30,7 +30,7 @@ import { WcmItemFilter } from "../model/WcmItemFilter";
   providedIn: "root",
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api",
   headers: {
     "content-type": "application/json",

@@ -102,7 +102,7 @@ export class FileUploadComponent implements OnInit {
     fd.append(this.param, file.data);
     const req = new HttpRequest(
       "POST",
-      `${this.apiConfigService.apiConfig.apiBaseUrl}/modeshape/api/${
+      `${this.apiConfigService.apiConfig.apiBaseUrls["wcm"]}/modeshape/api/${
         this.repositoryName
       }/${this.workspaceName}/upload?path=${
         this.wcmPath

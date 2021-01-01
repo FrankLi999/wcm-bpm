@@ -3,8 +3,19 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: false,
-    hmr       : false
+  production: false,
+  hmr       : false,
+  wcmAuthoringBaseUrl: "wcm-authoring",
+  wcmAuthoringDefaultUrl: "/wcm-authoring/site-explorer",
+  wcmRepository: "bpwizard",
+  wcmWorkspace: "default",
+  wcmLibrary: "camunda",
+  wcmSiteConfig: "bpm",
+  oauth2RedirectUrl: "http://wcm-authoring:3009/oauth2/redirect",
+  // wcmApiBaseUrl: "",
+  // bpmApiBaseUrl: ""
+  wcmApiBaseUrl: "http://wcm-server.bpwizard.com:28080",
+  bpmApiBaseUrl: "http://bpm-server.bpwizard.com:28081"
 };
 
 /*

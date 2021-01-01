@@ -23,7 +23,7 @@ import { BpmnWorkflow } from "../model/BpmnWorkflow";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/bpmnWorkflow",
   headers: {
     "content-type": "application/json"

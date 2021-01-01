@@ -26,21 +26,11 @@ import {
 import { FakeDbService } from "./fake-db/fake-db.service";
 import { environment } from "../environments/environment";
 import { AppStoreModule } from "./store/store.module";
-import { appApiConfig, appLayoutConfig } from "./config/app.config";
 import { RestClientConfigModule } from "bpw-rest-client";
 import { AppComponent } from "./app.component";
-import { appConfig, layoutConfig } from "bpw-common";
+import { appApiConfig, appLayoutConfig } from "./config/app.config";
 
-appConfig.baseUrl = "wcm-authoring";
-appConfig.defaultUrl = "/wcm-authoring/site-explorer";
-appConfig.repository = "bpwizard",
-appConfig.workspace = "default",
-appConfig.library = "camunda";
-appConfig.siteConfig = " bpm";
-appConfig.apiBaseUrl = "http://wcm-server.bpwizard.com:28080",
-appConfig.oauth2RedirectUrl = "http://wcm-authoring:3009/oauth2/redirect";
-appConfig.routeSubscriptions = [],
-appConfig.layoutConfig = layoutConfig;
+
 const appRoutes: Routes = [
   {
     path: "apps",

@@ -22,7 +22,7 @@ import { Form } from "../model/Form";
   providedIn: "root",
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/form",
   headers: {
     "content-type": "application/json",

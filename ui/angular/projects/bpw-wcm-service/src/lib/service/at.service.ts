@@ -22,7 +22,7 @@ import { AuthoringTemplate } from "../model/AuthoringTemplate";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/at",
   headers: {
     "content-type": "application/json"

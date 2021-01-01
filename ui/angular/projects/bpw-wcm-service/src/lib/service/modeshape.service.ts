@@ -24,7 +24,7 @@ import { RestItem } from "../model/RestItem";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/modeshape/api",
   headers: {
     "content-type": "application/json"

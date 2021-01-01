@@ -49,7 +49,8 @@ class JwtService {
   };
 
   createUser = (data) => {
-    return from(axios.post('/http://wcm-server.bpwizard.com:28080/core/api/users', data)).pipe(
+        //apiConfigService.baseUrl['auth-service']
+    return from(axios.post('/core/api/users', data)).pipe(
       map((response) => {
         if (response.data.user) {
           this.setSession(response.data.access_token);
@@ -62,8 +63,9 @@ class JwtService {
   };
 
   signInWithEmailAndPassword = (email, password) => {
+        //apiConfigService.baseUrl['auth-service']
     return from(axios
-      .post('http://wcm-server.bpwizard.com:28080/core/api/login?repository=bpwizard&workspace=default&library=apigateway&config=apigateway', {
+      .post('/core/api/login?repository=bpwizard&workspace=default&library=apigateway&config=apigateway', {
         email,
         password,
       }))
@@ -76,8 +78,9 @@ class JwtService {
   };
 
   signInWithToken = () => {
+        //apiConfigService.baseUrl['auth-service']
     return from(axios
-      .get('http://wcm-server.bpwizard.com:28080/core/api/user-profile?repository=bpwizard&workspace=default&library=apigateway&config=apigateway'))
+      .get('/core/api/user-profile?repository=bpwizard&workspace=default&library=apigateway&config=apigateway'))
       .pipe(
         map((response) => {
           if (response.data) {

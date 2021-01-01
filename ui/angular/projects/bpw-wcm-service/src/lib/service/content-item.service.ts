@@ -28,7 +28,7 @@ import { DraftItemRequest } from "../model/DraftItemRequest";
   providedIn: "root",
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/contentItem",
   headers: {
     "content-type": "application/json",

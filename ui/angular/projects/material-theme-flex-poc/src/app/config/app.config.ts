@@ -10,9 +10,11 @@ import { ApiConfig } from "bpw-rest-client";
 import { appConfig } from "bpw-common";
 // declare var appConfig: any;
 export const APP_OAUTH2_REDIRECT_URI = appConfig.oauth2RedirectUrl;
-export const APP_API_BASE_URL = appConfig.apiBaseUrl;
+export const APP_API_BASE_URL = appConfig.wcmApiBaseUrl;
 export const appApiConfig: ApiConfig = {
-  apiBaseUrl: APP_API_BASE_URL,
+  apiBaseUrls: {
+    "wcm": APP_API_BASE_URL,
+  },
   accessToken: "accessToken",
   oauth2RedirectUrl: APP_OAUTH2_REDIRECT_URI,
   googleAuthUrl: `${APP_API_BASE_URL}/oauth2/authorization/google?redirect_uri=${APP_OAUTH2_REDIRECT_URI}`,

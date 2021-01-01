@@ -22,7 +22,7 @@ import { Library } from "../model/Library";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/library",
   headers: {
     "content-type": "application/json"

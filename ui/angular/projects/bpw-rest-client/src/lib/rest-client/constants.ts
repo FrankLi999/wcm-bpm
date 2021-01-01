@@ -1,5 +1,5 @@
 // export const API_BASE_URL = 'http://192.168.0.168:28080';
-export const API_BASE_URL = "http://wcm-server.bpwizard.com:28080";
+export const API_BASE_URL = "";
 export const ACCESS_TOKEN = "accessToken";
 
 export const OAUTH2_REDIRECT_URI = "http://wcm-authoring:3009/oauth2/redirect";

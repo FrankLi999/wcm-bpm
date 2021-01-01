@@ -1,14 +1,9 @@
 package com.bpwizard.wcm.repo.config;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 import com.bpwizard.spring.boot.commons.service.AutoConfiguration;
-import com.bpwizard.spring.boot.commons.web.filter.LocaleFilter;
-import com.bpwizard.wcm.repo.rest.filter.CleanupFilter;
-import com.bpwizard.wcm.repo.rest.filter.LoggingFilter;
 
 // @Configuration
 @Import({
@@ -20,4 +15,5 @@ import com.bpwizard.wcm.repo.rest.filter.LoggingFilter;
 	WcmAppConfig.class
 	})
 @AutoConfigureBefore({ModeshapeConfig.class, AutoConfiguration.class})
+@ComponentScan(basePackages={"com.bpwizard.wcm", "com.bpwizard.spring.boot.commons"})
 public class WcmAppAutoConfig {}

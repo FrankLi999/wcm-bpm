@@ -20,19 +20,15 @@ import {
   AuthHttpInterceptor,
 } from "bpw-common";
 
-import { environment } from "../environments/environment";
 import { AppStoreModule } from "./store/store.module";
-
-import { appApiConfig, appLayoutConfig } from "./config/app.config";
 import { RestClientConfigModule } from "bpw-rest-client";
-
 import { AppComponent } from "./app.component";
 import { SampleModule } from "./sample/sample.module";
 import { PositionModule } from "./poc/position/position.module";
 import { FlexModule } from "./poc/flex/flex.module";
-import { GridModule } from "./poc/grid/grid.module";
 import { PositionsComponent } from "./poc/position/positions/positions.component";
 import { FlexComponent } from "./poc/flex/flex/flex.component";
+import { appApiConfig, appLayoutConfig } from "./config/app.config";
 const appRoutes: Routes = [
   {
     path: "forms",

@@ -33,22 +33,10 @@ import { RestClientConfigModule } from "bpw-rest-client";
 import { environment } from "../environments/environment";
 import { AppComponent } from "./app.component";
 import { AppStoreModule } from "./store/store.module";
-
-import { appApiConfig, appLayoutConfig } from "./config/app.config";
 import { AppErrorComponent } from "./components/app-error/app-error.component";
 
 import { appConfig, layoutConfig } from "bpw-common";
-
-appConfig.baseUrl = "mysite";
-appConfig.defaultUrl = "/mysite/home";
-appConfig.repository = "bpwizard",
-appConfig.workspace = "default",
-appConfig.library = "mysite";
-appConfig.siteConfig = "mysite";
-appConfig.apiBaseUrl = "http://wcm-server.bpwizard.com:28080",
-appConfig.oauth2RedirectUrl = "http://mysite:6009/oauth2/redirect";
-appConfig.routeSubscriptions = [],
-appConfig.layoutConfig = layoutConfig;
+import { appApiConfig, appLayoutConfig } from "./config/app.config";
 
 const appRoutes: Routes = [
   {

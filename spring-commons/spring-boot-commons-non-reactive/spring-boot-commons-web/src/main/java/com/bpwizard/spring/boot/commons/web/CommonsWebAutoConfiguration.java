@@ -1,6 +1,7 @@
 package com.bpwizard.spring.boot.commons.web;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Validator;
@@ -12,7 +13,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
-
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
@@ -29,15 +29,17 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.bpwizard.spring.boot.commons.CommonsAutoConfiguration;
 import com.bpwizard.spring.boot.commons.SpringProperties;
+import com.bpwizard.spring.boot.commons.SpringProperties.Cors;
 import com.bpwizard.spring.boot.commons.exceptions.ErrorResponseComposer;
 import com.bpwizard.spring.boot.commons.web.exceptions.DefaultExceptionHandlerControllerAdvice;
 import com.bpwizard.spring.boot.commons.web.exceptions.SpringErrorAttributes;
 import com.bpwizard.spring.boot.commons.web.exceptions.SpringErrorController;
-import com.bpwizard.spring.boot.commons.web.security.SpringCorsConfigurationSource;
 import com.bpwizard.spring.boot.commons.web.security.SpringWebAuditorAware;
 import com.bpwizard.spring.boot.commons.web.security.SpringWebSecurityConfig;
 import com.bpwizard.spring.boot.commons.web.util.WebUtils;
@@ -135,10 +137,22 @@ public class CommonsWebAutoConfiguration {
 	@Bean
 	@ConditionalOnProperty(name="bpw.cors.allowed-origins")
 	@ConditionalOnMissingBean(CorsConfigurationSource.class)
-	public SpringCorsConfigurationSource corsConfigurationSource(SpringProperties properties) {
+	public CorsConfigurationSource corsConfigurationSource(SpringProperties properties) {
+	//// public SpringCorsConfigurationSource corsConfigurationSource(SpringProperties properties) {
 		
-        logger.info("Configuring SpringCorsConfigurationSource");       
-		return new SpringCorsConfigurationSource(properties);		
+        logger.info("Configuring SpringCorsConfigurationSource"); 
+        CorsConfiguration config = new CorsConfiguration();
+        Cors cors = properties.getCors();
+		config.setAllowCredentials(true);
+		config.setAllowedHeaders(Arrays.asList(cors.getAllowedHeaders()));
+		config.setAllowedMethods(Arrays.asList(cors.getAllowedMethods()));
+		config.setAllowedOrigins(Arrays.asList(cors.getAllowedOrigins()));
+		config.setExposedHeaders(Arrays.asList(cors.getExposedHeaders()));
+		config.setMaxAge(cors.getMaxAge());
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+		
+		return source;	
 	}
 	
 	/**

@@ -23,7 +23,7 @@ import { PageConfig } from "../model/PageConfig";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/siteConfig",
   headers: {
     "content-type": "application/json"

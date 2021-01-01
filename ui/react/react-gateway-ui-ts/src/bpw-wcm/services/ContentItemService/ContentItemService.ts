@@ -3,7 +3,8 @@ import { filter, map } from 'rxjs/operators';
 import { from } from 'rxjs';
 class ContentItemService {
   getContentItem = (repository, workspace, contentPath) => {
-    return from(axios.get(`http://wcm-server.bpwizard.com:28080/wcm/api/contentItem/get/${repository}/${workspace}?path=${contentPath}`)).pipe(
+    //    //apiConfigService.baseUrl['auth-service']
+    return from(axios.get(`/wcm/api/contentItem/get/${repository}/${workspace}?path=${contentPath}`)).pipe(
       map((resp) => resp.data),
       filter((contentItem) => !!contentItem)
     );

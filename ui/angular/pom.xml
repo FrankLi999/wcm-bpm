@@ -64,7 +64,7 @@
                       <goal>npm</goal>
                   </goals>
                   <configuration>
-                      <arguments>run build --project ${angular-project}</arguments>
+                      <arguments>run build --project ${angular-project} --prod --aot --buildOptimizer --commonChunk --vendorChunk --optimization --progress --output-hashing none</arguments>
                   </configuration>
               </execution>
           </executions>

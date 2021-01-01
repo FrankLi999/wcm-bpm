@@ -21,7 +21,8 @@ export class UiService {
   ) {}
 
   getErrorMessage(err): string {
-    return err.error && err.error.errors.length > 0
+    // return err.error && err.error.errors.length > 0
+    return err.error && err.error.errors && err.error.errors.length > 0
       ? "validation error"
       : err.error && err.error.message
       ? err.error.message

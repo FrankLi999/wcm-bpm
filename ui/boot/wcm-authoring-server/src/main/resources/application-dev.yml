@@ -24,7 +24,7 @@ keycloak:
   realm: wcm_bpm
   realm-url: ${kc.base-url}/realms/${kc.realm}
 server:
-  port: ${WCM_PORT:3009}
+  port: ${WCM_PORT:28080}
 spring:
   #cache:
   #  type: hazelcast

@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-
 import {
   RestClient,
   Client,
@@ -21,7 +20,7 @@ import { Grant } from "../model/Grant";
   providedIn: "root"
 })
 @Client({
-  serviceId: "modeshape-service",
+  serviceId: "wcm",
   baseUrl: "/wcm/api/acl",
   headers: {
     "content-type": "application/json"

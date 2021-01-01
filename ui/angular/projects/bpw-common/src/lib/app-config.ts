@@ -42,8 +42,9 @@ export var appConfig = {
   workspace: "default",
   library: "camunda",
   siteConfig: "bpm",
-  apiBaseUrl: "http://wcm-server.bpwizard.com:28080",
-  oauth2RedirectUrl: "http://wcm-authoring:3009/oauth2/redirect",
+  wcmApiBaseUrl: "",
+  bpmApiBaseUrl: "",
+  oauth2RedirectUrl: "",
   routeSubscriptions: [],
   layoutConfig: layoutConfig,
 };

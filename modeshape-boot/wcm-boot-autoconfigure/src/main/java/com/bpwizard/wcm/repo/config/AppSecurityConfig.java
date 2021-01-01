@@ -2,9 +2,9 @@ package com.bpwizard.wcm.repo.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.bpwizard.spring.boot.commons.SpringProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,10 +13,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.bpwizard.spring.boot.commons.SpringProperties;
 import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.service.security.SpringJdbcSecurityConfig;
 import com.bpwizard.spring.boot.commons.service.security.SpringUserDetailsService;
 
+// @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
@@ -64,7 +66,7 @@ public class AppSecurityConfig extends SpringJdbcSecurityConfig {
         String permitAllMaters[] = springProperties.getAppSecurity().getPermitAll();
         http.authorizeRequests()
             .antMatchers(permitAllMaters)
-            .permitAll()            
+            	.permitAll()            
             .anyRequest()
                 .authenticated();
 	}

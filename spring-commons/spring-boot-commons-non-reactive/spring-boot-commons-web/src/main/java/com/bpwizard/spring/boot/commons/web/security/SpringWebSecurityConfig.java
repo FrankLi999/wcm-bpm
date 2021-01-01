@@ -22,6 +22,7 @@ public class SpringWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	protected JSONWebSignatureService jwsTokenService;
 	
+	
 	@Autowired
 	public void createSpringWebSecurityConfig(JSONWebSignatureService jwsTokenService) {
 
