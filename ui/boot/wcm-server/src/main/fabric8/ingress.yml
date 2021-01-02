@@ -1,0 +1,9 @@
+
+metadata:
+  labels:
+    app: wcm-server
+  name: wcm-server
+spec:
+  backend:
+    serviceName: wcm-server
+    servicePort: 6009

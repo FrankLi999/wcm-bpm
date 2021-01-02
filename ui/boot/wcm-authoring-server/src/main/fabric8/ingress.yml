@@ -1,0 +1,9 @@
+
+metadata:
+  labels:
+    app: wcm-authoring-server
+  name: wcm-authoring-server
+spec:
+  backend:
+    serviceName: wcm-authoring-server
+    servicePort: 3009

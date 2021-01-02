@@ -1,0 +1,9 @@
+
+metadata:
+  labels:
+    app: bpm-server
+  name: bpm-server
+spec:
+  backend:
+    serviceName: bpm-server
+    servicePort: 4009

@@ -1,0 +1,12 @@
+metadata:
+  labels:
+    app: wcm-authoring-server-demo
+  name: wcm-authoring-server-demo
+spec:
+  ports:
+  - port: 3009
+    protocol: TCP
+    targetPort: 3009
+  selector:
+    app: wcm-authoring-server-demo
+      
