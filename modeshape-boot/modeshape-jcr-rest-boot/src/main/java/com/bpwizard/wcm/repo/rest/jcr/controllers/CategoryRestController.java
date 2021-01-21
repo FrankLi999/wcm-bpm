@@ -22,7 +22,7 @@ import com.bpwizard.wcm.repo.rest.RestHelper;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Category;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -50,7 +50,7 @@ public class CategoryRestController extends BaseWcmRestController {
 					String.format(WcmConstants.NODE_CATEGORY_SUB_PATH_PATTERN, category.getLibrary(), category.getParent(), category.getName()) :
 					String.format(WcmConstants.NODE_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
 			this.wcmItemHandler.addItem(
-					WcmEvent.WcmItemType.category,
+					WcmEventEntry.WcmItemType.category,
 					baseUrl, 
 					repositoryName,
 					category.getWorkspace(),
@@ -86,9 +86,9 @@ public class CategoryRestController extends BaseWcmRestController {
 					String.format(WcmConstants.NODE_CATEGORY_PATH_PATTERN, category.getLibrary(), category.getName());
 			
 			JsonNode categoryJson = category.toJson();
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.category, baseUrl, repositoryName, category.getWorkspace(), path, categoryJson);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.category, baseUrl, repositoryName, category.getWorkspace(), path, categoryJson);
 			if (this.authoringEnabled) {
-				this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.category, baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, categoryJson);
+				this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.category, baseUrl, repositoryName, WcmConstants.DRAFT_WS, path, categoryJson);
 			}
 			
 			if (logger.isDebugEnabled()) {
@@ -116,7 +116,7 @@ public class CategoryRestController extends BaseWcmRestController {
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
-	  		this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.category, baseUrl, repository, workspace, absPath);
+	  		this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.category, baseUrl, repository, workspace, absPath);
   			if (logger.isDebugEnabled()) {
   				logger.debug("Exit");
   			}

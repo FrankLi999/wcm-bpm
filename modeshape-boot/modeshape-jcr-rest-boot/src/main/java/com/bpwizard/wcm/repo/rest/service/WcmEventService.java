@@ -1,6 +1,5 @@
 package com.bpwizard.wcm.repo.rest.service;
 
-import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -14,17 +13,16 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
 import com.bpwizard.wcm.repo.rest.handler.AbstractHandler;
 import com.bpwizard.wcm.repo.rest.jcr.model.Syndicator;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 @Component
@@ -35,14 +33,11 @@ public class WcmEventService extends AbstractHandler {
 	protected JdbcTemplate jdbcTemplate;
 	
 	private SimpleJdbcInsert simpleJdbcInsert;
-	
-	@Value("${kafka.topic.wcm-event}")
-	private String wcmEventTopic;
-	
+
 	private static final String updateEventSql = "INSERT INTO SYN_WCM_EVENT(ID, REPOSITORY, WORKSPACE, LIBRARY, NODE_PATH, OPERATION, ITEMTYPE, timeCreated, CONTENT) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE SET LIBRARY=?, NODE_PATH = ?, OPERATION = ?, ITEMTYPE=?, timeCreated=?, CONTENT=?";
 	private static final String clearWcmEventsSql = "DELETE SYN_WCM_EVENT WHERE timeCcreated < ?";
-	private static final String selectWcmEventsBeforeSql = "SELECT * FROM SYN_WCM_EVENT WHERE library= :library and timeCcreated > :begin and timeCcreated < :end ORDER BY timeCcreated ASC LIMIT :pageSize OFFSET :offset";
-	private static final String selectCndBeforeSql = "SELECT * FROM SYN_WCM_EVENT WHERE ITEMTYPE= 'cnd' and timeCcreated > :begin and timeCcreated < :end ORDER BY timeCcreated ASC";
+	private static final String selectWcmEventsBeforeSql = "SELECT * FROM SYN_WCM_EVENT WHERE library= ? and timeCreated > ? and timeCreated < ? ORDER BY timeCreated ASC LIMIT ? OFFSET ?";
+	private static final String selectCndBeforeSql = "SELECT * FROM SYN_WCM_EVENT WHERE ITEMTYPE= 'cnd' and timeCreated > ? and timeCreated < ? ORDER BY timeCreated ASC";
 	
 	@PostConstruct
 	private void postConstruct() {
@@ -56,53 +51,53 @@ public class WcmEventService extends AbstractHandler {
 	    return jdbcTemplate.update(clearWcmEventsSql, params, types);
 	}
 
-	public int addWcmEvent(WcmEvent event) {
+	public int addWcmEvent(WcmEventEntry event) {
 		return doInsert(event);
 	}
 
-	public int updateWcmEvent(WcmEvent event) {
+	public int updateWcmEvent(WcmEventEntry event) {
 		return  doUpsert(event);
 	}
 
-	public List<WcmEvent> getCndAfter(
+	public List<WcmEvent> getCndBefore(
 			Syndicator syndicator,
 			Timestamp endTimestamp) {
-		
-		SqlParameterSource namedParameters = new MapSqlParameterSource()
-				.addValue("begin", syndicator.getLastSyndication())
-				.addValue("end", endTimestamp);
+		Object args[] = {syndicator.getLastSyndication(), endTimestamp};
+		int argTypes[] = { Types.TIMESTAMP, Types.TIMESTAMP};
 		List<WcmEvent> wcmEvents = jdbcTemplate.query(
-				selectCndBeforeSql, new WcmEventRowMapper(), namedParameters);
+				selectCndBeforeSql, args, argTypes, new WcmEventRowMapper());
 
 		return wcmEvents;
 	}
 	
-	public List<WcmEvent> getWcmEventAfter(
+	public List<WcmEvent> getWcmEventBefore(
 			Syndicator syndicator,
 			Timestamp endTimestamp, 
 			int pageIndex,
 			int pageSize) {
+		List<WcmEvent> wcmEvents = new ArrayList<>();
 		
-		SqlParameterSource namedParameters = new MapSqlParameterSource()
-				.addValue("library", syndicator.getLibrary())
-				.addValue("begin", syndicator.getLastSyndication())
-				.addValue("end", endTimestamp)
-				.addValue("pageSize", pageSize)
-				.addValue("offset", pageSize * pageIndex);
-		List<WcmEvent> wcmEvents = jdbcTemplate.query(
-				selectWcmEventsBeforeSql, new WcmEventRowMapper(), namedParameters);
-
+		Object args[] = {"", syndicator.getLastSyndication(), endTimestamp, pageSize, pageIndex};
+		int argTypes[] = { Types.VARCHAR, Types.TIMESTAMP, Types.TIMESTAMP, Types.INTEGER, Types.INTEGER};
+		wcmEvents.addAll(jdbcTemplate.query(
+			selectWcmEventsBeforeSql, args, argTypes, new WcmEventRowMapper()));
+			
+		for (String library: syndicator.getLibraries()) {
+			args[0] = library;
+			wcmEvents.addAll(jdbcTemplate.query(
+				selectWcmEventsBeforeSql, args, argTypes, new WcmEventRowMapper()));
+		}
 		return wcmEvents;
 	}
 
-	public int[] batchInsert(List<WcmEvent> events) {
+	public int[] batchInsert(List<WcmEventEntry> events) {
 		MapSqlParameterSource parameters[] = events.stream().map(e -> insertParameters(e)).toArray(MapSqlParameterSource[]::new);
         return simpleJdbcInsert.executeBatch(parameters);
     }
 	
-	public int[] batchUpdate(List<WcmEvent> events) {
+	public int[] batchUpdate(List<WcmEventEntry> events) {
 		List<Object[]> batchArgs = new ArrayList<>();
-		for (WcmEvent event: events) {
+		for (WcmEventEntry event: events) {
 			Object args[] = {event.getId(), event.getRepository(), event.getWorkspace(), event.getLibrary(), event.getNodePath(), event.getOperation().name(), event.getItemType().name(), event.getTimeCreated(), event.getContent(), event.getLibrary(), event.getNodePath(), event.getOperation().name(), event.getItemType().name(), event.getTimeCreated(), event.getContent()};
 			batchArgs.add(args);
 		}
@@ -110,18 +105,18 @@ public class WcmEventService extends AbstractHandler {
 		return jdbcTemplate.batchUpdate(updateEventSql, batchArgs, argTypes);
     }
 	
-	protected int doInsert(WcmEvent event) {
+	protected int doInsert(WcmEventEntry event) {
 		MapSqlParameterSource parameters = insertParameters(event);
 		 return simpleJdbcInsert.execute(parameters);
 	}
 	
-	protected int doUpsert(WcmEvent event) {
+	protected int doUpsert(WcmEventEntry event) {
 		Object args[] = {event.getId(), event.getRepository(), event.getWorkspace(), event.getLibrary(), event.getNodePath(), event.getOperation().name(), event.getItemType().name(), event.getTimeCreated(), event.getContent(), event.getLibrary(), event.getNodePath(), event.getOperation().name(), event.getItemType().name(), event.getTimeCreated(), event.getContent()};
 		int[] argTypes = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.BLOB, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.BLOB};
 	    return jdbcTemplate.update(updateEventSql, args, argTypes);
 	}
 	
-	protected MapSqlParameterSource insertParameters(WcmEvent event) {
+	protected MapSqlParameterSource insertParameters(WcmEventEntry event) {
 		event.setTimeCreated(new Timestamp(System.currentTimeMillis()));
 		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -162,10 +157,34 @@ public class WcmEventService extends AbstractHandler {
 	    	wcmEvent.setNodePath(rs.getString("NODE_PATH"));
 	    	wcmEvent.setOperation(WcmEvent.Operation.valueOf(rs.getString("OPERATION")));
 	    	wcmEvent.setItemType(WcmEvent.WcmItemType.valueOf(rs.getString("ITEMTYPE")));
-
-	    	Blob b = rs.getBlob("CONTENT");
-	    	wcmEvent.setContent(b.getBinaryStream());
+//	    	try {
+//	    		wcmEvent.setContent(this.getBytes(rs.getBlob("CONTENT").getBinaryStream()));
+//	    	} catch (IOException e) {
+//	    		throw new SQLException(e);
+//	    	}
+	    	// Blob b = rs.getBlob("CONTENT");
+	    	// wcmEvent.setContent(b.getBinaryStream());
+	    	wcmEvent.setContent(rs.getBytes("CONTENT"));
 	    	return wcmEvent;
 	    }
+	    
+	    
+//	    private final byte[] getBytes(InputStream in) throws IOException {
+//			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//			byte[] buf = new byte[1024];
+//			//InputStream in = blob.getBinaryStream();
+//			int n = 0;
+//			while ((n=in.read(buf))>=0) {
+//				baos.write(buf, 0, n);
+//			}
+//			in.close();
+//			
+//			System.out.println(">>>>>>>>>>>>> wcm event content-----");
+//			Bson.read(baos);
+//			byte[] bytes = baos.toByteArray();
+//
+//			
+//			return bytes;
+//		}
 	}
 }

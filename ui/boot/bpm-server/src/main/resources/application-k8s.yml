@@ -140,7 +140,7 @@ bpw:
     syndication:
       enabled: true
     datasource:
-      # url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+      # url: jdbc:mysql://mysql:3306/bpm_site?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       # url: jdbc:mysql://localhost:3306/wcm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       # url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -159,19 +159,19 @@ bpw:
         maximum-pool-size: 5
         minimum-idle: 5
         connection-timeout: 30000        
-  # camunda:
-  #   datasource:
-  #     driver-class-name: com.mysql.cj.jdbc.Driver
-  #     url: jdbc:mysql://${BPM_DB_HOST_PORT}/${BPM_DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-  #     username: ${BPM_DB_USERNAME}
-  #     password: ${BPM_DB_PASSWORD}
-  #     hikari:
-  #       connection-test-query: select 1
-  #       idle-timeout: 600000
-  #       max-lifetime: 1800000
-  #       maximum-pool-size: 5
-  #       minimum-idle: 5
-  #       connection-timeout: 30000
+  camunda:
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://${BPM_DB_HOST_PORT}/${BPM_DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+      username: ${BPM_DB_USERNAME}
+      password: ${BPM_DB_PASSWORD}
+      hikari:
+        connection-test-query: select 1
+        idle-timeout: 600000
+        max-lifetime: 1800000
+        maximum-pool-size: 5
+        minimum-idle: 5
+        connection-timeout: 30000
   # auth:
     # tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
     # tokenExpirationMsec: 864000000

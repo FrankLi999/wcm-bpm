@@ -2,6 +2,7 @@ package com.bpwizard.wcm.repo.rest.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +32,8 @@ public class WcmServerService {
 	SimpleJdbcInsert simpleJdbcInsert;
 	
 	private static final String updateSql = "UPDATE SYN_WCM_SERVER SET HOST = ?, PORT = ?, updated_by=? WHERE id = ?";
-	private static final String deleteSql = "DELETE SYN_WCM_SERVER WHERE id = ?";
-	private static final String selectByIdSql = "Select * from SYN_WCM_SERVER WHERE id = :id";
+	private static final String deleteSql = "DELETE FROM SYN_WCM_SERVER WHERE id = ?";
+	private static final String selectByIdSql = "Select * from SYN_WCM_SERVER WHERE id = ?";
 	private static final String selectByAllSql = "Select * from SYN_WCM_SERVER";
 
 	@PostConstruct
@@ -49,10 +48,9 @@ public class WcmServerService {
 	}
 	
 	public WcmServer getWcmServer(Long id) {
-		// return wcmServerRepo.findById(id);
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", id);
-		WcmServer wcmServer = jdbcTemplate.queryForObject(
-				selectByIdSql, new WcmServerRowMapper(), namedParameters);
+		Object[] args = { id }; 
+		int[] argTypes = { Types.BIGINT };
+		WcmServer wcmServer = jdbcTemplate.queryForObject(selectByIdSql, args, argTypes, new WcmServerRowMapper());
 
 		return wcmServer;
 	}
@@ -63,6 +61,7 @@ public class WcmServerService {
 	    parameters.put("HOST", wcmServer.getHost());
 	    parameters.put("PORT", wcmServer.getPort());
 	    parameters.put("created_by", WebUtils.currentUserId());
+	    parameters.put("created_at", new Timestamp(System.currentTimeMillis()));
 	    
 	    return simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 	}

@@ -60,6 +60,18 @@
 			<artifactId>modeshape-jcr-rest-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- 
+		<dependency>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>modeshape-collector-kafka-boot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.bpwizard.wcm-bpm</groupId>
+			<artifactId>modeshape-syndicator-kafka-boot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		-->
 		<!-- end of modesahpe dependencies -->
 		<dependency>
     		<groupId>org.springframework.boot</groupId>
@@ -228,6 +240,10 @@
 			<artifactId>camunda-bpm-process-test-coverage</artifactId>
 			<version>0.3.2</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+		  <groupId>org.springframework.kafka</groupId>
+		  <artifactId>spring-kafka</artifactId>
 		</dependency>
 		<!-- 
         <dependency>

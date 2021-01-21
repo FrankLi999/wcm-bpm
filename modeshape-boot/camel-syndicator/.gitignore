@@ -1,6 +1,10 @@
+h2/
 target/
+transaction-logs/
 !.mvn/wrapper/maven-wrapper.jar
-
+ignite/
+*.txt
+*.log
 ### STS ###
 .apt_generated
 .classpath
@@ -23,3 +27,4 @@ dist/
 nbdist/
 .nb-gradle/
 /.apt_generated_tests/
+.sts4-cache/

@@ -20,12 +20,13 @@ import java.util.Map;
 
 import javax.jcr.Credentials;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.modeshape.jcr.ExecutionContext;
 import org.modeshape.jcr.security.AuthenticationProvider;
 import org.modeshape.jcr.security.AuthorizationProvider;
+import org.modeshape.jcr.security.SecurityContext;
 import org.modeshape.jcr.value.Path;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 /**
@@ -42,6 +43,9 @@ public class SpringSecurityProvider implements AuthenticationProvider, Authoriza
             ExecutionContext repositoryContext,
             Map<String, Object> sessionAttributes) {
 
+    	System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> authentication:" + credentials.toString());
+    	System.out.println(credentials.getClass());
+    	System.out.println(credentials);
         if (credentials instanceof SpringSecurityCredentials) {
             SpringSecurityCredentials creds = (SpringSecurityCredentials) credentials;
             Authentication auth = creds.getAuth();
@@ -51,7 +55,7 @@ public class SpringSecurityProvider implements AuthenticationProvider, Authoriza
             }
         }
         return null;
-    }
+    } 
 
 	@Override
 	public boolean hasPermission(
@@ -61,6 +65,13 @@ public class SpringSecurityProvider implements AuthenticationProvider, Authoriza
 			String workspaceName, 
 			Path absPath, 
 			String... actions) {
+		SecurityContext securityContext = context.getSecurityContext();
+		if (securityContext == null) {
+			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>securityContext is null");
+		} else {
+			System.out.println(">>>>>>>>>>>>>>>>>> user name:" + securityContext.getUserName());
+		}
+		
 		System.out.println(">>>>>>>>>>>>hasPermission>>>>>>>>>repositoryName:" + repositoryName);
 		System.out.println(">>>>>>>>>>>hasPermission>>>>>>>>>>repositorySourceName:" + repositorySourceName);
 		System.out.println(">>>>>>>>>>>hasPermission>>>>>>>>>>workspaceName:" + workspaceName);

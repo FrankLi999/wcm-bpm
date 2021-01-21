@@ -27,7 +27,7 @@ import com.bpwizard.wcm.repo.rest.handler.WcmRequestHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -153,7 +153,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_AT_PATH_PATTERN, at.getLibrary(), at.getName());
 			String repositoryName = at.getRepository();
-			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.authoringTemplate, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, at.toJson());
+			this.wcmItemHandler.addItem(WcmEventEntry.WcmItemType.authoringTemplate, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, at.toJson());
 			this.wcmUtils.registerNodeType(at.getWorkspace(), at);
 			if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(at.getWorkspace())) {
 				this.wcmUtils.registerNodeType(WcmConstants.DRAFT_WS, at);
@@ -188,7 +188,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 			String repositoryName = at.getRepository();
 			
 			JsonNode atJson = at.toJson();
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.authoringTemplate, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, atJson);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.authoringTemplate, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, atJson);
 			this.wcmUtils.registerNodeType(at.getWorkspace(), at);
 			if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(at.getWorkspace())) {
 				this.wcmUtils.registerNodeType(WcmConstants.DRAFT_WS, at);
@@ -223,7 +223,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
-	  		this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.authoringTemplate, baseUrl, repository, workspace, absPath);
+	  		this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.authoringTemplate, baseUrl, repository, workspace, absPath);
   			
 	  		if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(workspace)) {
 //	  			this.wcmUtils.deleteNodeType(WcmConstants.DEFAULT_WS, wcmPath);

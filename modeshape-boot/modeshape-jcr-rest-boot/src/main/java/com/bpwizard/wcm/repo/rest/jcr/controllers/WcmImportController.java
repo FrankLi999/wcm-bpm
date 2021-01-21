@@ -27,7 +27,7 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Library;
 import com.bpwizard.wcm.repo.rest.jcr.model.Preload;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -50,7 +50,6 @@ public class WcmImportController extends BaseWcmRestController {
 	@PostMapping(path= "/preload")
     public ResponseEntity<?> loadQueries(HttpServletRequest request) throws WcmRepositoryException {
     	logger.debug("Entering ...");
-    	
     	try {
     		com.bpwizard.wcm.repo.rest.jcr.model.Preload[] preloads = this.wcmRequestHandler.readJson(
     				resourceLoader.getResource("classpath:/modeshape/data/preload-config.json").getInputStream(), 
@@ -124,7 +123,7 @@ public class WcmImportController extends BaseWcmRestController {
     		String baseUrl = RestHelper.repositoryUrl(request);
 	    	ResponseEntity<?> response = this.nodeTypeHandler.importCND(baseUrl, repositoryName, workspaceName, allowUpdate, file.getInputStream());
 	    	if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(workspaceName)) {
-    			wcmEventService.addCNDEvent(repositoryName, workspaceName, file.getInputStream(), WcmEvent.WcmItemType.cnd);
+    			wcmEventService.addCNDEvent(repositoryName, workspaceName, file.getInputStream(), WcmEventEntry.WcmItemType.cnd);
     		}
 	    	logger.debug("Exiting ...");
 	    	return response;
@@ -146,7 +145,7 @@ public class WcmImportController extends BaseWcmRestController {
         				resourceLoader.getResource(preload.getPath()).getInputStream());
     		}
     		if (this.syndicationEnabled) {
-    			wcmEventService.addCNDEvent(preload.getRepository(), WcmConstants.DEFAULT_WS, resourceLoader.getResource(preload.getPath()).getInputStream(), WcmEvent.WcmItemType.cnd);
+    			wcmEventService.addCNDEvent(preload.getRepository(), WcmConstants.DEFAULT_WS, resourceLoader.getResource(preload.getPath()).getInputStream(), WcmEventEntry.WcmItemType.cnd);
     		}
 	        logger.debug("Exiting ...");
     	} catch (Throwable t) {

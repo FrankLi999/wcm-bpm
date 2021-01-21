@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 
 import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestItem;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -97,7 +98,7 @@ public final class RestWcmItemHandler extends ItemHandler {
      */
     public ResponseEntity<RestItem> addItem( 
     		//HttpServletRequest request,
-    		WcmEvent.WcmItemType itemType,
+    		WcmEventEntry.WcmItemType itemType,
     		String baseUrl,
 	         String repositoryName,
 	         String workspaceName,
@@ -109,7 +110,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     }
 
     public ResponseEntity<RestItem> addItem( 
-    		WcmEvent.WcmItemType itemType,
+    		WcmEventEntry.WcmItemType itemType,
     		String baseUrl,
             String repositoryName,
             String workspaceName,
@@ -119,10 +120,11 @@ public final class RestWcmItemHandler extends ItemHandler {
         String newNodeName = newNodeName(path);
 
         Session session = getSession(repositoryName, workspaceName);
+        
         Node parentNode = (Node)session.getItem(parentAbsPath);
         Node newNode = addNode(parentNode, newNodeName, requestBodyJSON);
         if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(workspaceName)) {
-        	int depth = WcmEvent.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
+        	int depth = WcmEventEntry.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
 			RestNode restNewNode = (RestNode)createRestItem(baseUrl, depth, session, newNode);
 			wcmEventService.addNewItemEvent(
 					(RestNode) restNewNode, 
@@ -182,7 +184,7 @@ public final class RestWcmItemHandler extends ItemHandler {
      * @throws RepositoryException if any error occurs at the repository level.
      */
     public RestItem updateItem( 
-    		WcmEvent.WcmItemType itemType,
+    		WcmEventEntry.WcmItemType itemType,
     		String baseUrl,
             String rawRepositoryName,
             String rawWorkspaceName,
@@ -222,7 +224,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     }
 
     public RestItem updateItem( 
-    		WcmEvent.WcmItemType itemType,
+    		WcmEventEntry.WcmItemType itemType,
     		String baseUrl,
             String rawRepositoryName,
             String rawWorkspaceName,
@@ -369,11 +371,11 @@ public final class RestWcmItemHandler extends ItemHandler {
         return createOkResponse(result);
     }
     
-    public void deleteItem(WcmEvent.WcmItemType itemType,  String baseUrl, String repository, String workspace, String path) 
+    public void deleteItem(WcmEventEntry.WcmItemType itemType,  String baseUrl, String repository, String workspace, String path) 
     		throws PathNotFoundException, RepositoryException {
 
 		path = (path.startsWith("/")) ? path : String.format("/%s", path);
-		List<WcmEvent> wcmEvents = new ArrayList<>();
+		List<WcmEventEntry> wcmEvents = new ArrayList<>();
 		Session session = this.repositoryManager.getSession(repository, workspace);
 		Session draftSession = this.repositoryManager.getSession(repository, WcmConstants.DRAFT_WS);
 		Session expiredSession = this.repositoryManager.getSession(repository, WcmConstants.EXPIRED_WS);
@@ -391,14 +393,14 @@ public final class RestWcmItemHandler extends ItemHandler {
 
     protected void doDelete( 
     		String path,
-    		WcmEvent.WcmItemType itemType,
+    		WcmEventEntry.WcmItemType itemType,
     		String baseUrl,
     		String repository,
     		String workspace,
             Session session,
             Session draftSession,
             Session expiredSession,
-            List<WcmEvent> wcmEvents) throws RepositoryException {
+            List<WcmEventEntry> wcmEvents) throws RepositoryException {
     	//TODO: only delete from all three workspaces when it is deleting from WcmConstants.DEFAULT_WS
     	Set<String> previousDescendants = new HashSet<String>();	
   		String nodeId = null;
@@ -465,16 +467,16 @@ public final class RestWcmItemHandler extends ItemHandler {
         Session draftSession = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
         Session expiredSession = this.repositoryManager.getSession(repositoryName, WcmConstants.EXPIRED_WS);
         TreeSet<String> pathsInOrder = new TreeSet<>();
-        Map<String, WcmEvent.WcmItemType> itemTypes = new HashMap<>();
+        Map<String, WcmEventEntry.WcmItemType> itemTypes = new HashMap<>();
         for (int i = 0; i < requestArray.size(); i++) {
         	String absPath = absPath(requestArray.get(i).get("wcmItem").asText());
             pathsInOrder.add(absPath);
-            itemTypes.put(absPath, WcmEvent.WcmItemType.valueOf(requestArray.get(i).get("itemType").asText()));
+            itemTypes.put(absPath, WcmEventEntry.WcmItemType.valueOf(requestArray.get(i).get("itemType").asText()));
         }
         List<String> pathsInOrderList = new ArrayList<>(pathsInOrder);
         Collections.reverse(pathsInOrderList);
 
-        List<WcmEvent> wcmEvents = new ArrayList<>();
+        List<WcmEventEntry> wcmEvents = new ArrayList<>();
         for (String path : pathsInOrderList) {
             try {
                 doDelete( path, itemTypes.get(path), baseUrl, repositoryName, workspace, session, draftSession, expiredSession, wcmEvents);
@@ -500,7 +502,7 @@ public final class RestWcmItemHandler extends ItemHandler {
             TreeMap<String, JsonNode> wcmNodesByPath)
         throws RepositoryException, IOException {
         List<RestItem> result = new ArrayList<RestItem>();
-        List<WcmEvent> wcmEvents = new ArrayList<WcmEvent>();
+        List<WcmEventEntry> wcmEvents = new ArrayList<>();
         for (String nodePath : wcmNodesByPath.keySet()) {
         	JsonNode jsonNode = wcmNodesByPath.get(nodePath);
         	Set<String> previousDescendants = new HashSet<String>();		
@@ -519,8 +521,8 @@ public final class RestWcmItemHandler extends ItemHandler {
             result.addAll(restNodes);
             
             if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(session.getWorkspace().getName())) {
-            	WcmEvent.WcmItemType itemType = WcmEvent.WcmItemType.valueOf(jsonNode.get("itemType").asText());
-            	int depth = WcmEvent.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
+            	WcmEventEntry.WcmItemType itemType = WcmEventEntry.WcmItemType.valueOf(jsonNode.get("itemType").asText());
+            	int depth = WcmEventEntry.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
     			RestNode restNode = (RestNode)this.item(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, nodePath, depth);
             	// RestNode restNode = (RestNode)createRestItem(baseUrl, depth, session, item);
     			wcmEvents.add(wcmEventService.createUpdateItemEvent(
@@ -593,7 +595,7 @@ public final class RestWcmItemHandler extends ItemHandler {
 	        Session session ) throws RepositoryException, IOException {
     	
         List<RestItem> result = new ArrayList<RestItem>();
-        List<WcmEvent> wcmEvents = new ArrayList<WcmEvent>();
+        List<WcmEventEntry> wcmEvents = new ArrayList<>();
 	        
         for (String nodePath : wcmNodesByPath.keySet()) {
             JsonNode jsonNode = wcmNodesByPath.get(nodePath);
@@ -601,7 +603,7 @@ public final class RestWcmItemHandler extends ItemHandler {
             List<RestItem> restNewNodes = addMultipleJcrNodes(baseUrl, repositoryName, nodesByPath, session);
             result.addAll(restNewNodes);
             if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(session.getWorkspace().getName())) {
-            	WcmEvent.WcmItemType itemType = WcmEvent.WcmItemType.valueOf(jsonNode.get("itemType").asText());
+            	WcmEventEntry.WcmItemType itemType = WcmEventEntry.WcmItemType.valueOf(jsonNode.get("itemType").asText());
             	int depth = WcmEvent.WcmItemType.library.equals(itemType) ? WcmConstants.READ_DEPTH_TWO_LEVEL : WcmConstants.FULL_SUB_DEPTH;
     			RestNode restNode = (RestNode)this.item(baseUrl, repositoryName, WcmConstants.DEFAULT_WS, nodePath, depth);
             	// RestNode restNode = (RestNode)createRestItem(baseUrl, depth, session, newNode);

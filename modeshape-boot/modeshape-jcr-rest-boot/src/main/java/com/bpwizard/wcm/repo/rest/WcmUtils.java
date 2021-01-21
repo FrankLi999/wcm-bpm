@@ -93,7 +93,11 @@ public class WcmUtils {
 	}
 
 	public static String library(String wcmPath) {
-		return wcmPath.startsWith("/") ? wcmPath.split("/", 3)[1] : wcmPath.split("/", 2)[0];	
+		if (wcmPath.equals("library") || wcmPath.equals("/library")) {
+			return "";
+		}
+		return wcmPath.startsWith("/") ? wcmPath.startsWith("/library") ? wcmPath.split("/", 4)[2] : wcmPath.split("/", 3)[1] : wcmPath.startsWith("library") ? wcmPath.split("/", 3)[1] : wcmPath.split("/", 2)[0];
+		// return wcmPath.startsWith("/") ? wcmPath.split("/", 3)[1] : wcmPath.split("/", 2)[0];	
 	}
 	
 	public static String at(String atPath) {

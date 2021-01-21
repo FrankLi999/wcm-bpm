@@ -32,7 +32,7 @@ import com.bpwizard.wcm.repo.rest.handler.WcmRequestHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ValidationRule;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -106,7 +106,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			
 			String repositoryName = validationRule.getRepository();
-			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.validationRule, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, validationRule.toJson());
+			this.wcmItemHandler.addItem(WcmEventEntry.WcmItemType.validationRule, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, validationRule.toJson());
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
 			}
@@ -136,7 +136,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
 			String repositoryName = validationRule.getRepository();
 				
 			JsonNode atJson = validationRule.toJson();
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.validationRule, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.validationRule, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
@@ -243,7 +243,7 @@ public class ValidationRuleRestController extends BaseWcmRestController {
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
 	  		
-  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.validationRule, baseUrl, repository, workspace, absPath);
+  			this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.validationRule, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.debug("Exit");

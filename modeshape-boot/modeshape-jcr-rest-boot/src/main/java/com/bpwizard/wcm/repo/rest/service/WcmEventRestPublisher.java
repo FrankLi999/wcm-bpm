@@ -1,11 +1,16 @@
 package com.bpwizard.wcm.repo.rest.service;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.RepositoryException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.jcr.model.JcrNode;
+import com.bpwizard.wcm.repo.rest.jcr.model.RootNodeKeys;
 import com.bpwizard.wcm.repo.rest.jcr.model.Syndicator;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -32,36 +38,42 @@ public class WcmEventRestPublisher {
 	public void syndicateCndTypes(WcmEvent wcmEvent, Syndicator syndicator, String token) throws IOException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-		headers.setBearerAuth(token);
+		// headers.setBearerAuth(token);
+		headers.set(HttpHeaders.AUTHORIZATION, token);
+
 		MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 		
-		body.add("file", new InputStreamResource(wcmEvent.getContent()));
+		body.add("file", this.getTemplFile("cnd_", wcmEvent.getContent()));
 		HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 		String serverUrl = String.format("http://%s:%s/wcm/api/import/%s/%s/nodetypes", syndicator.getCollector().getHost(), syndicator.getCollector().getPort(), syndicator.getRepository(), syndicator.getWorkspace());
 		restTemplate.postForEntity(serverUrl, requestEntity, Void.class);
 	}
 	
-	public void syndicate(WcmEvent wcmEvent, Syndicator syndicator, String token) throws IOException {
-		
+	public void syndicate(WcmEvent wcmEvent, Syndicator syndicator, String token, RootNodeKeys rootNodeKeys) throws RepositoryException, IOException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-		headers.setBearerAuth(token);
+		// headers.setBearerAuth(token);
+		headers.set(HttpHeaders.AUTHORIZATION, token);
 		MultiValueMap<String, Object> wcmItemBody = new LinkedMultiValueMap<>();
 		List<String> descendantIds = fromWcmEvent(wcmEvent, wcmItemBody);
 		for (String id : descendantIds) {
-			JcrNode elementNode = jcrNodeService.getJcrNode(id);
+			JcrNode elementNode = this.getJcrNode(rootNodeKeys.getRootNodeKey(), id);
 			MultiValueMap<String, Object> elementBody = new LinkedMultiValueMap<>();
-			elementBody.add("id", elementNode.getId());
-			elementBody.add("timestamp", elementNode.getLastUpdated());
-			elementBody.add("operation", wcmEvent.getOperation().name());
-			elementBody.add("content", new InputStreamResource(elementNode.getContent()));
+			elementBody.add("id", id);
+			elementBody.add("timestamp", elementNode.getLastUpdated().getTime());
+			elementBody.add("operation", wcmEvent.getOperation().name());	
+			elementBody.add("content", this.getTemplFile("element_", elementNode.getContent()));
+			elementBody.add("rootNodeKey", rootNodeKeys.getRootNodeKey());
+			elementBody.add("jcrSystemKey", rootNodeKeys.getJcrSystemKey());
 			String serverUrl = String.format("http://%s:%s/wcm/api/collector/%s/%s/element", syndicator.getCollector().getHost(), syndicator.getCollector().getPort(), syndicator.getRepository(), syndicator.getWorkspace());
 			HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(elementBody, headers);
 			restTemplate.postForEntity(serverUrl, requestEntity, Void.class);
 		}
-		JcrNode jcrNode = jcrNodeService.getJcrNode(wcmEvent.getId());
+		JcrNode jcrNode = this.getJcrNode(rootNodeKeys.getRootNodeKey(), wcmEvent.getId());
 		wcmItemBody.add("timestamp", jcrNode.getLastUpdated().getTime());
-		wcmItemBody.add("content", new InputStreamResource(jcrNode.getContent()));
+		wcmItemBody.add("content", this.getTemplFile("wcmItem_", jcrNode.getContent()));
+		wcmItemBody.add("rootNodeKey", rootNodeKeys.getRootNodeKey());
+		wcmItemBody.add("jcrSystemKey", rootNodeKeys.getJcrSystemKey());
 		String serverUrl = String.format("http://%s:%s/wcm/api/collector/%s/%s/item", syndicator.getCollector().getHost(), syndicator.getCollector().getPort(), syndicator.getRepository(), syndicator.getWorkspace());
 		HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>( wcmItemBody, headers);
 		restTemplate.postForEntity(serverUrl, requestEntity, Void.class);
@@ -76,7 +88,7 @@ public class WcmEventRestPublisher {
 		body.add("operation", wcmEvent.getOperation().name());
 		body.add("itemType", wcmEvent.getItemType().name());
 		
-		ObjectNode contentNode = (ObjectNode) JsonUtils.inputStreamToJsonNode(wcmEvent.getContent());
+		ObjectNode contentNode = (ObjectNode) JsonUtils.bytesToJsonNode(wcmEvent.getContent());
 		ArrayNode descendants = (ArrayNode) contentNode.get("descendants");
 		if (descendants != null && descendants.size() > 0) {
 			
@@ -93,7 +105,20 @@ public class WcmEventRestPublisher {
 				removedDescendantIds.add(removedDescendants.get(i).textValue());
 			}
 			body.add("removedDescendants", String.join(",", removedDescendantIds));
+		} else {
+			body.add("removedDescendants", "");
 		}
 		return descendantIds;
+	}
+	
+	public Resource getTemplFile(String prefix, byte[] content) throws IOException {
+        Path cndFile = Files.createTempFile(prefix + System.currentTimeMillis(), ".txt");
+        Files.write(cndFile, content);
+        return new FileSystemResource(cndFile.toFile());
+    }
+	
+	private JcrNode getJcrNode(String rootNodeKey, String nodeId) {
+		String nodeKey =  String.format("%s%s", rootNodeKey, nodeId);
+		return jcrNodeService.getJcrNode(nodeKey);
 	}
 }

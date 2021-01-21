@@ -1,5 +1,4 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
-import java.io.InputStream;
 import java.sql.Timestamp;
 
 public class WcmEvent {
@@ -62,7 +61,8 @@ public class WcmEvent {
 	private Operation operation;
 	private WcmItemType itemType;
 	private Timestamp timeCreated;
-	private InputStream content;
+	// private InputStream content;
+	private byte[] content;
 	public String getId() {
 		return id;
 	}
@@ -112,10 +112,10 @@ public class WcmEvent {
 		this.timeCreated = timeCreated;
 	}
 
-	public InputStream getContent() {
+	public byte[] getContent() {
 		return content;
 	}
-	public void setContent(InputStream content) {
+	public void setContent(byte[] content) {
 		this.content = content;
 	}
 	

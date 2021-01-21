@@ -1,0 +1,13 @@
+metadata:
+  labels:
+    app: wcm-server
+    x: y
+  name: wcm-server
+spec:
+  ports:
+  - port: 6009
+    protocol: TCP
+    targetPort: 6009
+  selector:
+    app: wcm-server
+      

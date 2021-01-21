@@ -11,7 +11,7 @@
         },
         "persistence" : {
             "type" : "db",
-            "connectionUrl": "jdbc:mysql://mysql:3306/wcm?allowPublicKeyRetrieval=true&useSSL=false",
+            "connectionUrl": "jdbc:mysql://mysql:3306/bpm_site?allowPublicKeyRetrieval=true&useSSL=false",
             "driver": "com.mysql.cj.jdbc.Driver",
             "createOnStart" : true,
             "dropOnExit" : false,
@@ -21,13 +21,13 @@
         "binaryStorage" : {
             "type"  : "database",
             "driverClass" : "com.mysql.cj.jdbc.Driver",
-            "url" : "jdbc:mysql://mysql:3306/wcm?allowPublicKeyRetrieval=true&useSSL=false",
+            "url" : "jdbc:mysql://mysql:3306/bpm_site?allowPublicKeyRetrieval=true&useSSL=false",
             "username" : "wcm",
             "password" : "P@ssw0rd"
         }
     },
     "workspaces" : {
-        "predefined" : ["draft", "expired"],
+        "predefined" : [],
         "default" : "default",
         "allowCreation" : true
     },

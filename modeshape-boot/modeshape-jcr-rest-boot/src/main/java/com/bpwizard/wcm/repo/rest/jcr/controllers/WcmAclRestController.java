@@ -1,7 +1,6 @@
 package com.bpwizard.wcm.repo.rest.jcr.controllers;
 
 import java.security.Principal;
-import com.bpwizard.spring.boot.commons.security.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,11 +35,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bpwizard.spring.boot.commons.security.Group;
 import com.bpwizard.spring.boot.commons.service.domain.Role;
 import com.bpwizard.spring.boot.commons.service.domain.RoleService;
+import com.bpwizard.spring.boot.commons.service.domain.UnpagedSort;
 import com.bpwizard.spring.boot.commons.service.domain.User;
 import com.bpwizard.spring.boot.commons.service.domain.UserService;
-import com.bpwizard.spring.boot.commons.service.domain.UnpagedSort;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Grant;
@@ -51,7 +51,6 @@ import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.bpwizard.wcm.repo.validation.ValidateString;
 
-@SuppressWarnings("removal")
 @RestController
 @RequestMapping(WcmAclRestController.BASE_URI)
 @Validated

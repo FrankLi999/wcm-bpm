@@ -27,7 +27,7 @@ import com.bpwizard.wcm.repo.rest.handler.WcmRequestHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Form;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -103,7 +103,7 @@ public class FormRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_FORM_PATH_PATTERN, form.getLibrary(), form.getName());
 			String repositoryName = form.getRepository();
-			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.form, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, form.toJson());
+			this.wcmItemHandler.addItem(WcmEventEntry.WcmItemType.form, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, form.toJson());
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
 			}
@@ -133,7 +133,7 @@ public class FormRestController extends BaseWcmRestController {
 			String repositoryName = form.getRepository();
 				
 			JsonNode formJson = form.toJson();
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.form, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, formJson);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.form, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, formJson);
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
@@ -164,7 +164,7 @@ public class FormRestController extends BaseWcmRestController {
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
 	  		
-  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.form, baseUrl, repository, workspace, absPath);
+  			this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.form, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.debug("Exit");

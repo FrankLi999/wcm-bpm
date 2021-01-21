@@ -32,7 +32,7 @@ import com.bpwizard.wcm.repo.rest.handler.WcmRequestHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.Library;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -132,7 +132,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 			
 			JsonNode jsonItem = library.toJson();
 			this.wcmItemHandler.updateItem(
-					WcmEvent.WcmItemType.library,
+					WcmEventEntry.WcmItemType.library,
 					baseUrl, 
 					repositoryName,
 					library.getWorkspace(),
@@ -165,7 +165,7 @@ public class ResourceLibraryRestController extends BaseWcmRestController {
 		String absPath = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName()); 
 		try {
 			this.wcmItemHandler.deleteItem(
-					WcmEvent.WcmItemType.library,
+					WcmEventEntry.WcmItemType.library,
 					baseUrl,
 					library.getRepository(), 
 					library.getWorkspace(), 

@@ -4,11 +4,10 @@ import java.security.Principal;
 import com.bpwizard.spring.boot.commons.security.Group;
 import java.util.Enumeration;
 
-@SuppressWarnings("removal")
 public class ModeshapGroup implements Group {
     private String group;
     
-   public ModeshapGroup(String group) {
+    public ModeshapGroup(String group) {
     	this.group = group;
     }
 	@Override

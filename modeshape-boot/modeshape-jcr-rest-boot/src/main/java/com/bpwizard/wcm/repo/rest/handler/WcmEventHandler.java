@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.jcr.RepositoryException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,17 @@ import org.springframework.util.ObjectUtils;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
+import com.bpwizard.wcm.repo.rest.jcr.model.RootNodeKeys;
 import com.bpwizard.wcm.repo.rest.jcr.model.SyndicationRequest;
 import com.bpwizard.wcm.repo.rest.jcr.model.Syndicator;
+import com.bpwizard.wcm.repo.rest.jcr.model.UpdateSyndicationRequest;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
+import com.bpwizard.wcm.repo.rest.service.RootNodeKeyService;
 import com.bpwizard.wcm.repo.rest.service.SyndicatorService;
+import com.bpwizard.wcm.repo.rest.service.WcmEventQueuePublisher;
 import com.bpwizard.wcm.repo.rest.service.WcmEventRestPublisher;
 import com.bpwizard.wcm.repo.rest.service.WcmEventService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,7 +39,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Service
-public class WcmEventHandler {
+public class WcmEventHandler extends AbstractHandler {
 	private static final Logger logger = LoggerFactory.getLogger(SyndicatorService.class);
 	
 	@Autowired
@@ -47,17 +54,25 @@ public class WcmEventHandler {
 	@Autowired
 	private WcmEventRestPublisher wcmEventRestPublisher;
 	
+	@Autowired
+	private RootNodeKeyService rootNodeKeyService;
+	
 	@Value("${syndication.strategy}")
 	private String syndicationStrategy; //rest or Kafka
 	
 	@Transactional
-	public void syndicate(SyndicationRequest syndicationRequest, String token) throws IOException {
+	public void syndicate(SyndicationRequest syndicationRequest, String token) throws RepositoryException, IOException {
+		
+		
 		Syndicator syndicator = syndicatorService.getSyndicator(syndicationRequest.getSyndicationId());
-		List<WcmEvent> cndEvents = wcmEventService.getCndAfter(syndicator, syndicationRequest.getEndTime());
+		long currentTimeMillis = System.currentTimeMillis();
+		Timestamp lastSyndication = (syndicationRequest.getEndTime().getTime() < currentTimeMillis) ? 
+				syndicationRequest.getEndTime(): new Timestamp(currentTimeMillis);
+		List<WcmEvent> cndEvents = wcmEventService.getCndBefore(syndicator, syndicationRequest.getEndTime());
 		if (cndEvents != null) {
 			for (WcmEvent cndEvent: cndEvents) {
 //				if ("kafka".equals(syndicationStrategy)) {
-//					wcmEventQueuePublisher.syndicateCndTypes(cndEvent);
+//					wcmEventQueuePublisher.syndicateCndTypes(cndEvent, syndicator, token);
 //				} else {
 					wcmEventRestPublisher.syndicateCndTypes(cndEvent, syndicator, token);
 //				}
@@ -67,22 +82,39 @@ public class WcmEventHandler {
 		int pageIndex = 0;
 		int actualBatchSize = 0;
 		List<WcmEvent> wcmEvents = null;
+		RootNodeKeys rootNodeKeys = this.rootNodeKeyService.getRootNodeKeys(syndicator.getRepository(), syndicator.getWorkspace());
+		int elements = 0;
+		int items = 0;
 		do {
 			
-			wcmEvents = wcmEventService.getWcmEventAfter(syndicator, syndicationRequest.getEndTime(), pageIndex, pageSize);
+			wcmEvents = wcmEventService.getWcmEventBefore(syndicator, syndicationRequest.getEndTime(), pageIndex, pageSize);
 			actualBatchSize = wcmEvents.size();
+			System.out.println(">>>>>>>>>>>>>>>>>>> size of batch:" + actualBatchSize);
+			items += actualBatchSize;
+			pageIndex += actualBatchSize;
 			if (actualBatchSize > 0) {
 				for (WcmEvent wcmEvent: wcmEvents) {
+					ObjectNode contentNode = (ObjectNode) JsonUtils.bytesToJsonNode(wcmEvent.getContent());
+					ArrayNode descendants = (ArrayNode) contentNode.get("descendants");
+					System.out.println(">>>>>>>>>>>>>>>>>>> nodePath: " + wcmEvent.getLibrary() + "/" + wcmEvent.getNodePath());
+					if (descendants != null) {
+						elements += descendants.size();
+						System.out.println(">>>>>>>>>>>>>>>>>>> number of elements:" + descendants.size());
+					}
 //					if ("kafka".equals(syndicationStrategy)) {
-//						wcmEventQueuePublisher.syndicate(wcmEvent);
+//						wcmEventQueuePublisher.syndicate(wcmEvent, syndicator, token, rootNodeKeys);
 //					} else {
-						wcmEventRestPublisher.syndicate(wcmEvent, syndicator, token);
-//					}
-					
+						wcmEventRestPublisher.syndicate(wcmEvent, syndicator, token, rootNodeKeys);
+//					}					
 				}
 			}
-		} while (actualBatchSize >= pageSize);	
-		
+		} while (actualBatchSize >= pageSize);
+		System.out.println(">>>>>>>>>>>>>>>>>>> number of all items:" + items);
+		System.out.println(">>>>>>>>>>>>>>>>>>> number of all elements:" + elements);
+		UpdateSyndicationRequest updateSyndicationRequest = new UpdateSyndicationRequest();
+		updateSyndicationRequest.setSyndicationId(syndicator.getId());
+		updateSyndicationRequest.setLastSyndication(lastSyndication);
+		syndicatorService.updateSyndicator(updateSyndicationRequest);
 	}
 	
 	@Transactional
@@ -90,16 +122,16 @@ public class WcmEventHandler {
 			String repositoryName,
 			String workspace,
 			InputStream is,
-			WcmEvent.WcmItemType itemType) {
+			WcmEventEntry.WcmItemType itemType) {
 		
 		Long timestamp = System.currentTimeMillis();
 
-	    WcmEvent wcmEvent = new WcmEvent();
+	    WcmEventEntry wcmEvent = new WcmEventEntry();
 	    wcmEvent.setId(String.format("cnd_%s", timestamp));
 	    wcmEvent.setRepository(repositoryName);
 	    wcmEvent.setWorkspace(workspace);
 	    wcmEvent.setItemType(itemType);
-	    wcmEvent.setOperation(WcmEvent.Operation.create);
+	    wcmEvent.setOperation(WcmEventEntry.Operation.create);
 	    wcmEvent.setTimeCreated(new Timestamp(timestamp));
 	    wcmEvent.setContent(is);
 	    wcmEventService.addWcmEvent(wcmEvent);
@@ -111,9 +143,9 @@ public class WcmEventHandler {
 			String repositoryName,
 			String workspace,
 			String path,
-			WcmEvent.WcmItemType itemType) {
+			WcmEventEntry.WcmItemType itemType) {
 		
-		WcmEvent event = this.createNewItemEvent(
+		WcmEventEntry event = this.createNewItemEvent(
 				restNode, 
 				repositoryName, 
 				workspace, 
@@ -123,17 +155,17 @@ public class WcmEventHandler {
 	}
 	
 	@Transactional
-	public int[] addNewItemEvents(List<WcmEvent> events) {
+	public int[] addNewItemEvents(List<WcmEventEntry> events) {
 		return wcmEventService.batchInsert(events);
 	}
 	
 	@Transactional
-	public int[] addUpdateItemEvents(List<WcmEvent> events) {
+	public int[] addUpdateItemEvents(List<WcmEventEntry> events) {
 		return wcmEventService.batchUpdate(events);
 	}
 	
 	@Transactional
-	public int[] addDeleteItemEvents(List<WcmEvent> events) {
+	public int[] addDeleteItemEvents(List<WcmEventEntry> events) {
 		return wcmEventService.batchUpdate(events);
 	}
 	
@@ -143,10 +175,10 @@ public class WcmEventHandler {
 			String repositoryName,
 			String workspace,
 			String path,
-			WcmEvent.WcmItemType itemType,
+			WcmEventEntry.WcmItemType itemType,
 			Set<String> previousDescendants) {
 		
-		WcmEvent event = this.createUpdateItemEvent(
+		WcmEventEntry event = this.createUpdateItemEvent(
 				restNode, 
 				repositoryName, 
 				workspace, path, 
@@ -160,10 +192,10 @@ public class WcmEventHandler {
 			String repositoryName,
 			String workspace,
 			String path,
-			WcmEvent.WcmItemType itemType,
+			WcmEventEntry.WcmItemType itemType,
 			Set<String> previousDescendants) {
 		
-		WcmEvent event = this.createDeleteItemEvent(
+		WcmEventEntry event = this.createDeleteItemEvent(
 				nodeId, 
 				repositoryName, 
 				workspace, 
@@ -173,20 +205,20 @@ public class WcmEventHandler {
 		wcmEventService.updateWcmEvent(event);
 	}
 	
-	public WcmEvent createNewItemEvent(
+	public WcmEventEntry createNewItemEvent(
 			RestNode restNode, 
 			String repositoryName,
 			String workspace,
 			String nodePath,
-			WcmEvent.WcmItemType itemType) {
+			WcmEventEntry.WcmItemType itemType) {
 		
-		WcmEvent event = new WcmEvent();
+		WcmEventEntry event = new WcmEventEntry();
 		event.setId(restNode.getId());
 		event.setRepository(repositoryName);
 		event.setWorkspace(workspace);
 		event.setLibrary(WcmUtils.library(nodePath));
 		event.setNodePath(nodePath);
-		event.setOperation(WcmEvent.Operation.create);
+		event.setOperation(WcmEventEntry.Operation.create);
 		event.setItemType(itemType);
 		
 		for (RestProperty prop: restNode.getJcrProperties()) {
@@ -202,21 +234,21 @@ public class WcmEventHandler {
 		return event;
 	}
 	
-	public WcmEvent createUpdateItemEvent(
+	public WcmEventEntry createUpdateItemEvent(
 			RestNode restNode, 
 			String repositoryName,
 			String workspace,
 			String nodePath,
-			WcmEvent.WcmItemType itemType,
+			WcmEventEntry.WcmItemType itemType,
 			Set<String> previousDescendants) {
 		
-		WcmEvent event = new WcmEvent();
+		WcmEventEntry event = new WcmEventEntry();
 		event.setId(restNode.getId());
 		event.setRepository(repositoryName);
 		event.setWorkspace(workspace);
 		event.setLibrary(WcmUtils.library(nodePath));
 		event.setNodePath(nodePath);
-		event.setOperation(WcmEvent.Operation.update);
+		event.setOperation(WcmEventEntry.Operation.update);
 		event.setItemType(itemType);
 		
 		for (RestProperty prop: restNode.getJcrProperties()) {
@@ -241,21 +273,21 @@ public class WcmEventHandler {
 		return event;
 	}
 	
-	public WcmEvent createDeleteItemEvent(
+	public WcmEventEntry createDeleteItemEvent(
 			String nodeId, 
 			String repositoryName,
 			String workspace,
 			String nodePath,
-			WcmEvent.WcmItemType itemType,
+			WcmEventEntry.WcmItemType itemType,
 			Set<String> previousDescendants) {
 		
-		WcmEvent event = new WcmEvent();
+		WcmEventEntry event = new WcmEventEntry();
 		
 		event.setRepository(repositoryName);
 		event.setWorkspace(workspace);
 		event.setLibrary(WcmUtils.library(nodePath));
 		event.setNodePath(nodePath);
-		event.setOperation(WcmEvent.Operation.delete);
+		event.setOperation(WcmEventEntry.Operation.delete);
 		event.setItemType(itemType);
 		event.setId(nodeId);
 		event.setTimeCreated(new Timestamp(System.currentTimeMillis()));

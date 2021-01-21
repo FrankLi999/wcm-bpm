@@ -66,3 +66,8 @@ authoring-boot-ui
       -javaagent:/home/ubuntu/tools/glowroot/glowroot-0.13.6/glowroot.jar	  
 
 mvn spring-boot:run -Dspring-boot.run.arguments="--spring.main.banner-mode=OFF" -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev -DBPM_PORT=28082 -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-28082" -P mysql      
+
+
+camel-syndicator:
+
+    -Djava.security.egd=file:/dev/./urandom-18090 -Dspring.profiles.active=dev -Dspring.jta.log-dir=/home/ubuntu/var/modeshape/transaction-logs-18090 -DWCM_PORT=18090 -DWCM_DB_HOST_PORT=localhost:3306

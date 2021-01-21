@@ -12,7 +12,7 @@ public class Syndicator {
 	private Long id;
 	private String repository;
 	private String workspace;
-	private String library;
+	private String libraries[];
 	private WcmServer collector;
 	private Timestamp lastSyndication;
 	@CreatedBy
@@ -48,12 +48,12 @@ public class Syndicator {
 		this.workspace = workspace;
 	}
 
-	public String getLibrary() {
-		return library;
+	public String[] getLibraries() {
+		return this.libraries;
 	}
 
-	public void setLibrary(String library) {
-		this.library = library;
+	public void setLibraries(String[] libraries) {
+		this.libraries = libraries;
 	}
 
 	public WcmServer getCollector() {
@@ -106,8 +106,8 @@ public class Syndicator {
 
 	@Override
 	public String toString() {
-		return "Syndicator [id=" + id + ", repository=" + repository + ", workspace=" + workspace + ", library="
-				+ library + ", collector=" + collector + ", lastSyndication=" + lastSyndication + ", createdBy="
+		return "Syndicator [id=" + id + ", repository=" + repository + ", workspace=" + workspace + ", libraries="
+				+ libraries + ", collector=" + collector + ", lastSyndication=" + lastSyndication + ", createdBy="
 				+ createdBy + ", updatedBy=" + updatedBy + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
 				+ "]";
 	}

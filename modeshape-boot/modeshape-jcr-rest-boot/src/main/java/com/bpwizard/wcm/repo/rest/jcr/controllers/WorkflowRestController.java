@@ -33,7 +33,7 @@ import com.bpwizard.wcm.repo.rest.handler.WcmRequestHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.BpmnWorkflow;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -132,7 +132,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String repositoryName = bpmnWorkflow.getRepository();
 			
-			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.workflow, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, bpmnWorkflow.toJson());
+			this.wcmItemHandler.addItem(WcmEventEntry.WcmItemType.workflow, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, absPath, bpmnWorkflow.toJson());
 			if (this.authoringEnabled) {
 				Session session = this.repositoryManager.getSession(repositoryName, WcmConstants.DRAFT_WS);
 				session.getWorkspace().clone(WcmConstants.DEFAULT_WS, absPath, absPath, true);
@@ -165,7 +165,7 @@ public class WorkflowRestController extends BaseWcmRestController {
 			String repositoryName = bpmnWorkflow.getRepository();
 			
 			JsonNode atJson = bpmnWorkflow.toJson();
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.workflow, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.workflow, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, atJson);
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
@@ -195,7 +195,7 @@ public class WorkflowRestController extends BaseWcmRestController {
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
 	  		
-  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.workflow, baseUrl, repository, workspace, absPath);
+  			this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.workflow, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.debug("Exit");

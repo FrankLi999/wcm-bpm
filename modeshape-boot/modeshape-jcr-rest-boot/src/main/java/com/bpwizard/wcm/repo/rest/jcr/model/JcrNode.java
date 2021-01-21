@@ -1,14 +1,13 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
-import java.io.InputStream;
 import java.sql.Timestamp;
 
 public class JcrNode {
 	
 	private String id;
 	private Timestamp lastUpdated;
-	private InputStream content;
-
+	// private InputStream content;
+	private byte[] content;
 	public String getId() {
 		return id;
 	}
@@ -21,10 +20,10 @@ public class JcrNode {
 	public void setLastUpdated(Timestamp lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
-	public InputStream getContent() {
+	public byte[] getContent() {
 		return content;
 	}
-	public void setContent(InputStream content) {
+	public void setContent(byte[] content) {
 		this.content = content;
 	}
 }

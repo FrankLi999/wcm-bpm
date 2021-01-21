@@ -29,7 +29,7 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentItem;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -64,7 +64,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 			String absPath = WcmUtils.nodePath(contentItem.getWcmPath(), contentItem.getProperties().getName());
 			String baseUrl = RestHelper.repositoryUrl(request);
 			
-			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.contentItem, baseUrl, contentItem.getRepository(), WcmConstants.DEFAULT_WS, absPath, contentItem.toJson(at));
+			this.wcmItemHandler.addItem(WcmEventEntry.WcmItemType.contentItem, baseUrl, contentItem.getRepository(), WcmConstants.DEFAULT_WS, absPath, contentItem.toJson(at));
 			Session session = this.repositoryManager.getSession(contentItem.getRepository(), WcmConstants.DEFAULT_WS);
 			if (contentItem.getAcl() != null) {
 				ModeshapeUtils.grantPermissions(session, absPath, contentItem.getAcl());
@@ -101,7 +101,7 @@ public class ContentItemRestController extends BaseWcmRestController {
 			}
 			
 			JsonNode contentItemJson = contentItem.toJson(at);
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.contentItem, baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), absPath, contentItemJson);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.contentItem, baseUrl, contentItem.getRepository(), contentItem.getWorkspace(), absPath, contentItemJson);
 			Session session = this.repositoryManager.getSession(contentItem.getRepository(), WcmConstants.DEFAULT_WS);
 			if (contentItem.getAcl() != null) {
 				ModeshapeUtils.grantPermissions(session, absPath, contentItem.getAcl());
@@ -173,7 +173,7 @@ public class ContentItemRestController extends BaseWcmRestController {
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
 	  		
-  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.contentItem, baseUrl, repository, workspace, absPath);
+  			this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.contentItem, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.debug("Exit");

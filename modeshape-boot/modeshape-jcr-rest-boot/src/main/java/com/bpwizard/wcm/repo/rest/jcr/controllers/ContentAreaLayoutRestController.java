@@ -27,7 +27,7 @@ import com.bpwizard.wcm.repo.rest.handler.WcmRequestHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ContentAreaLayout;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
@@ -130,7 +130,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			String repositoryName = pageLayout.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format( WcmConstants.NODE_CONTENT_LAYOUT_PATH_PATTERN, pageLayout.getLibrary(), pageLayout.getName());
-			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.contentAreaLayout, baseUrl, repositoryName, pageLayout.getWorkspace(), path, pageLayout.toJson());
+			this.wcmItemHandler.addItem(WcmEventEntry.WcmItemType.contentAreaLayout, baseUrl, repositoryName, pageLayout.getWorkspace(), path, pageLayout.toJson());
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
 			}
@@ -157,7 +157,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
 			String repositoryName = pageLayout.getRepository();
 			
 			JsonNode layoutJson = pageLayout.toJson();
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.contentAreaLayout, baseUrl, repositoryName, pageLayout.getWorkspace(), absPath, layoutJson);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.contentAreaLayout, baseUrl, repositoryName, pageLayout.getWorkspace(), absPath, layoutJson);
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
@@ -184,7 +184,7 @@ public class ContentAreaLayoutRestController extends BaseWcmRestController {
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
 	  		
-  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.contentAreaLayout, baseUrl, repository, workspace, absPath);
+  			this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.contentAreaLayout, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   	  		logger.debug("Exit");

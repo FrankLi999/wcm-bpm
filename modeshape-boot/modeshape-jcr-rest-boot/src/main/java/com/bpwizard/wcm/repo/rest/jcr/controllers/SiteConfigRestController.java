@@ -25,7 +25,7 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.PageConfig;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteConfig;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -51,7 +51,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			String repositoryName = siteConfig.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String absPath = String.format(WcmConstants.NODE_SITECONFIG_PATH_PATTERN, siteConfig.getLibrary(), siteConfig.getName());
-			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.siteConfig, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, siteConfig.toJson());
+			this.wcmItemHandler.addItem(WcmEventEntry.WcmItemType.siteConfig, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, siteConfig.toJson());
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
@@ -76,7 +76,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			
 			JsonNode jsonItem = siteConfig.toJson();
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.siteConfig, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, jsonItem);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.siteConfig, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, jsonItem);
 		} catch (WcmRepositoryException e) {
 			logger.error("Failed to save site config", e);
 			throw e;
@@ -184,7 +184,7 @@ public class SiteConfigRestController extends BaseWcmRestController {
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
 	  		
-  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.siteConfig, baseUrl, repository, workspace, absPath);
+  			this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.siteConfig, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.debug("Exit");

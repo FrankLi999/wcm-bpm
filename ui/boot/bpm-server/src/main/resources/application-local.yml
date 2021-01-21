@@ -73,7 +73,7 @@ spring:
   #           # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
             
   datasource:
-    # url: jdbc:mysql://192.168.0.168:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    # url: jdbc:mysql://192.168.0.168:3306/bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     #url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
     username: wcmbpm
@@ -160,7 +160,7 @@ bpw:
     syndication:
       enabled: false
     datasource:
-      #url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+      #url: jdbc:mysql://mysql:3306/bpm_site?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       url: jdbc:h2:file:./h2/wcm/data;DB_CLOSE_ON_EXIT=FALSE
       #driver-class-name: com.mysql.cj.jdbc.Driver
       driver-class-name: org.h2.Driver

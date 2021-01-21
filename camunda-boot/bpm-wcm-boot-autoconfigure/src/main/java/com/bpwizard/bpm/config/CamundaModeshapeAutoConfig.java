@@ -19,7 +19,6 @@ import com.bpwizard.wcm.repo.config.WebdavConfig;
   AppSecurityConfig.class,
   ModeshapeAppConfig.class,
   WebdavConfig.class,
-  WebdavConfig.class,
   WebSocketConfig.class,
   WcmAppConfig.class,
   CamundaConfig.class

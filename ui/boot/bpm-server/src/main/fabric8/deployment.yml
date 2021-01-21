@@ -52,7 +52,7 @@ spec:
             - name: WCM_DB_HOST_PORT
               value: "mysql:3306"
             - name: WCM_DB_NAME
-              value: wcm
+              value: bpm_site
             - name: WCM_DB_USERNAME
               valueFrom:
                 secretKeyRef:

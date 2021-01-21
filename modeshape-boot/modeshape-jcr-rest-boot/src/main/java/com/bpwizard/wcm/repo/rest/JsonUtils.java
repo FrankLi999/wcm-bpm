@@ -32,6 +32,10 @@ public class JsonUtils {
 	public static JsonNode inputStreamToJsonNode(InputStream is) throws IOException {
         return mapper.readTree(is);
     }
+
+	public static JsonNode bytesToJsonNode(byte[] bytes) throws IOException {
+        return mapper.readTree(bytes);
+    }
 	
 	public static ArrayNode readTree(String fromValues[]) throws JsonProcessingException {
 		ArrayNode arrayNode = creatArrayNode();
@@ -39,6 +43,10 @@ public class JsonUtils {
 			arrayNode.add(mapper.readTree(value));
 		}
 		return arrayNode;
+    }
+
+	public static byte[] writeValueAsBytes(JsonNode jsonNode) throws JsonProcessingException {
+        return mapper.writeValueAsBytes(jsonNode);
     }
 	
 	public static String writeValueAsString(JsonNode jsonNode) throws JsonProcessingException {

@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,27 +33,27 @@ public class SyndicatorService {
 	
 	SimpleJdbcInsert simpleJdbcInsert;
 	
-	private static final String selectColumns = "SELECT s.ID as ID, s.LAST_SYNDICATION LAST_SYNDICATION, s.created_by as CREATED_BY, s.updated_by as UPDATED_BY, s.created_at as CREATED_AT, s.updated_at as UPDATED_AT, w.ID as COLLECTOR_ID, w.HOST as COLLECTOR_HOST, w.PORT as COLLECTOR_PORT";
+	private static final String selectColumns = "SELECT s.ID as ID, s.LAST_SYNDICATION LAST_SYNDICATION, s.repository as REPOSITORY, s.workspace as WORKSPACE, s.library as LIBRARY, s.created_by as CREATED_BY, s.updated_by as UPDATED_BY, s.created_at as CREATED_AT, s.updated_at as UPDATED_AT, w.ID as COLLECTOR_ID, w.HOST as COLLECTOR_HOST, w.PORT as COLLECTOR_PORT";
 	private static final String updateSql = "UPDATE SYN_SYNDICATOR SET LAST_SYNDICATION = ? WHERE id = ?";
 	private static final String deleteSql = "DELETE SYN_SYNDICATOR WHERE id = ?";
-	private static final String selectByIdSql = String.format("%s from SYN_SYNDICATOR as s JOIN SYN_WCM_SERVER as w ON s.COLLECTOR_ID = w.ID WHERE s.id = :id", selectColumns);
+	private static final String selectByIdSql = String.format("%s from SYN_SYNDICATOR as s JOIN SYN_WCM_SERVER as w ON s.COLLECTOR_ID = w.ID WHERE s.id = ?", selectColumns);
 	private static final String selectByAllSql = String.format("%s   from SYN_SYNDICATOR as s JOIN SYN_WCM_SERVER as w ON s.COLLECTOR_ID = w.ID", selectColumns);
 
 	@PostConstruct
 	private void postConstruct() {
 		simpleJdbcInsert = 
-			new SimpleJdbcInsert(jdbcTemplate).withTableName("SYN_SYNDICATION").usingGeneratedKeyColumns("ID");
+			new SimpleJdbcInsert(jdbcTemplate).withTableName("SYN_SYNDICATOR").usingGeneratedKeyColumns("ID");
 	};
 	
 	public List<Syndicator> getSyndicators() {
-		List<Syndicator> Syndications = jdbcTemplate.query(selectByIdSql, new SyndicationRowMapper());
+		List<Syndicator> Syndications = jdbcTemplate.query(selectByAllSql, new SyndicationRowMapper());
 		return Syndications;
 	}
 	
 	public Syndicator getSyndicator(Long id) {
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", id);
-		Syndicator syndication = jdbcTemplate.queryForObject(
-				selectByAllSql, new SyndicationRowMapper(), namedParameters);
+		Object[] args = { id }; 
+		int[] argTypes = { Types.BIGINT };
+		Syndicator syndication = jdbcTemplate.queryForObject(selectByIdSql, args, argTypes, new SyndicationRowMapper());
 
 		return syndication;
 	}
@@ -64,15 +62,20 @@ public class SyndicatorService {
 			Syndicator syndication) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 	    parameters.put("COLLECTOR_ID", syndication.getCollector().getId());
+	    parameters.put("REPOSITORY", syndication.getRepository());
+	    parameters.put("WORKSPACE", syndication.getWorkspace());
+	    parameters.put("LIBRARY", String.join(",", syndication.getLibraries()));
 	    parameters.put("created_by", WebUtils.currentUserId());
+	    parameters.put("created_at", new Timestamp(System.currentTimeMillis()));
+	    parameters.put("LAST_SYNDICATION", "1970-01-01 00:00:00");
 	    return simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 	}
 	
 	public int updateSyndicator(
 			UpdateSyndicationRequest syndicationRequest) 
 			throws WcmRepositoryException {
-		Object[] params = { syndicationRequest.getLastSyndication(), syndicationRequest.getSyndicationId(), WebUtils.currentUserId(), new Timestamp(System.currentTimeMillis())};
-	    int[] types = {Types.TIMESTAMP, Types.BIGINT, Types.VARCHAR, Types.TIMESTAMP};
+		Object[] params = { syndicationRequest.getLastSyndication(), syndicationRequest.getSyndicationId() };
+	    int[] types = { Types.TIMESTAMP, Types.BIGINT };
 	    return jdbcTemplate.update(updateSql, params, types);
 	}
 	
@@ -90,6 +93,9 @@ public class SyndicatorService {
 	    	WcmServer wcmServer = new WcmServer();
 	    	syndication.setCollector(wcmServer);
 	    	syndication.setId(rs.getLong("ID"));
+	    	syndication.setRepository(rs.getString("REPOSITORY"));
+	    	syndication.setWorkspace(rs.getString("WORKSPACE"));
+	    	syndication.setLibraries(rs.getString("LIBRARY").split(","));		    
 	    	syndication.setLastSyndication(rs.getTimestamp("LAST_SYNDICATION"));
 	    	syndication.setCreatedBy(rs.getString("CREATED_BY"));
 	    	syndication.setUpdatedBy(rs.getString("UPDATED_BY"));

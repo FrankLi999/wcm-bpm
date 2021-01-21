@@ -12,15 +12,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.jcr.query.InvalidQueryException;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.modeshape.jcr.api.query.Query;
 import org.modeshape.web.jcr.RepositoryManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -84,7 +85,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.Theme;
 import com.bpwizard.wcm.repo.rest.jcr.model.ThemeColors;
 import com.bpwizard.wcm.repo.rest.jcr.model.Toolbar;
 import com.bpwizard.wcm.repo.rest.jcr.model.VisbleCondition;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmLibrary;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmOperation;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmProperties;
@@ -141,6 +142,10 @@ public class WcmRequestHandler {
 	protected SyndicatorService syndicationUtils;
 
 	protected ObjectMapper objectMapper = new ObjectMapper();
+	
+	public Session getSession(String repository, String workspace) throws RepositoryException {
+		return wcmItemHandler.getSession(repository, workspace);
+	}
 	
 	public WcmSystem getWcmSystem(
 			String repository,
@@ -419,6 +424,19 @@ public class WcmRequestHandler {
 		return at;
 	}
 
+	public AuthoringTemplate getAuthoringTemplate(String repository, String workspace, String atPath,
+			String baseUrl) throws WcmRepositoryException {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Entry");
+		}
+		AuthoringTemplate at = this.wcmUtils.getAuthoringTemplate(repository, workspace, atPath, baseUrl);
+		if (logger.isDebugEnabled()) {
+			logger.debug("Exit");
+		}
+		return at;
+	}
+
+	
 	public Form getForm(String repository, String workspace, String atPath, HttpServletRequest request)
 			throws WcmRepositoryException {
 		String baseUrl = RestHelper.repositoryUrl(request);
@@ -3032,7 +3050,7 @@ public class WcmRequestHandler {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_LIB_PATH_PATTERN, library.getName());
 			this.wcmItemHandler.addItem(
-					WcmEvent.WcmItemType.library,
+					WcmEventEntry.WcmItemType.library,
 					baseUrl, 
 					repositoryName,
 					library.getWorkspace(),
@@ -3095,7 +3113,7 @@ public class WcmRequestHandler {
 			String baseUrl = RestHelper.repositoryUrl(request);
 			String path = String.format(WcmConstants.NODE_QUERY_PATH_PATTERN, query.getLibrary(), query.getName());
 			
-			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.query, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
+			this.wcmItemHandler.addItem(WcmEventEntry.WcmItemType.query, baseUrl,  repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
 			}

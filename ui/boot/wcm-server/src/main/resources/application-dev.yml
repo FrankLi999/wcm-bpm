@@ -24,7 +24,7 @@ keycloak:
   realm: wcm_bpm
   realm-url: ${kc.base-url}/realms/${kc.realm}
 server:
-  port: ${WCM_BPM:6009}
+  port: ${WCM_PORT:6009}
 spring:
   #cache:
   #  type: hazelcast
@@ -74,7 +74,7 @@ spring:
   #           # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
             
   datasource:
-    url: jdbc:mysql://localhost:3306/wcm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    url: jdbc:mysql://${WCM_DB_HOST_PORT:localhost:3306}/wcm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     username: wcm
     password: P@ssw0rd
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -137,10 +137,6 @@ spring:
             # userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
 bpw:
   account:
-    authoring:
-      enabled: true
-    syndication:
-      enabled: true
     datasource:
       # url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       url: jdbc:mysql://localhost:3306/account?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true

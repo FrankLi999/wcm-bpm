@@ -17,27 +17,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
-import com.bpwizard.wcm_bpm.setup.config.BaseMysqlConfiguration;
-import com.bpwizard.wcm_bpm.setup.config.AccountDBConfiguration;
-import com.bpwizard.wcm_bpm.setup.config.BpmDBConfiguration;
-import com.bpwizard.wcm_bpm.setup.config.GatewayDBConfiguration;
-import com.bpwizard.wcm_bpm.setup.config.WcmDBConfiguration;
+import com.bpwizard.wcm_bpm.setup.config.MysqlConfiguration;
+import com.bpwizard.wcm_bpm.setup.config.MysqlConfigurations;
 
 @SpringBootApplication
 public class SetupApplication implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(SetupApplication.class);
 	@Autowired
-	AccountDBConfiguration accountDBConfiguration;
-	
-	@Autowired
-	BpmDBConfiguration bpmDBConfiguration;
-
-	@Autowired
-	GatewayDBConfiguration gatewayDBConfiguration;
-
-	@Autowired
-	WcmDBConfiguration wcmDBConfiguration;
-
+	MysqlConfigurations mysqlConfigurations;
+		
 	public static void main(String[] args) {
 		SpringApplication.run(SetupApplication.class, args);
 	}
@@ -45,14 +33,14 @@ public class SetupApplication implements CommandLineRunner {
 	@Override
     public void run(String... args) {
 		logger.info("EXECUTING : command line runner");
-        setupDB("account database", accountDBConfiguration);
-		setupDB("bpm database", bpmDBConfiguration);
-		setupDB("gateway database", gatewayDBConfiguration);
-		setupDB("wcm database", wcmDBConfiguration);
+		for (MysqlConfiguration mysqlConfiguration: mysqlConfigurations.getMysqlConfiguration()) {
+			setupDB(mysqlConfiguration);	
+		}
     }
 
 
-	private static void setupDB(String db, BaseMysqlConfiguration mysqlConfiguration) {
+	private static void setupDB(MysqlConfiguration mysqlConfiguration) {
+		String db = mysqlConfiguration.getName();
         String adminUser = mysqlConfiguration.getMysqlAdminUser();
 		String adminPwd = mysqlConfiguration.getMysqlAdminPassword();
 		String mysqlUser = mysqlConfiguration.getMysqlUser();
@@ -61,23 +49,23 @@ public class SetupApplication implements CommandLineRunner {
 		
 		//try (Scanner scanner = new Scanner(System.in)) {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println(String.format("Enter %s admin user name (%s): ", db, adminUser));
+		System.out.println(String.format("Enter %s database admin user name (%s): ", db, adminUser));
 		String input = scanner.nextLine();
 		adminUser = StringUtils.hasText(input) ? input : adminUser;
 		
-		System.out.println(String.format("Enter %s admin user password (%s): ", db, adminPwd));
+		System.out.println(String.format("Enter %s database admin user password (%s): ", db, adminPwd));
 		input = scanner.nextLine();
 		adminPwd = StringUtils.hasText(input) ? input : adminPwd;
 		
-		System.out.println(String.format("Enter %s application user name (%s): ", db, mysqlUser));
+		System.out.println(String.format("Enter %s database application user name (%s): ", db, mysqlUser));
 		input = scanner.nextLine();
 		mysqlUser = StringUtils.hasText(input) ? input : mysqlUser;
 		
-		System.out.println(String.format("Enter %s application user password (%s): ", db, mysqlPwd));
+		System.out.println(String.format("Enter %s database  application user password (%s): ", db, mysqlPwd));
 		input = scanner.nextLine();
 		mysqlPwd = StringUtils.hasText(input) ? input : mysqlPwd;
 		
-		System.out.println(String.format("Enter %s application schema (%s): ", db, mysqlSchema));
+		System.out.println(String.format("Enter %s database application schema (%s): ", db, mysqlSchema));
 		input = scanner.nextLine();
 		mysqlSchema = StringUtils.hasText(input) ? input : mysqlSchema;
 		//}

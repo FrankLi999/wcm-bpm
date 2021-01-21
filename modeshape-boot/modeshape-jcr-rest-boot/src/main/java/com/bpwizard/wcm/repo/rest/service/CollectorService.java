@@ -2,6 +2,7 @@ package com.bpwizard.wcm.repo.rest.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +36,7 @@ public class CollectorService {
 	private static final String selectColumns = "SELECT c.ID as ID, c.LAST_SYNDICATION LAST_SYNDICATION, c.created_by as CREATED_BY, c.updated_by as UPDATED_BY, c.created_at as CREATED_AT, c.updated_at as UPDATED_AT, w.ID as SYNDICATOR_ID, w.HOST as SYNDICATOR_HOST, w.PORT as SYNDICATOR_PORT";
 	private static final String updateSql = "UPDATE SYN_COLLECTOR SET LAST_SYNDICATION = ?, updated_by=? WHERE id = ?";
 	private static final String deleteSql = "DELETE SYN_COLLECTOR WHERE id = ?";
-	private static final String selectByIdSql = String.format("%s from SYN_COLLECTOR as c JOIN SYN_WCM_SERVER as w ON c.SYNDICATOR_ID = w.ID WHERE s.id = :id", selectColumns);
+	private static final String selectByIdSql = String.format("%s from SYN_COLLECTOR as c JOIN SYN_WCM_SERVER as w ON c.SYNDICATOR_ID = w.ID WHERE s.id = ?", selectColumns);
 	private static final String selectByAllSql = String.format("%s  from SYN_COLLECTOR as c JOIN SYN_WCM_SERVER as w ON c.SYNDICATOR_ID = w.ID", selectColumns);
 	
 	@PostConstruct
@@ -52,9 +51,9 @@ public class CollectorService {
 	}
 	
 	public Collector getCollector(Long id) {
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", id);
-		Collector collector = jdbcTemplate.queryForObject(
-				selectByIdSql, new CollectorRowMapper(), namedParameters);
+		Object[] args = { id }; 
+		int[] argTypes = { Types.BIGINT };
+		Collector collector = jdbcTemplate.queryForObject(selectByIdSql, args, argTypes, new CollectorRowMapper());
 
 		return collector;
 	}
@@ -64,6 +63,8 @@ public class CollectorService {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 	    parameters.put("SYNDICATOR_ID", collector.getSyndicator().getId());
 	    parameters.put("created_by", WebUtils.currentUserId());
+	    parameters.put("created_at", new Timestamp(System.currentTimeMillis()));
+	    parameters.put("LAST_SYNDICATION", "1970-01-01 00:00:00");
 	    return simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 	}
 	

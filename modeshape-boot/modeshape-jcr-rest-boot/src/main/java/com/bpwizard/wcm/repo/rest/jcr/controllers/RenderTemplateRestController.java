@@ -28,7 +28,7 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.AuthoringTemplate;
 import com.bpwizard.wcm.repo.rest.jcr.model.RenderTemplate;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
@@ -142,7 +142,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			String repositoryName = rt.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
 			AuthoringTemplate at = rt.isQuery() ? null : this.wcmRequestHandler.getAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
-			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.renderTemplate, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, rt.toJson(at));
+			this.wcmItemHandler.addItem(WcmEventEntry.WcmItemType.renderTemplate, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, absPath, rt.toJson(at));
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
@@ -173,7 +173,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
 			
 			AuthoringTemplate at = this.wcmRequestHandler.getAuthoringTemplate(repositoryName, rt.getWorkspace(), rt.getResourceName(), request);
 			JsonNode rtJson = rt.toJson(at);
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.renderTemplate, baseUrl, repositoryName, rt.getWorkspace(), absPath, rtJson);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.renderTemplate, baseUrl, repositoryName, rt.getWorkspace(), absPath, rtJson);
 			
 		} catch (WcmRepositoryException e ) {
 			logger.error("Failed to save AT", e);
@@ -200,7 +200,7 @@ public class RenderTemplateRestController extends BaseWcmRestController {
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
 	  		
-  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.renderTemplate, baseUrl, repository, workspace, absPath);
+  			this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.renderTemplate, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.debug("Exit");

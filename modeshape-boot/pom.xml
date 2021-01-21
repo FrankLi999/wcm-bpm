@@ -17,7 +17,9 @@
 	</parent>
 
 	<modules>
-	    <module>camel-syndicator</module>
+	    <!--
+		<module>camel-syndicator</module>
+		-->
 	    <module>modeshape-commons-boot</module>
 	    <module>modeshape-jcr-boot</module>
         <module>modeshape-jcr-rest-boot</module>
@@ -25,5 +27,7 @@
 	    <module>modeshape-webdav-boot</module>
 	    <module>wcm-authoring-server-demo</module>
 	    <module>wcm-boot-autoconfigure</module>
+		<module>modeshape-syndicator-kafka-boot</module>
+		<module>modeshape-collector-kafka-boot</module>
 	</modules>
 </project>	

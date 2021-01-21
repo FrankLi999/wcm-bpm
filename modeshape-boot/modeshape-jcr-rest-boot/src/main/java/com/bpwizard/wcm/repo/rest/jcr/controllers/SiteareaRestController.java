@@ -26,7 +26,7 @@ import com.bpwizard.wcm.repo.rest.handler.WcmRequestHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.SiteArea;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
 import com.bpwizard.wcm.repo.rest.utils.WcmErrors;
@@ -53,7 +53,7 @@ public class SiteareaRestController extends BaseWcmRestController {
 		try {	
 			String repositoryName = sa.getRepository();
 			String baseUrl = RestHelper.repositoryUrl(request);
-			this.wcmItemHandler.addItem(WcmEvent.WcmItemType.siteArea, baseUrl, repositoryName, sa.getWorkspace(), absPath, sa.toJson());
+			this.wcmItemHandler.addItem(WcmEventEntry.WcmItemType.siteArea, baseUrl, repositoryName, sa.getWorkspace(), absPath, sa.toJson());
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
@@ -82,7 +82,7 @@ public class SiteareaRestController extends BaseWcmRestController {
 			String repositoryName = sa.getRepository();
 			
 			JsonNode saJson = sa.toJson();
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.siteArea, baseUrl, repositoryName, sa.getWorkspace(), absPath, saJson);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.siteArea, baseUrl, repositoryName, sa.getWorkspace(), absPath, saJson);
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
@@ -170,7 +170,7 @@ public class SiteareaRestController extends BaseWcmRestController {
   		String baseUrl = RestHelper.repositoryUrl(request);
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
-	  		this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.siteArea, baseUrl, repository, workspace, absPath);
+	  		this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.siteArea, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.debug("Exit");

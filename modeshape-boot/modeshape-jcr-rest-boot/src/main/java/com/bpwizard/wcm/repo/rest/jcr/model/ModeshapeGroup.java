@@ -1,10 +1,10 @@
 package com.bpwizard.wcm.repo.rest.jcr.model;
 
 import java.security.Principal;
-import com.bpwizard.spring.boot.commons.security.Group;
 import java.util.Enumeration;
 
-@SuppressWarnings("removal")
+import com.bpwizard.spring.boot.commons.security.Group;
+
 public class ModeshapeGroup implements Group {
 	private String group;
     

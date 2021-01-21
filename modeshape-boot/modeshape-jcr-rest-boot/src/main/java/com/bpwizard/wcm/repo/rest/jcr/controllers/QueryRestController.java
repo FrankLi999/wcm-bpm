@@ -18,11 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.modeshape.common.SystemFailureException;
 import org.modeshape.jcr.JcrI18n;
 import org.modeshape.jcr.api.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,7 +47,7 @@ import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ColumnValue;
 import com.bpwizard.wcm.repo.rest.jcr.model.QueryStatement;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
@@ -185,7 +185,7 @@ public class QueryRestController extends BaseWcmRestController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			this.wcmItemHandler.updateItem(WcmEvent.WcmItemType.query, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
+			this.wcmItemHandler.updateItem(WcmEventEntry.WcmItemType.query, baseUrl, repositoryName, WcmConstants.DEFAULT_WS, path, qJson);
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Exit");
@@ -234,7 +234,7 @@ public class QueryRestController extends BaseWcmRestController {
   		String absPath = String.format(wcmPath.startsWith("/") ? WcmConstants.NODE_ROOT_PATH_PATTERN : WcmConstants.NODE_ROOT_REL_PATH_PATTERN, wcmPath);
   		try {
 	  		
-  			this.wcmItemHandler.deleteItem(WcmEvent.WcmItemType.query, baseUrl, repository, workspace, absPath);
+  			this.wcmItemHandler.deleteItem(WcmEventEntry.WcmItemType.query, baseUrl, repository, workspace, absPath);
   			
   	  		if (logger.isDebugEnabled()) {
   				logger.debug("Exit");
