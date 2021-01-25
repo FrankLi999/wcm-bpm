@@ -26,7 +26,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmServer;
 
 @Service
 @Transactional	
-public class SyndicatorService {
+public class SyndicatorRepository {
 	@Autowired
 	@Qualifier("modeshapeJdbcTemplate")
 	JdbcTemplate jdbcTemplate;

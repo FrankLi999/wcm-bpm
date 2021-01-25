@@ -1,190 +1,270 @@
 package com.bpwizard.wcm.repo.rest.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.Timestamp;
-import java.sql.Types;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
-import com.bpwizard.wcm.repo.rest.handler.AbstractHandler;
-import com.bpwizard.wcm.repo.rest.jcr.model.Syndicator;
-import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.JsonUtils;
+import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
+import com.bpwizard.wcm.repo.rest.modeshape.model.RestProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-@Component
-public class WcmEventService extends AbstractHandler {
-
-	@Autowired(required = false)
-	@Qualifier("modeshapeJdbcTemplate")
-	protected JdbcTemplate jdbcTemplate;
+@Service
+public class WcmEventService { 
+	private static final Logger logger = LoggerFactory.getLogger(WcmEventService.class);
 	
-	private SimpleJdbcInsert simpleJdbcInsert;
+	@Autowired
+	private JcrNodeEventRepository jcrNodeEventRepo;
 
-	private static final String updateEventSql = "INSERT INTO SYN_WCM_EVENT(ID, REPOSITORY, WORKSPACE, LIBRARY, NODE_PATH, OPERATION, ITEMTYPE, timeCreated, CONTENT) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE SET LIBRARY=?, NODE_PATH = ?, OPERATION = ?, ITEMTYPE=?, timeCreated=?, CONTENT=?";
-	private static final String clearWcmEventsSql = "DELETE SYN_WCM_EVENT WHERE timeCcreated < ?";
-	private static final String selectWcmEventsBeforeSql = "SELECT * FROM SYN_WCM_EVENT WHERE library= ? and timeCreated > ? and timeCreated < ? ORDER BY timeCreated ASC LIMIT ? OFFSET ?";
-	private static final String selectCndBeforeSql = "SELECT * FROM SYN_WCM_EVENT WHERE ITEMTYPE= 'cnd' and timeCreated > ? and timeCreated < ? ORDER BY timeCreated ASC";
+	@Autowired
+	private JsonNodeEventRepository jsonNodeEventRepo;
 	
-	@PostConstruct
-	private void postConstruct() {
-		simpleJdbcInsert = 
-			new SimpleJdbcInsert(jdbcTemplate).withTableName("SYN_WCM_EVENT"); //.usingGeneratedKeyColumns("ID");
-	};
-	
-	public int clearWcmEventBefore(Timestamp timestamp) {
-		Object[] params = { timestamp };
-	    int[] types = {Types.TIMESTAMP};
-	    return jdbcTemplate.update(clearWcmEventsSql, params, types);
-	}
-
-	public int addWcmEvent(WcmEventEntry event) {
-		return doInsert(event);
-	}
-
-	public int updateWcmEvent(WcmEventEntry event) {
-		return  doUpsert(event);
-	}
-
-	public List<WcmEvent> getCndBefore(
-			Syndicator syndicator,
-			Timestamp endTimestamp) {
-		Object args[] = {syndicator.getLastSyndication(), endTimestamp};
-		int argTypes[] = { Types.TIMESTAMP, Types.TIMESTAMP};
-		List<WcmEvent> wcmEvents = jdbcTemplate.query(
-				selectCndBeforeSql, args, argTypes, new WcmEventRowMapper());
-
-		return wcmEvents;
-	}
-	
-	public List<WcmEvent> getWcmEventBefore(
-			Syndicator syndicator,
-			Timestamp endTimestamp, 
-			int pageIndex,
-			int pageSize) {
-		List<WcmEvent> wcmEvents = new ArrayList<>();
+	@Transactional
+	public void addCNDEvent(
+			String repositoryName,
+			String workspace,
+			InputStream is,
+			WcmEventEntry.WcmItemType itemType) throws JsonProcessingException {
 		
-		Object args[] = {"", syndicator.getLastSyndication(), endTimestamp, pageSize, pageIndex};
-		int argTypes[] = { Types.VARCHAR, Types.TIMESTAMP, Types.TIMESTAMP, Types.INTEGER, Types.INTEGER};
-		wcmEvents.addAll(jdbcTemplate.query(
-			selectWcmEventsBeforeSql, args, argTypes, new WcmEventRowMapper()));
-			
-		for (String library: syndicator.getLibraries()) {
-			args[0] = library;
-			wcmEvents.addAll(jdbcTemplate.query(
-				selectWcmEventsBeforeSql, args, argTypes, new WcmEventRowMapper()));
-		}
-		return wcmEvents;
-	}
+		Long timestamp = System.currentTimeMillis();
 
-	public int[] batchInsert(List<WcmEventEntry> events) {
-		MapSqlParameterSource parameters[] = events.stream().map(e -> insertParameters(e)).toArray(MapSqlParameterSource[]::new);
-        return simpleJdbcInsert.executeBatch(parameters);
-    }
-	
-	public int[] batchUpdate(List<WcmEventEntry> events) {
-		List<Object[]> batchArgs = new ArrayList<>();
-		for (WcmEventEntry event: events) {
-			Object args[] = {event.getId(), event.getRepository(), event.getWorkspace(), event.getLibrary(), event.getNodePath(), event.getOperation().name(), event.getItemType().name(), event.getTimeCreated(), event.getContent(), event.getLibrary(), event.getNodePath(), event.getOperation().name(), event.getItemType().name(), event.getTimeCreated(), event.getContent()};
-			batchArgs.add(args);
-		}
-		int[] argTypes = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.BLOB, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.BLOB};
-		return jdbcTemplate.batchUpdate(updateEventSql, batchArgs, argTypes);
-    }
-	
-	protected int doInsert(WcmEventEntry event) {
-		MapSqlParameterSource parameters = insertParameters(event);
-		 return simpleJdbcInsert.execute(parameters);
+	    WcmEventEntry wcmEvent = new WcmEventEntry();
+	    wcmEvent.setId(String.format("cnd_%s", timestamp));
+	    wcmEvent.setRepository(repositoryName);
+	    wcmEvent.setWorkspace(workspace);
+	    wcmEvent.setItemType(itemType);
+	    wcmEvent.setOperation(WcmEventEntry.Operation.create);
+	    wcmEvent.setTimeCreated(new Timestamp(timestamp));
+	    wcmEvent.setContent(is);
+	    jcrNodeEventRepo.addWcmEvent(wcmEvent);
+	    jsonNodeEventRepo.addWcmEvent(wcmEvent);
 	}
 	
-	protected int doUpsert(WcmEventEntry event) {
-		Object args[] = {event.getId(), event.getRepository(), event.getWorkspace(), event.getLibrary(), event.getNodePath(), event.getOperation().name(), event.getItemType().name(), event.getTimeCreated(), event.getContent(), event.getLibrary(), event.getNodePath(), event.getOperation().name(), event.getItemType().name(), event.getTimeCreated(), event.getContent()};
-		int[] argTypes = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.BLOB, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.BLOB};
-	    return jdbcTemplate.update(updateEventSql, args, argTypes);
-	}
-	
-	protected MapSqlParameterSource insertParameters(WcmEventEntry event) {
-		event.setTimeCreated(new Timestamp(System.currentTimeMillis()));
+	@Transactional
+	public void addNewItemEvent(
+			RestNode restNode, 
+			String repositoryName,
+			String workspace,
+			String path,
+			WcmEventEntry.WcmItemType itemType,
+			JsonNode requestBody) throws JsonProcessingException {
 		
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("ID", event.getId());
-		parameters.addValue("REPOSITORY", event.getRepository());
-		parameters.addValue("WORKSPACE", event.getWorkspace());
-		parameters.addValue("LIBRARY", event.getLibrary());
-	    parameters.addValue("NODE_PATH", event.getNodePath());
-	    parameters.addValue("ITEMTYPE", event.getItemType().name());
-	    parameters.addValue("OPERATION", event.getOperation().name());
-	    parameters.addValue("timeCreated", event.getTimeCreated());
-	    parameters.addValue("CONTENT", event.getContent());
-	    
-	    
-	    return parameters;
+		WcmEventEntry event = this.createNewItemEvent(
+				restNode, 
+				repositoryName, 
+				workspace, 
+				path, 
+				itemType,
+				requestBody);
+		jcrNodeEventRepo.addWcmEvent(event);
+		jsonNodeEventRepo.addWcmEvent(event);
 	}
 	
-	protected Set<String> arrayNodeToStrings(ArrayNode nodes) {
-		Set<String> ids = new HashSet<>();
-		if (nodes != null) {
-			for (int i = 0; i < nodes.size(); i++) {
-				ids.add(nodes.get(i).textValue());
+	@Transactional
+	public void addNewItemEvents(List<WcmEventEntry> events) {
+		jcrNodeEventRepo.batchInsert(events);
+		jsonNodeEventRepo.batchInsert(events);
+	}
+	
+	@Transactional
+	public  void addUpdateItemEvents(List<WcmEventEntry> events) throws JsonProcessingException {
+		jcrNodeEventRepo.batchUpdate(events);
+		jsonNodeEventRepo.batchUpdate(events);
+	}
+	
+	@Transactional
+	public void addDeleteItemEvents(List<WcmEventEntry> events) throws JsonProcessingException {
+		jcrNodeEventRepo.batchUpdate(events);
+		jsonNodeEventRepo.batchUpdate(events);
+	}
+	
+	@Transactional
+	public void addUpdateItemEvent(
+			RestNode restNode, 
+			String repositoryName,
+			String workspace,
+			String path,
+			WcmEventEntry.WcmItemType itemType,
+			Set<String> previousDescendants,
+			JsonNode requestBody) throws JsonProcessingException {
+		
+		WcmEventEntry event = this.createUpdateItemEvent(
+				restNode, 
+				repositoryName, 
+				workspace, path, 
+				itemType, 
+				previousDescendants,
+				requestBody);
+		jcrNodeEventRepo.updateWcmEvent(event);	
+		jsonNodeEventRepo.updateWcmEvent(event);	
+	}
+	
+	@Transactional
+	public void addDeleteItemEvent(
+			String nodeId, 
+			String repositoryName,
+			String workspace,
+			String path,
+			WcmEventEntry.WcmItemType itemType,
+			Set<String> previousDescendants) throws JsonProcessingException {
+		
+		WcmEventEntry event = this.createDeleteItemEvent(
+				nodeId, 
+				repositoryName, 
+				workspace, 
+				path, 
+				itemType, 
+				previousDescendants);
+		jcrNodeEventRepo.updateWcmEvent(event);
+		jsonNodeEventRepo.updateWcmEvent(event);
+	}
+	
+	public WcmEventEntry createNewItemEvent(
+			RestNode restNode, 
+			String repositoryName,
+			String workspace,
+			String nodePath,
+			WcmEventEntry.WcmItemType itemType,
+			JsonNode requestBody) {
+		
+		WcmEventEntry event = new WcmEventEntry();
+		event.setId(restNode.getId());
+		event.setRepository(repositoryName);
+		event.setWorkspace(workspace);
+		event.setLibrary(WcmUtils.library(nodePath));
+		event.setNodePath(nodePath);
+		event.setOperation(WcmEventEntry.Operation.create);
+		event.setItemType(itemType);
+		event.setJsonNode(requestBody);
+		for (RestProperty prop: restNode.getJcrProperties()) {
+		    if ("jcr:lastModified".equals(prop.getName())) {
+		    	event.setTimeCreated(Timestamp.valueOf(prop.getValues().get(0)));
+		    }
+		}
+		
+		Set<String> descendants = new HashSet<>();
+		this.populateDescendantIds(restNode, descendants);
+		// event.setDescendants(descendants);
+		event.setContent(content(descendants, null));
+		return event;
+	}
+	
+	public WcmEventEntry createUpdateItemEvent(
+			RestNode restNode, 
+			String repositoryName,
+			String workspace,
+			String nodePath,
+			WcmEventEntry.WcmItemType itemType,
+			Set<String> previousDescendants,
+			JsonNode requestBody) {
+		
+		WcmEventEntry event = new WcmEventEntry();
+		event.setId(restNode.getId());
+		event.setRepository(repositoryName);
+		event.setWorkspace(workspace);
+		event.setLibrary(WcmUtils.library(nodePath));
+		event.setNodePath(nodePath);
+		event.setOperation(WcmEventEntry.Operation.update);
+		event.setItemType(itemType);
+		event.setJsonNode(requestBody);
+		
+		for (RestProperty prop: restNode.getJcrProperties()) {
+		    if ("jcr:lastModified".equals(prop.getName())) {
+		    	event.setTimeCreated(Timestamp.valueOf(prop.getValues().get(0)));
+		    }
+		}
+		
+		Set<String> descendants = new HashSet<>();
+		this.populateDescendantIds(restNode, descendants);
+		// event.setDescendants(descendants);
+		
+		Set<String> removedDescendants = new HashSet<>();
+		
+		for (String previousDescendant: previousDescendants) {
+			if (!descendants.contains(previousDescendant)) {
+				removedDescendants.add(previousDescendant);
 			}
 		}
-		return ids;
-		
+		// event.setRemovedDescendants(removedDescendants);
+		event.setContent(content(descendants, removedDescendants));
+		return event;
 	}
 	
-	public class WcmEventRowMapper implements RowMapper<WcmEvent> {
-	    @Override
-	    public WcmEvent mapRow(ResultSet rs, int rowNum) throws SQLException {
-	    	WcmEvent wcmEvent = new WcmEvent();
-	 
-	    	wcmEvent.setId(rs.getString("ID"));
-	    	wcmEvent.setRepository(rs.getString("REPOSITORY"));
-	    	wcmEvent.setWorkspace(rs.getString("WORKSPACE"));
-	    	wcmEvent.setLibrary(rs.getString("LIBRARY"));
-	    	wcmEvent.setNodePath(rs.getString("NODE_PATH"));
-	    	wcmEvent.setOperation(WcmEvent.Operation.valueOf(rs.getString("OPERATION")));
-	    	wcmEvent.setItemType(WcmEvent.WcmItemType.valueOf(rs.getString("ITEMTYPE")));
-//	    	try {
-//	    		wcmEvent.setContent(this.getBytes(rs.getBlob("CONTENT").getBinaryStream()));
-//	    	} catch (IOException e) {
-//	    		throw new SQLException(e);
-//	    	}
-	    	// Blob b = rs.getBlob("CONTENT");
-	    	// wcmEvent.setContent(b.getBinaryStream());
-	    	wcmEvent.setContent(rs.getBytes("CONTENT"));
-	    	return wcmEvent;
-	    }
-	    
-	    
-//	    private final byte[] getBytes(InputStream in) throws IOException {
-//			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//			byte[] buf = new byte[1024];
-//			//InputStream in = blob.getBinaryStream();
-//			int n = 0;
-//			while ((n=in.read(buf))>=0) {
-//				baos.write(buf, 0, n);
-//			}
-//			in.close();
-//			
-//			System.out.println(">>>>>>>>>>>>> wcm event content-----");
-//			Bson.read(baos);
-//			byte[] bytes = baos.toByteArray();
-//
-//			
-//			return bytes;
-//		}
+	public WcmEventEntry createDeleteItemEvent(
+			String nodeId, 
+			String repositoryName,
+			String workspace,
+			String nodePath,
+			WcmEventEntry.WcmItemType itemType,
+			Set<String> previousDescendants) {
+		
+		WcmEventEntry event = new WcmEventEntry();
+		
+		event.setRepository(repositoryName);
+		event.setWorkspace(workspace);
+		event.setLibrary(WcmUtils.library(nodePath));
+		event.setNodePath(nodePath);
+		event.setOperation(WcmEventEntry.Operation.delete);
+		event.setItemType(itemType);
+		event.setId(nodeId);
+		event.setTimeCreated(new Timestamp(System.currentTimeMillis()));
+		event.setContent(content(null, previousDescendants));
+//		event.setDescendants(null);
+//		event.setRemovedDescendants(previousDescendants);
+		return event;
 	}
+	
+	public void populateDescendantIds(RestNode restNode, Set<String> nodeIds) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Entry");
+		}
+		for (RestNode child: restNode.getChildren()) {
+			nodeIds.add(child.getId());
+			populateDescendantIds(child, nodeIds);
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug("Exit");
+		}
+	}
+
+	protected ByteArrayInputStream content(Set<String> descendantIds, Set<String> removedDescendantIds) {
+    	
+		ObjectNode contentNode = JsonUtils.createObjectNode();
+		if (!ObjectUtils.isEmpty(descendantIds)) {
+			ArrayNode descendants = JsonUtils.creatArrayNode();
+			for (String value : descendantIds) {
+				descendants.add(value);
+			}
+			contentNode.set("descendants", descendants);
+		}
+		if (!ObjectUtils.isEmpty(removedDescendantIds)) {
+			ArrayNode removedDescendants = JsonUtils.creatArrayNode();
+			for (String value : removedDescendantIds) {
+				removedDescendants.add(value);
+				contentNode.set("removedDescendants", removedDescendants);
+			}
+		}
+		try {
+			return new ByteArrayInputStream(JsonUtils.writeValueAsString(contentNode).getBytes());
+		} catch (JsonProcessingException e) {
+			// TODO
+			throw new RuntimeException(e);
+		}
+    }
 }

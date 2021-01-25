@@ -18,22 +18,22 @@ import com.bpwizard.wcm.repo.rest.jcr.model.JcrNode;
 import com.bpwizard.wcm.repo.rest.jcr.model.RootNodeKeys;
 import com.bpwizard.wcm.repo.rest.jcr.model.Syndicator;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
-import com.bpwizard.wcm.repo.rest.service.JcrNodeService;
-import com.bpwizard.wcm.repo.rest.service.WcmEventQueuePublisher;
+import com.bpwizard.wcm.repo.rest.service.JcrNodeRepository;
+import com.bpwizard.wcm.repo.rest.service.JcrNodeEventQueuePublisher;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Component
-public class WcmEventKafkaPublisher implements WcmEventQueuePublisher {
+public class JcrNodeEventKafkaPublisher implements JcrNodeEventQueuePublisher {
 	private static final byte FINAL_MESSAGE_SEGMENT[] = "~final~".getBytes(); 
 	@Autowired
 	private KafkaTemplate<String, byte[]> kafkaTemplate;
 	
 	@Autowired
-	private JcrNodeService jcrNodeService;
+	private JcrNodeRepository jcrNodeRepository;
 	
-	@Value("${bpw.wcm.kafka.topic.wcm-event}")
+	@Value("${bpw.wcm.kafka.topic.jcr-wcm-event}")
 	private String wcmEventTopic;
 	
 	public void syndicateCndTypes(WcmEvent wcmEvent, Syndicator syndicator, String token) throws JsonProcessingException, IOException {
@@ -138,14 +138,14 @@ public class WcmEventKafkaPublisher implements WcmEventQueuePublisher {
 	}
 
 	private void sendContent(String key, byte[] payload, String token) throws IOException {
-//		
-//		int blockSize = 10240; //best chunk size is 10240
-//		
-//		for (byte[] dataChunk = content.readNBytes(blockSize); dataChunk.length > 0; dataChunk = content.readNBytes(blockSize)) {
-//			if (dataChunk.length > 0) {
-//				this.sendMessage(wcmEventTopic, key, dataChunk);
+//			
+//			int blockSize = 10240; //best chunk size is 10240
+//			
+//			for (byte[] dataChunk = content.readNBytes(blockSize); dataChunk.length > 0; dataChunk = content.readNBytes(blockSize)) {
+//				if (dataChunk.length > 0) {
+//					this.sendMessage(wcmEventTopic, key, dataChunk);
+//				}
 //			}
-//		}
 		this.sendMessage(wcmEventTopic, key, payload, token, false);
 		this.sendMessage(wcmEventTopic, key, FINAL_MESSAGE_SEGMENT, token, true);
 	}
@@ -167,6 +167,6 @@ public class WcmEventKafkaPublisher implements WcmEventQueuePublisher {
 	
 	private JcrNode getJcrNode(String rootNodeKey, String nodeId) {
 		String nodeKey =  String.format("%s%s", rootNodeKey, nodeId);
-		return jcrNodeService.getJcrNode(nodeKey);
+		return jcrNodeRepository.getJcrNode(nodeKey);
 	}
 }

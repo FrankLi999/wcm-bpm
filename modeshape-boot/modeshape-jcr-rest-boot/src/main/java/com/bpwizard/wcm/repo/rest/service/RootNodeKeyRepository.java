@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.bpwizard.wcm.repo.rest.jcr.model.RootNodeKeys;
 
 @Service
-public class RootNodeKeyService {
+public class RootNodeKeyRepository {
 	@Autowired protected RepositoryManager repositoryManager;
 	
 	@Autowired

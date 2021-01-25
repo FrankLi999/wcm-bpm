@@ -44,8 +44,6 @@ public class WcmImportController extends BaseWcmRestController {
 	@Autowired
 	private WcmRequestHandler wcmRequestHandler;
 	
-	
-	
 	//TODO: failed scenario - all or nothing
 	@PostMapping(path= "/preload")
     public ResponseEntity<?> loadQueries(HttpServletRequest request) throws WcmRepositoryException {
@@ -123,7 +121,7 @@ public class WcmImportController extends BaseWcmRestController {
     		String baseUrl = RestHelper.repositoryUrl(request);
 	    	ResponseEntity<?> response = this.nodeTypeHandler.importCND(baseUrl, repositoryName, workspaceName, allowUpdate, file.getInputStream());
 	    	if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(workspaceName)) {
-    			wcmEventService.addCNDEvent(repositoryName, workspaceName, file.getInputStream(), WcmEventEntry.WcmItemType.cnd);
+	    		wcmEventService.addCNDEvent(repositoryName, workspaceName, file.getInputStream(), WcmEventEntry.WcmItemType.cnd);
     		}
 	    	logger.debug("Exiting ...");
 	    	return response;

@@ -8,11 +8,20 @@ import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
 public class KafkaTopicConfig {
-	@Value("${bpw.wcm.kafka.topic.wcm-event:wcm-event}")
-	private String wcmEventTopic;
+	@Value("${bpw.wcm.kafka.topic.jcr-wcm-event:jcr-wcm-event}")
+	private String jcrWcmEventTopic;
 
+	@Value("${bpw.wcm.kafka.topic.json-wcm-event:json-wcm-event}")
+	private String jsonWcmEventTopic;
+	
 	@Bean
-	NewTopic wcmEventTopic() {
-		return TopicBuilder.name(wcmEventTopic).build();
+	NewTopic jcrWcmEventTopic() {
+		return TopicBuilder.name(jcrWcmEventTopic).build();
 	}
+	
+	@Bean
+	NewTopic jsonWcmEventTopic() {
+		return TopicBuilder.name(jsonWcmEventTopic).build();
+	}
+
 }

@@ -141,10 +141,10 @@ bpw:
     kafka:
       bootstrap-servers: my-cluster-kafka-bootstrap:9092
       group:
-        wcm-event: wcm-event
+        wcm-event: jcr-wcm-event
       topic:
-        wcm-event: wcm-event
-        wcm-workflow: wcm-workflow
+        jcr-wcm-event: jcr-wcm-event
+        json-wcm-workflow: json-wcm-workflow
   account:
     authoring:
       enabled: true
@@ -160,9 +160,9 @@ bpw:
       password: P@ssw0rd
   modeshape:
     authoring:
-      enabled: true
+      enabled: false
     syndication:
-      enabled: true
+      enabled: false
     datasource:
       # url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       url: jdbc:mysql://localhost:3306/wcm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
@@ -362,9 +362,13 @@ ignite:
 
 #spring.datasource.url=jdbc:h2:./camunda-db-order;DB_CLOSE_ON_EXIT=false
 syndication:
-  # strategy: kafka
-  strategy: rest
-  #strategy: camel
+  transport:
+    strategy: rest
+    # strategy: kafka
+    #strategy: camel
+  item: 
+    strategy: json
+    #strategy:jcr
 message:
   topic:
     name: wcm-event

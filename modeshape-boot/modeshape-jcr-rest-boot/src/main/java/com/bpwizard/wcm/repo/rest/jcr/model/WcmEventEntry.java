@@ -3,6 +3,8 @@ package com.bpwizard.wcm.repo.rest.jcr.model;
 import java.io.InputStream;
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class WcmEventEntry {
 	public enum Operation {
 		create,
@@ -64,6 +66,7 @@ public class WcmEventEntry {
 	private WcmItemType itemType;
 	private Timestamp timeCreated;
 	private InputStream content;
+	private JsonNode jsonNode;
 	public String getId() {
 		return id;
 	}
@@ -119,11 +122,16 @@ public class WcmEventEntry {
 	public void setContent(InputStream content) {
 		this.content = content;
 	}
-	
+	public JsonNode getJsonNode() {
+		return jsonNode;
+	}
+	public void setJsonNode(JsonNode jsonNode) {
+		this.jsonNode = jsonNode;
+	}
 	@Override
 	public String toString() {
-		return "WcmEvent [id=" + id + ", nodePath=" + nodePath + ", repository=" + repository
-				+ ", workspace=" + workspace + ", library=" + library + ", operation=" + operation + ", itemType=" + itemType + ", timeCreated="
-				+ timeCreated + "]";
+		return "WcmEventEntry [id=" + id + ", repository=" + repository + ", workspace=" + workspace + ", library="
+				+ library + ", nodePath=" + nodePath + ", operation=" + operation + ", itemType=" + itemType
+				+ ", timeCreated=" + timeCreated + ", content=" + content + ", jsonNode=" + jsonNode + "]";
 	}
 }

@@ -1,7 +1,10 @@
 package com.bpwizard.wcm.repo.rest;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -49,11 +52,23 @@ public class JsonUtils {
         return mapper.writeValueAsBytes(jsonNode);
     }
 	
+	public static InputStream writeValueAsStream(JsonNode jsonNode) throws JsonProcessingException {
+        return new ByteArrayInputStream(mapper.writeValueAsBytes(jsonNode));
+    }
+	
 	public static String writeValueAsString(JsonNode jsonNode) throws JsonProcessingException {
         return mapper.writeValueAsString(jsonNode);
     }
 	
 	public static String objectAsJsonString(Object value) throws JsonProcessingException {
         return mapper.writeValueAsString(value);
+    }
+	
+	public static List<String> writeToStrings(ArrayNode values) throws JsonProcessingException {
+		List<String> strings = new ArrayList<>();
+		for (int i = 0; i < values.size(); i++) {
+			strings.add(values.get(i).textValue());
+		}
+		return strings;
     }
 }

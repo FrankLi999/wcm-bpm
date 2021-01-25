@@ -28,12 +28,12 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Component
-public class WcmEventRestPublisher {
+public class JcrNodeEventRestPublisher {
 	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Autowired
-	private JcrNodeService jcrNodeService;
+	private JcrNodeRepository jcrNodeService;
 	
 	public void syndicateCndTypes(WcmEvent wcmEvent, Syndicator syndicator, String token) throws IOException {
 		HttpHeaders headers = new HttpHeaders();
@@ -65,7 +65,7 @@ public class WcmEventRestPublisher {
 			elementBody.add("content", this.getTemplFile("element_", elementNode.getContent()));
 			elementBody.add("rootNodeKey", rootNodeKeys.getRootNodeKey());
 			elementBody.add("jcrSystemKey", rootNodeKeys.getJcrSystemKey());
-			String serverUrl = String.format("http://%s:%s/wcm/api/collector/%s/%s/element", syndicator.getCollector().getHost(), syndicator.getCollector().getPort(), syndicator.getRepository(), syndicator.getWorkspace());
+			String serverUrl = String.format("http://%s:%s/wcm/api/collector/%s/%s/jcrElement", syndicator.getCollector().getHost(), syndicator.getCollector().getPort(), syndicator.getRepository(), syndicator.getWorkspace());
 			HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(elementBody, headers);
 			restTemplate.postForEntity(serverUrl, requestEntity, Void.class);
 		}
@@ -74,7 +74,7 @@ public class WcmEventRestPublisher {
 		wcmItemBody.add("content", this.getTemplFile("wcmItem_", jcrNode.getContent()));
 		wcmItemBody.add("rootNodeKey", rootNodeKeys.getRootNodeKey());
 		wcmItemBody.add("jcrSystemKey", rootNodeKeys.getJcrSystemKey());
-		String serverUrl = String.format("http://%s:%s/wcm/api/collector/%s/%s/item", syndicator.getCollector().getHost(), syndicator.getCollector().getPort(), syndicator.getRepository(), syndicator.getWorkspace());
+		String serverUrl = String.format("http://%s:%s/wcm/api/collector/%s/%s/jcrItem", syndicator.getCollector().getHost(), syndicator.getCollector().getPort(), syndicator.getRepository(), syndicator.getWorkspace());
 		HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>( wcmItemBody, headers);
 		restTemplate.postForEntity(serverUrl, requestEntity, Void.class);
 	}

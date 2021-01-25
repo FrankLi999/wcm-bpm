@@ -144,8 +144,8 @@ bpw:
       group:
         wcm-event: wcm-event
       topic:
-        wcm-event: wcm-event
-        wcm-workflow: wcm-workflow
+        jcr-wcm-event: jcr-wcm-event
+        json-wcm-workflow: json-wcm-workflow
   account:
     datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -451,14 +451,18 @@ ignite:
 
 #spring.datasource.url=jdbc:h2:./camunda-db-order;DB_CLOSE_ON_EXIT=false
 syndication:
-  # strategy: kafka
-  strategy: rest
-  # strategy: camel
+  transport:
+    strategy: rest
+    # strategy: kafka
+    #strategy: camel
+  item: 
+    strategy: json
+    #strategy:jcr
 message:
   topic:
     name: wcm-event
   group: order
-  
+syndication.item.strategy  
 org:
   modeshape:
     backupLocation: "/home/ubuntu/temp"

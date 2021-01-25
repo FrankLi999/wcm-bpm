@@ -9,7 +9,7 @@ import com.bpwizard.wcm.repo.rest.handler.RestNodeTypeHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestRepositoryHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestServerHandler;
 import com.bpwizard.wcm.repo.rest.handler.RestWcmItemHandler;
-import com.bpwizard.wcm.repo.rest.handler.WcmEventHandler;
+import com.bpwizard.wcm.repo.rest.service.WcmEventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class BaseWcmRestController {
@@ -37,8 +37,8 @@ public abstract class BaseWcmRestController {
 	@Autowired
 	protected WcmUtils wcmUtils;
 	
-	@Autowired
-	protected WcmEventHandler wcmEventService;
+	@Autowired	
+	protected WcmEventService wcmEventService;
 
 	protected ObjectMapper objectMapper = new ObjectMapper();
 }

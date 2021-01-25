@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.ClearWcmEventRequest;
-import com.bpwizard.wcm.repo.rest.service.WcmEventService;
+import com.bpwizard.wcm.repo.rest.service.JcrNodeEventRepository;
 
 @RestController
 @RequestMapping(WcmEventController.BASE_URI)
@@ -25,7 +25,7 @@ public class WcmEventController extends BaseWcmRestController {
 	private static final Logger logger = LoggerFactory.getLogger(WcmEventController.class);
 	
 	@Autowired
-	private WcmEventService wcmEventHandler;
+	private JcrNodeEventRepository wcmEventHandler;
 	
 	@PostMapping(path = "/clear", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> clearWcmEvents(

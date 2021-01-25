@@ -21,7 +21,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.JcrNodeEntry;
 
 @Service
 @Transactional
-public class JcrNodeService {
+public class JcrNodeRepository {
 	private static final String selectJcrNode = "SELECT * FROM MODESHAPE_REPOSITORY WHERE ID = ?";
 	private static final String updateJcrNode = "INSERT INTO MODESHAPE_REPOSITORY(ID, LAST_CHANGED, CONTENT) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE LAST_CHANGED=?, CONTENT=?";
 	private static final String deleteJcrNode = "DELETE FROM MODESHAPE_REPOSITORY where ID = ?";

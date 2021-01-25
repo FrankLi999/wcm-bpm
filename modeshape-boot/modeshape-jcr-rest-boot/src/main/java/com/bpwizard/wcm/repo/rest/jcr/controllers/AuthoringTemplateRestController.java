@@ -41,6 +41,7 @@ public class AuthoringTemplateRestController extends BaseWcmRestController {
 	public static final String BASE_URI = "/wcm/api/at";
 	@Autowired
 	private WcmRequestHandler wcmRequestHandler;
+	
 	@GetMapping(path = "/{repository}/{workspace}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, AuthoringTemplate> getAuthoringTemplates(@PathVariable("repository") String repository,
 			@PathVariable("workspace") String workspace, HttpServletRequest request) 

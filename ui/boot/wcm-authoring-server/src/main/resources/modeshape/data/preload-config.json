@@ -7,80 +7,20 @@
 	},
 	{
 		"repository": "bpwizard",
-		"workspace": ["draft", "expired", "default"],
+		"workspace": ["default"],
 		"preloadType": "CND",
 		"path": "classpath:/modeshape/data/mytypes.cnd"
 	},
 	{
 		"repository": "bpwizard",
-		"workspace": ["default", "expired"],
+		"workspace": ["default"],
 		"preloadType": "ITEMS",
 		"path": "classpath:/modeshape/data/setup.json"
 	},
 	{
 		"repository": "bpwizard",
-		"workspace": ["default", "expired"],
+		"workspace": ["default"],
 		"preloadType": "LIBRARY",
 		"path": "classpath:/modeshape/data/system/system-library.json"
-	},
-	{
-		"repository": "bpwizard",
-		"workspace": [ "default", "expired"],
-		"preloadType": "ITEMS",
-		"path": "classpath:/modeshape/data/system/system-items.json"
-	},
-	{
-		"repository": "bpwizard",
-		"workspace": ["default", "expired"],
-		"preloadType": "LIBRARY",
-		"path": "classpath:/modeshape/data/design/design-library.json"
-	},
-	{
-		"repository": "bpwizard",
-		"workspace": [ "default", "expired"],
-		"preloadType": "ITEMS",
-		"path": "classpath:/modeshape/data/design/design-items.json"
-	},
-	{
-		"repository": "bpwizard",
-		"workspace": [ "default", "expired"],
-		"preloadType": "LIBRARY",
-		"path": "classpath:/modeshape/data/mysite/mysite-library.json"
-	},
-	{
-		"repository": "bpwizard",
-		"workspace": [ "default", "expired"],
-		"preloadType": "QUERY",
-		"path": "classpath:/modeshape/data/queries.json"
-	},
-	{
-		"repository": "bpwizard",
-		"workspace": [ "default", "expired"],
-		"preloadType": "ITEMS",
-		"path": "classpath:/modeshape/data/mysite/mysite-items.json"
-	},
-	{
-		"repository": "bpwizard",
-		"workspace": [ "default", "expired"],
-		"preloadType": "LIBRARY",
-		"path": "classpath:/modeshape/data/camunda/camunda-library.json"
-	},
-	{
-		"repository": "bpwizard",
-		"workspace": [ "default", "expired"],
-		"preloadType": "ITEMS",
-		"path": "classpath:/modeshape/data/camunda/camunda-items.json"
-	},
-	{
-		"repository": "bpwizard",
-		"workspace": [ "default", "expired"],
-		"preloadType": "LIBRARY",
-		"path": "classpath:/modeshape/data/apigateway/apigateway-library.json"
-	},
-	{
-		"repository": "bpwizard",
-		"workspace": [ "default", "expired"],
-		"preloadType": "ITEMS",
-		"path": "classpath:/modeshape/data/apigateway/apigateway-items.json"
 	}
 ]

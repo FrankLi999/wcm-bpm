@@ -26,12 +26,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.WcmUtils;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestItem;
 import com.bpwizard.wcm.repo.rest.modeshape.model.RestNode;
+import com.bpwizard.wcm.repo.rest.service.WcmEventService;
 import com.bpwizard.wcm.repo.rest.utils.WcmConstants;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -49,7 +52,7 @@ public final class RestWcmItemHandler extends ItemHandler {
 	protected boolean syndicationEnabled = true;
 	
 	@Autowired	
-	protected WcmEventHandler wcmEventService;
+	protected WcmEventService wcmEventService;
 
 	@Autowired	
 	protected WcmUtils wcmUtils;
@@ -131,7 +134,8 @@ public final class RestWcmItemHandler extends ItemHandler {
 					repositoryName, 
 					WcmConstants.DEFAULT_WS, 
 					path,
-					itemType);
+					itemType,
+					requestBodyJSON);
 		} 
         session.save();
         if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(workspaceName)) {
@@ -210,7 +214,8 @@ public final class RestWcmItemHandler extends ItemHandler {
 					WcmConstants.DEFAULT_WS,  
 					path,
 					itemType,
-					previousDescendants);
+					previousDescendants,
+					json);
 		}
         session.save();
         
@@ -233,7 +238,8 @@ public final class RestWcmItemHandler extends ItemHandler {
     	
     	Set<String> previousDescendants = new HashSet<String>();		
     	if (this.syndicationEnabled && WcmConstants.DEFAULT_WS.equals(rawWorkspaceName)) {
-			RestNode restNode = (RestNode)this.item(baseUrl, rawRepositoryName, WcmConstants.DEFAULT_WS, path, WcmConstants.FULL_SUB_DEPTH);
+			RestNode restNode = (RestNode)this.item(baseUrl, rawRepositoryName, WcmConstants.DEFAULT_WS, 
+					path, WcmConstants.FULL_SUB_DEPTH);
 			wcmEventService.populateDescendantIds(restNode, previousDescendants);
 		}	
 		
@@ -250,7 +256,8 @@ public final class RestWcmItemHandler extends ItemHandler {
 					WcmConstants.DEFAULT_WS,  
 					path,
 					itemType,
-					previousDescendants);
+					previousDescendants,
+					jsonItem);
 		}
 		session.save();
 		if (this.authoringEnabled && WcmConstants.DEFAULT_WS.equals(rawWorkspaceName)) {
@@ -310,9 +317,9 @@ public final class RestWcmItemHandler extends ItemHandler {
      */
     public ResponseEntity<?> addItems( //HttpServletRequest request,
     		String baseUrl,
-                              String repositoryName,
-                              String workspaceName,
-                              InputStream requestContent ) throws IOException, RepositoryException {
+            String repositoryName,
+            String workspaceName,
+            InputStream requestContent ) throws IOException, RepositoryException {
     	JsonNode jsonNode = this.inputStreamToJsonNode(requestContent);
 		ArrayNode wcmItems = (ArrayNode)jsonNode.get("wcmItems");
         return this.doAddItems(baseUrl, repositoryName, workspaceName, wcmItems);
@@ -372,7 +379,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     }
     
     public void deleteItem(WcmEventEntry.WcmItemType itemType,  String baseUrl, String repository, String workspace, String path) 
-    		throws PathNotFoundException, RepositoryException {
+    		throws PathNotFoundException, RepositoryException, JsonProcessingException {
 
 		path = (path.startsWith("/")) ? path : String.format("/%s", path);
 		List<WcmEventEntry> wcmEvents = new ArrayList<>();
@@ -531,7 +538,8 @@ public final class RestWcmItemHandler extends ItemHandler {
     					WcmConstants.DEFAULT_WS,  
     					nodePath,
     					itemType,
-    					previousDescendants));
+    					previousDescendants,
+    					translateJsonContentNode(jsonNode)));
     		}
         }
         
@@ -612,7 +620,8 @@ public final class RestWcmItemHandler extends ItemHandler {
     					repositoryName,
     					WcmConstants.DEFAULT_WS, 
     					nodePath,
-    					itemType));
+    					itemType,
+    					translateJsonContentNode(jsonNode)));
     		}
             
         }
@@ -632,7 +641,7 @@ public final class RestWcmItemHandler extends ItemHandler {
     		String baseUrl,
 	    	String repositoryName,
 	        TreeMap<String, JsonNode> nodesByPath,
-	        Session session ) throws RepositoryException, IOException {
+	        Session session) throws RepositoryException, IOException {
     	
         List<RestItem> result = new ArrayList<RestItem>();
 	        
@@ -665,5 +674,48 @@ public final class RestWcmItemHandler extends ItemHandler {
         Session session = getSession(repositoryName, workspaceName);
         TreeMap<String, JsonNode> nodesByPath = createWcmNodesByPathMap(requestBody);
         return addMultipleWcmNodes(baseUrl, repositoryName, nodesByPath, session);
+    }
+    
+    private JsonNode translateJsonContentNode(JsonNode itemNode) {
+    	Map<String, ObjectNode> jsonNodeMap = new HashMap<String, ObjectNode>();
+    	JsonNode rootNode = null;
+    	String wcmPath = itemNode.get("wcmPath").textValue();
+		JsonNode contentNode = itemNode.get("content");
+		
+		for (Iterator<String> fieldIter = contentNode.fieldNames(); fieldIter.hasNext();) {
+			
+			String nodePath = fieldIter.next();
+			ObjectNode jsonNode = JsonUtils.createObjectNode();
+			jsonNodeMap.put(nodePath,  jsonNode);
+			String nodeName = newNodeName(nodePath);
+			ObjectNode children = null;
+			if (!wcmPath.equals(nodePath)) {
+				String parentPath = parentRelativePath(nodePath);;
+				ObjectNode parentNode = jsonNodeMap.get(parentPath);
+				children = (ObjectNode) parentNode.get(WcmConstants.JCR_JSON_NODE_CHILDREN);
+				if (children == null) {
+					children = JsonUtils.createObjectNode();
+					parentNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, children);
+				}
+				children.set(nodeName, jsonNode);
+			} else {
+				rootNode = jsonNode;
+			}
+			JsonNode childContentNode = contentNode.get(nodePath);
+			for (Iterator<String> propertyIter = childContentNode.fieldNames(); propertyIter.hasNext();) {
+				String propertyName = propertyIter.next();
+				jsonNode.set(propertyName, childContentNode.get(propertyName));
+			}
+		}
+		
+    	return rootNode;
+    }
+    
+    protected String parentRelativePath( String relativePath ) {
+        int lastSlashInd = relativePath.lastIndexOf('/');
+        if (lastSlashInd == -1) {
+            return "/";
+        }
+        return relativePath.substring(0, lastSlashInd);
     }
 }

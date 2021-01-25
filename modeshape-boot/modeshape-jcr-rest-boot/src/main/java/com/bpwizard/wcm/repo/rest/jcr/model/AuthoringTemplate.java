@@ -153,8 +153,7 @@ public class AuthoringTemplate extends ResourceNode implements HasName, HasWcmAu
 			elementGroupNode.set(WcmConstants.JCR_JSON_NODE_CHILDREN, elementGroupNodeChildren);
 			elementGroupNode.put(JcrConstants.JCR_PRIMARY_TYPE, "bpw:formGroupFoler");
 			
-			this.addFormGroups(elementGroupNodeChildren, this.getElementGroups());
-			
+			this.addFormGroups(elementGroupNodeChildren, this.getElementGroups());	
 		}
 		
 		if (this.elements != null && this.elements.size() > 0 ) {

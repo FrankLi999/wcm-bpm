@@ -26,7 +26,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmServer;
 
 @Service
 @Transactional	
-public class CollectorService {
+public class CollectorRepository {
 	@Autowired
 	@Qualifier("modeshapeJdbcTemplate")
 	JdbcTemplate jdbcTemplate;

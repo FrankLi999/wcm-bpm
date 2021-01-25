@@ -24,7 +24,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmServer;
 
 @Service
 @Transactional	
-public class WcmServerService {
+public class WcmServerRepository {
 	@Autowired
 	@Qualifier("modeshapeJdbcTemplate")
 	JdbcTemplate jdbcTemplate;

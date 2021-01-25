@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bpwizard.wcm.repo.rest.handler.WcmEventHandler;
+import com.bpwizard.wcm.repo.rest.handler.JcrNodeSyndicationHandler;
+import com.bpwizard.wcm.repo.rest.handler.JsonNodeSyndicationHandler;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmError;
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.SyndicationRequest;
 import com.bpwizard.wcm.repo.rest.jcr.model.Syndicator;
 import com.bpwizard.wcm.repo.rest.jcr.model.UpdateSyndicationRequest;
-import com.bpwizard.wcm.repo.rest.service.SyndicatorService;
+import com.bpwizard.wcm.repo.rest.service.SyndicatorRepository;
 
 @RestController
 @RequestMapping(SyndicatorController.BASE_URI)
@@ -36,9 +38,16 @@ public class SyndicatorController extends BaseWcmRestController {
 	private static final Logger logger = LoggerFactory.getLogger(SyndicatorController.class);
 	
 	@Autowired
-	private SyndicatorService syndicatorService;
-	@Autowired
-	private  WcmEventHandler  wcmEventService;
+	private SyndicatorRepository syndicatorService;
+
+	@Autowired	
+	protected JcrNodeSyndicationHandler jcrNodeWcmEventHandler;
+
+	@Autowired	
+	protected JsonNodeSyndicationHandler jsonNodeWcmEventHandler;
+	
+	@Value("${syndication.item.strategy}")
+	private String syndicationItemStrategy; //jcr or json
 	
 	@PostMapping(path = "/syndicate", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> syndicate(
@@ -49,7 +58,11 @@ public class SyndicatorController extends BaseWcmRestController {
 			logger.debug("Entry");
 		}
 		try {
-			wcmEventService.syndicate(syndicationRequest, request.getHeader("Authorization"));
+			if ("jcr".equals(syndicationItemStrategy)) {
+				jcrNodeWcmEventHandler.syndicate(syndicationRequest, request.getHeader("Authorization"));
+			} else {
+				jsonNodeWcmEventHandler.syndicate(syndicationRequest, request.getHeader("Authorization"));
+			}
 		} catch (Throwable t) {
 	    	logger.error("Syndication error", t);
 			throw new WcmRepositoryException(t, WcmError.UNEXPECTED_ERROR);

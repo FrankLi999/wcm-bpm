@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bpwizard.wcm.repo.rest.jcr.exception.WcmRepositoryException;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmServer;
-import com.bpwizard.wcm.repo.rest.service.WcmServerService;
+import com.bpwizard.wcm.repo.rest.service.WcmServerRepository;
 
 @RestController
 @RequestMapping(WcmServerController.BASE_URI)
@@ -31,7 +31,7 @@ public class WcmServerController {
 	private static final Logger logger = LoggerFactory.getLogger(WcmServerController.class);
 	
 	@Autowired
-	WcmServerService wcmServerService;
+	WcmServerRepository wcmServerService;
 
 	@GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<?> getWcmServers() {
