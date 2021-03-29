@@ -24,7 +24,7 @@ keycloak:
   realm: wcm_bpm
   realm-url: ${kc.base-url}/realms/${kc.realm}
 server:
-  port: ${WCM_PORT:28080}
+  port: ${WCM_PORT:3009}
 spring:
   #cache:
   #  type: hazelcast
@@ -74,7 +74,7 @@ spring:
   #           # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
             
   datasource:
-    url: jdbc:mysql://${WCM_DB_HOST_PORT:localhost:3306}/wcm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    url: jdbc:mysql://${WCM_DB_HOST_PORT:localhost:3306}/wcm_authoring?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     username: wcm
     password: P@ssw0rd
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -139,17 +139,14 @@ spring:
 bpw:
   wcm:
     kafka:
-      bootstrap-servers: my-cluster-kafka-bootstrap:9092
+      bootstrap-servers: localhost:9092
       group:
         wcm-event: jcr-wcm-event
       topic:
         jcr-wcm-event: jcr-wcm-event
-        json-wcm-workflow: json-wcm-workflow
+        json-wcm-event: json-wcm-event
+        #json-wcm-workflow: json-wcm-workflow
   account:
-    authoring:
-      enabled: true
-    syndication:
-      enabled: true
     datasource:
       # url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       url: jdbc:mysql://localhost:3306/account?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
@@ -160,12 +157,12 @@ bpw:
       password: P@ssw0rd
   modeshape:
     authoring:
-      enabled: false
+      enabled: true
     syndication:
-      enabled: false
+      enabled: true
     datasource:
       # url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-      url: jdbc:mysql://localhost:3306/wcm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+      url: jdbc:mysql://localhost:3306/wcm_authoring?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       # url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
       driver-class-name: com.mysql.cj.jdbc.Driver
       # driver-class-name: org.h2.Driver
@@ -193,7 +190,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://wcm-authoring:3009, http://wcm-authoring:4200, http://bpm-ui:4009, http://gateway-ui:5009, http://mysite:6009
+    allowed-origins: http://wcm-authoring:3009, http://wcm-authoring:28080, http://bpm-ui:4009, http://bpm-ui:28081, http://gateway-ui:5009, http://gateway-ui:28083, http://mysite:6009, http://mysite:28082
 #    exposedHeaders: 
 #      - Cache-Control
 #      - Connection

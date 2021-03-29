@@ -14,7 +14,7 @@ export const environment = {
   oauth2RedirectUrl: "http://bpm-ui:4009/oauth2/redirect",
   // wcmApiBaseUrl: "",
   // bpmApiBaseUrl: ""
-  wcmApiBaseUrl: "http://wcm-server.bpwizard.com:28080",
+  wcmApiBaseUrl: "http://bpm-server.bpwizard.com:28081",
   bpmApiBaseUrl: "http://bpm-server.bpwizard.com:28081"
 };
 

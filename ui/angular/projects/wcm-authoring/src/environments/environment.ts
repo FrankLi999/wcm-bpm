@@ -9,12 +9,16 @@ export const environment = {
   wcmAuthoringDefaultUrl: "/wcm-authoring/site-explorer",
   wcmRepository: "bpwizard",
   wcmWorkspace: "default",
-  wcmLibrary: "camunda",
-  wcmSiteConfig: "bpm",
+  // wcmLibrary: "camunda",
+  // wcmSiteConfig: "bpm",
+  wcmLibrary: "mysite",
+  wcmSiteConfig: "mysite",
   oauth2RedirectUrl: "http://wcm-authoring:3009/oauth2/redirect",
   // wcmApiBaseUrl: "",
   // bpmApiBaseUrl: ""
-  wcmApiBaseUrl: "http://wcm-server.bpwizard.com:28080",
+  // wcmApiBaseUrl: "http://wcm-server.bpwizard.com:28080",
+  // wcmApiBaseUrl: "http://wcm-server.bpwizard.com:28081",
+  wcmApiBaseUrl: "http://wcm-server.bpwizard.com:28082",
   bpmApiBaseUrl: "http://bpm-server.bpwizard.com:28081"
 };
 

@@ -1,0 +1,26 @@
+[
+    {
+		"repository": "bpwizard",
+		"workspace": ["draft", "expired", "default"],
+		"preloadType": "CND",
+		"path": "classpath:/modeshape/data/bpw.cnd"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": ["default"],
+		"preloadType": "CND",
+		"path": "classpath:/modeshape/data/mytypes.cnd"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": ["default"],
+		"preloadType": "ITEMS",
+		"path": "classpath:/modeshape/data/setup.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": ["default"],
+		"preloadType": "LIBRARY",
+		"path": "classpath:/modeshape/data/system/system-library.json"
+	}
+]

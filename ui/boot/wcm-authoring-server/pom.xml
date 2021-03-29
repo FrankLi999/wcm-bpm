@@ -46,7 +46,6 @@
 			<artifactId>modeshape-jcr-rest-boot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- 
 		<dependency>
 			<groupId>com.bpwizard.wcm-bpm</groupId>
 			<artifactId>modeshape-syndicator-kafka-boot</artifactId>
@@ -56,7 +55,6 @@
 		  <groupId>org.springframework.kafka</groupId>
 		  <artifactId>spring-kafka</artifactId>
 		</dependency>
-        -->
 		<!-- end of modesahpe dependencies -->
 		<dependency>
             <groupId>org.springframework.boot</groupId>

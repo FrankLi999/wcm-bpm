@@ -65,7 +65,7 @@
       "@bpw/ajsf-core": [
         "projects/bpw-ajsf-core/src/public-api"
       ],
-      "@bpw/ajsf-cor/*": [
+      "@bpw/ajsf-core/*": [
         "projects/bpw-ajsf-core/src/public-api/*"
       ],
       "@bpw/ajsf-material": [

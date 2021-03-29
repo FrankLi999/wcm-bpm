@@ -15,7 +15,7 @@
     "prerender": "ng run wcm-authoring:prerender",
     "start-bpmn-modeler": "ng serve --port 7009 --host=localhost --project bpmn-modeler",
     "start-bpw-form": "ng serve --port 4090 --host=localhost --project bpw-form --vendorSourceMap --proxy-config proxy.conf.json",
-    "start-wcm-authoring": "ng serve --port 3009 --host=wcm-authoring --project wcm-authoring --proxy-config proxy.conf.json",
+    "start-wcm-authoring": "ng serve --port 3009 --host=wcm-authoring --project wcm-authoring --proxy-config proxy.conf-mysite.json",
     "start-bpm-ui": "ng serve --port 4009 --host=bpm-ui  --project bpm-ui",
     "start-mysite": "ng serve --port 6009 --host=mysite  --project mysite",
     "start-material-theme-flex-poc": "ng serve --port 3100 --project material-theme-flex-poc",

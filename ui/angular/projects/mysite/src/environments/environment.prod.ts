@@ -5,8 +5,8 @@ export const environment = {
   wcmAuthoringDefaultUrl: "/mysite/home",
   wcmRepository: "bpwizard",
   wcmWorkspace: "default",
-  wcmLibrary: "camunda",
-  wcmSiteConfig: "bpm",
+  wcmLibrary: "mysite",
+  wcmSiteConfig: "mysite",
   oauth2RedirectUrl: "/oauth2/redirect",
   // wcmApiBaseUrl: "",
   // bpmApiBaseUrl: ""

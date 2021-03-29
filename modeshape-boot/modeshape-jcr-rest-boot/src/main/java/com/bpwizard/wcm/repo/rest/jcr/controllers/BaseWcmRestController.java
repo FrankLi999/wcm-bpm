@@ -13,11 +13,11 @@ import com.bpwizard.wcm.repo.rest.service.WcmEventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class BaseWcmRestController {
-	@Value("${bpw.modeshape.authoring.enabled:true}")
-	protected boolean authoringEnabled = true;
+	@Value("${bpw.modeshape.authoring.enabled:false}")
+	protected boolean authoringEnabled;
 	
-	@Value("${bpw.modeshape.syndication.enabled:true}")
-	protected boolean syndicationEnabled = true;
+	@Value("${bpw.modeshape.syndication.enabled:false}")
+	protected boolean syndicationEnabled;
 	
 	@Autowired
 	protected RestWcmItemHandler wcmItemHandler;

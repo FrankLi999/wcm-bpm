@@ -64,7 +64,8 @@ public class CollectorRepository {
 	    parameters.put("SYNDICATOR_ID", collector.getSyndicator().getId());
 	    parameters.put("created_by", WebUtils.currentUserId());
 	    parameters.put("created_at", new Timestamp(System.currentTimeMillis()));
-	    parameters.put("LAST_SYNDICATION", "1970-01-01 00:00:00");
+	    // TODO
+	    parameters.put("LAST_SYNDICATION", "1970-02-01 00:00:00");
 	    return simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 	}
 	

@@ -9,8 +9,8 @@ com/bpwizard/bpm/wcm/client/model/CompleteEditRequest.class
 com/bpwizard/bpm/wcm/client/model/DeleteDraftRequest.class
 com/bpwizard/bpm/wcm/client/model/CompleteReviewRequest.class
 com/bpwizard/bpm/wcm/client/model/UpdateDraftRequest.class
-com/bpwizard/bpm/wcm/client/model/StartFlowRequest.class
-com/bpwizard/bpm/wcm/client/model/PublishItemRequest.class
 com/bpwizard/bpm/wcm/client/model/EditContentItemRequest.class
+com/bpwizard/bpm/wcm/client/model/PublishItemRequest.class
+com/bpwizard/bpm/wcm/client/model/StartFlowRequest.class
 com/bpwizard/bpm/wcm/client/model/ClaimReivewTaskReuqest.class
 com/bpwizard/bpm/wcm/client/model/WcmConstants.class

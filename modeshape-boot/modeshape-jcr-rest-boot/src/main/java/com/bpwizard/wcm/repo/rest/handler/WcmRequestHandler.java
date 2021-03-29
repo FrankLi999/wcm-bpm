@@ -168,7 +168,7 @@ public class WcmRequestHandler {
 			wcmSystem.setAuthoringTemplates(this.getAuthoringTemplates(repository, workspace, request));
 			wcmSystem.setFormTemplates(this.getForms(repository, workspace, request));
 			wcmSystem.setControlFiels(this.getControlField(repository, workspace, request));
-			wcmSystem.setWcmRepositories(this.getWcmRepositories(request));	
+			// wcmSystem.setWcmRepositories(this.getWcmRepositories(request));	
 
 			Map<String, JsonForm[]> authoringTemplateForms = this.getSystemAuthoringTemplateAsJsonForm(repository, workspace, request);
 			wcmSystem.setAuthoringTemplateForms(authoringTemplateForms);
@@ -184,7 +184,7 @@ public class WcmRequestHandler {
 			Map<String, JsonForm[]> forms = this.doGetApplicationFormAsJsonForm(repository, workspace, library, request);
 			wcmSystem.setForms(forms);
 		}
-		
+		wcmSystem.setWcmRepositories(this.getWcmRepositories(request));	
 		wcmSystem.setJcrThemes(this.getTheme(repository, workspace, request));
 		Map<String, RenderTemplate> renderTemplates = this.getRenderTemplates(repository, workspace, request);
 		wcmSystem.setRenderTemplates(renderTemplates);

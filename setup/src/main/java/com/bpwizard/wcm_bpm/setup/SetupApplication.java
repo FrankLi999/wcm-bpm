@@ -48,26 +48,26 @@ public class SetupApplication implements CommandLineRunner {
 		String mysqlSchema = mysqlConfiguration.getMysqlSchema();
 		
 		//try (Scanner scanner = new Scanner(System.in)) {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println(String.format("Enter %s database admin user name (%s): ", db, adminUser));
-		String input = scanner.nextLine();
-		adminUser = StringUtils.hasText(input) ? input : adminUser;
-		
-		System.out.println(String.format("Enter %s database admin user password (%s): ", db, adminPwd));
-		input = scanner.nextLine();
-		adminPwd = StringUtils.hasText(input) ? input : adminPwd;
-		
-		System.out.println(String.format("Enter %s database application user name (%s): ", db, mysqlUser));
-		input = scanner.nextLine();
-		mysqlUser = StringUtils.hasText(input) ? input : mysqlUser;
-		
-		System.out.println(String.format("Enter %s database  application user password (%s): ", db, mysqlPwd));
-		input = scanner.nextLine();
-		mysqlPwd = StringUtils.hasText(input) ? input : mysqlPwd;
-		
-		System.out.println(String.format("Enter %s database application schema (%s): ", db, mysqlSchema));
-		input = scanner.nextLine();
-		mysqlSchema = StringUtils.hasText(input) ? input : mysqlSchema;
+//		Scanner scanner = new Scanner(System.in);
+//		System.out.println(String.format("Enter %s database admin user name (%s): ", db, adminUser));
+//		String input = scanner.nextLine();
+//		adminUser = StringUtils.hasText(input) ? input : adminUser;
+//		
+//		System.out.println(String.format("Enter %s database admin user password (%s): ", db, adminPwd));
+//		input = scanner.nextLine();
+//		adminPwd = StringUtils.hasText(input) ? input : adminPwd;
+//		
+//		System.out.println(String.format("Enter %s database application user name (%s): ", db, mysqlUser));
+//		input = scanner.nextLine();
+//		mysqlUser = StringUtils.hasText(input) ? input : mysqlUser;
+//		
+//		System.out.println(String.format("Enter %s database  application user password (%s): ", db, mysqlPwd));
+//		input = scanner.nextLine();
+//		mysqlPwd = StringUtils.hasText(input) ? input : mysqlPwd;
+//		
+//		System.out.println(String.format("Enter %s database application schema (%s): ", db, mysqlSchema));
+//		input = scanner.nextLine();
+//		mysqlSchema = StringUtils.hasText(input) ? input : mysqlSchema;
 		//}
 		logger.info("adminUser:" + adminUser);
 		logger.info("adminPwd:" + adminPwd);

@@ -140,12 +140,13 @@ spring:
 bpw:
   wcm:
     kafka:
-      bootstrap-servers: my-cluster-kafka-bootstrap:9092
+      bootstrap-servers: localhost:9092
       group:
         wcm-event: wcm-event
       topic:
         jcr-wcm-event: jcr-wcm-event
-        json-wcm-workflow: json-wcm-workflow
+        json-wcm-event: json-wcm-event
+        #json-wcm-workflow: json-wcm-workflow
   account:
     datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -204,7 +205,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://wcm-authoring:3009, http://bpm-ui:4009, http://gateway-ui:5009, http://mysite:6009
+    allowed-origins: http://wcm-authoring:3009, http://wcm-authoring:28080, http://bpm-ui:4009, http://bpm-ui:28081, http://gateway-ui:5009, http://gateway-ui:28083, http://mysite:6009, http://mysite:28082
 #    exposedHeaders: 
 #      - Cache-Control
 #      - Connection
@@ -462,7 +463,6 @@ message:
   topic:
     name: wcm-event
   group: order
-syndication.item.strategy  
 org:
   modeshape:
     backupLocation: "/home/ubuntu/temp"

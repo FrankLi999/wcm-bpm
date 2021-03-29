@@ -112,6 +112,7 @@ public class CollectorController extends BaseWcmRestController {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Entry");
 		}
+		System.out.println(">>>>>>>>>>>>>>>> nodePath:>>>>>>>>>>> " + nodePath);
 		String baseUrl = RestHelper.repositoryUrl(request);
 		this.jsonNodeCollectionHandler.collectJsonItem(repository, workspace,
 				nodePath, itemType, operation, content.getInputStream(), baseUrl);

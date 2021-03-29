@@ -1266,17 +1266,17 @@
    {
       	"operation": "create",
       	"itemType": "theme",
-      	"wcmPath": "library/design/theme/apigateway",
+      	"wcmPath": "library/apigateway/theme/apigateway",
       	"content": {
-      		"library/design/theme/apigateway" : {
+      		"library/apigateway/theme/apigateway" : {
 		        "jcr:primaryType":"bpw:system_themeType"        
 		    },
-		    "library/design/theme/apigateway/properties" : {
+		    "library/apigateway/theme/apigateway/properties" : {
 		        "jcr:primaryType":"bpw:ContentItemproperties",
 				"bpw:name": "apigateway",
 		        "bpw:title": "API Gateway"
 		    },
-		    "library/design/theme/apigateway/elements" : {
+		    "library/apigateway/theme/apigateway/elements" : {
 		        "jcr:primaryType":"bpw:system_themeType_ElementFolder",
 		        "note": "API gateway theme"
 		    }
@@ -1311,7 +1311,14 @@
 			"library/apigateway/renderTemplate/HandlerLayout/row1/column1/body": {
 			    "jcr:primaryType": "bpw:ResourceElementRender",
 				"bpw:name": "body"
-			},
+			}
+		}
+	},
+	{
+      	"operation": "create",
+      	"itemType": "renderTemplate",
+      	"wcmPath": "library/apigateway/renderTemplate/AdminLayout",
+      	"content": {
 			"library/apigateway/renderTemplate/AdminLayout": {
 				"jcr:primaryType": "bpw:renderTemplate",
 				"bpw:name": "AdminLayout",

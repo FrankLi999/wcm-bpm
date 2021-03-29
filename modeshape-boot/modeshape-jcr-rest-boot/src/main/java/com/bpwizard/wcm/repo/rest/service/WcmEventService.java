@@ -52,8 +52,8 @@ public class WcmEventService {
 	    wcmEvent.setOperation(WcmEventEntry.Operation.create);
 	    wcmEvent.setTimeCreated(new Timestamp(timestamp));
 	    wcmEvent.setContent(is);
-	    jcrNodeEventRepo.addWcmEvent(wcmEvent);
-	    jsonNodeEventRepo.addWcmEvent(wcmEvent);
+	    jsonNodeEventRepo.addCndEvent(wcmEvent);
+	    jcrNodeEventRepo.addCndEvent(wcmEvent);
 	}
 	
 	@Transactional

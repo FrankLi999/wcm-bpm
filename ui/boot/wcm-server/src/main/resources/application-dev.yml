@@ -74,7 +74,7 @@ spring:
   #           # factory_class: "com.hazelcast.hibernate.HazelcastCacheRegionFactory"
             
   datasource:
-    url: jdbc:mysql://${WCM_DB_HOST_PORT:localhost:3306}/wcm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+    url: jdbc:mysql://${WCM_DB_HOST_PORT:localhost:3306}/wcm_site?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
     username: wcm
     password: P@ssw0rd
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -136,6 +136,15 @@ spring:
             # tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
             # userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
 bpw:
+  wcm:
+    kafka:
+      bootstrap-servers: localhost:9092
+      group:
+        wcm-event: wcm-event
+      topic:
+        jcr-wcm-event: jcr-wcm-event
+        json-wcm-event: json-wcm-event
+        #json-wcm-workflow: json-wcm-workflow
   account:
     datasource:
       # url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
@@ -152,7 +161,7 @@ bpw:
       enabled: false
     datasource:
       # url: jdbc:mysql://mysql:3306/wcm_bpm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
-      url: jdbc:mysql://localhost:3306/wcm?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
+      url: jdbc:mysql://localhost:3306/wcm_site?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&nullNamePatternMatchesAll=true
       # url: jdbc:h2:file:./h2/wcm_bpm/data;DB_CLOSE_ON_EXIT=FALSE
       driver-class-name: com.mysql.cj.jdbc.Driver
       # driver-class-name: org.h2.Driver
@@ -180,7 +189,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://wcm-authoring:3009, http://wcm-authoring:4200, http://bpm-ui:4009, http://gateway-ui:5009, http://mysite:6009
+    allowed-origins: http://wcm-authoring:3009, http://wcm-authoring:28080, http://bpm-ui:4009, http://bpm-ui:28081, http://gateway-ui:5009, http://gateway-ui:28083, http://mysite:6009, http://mysite:28082
 #    exposedHeaders: 
 #      - Cache-Control
 #      - Connection
@@ -349,18 +358,22 @@ ignite:
 
 #spring.datasource.url=jdbc:h2:./camunda-db-order;DB_CLOSE_ON_EXIT=false
 syndication:
-  strategy: kafka
-  #strategy: rest
-  #strategy: camel
-kafka:
-  bootstrap-servers: kafka:9092
-  topic:
-    wcm-event: wcm-event
-    wcm-workflow: wcm-workflow
+  transport:
+    strategy: rest
+    # strategy: kafka
+    #strategy: camel
+  item: 
+    strategy: json
+    #strategy:jcr
 message:
   topic:
     name: wcm-event
   group: order
+#kafka:
+#  bootstrap-servers: localhost:9092
+#  topic:
+#    wcm-event: wcm-event
+#    wcm-workflow: wcm-workflow
 #server:
   #port: 8091    
   

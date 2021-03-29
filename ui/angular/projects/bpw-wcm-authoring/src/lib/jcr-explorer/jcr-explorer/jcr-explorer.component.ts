@@ -163,6 +163,7 @@ export class JcrExplorerComponent implements OnInit, OnDestroy {
       .pipe(select(getWcmRepositories), takeUntil(this.unsubscribeAll))
       .subscribe(
         (repositories: WcmRepository[]) => {
+          console.log(">>>>>>>>>>>>>>>> repositories:", repositories);
           if (repositories) {
             const repoNodes = repositories.map((repository) =>
               this.generateRepositoryNode(repository.name, repository)

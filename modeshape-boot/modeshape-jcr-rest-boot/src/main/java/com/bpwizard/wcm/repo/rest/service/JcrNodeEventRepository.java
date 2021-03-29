@@ -51,6 +51,10 @@ public class JcrNodeEventRepository extends AbstractHandler {
 	    return jdbcTemplate.update(clearWcmEventsSql, params, types);
 	}
 
+	public int addCndEvent(WcmEventEntry event) {
+		return doInsert(event);
+	}
+	
 	public int addWcmEvent(WcmEventEntry event) {
 		return doInsert(event);
 	}

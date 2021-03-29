@@ -4,11 +4,11 @@
 /home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/CreateDraftRequest.java
 /home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/DraftItemRequest.java
 /home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/UpdateDraftRequest.java
-/home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/WcmConstants.java
 /home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/ContentTask.java
+/home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/WcmConstants.java
 /home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/ClaimReivewTaskReuqest.java
-/home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/CompleteEditRequest.java
 /home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/DeleteDraftRequest.java
+/home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/CompleteEditRequest.java
 /home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/CompleteReviewRequest.java
 /home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/StartFlowRequest.java
 /home/ubuntu/projects/wcm-bpm/camunda-boot/bpm-wcm-client-model/src/main/java/com/bpwizard/bpm/wcm/client/model/PublishItemRequest.java

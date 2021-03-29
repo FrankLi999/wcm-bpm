@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Component;
 
 import com.bpwizard.wcm.repo.rest.JsonUtils;
 import com.bpwizard.wcm.repo.rest.handler.AbstractHandler;
@@ -27,6 +28,7 @@ import com.bpwizard.wcm.repo.rest.jcr.model.WcmEventEntry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+@Component
 public class JsonNodeEventRepository extends AbstractHandler {
 
 	@Autowired(required = false)
@@ -34,10 +36,10 @@ public class JsonNodeEventRepository extends AbstractHandler {
 	protected JdbcTemplate jdbcTemplate;
 	
 	private SimpleJdbcInsert simpleJdbcInsert;
-
+	// SELECT ITEMTYPE, NODE_PATH, CONVERT(CONTENT USING utf8) FROM SYN_JSON_NODE_EVENT
 	private static final String updateEventSql = "INSERT INTO SYN_JSON_NODE_EVENT(ID, REPOSITORY, WORKSPACE, LIBRARY, NODE_PATH, OPERATION, ITEMTYPE, timeCreated, CONTENT) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE SET LIBRARY=?, NODE_PATH = ?, OPERATION = ?, ITEMTYPE=?, timeCreated=?, CONTENT=?";
 	private static final String clearWcmEventsSql = "DELETE SYN_JSON_NODE_EVENT WHERE timeCcreated < ?";
-	private static final String selectWcmEventsBeforeSql = "SELECT * FROM SYN_JSON_NODE_EVENT WHERE library= ? and timeCreated > ? and timeCreated < ? ORDER BY timeCreated ASC LIMIT ? OFFSET ?";
+	private static final String selectWcmEventsBeforeSql = "SELECT * FROM SYN_JSON_NODE_EVENT WHERE library= ? and timeCreated > ? and timeCreated < ? ORDER BY timeCreated, NODE_PATH ASC LIMIT ? OFFSET ?";
 	private static final String selectCndBeforeSql = "SELECT * FROM SYN_JSON_NODE_EVENT WHERE ITEMTYPE= 'cnd' and timeCreated > ? and timeCreated < ? ORDER BY timeCreated ASC";
 	
 	@PostConstruct
@@ -52,10 +54,14 @@ public class JsonNodeEventRepository extends AbstractHandler {
 	    return jdbcTemplate.update(clearWcmEventsSql, params, types);
 	}
 
+	public int addCndEvent(WcmEventEntry event) throws JsonProcessingException {
+		return doCndInsert(event);
+	}
+
 	public int addWcmEvent(WcmEventEntry event) throws JsonProcessingException {
 		return doInsert(event);
 	}
-
+	
 	public int updateWcmEvent(WcmEventEntry event) throws JsonProcessingException {
 		return  doUpsert(event);
 	}
@@ -67,7 +73,7 @@ public class JsonNodeEventRepository extends AbstractHandler {
 		int argTypes[] = { Types.TIMESTAMP, Types.TIMESTAMP};
 		List<WcmEvent> wcmEvents = jdbcTemplate.query(
 				selectCndBeforeSql, args, argTypes, new WcmEventRowMapper());
-
+		System.out.println(">>>>>>>>> wcmEvents:" + wcmEvents);
 		return wcmEvents;
 	}
 	
@@ -126,6 +132,11 @@ public class JsonNodeEventRepository extends AbstractHandler {
 		MapSqlParameterSource parameters = insertParameters(event);
 		 return simpleJdbcInsert.execute(parameters);
 	}
+
+	protected int doCndInsert(WcmEventEntry event) throws JsonProcessingException {
+		MapSqlParameterSource parameters = insertCndParameters(event);
+		 return simpleJdbcInsert.execute(parameters);
+	}
 	
 	protected int doUpsert(WcmEventEntry event) throws JsonProcessingException {
 		InputStream content = JsonUtils.writeValueAsStream(event.getJsonNode());
@@ -153,6 +164,26 @@ public class JsonNodeEventRepository extends AbstractHandler {
 	    parameters.addValue("OPERATION", event.getOperation().name());
 	    parameters.addValue("timeCreated", event.getTimeCreated());
 	    parameters.addValue("CONTENT", JsonUtils.writeValueAsStream(event.getJsonNode()));
+	    //parameters.addValue("CONTENT", event.getContent());
+	    
+	    
+	    return parameters;
+	}
+	
+	protected MapSqlParameterSource insertCndParameters(WcmEventEntry event) throws JsonProcessingException {
+		event.setTimeCreated(new Timestamp(System.currentTimeMillis()));
+		
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("ID", event.getId());
+		parameters.addValue("REPOSITORY", event.getRepository());
+		parameters.addValue("WORKSPACE", event.getWorkspace());
+		parameters.addValue("LIBRARY", event.getLibrary());
+	    parameters.addValue("NODE_PATH", event.getNodePath());
+	    parameters.addValue("ITEMTYPE", event.getItemType().name());
+	    parameters.addValue("OPERATION", event.getOperation().name());
+	    parameters.addValue("timeCreated", event.getTimeCreated());
+	    //parameters.addValue("CONTENT", JsonUtils.writeValueAsStream(event.getJsonNode()));
+	    parameters.addValue("CONTENT", event.getContent());
 	    
 	    
 	    return parameters;

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.jcr.RepositoryException;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,12 @@ import com.bpwizard.wcm.repo.rest.jcr.model.SyndicationRequest;
 import com.bpwizard.wcm.repo.rest.jcr.model.Syndicator;
 import com.bpwizard.wcm.repo.rest.jcr.model.UpdateSyndicationRequest;
 import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent;
+import com.bpwizard.wcm.repo.rest.jcr.model.WcmEvent.WcmItemType;
 import com.bpwizard.wcm.repo.rest.service.JsonNodeEventQueuePublisher;
 import com.bpwizard.wcm.repo.rest.service.JsonNodeEventRepository;
 import com.bpwizard.wcm.repo.rest.service.JsonNodeEventRestPublisher;
 import com.bpwizard.wcm.repo.rest.service.SyndicatorRepository;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Component
 public class JsonNodeSyndicationHandler extends AbstractHandler {
@@ -77,8 +78,12 @@ public class JsonNodeSyndicationHandler extends AbstractHandler {
 			pageIndex += actualBatchSize;
 			if (actualBatchSize > 0) {
 				for (WcmEvent wcmEvent: wcmEvents) {
-					ObjectNode contentNode = (ObjectNode) JsonUtils.bytesToJsonNode(wcmEvent.getContent());
-					ArrayNode descendants = (ArrayNode) contentNode.get("descendants");
+					System.out.println(">>>>>>> syndicate >>> " + wcmEvent.getNodePath() + "---" + new String(wcmEvent.getContent()));
+					if (WcmItemType.libraryFolder.equals(wcmEvent.getItemType())) {
+						continue;
+					}
+					//ObjectNode contentNode = (ObjectNode) JsonUtils.bytesToJsonNode(wcmEvent.getContent());
+					ArrayNode descendants = ObjectUtils.isEmpty(wcmEvent.getContent()) ? null :(ArrayNode) JsonUtils.bytesToJsonNode(wcmEvent.getContent()).get("descendants");
 					System.out.println(">>>>>>>>>>>>>>>>>>> nodePath: " + wcmEvent.getLibrary() + "/" + wcmEvent.getNodePath());
 					if (descendants != null) {
 						elements += descendants.size();

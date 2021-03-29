@@ -24,7 +24,7 @@ public class JsonNodeEventKafkaPublisher implements JsonNodeEventQueuePublisher 
 	@Autowired
 	private KafkaTemplate<String, byte[]> kafkaTemplate;
 	
-	@Value("${bpw.wcm.kafka.topic.json-wcm-event}")
+	@Value("${bpw.wcm.kafka.topic.json-wcm-event:json-wcm-event}")
 	private String wcmEventTopic;
 	
 	public void syndicateCndTypes(WcmEvent wcmEvent, Syndicator syndicator, String token) throws JsonProcessingException, IOException {

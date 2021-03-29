@@ -1,0 +1,20 @@
+[
+    {
+		"repository": "bpwizard",
+		"workspace": ["default"],
+		"preloadType": "ITEMS",
+		"path": "classpath:/modeshape/data/setup.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": ["default"],
+		"preloadType": "LIBRARY",
+		"path": "classpath:/modeshape/data/system/system-library.json"
+	},
+	{
+		"repository": "bpwizard",
+		"workspace": [ "default"],
+		"preloadType": "ITEMS",
+		"path": "classpath:/modeshape/data/system/system-items.json"
+	}
+]

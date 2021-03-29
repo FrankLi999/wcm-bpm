@@ -46,7 +46,7 @@ public class WcmImportController extends BaseWcmRestController {
 	
 	//TODO: failed scenario - all or nothing
 	@PostMapping(path= "/preload")
-    public ResponseEntity<?> loadQueries(HttpServletRequest request) throws WcmRepositoryException {
+    public ResponseEntity<?> preload(HttpServletRequest request) throws WcmRepositoryException {
     	logger.debug("Entering ...");
     	try {
     		com.bpwizard.wcm.repo.rest.jcr.model.Preload[] preloads = this.wcmRequestHandler.readJson(

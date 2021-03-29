@@ -1,0 +1,14 @@
+{
+  "/core/api": {
+    "target": "http://wcm-server.bpwizard.com:28081",
+    "secure": false
+  },
+  "/wcm": {
+    "target": "http://wcm-server.bpwizard.com:28081",
+    "secure": false
+  },
+  "/modeshape": {
+    "target": "http://wcm-server.bpwizard.com:28081",
+    "secure": false
+  }
+}

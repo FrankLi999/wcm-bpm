@@ -30,7 +30,7 @@
       "bpw-common": ["projects/bpw-common/src/public-api"],
       "bpw-common/*": ["projects/bpw-common/src/lib/*"],
       "@bpw/ajsf-core": ["projects/bpw-ajsf-core/src/public-api"],
-      "@bpw/ajsf-cor/*": ["projects/bpw-ajsf-core/src/public-api/*"],
+      "@bpw/ajsf-core/*": ["projects/bpw-ajsf-core/src/public-api/*"],
       "@bpw/ajsf-material": ["projects/bpw-ajsf-material/src/public-api"],
       "@bpw/ajsf-material/*": ["projects/bpw-ajsf-material/src/public-api/*"]
     }

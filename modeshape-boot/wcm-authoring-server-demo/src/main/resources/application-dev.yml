@@ -208,7 +208,7 @@ bpw:
   cors:
     # Comma separated values of CORS allowedOrigins
     # If this property is not given, CORS is not configured
-    allowed-origins: http://wcm-authoring:3009, http://wcm-authoring:4200, http://bpm-ui:4009, http://gateway-ui:5009, http://mysite:6009
+    allowed-origins: http://wcm-authoring:3009, http://wcm-authoring:28080, http://bpm-ui:4009, http://bpm-ui:28081, http://gateway-ui:5009, http://gateway-ui:28083, http://mysite:6009, http://mysite:28082
 #    exposedHeaders: 
 #      - Cache-Control
 #      - Connection

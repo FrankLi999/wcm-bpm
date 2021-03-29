@@ -121,7 +121,7 @@ public class WcmEvent {
 	
 	@Override
 	public String toString() {
-		return "WcmEvent [id=" + id + ", nodePath=" + nodePath + ", repository=" + repository
+		return "WcmEvent [id=" + id + ", nodePath=" + nodePath + ", content=" + new String(content) + ", repository=" + repository
 				+ ", workspace=" + workspace + ", library=" + library + ", operation=" + operation + ", itemType=" + itemType + ", timeCreated="
 				+ timeCreated + "]";
 	}
